@@ -6,14 +6,14 @@ use actix_web::App;
 use actix_web::HttpServer;
 
 
-// todo delete--------------------------------------------------------
+// TODO delete--------------------------------------------------------
 use actix_web::Responder;
 use actix_web::HttpResponse;
 #[get("/test")]
 async fn test() -> impl Responder {
     return HttpResponse::Ok().body("test");
 }
-// todo delete---------------------------------------------------------
+// TODO delete---------------------------------------------------------
 
 
 #[actix_web::main]
