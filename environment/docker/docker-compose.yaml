@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+    postgresql:
+        container_name: memis_postgresql
+        build:
+            context: ./service/postgresql
+            dockerfile: Dockerfile
+        environment:
+            PGDATA: '/var/lib/postgresql/data'
+            POSTGRES_HOST_AUTH_METHOD: 'md5'
+            POSTGRES_USER: 'user'
+            POSTGRES_PASSWORD: 'password'
+            POSTGRES_DB: 'memis'
+        volumes:
+            - postgresql_data:/var/lib/postgresql/data
+        env_file:
+            - ./../../app/.env
+        restart: always
+
+volumes:
+    postgresql_data:
+        driver: local

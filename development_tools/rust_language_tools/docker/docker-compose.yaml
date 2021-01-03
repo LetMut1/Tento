@@ -1,0 +1,35 @@
+version: '3.8'
+
+services: 
+    rust_tools:
+        container_name: memis_rust_cargo_tools
+        build:
+            context: ./service/rust_cargo_tools/
+            dockerfile: dockerfile
+        environment: 
+            USER: ${USER}
+        volumes:
+            - ./../../../:/usr/local/MemIs/
+        env_file:
+            - ./../../../app/.env
+        ports:
+            - 8080:80
+        working_dir: /usr/local/MemIs/app/
+        restart: always
+        tty: true
+        init: true
+    diesel_framework_tools:
+        container_name: memis_diesel_framework_tools
+        build:
+            context: ./service/diesel_framework_tools/
+            dockerfile: dockerfile
+        environment: 
+            USER: ${USER}
+        volumes:
+            - ./../../../app/:/usr/local/MemIs/app/
+        env_file:
+            - ./../../../app/.env
+        working_dir: /usr/local/MemIs/app/
+        restart: always
+        tty: true
+        init: true

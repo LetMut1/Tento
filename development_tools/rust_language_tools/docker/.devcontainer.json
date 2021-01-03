@@ -1,0 +1,19 @@
+// The file is for VSCode "ms-vscode-remote.vscode-remote-extensionpack" extension.
+{
+    "dockerComposeFile": "./docker-compose.yaml",
+    "service": "rust_tools",
+    "workspaceFolder": "/usr/local/MemIs/",
+    "extensions": [
+		"rust-lang.rust",
+		"ms-azuretools.vscode-docker",
+		"bungcip.better-toml",
+		"irongeek.vscode-env",
+		"gruntfuggly.todo-tree"
+    ],
+    "settings": { 
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"files.watcherExclude": {
+			"**/target/**": true
+		}
+	}
+}
