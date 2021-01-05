@@ -4,7 +4,10 @@
     "service": "rust_tools",
     "workspaceFolder": "/usr/local/MemIs/",
     "extensions": [
-		"rust-lang.rust",
+		// The only one extension required {
+		"matklad.rust-analyzer",
+		// "rust-lang.rust",
+		// The only one extension required  }
 		"ms-azuretools.vscode-docker",
 		"bungcip.better-toml",
 		"irongeek.vscode-env",

@@ -1,4 +1,3 @@
 [print_schema]
 file = "./src/diesel_framework_component/schema.rs"
 schema = "public"
-with_docs = true

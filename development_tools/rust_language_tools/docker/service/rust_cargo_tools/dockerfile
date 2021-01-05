@@ -2,6 +2,11 @@ FROM rust:1.48.0
 
 RUN \
 mkdir -p /usr/local/MemIs && \
-# For VSCode "rust-lang.rust" extension {
-rustup component add rust-analysis rust-src rls
-# For VSCode "rust-lang.rust" extension }
+# For VSCode extensions {
+# For "matklad.rust-analyzer and "rust-lang.rust" extensions {
+rustup component add rust-src && \
+# For "matklad.rust-analyzer and "rust-lang.rust" extensions }
+# For "rust-lang.rust" extension {
+rustup component add rust-analysis rls
+# For "rust-lang.rust" extension }
+# For VSCode extensions }
