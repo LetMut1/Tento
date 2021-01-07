@@ -12,11 +12,13 @@ async fn main() -> Result<()> {
     }).bind("0.0.0.0:80")?.run().await;
 }
 
+
+// TODO зачем Dereference на Self в ToSql (Diesel);
+
 // TODO create async Database connections pool
 // TODO default_service 
 // TODO Middleware for Scope/Resource
 // TODO Custom Handlers 
-
 // TODO Can we acces to HTTpRequest in Guard? (Check the Params setting opportunity)
 
 
@@ -32,6 +34,7 @@ use actix_web::Responder;
 use actix_web::HttpResponse;
 #[get("/test")]
 async fn test() -> impl Responder {
-    return HttpResponse::Ok().body("test");
+    // println!("{:?}", value);
+    return HttpResponse::Ok().body("dfdfvdf");
 }
 // TODO delete---------------------------------------------------------

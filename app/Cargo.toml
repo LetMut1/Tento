@@ -8,10 +8,16 @@ edition = "2018"
 name = "web_index_bin"
 path = "./src/bin/web_index.rs"
 
+[[bin]]
+name = "postgres_fixtures_bin"
+path = "./src/bin/postgres_fixtures.rs"
+
 [lib]
 name = "self_lib"
 path = "./src/lib.rs"
 
 [dependencies]
 actix-web = "3.3.2"
-diesel = { version = "1.4.4", features = ["postgres"] }
+diesel = { version = "1.4.4", features = ["postgres", "uuid"] }
+uuid = { version = "0.8.1", features = ["v1"] }
+chrono = "0.4.19"
