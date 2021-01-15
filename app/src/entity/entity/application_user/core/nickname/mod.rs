@@ -1,20 +1,22 @@
 use diesel::AsExpression;
 use diesel::backend::Backend;
+use diesel::deserialize::FromSql;
+use diesel::deserialize::Result as DieselDeserializeResult;
+use diesel::FromSqlRow;
 use diesel::serialize::Output;
 use diesel::serialize::Result as DieselSerializeResult;
 use diesel::serialize::ToSql;
 use diesel::sql_types::Text as DieselSqlTypeText;
-use diesel::sql_types::Uuid as DieselSqlTypeUuid;
 use std::fmt::Debug;
 use std::io::Write;
 
-#[derive(Debug, AsExpression)]
-#[sql_type = "DieselSqlTypeUuid"]
-pub struct JwtId {
+#[derive(Debug, AsExpression, FromSqlRow)]
+#[sql_type = "DieselSqlTypeText"]
+pub struct Nickname {
     value: String
 }
 
-impl<'a> JwtId {
+impl<'a> Nickname {
     pub fn new(value: String) -> Self {
         return Self {value};
     }
@@ -30,7 +32,7 @@ impl<'a> JwtId {
     }
 }
 
-impl<DB> ToSql<DieselSqlTypeUuid, DB> for JwtId
+impl<DB> ToSql<DieselSqlTypeText, DB> for Nickname
 where
     DB: Backend,
     String: ToSql<DieselSqlTypeText, DB>
@@ -41,4 +43,14 @@ where
     {
         return self.get_value().to_sql(out);
     }
+}
+
+impl<DB> FromSql<DieselSqlTypeText, DB> for Nickname
+where
+     DB: Backend,
+     String: FromSql<DieselSqlTypeText, DB>,
+ {
+     fn from_sql(bytes: Option<&DB::RawValue>) -> DieselDeserializeResult<Self> {
+         return Ok(Self {value: String::from_sql(bytes)?});
+     }
 }

@@ -9,9 +9,9 @@ services:
         environment:
             PGDATA: '/var/lib/postgresql/data'
             POSTGRES_HOST_AUTH_METHOD: 'md5'
-            POSTGRES_USER: 'user'
+            POSTGRES_USER: 'root'
             POSTGRES_PASSWORD: 'password'
-            POSTGRES_DB: 'memis'
+            POSTGRES_DB: 'mem_is'
         volumes:
             - postgresql_data:/var/lib/postgresql/data
         restart: always

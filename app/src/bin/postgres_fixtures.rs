@@ -1,18 +1,24 @@
 extern crate self_lib;
-use self_lib::diesel_component::schema::public::app_user;
-use self_lib::entity::entity::app_user::AppUser;
+use self_lib::diesel_component::schema::public::application_user;
+use self_lib::entity::entity::application_user::ApplicationUser;
 
 extern crate diesel;
+use diesel::pg::PgConnection;
 use diesel::prelude::*;
-use diesel::pg::PgConnection;                   // TODO Write normal (in one Connection)
-
+                                // TODO refactor with any methods
 fn main() -> () {
-    for i in 1..100 {
-        diesel::insert_into(app_user::table)
-        .values(& AppUser::new(i.to_string(), self_lib::entity::entity::app_user::core::id::Id::new().get_value(), String::from("svdf")))
-        .execute(& PgConnection::establish("postgres://user:password@postgresql/memis").expect(&format!("Error connecting")))
-        .expect("Error saving new post");
+    let mut application_user_registry: Vec<ApplicationUser> = vec![];
+    
+    for i in 1..1000 {
+        application_user_registry.push(
+            ApplicationUser::new(i.to_string(), i.to_string())
+        )
     }
+
+    diesel::insert_into(application_user::table)
+    .values(&application_user_registry)
+    .execute(&PgConnection::establish("postgres://root:password@postgresql/mem_is").expect(&format!("Error connecting")))
+    .expect("Error saving new post");
     
     return ();
 }

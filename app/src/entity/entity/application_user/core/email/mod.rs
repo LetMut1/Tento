@@ -1,5 +1,8 @@
 use diesel::AsExpression;
 use diesel::backend::Backend;
+use diesel::deserialize::FromSql;
+use diesel::deserialize::Result as DieselDeserializeResult;
+use diesel::FromSqlRow;
 use diesel::serialize::Output;
 use diesel::serialize::Result as DieselSerializeResult;
 use diesel::serialize::ToSql;
@@ -7,7 +10,7 @@ use diesel::sql_types::Text as DieselSqlTypeText;
 use std::fmt::Debug;
 use std::io::Write;
 
-#[derive(Debug, AsExpression)]
+#[derive(Debug, AsExpression, FromSqlRow)]
 #[sql_type = "DieselSqlTypeText"]
 pub struct Email {
     value: String
@@ -42,4 +45,12 @@ where
     }
 }
 
-
+impl<DB> FromSql<DieselSqlTypeText, DB> for Email
+where
+     DB: Backend,
+     String: FromSql<DieselSqlTypeText, DB>,
+ {
+     fn from_sql(bytes: Option<&DB::RawValue>) -> DieselDeserializeResult<Self> {
+         return Ok(Self {value: String::from_sql(bytes)?});
+     }
+}
