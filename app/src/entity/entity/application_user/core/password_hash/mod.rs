@@ -1,12 +1,12 @@
 use maybe_owned::MaybeOwned;
 use std::borrow::Borrow;
 
-pub struct Nickname<'a> {
+pub struct PasswordHash<'a> {
     value: MaybeOwned<'a, String>
 }
 
-impl<'a> Nickname<'a> {
-    pub fn new(value: MaybeOwned<'a, String>) -> Self {
+impl<'a> PasswordHash<'a> {
+    pub fn new(value: MaybeOwned<'a, String>) -> Self {     // TODO create Hash with Util HAher
         return Self {value};
     }
 

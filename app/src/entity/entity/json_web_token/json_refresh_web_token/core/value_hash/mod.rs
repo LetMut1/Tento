@@ -1,11 +1,11 @@
 use maybe_owned::MaybeOwned;
 use std::borrow::Borrow;
 
-pub struct Nickname<'a> {
+pub struct ValueHash<'a> {
     value: MaybeOwned<'a, String>
 }
 
-impl<'a> Nickname<'a> {
+impl<'a> ValueHash<'a> {
     pub fn new(value: MaybeOwned<'a, String>) -> Self {
         return Self {value};
     }

@@ -3,24 +3,30 @@ pub mod public {
         use diesel::sql_types::*;
 
         application_user (id) {
-            email -> Varchar,
             id -> Uuid,
-            jwt_id -> Uuid,
+            email -> Varchar,
             nickname -> Varchar,
+            password_hash -> Varchar,
         }
     }
 
     table! {
         use diesel::sql_types::*;
 
-        for_test (idd) {
-            testes_value -> Int8,
-            idd -> Uuid,
+        json_refresh_web_token (id) {
+            id -> Uuid,
+            device_id -> Varchar,
+            value_hash -> Varchar,
+            user_id -> Uuid,
+            expired_at -> Timestamptz,
+            created_at -> Timestamptz,
         }
     }
 
+    joinable!(json_refresh_web_token -> application_user (user_id));
+
     allow_tables_to_appear_in_same_query!(
         application_user,
-        for_test,
+        json_refresh_web_token,
     );
 }
