@@ -1,5 +1,4 @@
 use maybe_owned::MaybeOwned;
-use std::borrow::Borrow;
 use uuid::Uuid;
 
 pub struct UuidV4<'a> {
@@ -8,11 +7,15 @@ pub struct UuidV4<'a> {
 
 impl<'a> UuidV4<'a> {
     pub fn new() -> Self {
-        return Self {value: MaybeOwned::Owned(Uuid::new_v4())};
+        return Self {
+            value: MaybeOwned::Owned(Uuid::new_v4())
+        };
     }
 
     pub fn new_from(value: MaybeOwned<'a, Uuid>) -> Self {
-        return Self {value};
+        return Self {
+            value
+        };
     }
 
     pub fn set_value(&'a mut self, value: MaybeOwned<'a, Uuid>) -> &'a mut Self {
@@ -22,6 +25,6 @@ impl<'a> UuidV4<'a> {
     }
 
     pub fn get_value(&'a self) -> &'a Uuid {
-        return self.value.borrow();
+        return &self.value;
     }
 }

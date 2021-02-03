@@ -12,7 +12,7 @@ pub struct New<'a> {
     id: &'a Uuid,
     user_id: &'a Uuid,
     device_id: &'a String,
-    value_hash: &'a String,
+    value: &'a String,
     created_at: &'a ChronoDateTime<Utc>,
     expired_at: &'a ChronoDateTime<Utc>
 }
@@ -23,7 +23,7 @@ impl<'a> New<'a> {
             id: entity.get_id().get_value(),
             user_id: entity.get_user_id().get_value(),
             device_id: entity.get_device_id().get_value(),
-            value_hash: entity.get_value_hash().get_value(),
+            value: entity.get_value().get_value(),
             created_at: entity.get_created_at().get_value(),
             expired_at: entity.get_created_at().get_value()
         };
@@ -35,7 +35,7 @@ pub struct Existing {
     id: Uuid,
     user_id: Uuid,
     device_id: String,
-    value_hash: String,
+    value: String,
     created_at: ChronoDateTime<Utc>,
     expired_at: ChronoDateTime<Utc>
 }
@@ -54,7 +54,7 @@ impl<'a> Existing {
     }
 
     pub fn get_value_hash(&'a self) -> &'a String {
-        return &self.value_hash;
+        return &self.value;
     }
 
     pub fn get_created_at(&'a self) -> &'a ChronoDateTime<Utc> {

@@ -1,7 +1,6 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use maybe_owned::MaybeOwned;
-use std::borrow::Borrow;
 
 pub struct DateTime<'a> {
     value: MaybeOwned<'a, ChronoDateTime<Utc>>
@@ -9,11 +8,15 @@ pub struct DateTime<'a> {
 
 impl<'a> DateTime<'a> {
     pub fn new() -> Self {
-        return Self {value: MaybeOwned::Owned(Utc::now())};
+        return Self {
+            value: MaybeOwned::Owned(Utc::now())
+        };
     }
 
     pub fn new_from(value: MaybeOwned<'a, ChronoDateTime<Utc>>) -> Self {
-        return Self {value};
+        return Self {
+            value
+        };
     }
 
     pub fn set_value(&'a mut self, value: MaybeOwned<'a, ChronoDateTime<Utc>>) -> &'a mut Self {
@@ -23,6 +26,6 @@ impl<'a> DateTime<'a> {
     }
 
     pub fn get_value(&'a self) -> &'a ChronoDateTime<Utc> {
-        return self.value.borrow();
+        return &self.value;
     }
 }

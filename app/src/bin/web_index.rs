@@ -1,5 +1,6 @@
 #[macro_use]
 extern crate actix_web;
+
 use actix_web::App;
 use actix_web::HttpServer;
 use std::io::Result;

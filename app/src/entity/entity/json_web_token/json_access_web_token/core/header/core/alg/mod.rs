@@ -16,6 +16,8 @@ impl<'a> Alg {
 
 impl Default for Alg {
     fn default() -> Self {
-        return Self { value: "HS512" };
+        return Self { 
+            value: "HS512" 
+        };
     }
 }

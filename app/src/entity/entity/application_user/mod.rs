@@ -24,7 +24,7 @@ impl<'a> ApplicationUser<'a> {
         };
     }
 
-    pub fn from_model(model: &'a Existing) -> Self {
+    pub fn new_from_model(model: &'a Existing) -> Self {
         return Self {
             id: UuidV4::new_from(MaybeOwned::Borrowed(model.get_id())),
             email: Email::new(MaybeOwned::Borrowed(model.get_emal())),

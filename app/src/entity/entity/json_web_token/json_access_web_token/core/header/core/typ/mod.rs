@@ -16,6 +16,8 @@ impl<'a> Typ {
 
 impl Default for Typ {
     fn default() -> Self {
-        return Self { value: "JWT" };
+        return Self { 
+            value: "JWT" 
+        };
     }
 }

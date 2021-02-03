@@ -18,7 +18,11 @@ path = "./src/lib.rs"
 
 [dependencies]
 actix-web = "3.3.2"
-diesel = { version = "1.4.4", features = ["postgres", "uuidv07", "chrono"] }
-uuid = { version = "0.8.1", features = ["v4", "v1"] }
+base64 = "0.13.0"
 chrono = "0.4.19"
+diesel = { version = "1.4.4", features = ["postgres", "uuidv07", "chrono"] }
+hex = "0.4.2"
+json = "0.12.4"
 maybe-owned = "0.3.4"
+rust-crypto = "0.2.36"
+uuid = { version = "0.8.1", features = ["v4", "v1"] }

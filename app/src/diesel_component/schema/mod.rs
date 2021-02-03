@@ -16,7 +16,7 @@ pub mod public {
         json_refresh_web_token (id) {
             id -> Uuid,
             device_id -> Varchar,
-            value_hash -> Varchar,
+            value -> Varchar,
             user_id -> Uuid,
             expired_at -> Timestamptz,
             created_at -> Timestamptz,
