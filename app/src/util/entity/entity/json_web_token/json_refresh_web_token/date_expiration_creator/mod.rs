@@ -7,6 +7,6 @@ pub struct DateExpirationCreator;
 
 impl<'a> DateExpirationCreator {
     pub fn create_interval() -> DateTime<'a> {
-        return DateTime::new_from(MaybeOwned::Owned(Utc::now().checked_add_signed(Duration::days(30)).unwrap()));
+        return DateTime::new_from_date_time(MaybeOwned::Owned(Utc::now().checked_add_signed(Duration::days(30)).unwrap()));
     }
 }

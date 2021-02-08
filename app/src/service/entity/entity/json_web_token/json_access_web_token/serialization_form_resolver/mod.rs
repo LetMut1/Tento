@@ -1,13 +1,13 @@
+use crate::dto::entity::entity::json_web_token::json_access_web_token::core::header::common::Common as HeaderCommon;
+use crate::dto::entity::entity::json_web_token::json_access_web_token::core::payload::common::Common as PayloadCommon;
 use crate::entity::entity::json_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::util::entity::entity::json_web_token::json_access_web_token::hs512_encryptor::HS512Encoder;
-use json::JsonValue;
-use json::object;
 
 pub struct SerializationFormResolver {
     hs512_encoder: HS512Encoder
 }
 
-impl<'a> SerializationFormResolver {
+impl<'a, 'b: 'a> SerializationFormResolver {
     pub fn new() -> Self {
         return Self {
             hs512_encoder: HS512Encoder::new()
@@ -15,29 +15,22 @@ impl<'a> SerializationFormResolver {
     }
 
     pub fn serialize(&'a self, json_access_web_token: &'a JsonAccessWebToken) -> String {
-        let header: JsonValue = object! {
-            alg: json_access_web_token.get_header().get_alg().get_value(),
-            typ: json_access_web_token.get_header().get_typ().get_value()
-        };
+        let header_common: HeaderCommon = HeaderCommon::new_from_entity(json_access_web_token);
+        let payload_common: PayloadCommon = PayloadCommon::new_from_entity(json_access_web_token);
 
-        let payload: JsonValue = object! {
-            user_id: json_access_web_token.get_payload().get_user_id().get_value().to_string(),
-            device_id: json_access_web_token.get_payload().get_device_id().get_value().clone(),
-            json_refresh_web_token_value: json_access_web_token.get_payload().get_value().get_value().to_string(),
-            exp: json_access_web_token.get_payload().get_exp().get_value().to_rfc3339()
-        };
-
-        return self.create_classic_form(&header.dump(), &payload.dump());
+        return self.create_classic_form(&serde_json::to_string(&header_common).unwrap(), &serde_json::to_string(&payload_common).unwrap());
     }
 
-    pub fn deserialize(&'a self, jawt_classic_form: &'a String) -> JsonAccessWebToken {       // TODO Result c кастомной ошибкой, плюс обработка ошибок далее
-        let jawt_parts: Vec<String> = jawt_classic_form.split(".").map(|value: &str| -> String { return value.to_string(); }).collect();
+    pub fn deserialize(&'a self, jawt_classic_form: &'b String) -> JsonAccessWebToken {
+        let jawt_parts: Vec<String> = jawt_classic_form.split(".").map(|value: &str| -> String { return value.to_owned(); }).collect();
 
         if self.is_valid(&jawt_parts) {
+            let paylod_json_encoded: &[u8] = &base64::decode(&jawt_parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
+            let payload_common: PayloadCommon = serde_json::from_slice(paylod_json_encoded).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
             
+            return JsonAccessWebToken::new_from_payload_dto_common(payload_common);
         } else {
-            // TODO выбрасывать исключение
-            panic!("TODO");
+            panic!("Выбрасываем исключение, то есть, возвращаем Резалт с кастомной ошибкой");   // TODO 
         }
     }
 

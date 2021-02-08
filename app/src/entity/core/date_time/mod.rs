@@ -2,24 +2,30 @@ use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use maybe_owned::MaybeOwned;
 
-pub struct DateTime<'a> {
-    value: MaybeOwned<'a, ChronoDateTime<Utc>>
+pub struct DateTime<'b> {
+    value: MaybeOwned<'b, ChronoDateTime<Utc>>
 }
 
-impl<'a> DateTime<'a> {
+impl<'a, 'b: 'a> DateTime<'b> {
     pub fn new() -> Self {
         return Self {
             value: MaybeOwned::Owned(Utc::now())
         };
     }
 
-    pub fn new_from(value: MaybeOwned<'a, ChronoDateTime<Utc>>) -> Self {
+    pub fn new_from_date_time(value: MaybeOwned<'b, ChronoDateTime<Utc>>) -> Self {
         return Self {
             value
         };
     }
 
-    pub fn set_value(&'a mut self, value: MaybeOwned<'a, ChronoDateTime<Utc>>) -> &'a mut Self {
+    pub fn new_from_string(value: &'b String) -> Self {
+        return Self {
+            value:MaybeOwned::Owned(ChronoDateTime::parse_from_rfc3339(value.as_str()).unwrap().with_timezone(&Utc))        // TODO выбрасывать ошибку
+        };
+    }
+
+    pub fn set_value(&'a mut self, value: MaybeOwned<'b, ChronoDateTime<Utc>>) -> &'a mut Self {
         self.value = value;
 
         return self;

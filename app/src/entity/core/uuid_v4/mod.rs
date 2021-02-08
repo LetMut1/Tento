@@ -1,24 +1,36 @@
 use maybe_owned::MaybeOwned;
+use std::convert::TryInto;
 use uuid::Uuid;
 
-pub struct UuidV4<'a> {
-    value: MaybeOwned<'a, Uuid>
+pub struct UuidV4<'b> {
+    value: MaybeOwned<'b, Uuid>
 }
 
-impl<'a> UuidV4<'a> {
+impl<'a, 'b: 'a> UuidV4<'b> {
     pub fn new() -> Self {
         return Self {
             value: MaybeOwned::Owned(Uuid::new_v4())
         };
     }
 
-    pub fn new_from(value: MaybeOwned<'a, Uuid>) -> Self {
+    pub fn new_from_uuid(value: &'b Uuid) -> Self {
         return Self {
-            value
+            value: MaybeOwned::Borrowed(value)
         };
     }
 
-    pub fn set_value(&'a mut self, value: MaybeOwned<'a, Uuid>) -> &'a mut Self {
+    pub fn new_from_string(value: &'b String) -> Self {
+        let value_bytes: &[u8] = value.as_bytes();
+        if value_bytes.len() == 16 {
+            return Self { 
+                value: MaybeOwned::Owned(Uuid::from_bytes(value_bytes.try_into().unwrap())) // TODO ВЫбрасывать ошибку тоже
+            }
+        } else {
+            panic!("выбрасывать Ошибки"); // TODO 
+        }
+    }
+
+    pub fn set_value(&'a mut self, value: MaybeOwned<'b, Uuid>) -> &'a mut Self {
         self.value = value;
 
         return self;
