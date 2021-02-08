@@ -5,12 +5,12 @@ use crate::entity::entity::json_web_token::json_refresh_web_token::JsonRefreshWe
 use self::core::header::Header;
 use self::core::payload::Payload;
 
-pub struct JsonAccessWebToken<'b> {
+pub struct JsonAccessWebToken<'a, 'b: 'a> {
     header: Header,
-    payload: Payload<'b>
+    payload: Payload<'a, 'b>
 }
 
-impl<'a, 'b: 'a> JsonAccessWebToken<'b> {
+impl<'a, 'b: 'a> JsonAccessWebToken<'a, 'b> {
     pub fn new_from_jrwt(json_refresh_web_token: &'b JsonRefreshWebToken<'a, 'b>) -> Self {
         return Self {
             header: Header::new(),
@@ -18,7 +18,7 @@ impl<'a, 'b: 'a> JsonAccessWebToken<'b> {
         };
     }
 
-    pub fn new_from_payload_dto_common(common: Common<'b>) -> Self {
+    pub fn new_from_payload_dto_common(common: &'b Common<'b>) -> Self {
         return Self {
             header: Header::new(),
             payload: Payload::new_from_dto_common(common)
@@ -29,7 +29,7 @@ impl<'a, 'b: 'a> JsonAccessWebToken<'b> {
         return &self.header;
     }
 
-    pub fn get_payload(&'a self) -> &'a Payload<'b> {
+    pub fn get_payload(&'a self) -> &'a Payload<'a, 'b> {
         return &self.payload;
     }
 }

@@ -12,7 +12,7 @@ pub struct Common<'b> {
 }
 
 impl<'a, 'b: 'a> Common<'b> {
-    pub fn new_from_entity(json_access_web_token: &'b JsonAccessWebToken<'b>) -> Self {
+    pub fn new_from_entity(json_access_web_token: &'b JsonAccessWebToken<'a, 'b>) -> Self {
         return Self {
             user_id: MaybeOwned::Owned(json_access_web_token.get_payload().get_user_id().get_value().to_string()),
             device_id: MaybeOwned::Borrowed(json_access_web_token.get_payload().get_device_id().get_value()),

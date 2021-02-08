@@ -1,16 +1,19 @@
 use crate::dto::entity::entity::json_web_token::json_access_web_token::core::header::common::Common as HeaderCommon;
 use crate::dto::entity::entity::json_web_token::json_access_web_token::core::payload::common::Common as PayloadCommon;
 use crate::entity::entity::json_web_token::json_access_web_token::JsonAccessWebToken;
-use crate::util::entity::entity::json_web_token::json_access_web_token::hs512_encryptor::HS512Encoder;
+use crate::util::entity::entity::json_web_token::json_access_web_token::hs512_encoder::HS512Encoder;
+use std::option::Option;
 
-pub struct SerializationFormResolver {
-    hs512_encoder: HS512Encoder
+pub struct SerializationFormResolver<'a> {
+    hs512_encoder: HS512Encoder,
+    payload_common: Option<PayloadCommon<'a>>
 }
 
-impl<'a, 'b: 'a> SerializationFormResolver {
+impl<'a, 'b: 'a> SerializationFormResolver<'a> {
     pub fn new() -> Self {
         return Self {
-            hs512_encoder: HS512Encoder::new()
+            hs512_encoder: HS512Encoder::new(),
+            payload_common: None
         };
     }
 
@@ -21,14 +24,14 @@ impl<'a, 'b: 'a> SerializationFormResolver {
         return self.create_classic_form(&serde_json::to_string(&header_common).unwrap(), &serde_json::to_string(&payload_common).unwrap());
     }
 
-    pub fn deserialize(&'a self, jawt_classic_form: &'b String) -> JsonAccessWebToken {
+    pub fn deserialize(&'a mut self, jawt_classic_form: &'b String) -> &'a PayloadCommon<'a> {
         let jawt_parts: Vec<String> = jawt_classic_form.split(".").map(|value: &str| -> String { return value.to_owned(); }).collect();
 
         if self.is_valid(&jawt_parts) {
             let paylod_json_encoded: &[u8] = &base64::decode(&jawt_parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
-            let payload_common: PayloadCommon = serde_json::from_slice(paylod_json_encoded).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
-            
-            return JsonAccessWebToken::new_from_payload_dto_common(payload_common);
+            self.payload_common = Some(serde_json::from_slice(paylod_json_encoded).unwrap());  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
+
+            return (&self.payload_common).as_ref().unwrap();
         } else {
             panic!("Выбрасываем исключение, то есть, возвращаем Резалт с кастомной ошибкой");   // TODO 
         }
