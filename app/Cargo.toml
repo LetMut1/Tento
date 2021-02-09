@@ -5,15 +5,15 @@ authors = ["zda"]
 edition = "2018"
 
 [[bin]]
-name = "web_index_bin"
-path = "./src/bin/web_index.rs"
+name = "web_main_bin"
+path = "./src/bin/web_main.rs"
 
 [[bin]]
 name = "postgres_fixtures_bin"
 path = "./src/bin/postgres_fixtures.rs"
 
 [lib]
-name = "self_lib"
+name = "self_"
 path = "./src/lib.rs"
 
 [dependencies]

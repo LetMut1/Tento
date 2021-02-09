@@ -1,13 +1,12 @@
-extern crate self_lib;
-use self_lib::diesel_component::schema::public::application_user;
-use self_lib::entity::entity::application_user::ApplicationUser;
-
+extern crate self_;
 extern crate diesel;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
+use self_::diesel_component::schema::public::application_user;
+use self_::entity::entity::application_user::ApplicationUser;
                                 // TODO refactor with any methods
 fn main() -> () {
-    // let mut application_user_registry: Vec<ApplicationUser> = vec![];
+    // let mut application_user_registry: Vec<ApplicationUser<'LIFETIME>> = vec![];
     
     // for i in 1..1000 {
     //     application_user_registry.push(

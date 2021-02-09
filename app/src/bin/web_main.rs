@@ -1,4 +1,4 @@
-#[macro_use]
+#[macro_use]                // TODO нужно ли 
 extern crate actix_web;
 
 use actix_web::App;
@@ -8,7 +8,7 @@ use std::io::Result;
 #[actix_web::main]
 async fn main() -> Result<()> {
     return HttpServer::new(|| {
-        App::new().service(test)// TODO delete service
+        App::new().service(self_::actix_web_component::request_handler::test)
     }).bind("0.0.0.0:80")?.run().await;
 }
 
@@ -30,13 +30,3 @@ async fn main() -> Result<()> {
 // TODO Custom Handlers 
 // TODO Can we acces to HTTpRequest in Guard? (Check the Params setting opportunity)
 // TODO https://www.reddit.com/r/rust/comments/frkta2/manytomany_relationships_in_diesel_does_anybody/      Diesel MANY-TO-MANY Association example
-// TODO delete--------------------------------------------------------
-
-use actix_web::Responder;
-use actix_web::HttpResponse;
-#[get("/test")]
-async fn test() -> impl Responder {
-    // println!("{:?}", value);
-    return HttpResponse::Ok().body("dfdfvdf");
-}
-// TODO delete---------------------------------------------------------
