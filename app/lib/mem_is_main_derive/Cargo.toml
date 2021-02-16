@@ -1,0 +1,14 @@
+[package]
+name = "mem_is_main_derive"
+version = "0.1.0"
+authors = ["zda"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+name = "mem_is_main_derive"
+path = "./src/lib.rs"
+
+[dependencies]
+syn = { version = "1" }
+quote = { version = "1" }
