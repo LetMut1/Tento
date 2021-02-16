@@ -6,11 +6,11 @@ edition = "2018"
 
 [[bin]]
 name = "web_main_bin"
-path = "./src/bin/web_main.rs"
+path = "./bin/web_main.rs"
 
 [[bin]]
 name = "postgres_fixtures_bin"
-path = "./src/bin/postgres_fixtures.rs"
+path = "./bin/postgres_fixtures.rs"
 
 [lib]
 name = "self_"

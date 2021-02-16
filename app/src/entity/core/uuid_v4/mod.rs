@@ -30,12 +30,6 @@ impl<'a, 'b: 'a> UuidV4<'b> {
         }
     }
 
-    pub fn set_value(&'a mut self, value: MaybeOwned<'b, Uuid>) -> &'a mut Self {
-        self.value = value;
-
-        return self;
-    }
-
     pub fn get_value(&'a self) -> &'a Uuid {
         return &self.value;
     }

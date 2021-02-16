@@ -7,6 +7,8 @@ pub mod public {
             email -> Varchar,
             nickname -> Varchar,
             password_hash -> Varchar,
+            created_at -> Timestamptz,
+            confirmed -> Bool,
         }
     }
 

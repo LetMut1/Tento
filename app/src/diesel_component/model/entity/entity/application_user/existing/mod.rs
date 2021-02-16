@@ -1,3 +1,5 @@
+use chrono::DateTime as ChronoDateTime;
+use chrono::offset::Utc;
 use diesel::Queryable;
 use uuid::Uuid;
 
@@ -6,7 +8,9 @@ pub struct Existing {
     id: Uuid,
     email: String,
     nickname: String,
-    password_hash: String
+    password_hash: String,
+    created_at: ChronoDateTime<Utc>,
+    confirmed: bool
 }
 
 impl<'a> Existing{
@@ -24,5 +28,13 @@ impl<'a> Existing{
 
     pub fn get_password_hash(&'a self) -> &'a String {
         return &self.password_hash;
+    }
+
+    pub fn get_created_at(&'a self) -> &'a ChronoDateTime<Utc> {
+        return &self.created_at;
+    }
+
+    pub fn get_confirmed(&'a self) -> bool {
+        return self.confirmed;
     }
 }

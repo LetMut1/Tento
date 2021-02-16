@@ -25,12 +25,6 @@ impl<'a, 'b: 'a> DateTime<'b> {
         };
     }
 
-    pub fn set_value(&'a mut self, value: MaybeOwned<'b, ChronoDateTime<Utc>>) -> &'a mut Self {
-        self.value = value;
-
-        return self;
-    }
-
     pub fn get_value(&'a self) -> &'a ChronoDateTime<Utc> {
         return &self.value;
     }

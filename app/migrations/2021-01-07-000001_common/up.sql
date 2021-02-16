@@ -3,6 +3,8 @@ CREATE TABLE application_user (
     email VARCHAR NOT NULL,
     nickname VARCHAR NOT NULL,
     password_hash VARCHAR NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL,
+    confirmed BOOLEAN NOT NULL,
     PRIMARY KEY (id)
 );
 -- // TODO Create Constraints !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

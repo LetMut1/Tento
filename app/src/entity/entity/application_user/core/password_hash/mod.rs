@@ -5,16 +5,10 @@ pub struct PasswordHash<'b> {
 }
 
 impl<'a, 'b: 'a> PasswordHash<'b> {
-    pub fn new(value: MaybeOwned<'b, String>) -> Self {     // TODO create Hash with Util HAher
+    pub fn new(value: MaybeOwned<'b, String>) -> Self {     // TODO create Hash with Util HAher (Нужен ли он имеео здесь как свойство )
         return Self {
             value
         };
-    }
-
-    pub fn set_value(&'a mut self, value: MaybeOwned<'b, String>) -> &'a mut Self {
-        self.value = value;
-
-        return self;
     }
 
     pub fn get_value(&'a self) -> &'a String {

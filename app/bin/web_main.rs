@@ -1,18 +1,20 @@
-#[macro_use]                // TODO нужно ли 
 extern crate actix_web;
-
 use actix_web::App;
 use actix_web::HttpServer;
-use std::io::Result;
+use actix_web::web;
+use std::io::Result;      // TODO Везде ли Нужен МэйбиОвнед? при создании экземпляра в архументы можно положить сразу референс. - То есть, в основном, будут референсы
 
 #[actix_web::main]
 async fn main() -> Result<()> {
-    return HttpServer::new(|| {
-        App::new().service(self_::actix_web_component::request_handler::test)
+    return HttpServer::new(|| {         // TODO переместить Scops в разные методы? 
+        App::new().service(
+            web::scope("").route("/test", web::post().to(self_::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::Authorization::register))
+        )
     }).bind("0.0.0.0:80")?.run().await;
 }
 
 // TODO Do not remove this block until the problems have been fixed {
+    // TOOD 0. Header Connection: Keep-alive - disable https://developer.mozilla.org/ru/docs/Web/HTTP/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BA%D0%B8/Connection
     // TODO 1. Work with JRWT via Redis, create BlacList for Access Token in Redis
     // TODO 2. Diesel do not works with Uuid 0.8.* :
     // https://github.com/diesel-rs/diesel/issues/2348

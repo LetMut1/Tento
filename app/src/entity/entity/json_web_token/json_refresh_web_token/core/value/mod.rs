@@ -11,12 +11,6 @@ impl<'a, 'b: 'a> Value<'b> {
         };
     }
 
-    pub fn set_value(&'a mut self, value: MaybeOwned<'b, String>) -> &'a mut Self {
-        self.value = value;
-
-        return self;
-    }
-
     pub fn get_value(&'a self) -> &'a String {
         return &self.value;
     }

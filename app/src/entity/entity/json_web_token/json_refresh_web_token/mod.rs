@@ -4,7 +4,7 @@ use crate::diesel_component::model::entity::entity::json_refresh_web_token::exis
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::device_id::DeviceId;
 use crate::entity::core::uuid_v4::UuidV4;
-use crate::util::entity::entity::json_web_token::json_refresh_web_token::date_expiration_creator::DateExpirationCreator;
+use crate::utility::entity::entity::json_web_token::json_refresh_web_token::date_expiration_creator::DateExpirationCreator;
 use maybe_owned::MaybeOwned;
 use self::core::value::Value;
 
@@ -40,14 +40,14 @@ impl<'a, 'b: 'a> JsonRefreshWebToken<'a, 'b> {          // TODO  create ValHas w
         };
     }
 
-    pub fn set_value(&'a mut self, value: String) -> &'a mut Self {
-        self.value = Value::new(MaybeOwned::Owned(value));
+    pub fn refresh_expired_at(&'a mut self) -> &'a mut Self {
+        self.expired_at = DateExpirationCreator::create_interval();
 
         return self;
     }
 
-    pub fn refresh_expired_at(&'a mut self) -> &'a mut Self {
-        self.expired_at = DateExpirationCreator::create_interval();
+    pub fn set_value(&'a mut self, value: Value<'b>) -> &'a mut Self {
+        self.value = value;
 
         return self;
     }
