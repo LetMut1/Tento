@@ -21,8 +21,3 @@
         
 //     }
 // }
-
-
-// https://stackoverflow.com/questions/45232838/is-it-possible-to-automatically-define-fields-of-a-struct
-
-// Попробовать создать декларативный макрос для Полей Сущности и и реализовать дополнительный функционал

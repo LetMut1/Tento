@@ -2,7 +2,7 @@ use diesel::RunQueryDsl;
 
 use crate::diesel_component::model::entity::entity::application_user::new::New;
 use crate::diesel_component::schema::public::application_user::dsl::application_user;
-use crate::utility::repository::entity::common::pg_connection_manager::PGConnectionManager;
+use crate::utility::repository::entity::_common::pg_connection_manager::PGConnectionManager;
 
 pub struct BaseRepository<'b> {
     pg_connection_manager: &'b PGConnectionManager

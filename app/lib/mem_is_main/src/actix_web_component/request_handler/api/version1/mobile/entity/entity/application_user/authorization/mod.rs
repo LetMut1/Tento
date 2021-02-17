@@ -3,7 +3,7 @@ use actix_web::Responder;
 use actix_web::web::Form;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::request::Request as RegisterRequest;
 use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::Handler as RegisterHandler;
-use crate::utility::repository::entity::common::pg_connection_manager::PGConnectionManager;
+use crate::utility::repository::entity::_common::pg_connection_manager::PGConnectionManager;
 
 pub struct Authorization;
 

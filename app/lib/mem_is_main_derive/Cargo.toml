@@ -10,5 +10,6 @@ name = "mem_is_main_derive"
 path = "./src/lib.rs"
 
 [dependencies]
-syn = { version = "1" }
+syn = { version = "1", features = ["full"] }
 quote = { version = "1" }
+proc-macro2 = { version = "1" }
