@@ -1,5 +1,5 @@
 extern crate actix_web;
-extern crate mem_is_main;
+extern crate core_lib as core;
 use actix_web::App;
 use actix_web::HttpServer;
 use actix_web::web;
@@ -9,7 +9,7 @@ use std::io::Result;      // TODO Везде ли Нужен МэйбиОвне�
 async fn main() -> Result<()> {
     return HttpServer::new(|| {         // TODO переместить Scops в разные методы? 
         App::new().service(
-            web::scope("").route("/test", web::post().to(mem_is_main::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::Authorization::register))
+            web::scope("").route("/test", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::Authorization::register))
         )
     }).bind("0.0.0.0:80")?.run().await;
 }

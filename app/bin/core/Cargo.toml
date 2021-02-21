@@ -1,17 +1,17 @@
 [package]
-name = "mem_is_bin"
+name = "core_bin"
 version = "0.1.0"
 authors = ["zda"]
 edition = "2018"
 
 [[bin]]
-name = "web_main_bin"
+name = "core_bin_web_main"
 path = "./src/web_main.rs"
 
 [[bin]]
-name = "postgres_fixtures_bin"
+name = "core_bin_postgres_fixtures"
 path = "./src/postgres_fixtures.rs"
 
 [dependencies]
 actix-web = { version = "3.3.2" }
-mem_is_main = { path = "./../lib/mem_is_main", version = "0.1.0" }
+core_lib = { path = "./../../lib/core", version = "0.1.0" }

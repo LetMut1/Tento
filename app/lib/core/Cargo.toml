@@ -1,12 +1,12 @@
 [package]
-name = "mem_is_main"
+name = "core_lib"
 version = "0.1.0"
 authors = ["zda"]
 edition = "2018"
 
 [lib]
-name = "mem_is_main"
-path = "./src/lib.rs"
+name = "core_lib"
+path = "./src/mod.rs"
 
 [dependencies]
 actix-web = { version = "3.3.2" }
@@ -15,7 +15,6 @@ chrono = { version = "0.4.19" }
 diesel = { version = "1.4.4", features = ["postgres", "uuidv07", "chrono"] }
 hex = { version = "0.4.2" }
 maybe-owned = { version = "0.3.4", features = ["serde"] }
-mem_is_main_derive = { path = "./../lib/mem_is_main_derive", version = "0.1.0" }
 rust-crypto = { version = "0.2.36" }
 serde = { version = "1.0.123", features = ["derive"] }
 serde_json = { version = "1.0" }

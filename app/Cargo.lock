@@ -475,6 +475,30 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2df960f5d869b2dd8532793fde43eb5427cceb126c929747a26823ab0eeb536"
 
 [[package]]
+name = "core_bin"
+version = "0.1.0"
+dependencies = [
+ "actix-web",
+ "core_lib",
+]
+
+[[package]]
+name = "core_lib"
+version = "0.1.0"
+dependencies = [
+ "actix-web",
+ "base64",
+ "chrono",
+ "diesel",
+ "hex",
+ "maybe-owned",
+ "rust-crypto",
+ "serde",
+ "serde_json",
+ "uuid",
+]
+
+[[package]]
 name = "cpuid-bool"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -968,39 +992,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4facc753ae494aeb6e3c22f839b158aebd4f9270f55cd3c79906c45476c47ab4"
 dependencies = [
  "serde",
-]
-
-[[package]]
-name = "mem_is_bin"
-version = "0.1.0"
-dependencies = [
- "actix-web",
- "mem_is_main",
-]
-
-[[package]]
-name = "mem_is_main"
-version = "0.1.0"
-dependencies = [
- "actix-web",
- "base64",
- "chrono",
- "diesel",
- "hex",
- "maybe-owned",
- "rust-crypto",
- "serde",
- "serde_json",
- "uuid",
-]
-
-[[package]]
-name = "mem_is_main_derive"
-version = "0.1.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]

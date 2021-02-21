@@ -4,8 +4,9 @@
 // use diesel::prelude::*;
 // use self_::diesel_component::schema::public::application_user;
 // use self_::entity::entity::application_user::ApplicationUser;
-                                // TODO refactor with any methods
-fn main() -> () {
+
+
+fn main() -> () {       // TODO delete from CargoToml
     // let mut application_user_registry: Vec<ApplicationUser<'LIFETIME>> = vec![];
     
     // for i in 1..1000 {

@@ -1,6 +1,2 @@
 [workspace]
-members = [
-    "./bin",
-    "./lib/mem_is_main",
-    "./lib/mem_is_main_derive",
-]
+members = ["./bin/core/", "./lib/core/"]
