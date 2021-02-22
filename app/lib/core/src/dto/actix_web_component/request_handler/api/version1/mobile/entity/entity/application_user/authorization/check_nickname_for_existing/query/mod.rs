@@ -1,12 +1,11 @@
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-pub struct Request {
+pub struct Query {
     nickname: String
 }
 
-impl<'a> Request {
-
+impl<'a> Query {
     pub fn get_nickname(&'a self) -> &'a String {
         return &self.nickname;
     }

@@ -2,7 +2,7 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use crate::diesel_component::schema::public::application_user;
-use crate::entity::entity::application_user::ApplicationUser;
+use crate::entity::entity::application_user::application_user::ApplicationUser;
 use diesel::Insertable;
 use uuid::Uuid;
 

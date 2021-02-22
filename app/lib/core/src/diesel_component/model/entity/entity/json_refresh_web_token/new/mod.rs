@@ -1,7 +1,7 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use crate::diesel_component::schema::public::json_refresh_web_token;
-use crate::entity::entity::json_web_token::json_refresh_web_token::JsonRefreshWebToken;
+use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use diesel::Insertable;
 use uuid::Uuid;
 

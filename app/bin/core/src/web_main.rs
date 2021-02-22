@@ -9,7 +9,9 @@ use std::io::Result;      // TODO Везде ли Нужен МэйбиОвне�
 async fn main() -> Result<()> {
     return HttpServer::new(|| {         // TODO переместить Scops в разные методы? 
         App::new().service(
-            web::scope("").route("/test", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::Authorization::register))
+            web::scope("")              // TODO сделать правильно
+            .route("/user/register", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::Authorization::register))
+            .route("/user/cnfe", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::Authorization::check_nickname_for_existing))
         )
     }).bind("0.0.0.0:80")?.run().await;
 }

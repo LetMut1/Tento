@@ -1,6 +1,6 @@
 use crate::diesel_component::model::entity::entity::application_user::new::New;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::request::Request;
-use crate::entity::entity::application_user::ApplicationUser;
+use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::repository::entity::entity::application_user::base_repository::BaseRepository;
 use crate::utility::repository::entity::_common::pg_connection_manager::PGConnectionManager;
 
