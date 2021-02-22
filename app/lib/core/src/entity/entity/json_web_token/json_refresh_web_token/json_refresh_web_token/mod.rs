@@ -14,18 +14,21 @@ pub struct JsonRefreshWebToken<'a, 'b> {
     value: Value<'b>,
     created_at: DateTime<'a>,
     expired_at: DateTime<'a>,
+    date_expiration_creator: DateExpirationCreator
 }
 
 impl<'a, 'b: 'a> JsonRefreshWebToken<'a, 'b> {          // TODO  create ValHas with CustomHasher, value - это изменяемое после каждого использования токена поле. Может, завязать на device_id?
     pub fn new_from_credentials(user_id: &'b UuidV4, device_id: String) -> Self {     // TODO Value генерировать внутри
-        
+        let date_expiration_creator: DateExpirationCreator = DateExpirationCreator::new();
+
         return Self {
             id: UuidV4::new(),
             user_id: MaybeOwned::Borrowed(user_id),
             device_id: DeviceId::new(MaybeOwned::Owned(device_id)),
             value: Value::new(MaybeOwned::Owned(Uuid::new_v4().to_string())),
             created_at: DateTime::new(),
-            expired_at: DateExpirationCreator::create_interval()
+            expired_at: date_expiration_creator.create_interval(),
+            date_expiration_creator
         };
     }
 
@@ -36,12 +39,13 @@ impl<'a, 'b: 'a> JsonRefreshWebToken<'a, 'b> {          // TODO  create ValHas w
             device_id: DeviceId::new(MaybeOwned::Borrowed(model.get_device_id())),
             value: Value::new(MaybeOwned::Borrowed(model.get_value_hash())),
             created_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(model.get_created_at())),
-            expired_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(model.get_expired_at()))
+            expired_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(model.get_expired_at())),
+            date_expiration_creator: DateExpirationCreator::new()
         };
     }
 
     pub fn refresh_expired_at(&'a mut self) -> &'a mut Self {
-        self.expired_at = DateExpirationCreator::create_interval();
+        self.expired_at = self.date_expiration_creator.create_interval();
 
         return self;
     }
