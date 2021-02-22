@@ -5,6 +5,7 @@ use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_web_token::json_refresh_web_token::core::value::Value;
 use crate::utility::entity::entity::json_web_token::json_refresh_web_token::date_expiration_creator::DateExpirationCreator;
 use maybe_owned::MaybeOwned;
+use uuid::Uuid;
 
 pub struct JsonRefreshWebToken<'a, 'b> {
     id: UuidV4<'b>,
@@ -12,16 +13,17 @@ pub struct JsonRefreshWebToken<'a, 'b> {
     device_id: DeviceId<'b>,
     value: Value<'b>,
     created_at: DateTime<'a>,
-    expired_at: DateTime<'a>
+    expired_at: DateTime<'a>,
 }
 
 impl<'a, 'b: 'a> JsonRefreshWebToken<'a, 'b> {          // TODO  create ValHas with CustomHasher, value - это изменяемое после каждого использования токена поле. Может, завязать на device_id?
-    pub fn new_from_credentials(user_id: &'b UuidV4, device_id: String, value: String) -> Self {     // TODO Value генерировать внутри
+    pub fn new_from_credentials(user_id: &'b UuidV4, device_id: String) -> Self {     // TODO Value генерировать внутри
+        
         return Self {
             id: UuidV4::new(),
             user_id: MaybeOwned::Borrowed(user_id),
             device_id: DeviceId::new(MaybeOwned::Owned(device_id)),
-            value: Value::new(MaybeOwned::Owned(value)),
+            value: Value::new(MaybeOwned::Owned(Uuid::new_v4().to_string())),
             created_at: DateTime::new(),
             expired_at: DateExpirationCreator::create_interval()
         };

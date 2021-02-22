@@ -5,6 +5,8 @@ use crate::entity::entity::application_user::core::confirmed::Confirmed;
 use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::entity::entity::application_user::core::password_hash::PasswordHash;
+use crate::entity::entity::application_user::core::password::Password;
+use crate::utility::entity::entity::application_user::password_encoder::PasswordEncoder;
 use maybe_owned::MaybeOwned;
 
 pub struct ApplicationUser<'b> {
@@ -13,18 +15,22 @@ pub struct ApplicationUser<'b> {
     nickname: Nickname<'b>,
     password_hash: PasswordHash<'b>,
     created_at: DateTime<'b>,           // TODO  Roles
-    confirmed: Confirmed
+    confirmed: Confirmed,
+    password_encoder: PasswordEncoder
 }
 
 impl<'a, 'b: 'a> ApplicationUser<'b> {
-    pub fn new_from_credentials(email: &'b String, nickname: &'b String, password: &'b String) -> Self {     
+    pub fn new_from_credentials(email: &'b String, nickname: &'b String, password: &'b String) -> Self {
+        let password_encoder = PasswordEncoder::new();
+
         return Self {
             id: UuidV4::new(),
             email: Email::new(MaybeOwned::Borrowed(email)),
             nickname: Nickname::new(MaybeOwned::Borrowed(nickname)),
-            password_hash: PasswordHash::new(MaybeOwned::Borrowed(password)),
+            password_hash: PasswordHash::new(MaybeOwned::Owned(password_encoder.encode(password))),
             created_at: DateTime::new(),
-            confirmed: Confirmed::new(false)
+            confirmed: Confirmed::new(false),
+            password_encoder
         };
     }
 
@@ -35,7 +41,8 @@ impl<'a, 'b: 'a> ApplicationUser<'b> {
             nickname: Nickname::new(MaybeOwned::Borrowed(model.get_nickname())),
             password_hash: PasswordHash::new(MaybeOwned::Borrowed(model.get_password_hash())),
             created_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(model.get_created_at())),
-            confirmed: Confirmed::new(model.get_confirmed())
+            confirmed: Confirmed::new(model.get_confirmed()),
+            password_encoder: PasswordEncoder::new()
         };
     }
 
@@ -55,8 +62,8 @@ impl<'a, 'b: 'a> ApplicationUser<'b> {
         return self;
     }
 
-    pub fn set_password_hash(&'a mut self, password_hash: PasswordHash<'b>) -> &'a mut Self {
-        self.password_hash = password_hash;
+    pub fn set_password(&'a mut self, password: Password<'b>) -> &'a mut Self {
+        self.password_hash = PasswordHash::new(MaybeOwned::Owned(self.password_encoder.encode(password.get_value())));
 
         return self;
     }
