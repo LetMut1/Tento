@@ -11,14 +11,14 @@ use crate::utility::entity::entity::application_user::password_encoder::Password
 use crate::utility::repository::entity::_common::pg_connection_manager::PGConnectionManager;
 use maybe_owned::MaybeOwned;
 
-pub struct Handler<'b, 'c> {              // TODO нужно ли возращать на аб параметры
+pub struct Handler<'a, 'b: 'a> {              // TODO нужно ли возращать на аб параметры
     base_repository: BaseRepository<'b>,
     request: &'b Request,
-    serialization_form_resolver: SerializationFormResolver<'c>,
+    serialization_form_resolver: SerializationFormResolver<'a>,
     password_encoder: PasswordEncoder
 }
 
-impl<'a: 'c, 'b: 'a, 'c> Handler<'b, 'c> {
+impl<'a, 'b: 'a> Handler<'a, 'b> {
     pub fn new(pg_connection_manager: &'b PGConnectionManager, request: &'b Request) -> Self {      // TODO посмотреть везед по коду и убрать добавленное заимствование
         return Self {
             base_repository: BaseRepository::new(pg_connection_manager),
@@ -29,11 +29,11 @@ impl<'a: 'c, 'b: 'a, 'c> Handler<'b, 'c> {
     }
 
     pub fn handle(&'a mut self) -> ReturnedType {        // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
-        let existing: &Existing = self.base_repository.get_by_email(&Email::<'_>::new(MaybeOwned::Borrowed(self.request.get_email())));
+        let existing: &Existing = self.base_repository.get_by_email(&Email::new(MaybeOwned::Borrowed(self.request.get_email())));
         if self.password_encoder.is_valid(self.request.get_password(), existing.get_password_hash()) { // TODO // TODO // TODO check CONFIRMED !!!!!!!!!!!!!!!!!!
-            let json_refresh_web_token: JsonRefreshWebToken<'c, 'a> = 
+            let json_refresh_web_token: JsonRefreshWebToken<'_, '_> = 
             JsonRefreshWebToken::new_from_credentials(UuidV4::new_from_uuid(existing.get_id()), self.request.get_device_id());   // TODO cохраняем в бд 
-            let json_access_web_token: JsonAccessWebToken<'_, '_> = JsonAccessWebToken::new_from_jrwt(&json_refresh_web_token);
+            let json_access_web_token: JsonAccessWebToken<'_> = JsonAccessWebToken::new_from_jrwt(&json_refresh_web_token);
             
             return ReturnedType::JsonAccessWebToken(self.serialization_form_resolver.serialize(&json_access_web_token));
         } else {

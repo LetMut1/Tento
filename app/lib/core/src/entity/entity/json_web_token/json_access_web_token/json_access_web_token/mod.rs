@@ -3,13 +3,13 @@ use crate::entity::entity::json_web_token::json_access_web_token::core::header::
 use crate::entity::entity::json_web_token::json_access_web_token::core::payload::Payload;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 
-pub struct JsonAccessWebToken<'a, 'b: 'a> {
+pub struct JsonAccessWebToken<'b> {
     header: Header,
-    payload: Payload<'a, 'b>
+    payload: Payload<'b, 'b>
 }
 
-impl<'a, 'b: 'a> JsonAccessWebToken<'a, 'b> {
-    pub fn new_from_jrwt(json_refresh_web_token: &'b JsonRefreshWebToken<'a, 'b>) -> Self {
+impl<'a, 'b: 'a> JsonAccessWebToken<'b> {
+    pub fn new_from_jrwt(json_refresh_web_token: &'b JsonRefreshWebToken<'b, 'b>) -> Self {
         return Self {
             header: Header::new(),
             payload: Payload::new_from_jrwt(json_refresh_web_token)
@@ -27,7 +27,7 @@ impl<'a, 'b: 'a> JsonAccessWebToken<'a, 'b> {
         return &self.header;
     }
 
-    pub fn get_payload(&'a self) -> &'a Payload<'a, 'b> {
+    pub fn get_payload(&'a self) -> &'a Payload<'b, 'b> {
         return &self.payload;
     }
 }

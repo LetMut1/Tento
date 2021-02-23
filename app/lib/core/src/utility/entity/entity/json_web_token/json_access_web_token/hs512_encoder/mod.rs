@@ -12,10 +12,6 @@ impl<'a, 'b: 'a> HS512Encoder {
         return Self::default();
     }
 
-    fn get_configured_hmac(&'a self) -> Hmac<Sha512> {
-        return Hmac::new(Sha512::new(), self.key.as_bytes());
-    }
-
     pub fn encode(&'a self, subject: &'b String) -> String {
         let mut hmac: Hmac<Sha512> = self.get_configured_hmac();
         hmac.input(subject.as_bytes());
@@ -25,6 +21,10 @@ impl<'a, 'b: 'a> HS512Encoder {
 
     pub fn hash_is_valid(&'a self, subject: &'b String, subject_hash: &'b String) -> bool {
         return &self.encode(subject) == subject_hash;
+    }
+
+    fn get_configured_hmac(&'a self) -> Hmac<Sha512> {
+        return Hmac::new(Sha512::new(), self.key.as_bytes());
     }
 }
 

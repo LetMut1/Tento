@@ -9,8 +9,8 @@ pub struct Common<'b> {
     typ: MaybeOwned<'b, String>,
 }
 
-impl<'a, 'b: 'a> Common<'b> {
-    pub fn new_from_entity(json_access_web_token: &'b JsonAccessWebToken<'a, 'b>) -> Self {
+impl<'b> Common<'b> {
+    pub fn new_from_entity(json_access_web_token: &'b JsonAccessWebToken<'b>) -> Self {
         return Self {
             alg: MaybeOwned::Owned(json_access_web_token.get_header().get_alg().get_value()),
             typ: MaybeOwned::Owned(json_access_web_token.get_header().get_typ().get_value())

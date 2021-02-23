@@ -22,7 +22,7 @@ impl<'a: 'c, 'b: 'a, 'c> BaseRepository<'b> {
         };
     }
 
-    pub fn save(&'a self, new: New) -> () {  // TODO всплывание ошибок
+    pub fn save(&'a self, new: &'b New) -> () {  // TODO всплывание ошибок
         diesel::insert_into(application_user::table).values(new).execute(self.pg_connection_manager.get_connection()).unwrap();  //TODO ошибки, Плюс тру фолс, сохранилось ли или нет
     }
 

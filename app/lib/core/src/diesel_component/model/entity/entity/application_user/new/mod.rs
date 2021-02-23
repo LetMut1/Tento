@@ -1,4 +1,3 @@
-
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use crate::diesel_component::schema::public::application_user;

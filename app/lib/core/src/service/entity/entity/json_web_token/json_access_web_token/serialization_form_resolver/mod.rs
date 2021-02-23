@@ -19,13 +19,13 @@ impl<'a, 'b: 'a> SerializationFormResolver<'a> {
         };
     }
 
-    pub fn serialize(&'a self, json_access_web_token: &'b JsonAccessWebToken<'a, 'b>) -> String {
-        let header_common: HeaderCommon<'a> = HeaderCommon::new_from_entity(json_access_web_token);
-        let payload_common: PayloadCommon<'a> = PayloadCommon::new_from_entity(json_access_web_token);
+    pub fn serialize(&'a self, json_access_web_token: &'b JsonAccessWebToken<'b>) -> String {
+        let header_common: HeaderCommon<'_> = HeaderCommon::new_from_entity(json_access_web_token);
+        let payload_common: PayloadCommon<'_> = PayloadCommon::new_from_entity(json_access_web_token);
 
         return self.create_classic_form(
-            &serde_json::to_string::<HeaderCommon<'a>>(&header_common).unwrap(), 
-            &serde_json::to_string::<PayloadCommon<'a>>(&payload_common).unwrap()
+            &serde_json::to_string::<HeaderCommon<'_>>(&header_common).unwrap(), 
+            &serde_json::to_string::<PayloadCommon<'_>>(&payload_common).unwrap()
         );
     }
 

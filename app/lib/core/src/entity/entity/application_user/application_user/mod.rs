@@ -21,7 +21,7 @@ pub struct ApplicationUser<'b> {
 
 impl<'a, 'b: 'a> ApplicationUser<'b> {
     pub fn new_from_credentials(email: &'b String, nickname: &'b String, password: &'b String) -> Self {
-        let password_encoder = PasswordEncoder::new();
+        let password_encoder: PasswordEncoder = PasswordEncoder::new();
 
         return Self {
             id: UuidV4::new(),

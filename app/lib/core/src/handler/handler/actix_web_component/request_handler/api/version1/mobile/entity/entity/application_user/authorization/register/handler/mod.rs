@@ -21,7 +21,6 @@ impl<'a, 'b: 'a> Handler<'b> {
         let application_user: ApplicationUser<'b> = ApplicationUser::new_from_credentials(           // TODO validate ememail  - Проставить самую легкую проверку, 
             self.request.get_email(), self.request.get_nickname(), self.request.get_password()
         );
-        let new: New<'_> = New::new_from_entity(&application_user);
-        self.base_repository.save(new);
+        self.base_repository.save(&New::new_from_entity(&application_user));
     }
 }
