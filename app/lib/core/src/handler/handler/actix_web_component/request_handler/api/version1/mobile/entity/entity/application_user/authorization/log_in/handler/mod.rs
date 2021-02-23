@@ -28,21 +28,29 @@ impl<'a, 'b: 'a> Handler<'a, 'b> {
     }
 
     pub fn handle(&'a mut self) -> ReturnedType {        // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
-        let mut base_repository: BaseRepository<'_> = BaseRepository::new(&self.pg_connection_manager);
+        let returned_type: ReturnedType;
+        let mut base_repository: BaseRepository<'_> = BaseRepository::new(&mut self.pg_connection_manager);
+        base_repository.establish_connection();
         let existing: Existing = base_repository.get_by_email(self.request.get_email());
         let application_user: ApplicationUser<'_> = ApplicationUser::new_from_model(&existing);
         if self.password_encoder.is_valid(self.request.get_password(), application_user.get_passord_hash().get_value()) {
             if application_user.is_confirmed() {
                 let json_refresh_web_token: JsonRefreshWebToken<'_, '_> = 
-                JsonRefreshWebToken::new_from_credentials(MaybeOwned::Borrowed(application_user.get_id()), self.request.get_device_id());   // TODO cохраняем в бд 
+                    JsonRefreshWebToken::new_from_credentials(MaybeOwned::Borrowed(application_user.get_id()), self.request.get_device_id());   
+                    // TODO cохраняем в бд
+                base_repository.close_connection(); 
                 let json_access_web_token: JsonAccessWebToken<'_> = JsonAccessWebToken::new_from_jrwt(&json_refresh_web_token);
-                
-                return ReturnedType::JsonAccessWebToken(self.serialization_form_resolver.serialize(&json_access_web_token));
+                returned_type = ReturnedType::JsonAccessWebToken(self.serialization_form_resolver.serialize(&json_access_web_token));
+
+                return returned_type;
             } else {
-                return ReturnedType::NotConfirmed;
+                returned_type = ReturnedType::NotConfirmed;
             }
         } else {
-            return ReturnedType::WrongPassword;
+            returned_type = ReturnedType::WrongPassword;
         }
+        base_repository.close_connection();
+
+        return returned_type;
     }
 }

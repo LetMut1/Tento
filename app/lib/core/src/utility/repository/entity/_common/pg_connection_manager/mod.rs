@@ -13,16 +13,35 @@ impl<'a> PGConnectionManager {
     }
 
     pub fn establish_connection(&'a mut self) -> () {
-        self.pg_connection = Some(PgConnection::establish("postgres://root:password@postgresql/mem_is").unwrap()); // TODO всплывание ошибок // TODO from env
+        match self.pg_connection {
+            Some(ref _pg_connection) => {
+                // compile_error!("Logic error, PgConnection is already exist");
+            },
+            None => {
+                self.pg_connection = Some(PgConnection::establish("postgres://root:password@postgresql/mem_is").unwrap()); // TODO всплывание ошибок // TODO from env
+            }
+        }
     }
 
-    pub fn get_pg_connection(&'a self) -> &'a PgConnection {        // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    pub fn close_connection(&'a mut self) -> () {
+        match self.pg_connection {
+            Some(ref _pg_connection) => {
+                self.pg_connection = None;
+            },
+            None => {
+                // compile_error!("Logic error, PgConnection does not exist");
+            }
+        }
+    }
+
+    pub fn get_connection(&'a self) -> &'a PgConnection {
         match self.pg_connection {
             Some(ref pg_connection) => {
                 return pg_connection;
             },
             None => {
-                panic!("Logic error, please, initilize 'self.pg_connection' with not-None value");
+                // compile_error!("Logic error, PgConnection does not exist");
+                panic!("DELET THIS");// TODO delete
             }
         }
     }

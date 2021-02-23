@@ -16,7 +16,7 @@ pub struct Authorization;
 impl Authorization {
     pub async fn register(request: Form<RegisterRequest>) -> impl Responder {
         let request: RegisterRequest = request.into_inner();
-        let handler: RegisterHandler<'_> = RegisterHandler::new(&request);
+        let mut handler: RegisterHandler<'_> = RegisterHandler::new(&request);
         handler.handle();                  //TODO try catch
 
         return HttpResponse::Ok();
@@ -24,7 +24,7 @@ impl Authorization {
 
     pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> impl Responder {
         let query: CheckNicknameForExistingQuery = query.into_inner();
-        let handler: CheckNicknameForExistingHanlder<'_> = CheckNicknameForExistingHanlder::new(&query);              //TODO try catch
+        let mut handler: CheckNicknameForExistingHanlder<'_> = CheckNicknameForExistingHanlder::new(&query);              //TODO try catch
         let mut response_builder: HttpResponseBuilder = HttpResponse::Ok();
         if handler.handle() {                 //TODO try catch
             return response_builder.body("{\"success\":true}");

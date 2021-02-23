@@ -17,11 +17,13 @@ impl<'a, 'b: 'a> Handler<'b> {
         };
     }
 
-    pub fn handle(&'a self) -> () {     
-        let base_repository: BaseRepository<'_> = BaseRepository::new(&self.pg_connection_manager);     // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
+    pub fn handle(&'a mut self) -> () {
         let application_user: ApplicationUser<'b> = ApplicationUser::new_from_credentials(   // TODO validate ememail  - Проставить самую легкую проверку, 
             self.request.get_email(), self.request.get_nickname(), self.request.get_password()
-        );
+        );   
+        let mut base_repository: BaseRepository<'_> = BaseRepository::new(&mut self.pg_connection_manager);     // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
+        base_repository.establish_connection();
         base_repository.save(&New::new_from_entity(&application_user));
+        base_repository.close_connection();
     }
 }

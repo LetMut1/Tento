@@ -15,9 +15,12 @@ impl<'a, 'b: 'a> Handler<'b> {
         };
     }
 
-    pub fn handle(&'a self) -> bool {  // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
-        let base_repository: BaseRepository<'_> = BaseRepository::new(&self.pg_connection_manager);
+    pub fn handle(&'a mut self) -> bool {  // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
+        let mut base_repository: BaseRepository<'_> = BaseRepository::new(&mut self.pg_connection_manager);
+        base_repository.establish_connection();
+        let result: bool = base_repository.is_exist_by_nickanme(self.query.get_nickname());
+        base_repository.close_connection();
 
-        return base_repository.is_exist_by_nickanme(self.query.get_nickname());
+        return result;
     }
 }
