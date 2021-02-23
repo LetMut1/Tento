@@ -8,43 +8,30 @@ use diesel::QueryDsl;
 use diesel::RunQueryDsl;
 
 pub struct BaseRepository<'b> {
-    pg_connection_manager: &'b PGConnectionManager,
-    existing_registry: Option<Vec<Existing>>
+    pg_connection_manager: &'b PGConnectionManager
 }
 
 impl<'a, 'b: 'a> BaseRepository<'b> {
-    pub fn new(pg_connection_manager: &'b PGConnectionManager) -> Self {            // TODO разделить коре и mod.rs в сущностях
+    pub fn new(pg_connection_manager: &'b PGConnectionManager) -> Self {
         return Self {
-            pg_connection_manager,
-            existing_registry: None
+            pg_connection_manager
         };
     }
 
-    pub fn save(&'a self, new: &'b New) -> () {  // TODO всплывание ошибок
-        diesel::insert_into(application_user::table).values(new).execute(self.pg_connection_manager.get_connection()).unwrap();  //TODO ошибки, Плюс тру фолс, сохранилось ли или нет
+    pub fn save(&'a self, new: &'b New) -> () {         // TODO ошибка alreadyExisting как перехватывать
+        diesel::insert_into(application_user::table).values(new).execute(self.pg_connection_manager.get_pg_connection()).unwrap();  //TODO ошибки, Плюс тру фолс, сохранилось ли или нет
     }
 
     pub fn is_exist_by_nickanme(&'a self, nickname: &'b String) -> bool { // TODO сделать возможномть устанавливать фильтр ?
         return 
-            diesel::select( // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                dsl::exists(application_user::table.filter(application_user::nickname.eq(nickname)))
-            ).get_result::<bool>(self.pg_connection_manager.get_connection()).unwrap();     // TODO ошибки
+            diesel::select(dsl::exists(application_user::table.filter(application_user::nickname.eq(nickname)))) // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                .get_result::<bool>(self.pg_connection_manager.get_pg_connection()).unwrap();     // TODO ошибки
     }
 
-    pub fn get_by_email(&'a mut self, email: &'b String) -> &'a Existing {
-        self.existing_registry = Some(application_user::table.filter(
-            application_user::email.eq(email)
-        ).limit(1).load::<Existing>(self.pg_connection_manager.get_connection()).unwrap()); // TODO ошибки
-        match self.existing_registry {
-            Some(ref existing_registry) => { return &(existing_registry[0]); },
-            None => panic!("Logic error, please, initialize 'self.existing_registry' field with not-None value")
-        };
-    }
-
-    pub fn get_existing_registry(&'a self) -> &'a Vec<Existing> {
-        match self.existing_registry {
-            Some(ref existing_registry) => { return existing_registry; },
-            None => panic!("Logic error, please, initialize 'self.existing_registry' field with not-None value")
-        };
+    pub fn get_by_email(&'a mut self, email: &'b String) -> Existing {
+        return 
+            application_user::table.filter(application_user::email.eq(email))
+                .limit(1).load::<Existing>(self.pg_connection_manager.get_pg_connection()).unwrap()
+                .pop().unwrap();
     }
 }

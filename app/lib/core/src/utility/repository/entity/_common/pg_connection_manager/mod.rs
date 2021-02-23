@@ -1,17 +1,29 @@
-use diesel::{Connection, pg::PgConnection};
+use diesel::pg::PgConnection;
+use diesel::Connection;
 
 pub struct PGConnectionManager {
-    pg_connection: PgConnection
+    pg_connection: Option<PgConnection>
 }
 
 impl<'a> PGConnectionManager {
-    pub fn new() -> Self {  // TODO всплывание ошибок 
+    pub fn new() -> Self {
         return Self {
-            pg_connection: PgConnection::establish("postgres://root:password@postgresql/mem_is").unwrap()   // TODO всплывание ошибок
+            pg_connection: None
         }
     }
 
-    pub fn get_connection(&'a self) -> &'a PgConnection {
-        return &self.pg_connection;
+    pub fn establish_connection(&'a mut self) -> () {
+        self.pg_connection = Some(PgConnection::establish("postgres://root:password@postgresql/mem_is").unwrap()); // TODO всплывание ошибок // TODO from env
+    }
+
+    pub fn get_pg_connection(&'a self) -> &'a PgConnection {        // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        match self.pg_connection {
+            Some(ref pg_connection) => {
+                return pg_connection;
+            },
+            None => {
+                panic!("Logic error, please, initilize 'self.pg_connection' with not-None value");
+            }
+        }
     }
 }

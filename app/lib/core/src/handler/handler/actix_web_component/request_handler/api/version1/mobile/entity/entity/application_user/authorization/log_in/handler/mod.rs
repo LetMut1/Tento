@@ -29,7 +29,7 @@ impl<'a, 'b: 'a> Handler<'a, 'b> {
 
     pub fn handle(&'a mut self) -> ReturnedType {        // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
         let mut base_repository: BaseRepository<'_> = BaseRepository::new(&self.pg_connection_manager);
-        let existing: &Existing = base_repository.get_by_email(self.request.get_email()); // TODO Можно ли Овнинг?
+        let existing: Existing = base_repository.get_by_email(self.request.get_email());
         let application_user: ApplicationUser<'_> = ApplicationUser::new_from_model(&existing);
         if self.password_encoder.is_valid(self.request.get_password(), application_user.get_passord_hash().get_value()) {
             if application_user.is_confirmed() {
