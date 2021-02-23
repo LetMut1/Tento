@@ -34,14 +34,14 @@ impl<'a, 'b: 'a> ApplicationUser<'b> {
         };
     }
 
-    pub fn new_from_model(model: &'b Existing) -> Self {
+    pub fn new_from_model(existing: &'b Existing) -> Self {
         return Self {
-            id: UuidV4::new_from_uuid(model.get_id()),
-            email: Email::new(MaybeOwned::Borrowed(model.get_emal())),
-            nickname: Nickname::new(MaybeOwned::Borrowed(model.get_nickname())),
-            password_hash: PasswordHash::new(MaybeOwned::Borrowed(model.get_password_hash())),
-            created_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(model.get_created_at())),
-            confirmed: Confirmed::new(model.get_confirmed()),
+            id: UuidV4::new_from_uuid(existing.get_id()),
+            email: Email::new(MaybeOwned::Borrowed(existing.get_emal())),
+            nickname: Nickname::new(MaybeOwned::Borrowed(existing.get_nickname())),
+            password_hash: PasswordHash::new(MaybeOwned::Borrowed(existing.get_password_hash())),
+            created_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(existing.get_created_at())),
+            confirmed: Confirmed::new(existing.get_confirmed()),
             password_encoder: PasswordEncoder::new()
         };
     }

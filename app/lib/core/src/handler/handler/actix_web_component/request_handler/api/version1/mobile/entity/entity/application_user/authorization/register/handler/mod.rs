@@ -5,22 +5,23 @@ use crate::repository::entity::entity::application_user::base_repository::BaseRe
 use crate::utility::repository::entity::_common::pg_connection_manager::PGConnectionManager;
 
 pub struct Handler<'b> {
-    base_repository: BaseRepository<'b>,
+    pg_connection_manager: PGConnectionManager,
     request: &'b Request
 }
 
 impl<'a, 'b: 'a> Handler<'b> {
-    pub fn new(pg_connection_manager: &'b PGConnectionManager, request: &'b Request) -> Self {
+    pub fn new(request: &'b Request) -> Self {
         return Self {
-            base_repository: BaseRepository::new(pg_connection_manager),
+            pg_connection_manager: PGConnectionManager::new(),
             request
         };
     }
 
-    pub fn handle(&'a self) -> () {                                                                  // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
-        let application_user: ApplicationUser<'b> = ApplicationUser::new_from_credentials(           // TODO validate ememail  - Проставить самую легкую проверку, 
+    pub fn handle(&'a self) -> () {     
+        let base_repository: BaseRepository<'_> = BaseRepository::new(&self.pg_connection_manager);     // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
+        let application_user: ApplicationUser<'b> = ApplicationUser::new_from_credentials(   // TODO validate ememail  - Проставить самую легкую проверку, 
             self.request.get_email(), self.request.get_nickname(), self.request.get_password()
         );
-        self.base_repository.save(&New::new_from_entity(&application_user));
+        base_repository.save(&New::new_from_entity(&application_user));
     }
 }

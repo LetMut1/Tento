@@ -10,15 +10,13 @@ use crate::handler::handler::actix_web_component::request_handler::api::version1
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::handler::Handler as LogInHandler;
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::Handler as RegisterHandler;
 use crate::handler::returned_type::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::returned_type::ReturnedType as LogInReturnedType;
-use crate::utility::repository::entity::_common::pg_connection_manager::PGConnectionManager;
 
 pub struct Authorization;
 
 impl Authorization {
     pub async fn register(request: Form<RegisterRequest>) -> impl Responder {
         let request: RegisterRequest = request.into_inner();
-        let pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
-        let handler: RegisterHandler<'_> = RegisterHandler::new(&pg_connection_manager, &request);
+        let handler: RegisterHandler<'_> = RegisterHandler::new(&request);
         handler.handle();                  //TODO try catch
 
         return HttpResponse::Ok();
@@ -26,11 +24,9 @@ impl Authorization {
 
     pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> impl Responder {
         let query: CheckNicknameForExistingQuery = query.into_inner();
-        let pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
-        let handler: CheckNicknameForExistingHanlder<'_> = CheckNicknameForExistingHanlder::new(&pg_connection_manager, &query);
-        let result: bool = handler.handle();                  //TODO try catch
+        let handler: CheckNicknameForExistingHanlder<'_> = CheckNicknameForExistingHanlder::new(&query);              //TODO try catch
         let mut response_builder: HttpResponseBuilder = HttpResponse::Ok();
-        if result {                 //TODO try catch
+        if handler.handle() {                 //TODO try catch
             return response_builder.body("{\"success\":true}");
         } else {
             return response_builder.body("{\"success\":false}");
@@ -39,16 +35,17 @@ impl Authorization {
 
     pub async fn log_in(request: Form<LogInRequest>) -> impl Responder {
         let request: LogInRequest = request.into_inner();
-        let pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
-        let mut log_in_handler: LogInHandler<'_, '_> = LogInHandler::new(&pg_connection_manager, &request);
-        let returned_type: LogInReturnedType = log_in_handler.handle();                  //TODO try catch
+        let mut handler: LogInHandler<'_, '_> = LogInHandler::new(&request);     // TODO Try
         let mut response_builder: HttpResponseBuilder = HttpResponse::Ok();
-        match returned_type {
+        match handler.handle() {
             LogInReturnedType::JsonAccessWebToken(ref value) => { 
                 return response_builder.body("{\"success\":true, \"jawt\":\"".to_owned() + value + &"\"}".to_owned());
             },
+            LogInReturnedType::WrongPassword => {
+                return response_builder.body("{\"success\":false, \"message\":\"wrong password\"}");
+            },
             LogInReturnedType::NotConfirmed => {
-                return response_builder.body("{\"success\":false, \"message\":\"Not confirmed\"}");
+                return response_builder.body("{\"success\":false, \"message\":\"not confirmed\"}");
             }
         }
     }
