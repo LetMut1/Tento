@@ -11,7 +11,7 @@ use crate::utility::entity::entity::application_user::password_encoder::Password
 use crate::utility::repository::entity::_common::pg_connection_manager::PGConnectionManager;
 use maybe_owned::MaybeOwned;
 
-pub struct Handler<'a, 'b: 'a> {              // TODO нужно ли возращать на аб параметры
+pub struct Handler<'a, 'b: 'a> {
     base_repository: BaseRepository<'b>,
     request: &'b Request,
     serialization_form_resolver: SerializationFormResolver<'a>,

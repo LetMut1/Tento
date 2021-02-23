@@ -14,7 +14,7 @@ pub struct BaseRepository<'b> {
     existing_registry: Option<Vec<Existing>>
 }
 
-impl<'a: 'c, 'b: 'a, 'c> BaseRepository<'b> {
+impl<'a, 'b: 'a, 'c> BaseRepository<'b> {
     pub fn new(pg_connection_manager: &'b PGConnectionManager) -> Self {            // TODO разделить коре и mod.rs в сущностях
         return Self {
             pg_connection_manager,
