@@ -14,7 +14,7 @@ pub struct BaseRepository<'b> {
     existing_registry: Option<Vec<Existing>>
 }
 
-impl<'a, 'b: 'a> BaseRepository<'b> {
+impl<'a: 'c, 'b: 'a, 'c> BaseRepository<'b> {
     pub fn new(pg_connection_manager: &'b PGConnectionManager) -> Self {            // TODO разделить коре и mod.rs в сущностях
         return Self {
             pg_connection_manager,
@@ -33,7 +33,7 @@ impl<'a, 'b: 'a> BaseRepository<'b> {
             ).get_result::<bool>(self.pg_connection_manager.get_connection()).unwrap();     // TODO ошибки
     }
 
-    pub fn get_by_email(&'a mut self, email: &'b Email) -> &'a Existing {
+    pub fn get_by_email(&'a mut self, email: &'c Email) -> &'a Existing {
         self.existing_registry = Some(application_user::table.filter(
             application_user::email.eq(email.get_value())
         ).limit(1).load::<Existing>(self.pg_connection_manager.get_connection()).unwrap()); // TODO ошибки

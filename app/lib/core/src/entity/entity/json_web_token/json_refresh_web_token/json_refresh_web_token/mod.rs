@@ -18,13 +18,13 @@ pub struct JsonRefreshWebToken<'a, 'b> {
 }
 
 impl<'a, 'b: 'a> JsonRefreshWebToken<'a, 'b> {          // TODO  create ValHas with CustomHasher, value - это изменяемое после каждого использования токена поле. Может, завязать на device_id?
-    pub fn new_from_credentials(user_id: &'b UuidV4, device_id: String) -> Self {     // TODO Value генерировать внутри
+    pub fn new_from_credentials(user_id: MaybeOwned<'b, UuidV4<'b>>, device_id: &'b String) -> Self {     // TODO Value генерировать внутри
         let date_expiration_creator: DateExpirationCreator = DateExpirationCreator::new();
 
         return Self {
             id: UuidV4::new(),
-            user_id: MaybeOwned::Borrowed(user_id),
-            device_id: DeviceId::new(MaybeOwned::Owned(device_id)),
+            user_id: user_id,
+            device_id: DeviceId::new(MaybeOwned::Borrowed(device_id)),
             value: Value::new(MaybeOwned::Owned(Uuid::new_v4().to_string())),
             created_at: DateTime::new(),
             expired_at: date_expiration_creator.create_interval(),

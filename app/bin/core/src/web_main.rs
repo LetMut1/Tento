@@ -12,6 +12,7 @@ async fn main() -> Result<()> {
             web::scope("")              // TODO сделать правильно
             .route("/user/register", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::Authorization::register))
             .route("/user/cnfe", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::Authorization::check_nickname_for_existing))
+            .route("/user/log_in", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::Authorization::log_in))
         )
     }).bind("0.0.0.0:80")?.run().await;
 }
