@@ -32,7 +32,7 @@ impl<'a: 'c, 'b: 'a, 'c> Handler<'b, 'c> {
         let existing: &Existing = self.base_repository.get_by_email(&Email::<'_>::new(MaybeOwned::Borrowed(self.request.get_email())));
         if self.password_encoder.is_valid(self.request.get_password(), existing.get_password_hash()) { // TODO // TODO // TODO check CONFIRMED !!!!!!!!!!!!!!!!!!
             let json_refresh_web_token: JsonRefreshWebToken<'c, 'a> = 
-            JsonRefreshWebToken::new_from_credentials(MaybeOwned::Owned(UuidV4::new_from_uuid(existing.get_id())), self.request.get_device_id());   // TODO cохраняем в бд 
+            JsonRefreshWebToken::new_from_credentials(UuidV4::new_from_uuid(existing.get_id()), self.request.get_device_id());   // TODO cохраняем в бд 
             let json_access_web_token: JsonAccessWebToken<'_, '_> = JsonAccessWebToken::new_from_jrwt(&json_refresh_web_token);
             
             return ReturnedType::JsonAccessWebToken(self.serialization_form_resolver.serialize(&json_access_web_token));

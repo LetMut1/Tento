@@ -9,7 +9,7 @@ use uuid::Uuid;
 
 pub struct JsonRefreshWebToken<'a, 'b> {
     id: UuidV4<'b>,
-    user_id:  MaybeOwned<'b, UuidV4<'b>>,
+    user_id:  UuidV4<'b>,
     device_id: DeviceId<'b>,
     value: Value<'b>,
     created_at: DateTime<'a>,
@@ -18,7 +18,7 @@ pub struct JsonRefreshWebToken<'a, 'b> {
 }
 
 impl<'a, 'b: 'a> JsonRefreshWebToken<'a, 'b> {          // TODO  create ValHas with CustomHasher, value - это изменяемое после каждого использования токена поле. Может, завязать на device_id?
-    pub fn new_from_credentials(user_id: MaybeOwned<'b, UuidV4<'b>>, device_id: &'b String) -> Self {     // TODO Value генерировать внутри
+    pub fn new_from_credentials(user_id: UuidV4<'b>, device_id: &'b String) -> Self {     // TODO Value генерировать внутри
         let date_expiration_creator: DateExpirationCreator = DateExpirationCreator::new();
 
         return Self {
@@ -35,7 +35,7 @@ impl<'a, 'b: 'a> JsonRefreshWebToken<'a, 'b> {          // TODO  create ValHas w
     pub fn new_from_model(model: &'b Existing) -> Self {
         return Self {
             id: UuidV4::new_from_uuid(model.get_id()),
-            user_id: MaybeOwned::Owned(UuidV4::new_from_uuid(model.get_user_id())),
+            user_id: UuidV4::new_from_uuid(model.get_user_id()),
             device_id: DeviceId::new(MaybeOwned::Borrowed(model.get_device_id())),
             value: Value::new(MaybeOwned::Borrowed(model.get_value_hash())),
             created_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(model.get_created_at())),
