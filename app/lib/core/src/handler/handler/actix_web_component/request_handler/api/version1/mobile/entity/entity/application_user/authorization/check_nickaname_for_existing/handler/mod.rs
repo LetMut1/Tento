@@ -1,6 +1,6 @@
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickname_for_existing::query::Query;
 use crate::repository::entity::entity::application_user::base_repository::BaseRepository;
-use crate::utility::repository::entity::_common::pg_connection_manager::PGConnectionManager;
+use crate::utility::repository::_common::pg_connection_manager::PGConnectionManager;
 
 pub struct Handler<'b> {
     pg_connection_manager: PGConnectionManager,

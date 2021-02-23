@@ -1,5 +1,5 @@
-use diesel::pg::PgConnection;
 use diesel::Connection;
+use diesel::pg::PgConnection;
 
 pub struct PGConnectionManager {
     pg_connection: Option<PgConnection>
@@ -15,7 +15,7 @@ impl<'a> PGConnectionManager {
     pub fn establish_connection(&'a mut self) -> () {
         match self.pg_connection {
             Some(ref _pg_connection) => {
-                // compile_error!("Logic error, PgConnection is already exist");
+                panic!("Logic error, PgConnection is already exist");   // TODO error
             },
             None => {
                 self.pg_connection = Some(PgConnection::establish("postgres://root:password@postgresql/mem_is").unwrap()); // TODO всплывание ошибок // TODO from env
@@ -29,7 +29,7 @@ impl<'a> PGConnectionManager {
                 self.pg_connection = None;
             },
             None => {
-                // compile_error!("Logic error, PgConnection does not exist");
+                 panic!("Logic error, PgConnection does not exist"); // TODO error
             }
         }
     }
@@ -40,8 +40,7 @@ impl<'a> PGConnectionManager {
                 return pg_connection;
             },
             None => {
-                // compile_error!("Logic error, PgConnection does not exist");
-                panic!("DELET THIS");// TODO delete
+                 panic!("Logic error, PgConnection does not exist");    // TODO error
             }
         }
     }

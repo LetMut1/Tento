@@ -15,8 +15,14 @@ chrono = { version = "0.4.19" }
 diesel = { version = "1.4.4", features = ["postgres", "uuidv07", "chrono"] }
 hex = { version = "0.4.2" }
 maybe-owned = { version = "0.3.4", features = ["serde"] }
-rust-argon2 = "0.8"
+rust-argon2 = { version = "0.8" }
 rust-crypto = { version = "0.2.36" }
 serde = { version = "1.0.123", features = ["derive"] }
 serde_json = { version = "1.0" }
 uuid = { version = "0.8.1", features = ["v4", "v1"] }
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3

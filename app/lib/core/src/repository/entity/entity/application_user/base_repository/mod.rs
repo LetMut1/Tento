@@ -1,7 +1,7 @@
 use crate::diesel_component::model::entity::entity::application_user::existing::Existing;
 use crate::diesel_component::model::entity::entity::application_user::new::New;
 use crate::diesel_component::schema::public::application_user;
-use crate::utility::repository::entity::_common::pg_connection_manager::PGConnectionManager;
+use crate::utility::repository::_common::pg_connection_manager::PGConnectionManager;
 use diesel::dsl; 
 use diesel::ExpressionMethods;
 use diesel::QueryDsl;

@@ -7,7 +7,7 @@ use crate::handler::returned_type::handler::actix_web_component::request_handler
 use crate::repository::entity::entity::application_user::base_repository::BaseRepository;
 use crate::service::entity::entity::json_web_token::json_access_web_token::serialization_form_resolver::SerializationFormResolver;
 use crate::utility::entity::entity::application_user::password_encoder::PasswordEncoder;
-use crate::utility::repository::entity::_common::pg_connection_manager::PGConnectionManager;
+use crate::utility::repository::_common::pg_connection_manager::PGConnectionManager;
 use maybe_owned::MaybeOwned;
 
 pub struct Handler<'a, 'b: 'a> {

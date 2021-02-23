@@ -1,4 +1,4 @@
-use crate::diesel_component::model::entity::entity::json_refresh_web_token::existing::Existing;
+use crate::diesel_component::model::entity::entity::json_web_token::json_refresh_web_token::existing::Existing;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::device_id::DeviceId;
 use crate::entity::core::uuid_v4::UuidV4;
