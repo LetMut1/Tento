@@ -9,10 +9,10 @@ pub struct JsonAccessWebToken<'b> {
 }
 
 impl<'a, 'b: 'a> JsonAccessWebToken<'b> {
-    pub fn new_from_jrwt(json_refresh_web_token: &'b JsonRefreshWebToken<'b, 'b>) -> Self {
+    pub fn new_from_json_refresh_web_token(json_refresh_web_token: &'b JsonRefreshWebToken<'b, 'b>) -> Self {
         return Self {
             header: Header::new(),
-            payload: Payload::new_from_jrwt(json_refresh_web_token)
+            payload: Payload::new_from_json_refresh_web_token(json_refresh_web_token)
         };
     }
 

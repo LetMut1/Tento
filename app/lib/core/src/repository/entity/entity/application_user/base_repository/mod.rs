@@ -8,11 +8,11 @@ use diesel::QueryDsl;
 use diesel::RunQueryDsl;
 
 pub struct BaseRepository<'b> {
-    pg_connection_manager: &'b mut PGConnectionManager
+    pg_connection_manager: &'b PGConnectionManager
 }
 
 impl<'a, 'b: 'a> BaseRepository<'b> {
-    pub fn new(pg_connection_manager: &'b mut PGConnectionManager) -> Self {
+    pub fn new(pg_connection_manager: &'b PGConnectionManager) -> Self {
         return Self {
             pg_connection_manager
         };
@@ -33,13 +33,5 @@ impl<'a, 'b: 'a> BaseRepository<'b> {
             application_user::table.filter(application_user::email.eq(email))
                 .limit(1).load::<Existing>(self.pg_connection_manager.get_connection()).unwrap()
                 .pop().unwrap();
-    }
-
-    pub fn establish_connection(&'a mut self) -> () {
-        self.pg_connection_manager.establish_connection();
-    }
-
-    pub fn close_connection(&'a mut self) -> () {
-        self.pg_connection_manager.close_connection();
     }
 }

@@ -28,11 +28,12 @@ async fn main() -> Result<()> {
     // TODO 5. Update ActixWeb
 // Do not remove this block until the problems have been fixed }
 
-
-// TODO create async Database connections pool
-// TODO Как Закрывать connection к БД
+// TODO Разобраться, что именно ФРэймворк параллелит, на каком этапе. (Параллелит ли это файл? - не должен)
+// TODO create async Database connections pool (r2d2) - нужно ли. r2d2 держит пул соендинений открытыми и раздает их на каждый хэндлер ( в контексте акстикс веб).
+//  То есть, соединения не переоткрываются, а используются постоянные. Сейчас же на каждом воркере будут открыто свое обычное соединение и закрыто.
 // TODO default_service 
+// TODO дефолтный ответ, если нет роута
+// TOOD можно ли изменить деолтный ответ при несовпадении Http параметров с ДТО
 // TODO Middleware for Scope/Resource
-// TODO Custom Handlers 
 // TODO Can we acces to HTTpRequest in Guard? (Check the Params setting opportunity)
 // TODO https://www.reddit.com/r/rust/comments/frkta2/manytomany_relationships_in_diesel_does_anybody/      Diesel MANY-TO-MANY Association example

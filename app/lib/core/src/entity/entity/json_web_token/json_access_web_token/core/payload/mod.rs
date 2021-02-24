@@ -15,7 +15,7 @@ pub struct Payload<'a, 'b: 'a> {
 }
 
 impl<'a, 'b: 'a> Payload<'a, 'b> {
-    pub fn new_from_jrwt(json_refresh_web_token: &'b JsonRefreshWebToken<'b, 'b>) -> Self {
+    pub fn new_from_json_refresh_web_token(json_refresh_web_token: &'b JsonRefreshWebToken<'b, 'b>) -> Self {
         return Self {
             user_id: MaybeOwned::Borrowed(json_refresh_web_token.get_user_id()),
             device_id: MaybeOwned::Borrowed(json_refresh_web_token.get_device_id()),

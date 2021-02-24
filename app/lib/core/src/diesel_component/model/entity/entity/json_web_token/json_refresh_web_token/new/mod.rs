@@ -17,7 +17,7 @@ pub struct New<'b> {
 }
 
 impl<'b> New<'b> {
-    pub fn from_entity(entity: &'b JsonRefreshWebToken<'b, 'b>) -> Self {
+    pub fn new_from_entity(entity: &'b JsonRefreshWebToken<'b, 'b>) -> Self {
         return Self {
             id: entity.get_id().get_value(),
             user_id: entity.get_user_id().get_value(),

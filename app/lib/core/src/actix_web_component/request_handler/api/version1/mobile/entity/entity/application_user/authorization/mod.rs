@@ -39,7 +39,7 @@ impl Authorization {
         let mut response_builder: HttpResponseBuilder = HttpResponse::Ok();
         match handler.handle() {
             LogInReturnedType::JsonAccessWebToken(ref value) => { 
-                return response_builder.body("{\"success\":true, \"jawt\":\"".to_owned() + value + &"\"}".to_owned());
+                return response_builder.body("{\"success\":true, \"jawt\":\"".to_string() + value + &"\"}".to_string());
             },
             LogInReturnedType::WrongPassword => {
                 return response_builder.body("{\"success\":false, \"message\":\"wrong password\"}");
