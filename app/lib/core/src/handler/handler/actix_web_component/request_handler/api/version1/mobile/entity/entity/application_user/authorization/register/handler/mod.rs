@@ -4,26 +4,17 @@ use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::repository::entity::entity::application_user::base_repository::BaseRepository;
 use crate::utility::repository::_common::pg_connection_manager::PGConnectionManager;
 
-pub struct Handler<'b> {
-    pg_connection_manager: PGConnectionManager,
-    request: &'b Request
-}
+pub struct Handler;
 
-impl<'a, 'b: 'a> Handler<'b> {
-    pub fn new(request: &'b Request) -> Self {
-        return Self {
-            pg_connection_manager: PGConnectionManager::new(),
-            request
-        };
-    }
-
-    pub fn handle(&'a mut self) -> () {
+impl<'b> Handler {
+    pub fn handle(request: &'b Request) -> () {
         let application_user: ApplicationUser<'b> = ApplicationUser::new_from_credentials(   // TODO validate ememail  - Проставить самую легкую проверку, 
-            self.request.get_email(), self.request.get_nickname(), self.request.get_password()
+            request.get_email(), request.get_nickname(), request.get_password()
         );   
-        self.pg_connection_manager.establish_connection();
-        let base_repository: BaseRepository<'_> = BaseRepository::new(&self.pg_connection_manager);     // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
+        let mut pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
+        pg_connection_manager.establish_connection();
+        let base_repository: BaseRepository<'_> = BaseRepository::new(&pg_connection_manager);     // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
         base_repository.save(&New::new_from_entity(&application_user));
-        self.pg_connection_manager.close_connection();
+        pg_connection_manager.close_connection();
     }
-}
+}       // TODO ОСТАНОВИЛСЯ ЗДЕСЬ. ИДТИ ВНИЗ ПО ДЕРЕВУ ДИРЕКТОРИЙ

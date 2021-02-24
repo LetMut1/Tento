@@ -16,17 +16,15 @@ pub struct Authorization;
 impl Authorization {
     pub async fn register(request: Form<RegisterRequest>) -> impl Responder {
         let request: RegisterRequest = request.into_inner();
-        let mut handler: RegisterHandler<'_> = RegisterHandler::new(&request);
-        handler.handle();                  //TODO try catch
+        RegisterHandler::handle(&request);                  //TODO try catch
 
         return HttpResponse::Ok();
     }
 
     pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> impl Responder {
-        let query: CheckNicknameForExistingQuery = query.into_inner();
-        let mut handler: CheckNicknameForExistingHanlder<'_> = CheckNicknameForExistingHanlder::new(&query);              //TODO try catch
+        let query: CheckNicknameForExistingQuery = query.into_inner();            //TODO try catch
         let mut response_builder: HttpResponseBuilder = HttpResponse::Ok();
-        if handler.handle() {                 //TODO try catch
+        if CheckNicknameForExistingHanlder::handle(&query) {                 //TODO try catch
             return response_builder.body("{\"success\":true}");
         } else {
             return response_builder.body("{\"success\":false}");
@@ -34,10 +32,9 @@ impl Authorization {
     }
 
     pub async fn log_in(request: Form<LogInRequest>) -> impl Responder {
-        let request: LogInRequest = request.into_inner();
-        let mut handler: LogInHandler<'_, '_> = LogInHandler::new(&request);     // TODO Try
+        let request: LogInRequest = request.into_inner();  // TODO Try
         let mut response_builder: HttpResponseBuilder = HttpResponse::Ok();
-        match handler.handle() {
+        match LogInHandler::handle(&request) {
             LogInReturnedType::JsonAccessWebToken(ref value) => { 
                 return response_builder.body("{\"success\":true, \"jawt\":\"".to_string() + value + &"\"}".to_string());
             },
