@@ -15,7 +15,7 @@ impl<'a> PGConnectionManager {
     pub fn establish_connection(&'a mut self) -> () {
         match self.pg_connection {
             Some(ref _pg_connection) => {
-                panic!("Logic error, PgConnection is already exist");   // TODO error           // TODO // TODO // TODO попробовать notpanic снова
+                panic!("Logic error, PgConnection is already exist");   // TODO error 
             },
             None => {
                 self.pg_connection = Some(PgConnection::establish("postgres://root:password@postgresql/mem_is").unwrap()); // TODO всплывание ошибок // TODO from env
