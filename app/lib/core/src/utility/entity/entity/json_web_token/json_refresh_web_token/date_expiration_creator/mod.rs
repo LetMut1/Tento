@@ -5,8 +5,8 @@ use maybe_owned::MaybeOwned;
 
 pub struct DateExpirationCreator;
 
-impl<'a> DateExpirationCreator {    // TODO правильные ли здесь
-    pub fn create_interval() -> DateTime<'a> {
+impl<'c> DateExpirationCreator {    // TODO правильные ли здесь
+    pub fn create_interval() -> DateTime<'c> {
         return DateTime::new_from_date_time(MaybeOwned::Owned(Utc::now().checked_add_signed(Duration::days(30)).unwrap()));
     }
 }
