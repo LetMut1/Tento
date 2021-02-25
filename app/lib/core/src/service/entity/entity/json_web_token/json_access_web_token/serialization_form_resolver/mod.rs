@@ -19,9 +19,9 @@ impl<'a, 'b: 'a> SerializationFormResolver {
     }
 
     pub fn deserialize(jawt_classic_form: &'b String) -> PayloadCommon<'a> {
-        let jawt_parts: Vec<String> = jawt_classic_form.split(Self::LINE_SEPARATOR).map(|value: &str| -> String { return value.to_string(); }).collect();
+        let jawt_parts: Vec<String> = jawt_classic_form.split(Self::LINE_SEPARATOR).map(|value: &'_ str| -> String { return value.to_string(); }).collect();
         if Self::is_valid(&jawt_parts) {
-            let paylod_json_encoded: &[u8] = &base64::decode(jawt_parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
+            let paylod_json_encoded: &'_ [u8] = &base64::decode(jawt_parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
             
             return serde_json::from_slice::<'_, PayloadCommon<'a>>(paylod_json_encoded).unwrap();  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
         } else {

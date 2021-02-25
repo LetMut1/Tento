@@ -20,7 +20,7 @@ impl<'a, 'b: 'a> UuidV4<'b> {
     }
 
     pub fn new_from_string(value: &'b String) -> Self {
-        let value_bytes: &[u8] = value.as_bytes();
+        let value_bytes: &'_ [u8] = value.as_bytes();
         if value_bytes.len() == 16 {
             return Self { 
                 value: MaybeOwned::Owned(Uuid::from_bytes(value_bytes.try_into().unwrap())) // TODO ВЫбрасывать ошибку тоже
