@@ -15,7 +15,7 @@ impl<'b> HS512Encoder {
     }
 
     pub fn hash_is_valid(subject: &'b String, subject_hash: &'b String) -> bool {
-        return &Self::encode(subject) == subject_hash;  // TODO // TODO // TODO сравнить значени строк, а не участки памяти, гна которые указывает сфлка 
+        return &Self::encode(subject) == subject_hash;
     }
 
     fn get_configured_hmac() -> Hmac<Sha512> {
