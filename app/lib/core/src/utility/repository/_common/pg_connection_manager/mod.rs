@@ -8,7 +8,7 @@ pub struct PGConnectionManager {
 impl<'a> PGConnectionManager {
     pub fn new() -> Self {
         return Self {
-            pg_connection: None
+            pg_connection: None                         // TODO // TODO // TODO lifetime self inner outer random
         }
     }
 
