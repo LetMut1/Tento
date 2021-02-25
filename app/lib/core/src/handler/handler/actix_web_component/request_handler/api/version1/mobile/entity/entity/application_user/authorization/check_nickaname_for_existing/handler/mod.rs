@@ -8,8 +8,7 @@ impl<'b> Handler {
     pub fn handle(query: &'b Query) -> bool {  // TODO Всплывание ошибок, В РекуестХэндлере делать try.
         let mut pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
         pg_connection_manager.establish_connection();
-        let base_repository: BaseRepository<'_> = BaseRepository::new(&pg_connection_manager);
-        let result: bool = base_repository.is_exist_by_nickanme(query.get_nickname());
+        let result: bool = BaseRepository::is_exist_by_nickanme(pg_connection_manager.get_connection(), query.get_nickname());
         pg_connection_manager.close_connection();
 
         return result;

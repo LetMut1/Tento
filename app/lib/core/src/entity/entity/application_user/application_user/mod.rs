@@ -15,22 +15,18 @@ pub struct ApplicationUser<'b> {
     nickname: Nickname<'b>,
     password_hash: PasswordHash<'b>,
     created_at: DateTime<'b>,           // TODO  Roles
-    confirmed: Confirmed,
-    password_encoder: PasswordEncoder
+    confirmed: Confirmed
 }
 
 impl<'a, 'b: 'a> ApplicationUser<'b> {
     pub fn new_from_credentials(email: &'b String, nickname: &'b String, password: &'b String) -> Self {
-        let password_encoder: PasswordEncoder = PasswordEncoder::new();
-
         return Self {
             id: UuidV4::new(),
             email: Email::new(MaybeOwned::Borrowed(email)),
             nickname: Nickname::new(MaybeOwned::Borrowed(nickname)),
-            password_hash: PasswordHash::new(MaybeOwned::Owned(password_encoder.encode(password))),
+            password_hash: PasswordHash::new(MaybeOwned::Owned(PasswordEncoder::encode(password))),
             created_at: DateTime::new(),
-            confirmed: Confirmed::new(false),
-            password_encoder
+            confirmed: Confirmed::new(false)
         };
     }
 
@@ -41,9 +37,8 @@ impl<'a, 'b: 'a> ApplicationUser<'b> {
             nickname: Nickname::new(MaybeOwned::Borrowed(existing.get_nickname())),
             password_hash: PasswordHash::new(MaybeOwned::Borrowed(existing.get_password_hash())),
             created_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(existing.get_created_at())),
-            confirmed: Confirmed::new(existing.get_confirmed()),
-            password_encoder: PasswordEncoder::new()
-        };
+            confirmed: Confirmed::new(existing.get_confirmed())
+        }
     }
 
     pub fn is_confirmed(&'a self) -> bool {
@@ -63,7 +58,7 @@ impl<'a, 'b: 'a> ApplicationUser<'b> {
     }
 
     pub fn set_password(&'a mut self, password: Password<'b>) -> &'a mut Self {
-        self.password_hash = PasswordHash::new(MaybeOwned::Owned(self.password_encoder.encode(password.get_value())));
+        self.password_hash = PasswordHash::new(MaybeOwned::Owned(PasswordEncoder::encode(password.get_value())));
 
         return self;
     }
