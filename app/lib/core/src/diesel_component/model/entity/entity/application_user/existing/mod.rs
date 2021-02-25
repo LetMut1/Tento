@@ -13,28 +13,28 @@ pub struct Existing {
     confirmed: bool
 }
 
-impl<'a> Existing{
-    pub fn get_id(&'a self) -> &'a Uuid {
+impl<'this> Existing{
+    pub fn get_id(&'this self) -> &'this Uuid {
         return &self.id;
     }
 
-    pub fn get_emal(&'a self) -> &'a String {
+    pub fn get_emal(&'this self) -> &'this String {
         return &self.email;
     }
 
-    pub fn get_nickname(&'a self) -> &'a String {
+    pub fn get_nickname(&'this self) -> &'this String {
         return &self.nickname;
     }
 
-    pub fn get_password_hash(&'a self) -> &'a String {
+    pub fn get_password_hash(&'this self) -> &'this String {
         return &self.password_hash;
     }
 
-    pub fn get_created_at(&'a self) -> &'a ChronoDateTime<Utc> {
+    pub fn get_created_at(&'this self) -> &'this ChronoDateTime<Utc> {
         return &self.created_at;
     }
 
-    pub fn get_confirmed(&'a self) -> bool {
+    pub fn get_confirmed(&'this self) -> bool {
         return self.confirmed;
     }
 }

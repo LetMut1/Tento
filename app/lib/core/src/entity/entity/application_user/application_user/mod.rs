@@ -9,17 +9,17 @@ use crate::entity::entity::application_user::core::password::Password;
 use crate::utility::entity::entity::application_user::password_encoder::PasswordEncoder;
 use maybe_owned::MaybeOwned;
 
-pub struct ApplicationUser<'b> {
-    id: UuidV4<'b>,
-    email: Email<'b>,                   // TODO где хранить сам токен и дату экспирации для подтверждении и логине  ( Редис?)
-    nickname: Nickname<'b>,
-    password_hash: PasswordHash<'b>,
-    created_at: DateTime<'b>,           // TODO  Roles
+pub struct ApplicationUser<'outer> {
+    id: UuidV4<'outer>,
+    email: Email<'outer>,                   // TODO где хранить сам токен и дату экспирации для подтверждении и логине  ( Редис?)
+    nickname: Nickname<'outer>,
+    password_hash: PasswordHash<'outer>,
+    created_at: DateTime<'outer>,           // TODO  Roles
     confirmed: Confirmed
 }
 
-impl<'a, 'b: 'a> ApplicationUser<'b> {
-    pub fn new_from_credentials(email: &'b String, nickname: &'b String, password: &'b String) -> Self {
+impl<'this, 'outer: 'this> ApplicationUser<'outer> {
+    pub fn new_from_credentials(email: &'outer String, nickname: &'outer String, password: &'outer String) -> Self {
         return Self {
             id: UuidV4::new(),
             email: Email::new(MaybeOwned::Borrowed(email)),
@@ -30,7 +30,7 @@ impl<'a, 'b: 'a> ApplicationUser<'b> {
         };
     }
 
-    pub fn new_from_model(existing: &'b Existing) -> Self {
+    pub fn new_from_model(existing: &'outer Existing) -> Self {
         return Self {
             id: UuidV4::new_from_uuid(existing.get_id()),
             email: Email::new(MaybeOwned::Borrowed(existing.get_emal())),
@@ -41,49 +41,49 @@ impl<'a, 'b: 'a> ApplicationUser<'b> {
         }
     }
 
-    pub fn is_confirmed(&'a self) -> bool {
+    pub fn is_confirmed(&'this self) -> bool {
         return (&self.confirmed).get_value();
     }
 
-    pub fn set_email(&'a mut self, email: Email<'b>) -> &'a mut Self {
+    pub fn set_email(&'this mut self, email: Email<'outer>) -> &'this mut Self {
         self.email = email;
 
         return self;
     }
 
-    pub fn set_nickname(&'a mut self, nickname: Nickname<'b>) -> &'a mut Self {
+    pub fn set_nickname(&'this mut self, nickname: Nickname<'outer>) -> &'this mut Self {
         self.nickname = nickname;
 
         return self;
     }
 
-    pub fn set_password(&'a mut self, password: Password<'b>) -> &'a mut Self {
+    pub fn set_password(&'this mut self, password: Password<'outer>) -> &'this mut Self {
         self.password_hash = PasswordHash::new(MaybeOwned::Owned(PasswordEncoder::encode(password.get_value())));
 
         return self;
     }
 
-    pub fn get_id(&'a self) -> &'a UuidV4<'b> {
+    pub fn get_id(&'this self) -> &'this UuidV4<'outer> {
         return &self.id;
     }
 
-    pub fn get_email(&'a self) -> &'a Email<'b> {
+    pub fn get_email(&'this self) -> &'this Email<'outer> {
         return &self.email;
     }
 
-    pub fn get_nickname(&'a self) -> &'a Nickname<'b> {
+    pub fn get_nickname(&'this self) -> &'this Nickname<'outer> {
         return &self.nickname;
     }
 
-    pub fn get_passord_hash(&'a self) -> &'a PasswordHash<'b> {
+    pub fn get_passord_hash(&'this self) -> &'this PasswordHash<'outer> {
         return &self.password_hash;
     }
 
-    pub fn get_created_at(&'a self) -> &'a DateTime<'b> {
+    pub fn get_created_at(&'this self) -> &'this DateTime<'outer> {
         return &self.created_at;
     }
 
-    pub fn get_confirmed(&'a self) -> &'a Confirmed {
+    pub fn get_confirmed(&'this self) -> &'this Confirmed {
         return &self.confirmed;
     }
 }

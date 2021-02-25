@@ -14,8 +14,8 @@ use maybe_owned::MaybeOwned;
 
 pub struct Handler;
 
-impl<'b> Handler{
-    pub fn handle(request: &'b Request) -> ReturnedType {        // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
+impl<'outer> Handler{
+    pub fn handle(request: &'outer Request) -> ReturnedType {        // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
         let returned_type: ReturnedType;
         let mut pg_connection_manager:PGConnectionManager = PGConnectionManager::new();
         pg_connection_manager.establish_connection();

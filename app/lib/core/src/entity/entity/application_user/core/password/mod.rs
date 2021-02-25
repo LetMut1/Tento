@@ -1,17 +1,17 @@
 use maybe_owned::MaybeOwned;
 
-pub struct Password<'b> {
-    value: MaybeOwned<'b, String>
+pub struct Password<'outer> {
+    value: MaybeOwned<'outer, String>
 }
 
-impl<'a, 'b: 'a> Password<'b> {
-    pub fn new(value: MaybeOwned<'b, String>) -> Self {
+impl<'this, 'outer: 'this> Password<'outer> {
+    pub fn new(value: MaybeOwned<'outer, String>) -> Self {
         return Self {
             value
         };
     }
 
-    pub fn get_value(&'a self) -> &'a String {
+    pub fn get_value(&'this self) -> &'this String {
         return &self.value;
     }
 }

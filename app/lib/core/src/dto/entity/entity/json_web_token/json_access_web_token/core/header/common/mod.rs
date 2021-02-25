@@ -4,13 +4,13 @@ use serde::Deserialize;
 use serde::Serialize;
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Common<'b> {
-    alg: MaybeOwned<'b, String>,
-    typ: MaybeOwned<'b, String>,
+pub struct Common<'outer> {
+    alg: MaybeOwned<'outer, String>,
+    typ: MaybeOwned<'outer, String>,
 }
 
-impl<'b> Common<'b> {
-    pub fn new_from_entity(json_access_web_token: &'b JsonAccessWebToken<'b>) -> Self {
+impl<'outer> Common<'outer> {
+    pub fn new_from_entity(json_access_web_token: &'outer JsonAccessWebToken<'outer>) -> Self {
         return Self {
             alg: MaybeOwned::Owned(json_access_web_token.get_header().get_alg().get_value()),
             typ: MaybeOwned::Owned(json_access_web_token.get_header().get_typ().get_value())

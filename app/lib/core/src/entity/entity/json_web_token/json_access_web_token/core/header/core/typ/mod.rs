@@ -4,12 +4,12 @@ pub struct Typ {
     value: &'static str
 }
 
-impl<'a> Typ {
+impl<'this> Typ {
     pub fn new() -> Self {
         return Self::default();
     }
 
-    pub fn get_value(&'a self) -> String {
+    pub fn get_value(&'this self) -> String {
         return self.value.to_string()
     }
 }

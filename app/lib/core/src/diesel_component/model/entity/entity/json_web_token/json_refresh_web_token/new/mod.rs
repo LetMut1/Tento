@@ -7,17 +7,17 @@ use uuid::Uuid;
 
 #[derive(Insertable)]
 #[table_name = "json_refresh_web_token"]
-pub struct New<'b> {
-    id: &'b Uuid,
-    user_id: &'b Uuid,
-    device_id: &'b String,
-    value: &'b String,
-    created_at: &'b ChronoDateTime<Utc>,
-    expired_at: &'b ChronoDateTime<Utc>
+pub struct New<'outer> {
+    id: &'outer Uuid,
+    user_id: &'outer Uuid,
+    device_id: &'outer String,
+    value: &'outer String,
+    created_at: &'outer ChronoDateTime<Utc>,
+    expired_at: &'outer ChronoDateTime<Utc>
 }
 
-impl<'b> New<'b> {
-    pub fn new_from_entity(entity: &'b JsonRefreshWebToken<'b, 'b>) -> Self {
+impl<'outer> New<'outer> {
+    pub fn new_from_entity(entity: &'outer JsonRefreshWebToken<'outer, 'outer>) -> Self {
         return Self {
             id: entity.get_id().get_value(),
             user_id: entity.get_user_id().get_value(),

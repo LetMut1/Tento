@@ -9,16 +9,16 @@ pub struct Header {
     typ: Typ
 }
 
-impl<'a> Header {
+impl<'this> Header {
     pub fn new() -> Self {
         return Self::default();
     }
 
-    pub fn get_alg(&'a self) -> &'a Alg {
+    pub fn get_alg(&'this self) -> &'this Alg {
         return &self.alg;
     }
 
-    pub fn get_typ(&'a self) -> &'a Typ {
+    pub fn get_typ(&'this self) -> &'this Typ {
         return &self.typ;
     }
 }

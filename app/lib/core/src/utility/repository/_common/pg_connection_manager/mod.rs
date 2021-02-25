@@ -5,14 +5,14 @@ pub struct PGConnectionManager {
     pg_connection: Option<PgConnection>
 }
 
-impl<'a> PGConnectionManager {
+impl<'this> PGConnectionManager {
     pub fn new() -> Self {
         return Self {
             pg_connection: None
         }
     }
 
-    pub fn establish_connection(&'a mut self) -> () {
+    pub fn establish_connection(&'this mut self) -> () {
         match self.pg_connection {
             Some(ref _pg_connection) => {
                 panic!("Logic error, PgConnection is already exist");   // TODO error 
@@ -23,7 +23,7 @@ impl<'a> PGConnectionManager {
         }
     }
 
-    pub fn close_connection(&'a mut self) -> () {
+    pub fn close_connection(&'this mut self) -> () {
         match self.pg_connection {
             Some(ref _pg_connection) => {
                 self.pg_connection = None;
@@ -34,7 +34,7 @@ impl<'a> PGConnectionManager {
         }
     }
 
-    pub fn get_connection(&'a self) -> &'a PgConnection {
+    pub fn get_connection(&'this self) -> &'this PgConnection {
         match self.pg_connection {
             Some(ref pg_connection) => {
                 return pg_connection;

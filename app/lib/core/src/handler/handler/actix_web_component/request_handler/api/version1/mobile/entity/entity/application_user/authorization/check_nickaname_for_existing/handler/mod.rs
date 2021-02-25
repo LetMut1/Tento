@@ -4,8 +4,8 @@ use crate::utility::repository::_common::pg_connection_manager::PGConnectionMana
 
 pub struct Handler;
 
-impl<'b> Handler {
-    pub fn handle(query: &'b Query) -> bool {  // TODO Всплывание ошибок, В РекуестХэндлере делать try.
+impl<'outer> Handler {
+    pub fn handle(query: &'outer Query) -> bool {  // TODO Всплывание ошибок, В РекуестХэндлере делать try.
         let mut pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
         pg_connection_manager.establish_connection();
         let result: bool = BaseRepository::is_exist_by_nickanme(pg_connection_manager.get_connection(), query.get_nickname());

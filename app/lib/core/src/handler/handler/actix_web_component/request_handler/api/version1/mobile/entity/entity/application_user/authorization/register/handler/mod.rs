@@ -6,8 +6,8 @@ use crate::utility::repository::_common::pg_connection_manager::PGConnectionMana
 
 pub struct Handler;
 
-impl<'b> Handler {
-    pub fn handle(request: &'b Request) -> () {
+impl<'outer> Handler {
+    pub fn handle(request: &'outer Request) -> () {
         let application_user: ApplicationUser<'_> = ApplicationUser::new_from_credentials(   // TODO validate ememail  - Проставить самую легкую проверку, 
             request.get_email(), request.get_nickname(), request.get_password()
         );   

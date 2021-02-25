@@ -5,8 +5,8 @@ pub struct Query {
     nickname: String
 }
 
-impl<'a> Query {
-    pub fn get_nickname(&'a self) -> &'a String {
+impl<'this> Query {
+    pub fn get_nickname(&'this self) -> &'this String {
         return &self.nickname;
     }
 }

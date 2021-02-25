@@ -7,17 +7,17 @@ use uuid::Uuid;
 
 #[derive(Insertable)]
 #[table_name = "application_user"]
-pub struct New<'b> {                    // TODO описать id Аттрибутами
-    id: &'b Uuid,
-    email: &'b String,
-    nickname: &'b String,
-    password_hash: &'b String,
-    created_at: &'b ChronoDateTime<Utc>,
+pub struct New<'outer> {                    // TODO описать id Аттрибутами
+    id: &'outer Uuid,
+    email: &'outer String,
+    nickname: &'outer String,
+    password_hash: &'outer String,
+    created_at: &'outer ChronoDateTime<Utc>,
     confirmed: bool
 }
 
-impl<'b> New<'b> {
-    pub fn new_from_entity(application_user: &'b ApplicationUser<'b>) -> Self {
+impl<'outer> New<'outer> {
+    pub fn new_from_entity(application_user: &'outer ApplicationUser<'outer>) -> Self {
         return Self {
             id: application_user.get_id().get_value(),
             email: application_user.get_email().get_value(),

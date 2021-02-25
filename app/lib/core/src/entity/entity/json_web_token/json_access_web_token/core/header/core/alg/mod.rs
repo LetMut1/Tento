@@ -4,12 +4,12 @@ pub struct Alg {
     value: &'static str
 }
 
-impl<'a> Alg {
+impl<'this> Alg {
     pub fn new() -> Self {
         return Self::default();
     }
 
-    pub fn get_value(&'a self) -> String {
+    pub fn get_value(&'this self) -> String {
         return self.value.to_string()
     }
 }

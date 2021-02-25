@@ -7,17 +7,17 @@ use crate::utility::entity::entity::json_web_token::json_refresh_web_token::date
 use maybe_owned::MaybeOwned;
 use uuid::Uuid;
 
-pub struct JsonRefreshWebToken<'a, 'b> {
-    id: UuidV4<'b>,
-    user_id:  MaybeOwned<'b, UuidV4<'b>>,
-    device_id: DeviceId<'b>,
-    value: Value<'b>,
-    created_at: DateTime<'a>,
-    expired_at: DateTime<'a>
+pub struct JsonRefreshWebToken<'this, 'outer> {
+    id: UuidV4<'outer>,
+    user_id:  MaybeOwned<'outer, UuidV4<'outer>>,
+    device_id: DeviceId<'outer>,
+    value: Value<'outer>,
+    created_at: DateTime<'this>,
+    expired_at: DateTime<'this>
 }
 
-impl<'a, 'b: 'a> JsonRefreshWebToken<'a, 'b> {          // TODO  create ValHas with CustomHasher, value - это изменяемое после каждого использования токена поле. Может, завязать на device_id?
-    pub fn new_from_credentials(user_id: MaybeOwned<'b, UuidV4<'b>>, device_id: &'b String) -> Self {     // TODO Value генерировать внутри
+impl<'this, 'outer: 'this> JsonRefreshWebToken<'this, 'outer> {          // TODO  create ValHas with CustomHasher, value - это изменяемое после каждого использования токена поле. Может, завязать на device_id?
+    pub fn new_from_credentials(user_id: MaybeOwned<'outer, UuidV4<'outer>>, device_id: &'outer String) -> Self {     // TODO Value генерировать внутри
         return Self {
             id: UuidV4::new(),
             user_id,
@@ -28,7 +28,7 @@ impl<'a, 'b: 'a> JsonRefreshWebToken<'a, 'b> {          // TODO  create ValHas w
         };
     }
 
-    pub fn new_from_model(existing: &'b Existing) -> Self {
+    pub fn new_from_model(existing: &'outer Existing) -> Self {
         return Self {
             id: UuidV4::new_from_uuid(existing.get_id()),
             user_id: MaybeOwned::Owned(UuidV4::new_from_uuid(existing.get_user_id())),
@@ -39,39 +39,39 @@ impl<'a, 'b: 'a> JsonRefreshWebToken<'a, 'b> {          // TODO  create ValHas w
         };
     }
 
-    pub fn refresh_expired_at(&'a mut self) -> &'a mut Self {
+    pub fn refresh_expired_at(&'this mut self) -> &'this mut Self {
         self.expired_at = DateExpirationCreator::create_interval();
 
         return self;
     }
 
-    pub fn set_value(&'a mut self, value: Value<'b>) -> &'a mut Self {
+    pub fn set_value(&'this mut self, value: Value<'outer>) -> &'this mut Self {
         self.value = value;
 
         return self;
     }
 
-    pub fn get_id(&'a self) -> &'a UuidV4<'b> {
+    pub fn get_id(&'this self) -> &'this UuidV4<'outer> {
         return &self.id;
     }
 
-    pub fn get_user_id(&'a self) -> &'a UuidV4<'b> {
+    pub fn get_user_id(&'this self) -> &'this UuidV4<'outer> {
         return &self.user_id;
     }
 
-    pub fn get_device_id(&'a self) -> &'a DeviceId<'b> {
+    pub fn get_device_id(&'this self) -> &'this DeviceId<'outer> {
         return &self.device_id;
     }
 
-    pub fn get_value(&'a self) -> &'a Value<'b> {
+    pub fn get_value(&'this self) -> &'this Value<'outer> {
         return &self.value;
     }
 
-    pub fn get_created_at(&'a self) -> &'a DateTime<'a> {
+    pub fn get_created_at(&'this self) -> &'this DateTime<'this> {
         return &self.created_at;
     }
 
-    pub fn get_expired_at(&'a self) -> &'a DateTime<'a> {
+    pub fn get_expired_at(&'this self) -> &'this DateTime<'this> {
         return &self.expired_at;
     }
 }

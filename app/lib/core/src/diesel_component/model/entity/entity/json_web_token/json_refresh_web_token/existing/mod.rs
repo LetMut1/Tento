@@ -13,28 +13,28 @@ pub struct Existing {
     expired_at: ChronoDateTime<Utc>
 }
 
-impl<'a> Existing {
-    pub fn get_id(&'a self) -> &'a Uuid {
+impl<'this> Existing {
+    pub fn get_id(&'this self) -> &'this Uuid {
         return &self.id;
     }
 
-    pub fn get_user_id(&'a self) -> &'a Uuid {
+    pub fn get_user_id(&'this self) -> &'this Uuid {
         return &self.user_id;
     }
 
-    pub fn get_device_id(&'a self) -> &'a String {
+    pub fn get_device_id(&'this self) -> &'this String {
         return &self.device_id;
     }
 
-    pub fn get_value_hash(&'a self) -> &'a String {
+    pub fn get_value_hash(&'this self) -> &'this String {
         return &self.value;
     }
 
-    pub fn get_created_at(&'a self) -> &'a ChronoDateTime<Utc> {
+    pub fn get_created_at(&'this self) -> &'this ChronoDateTime<Utc> {
         return &self.created_at;
     }
 
-    pub fn get_expired_at(&'a self) -> &'a ChronoDateTime<Utc> {
+    pub fn get_expired_at(&'this self) -> &'this ChronoDateTime<Utc> {
         return &self.expired_at;
     }
 }

@@ -1,17 +1,17 @@
 use maybe_owned::MaybeOwned;
 
-pub struct DeviceId<'b> {
-    value: MaybeOwned<'b, String>
+pub struct DeviceId<'outer> {
+    value: MaybeOwned<'outer, String>
 }
 
-impl<'a, 'b: 'a> DeviceId<'b> {
-    pub fn new(value: MaybeOwned<'b, String>) -> Self {
+impl<'this, 'outer: 'this> DeviceId<'outer> {
+    pub fn new(value: MaybeOwned<'outer, String>) -> Self {
         return Self {
             value
         };
     }
 
-    pub fn get_value(&'a self) -> &'a String {
+    pub fn get_value(&'this self) -> &'this String {
         return &self.value;
     }
 }
