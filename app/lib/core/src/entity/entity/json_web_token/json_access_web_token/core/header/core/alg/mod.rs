@@ -1,6 +1,6 @@
 use std::default::Default;
 
-pub struct Alg {            // TODO Возможность создавать экземпляр здесь не нужна ?
+pub struct Alg {
     value: &'static str
 }
 

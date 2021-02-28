@@ -28,6 +28,7 @@ async fn main() -> Result<()> {
     // TODO 5. Update ActixWeb
 // Do not remove this block until the problems have been fixed }
 
+// TODO #[inline] - нужно ли оптимизировать с помощью этого атрибута
 // TODO Зaщита от SQL-инъекций
 // TODO Разобраться, что именно ФРэймворк параллелит, на каком этапе. (Параллелит ли это файл? - не должен)
 // TODO create async Database connections pool (r2d2) - нужно ли. r2d2 держит пул соендинений открытыми и раздает их на каждый хэндлер ( в контексте акстикс веб).

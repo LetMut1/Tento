@@ -18,10 +18,10 @@ impl<'this, 'outer: 'this> SerializationFormResolver {
         );
     }
 
-    pub fn deserialize(jawt_classic_form: &'outer String) -> PayloadCommon<'this> {
-        let jawt_parts: Vec<String> = jawt_classic_form.split(Self::LINE_SEPARATOR).map(|value: &'_ str| -> String { return value.to_string(); }).collect();
-        if Self::is_valid(&jawt_parts) {
-            let paylod_json_encoded: &'_ [u8] = &base64::decode(jawt_parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
+    pub fn deserialize(classic_form: &'outer String) -> PayloadCommon<'this> {
+        let parts: Vec<String> = classic_form.split(Self::LINE_SEPARATOR).map(|value: &'_ str| -> String { return value.to_string(); }).collect();
+        if Self::is_valid(&parts) {
+            let paylod_json_encoded: &'_ [u8] = &base64::decode(parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
             
             return serde_json::from_slice::<'_, PayloadCommon<'this>>(paylod_json_encoded).unwrap();  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
         } else {
