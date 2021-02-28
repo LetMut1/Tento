@@ -1,9 +1,9 @@
 use crate::diesel_component::model::entity::entity::application_user::new::New;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::request::Request;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
-use crate::error::error::core::entity::entity_error_kind::EntityErrorKind;
-use crate::error::error::core::entity::entity::application_user::application_user_error_kind::ApplicationUserErrorKind;
-use crate::error::error::main_error_kind::MainErrorKind;
+use crate::error::main_error_kind::core::entity::entity_error_kind::entity_error_kind::EntityErrorKind;
+use crate::error::main_error_kind::core::entity::entity_error_kind::core::entity::application_user::application_user_error_kind::ApplicationUserErrorKind;
+use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::entity::entity::application_user::base_repository::BaseRepository;
 use crate::utility::repository::_common::pg_connection_manager::PGConnectionManager;
 

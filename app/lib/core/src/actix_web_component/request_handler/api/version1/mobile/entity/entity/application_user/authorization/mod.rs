@@ -6,20 +6,18 @@ use actix_web::web::Query;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickname_for_existing::query::Query as CheckNicknameForExistingQuery;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::request::Request as LogInRequest;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::request::Request as RegisterRequest;
-use crate::error::error::core::entity::entity_error_kind::EntityErrorKind;
-use crate::error::error::core::entity::entity::application_user::application_user_error_kind::ApplicationUserErrorKind;
-use crate::error::error::main_error_kind::MainErrorKind;
+use crate::error::main_error_kind::core::entity::entity_error_kind::entity_error_kind::EntityErrorKind;
+use crate::error::main_error_kind::core::entity::entity_error_kind::core::entity::application_user::application_user_error_kind::ApplicationUserErrorKind;
+use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::handler::Handler as LogInHandler;
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::Handler as RegisterHandler;
-use crate::handler::returned_type::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::returned_type::ReturnedType as LogInReturnedType;
 
 pub struct Authorization;
 
 impl Authorization {
     pub async fn register(request: Form<RegisterRequest>) -> impl Responder {
         let request: RegisterRequest = request.into_inner();
-
         match RegisterHandler::handle(&request) {
             Ok(ref _value) => { return HttpResponse::Ok().finish(); },
             Err(ref value) => {
@@ -30,13 +28,17 @@ impl Authorization {
                                 match value {
                                     ApplicationUserErrorKind::AlreadyExist(ref value) => {
                                         return HttpResponse::Ok().body("{\"success\":false, \"message\":\"user already exist\"}");
+                                    },
+                                    _ => {
+                                        // TODO написать в лог !!! Сюда вообще попадать не должны
+                                        return HttpResponse::InternalServerError().finish();
                                     }
                                 };
                             },
                         };
                     },
                     _ => {
-                                    // TODO написать в лог 
+                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                         return HttpResponse::InternalServerError().finish();
                     }
                 };
@@ -56,25 +58,42 @@ impl Authorization {
                 }
             },
             Err(ref value) => {
-                                        // TODO написать в лог 
+                                        // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 return HttpResponse::InternalServerError().finish();
             }
         };
     }
 
     pub async fn log_in(request: Form<LogInRequest>) -> impl Responder {
-        let request: LogInRequest = request.into_inner();  // TODO Try
-        let mut response_builder: HttpResponseBuilder = HttpResponse::Ok();
+        let request: LogInRequest = request.into_inner();
         match LogInHandler::handle(&request) {
-            LogInReturnedType::JsonAccessWebToken(ref value) => { 
-                return response_builder.body("{\"success\":true, \"jawt\":\"".to_string() + value + &"\"}".to_string());
-            },
-            LogInReturnedType::WrongPassword => {
-                return response_builder.body("{\"success\":false, \"message\":\"wrong password\"}");
-            },
-            LogInReturnedType::NotConfirmed => {
-                return response_builder.body("{\"success\":false, \"message\":\"not confirmed\"}");
+            Ok(ref value) => {  return HttpResponse::Ok().body("{\"success\":true, \"jawt\":\"".to_string() + value + &"\"}".to_string()); },
+            Err(ref value) => {
+                match value {
+                    MainErrorKind::EntityErrorKind(ref value) => {
+                        match value {
+                            EntityErrorKind::ApplicationUserErrorKind(ref value) => {
+                                match value {
+                                    ApplicationUserErrorKind::WrongPassword(ref _value) => {
+                                        return HttpResponse::Ok().body("{\"success\":false, \"message\":\"wrong password\"}");
+                                    },
+                                    ApplicationUserErrorKind::NotConfirmed(ref _value) => {
+                                        return HttpResponse::Ok().body("{\"success\":false, \"message\":\"not confirmed\"}");
+                                    },
+                                    _ => {
+                                        // TODO написать в лог !!! Сюда вообще попадать не должны
+                                        return HttpResponse::InternalServerError().finish();
+                                    }
+                                };
+                            },
+                        };
+                    },
+                    _ => {
+                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                        return HttpResponse::InternalServerError().finish();
+                    }
+                };
             }
-        }
+        };
     }
 }

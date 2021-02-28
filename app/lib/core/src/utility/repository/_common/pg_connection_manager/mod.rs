@@ -1,5 +1,5 @@
-use crate::error::error::core::common::connection::connection_error::ConnectionError;
-use crate::error::error::core::common::connection::postgresql::postgresql_connection_error_kind::PostgresqlConnectionErrorKind;
+use crate::error::main_error_kind::core::common::connection_error_kind::connection_error_kind::ConnectionErrorKind;
+use crate::error::main_error_kind::core::common::connection_error_kind::core::postgresql::postgresql_connection_error_kind::PostgresqlConnectionErrorKind;
 use crate::error::context::Context;
 use diesel::Connection;
 use diesel::pg::PgConnection;
@@ -15,7 +15,7 @@ impl<'this> PGConnectionManager {
         };                          // TODO везде ли проставлны 
     }
 
-    pub fn establish_connection(&'this mut self) -> Result<(), ConnectionError> {
+    pub fn establish_connection(&'this mut self) -> Result<(), ConnectionErrorKind> {
         match self.pg_connection {
             Some(ref _value) => { panic!("Logic error, PgConnection is already exist"); }, // TODO error Класть в Состояние фрэймворка (чтобы брать при запуске один раз и хранить в памяти)
             None => { 
@@ -26,7 +26,7 @@ impl<'this> PGConnectionManager {
                         return Ok(());
                     },
                     Err(value) => {
-                        return Err(ConnectionError::Postgresql(PostgresqlConnectionErrorKind::CanNotEstablish(Context::new(Some(value), None))));
+                        return Err(ConnectionErrorKind::Postgresql(PostgresqlConnectionErrorKind::CanNotEstablish(Context::new(Some(value), None))));
                     }
                 };
              }

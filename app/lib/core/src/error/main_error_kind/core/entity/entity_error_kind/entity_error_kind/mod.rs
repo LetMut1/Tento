@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
-use super::entity::application_user::application_user_error_kind::ApplicationUserErrorKind;
+use super::core::entity::application_user::application_user_error_kind::ApplicationUserErrorKind;
 
 #[derive(Debug)]
 pub enum EntityErrorKind {
