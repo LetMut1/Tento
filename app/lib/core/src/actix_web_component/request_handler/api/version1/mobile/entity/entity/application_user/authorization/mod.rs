@@ -6,7 +6,9 @@ use actix_web::web::Query;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickname_for_existing::query::Query as CheckNicknameForExistingQuery;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::request::Request as LogInRequest;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::request::Request as RegisterRequest;
-use crate::error::kind::main::main_error_kind::MainErrorKind;
+use crate::error::error::core::entity::entity_error_kind::EntityErrorKind;
+use crate::error::error::core::entity::entity::application_user::application_user_error_kind::ApplicationUserErrorKind;
+use crate::error::error::main_error_kind::MainErrorKind;
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::handler::Handler as LogInHandler;
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::Handler as RegisterHandler;
@@ -17,9 +19,29 @@ pub struct Authorization;
 impl Authorization {
     pub async fn register(request: Form<RegisterRequest>) -> impl Responder {
         let request: RegisterRequest = request.into_inner();
-        RegisterHandler::handle(&request);                  //TODO try catch
 
-        return HttpResponse::Ok();
+        match RegisterHandler::handle(&request) {
+            Ok(ref _value) => { return HttpResponse::Ok().finish(); },
+            Err(ref value) => {
+                match value {
+                    MainErrorKind::EntityErrorKind(ref value) => {
+                        match value {
+                            EntityErrorKind::ApplicationUserErrorKind(ref value) => {
+                                match value {
+                                    ApplicationUserErrorKind::AlreadyExist(ref value) => {
+                                        return HttpResponse::Ok().body("{\"success\":false, \"message\":\"user already exist\"}");
+                                    }
+                                };
+                            },
+                        };
+                    },
+                    _ => {
+                                    // TODO написать в лог 
+                        return HttpResponse::InternalServerError().finish();
+                    }
+                };
+            }
+        };
     }
 
     pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> impl Responder {

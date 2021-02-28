@@ -4,6 +4,7 @@ use crate::dto::actix_web_component::request_handler::api::version1::mobile::ent
 use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
+use crate::error::error::main_error_kind::MainErrorKind;
 use crate::handler::returned_type::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::returned_type::ReturnedType;
 use crate::repository::entity::entity::application_user::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::repository::entity::entity::json_web_token::json_refresh_web_token::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;

@@ -1,7 +1,7 @@
 use crate::diesel_component::model::entity::entity::application_user::existing::Existing;
 use crate::diesel_component::model::entity::entity::application_user::new::New;
 use crate::diesel_component::schema::public::application_user;
-use crate::error::kind::diesel_component::diesel_error_kind::DieselErrorKind;
+use crate::error::error::core::diesel_component::diesel_error_kind::DieselErrorKind;
 use crate::error::context::Context;
 use diesel::dsl; 
 use diesel::ExpressionMethods;

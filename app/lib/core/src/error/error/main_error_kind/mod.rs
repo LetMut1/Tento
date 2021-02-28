@@ -1,5 +1,6 @@
-use crate::error::kind::common::connection::connection_error::ConnectionError;
-use crate::error::kind::diesel_component::diesel_error_kind::DieselErrorKind;
+use super::core::common::connection::connection_error::ConnectionError;
+use super::core::diesel_component::diesel_error_kind::DieselErrorKind;
+use super::core::entity::entity_error_kind::EntityErrorKind;
 use std::convert::From;
 use std::error::Error;
 use std::fmt::Display;
@@ -9,7 +10,9 @@ use std::fmt::Result as FmtResult;
 #[derive(Debug)]
 pub enum MainErrorKind {
     DieselErrorKind(DieselErrorKind),
-    ConnectionError(ConnectionError)
+    ConnectionError(ConnectionError),
+    EntityErrorKind(EntityErrorKind)
+
 }
 
 impl Display for MainErrorKind {
@@ -32,6 +35,14 @@ impl From<ConnectionError> for MainErrorKind {
     fn from(previous: ConnectionError) -> Self {
         match previous {
             ConnectionError::Postgresql(ref _value) => { return Self::ConnectionError(previous); }
+        };
+    }
+}
+
+impl From<EntityErrorKind> for MainErrorKind {
+    fn from(previous: EntityErrorKind) -> Self {
+        match previous {
+            EntityErrorKind::ApplicationUserErrorKind(ref _value) => { return Self::EntityErrorKind(previous); }
         };
     }
 }
