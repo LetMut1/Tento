@@ -1,8 +1,8 @@
 use crate::diesel_component::model::entity::entity::application_user::existing::Existing;
 use crate::diesel_component::model::entity::entity::application_user::new::New;
 use crate::diesel_component::schema::public::application_user;
-use crate::error::diesel_component::diesel_error_kind::DieselErrorKind;
-use crate::error::error::context::Context;
+use crate::error::kind::diesel_component::diesel_error_kind::DieselErrorKind;
+use crate::error::context::Context;
 use diesel::dsl; 
 use diesel::ExpressionMethods;
 use diesel::pg::PgConnection;
@@ -12,15 +12,18 @@ use diesel::RunQueryDsl;
 pub struct BaseRepository;
 
 impl<'outer> BaseRepository {
-    pub fn save(pg_connection_manager: &'outer PgConnection, new: &'outer New) -> () {         // TODO ошибка alreadyExisting как перехватывать
-        diesel::insert_into(application_user::table).values(new).execute(pg_connection_manager).unwrap();  //TODO ошибки, Плюс тру фолс, сохранилось ли или нет
+    pub fn save(pg_connection_manager: &'outer PgConnection, new: &'outer New) -> Result<(), DieselErrorKind>  {
+        match diesel::insert_into(application_user::table).values(new).execute(pg_connection_manager) {
+        Ok(value) => { return Ok(()); },
+        Err(value) => { return Err(DieselErrorKind::Any(Context::new(Some(value), None))); }
+    };
     }
 
     pub fn is_exist_by_nickanme(pg_connection_manager: &'outer PgConnection, nickname: &'outer String) -> Result<bool, DieselErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
         match diesel::select(dsl::exists(application_user::table.filter(application_user::nickname.eq(nickname)))) // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             .get_result::<bool>(pg_connection_manager) {
             Ok(value) => { return Ok(value); },
-            Err(value) => { return Err(DieselErrorKind::Any(Context::new(Some(value), "sdsd".to_string()))); } // TODo текст
+            Err(value) => { return Err(DieselErrorKind::Any(Context::new(Some(value), None))); }
         };
     }
 

@@ -6,12 +6,12 @@ where
     E: Error
 {
     previous: Option<E>,
-    message: String
+    message: Option<String>
 }
 
 impl<'this, E> Context<E> where E: Error
 {
-    pub fn new(previous: Option<E>, message: String) -> Self {
+    pub fn new(previous: Option<E>, message: Option<String>) -> Self {
         return Self {
             previous,
             message
@@ -22,7 +22,7 @@ impl<'this, E> Context<E> where E: Error
         return &self.previous;
     }
 
-    pub fn get_message(&'this self) -> &'this String {
+    pub fn get_message(&'this self) -> &'this Option<String> {
         return &self.message;
     }
 }

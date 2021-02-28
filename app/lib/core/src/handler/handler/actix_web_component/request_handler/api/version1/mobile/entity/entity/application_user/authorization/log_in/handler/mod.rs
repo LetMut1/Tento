@@ -18,7 +18,7 @@ impl<'outer> Handler{
     pub fn handle(request: &'outer Request) -> ReturnedType {        // TODO Всплывание ошибок, В РекуестХэндлере делать try. 
         let returned_type: ReturnedType;
         let mut pg_connection_manager:PGConnectionManager = PGConnectionManager::new();
-        pg_connection_manager.establish_connection();
+        pg_connection_manager.establish_connection(); // TODO ?
         let application_user_existing: ApplicationUserExisting = 
             ApplicationUserBaseRepository::get_by_email(pg_connection_manager.get_connection(), request.get_email());
         let application_user: ApplicationUser<'_> = ApplicationUser::new_from_model(&application_user_existing);

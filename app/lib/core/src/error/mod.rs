@@ -1,2 +1,2 @@
-pub mod diesel_component;
-pub mod error;
+pub mod context;
+pub mod kind;
