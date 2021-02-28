@@ -30,7 +30,7 @@ impl<'this, 'outer: 'this> Payload<'this, 'outer> {
             device_id: MaybeOwned::Owned(DeviceId::new(MaybeOwned::Borrowed(common.get_device_id()))),
             value: MaybeOwned::Owned(Value::new(MaybeOwned::Borrowed(common.get_json_refresh_web_token_value()))),
             exp: DateTime::new_from_string(common.get_exp())
-        }
+        };
     }
 
     pub fn get_user_id(&'this self) -> &'this UuidV4<'outer> {

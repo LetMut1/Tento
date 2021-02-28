@@ -1,7 +1,7 @@
 use std::default::Default;
 
 pub struct Typ {
-    value: &'static str
+    value: &'static str         // TODO Возможность создавать экземпляр здесь не нужна ?
 }
 
 impl<'this> Typ {

@@ -1,6 +1,8 @@
 use crate::diesel_component::model::entity::entity::application_user::existing::Existing;
 use crate::diesel_component::model::entity::entity::application_user::new::New;
 use crate::diesel_component::schema::public::application_user;
+use crate::error::diesel_component::diesel_error_kind::DieselErrorKind;
+use crate::error::error::context::Context;
 use diesel::dsl; 
 use diesel::ExpressionMethods;
 use diesel::pg::PgConnection;
@@ -14,10 +16,12 @@ impl<'outer> BaseRepository {
         diesel::insert_into(application_user::table).values(new).execute(pg_connection_manager).unwrap();  //TODO ошибки, Плюс тру фолс, сохранилось ли или нет
     }
 
-    pub fn is_exist_by_nickanme(pg_connection_manager: &'outer PgConnection, nickname: &'outer String) -> bool { // TODO сделать возможномть устанавливать фильтр ?
-        return 
-            diesel::select(dsl::exists(application_user::table.filter(application_user::nickname.eq(nickname)))) // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                .get_result::<bool>(pg_connection_manager).unwrap();     // TODO ошибки
+    pub fn is_exist_by_nickanme(pg_connection_manager: &'outer PgConnection, nickname: &'outer String) -> Result<bool, DieselErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
+        match diesel::select(dsl::exists(application_user::table.filter(application_user::nickname.eq(nickname)))) // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            .get_result::<bool>(pg_connection_manager) {
+            Ok(value) => { return Ok(value); },
+            Err(value) => { return Err(DieselErrorKind::Any(Context::new(Some(value), "sdsd".to_string()))); } // TODo текст
+        };
     }
 
     pub fn get_by_email(pg_connection_manager: &'outer PgConnection, email: &'outer String) -> Existing {

@@ -38,7 +38,7 @@ impl<'this, 'outer: 'this> ApplicationUser<'outer> {
             password_hash: PasswordHash::new(MaybeOwned::Borrowed(existing.get_password_hash())),
             created_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(existing.get_created_at())),
             confirmed: Confirmed::new(existing.get_confirmed())
-        }
+        };
     }
 
     pub fn is_confirmed(&'this self) -> bool {

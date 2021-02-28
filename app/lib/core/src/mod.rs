@@ -11,6 +11,7 @@ extern crate serde;
 extern crate uuid;
 pub mod actix_web_component;
 pub mod dto;
+pub mod error;
 pub mod handler;
 pub(crate) mod diesel_component;
 pub(crate) mod entity;
