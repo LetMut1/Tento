@@ -1,23 +1,13 @@
-use std::default::Default;
-
-pub struct Alg {
-    value: &'static str
-}
+pub struct Alg;
 
 impl<'this> Alg {
+    const VALUE: &'static str = "HS512";
+
     pub fn new() -> Self {
-        return Self::default();
+        return Self;
     }
 
     pub fn get_value(&'this self) -> String {
-        return self.value.to_string()
-    }
-}
-
-impl Default for Alg {
-    fn default() -> Self {
-        return Self { 
-            value: "HS512" 
-        };
+        return Self::VALUE.to_string()
     }
 }

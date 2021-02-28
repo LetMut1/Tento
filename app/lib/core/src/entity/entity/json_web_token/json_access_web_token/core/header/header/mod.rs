@@ -24,8 +24,8 @@ impl<'this> Header {
 impl Default for Header {
     fn default() -> Self {
         return Self {
-            alg: Alg::default(),
-            typ: Typ::default()
+            alg: Alg::new(),
+            typ: Typ::new()
         };
     }
 }

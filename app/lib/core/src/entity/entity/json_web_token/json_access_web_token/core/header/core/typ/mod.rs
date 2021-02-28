@@ -1,23 +1,13 @@
-use std::default::Default;
-
-pub struct Typ {
-    value: &'static str
-}
+pub struct Typ;
 
 impl<'this> Typ {
+    const VALUE: &'static str = "JWT";
+
     pub fn new() -> Self {
-        return Self::default();
+        return Self;
     }
 
     pub fn get_value(&'this self) -> String {
-        return self.value.to_string()
-    }
-}
-
-impl Default for Typ {
-    fn default() -> Self {
-        return Self { 
-            value: "JWT" 
-        };
+        return Self::VALUE.to_string()
     }
 }
