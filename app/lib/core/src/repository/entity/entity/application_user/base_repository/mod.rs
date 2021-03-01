@@ -27,6 +27,14 @@ impl<'outer> BaseRepository {
         };
     }
 
+    pub fn is_exist_by_email(pg_connection_manager: &'outer PgConnection, email: &'outer String) -> Result<bool, DieselErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
+        match diesel::select(dsl::exists(application_user::table.filter(application_user::email.eq(email)))) // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            .get_result::<bool>(pg_connection_manager) {
+            Ok(value) => { return Ok(value); },
+            Err(value) => { return Err(DieselErrorKind::Any(Context::new(Some(value), None))); }
+        };
+    }
+
     pub fn get_by_email(pg_connection_manager: &'outer PgConnection, email: &'outer String) -> Result<Existing, DieselErrorKind> {
         match application_user::table.filter(application_user::email.eq(email))
             .limit(1).load::<Existing>(pg_connection_manager) { // TODO если вернется ноль значений, то что делать

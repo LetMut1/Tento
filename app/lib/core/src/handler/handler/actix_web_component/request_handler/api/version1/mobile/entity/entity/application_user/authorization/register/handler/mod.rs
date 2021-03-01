@@ -16,13 +16,15 @@ impl<'outer> Handler {
         );   
         let mut pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
         pg_connection_manager.establish_connection()?;
-        if BaseRepository::is_exist_by_nickanme(pg_connection_manager.get_connection(), request.get_nickname())? {  // TODO проверять по емейлу
+        if !BaseRepository::is_exist_by_nickanme(pg_connection_manager.get_connection(), request.get_nickname())? 
+            && !BaseRepository::is_exist_by_email(pg_connection_manager.get_connection(), request.get_email())?
+        {
             BaseRepository::save(pg_connection_manager.get_connection(), &New::new_from_entity(&application_user))?;
             pg_connection_manager.close_connection();
         } else {
-            return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist(
-                Some(format!("For Nickname '{}'", request.get_nickname()))))
-            )?
+            pg_connection_manager.close_connection();
+
+            return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist(None)))?;
         }
         
         return Ok(());

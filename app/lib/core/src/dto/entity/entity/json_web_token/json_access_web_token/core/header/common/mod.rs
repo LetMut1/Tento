@@ -1,9 +1,8 @@
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use maybe_owned::MaybeOwned;
-use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Serialize, Deserialize, Debug)]    // TODO подумать, нужнл
+#[derive(Serialize, Debug)] // TODO нужно ли deserialize
 pub struct Common<'outer> {
     alg: MaybeOwned<'outer, String>,
     typ: MaybeOwned<'outer, String>,

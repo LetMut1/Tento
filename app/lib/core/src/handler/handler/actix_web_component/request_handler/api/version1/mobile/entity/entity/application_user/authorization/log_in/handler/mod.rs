@@ -21,7 +21,7 @@ impl<'outer> Handler {
         let mut pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
         pg_connection_manager.establish_connection()?;
         let application_user_existing: ApplicationUserExisting = 
-            ApplicationUserBaseRepository::get_by_email(pg_connection_manager.get_connection(), request.get_email())?; //TODO Здесь
+            ApplicationUserBaseRepository::get_by_email(pg_connection_manager.get_connection(), request.get_email())?;
         let application_user: ApplicationUser<'_> = ApplicationUser::new_from_model(&application_user_existing);
         if  PasswordEncoder::is_valid(request.get_password(), application_user.get_passord_hash().get_value()) {
             if application_user.is_confirmed() {
