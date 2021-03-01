@@ -36,12 +36,12 @@ impl<'outer> Handler {
             } else {
                 pg_connection_manager.close_connection();
 
-                return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotConfirmed(None)))?;
+                return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotConfirmed))?;
             }
         } else {
             pg_connection_manager.close_connection();
 
-            return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::WrongPassword(None)))?;
+            return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::WrongPassword))?;
         }
     }
 }

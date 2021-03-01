@@ -1,4 +1,5 @@
 #[macro_use] extern crate diesel;
+#[macro_use] extern crate lazy_static;
 extern crate actix_web;
 extern crate argon2;
 extern crate base64;
@@ -6,9 +7,11 @@ extern crate chrono;
 extern crate crypto;
 extern crate hex;
 extern crate maybe_owned;
+extern crate regex;
 extern crate serde_json;
 extern crate serde;
 extern crate uuid;
+
 pub mod actix_web_component;
 pub mod dto;
 pub mod error;

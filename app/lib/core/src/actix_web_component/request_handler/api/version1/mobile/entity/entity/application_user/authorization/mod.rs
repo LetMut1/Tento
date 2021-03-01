@@ -44,7 +44,7 @@ impl Authorization {
                 if value {
                     return response_builder.body("{\"success\":true, \"result\":true}");
                 } else {
-                    return response_builder.body("{\"success\":false, \"result\":false}");
+                    return response_builder.body("{\"success\":true, \"result\":false}");
                 }
             },
             Err(ref value) => {
@@ -64,9 +64,12 @@ impl Authorization {
                         match value {
                             EntityErrorKind::ApplicationUserErrorKind(ref value) => {
                                 match value {
-                                    ApplicationUserErrorKind::AlreadyExist(ref value) => {
-                                        return HttpResponse::Ok().body("{\"success\":false, \"message\":\"user already exist\"}");
+                                    ApplicationUserErrorKind::AlreadyExist => {
+                                        return HttpResponse::Ok().body("{\"success\":false, \"code\":\"eau01\"}");
                                     },
+                                    ApplicationUserErrorKind::InvalidEmail => {
+                                        return HttpResponse::Ok().body("{\"success\":false, \"code\":\"eau02\"}");
+                                    }
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
                                         return HttpResponse::InternalServerError().finish();
@@ -94,11 +97,11 @@ impl Authorization {
                         match value {
                             EntityErrorKind::ApplicationUserErrorKind(ref value) => {
                                 match value {
-                                    ApplicationUserErrorKind::WrongPassword(ref _value) => {
-                                        return HttpResponse::Ok().body("{\"success\":false, \"message\":\"wrong password\"}");
+                                    ApplicationUserErrorKind::WrongPassword => {
+                                        return HttpResponse::Ok().body("{\"success\":false, \"code\":\"eau03\"}");
                                     },
-                                    ApplicationUserErrorKind::NotConfirmed(ref _value) => {
-                                        return HttpResponse::Ok().body("{\"success\":false, \"message\":\"not confirmed\"}");
+                                    ApplicationUserErrorKind::NotConfirmed => {
+                                        return HttpResponse::Ok().body("{\"success\":false, \"code\":\"eau04\"}");
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
