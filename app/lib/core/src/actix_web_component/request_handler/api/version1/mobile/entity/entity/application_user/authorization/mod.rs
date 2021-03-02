@@ -1,4 +1,4 @@
-use actix_web::dev::HttpResponseBuilder;
+use actix_web::http::header;
 use actix_web::HttpResponse;
 use actix_web::Responder;
 use actix_web::web::Form;
@@ -14,6 +14,7 @@ use crate::handler::handler::actix_web_component::request_handler::api::version1
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::handler::Handler as LogInHandler;
 use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::Handler as RegisterHandler;
+use crate::utility::actix_web_component::request_handler::_common::standart_response_body_wrapper::StandartResponseBodyWrapper;
 
 pub struct Authorization;
 
@@ -22,11 +23,14 @@ impl Authorization {
         let query: CheckEmailForExistingQuery = query.into_inner();
         match CheckEmailForExistingHanlder::handle(&query) {
             Ok(value) => {
-                let mut response_builder: HttpResponseBuilder = HttpResponse::Ok();
                 if value {
-                    return response_builder.body("{\"success\":true, \"result\":true}");
+                    return HttpResponse::Ok()
+                        .set_header(header::CONTENT_TYPE, "application/json")
+                        .body("{\"success\":true, \"result\":true}");
                 } else {
-                    return response_builder.body("{\"success\":true, \"result\":false}");
+                    return HttpResponse::Ok()
+                        .set_header(header::CONTENT_TYPE, "application/json")
+                        .body("{\"success\":true, \"result\":false}");
                 }
             },
             Err(ref value) => {
@@ -40,11 +44,14 @@ impl Authorization {
         let query: CheckNicknameForExistingQuery = query.into_inner();
         match CheckNicknameForExistingHanlder::handle(&query) {
             Ok(value) => {
-                let mut response_builder: HttpResponseBuilder = HttpResponse::Ok();
                 if value {
-                    return response_builder.body("{\"success\":true, \"result\":true}");
+                    return HttpResponse::Ok()
+                        .set_header(header::CONTENT_TYPE, "application/json")
+                        .body("{\"success\":true, \"result\":true}"); // TODO продублировать
                 } else {
-                    return response_builder.body("{\"success\":true, \"result\":false}");
+                    return HttpResponse::Ok()
+                        .set_header(header::CONTENT_TYPE, "application/json")
+                        .body("{\"success\":true, \"result\":false}");
                 }
             },
             Err(ref value) => {
@@ -57,7 +64,11 @@ impl Authorization {
     pub async fn register(request: Form<RegisterRequest>) -> impl Responder {
         let request: RegisterRequest = request.into_inner();
         match RegisterHandler::handle(&request) {
-            Ok(ref _value) => { return HttpResponse::Ok().finish(); },
+            Ok(ref _value) => { 
+                return HttpResponse::Ok()
+                    .set_header(header::CONTENT_TYPE, "application/json")
+                    .body("{\"success\":true, \"result\":true}"); 
+            },
             Err(ref value) => {
                 match value {
                     MainErrorKind::EntityErrorKind(ref value) => {
@@ -65,10 +76,14 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(ref value) => {
                                 match value {
                                     ApplicationUserErrorKind::AlreadyExist => {
-                                        return HttpResponse::Ok().body("{\"success\":false, \"code\":\"eau01\"}");
+                                        return HttpResponse::Ok()
+                                            .set_header(header::CONTENT_TYPE, "application/json")
+                                            .body(StandartResponseBodyWrapper::create_for_fail("eau01"));
                                     },
                                     ApplicationUserErrorKind::InvalidEmail => {
-                                        return HttpResponse::Ok().body("{\"success\":false, \"code\":\"eau02\"}");
+                                        return HttpResponse::Ok()
+                                            .set_header(header::CONTENT_TYPE, "application/json")
+                                            .body(StandartResponseBodyWrapper::create_for_fail("eau02"));
                                     }
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
@@ -90,7 +105,11 @@ impl Authorization {
     pub async fn log_in(request: Form<LogInRequest>) -> impl Responder {
         let request: LogInRequest = request.into_inner();
         match LogInHandler::handle(&request) {
-            Ok(ref value) => {  return HttpResponse::Ok().body("{\"success\":true, \"jawt\":\"".to_string() + value + &"\"}".to_string()); },
+            Ok(ref value) => { 
+                return HttpResponse::Ok()
+                    .set_header(header::CONTENT_TYPE, "application/json")
+                    .body("{\"success\":true, \"jawt\":\"".to_string() + value + &"\"}".to_string()); 
+            },
             Err(ref value) => {
                 match value {
                     MainErrorKind::EntityErrorKind(ref value) => {
@@ -98,10 +117,14 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(ref value) => {
                                 match value {
                                     ApplicationUserErrorKind::WrongPassword => {
-                                        return HttpResponse::Ok().body("{\"success\":false, \"code\":\"eau03\"}");
+                                        return HttpResponse::Ok()
+                                            .set_header(header::CONTENT_TYPE, "application/json")
+                                            .body(StandartResponseBodyWrapper::create_for_fail("eau03"));
                                     },
                                     ApplicationUserErrorKind::NotConfirmed => {
-                                        return HttpResponse::Ok().body("{\"success\":false, \"code\":\"eau04\"}");
+                                        return HttpResponse::Ok()
+                                            .set_header(header::CONTENT_TYPE, "application/json")
+                                            .body(StandartResponseBodyWrapper::create_for_fail("eau04"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны

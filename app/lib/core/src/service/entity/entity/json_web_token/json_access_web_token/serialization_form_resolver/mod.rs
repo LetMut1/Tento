@@ -2,6 +2,7 @@ use crate::dto::entity::entity::json_web_token::json_access_web_token::core::hea
 use crate::dto::entity::entity::json_web_token::json_access_web_token::core::payload::common::Common as PayloadCommon;
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::utility::entity::entity::json_web_token::json_access_web_token::hs512_encoder::HS512Encoder;
+use serde_json;
 
 pub struct SerializationFormResolver;
 
