@@ -520,7 +520,6 @@ dependencies = [
  "chrono",
  "diesel",
  "hex",
- "lazy_static",
  "maybe-owned",
  "regex",
  "rust-argon2",

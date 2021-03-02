@@ -1,5 +1,4 @@
 #[macro_use] extern crate diesel;
-#[macro_use] extern crate lazy_static;
 extern crate actix_web;
 extern crate argon2;
 extern crate base64;
