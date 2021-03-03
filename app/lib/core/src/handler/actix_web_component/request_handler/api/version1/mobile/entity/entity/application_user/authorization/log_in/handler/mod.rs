@@ -1,6 +1,7 @@
 use crate::diesel_component::model::entity::entity::application_user::existing::Existing as ApplicationUserExisting;
 use crate::diesel_component::model::entity::entity::json_web_token::json_refresh_web_token::new::New as JsonRefreshWebTokenNew;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::request::Request;
+use crate::dto::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::handler::result::Result as HandlerResult;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
@@ -17,7 +18,7 @@ use maybe_owned::MaybeOwned;
 pub struct Handler;
 
 impl<'outer> Handler {
-    pub fn handle(request: &'outer Request) -> Result<String, MainErrorKind> {
+    pub fn handle(request: &'outer Request) -> Result<HandlerResult, MainErrorKind> {
         let mut pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
         pg_connection_manager.establish_connection()?;
         let application_user_existing: ApplicationUserExisting = 
@@ -32,7 +33,7 @@ impl<'outer> Handler {
                 pg_connection_manager.close_connection(); 
                 let json_access_web_token: JsonAccessWebToken<'_> = JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token);
                 
-                return Ok(SerializationFormResolver::serialize(&json_access_web_token));
+                return Ok(HandlerResult::new(SerializationFormResolver::serialize(&json_access_web_token)));
             } else {
                 pg_connection_manager.close_connection();
 

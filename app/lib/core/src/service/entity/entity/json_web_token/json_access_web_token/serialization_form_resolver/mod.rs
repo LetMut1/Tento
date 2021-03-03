@@ -37,9 +37,11 @@ impl<'this, 'outer: 'this> SerializationFormResolver {
         return header_and_payload + Self::LINE_SEPARATOR + &signature;
     }
 
-    fn is_valid(jawt_parts: &'this Vec<String>) -> bool {
-        if jawt_parts.len() == 3 {
-            if HS512Encoder::hash_is_valid(&("".to_string() + &jawt_parts[0] + Self::LINE_SEPARATOR + &jawt_parts[1]), &jawt_parts[2]) {
+    fn is_valid(json_access_web_token_parts: &'this Vec<String>) -> bool {
+        if json_access_web_token_parts.len() == 3 {
+            if HS512Encoder::hash_is_valid(
+                &(String::new() + &json_access_web_token_parts[0] + Self::LINE_SEPARATOR + &json_access_web_token_parts[1]), &json_access_web_token_parts[2]
+            ) {
                 return true;
             } else {
                 return false;

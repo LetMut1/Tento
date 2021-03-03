@@ -1,5 +1,6 @@
 use crate::diesel_component::model::entity::entity::application_user::new::New;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::request::Request;
+use crate::dto::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::result::Result as HandlerResult;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::error::main_error_kind::core::entity::entity_error_kind::core::entity::application_user::application_user_error_kind::ApplicationUserErrorKind;
 use crate::error::main_error_kind::core::entity::entity_error_kind::entity_error_kind::EntityErrorKind;
@@ -11,7 +12,7 @@ use crate::utility::repository::_common::pg_connection_manager::PGConnectionMana
 pub struct Handler;
 
 impl<'outer> Handler {
-    pub fn handle(request: &'outer Request) -> Result<(), MainErrorKind> {
+    pub fn handle(request: &'outer Request) -> Result<HandlerResult, MainErrorKind> {
         if EmailSimpleValidator::is_valid(request.get_email()) {
             let application_user: ApplicationUser<'_> = ApplicationUser::new_from_credentials(
                 request.get_email(), request.get_nickname(), request.get_password()
@@ -29,7 +30,7 @@ impl<'outer> Handler {
                 return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;
             }
             
-            return Ok(());
+            return Ok(HandlerResult::new(true));
         } else {
             return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::InvalidEmail))?;
         }

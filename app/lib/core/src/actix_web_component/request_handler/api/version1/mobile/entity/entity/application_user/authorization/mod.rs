@@ -14,7 +14,7 @@ use crate::handler::actix_web_component::request_handler::api::version1::mobile:
 use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::handler::Handler as LogInHandler;
 use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::Handler as RegisterHandler;
-use crate::utility::actix_web_component::request_handler::_common::standart_response_body_wrapper::StandartResponseBodyWrapper;
+use crate::utility::actix_web_component::request_handler::_common::standart_json_response_body_wrapper::StandartJsonResponseBodyWrapper;
 
 pub struct Authorization;
 
@@ -22,16 +22,10 @@ impl Authorization {
     pub async fn check_email_for_existing(query: Query<CheckEmailForExistingQuery>) -> impl Responder {
         let query: CheckEmailForExistingQuery = query.into_inner();
         match CheckEmailForExistingHanlder::handle(&query) {
-            Ok(value) => {
-                if value {
-                    return HttpResponse::Ok()
-                        .set_header(header::CONTENT_TYPE, "application/json")
-                        .body("{\"success\":true, \"result\":true}");
-                } else {
-                    return HttpResponse::Ok()
-                        .set_header(header::CONTENT_TYPE, "application/json")
-                        .body("{\"success\":true, \"result\":false}");
-                }
+            Ok(ref value) => {
+                return HttpResponse::Ok()
+                    .set_header(header::CONTENT_TYPE, "application/json")
+                    .body(StandartJsonResponseBodyWrapper::create_for_success(value));
             },
             Err(ref value) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -43,16 +37,10 @@ impl Authorization {
     pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> impl Responder {
         let query: CheckNicknameForExistingQuery = query.into_inner();
         match CheckNicknameForExistingHanlder::handle(&query) {
-            Ok(value) => {
-                if value {
-                    return HttpResponse::Ok()
-                        .set_header(header::CONTENT_TYPE, "application/json")
-                        .body("{\"success\":true, \"result\":true}");
-                } else {
-                    return HttpResponse::Ok()
-                        .set_header(header::CONTENT_TYPE, "application/json")
-                        .body("{\"success\":true, \"result\":false}");
-                }
+            Ok(ref value) => {
+                return HttpResponse::Ok()
+                    .set_header(header::CONTENT_TYPE, "application/json")
+                    .body(StandartJsonResponseBodyWrapper::create_for_success(value));
             },
             Err(ref value) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -64,10 +52,10 @@ impl Authorization {
     pub async fn register(request: Form<RegisterRequest>) -> impl Responder {
         let request: RegisterRequest = request.into_inner();
         match RegisterHandler::handle(&request) {
-            Ok(ref _value) => { 
+            Ok(ref value) => { 
                 return HttpResponse::Ok()
                     .set_header(header::CONTENT_TYPE, "application/json")
-                    .body("{\"success\":true, \"result\":true}"); 
+                    .body(StandartJsonResponseBodyWrapper::create_for_success(value)); 
             },
             Err(ref value) => {
                 match value {
@@ -78,12 +66,12 @@ impl Authorization {
                                     ApplicationUserErrorKind::AlreadyExist => {
                                         return HttpResponse::Ok()
                                             .set_header(header::CONTENT_TYPE, "application/json")
-                                            .body(StandartResponseBodyWrapper::create_for_fail("eau01"));
+                                            .body(StandartJsonResponseBodyWrapper::create_for_fail("eau01"));
                                     },
                                     ApplicationUserErrorKind::InvalidEmail => {
                                         return HttpResponse::Ok()
                                             .set_header(header::CONTENT_TYPE, "application/json")
-                                            .body(StandartResponseBodyWrapper::create_for_fail("eau02"));
+                                            .body(StandartJsonResponseBodyWrapper::create_for_fail("eau02"));
                                     }
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
@@ -108,7 +96,7 @@ impl Authorization {
             Ok(ref value) => { 
                 return HttpResponse::Ok()
                     .set_header(header::CONTENT_TYPE, "application/json")
-                    .body("{\"success\":true, \"jawt\":\"".to_string() + value + &"\"}".to_string()); 
+                    .body(StandartJsonResponseBodyWrapper::create_for_success(value)); 
             },
             Err(ref value) => {
                 match value {
@@ -119,12 +107,12 @@ impl Authorization {
                                     ApplicationUserErrorKind::WrongPassword => {
                                         return HttpResponse::Ok()
                                             .set_header(header::CONTENT_TYPE, "application/json")
-                                            .body(StandartResponseBodyWrapper::create_for_fail("eau03"));
+                                            .body(StandartJsonResponseBodyWrapper::create_for_fail("eau03"));
                                     },
                                     ApplicationUserErrorKind::NotConfirmed => {
                                         return HttpResponse::Ok()
                                             .set_header(header::CONTENT_TYPE, "application/json")
-                                            .body(StandartResponseBodyWrapper::create_for_fail("eau04"));
+                                            .body(StandartJsonResponseBodyWrapper::create_for_fail("eau04"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны

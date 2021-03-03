@@ -2,13 +2,13 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Result {
-    result: bool
+    jawt: String
 }
 
 impl Result {
-    pub fn new(result: bool) -> Self {
+    pub fn new(json_access_web_token: String) -> Self {
         return Self {
-            result
+            jawt: json_access_web_token
         };
     }
 }
