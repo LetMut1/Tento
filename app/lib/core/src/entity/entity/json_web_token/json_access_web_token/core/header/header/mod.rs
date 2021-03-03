@@ -1,6 +1,5 @@
 use super::core::alg::Alg;
 use super::core::typ::Typ;
-use std::default::Default;
 
 pub struct Header {
     alg: Alg,
@@ -8,8 +7,11 @@ pub struct Header {
 }
 
 impl<'this> Header {
-    pub fn new() -> Self {
-        return Self::default();
+    pub const fn new() -> Self {
+        return Self {
+            alg: Alg::new(),
+            typ: Typ::new()
+        };
     }
 
     pub fn get_alg(&'this self) -> &'this Alg {
@@ -18,14 +20,5 @@ impl<'this> Header {
 
     pub fn get_typ(&'this self) -> &'this Typ {
         return &self.typ;
-    }
-}
-
-impl Default for Header {
-    fn default() -> Self {
-        return Self {
-            alg: Alg::new(),
-            typ: Typ::new()
-        };
     }
 }

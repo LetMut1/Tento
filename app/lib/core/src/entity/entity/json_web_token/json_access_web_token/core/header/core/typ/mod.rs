@@ -1,13 +1,15 @@
-pub struct Typ;
+pub struct Typ {
+    value: &'static str
+}
 
 impl<'this> Typ {
-    const VALUE: &'static str = "JWT";
-
-    pub fn new() -> Self {
-        return Self;
+    pub const fn new() -> Self {
+        return Self { 
+            value: "JWT"
+        };
     }
 
-    pub fn get_value(&'this self) -> String {
-        return Self::VALUE.to_string()
+    pub fn get_value(&'this self) -> &'static str {
+        return self.value
     }
 }

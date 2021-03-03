@@ -1,13 +1,15 @@
-pub struct Alg;
+pub struct Alg {
+    value: &'static str
+}
 
 impl<'this> Alg {
-    const VALUE: &'static str = "HS512";
-
-    pub fn new() -> Self {
-        return Self;
+    pub const fn new() -> Self {
+        return Self { 
+            value: "HS512" 
+        };
     }
 
-    pub fn get_value(&'this self) -> String {
-        return Self::VALUE.to_string()
+    pub fn get_value(&'this self) -> &'static str {
+        return self.value;
     }
 }

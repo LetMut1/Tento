@@ -10,10 +10,10 @@ use crate::dto::actix_web_component::request_handler::api::version1::mobile::ent
 use crate::error::main_error_kind::core::entity::entity_error_kind::core::entity::application_user::application_user_error_kind::ApplicationUserErrorKind;
 use crate::error::main_error_kind::core::entity::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
-use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
-use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
-use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::handler::Handler as LogInHandler;
-use crate::handler::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::Handler as RegisterHandler;
+use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
+use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
+use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::handler::Handler as LogInHandler;
+use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::Handler as RegisterHandler;
 use crate::utility::actix_web_component::request_handler::_common::standart_response_body_wrapper::StandartResponseBodyWrapper;
 
 pub struct Authorization;
@@ -47,7 +47,7 @@ impl Authorization {
                 if value {
                     return HttpResponse::Ok()
                         .set_header(header::CONTENT_TYPE, "application/json")
-                        .body("{\"success\":true, \"result\":true}"); // TODO продублировать
+                        .body("{\"success\":true, \"result\":true}");
                 } else {
                     return HttpResponse::Ok()
                         .set_header(header::CONTENT_TYPE, "application/json")
