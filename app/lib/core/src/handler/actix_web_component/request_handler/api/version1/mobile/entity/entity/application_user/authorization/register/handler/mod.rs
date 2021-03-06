@@ -6,7 +6,7 @@ use crate::error::main_error_kind::core::entity::entity_error_kind::core::entity
 use crate::error::main_error_kind::core::entity::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::entity::entity::application_user::base_repository::BaseRepository;
-use crate::utility::entity::entity::application_user::email_simple_validator::EmailSimpleValidator;
+use crate::utility::entity::entity::application_user::core::email::email_simple_validator::EmailSimpleValidator;
 use crate::utility::repository::_common::pg_connection_manager::PGConnectionManager;
 
 pub struct Handler;
@@ -14,7 +14,7 @@ pub struct Handler;
 impl<'outer> Handler {
     pub fn handle(request: &'outer Request) -> Result<HandlerResult, MainErrorKind> {
         if EmailSimpleValidator::is_valid(request.get_email()) {
-            let application_user: ApplicationUser<'_> = ApplicationUser::new_from_credentials(
+            let application_user: ApplicationUser<'_> = ApplicationUser::new(
                 request.get_email(), request.get_nickname(), request.get_password()
             );   
             let mut pg_connection_manager: PGConnectionManager = PGConnectionManager::new();

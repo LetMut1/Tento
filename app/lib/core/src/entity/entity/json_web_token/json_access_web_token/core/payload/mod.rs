@@ -1,7 +1,7 @@
 use crate::dto::entity::entity::json_web_token::json_access_web_token::core::payload::common::Common;
 use crate::entity::core::date_time::DateTime;
-use crate::entity::core::device_id::DeviceId;
 use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::json_web_token::json_refresh_web_token::core::device_id::DeviceId;
 use crate::entity::entity::json_web_token::json_refresh_web_token::core::value::Value;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::utility::entity::entity::json_web_token::json_access_web_token::date_expiration_creator::DateExpirationCreator;

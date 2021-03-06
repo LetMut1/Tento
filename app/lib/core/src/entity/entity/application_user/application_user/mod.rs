@@ -6,12 +6,12 @@ use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::entity::entity::application_user::core::password_hash::PasswordHash;
 use crate::entity::entity::application_user::core::password::Password;
-use crate::utility::entity::entity::application_user::password_encoder::PasswordEncoder;
+use crate::utility::entity::entity::application_user::core::password::password_encoder::PasswordEncoder;
 use maybe_owned::MaybeOwned;
 
 pub struct ApplicationUser<'outer> {
     id: UuidV4<'outer>,
-    email: Email<'outer>,                   // TODO где хранить сам токен и дату экспирации для подтверждении и логине  ( Редис?)
+    email: Email<'outer>,
     nickname: Nickname<'outer>,
     password_hash: PasswordHash<'outer>,
     created_at: DateTime<'outer>,           // TODO  Roles
@@ -19,7 +19,7 @@ pub struct ApplicationUser<'outer> {
 }
 
 impl<'this, 'outer: 'this> ApplicationUser<'outer> {
-    pub fn new_from_credentials(email: &'outer String, nickname: &'outer String, password: &'outer String) -> Self {
+    pub fn new(email: &'outer String, nickname: &'outer String, password: &'outer String) -> Self {
         return Self {
             id: UuidV4::new(),
             email: Email::new(MaybeOwned::Borrowed(email)),

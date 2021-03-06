@@ -13,8 +13,8 @@ use crate::handler::actix_web_component::request_handler::api::version1::mobile:
 use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::handler::Handler as LogInHandler;
 use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::Handler as RegisterHandler;
-use crate::utility::actix_web_component::request_handler::_common::standart_response_creator::StandartResponseCreator;
 use crate::utility::actix_web_component::request_handler::_common::standart_json_response_body_wrapper::StandartJsonResponseBodyWrapper;
+use crate::utility::actix_web_component::request_handler::_common::standart_response_creator::StandartResponseCreator;
 
 pub struct Authorization;
 
