@@ -1,6 +1,5 @@
-use actix_web::http::header;
+use actix_web::dev::Body;
 use actix_web::HttpResponse;
-use actix_web::Responder;
 use actix_web::web::Form;
 use actix_web::web::Query;
 use crate::dto::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_email_for_existing::query::Query as CheckEmailForExistingQuery;
@@ -14,48 +13,43 @@ use crate::handler::actix_web_component::request_handler::api::version1::mobile:
 use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::log_in::handler::Handler as LogInHandler;
 use crate::handler::actix_web_component::request_handler::api::version1::mobile::entity::entity::application_user::authorization::register::handler::Handler as RegisterHandler;
+use crate::utility::actix_web_component::request_handler::_common::standart_response_creator::StandartResponseCreator;
 use crate::utility::actix_web_component::request_handler::_common::standart_json_response_body_wrapper::StandartJsonResponseBodyWrapper;
 
 pub struct Authorization;
 
 impl Authorization {
-    pub async fn check_email_for_existing(query: Query<CheckEmailForExistingQuery>) -> impl Responder {
+    pub async fn check_email_for_existing(query: Query<CheckEmailForExistingQuery>) -> HttpResponse<Body> {
         let query: CheckEmailForExistingQuery = query.into_inner();
         match CheckEmailForExistingHanlder::handle(&query) {
             Ok(ref value) => {
-                return HttpResponse::Ok()
-                    .set_header(header::CONTENT_TYPE, "application/json")
-                    .body(StandartJsonResponseBodyWrapper::create_for_success(value));
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value));
             },
             Err(ref value) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                return HttpResponse::InternalServerError().finish();
+                return StandartResponseCreator::create_internal_server_error();
             }
         };
     }
 
-    pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> impl Responder {
+    pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> HttpResponse<Body> {
         let query: CheckNicknameForExistingQuery = query.into_inner();
         match CheckNicknameForExistingHanlder::handle(&query) {
             Ok(ref value) => {
-                return HttpResponse::Ok()
-                    .set_header(header::CONTENT_TYPE, "application/json")
-                    .body(StandartJsonResponseBodyWrapper::create_for_success(value));
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value));
             },
             Err(ref value) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                return HttpResponse::InternalServerError().finish();
+                return StandartResponseCreator::create_internal_server_error();
             }
         };
     }
 
-    pub async fn register(request: Form<RegisterRequest>) -> impl Responder {
+    pub async fn register(request: Form<RegisterRequest>) -> HttpResponse<Body> {
         let request: RegisterRequest = request.into_inner();
         match RegisterHandler::handle(&request) {
             Ok(ref value) => { 
-                return HttpResponse::Ok()
-                    .set_header(header::CONTENT_TYPE, "application/json")
-                    .body(StandartJsonResponseBodyWrapper::create_for_success(value)); 
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value)); 
             },
             Err(ref value) => {
                 match value {
@@ -64,18 +58,14 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(ref value) => {
                                 match value {
                                     ApplicationUserErrorKind::AlreadyExist => {
-                                        return HttpResponse::Ok()
-                                            .set_header(header::CONTENT_TYPE, "application/json")
-                                            .body(StandartJsonResponseBodyWrapper::create_for_fail("eau01"));
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau01"));
                                     },
                                     ApplicationUserErrorKind::InvalidEmail => {
-                                        return HttpResponse::Ok()
-                                            .set_header(header::CONTENT_TYPE, "application/json")
-                                            .body(StandartJsonResponseBodyWrapper::create_for_fail("eau02"));
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau02"));
                                     }
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return HttpResponse::InternalServerError().finish();
+                                        return StandartResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
@@ -83,20 +73,18 @@ impl Authorization {
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return HttpResponse::InternalServerError().finish();
+                        return StandartResponseCreator::create_internal_server_error();
                     }
                 };
             }
         };
     }
 
-    pub async fn log_in(request: Form<LogInRequest>) -> impl Responder {
+    pub async fn log_in(request: Form<LogInRequest>) -> HttpResponse<Body> {
         let request: LogInRequest = request.into_inner();
         match LogInHandler::handle(&request) {
             Ok(ref value) => { 
-                return HttpResponse::Ok()
-                    .set_header(header::CONTENT_TYPE, "application/json")
-                    .body(StandartJsonResponseBodyWrapper::create_for_success(value)); 
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value)); 
             },
             Err(ref value) => {
                 match value {
@@ -105,18 +93,14 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(ref value) => {
                                 match value {
                                     ApplicationUserErrorKind::WrongPassword => {
-                                        return HttpResponse::Ok()
-                                            .set_header(header::CONTENT_TYPE, "application/json")
-                                            .body(StandartJsonResponseBodyWrapper::create_for_fail("eau03"));
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau03"));
                                     },
                                     ApplicationUserErrorKind::NotConfirmed => {
-                                        return HttpResponse::Ok()
-                                            .set_header(header::CONTENT_TYPE, "application/json")
-                                            .body(StandartJsonResponseBodyWrapper::create_for_fail("eau04"));
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau04"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return HttpResponse::InternalServerError().finish();
+                                        return StandartResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
@@ -124,7 +108,7 @@ impl Authorization {
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return HttpResponse::InternalServerError().finish();
+                        return StandartResponseCreator::create_internal_server_error();
                     }
                 };
             }

@@ -6,14 +6,14 @@ use serde::Serialize;
 pub struct StandartJsonResponseBodyWrapper;
 
 impl<'outer> StandartJsonResponseBodyWrapper {
-    pub fn create_for_success<S>(body: &'outer S) -> String 
+    pub fn wrap_for_success<S>(body: &'outer S) -> String 
     where 
         S: Serialize
     {
         return serde_json::to_string::<SuccessResult<S>>(&SuccessResult::new(body)).unwrap();    // TODO обработать
     }
 
-    pub fn create_for_fail(code: &'static str) -> String {
+    pub fn wrap_for_fail(code: &'static str) -> String {
         return serde_json::to_string::<FailResult>(&FailResult::new(code)).unwrap();        // TODO Обработать
     }
 }
