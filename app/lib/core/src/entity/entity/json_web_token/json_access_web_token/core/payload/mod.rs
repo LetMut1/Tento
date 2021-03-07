@@ -8,16 +8,16 @@ use crate::utility::_in_context_for::entity::entity::json_web_token::json_access
 use maybe_owned::MaybeOwned;
 
 pub struct Payload<'this, 'outer: 'this> {
-    user_id: MaybeOwned<'outer, UuidV4<'outer>>,
+    application_user_id: MaybeOwned<'outer, UuidV4<'outer>>,
     device_id: MaybeOwned<'outer, DeviceId<'outer>>,
     value: MaybeOwned<'outer, Value<'outer>>,
     exp: DateTime<'this>
 }
 
 impl<'this, 'outer: 'this> Payload<'this, 'outer> {
-    pub fn new_from_json_refresh_web_token(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer, 'outer>) -> Self {
+    pub fn new_from_json_refresh_web_token(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
         return Self {
-            user_id: MaybeOwned::Borrowed(json_refresh_web_token.get_user_id()),
+            application_user_id: MaybeOwned::Borrowed(json_refresh_web_token.get_application_user_id()),
             device_id: MaybeOwned::Borrowed(json_refresh_web_token.get_device_id()),
             value: MaybeOwned::Borrowed(json_refresh_web_token.get_value()),
             exp: DateExpirationCreator::create_interval()
@@ -26,15 +26,15 @@ impl<'this, 'outer: 'this> Payload<'this, 'outer> {
 
     pub fn new_from_dto_common(common: &'outer Common<'outer>) -> Self {
         return Self {
-            user_id: MaybeOwned::Owned(UuidV4::new_from_string(common.get_user_id())),
+            application_user_id: MaybeOwned::Owned(UuidV4::new_from_string(common.get_application_user_id())),
             device_id: MaybeOwned::Owned(DeviceId::new(MaybeOwned::Borrowed(common.get_device_id()))),
             value: MaybeOwned::Owned(Value::new(MaybeOwned::Borrowed(common.get_json_refresh_web_token_value()))),
             exp: DateTime::new_from_string(common.get_exp())
         };
     }
 
-    pub fn get_user_id(&'this self) -> &'this UuidV4<'outer> {
-        return &self.user_id;
+    pub fn get_application_user_id(&'this self) -> &'this UuidV4<'outer> {
+        return &self.application_user_id;
     }
 
     pub fn get_device_id(&'this self) -> &'this DeviceId<'outer> {

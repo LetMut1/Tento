@@ -7,10 +7,8 @@ use uuid::Uuid;
 pub struct Existing {
     id: Uuid,
     application_user_id: Uuid,
-    device_id: String,
     value: String,
     created_at: ChronoDateTime<Utc>,
-    expired_at: ChronoDateTime<Utc>
 }
 
 impl<'this> Existing {
@@ -22,19 +20,11 @@ impl<'this> Existing {
         return &self.application_user_id;
     }
 
-    pub fn get_device_id(&'this self) -> &'this String {
-        return &self.device_id;
-    }
-
     pub fn get_value_hash(&'this self) -> &'this String {
         return &self.value;
     }
 
     pub fn get_created_at(&'this self) -> &'this ChronoDateTime<Utc> {
         return &self.created_at;
-    }
-
-    pub fn get_expired_at(&'this self) -> &'this ChronoDateTime<Utc> {
-        return &self.expired_at;
     }
 }

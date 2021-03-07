@@ -2,22 +2,39 @@ use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_registration_confirmation_token::core::value::Value;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
+use crate::utility::_in_context_for::entity::entity::apllication_user_registration_confirmation_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use maybe_owned::MaybeOwned;
 
-pub struct ApplicationUserRegistrationConfirmationToken<'this, 'outer: 'this> {   // TODO Redis disc
+pub struct ApplicationUserRegistrationConfirmationToken<'outer> {   // TODO Redis disc
     id: UuidV4<'outer>,
     application_user_id: MaybeOwned<'outer, UuidV4<'outer>>,
-    value: Value<'this>,
-    expired_at: DateTime<'this>
+    value: Value<'outer>,
+    expired_at: DateTime<'outer>
 }
 
-impl<'this, 'outer: 'this> ApplicationUserRegistrationConfirmationToken<'this, 'outer> {
-    // pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
-    //     return Self {
-    //         id: UuidV4::new(),
-    //         application_user_id: MaybeOwned::Borrowed(application_user.get_id()),
-    //         value: UuidV4::new(),    // TODO какое значени лучше генерировать
-    //         expired_at:
-    //     };
-    // }
+impl<'this, 'outer: 'this> ApplicationUserRegistrationConfirmationToken<'outer> {
+    pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
+        return Self {
+            id: UuidV4::new(),
+            application_user_id: MaybeOwned::Borrowed(application_user.get_id()),
+            value: Value::new(MaybeOwned::Owned(UuidV4::new().get_value().to_string())),    // TODO какое значени лучше генерировать
+            expired_at: DateExpirationCreator::create_interval()
+        };
+    }
+
+    pub fn get_id(&'this self) -> &'this UuidV4<'outer> {
+        return &self.id;
+    }
+
+    pub fn get_application_user_id(&'this self) -> &'this UuidV4<'outer> {
+        return &self.application_user_id;
+    }
+
+    pub fn get_value(&'this self) -> &'this Value<'outer> {
+        return &self.value;
+    }
+
+    pub fn get_expired_at(&'this self) -> &'this DateTime<'outer> {
+        return &self.expired_at;
+    }
 }

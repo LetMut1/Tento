@@ -25,7 +25,7 @@ impl<'outer> Handler {
         let application_user: ApplicationUser<'_> = ApplicationUser::new_from_model(&application_user_existing);
         if  PasswordEncoder::is_valid(request.get_password(), application_user.get_passord_hash().get_value()) {
             if application_user.is_confirmed() {
-                let json_refresh_web_token: JsonRefreshWebToken<'_, '_> = 
+                let json_refresh_web_token: JsonRefreshWebToken<'_> = 
                     JsonRefreshWebToken::new(&application_user, request.get_device_id());   
                 let json_refresh_web_token_new: JsonRefreshWebTokenNew<'_> = JsonRefreshWebTokenNew::new_from_entity(&json_refresh_web_token);
                 JsonRefreshWebTokenBaseRepository::save(pg_connection_manager.get_connection(), &json_refresh_web_token_new)?;

@@ -14,7 +14,7 @@ pub struct BaseRepository;
 impl<'outer> BaseRepository {
     pub fn save(pg_connection_manager: &'outer PgConnection, new: &'outer New) -> Result<(), DieselErrorKind> {
         match diesel::insert_into(application_user::table).values(new).execute(pg_connection_manager) {
-            Ok(value) => { return Ok(()); },
+            Ok(_value) => { return Ok(()); },
             Err(value) => { return Err(DieselErrorKind::Any(Context::new(Some(value), None))); }
         };
     }

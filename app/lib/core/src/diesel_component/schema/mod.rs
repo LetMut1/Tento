@@ -19,16 +19,29 @@ pub mod public {
             id -> Uuid,
             device_id -> Varchar,
             value -> Varchar,
-            user_id -> Uuid,
+            application_user_id -> Uuid,
             expired_at -> Timestamptz,
             created_at -> Timestamptz,
         }
     }
 
-    joinable!(json_refresh_web_token -> application_user (user_id));
+    table! {
+        use diesel::sql_types::*;
+
+        application_user_registration_confirmation_token (id) {
+            id -> Uuid,
+            value -> Varchar,
+            application_user_id -> Uuid,
+            expired_at -> Timestamptz,
+        }
+    }
+
+    joinable!(json_refresh_web_token -> application_user (application_user_id));
+    joinable!(application_user_registration_confirmation_token -> application_user (application_user_id));
 
     allow_tables_to_appear_in_same_query!(
         application_user,
         json_refresh_web_token,
+        application_user_registration_confirmation_token,
     );
 }
