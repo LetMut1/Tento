@@ -5,6 +5,8 @@ extern crate base64;
 extern crate chrono;
 extern crate crypto;
 extern crate hex;
+extern crate lettre_email;
+extern crate lettre;
 extern crate maybe_owned;
 extern crate regex;
 extern crate serde_json;

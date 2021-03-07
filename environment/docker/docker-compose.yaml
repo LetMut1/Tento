@@ -5,7 +5,7 @@ services:
         container_name: memis_postgresql
         build:
             context: ./service/postgresql
-            dockerfile: Dockerfile
+            dockerfile: dockerfile
         environment:
             PGDATA: '/var/lib/postgresql/data'
             POSTGRES_HOST_AUTH_METHOD: 'md5'
@@ -14,6 +14,12 @@ services:
             POSTGRES_DB: 'mem_is'
         volumes:
             - postgresql_data:/var/lib/postgresql/data
+        restart: always
+    mailhog:
+        container_name: memis_mailhog
+        build:
+            context: ./service/mailhog
+            dockerfile: dockerfile
         restart: always
 
 volumes:
