@@ -1,4 +1,4 @@
-use crate::dto::entity::entity::json_web_token::json_access_web_token::core::payload::common::Common;
+use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::payload::_new_fro_context::common::Common;
 use crate::entity::entity::json_web_token::json_access_web_token::core::header::header::Header;
 use crate::entity::entity::json_web_token::json_access_web_token::core::payload::Payload;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
