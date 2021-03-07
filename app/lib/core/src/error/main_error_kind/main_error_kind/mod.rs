@@ -1,6 +1,6 @@
-use super::core::common::connection_error_kind::connection_error_kind::ConnectionErrorKind;
-use super::core::diesel_component::diesel_error_kind::DieselErrorKind;
-use super::core::entity::entity_error_kind::entity_error_kind::EntityErrorKind;
+use super::core::connection_error_kind::connection_error_kind::ConnectionErrorKind;
+use super::core::_in_context_for::diesel_component::_new_for_context::diesel_error_kind::DieselErrorKind;
+use super::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
 use std::convert::From;
 use std::error::Error;
 use std::fmt::Display;

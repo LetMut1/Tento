@@ -1,5 +1,5 @@
-use crate::dto::_in_context_for::utility::_in_context_for::actix_web_component::request_handler::_common::standart_json_response_body_wrapper::_new_for_context::fail_result::FailResult;
-use crate::dto::_in_context_for::utility::_in_context_for::actix_web_component::request_handler::_common::standart_json_response_body_wrapper::_new_for_context::success_result::SuccessResult;
+use crate::dto::_in_context_for::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_json_response_body_wrapper::_new_for_context::fail_result::FailResult;
+use crate::dto::_in_context_for::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_json_response_body_wrapper::_new_for_context::success_result::SuccessResult;
 use serde_json;
 use serde::Serialize;
 

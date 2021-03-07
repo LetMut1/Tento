@@ -1,5 +1,5 @@
-use crate::error::main_error_kind::core::common::connection_error_kind::connection_error_kind::ConnectionErrorKind;
-use crate::error::main_error_kind::core::common::connection_error_kind::core::postgresql::postgresql_connection_error_kind::PostgresqlConnectionErrorKind;
+use crate::error::main_error_kind::core::connection_error_kind::connection_error_kind::ConnectionErrorKind;
+use crate::error::main_error_kind::core::connection_error_kind::core::postgresql::postgresql_connection_error_kind::PostgresqlConnectionErrorKind;
 use crate::error::context::Context;
 use diesel::Connection;
 use diesel::pg::PgConnection;
