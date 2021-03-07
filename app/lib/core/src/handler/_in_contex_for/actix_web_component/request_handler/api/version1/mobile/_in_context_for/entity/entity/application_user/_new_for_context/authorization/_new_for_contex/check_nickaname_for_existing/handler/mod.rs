@@ -3,7 +3,7 @@ use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::
 use crate::error::main_error_kind::core::diesel_component::diesel_error_kind::DieselErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::base_repository::BaseRepository;
-use crate::utility::repository::_common::pg_connection_manager::PGConnectionManager;
+use crate::utility::_in_context_for::repository::_new_for_context::pg_connection_manager::PGConnectionManager;
 
 pub struct Handler;
 

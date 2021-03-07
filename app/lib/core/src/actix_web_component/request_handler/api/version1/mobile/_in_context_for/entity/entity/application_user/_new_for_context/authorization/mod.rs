@@ -13,8 +13,8 @@ use crate::handler::_in_contex_for::actix_web_component::request_handler::api::v
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in::handler::Handler as LogInHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::register::handler::Handler as RegisterHandler;
-use crate::utility::actix_web_component::request_handler::_common::standart_json_response_body_wrapper::StandartJsonResponseBodyWrapper;
-use crate::utility::actix_web_component::request_handler::_common::standart_response_creator::StandartResponseCreator;
+use crate::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_json_response_body_wrapper::StandartJsonResponseBodyWrapper;
+use crate::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_response_creator::StandartResponseCreator;
 
 pub struct Authorization;
 

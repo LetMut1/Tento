@@ -11,8 +11,8 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::repository::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
-use crate::utility::entity::entity::application_user::core::password::password_encoder::PasswordEncoder;
-use crate::utility::repository::_common::pg_connection_manager::PGConnectionManager;
+use crate::utility::_in_context_for::entity::entity::application_user::core::password::_new_for_context::password_encoder::PasswordEncoder;
+use crate::utility::_in_context_for::repository::_new_for_context::pg_connection_manager::PGConnectionManager;
 
 pub struct Handler;
 

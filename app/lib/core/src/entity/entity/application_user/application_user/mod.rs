@@ -6,7 +6,7 @@ use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::entity::entity::application_user::core::password_hash::PasswordHash;
 use crate::entity::entity::application_user::core::password::Password;
-use crate::utility::entity::entity::application_user::core::password::password_encoder::PasswordEncoder;
+use crate::utility::_in_context_for::entity::entity::application_user::core::password::_new_for_context::password_encoder::PasswordEncoder;
 use maybe_owned::MaybeOwned;
 
 pub struct ApplicationUser<'outer> {

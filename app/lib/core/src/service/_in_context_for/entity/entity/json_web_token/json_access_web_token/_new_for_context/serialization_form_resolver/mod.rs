@@ -1,7 +1,7 @@
 use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::header::header::_new_for_context::common::Common as HeaderCommon;
 use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::payload::_new_fro_context::common::Common as PayloadCommon;
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
-use crate::utility::entity::entity::json_web_token::json_access_web_token::core::payload::hs512_encoder::HS512Encoder;
+use crate::utility::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::payload::_new_for_context::hs512_encoder::HS512Encoder;
 use serde_json;
 
 pub struct SerializationFormResolver;

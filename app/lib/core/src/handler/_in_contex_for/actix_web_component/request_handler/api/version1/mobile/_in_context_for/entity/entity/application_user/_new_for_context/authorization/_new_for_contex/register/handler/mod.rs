@@ -6,8 +6,8 @@ use crate::error::main_error_kind::core::entity::entity_error_kind::core::entity
 use crate::error::main_error_kind::core::entity::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::base_repository::BaseRepository;
-use crate::utility::entity::entity::application_user::core::email::email_simple_validator::EmailSimpleValidator;
-use crate::utility::repository::_common::pg_connection_manager::PGConnectionManager;
+use crate::utility::_in_context_for::entity::entity::application_user::core::email::_new_for_context::email_simple_validator::EmailSimpleValidator;
+use crate::utility::_in_context_for::repository::_new_for_context::pg_connection_manager::PGConnectionManager;
 
 pub struct Handler;
 
