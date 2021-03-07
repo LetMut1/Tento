@@ -2,9 +2,9 @@ use crypto::hmac::Hmac;
 use crypto::mac::Mac;
 use crypto::sha2::Sha512;
 
-pub struct HS512Encoder;        // TODO как назвать и куда вставить.
+pub struct SignatureCreator;
 
-impl<'outer> HS512Encoder {
+impl<'outer> SignatureCreator {
     const PRIVATE_KEY: &'static str = "Jd2DffsFi3sc8Mz2udB0bz8zH12asu4S1ksS2v8cs5fFm6dcfLk";
 
     pub fn encode(subject: &'outer String) -> String {
