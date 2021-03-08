@@ -33,10 +33,10 @@ impl<'outer> Handler {
                 Err(value) => { return Err(DieselErrorKind::new_any(value, None))?; }
             };
 
-            if !BaseRepository::is_exist_by_nickanme(connection_manager.get_connection(), request.get_nickname())? 
-                && !BaseRepository::is_exist_by_email(connection_manager.get_connection(), request.get_email())?
+            if !BaseRepository::is_exist_by_nickanme(&connection_manager, request.get_nickname())? 
+                && !BaseRepository::is_exist_by_email(&connection_manager, request.get_email())?
             {
-                BaseRepository::save(connection_manager.get_connection(), &ApplicationUserNew::new_from_entity(&application_user))?;
+                BaseRepository::save(&connection_manager, &ApplicationUserNew::new_from_entity(&application_user))?;
                 
                 connection_manager.close_connection();
             } else {

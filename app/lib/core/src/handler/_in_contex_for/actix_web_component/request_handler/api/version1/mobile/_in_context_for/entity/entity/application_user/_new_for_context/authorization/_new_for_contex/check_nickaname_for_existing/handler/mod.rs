@@ -12,7 +12,7 @@ impl<'outer> Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        let result: Result<bool, DieselErrorKind> = BaseRepository::is_exist_by_nickanme(connection_manager.get_connection(), query.get_nickname());
+        let result: Result<bool, DieselErrorKind> = BaseRepository::is_exist_by_nickanme(&connection_manager, query.get_nickname());
         
         connection_manager.close_connection();
 

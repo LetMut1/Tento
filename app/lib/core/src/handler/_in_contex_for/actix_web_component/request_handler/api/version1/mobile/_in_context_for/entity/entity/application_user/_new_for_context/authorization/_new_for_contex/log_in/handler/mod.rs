@@ -21,7 +21,7 @@ impl<'outer> Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        let application_user_existing: ApplicationUserExisting = ApplicationUserBaseRepository::get_by_email(connection_manager.get_connection(), request.get_email())?;
+        let application_user_existing: ApplicationUserExisting = ApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())?;
 
         let application_user: ApplicationUser<'_> = ApplicationUser::new_from_model(&application_user_existing);
 
@@ -31,7 +31,7 @@ impl<'outer> Handler {
 
                 let json_refresh_web_token_new: JsonRefreshWebTokenNew<'_> = JsonRefreshWebTokenNew::new_from_entity(&json_refresh_web_token);
 
-                JsonRefreshWebTokenBaseRepository::save(connection_manager.get_connection(), &json_refresh_web_token_new)?;
+                JsonRefreshWebTokenBaseRepository::save(&connection_manager, &json_refresh_web_token_new)?;
 
                 connection_manager.close_connection(); 
                 

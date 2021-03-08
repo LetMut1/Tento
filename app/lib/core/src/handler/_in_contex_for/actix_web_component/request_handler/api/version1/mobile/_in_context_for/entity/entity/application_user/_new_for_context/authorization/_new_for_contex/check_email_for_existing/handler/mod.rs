@@ -12,7 +12,7 @@ impl<'outer> Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        let result: Result<bool, DieselErrorKind> = BaseRepository::is_exist_by_email(connection_manager.get_connection(), query.get_email());
+        let result: Result<bool, DieselErrorKind> = BaseRepository::is_exist_by_email(&connection_manager, query.get_email());
 
         connection_manager.close_connection();
 
