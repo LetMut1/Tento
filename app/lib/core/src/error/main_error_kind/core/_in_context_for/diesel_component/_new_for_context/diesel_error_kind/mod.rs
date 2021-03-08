@@ -10,6 +10,12 @@ pub enum DieselErrorKind {
     Any(Context<DieselError>)
 }
 
+impl DieselErrorKind {
+    pub fn new_any(diesel_error: DieselError, message: Option<String>) -> Self {
+        return Self::Any(Context::new(Some(diesel_error), message));
+    }
+}
+
 impl Display for DieselErrorKind {
     fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
         return Ok(());  // TODO 

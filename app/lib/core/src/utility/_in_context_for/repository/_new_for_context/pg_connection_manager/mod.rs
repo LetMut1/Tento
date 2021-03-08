@@ -1,6 +1,5 @@
 use crate::error::main_error_kind::core::connection_error_kind::connection_error_kind::ConnectionErrorKind;
 use crate::error::main_error_kind::core::connection_error_kind::core::postgresql::postgresql_connection_error_kind::PostgresqlConnectionErrorKind;
-use crate::error::context::Context;
 use diesel::Connection;
 use diesel::pg::PgConnection;
 
@@ -26,7 +25,7 @@ impl<'this> PGConnectionManager {
                         return Ok(());
                     },
                     Err(value) => {
-                        return Err(ConnectionErrorKind::Postgresql(PostgresqlConnectionErrorKind::CanNotEstablish(Context::new(Some(value), None))));
+                        return Err(ConnectionErrorKind::Postgresql(PostgresqlConnectionErrorKind::new_can_not_establish(value, None)));
                     }
                 };
              }

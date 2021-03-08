@@ -10,6 +10,12 @@ pub enum PostgresqlConnectionErrorKind {
     CanNotEstablish(Context<ConnectionError>)
 }
 
+impl PostgresqlConnectionErrorKind {
+    pub fn new_can_not_establish(connection_error: ConnectionError, message: Option<String>) -> Self {
+        return Self::CanNotEstablish(Context::new(Some(connection_error), message));
+    }
+}
+
 impl Display for PostgresqlConnectionErrorKind {
     fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
         return Ok(());  // TODO 

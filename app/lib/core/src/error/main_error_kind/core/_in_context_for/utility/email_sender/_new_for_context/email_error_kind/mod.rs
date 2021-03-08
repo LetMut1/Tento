@@ -12,6 +12,16 @@ pub enum EmailErrorKind {
     Sending(Context<LettreError>)
 }
 
+impl EmailErrorKind {
+    pub fn new_creating(lettre_email_error: LettreEmailError, message: Option<String>) -> Self {
+        return Self::Creating(Context::new(Some(lettre_email_error), message));
+    }
+
+    pub fn new_sending(lettre_error: LettreError, message: Option<String>) -> Self {
+        return Self::Sending(Context::new(Some(lettre_error), message));
+    }
+}
+
 impl Display for EmailErrorKind {
     fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
         return Ok(());  // TODO 
