@@ -3,11 +3,11 @@ use crate::error::main_error_kind::core::connection_error_kind::core::postgresql
 use diesel::Connection;
 use diesel::pg::PgConnection;
 
-pub struct PGConnectionManager {
+pub struct ConnectionManager {
     pg_connection: Option<PgConnection>
 }
 
-impl<'this> PGConnectionManager {
+impl<'this> ConnectionManager {
     pub fn new() -> Self {
         return Self {
             pg_connection: None
@@ -16,7 +16,7 @@ impl<'this> PGConnectionManager {
 
     pub fn establish_connection(&'this mut self) -> Result<(), ConnectionErrorKind> {
         match self.pg_connection {
-            Some(ref _value) => { panic!("Logic error, PgConnection is already exist"); }, // TODO error Класть в Состояние фрэймворка (чтобы брать при запуске один раз и хранить в памяти)
+            Some(ref _value) => { panic!("Logic error, PgConnection is already exist"); }, // TODO error
             None => { 
                 match PgConnection::establish("postgres://root:password@postgresql/mem_is") {  // TODO from env
                     Ok(value) => {

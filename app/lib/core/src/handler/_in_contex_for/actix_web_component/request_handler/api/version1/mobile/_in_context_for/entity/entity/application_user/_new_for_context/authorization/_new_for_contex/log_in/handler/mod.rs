@@ -11,17 +11,17 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::repository::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
+use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
 use crate::utility::_in_context_for::entity::entity::application_user::core::password::_new_for_context::password_encoder::PasswordEncoder;
-use crate::utility::_in_context_for::repository::_new_for_context::pg_connection_manager::PGConnectionManager;
 
 pub struct Handler;
 
 impl<'outer> Handler {
     pub fn handle(request: &'outer Request) -> Result<HandlerResult, MainErrorKind> {
-        let mut pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
-        pg_connection_manager.establish_connection()?;
+        let mut connection_manager: ConnectionManager = ConnectionManager::new();
+        connection_manager.establish_connection()?;
 
-        let application_user_existing: ApplicationUserExisting = ApplicationUserBaseRepository::get_by_email(pg_connection_manager.get_connection(), request.get_email())?;
+        let application_user_existing: ApplicationUserExisting = ApplicationUserBaseRepository::get_by_email(connection_manager.get_connection(), request.get_email())?;
 
         let application_user: ApplicationUser<'_> = ApplicationUser::new_from_model(&application_user_existing);
 
@@ -31,20 +31,20 @@ impl<'outer> Handler {
 
                 let json_refresh_web_token_new: JsonRefreshWebTokenNew<'_> = JsonRefreshWebTokenNew::new_from_entity(&json_refresh_web_token);
 
-                JsonRefreshWebTokenBaseRepository::save(pg_connection_manager.get_connection(), &json_refresh_web_token_new)?;
+                JsonRefreshWebTokenBaseRepository::save(connection_manager.get_connection(), &json_refresh_web_token_new)?;
 
-                pg_connection_manager.close_connection(); 
+                connection_manager.close_connection(); 
                 
                 let json_access_web_token: JsonAccessWebToken<'_> = JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token);
                 
                 return Ok(HandlerResult::new(SerializationFormResolver::serialize(&json_access_web_token)));
             } else {
-                pg_connection_manager.close_connection();
+                connection_manager.close_connection();
 
                 return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotConfirmed))?;
             }
         } else {
-            pg_connection_manager.close_connection();
+            connection_manager.close_connection();
 
             return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::WrongPassword))?;
         }
