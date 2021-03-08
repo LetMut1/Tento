@@ -1,6 +1,6 @@
 use crate::error::context::Context;
 use lettre_email::error::Error as LettreEmailError;
-use lettre::error::Error as LettreError;
+use lettre::smtp::error::Error as LettreError;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
