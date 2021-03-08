@@ -20,6 +20,8 @@ services:
         build:
             context: ./service/mailhog
             dockerfile: dockerfile
+        ports:
+        - 8025:8025
         restart: always
 
 volumes:
