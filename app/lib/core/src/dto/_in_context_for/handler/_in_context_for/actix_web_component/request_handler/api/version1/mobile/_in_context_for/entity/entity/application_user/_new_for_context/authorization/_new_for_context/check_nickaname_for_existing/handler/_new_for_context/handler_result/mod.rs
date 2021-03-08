@@ -1,11 +1,11 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct Result {
+pub struct HandlerResult {
     result: bool
 }
 
-impl Result {
+impl HandlerResult {
     pub fn new(result: bool) -> Self {
         return Self {
             result
