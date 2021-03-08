@@ -4,9 +4,16 @@ RUN \
 mkdir -p /usr/local/MemIs && \
 # For VSCode extensions {
 # For "matklad.rust-analyzer and "rust-lang.rust" extensions {
-rustup component add rust-src && \
+rustup component add \
+    rust-src && \
 # For "matklad.rust-analyzer and "rust-lang.rust" extensions }
 # For "rust-lang.rust" extension {
-rustup component add rust-analysis rls
+rustup component add \
+    rust-analysis \
+    rls && \
 # For "rust-lang.rust" extension }
 # For VSCode extensions }
+apt-get update && \
+apt-get install -y \
+    pkg-config \
+    libssl-dev
