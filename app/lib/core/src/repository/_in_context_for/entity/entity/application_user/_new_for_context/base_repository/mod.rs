@@ -1,5 +1,5 @@
-use crate::diesel_component::model::_in_context_for::entity::entity::application_user::_new_for_context::existing::Existing;
-use crate::diesel_component::model::_in_context_for::entity::entity::application_user::_new_for_context::new::New;
+use crate::resourse_model::_in_context_for::entity::entity::application_user::_new_for_context::existing::Existing;
+use crate::resourse_model::_in_context_for::entity::entity::application_user::_new_for_context::new::New;
 use crate::diesel_component::schema::public::application_user;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error_kind::DieselErrorKind;

@@ -1,4 +1,4 @@
-use crate::diesel_component::model::_in_context_for::entity::entity::application_user::_new_for_context::existing::Existing;
+use crate::resourse_model::_in_context_for::entity::entity::application_user::_new_for_context::existing::Existing;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::core::confirmed::Confirmed;

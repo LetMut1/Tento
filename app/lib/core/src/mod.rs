@@ -19,6 +19,7 @@ pub mod error;
 pub mod handler;
 pub(crate) mod diesel_component;
 pub(crate) mod entity;
+pub(crate) mod resourse_model;
 pub(crate) mod repository;
 pub(crate) mod service;
 pub(crate) mod utility;

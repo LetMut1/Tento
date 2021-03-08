@@ -1,4 +1,4 @@
-use crate::diesel_component::model::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::new::New;
+use crate::resourse_model::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::new::New;
 use crate::diesel_component::schema::public::json_refresh_web_token;
 use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error_kind::DieselErrorKind;
 use diesel::pg::PgConnection;
