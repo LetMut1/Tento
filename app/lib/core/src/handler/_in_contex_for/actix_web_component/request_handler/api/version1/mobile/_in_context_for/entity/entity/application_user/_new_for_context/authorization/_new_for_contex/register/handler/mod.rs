@@ -18,21 +18,21 @@ pub struct Handler;
 impl<'outer> Handler {
     pub fn handle(request: &'outer Request) -> Result<HandlerResult, MainErrorKind> {
         if EmailSimpleValidator::is_valid(request.get_email()) {
-            let application_user: ApplicationUser<'_> = ApplicationUser::new(request.get_email(), request.get_nickname(), request.get_password());  
-
-            let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> = ApplicationUserRegistrationConfirmationToken::new(&application_user);
-
             let mut connection_manager: ConnectionManager = ConnectionManager::new();
             connection_manager.establish_connection()?;
 
             if !ApplicationUserBaseRepository::is_exist_by_nickanme(&connection_manager, request.get_nickname())? 
                 && !ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, request.get_email())?
             {
+                let application_user: ApplicationUser<'_> = ApplicationUser::new(request.get_email(), request.get_nickname(), request.get_password());  
+
+                let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> = ApplicationUserRegistrationConfirmationToken::new(&application_user);
+                
                 connection_manager.begin_transaction()?;
                 match ApplicationUserBaseRepository::save(&connection_manager, &ApplicationUserNew::new(&application_user)) {
                     Ok(_) => {
                         match ApplicationUserRegistrationConfirmationTokenBaseRepository::save(&connection_manager, &ApplicationUserRegistrationConfirmationTokenNew::new(&application_user_registration_confirmation_token)) {
-                            Ok(_) => { 
+                            Ok(_) => {
                                 connection_manager.commit_transaction()?;
                                 connection_manager.close_connection();
 
