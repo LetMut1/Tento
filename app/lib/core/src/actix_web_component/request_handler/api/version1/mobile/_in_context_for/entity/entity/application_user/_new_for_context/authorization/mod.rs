@@ -21,6 +21,7 @@ pub struct Authorization;
 impl Authorization {
     pub async fn check_email_for_existing(query: Query<CheckEmailForExistingQuery>) -> HttpResponse<Body> {
         let query: CheckEmailForExistingQuery = query.into_inner();
+
         match CheckEmailForExistingHanlder::handle(&query) {
             Ok(ref value) => {
                 return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value));
@@ -34,6 +35,7 @@ impl Authorization {
 
     pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> HttpResponse<Body> {
         let query: CheckNicknameForExistingQuery = query.into_inner();
+
         match CheckNicknameForExistingHanlder::handle(&query) {
             Ok(ref value) => {
                 return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value));
@@ -47,6 +49,7 @@ impl Authorization {
 
     pub async fn register(request: Form<RegisterRequest>) -> HttpResponse<Body> {
         let request: RegisterRequest = request.into_inner();
+
         match RegisterHandler::handle(&request) {
             Ok(ref value) => { 
                 return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value)); 
@@ -82,6 +85,7 @@ impl Authorization {
 
     pub async fn log_in(request: Form<LogInRequest>) -> HttpResponse<Body> {
         let request: LogInRequest = request.into_inner();
+        
         match LogInHandler::handle(&request) {
             Ok(ref value) => { 
                 return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value)); 

@@ -21,7 +21,7 @@ impl<'this, 'outer: 'this> DateTime<'outer> {
 
     pub fn new_from_string(value: &'outer String) -> Self {
         return Self {
-            value:MaybeOwned::Owned(ChronoDateTime::parse_from_rfc3339(value.as_str()).unwrap().with_timezone(&Utc))        // TODO выбрасывать ошибку
+            value: MaybeOwned::Owned(ChronoDateTime::parse_from_rfc3339(value.as_str()).unwrap().with_timezone(&Utc))        // TODO выбрасывать ошибку
         };
     }
 

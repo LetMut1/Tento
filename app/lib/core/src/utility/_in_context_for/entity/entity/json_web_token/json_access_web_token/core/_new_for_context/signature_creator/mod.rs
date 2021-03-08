@@ -9,6 +9,7 @@ impl<'outer> SignatureCreator {
 
     pub fn encode(subject: &'outer String) -> String {
         let mut hmac: Hmac<Sha512> = Self::get_configured_hmac();
+        
         hmac.input(subject.as_bytes());
 
         return hex::encode(hmac.result().code());

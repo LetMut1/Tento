@@ -14,15 +14,16 @@ pub struct Handler;
 impl<'outer> Handler {
     pub fn handle(request: &'outer Request) -> Result<HandlerResult, MainErrorKind> {
         if EmailSimpleValidator::is_valid(request.get_email()) {
-            let application_user: ApplicationUser<'_> = ApplicationUser::new(
-                request.get_email(), request.get_nickname(), request.get_password()
-            );   
+            let application_user: ApplicationUser<'_> = ApplicationUser::new(request.get_email(), request.get_nickname(), request.get_password());  
+
             let mut pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
             pg_connection_manager.establish_connection()?;
+
             if !BaseRepository::is_exist_by_nickanme(pg_connection_manager.get_connection(), request.get_nickname())? 
                 && !BaseRepository::is_exist_by_email(pg_connection_manager.get_connection(), request.get_email())?
             {
                 BaseRepository::save(pg_connection_manager.get_connection(), &New::new_from_entity(&application_user))?;
+                
                 pg_connection_manager.close_connection();
             } else {
                 pg_connection_manager.close_connection();

@@ -16,6 +16,7 @@ pub struct EmailSender;
 impl<'outer> EmailSender {
     pub fn send(subject: String, body: String, to: String) -> Result<(), EmailErrorKind> {
         let email: Email;
+
         match EmailBuilder::new()
                 .subject(subject)
                 .text(body)
@@ -25,7 +26,9 @@ impl<'outer> EmailSender {
             Ok(value) => { email = value; },
             Err(value) => { return Err(EmailErrorKind::new_creating(value, None)); }   // TODO через шке конструктор
         };
+
         let mut smtp_transport: SmtpTransport;
+
         // TODO uncomment {  
         // match SmtpClient::new_simple("TODO") {  // TODO Для Prod нужен этот код, для Dev -тот, что ниже
         //     Ok(value) => {
@@ -46,6 +49,10 @@ impl<'outer> EmailSender {
         // };
         // TODO uncomment }
 
+
+
+
+        
         // TODO delete below
         // TODO сделать возможность пробрасывать среду dev/prod с конфига
         match SmtpClient::new(("mailhog", 1025), ClientSecurity::None) {
@@ -54,6 +61,7 @@ impl<'outer> EmailSender {
             },
             Err(value) => { return Err(EmailErrorKind::new_sending(value, None)); }
         };
+
         match smtp_transport.send(email.into()) {
             Ok(_value) => { return Ok(()); },
             Err(value) => { return Err(EmailErrorKind::new_sending(value, None)); }

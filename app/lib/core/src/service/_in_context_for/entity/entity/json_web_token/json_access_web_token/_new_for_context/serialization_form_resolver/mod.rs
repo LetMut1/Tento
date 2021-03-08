@@ -11,6 +11,7 @@ impl<'this, 'outer: 'this> SerializationFormResolver {
 
     pub fn serialize(json_access_web_token: &'outer JsonAccessWebToken<'outer>) -> String {
         let header_common: HeaderCommon<'_> = HeaderCommon::new_from_entity(json_access_web_token);
+
         let payload_common: PayloadCommon<'_> = PayloadCommon::new_from_entity(json_access_web_token);
 
         return Self::create_classic_form(
@@ -21,6 +22,7 @@ impl<'this, 'outer: 'this> SerializationFormResolver {
 
     pub fn deserialize(classic_form: &'outer String) -> PayloadCommon<'this> {
         let parts: Vec<String> = classic_form.split(Self::LINE_SEPARATOR).map(|value: &'_ str| -> String { return value.to_string(); }).collect();
+
         if Self::is_valid(&parts) {
             let paylod_json_encoded: &'_ [u8] = &base64::decode(parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
             
@@ -32,6 +34,7 @@ impl<'this, 'outer: 'this> SerializationFormResolver {
 
     fn create_classic_form(header: &'this String, payload: &'this String) -> String {
         let header_and_payload: String = base64::encode(header.as_bytes()) + Self::LINE_SEPARATOR + &base64::encode(payload.as_bytes());
+        
         let signature: String = SignatureCreator::encode(&header_and_payload);
 
         return header_and_payload + Self::LINE_SEPARATOR + &signature;

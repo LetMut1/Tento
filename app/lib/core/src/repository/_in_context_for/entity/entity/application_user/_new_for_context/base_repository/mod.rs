@@ -20,24 +20,21 @@ impl<'outer> BaseRepository {
     }
 
     pub fn is_exist_by_nickanme(pg_connection: &'outer PgConnection, nickname: &'outer String) -> Result<bool, DieselErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
-        match diesel::select(dsl::exists(application_user::table.filter(application_user::nickname.eq(nickname)))) // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            .get_result::<bool>(pg_connection) {
+        match diesel::select(dsl::exists(application_user::table.filter(application_user::nickname.eq(nickname)))).get_result::<bool>(pg_connection) { // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             Ok(value) => { return Ok(value); },
             Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
         };
     }
 
     pub fn is_exist_by_email(pg_connection: &'outer PgConnection, email: &'outer String) -> Result<bool, DieselErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
-        match diesel::select(dsl::exists(application_user::table.filter(application_user::email.eq(email)))) // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            .get_result::<bool>(pg_connection) {
+        match diesel::select(dsl::exists(application_user::table.filter(application_user::email.eq(email)))).get_result::<bool>(pg_connection) { // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             Ok(value) => { return Ok(value); },
             Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
         };
     }
 
     pub fn get_by_email(pg_connection: &'outer PgConnection, email: &'outer String) -> Result<Existing, DieselErrorKind> {
-        match application_user::table.filter(application_user::email.eq(email))
-            .limit(1).load::<Existing>(pg_connection) { // TODO если вернется ноль значений, то что делать
+        match application_user::table.filter(application_user::email.eq(email)).limit(1).load::<Existing>(pg_connection) { // TODO если вернется ноль значений, то что делать
             Ok(ref mut value) => { return Ok(value.pop().unwrap()); },  // TODO
             Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
         };

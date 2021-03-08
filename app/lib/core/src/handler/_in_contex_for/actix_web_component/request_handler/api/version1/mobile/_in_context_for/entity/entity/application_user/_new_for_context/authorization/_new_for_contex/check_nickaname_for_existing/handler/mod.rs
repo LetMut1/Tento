@@ -11,8 +11,9 @@ impl<'outer> Handler {
     pub fn handle(query: &'outer Query) -> Result<HandlerResult, MainErrorKind> {
         let mut pg_connection_manager: PGConnectionManager = PGConnectionManager::new();
         pg_connection_manager.establish_connection()?;
-        let result: Result<bool, DieselErrorKind> = 
-            BaseRepository::is_exist_by_nickanme(pg_connection_manager.get_connection(), query.get_nickname());
+
+        let result: Result<bool, DieselErrorKind> = BaseRepository::is_exist_by_nickanme(pg_connection_manager.get_connection(), query.get_nickname());
+        
         pg_connection_manager.close_connection();
 
         return Ok(HandlerResult::new(result?));
