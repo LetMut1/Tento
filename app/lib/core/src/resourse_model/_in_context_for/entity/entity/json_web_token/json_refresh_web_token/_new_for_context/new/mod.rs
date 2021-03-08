@@ -17,14 +17,14 @@ pub struct New<'outer> {
 }
 
 impl<'outer> New<'outer> {
-    pub fn new_from_entity(entity: &'outer JsonRefreshWebToken<'outer>) -> Self {
+    pub fn new(entity: &'outer JsonRefreshWebToken<'outer>) -> Self {
         return Self {
             id: entity.get_id().get_value(),
             application_user_id: entity.get_application_user_id().get_value(),
             device_id: entity.get_device_id().get_value(),
             value: entity.get_value().get_value(),
             created_at: entity.get_created_at().get_value(),
-            expired_at: entity.get_created_at().get_value()
+            expired_at: entity.get_expired_at().get_value()
         };
     }
 }

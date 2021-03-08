@@ -9,7 +9,7 @@ pub struct BaseRepository;
 impl<'outer> BaseRepository {
     pub fn save(connection_manager: &'outer ConnectionManager, new: &'outer New) -> Result<(), DieselErrorKind> {
         match diesel::insert_into(application_user_registration_confirmation_token::table).values(new).execute(connection_manager.get_connection()) {
-            Ok(_value) => { return Ok(()); },
+            Ok(_) => { return Ok(()); },
             Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
         };
     }

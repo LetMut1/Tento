@@ -17,7 +17,7 @@ pub struct New<'outer> {                    // TODO описать id Аттри
 }
 
 impl<'outer> New<'outer> {
-    pub fn new_from_entity(application_user: &'outer ApplicationUser<'outer>) -> Self {
+    pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
         return Self {
             id: application_user.get_id().get_value(),
             email: application_user.get_email().get_value(),

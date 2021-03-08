@@ -44,7 +44,7 @@ impl<'outer> EmailSender {
         // };
 
         // match smtp_transport.send(email.into()) {
-        //     Ok(_value) => { return Ok(()); },
+        //     Ok(_) => { return Ok(()); },
         //     Err(value) => { return Err(EmailErrorKind::new_sending(value, None)); }
         // };
         // TODO uncomment }
@@ -63,7 +63,7 @@ impl<'outer> EmailSender {
         };
 
         match smtp_transport.send(email.into()) {
-            Ok(_value) => { return Ok(()); },
+            Ok(_) => { return Ok(()); },
             Err(value) => { return Err(EmailErrorKind::new_sending(value, None)); }
         };
     }

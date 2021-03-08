@@ -1,7 +1,7 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use crate::diesel_component::schema::public::application_user_registration_confirmation_token;
-use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
+use crate::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use diesel::Insertable;
 use uuid::Uuid;
 
@@ -15,12 +15,12 @@ pub struct New<'outer> {
 }
 
 impl<'outer> New<'outer> {
-    pub fn new_from_entity(entity: &'outer JsonRefreshWebToken<'outer>) -> Self {
+    pub fn new(entity: &'outer ApplicationUserRegistrationConfirmationToken<'outer>) -> Self {
         return Self {
             id: entity.get_id().get_value(),
             application_user_id: entity.get_application_user_id().get_value(),
             value: entity.get_value().get_value(),
-            expired_at: entity.get_created_at().get_value()
+            expired_at: entity.get_expired_at().get_value()
         };
     }
 }

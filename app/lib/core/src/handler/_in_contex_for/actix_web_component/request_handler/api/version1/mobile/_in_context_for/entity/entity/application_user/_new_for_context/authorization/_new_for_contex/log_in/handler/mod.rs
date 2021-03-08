@@ -29,7 +29,7 @@ impl<'outer> Handler {
             if application_user.is_confirmed() {
                 let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(&application_user, request.get_device_id());
 
-                let json_refresh_web_token_new: JsonRefreshWebTokenNew<'_> = JsonRefreshWebTokenNew::new_from_entity(&json_refresh_web_token);
+                let json_refresh_web_token_new: JsonRefreshWebTokenNew<'_> = JsonRefreshWebTokenNew::new(&json_refresh_web_token);
 
                 JsonRefreshWebTokenBaseRepository::save(&connection_manager, &json_refresh_web_token_new)?;
 

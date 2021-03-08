@@ -14,7 +14,7 @@ pub struct BaseRepository;
 impl<'outer> BaseRepository {
     pub fn save(connection_manager: &'outer ConnectionManager, new: &'outer New) -> Result<(), DieselErrorKind> {
         match diesel::insert_into(application_user::table).values(new).execute(connection_manager.get_connection()) {
-            Ok(_value) => { return Ok(()); },
+            Ok(_) => { return Ok(()); },
             Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
         };
     }
@@ -42,7 +42,7 @@ impl<'outer> BaseRepository {
 
     pub fn delete(connection_manager: &'outer ConnectionManager, application_user: &'outer ApplicationUser<'outer>) -> Result<(), DieselErrorKind> {
         match diesel::delete(application_user::table.filter(application_user::id.eq(application_user.get_id().get_value()))).execute(connection_manager.get_connection()) {
-            Ok(_value) => { return Ok(()); },
+            Ok(_) => { return Ok(()); },
             Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
         };
     }

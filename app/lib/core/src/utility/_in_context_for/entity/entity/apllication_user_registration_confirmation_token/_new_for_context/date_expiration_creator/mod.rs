@@ -5,6 +5,6 @@ pub struct DateExpirationCreator;
 
 impl<'vague> DateExpirationCreator {
     pub fn create_interval() -> DateTime<'vague> {
-        return IntervalCreator::create_from_now(60*24);
+        return IntervalCreator::create_from_now(60 * 24);
     }
 }
