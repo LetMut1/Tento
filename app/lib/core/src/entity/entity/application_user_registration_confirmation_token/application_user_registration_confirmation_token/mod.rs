@@ -5,7 +5,7 @@ use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::utility::_in_context_for::entity::entity::apllication_user_registration_confirmation_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use maybe_owned::MaybeOwned;
 
-pub struct ApplicationUserRegistrationConfirmationToken<'outer> {   // TODO Redis disc
+pub struct ApplicationUserRegistrationConfirmationToken<'outer> {
     id: UuidV4<'outer>,
     application_user_id: MaybeOwned<'outer, UuidV4<'outer>>,
     value: Value<'outer>,

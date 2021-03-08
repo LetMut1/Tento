@@ -7,8 +7,8 @@ use diesel::RunQueryDsl;
 pub struct BaseRepository;
 
 impl<'outer> BaseRepository {
-    pub fn save(pg_connection_manager: &'outer PgConnection, new: &'outer New) -> Result<(), DieselErrorKind> {
-        match diesel::insert_into(json_refresh_web_token::table).values(new).execute(pg_connection_manager) {
+    pub fn save(pg_connection: &'outer PgConnection, new: &'outer New) -> Result<(), DieselErrorKind> {
+        match diesel::insert_into(json_refresh_web_token::table).values(new).execute(pg_connection) {
             Ok(_value) => { return Ok(()); },
             Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
         };

@@ -7,6 +7,16 @@ CREATE TABLE application_user (
     confirmed BOOLEAN NOT NULL,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE application_user_registration_confirmation_token (
+    id UUID NOT NULL,
+    application_user_id UUID NOT NULL,
+    value VARCHAR NOT NULL,
+    expired_at TIMESTAMPTZ NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (application_user_id) REFERENCES application_user (id)
+);
+
 -- // TODO Create Constraints !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 -- // TODO delete 
@@ -17,15 +27,6 @@ CREATE TABLE json_refresh_web_token (   -- // TODO Redis
     application_user_id UUID NOT NULL,
     expired_at TIMESTAMPTZ NOT NULL,
     created_at TIMESTAMPTZ NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (application_user_id) REFERENCES application_user (id)
-);
-
-CREATE TABLE application_user_registration_confirmation_token (   -- // TODO Redis
-    id UUID NOT NULL,
-    application_user_id UUID NOT NULL,
-    value VARCHAR NOT NULL,
-    expired_at TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (application_user_id) REFERENCES application_user (id)
 );
