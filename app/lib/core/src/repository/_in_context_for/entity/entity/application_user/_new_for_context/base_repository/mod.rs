@@ -47,4 +47,4 @@ impl<'outer> BaseRepository {
     //         Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
     //     };
     // }
-}//TODO посмотреть, можно ли сделать "owner moving" с Existing 
+}
