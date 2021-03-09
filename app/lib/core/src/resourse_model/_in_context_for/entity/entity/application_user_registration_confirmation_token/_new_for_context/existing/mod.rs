@@ -20,7 +20,7 @@ impl<'this> Existing {
         return &self.application_user_id;
     }
 
-    pub fn get_value_hash(&'this self) -> &'this String {
+    pub fn get_value(&'this self) -> &'this String {
         return &self.value;
     }
 

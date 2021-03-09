@@ -1,10 +1,10 @@
 use crate::entity::core::date_time::DateTime;
-use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::interval_creator::IntervalCreator;
+use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 
 pub struct DateExpirationCreator;
 
 impl<'vague> DateExpirationCreator {
-    pub fn create_interval() -> DateTime<'vague> {
-        return IntervalCreator::create_from_now(60 * 24);
+    pub fn create() -> DateTime<'vague> {
+        return DateTimeManipulator::add_interval_from_now(60 * 24);
     }
 }

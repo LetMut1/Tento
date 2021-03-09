@@ -9,7 +9,9 @@ where
     message: Option<String>
 }
 
-impl<'this, E> Context<E> where E: Error
+impl<'this, E> Context<E> 
+where 
+    E: Error
 {
     pub fn new(previous: Option<E>, message: Option<String>) -> Self {
         return Self {

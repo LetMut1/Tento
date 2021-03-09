@@ -7,8 +7,6 @@ use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_conte
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
-use crate::resourse_model::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::new::New as ApplicationUserRegistrationConfirmationTokenNew;
-use crate::resourse_model::_in_context_for::entity::entity::application_user::_new_for_context::new::New as ApplicationUserNew;
 use crate::service::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::base_sender::BaseSender;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
 use crate::utility::_in_context_for::entity::entity::application_user::core::email::_new_for_context::email_simple_validator::EmailSimpleValidator;
@@ -29,9 +27,9 @@ impl<'outer> Handler {
                 let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> = ApplicationUserRegistrationConfirmationToken::new(&application_user);
                 
                 connection_manager.begin_transaction()?;
-                match ApplicationUserBaseRepository::save(&connection_manager, &ApplicationUserNew::new(&application_user)) {
+                match ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
                     Ok(_) => {
-                        match ApplicationUserRegistrationConfirmationTokenBaseRepository::save(&connection_manager, &ApplicationUserRegistrationConfirmationTokenNew::new(&application_user_registration_confirmation_token)) {
+                        match ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&connection_manager, &application_user_registration_confirmation_token) {
                             Ok(_) => {
                                 connection_manager.commit_transaction()?;
                                 connection_manager.close_connection();

@@ -15,12 +15,12 @@ pub struct New<'outer> {
 }
 
 impl<'outer> New<'outer> {
-    pub fn new(entity: &'outer ApplicationUserRegistrationConfirmationToken<'outer>) -> Self {
+    pub fn new(application_user_registration_confirmation_token: &'outer ApplicationUserRegistrationConfirmationToken<'outer>) -> Self {
         return Self {
-            id: entity.get_id().get_value(),
-            application_user_id: entity.get_application_user_id().get_value(),
-            value: entity.get_value().get_value(),
-            expired_at: entity.get_expired_at().get_value()
+            id: application_user_registration_confirmation_token.get_id().get_value(),
+            application_user_id: application_user_registration_confirmation_token.get_application_user_id().get_value(),
+            value: application_user_registration_confirmation_token.get_value().get_value(),
+            expired_at: application_user_registration_confirmation_token.get_expired_at().get_value()
         };
     }
 }

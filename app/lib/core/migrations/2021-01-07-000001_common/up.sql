@@ -1,4 +1,4 @@
-CREATE TABLE application_user (
+CREATE TABLE application_user ( 
     id UUID NOT NULL,
     email VARCHAR NOT NULL,
     nickname VARCHAR NOT NULL,
@@ -7,10 +7,12 @@ CREATE TABLE application_user (
     confirmed BOOLEAN NOT NULL,
     PRIMARY KEY (id)
 );
+-- // TODO On delete cascade (при удалении юзра должны удалятьсявсе зависимые таблицы)
 -- // TODO Create Constraints !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 CREATE TABLE application_user_registration_confirmation_token (
     id UUID NOT NULL,
-    application_user_id UUID NOT NULL,
+    application_user_id UUID NOT NULL,  
+    -- // TODO application_user_id  - уникальность 
     value VARCHAR NOT NULL,
     expired_at TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (id),

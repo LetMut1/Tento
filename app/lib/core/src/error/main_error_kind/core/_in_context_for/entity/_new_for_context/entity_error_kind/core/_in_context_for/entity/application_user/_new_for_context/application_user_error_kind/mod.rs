@@ -5,9 +5,11 @@ use std::fmt::Result as FmtResult;
 
 #[derive(Debug)]
 pub enum ApplicationUserErrorKind {
+    AlreadyConfirmed,
     AlreadyExist,
     InvalidEmail,
     NotConfirmed,
+    NotFound,
     WrongPassword
 }
 

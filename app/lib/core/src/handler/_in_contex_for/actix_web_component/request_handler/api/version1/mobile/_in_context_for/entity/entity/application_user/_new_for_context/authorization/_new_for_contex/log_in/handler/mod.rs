@@ -1,5 +1,3 @@
-use crate::resourse_model::_in_context_for::entity::entity::application_user::_new_for_context::existing::Existing as ApplicationUserExisting;
-use crate::resourse_model::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::new::New as JsonRefreshWebTokenNew;
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::log_in::request::Request;
 use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::log_in::handler::_new_for_context::handler_result::HandlerResult;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
@@ -21,32 +19,37 @@ impl<'outer> Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        let application_user_existing: ApplicationUserExisting = ApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())?;
+        match ApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())? {
+            Some(ref value) => {
+                let application_user: ApplicationUser<'_> = ApplicationUser::new_from_model(value);
 
-        let application_user: ApplicationUser<'_> = ApplicationUser::new_from_model(&application_user_existing);
+                if  PasswordEncoder::is_valid(request.get_password(), application_user.get_passord_hash().get_value()) {
+                    if application_user.is_confirmed() {
+                        let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(&application_user, request.get_device_id());
 
-        if  PasswordEncoder::is_valid(request.get_password(), application_user.get_passord_hash().get_value()) {
-            if application_user.is_confirmed() {
-                let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(&application_user, request.get_device_id());
+                        JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
 
-                let json_refresh_web_token_new: JsonRefreshWebTokenNew<'_> = JsonRefreshWebTokenNew::new(&json_refresh_web_token);
+                        connection_manager.close_connection(); 
+                        
+                        let json_access_web_token: JsonAccessWebToken<'_> = JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token);
+                        
+                        return Ok(HandlerResult::new(SerializationFormResolver::serialize(&json_access_web_token)));
+                    } else {
+                        connection_manager.close_connection();
 
-                JsonRefreshWebTokenBaseRepository::save(&connection_manager, &json_refresh_web_token_new)?;
+                        return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotConfirmed))?;
+                    }
+                } else {
+                    connection_manager.close_connection();
 
-                connection_manager.close_connection(); 
-                
-                let json_access_web_token: JsonAccessWebToken<'_> = JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token);
-                
-                return Ok(HandlerResult::new(SerializationFormResolver::serialize(&json_access_web_token)));
-            } else {
+                    return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::WrongPassword))?;
+                }
+            },
+            None => {
                 connection_manager.close_connection();
-
-                return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotConfirmed))?;
+                
+                return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound))?;
             }
-        } else {
-            connection_manager.close_connection();
-
-            return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::WrongPassword))?;
-        }
+        };
     }
 }

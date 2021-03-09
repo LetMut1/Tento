@@ -4,7 +4,7 @@ use crate::entity::entity::json_web_token::json_access_web_token::core::payload:
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 
 pub struct JsonAccessWebToken<'outer> {
-    payload: Payload<'outer, 'outer>
+    payload: Payload<'outer>
 }
 
 impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
@@ -26,7 +26,7 @@ impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
         return &Self::HEADER;
     }
 
-    pub fn get_payload(&'this self) -> &'this Payload<'outer, 'outer> {
+    pub fn get_payload(&'this self) -> &'this Payload<'outer> {
         return &self.payload;
     }
 }

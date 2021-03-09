@@ -72,6 +72,10 @@ impl Authorization {
                                     }
                                 };
                             },
+                            _ => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                                return StandartResponseCreator::create_internal_server_error();
+                            }
                         };
                     },
                     _ => {
@@ -96,6 +100,9 @@ impl Authorization {
                         match value {
                             EntityErrorKind::ApplicationUserErrorKind(ref value) => {
                                 match value {
+                                    ApplicationUserErrorKind::NotFound => {
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau05"));
+                                    },
                                     ApplicationUserErrorKind::WrongPassword => {
                                         return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau03"));
                                     },
@@ -108,6 +115,10 @@ impl Authorization {
                                     }
                                 };
                             },
+                            _ => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                                return StandartResponseCreator::create_internal_server_error();
+                            }
                         };
                     },
                     _ => {

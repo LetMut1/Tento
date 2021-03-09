@@ -10,7 +10,7 @@ use uuid::Uuid;
 
 pub struct JsonRefreshWebToken<'outer> {
     id: UuidV4<'outer>,
-    application_user_id:  MaybeOwned<'outer, UuidV4<'outer>>,
+    application_user_id: UuidV4<'outer>,
     device_id: DeviceId<'outer>,
     value: Value<'outer>,
     created_at: DateTime<'outer>,    // TODO нужно ли это поле 
@@ -21,18 +21,18 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {    // TODO Redis disc  
     pub fn new(application_user: &'outer ApplicationUser<'outer>, device_id: &'outer String) -> Self {     // TODO Value генерировать внутри
         return Self {
             id: UuidV4::new(),
-            application_user_id: MaybeOwned::Borrowed(application_user.get_id()),
+            application_user_id: UuidV4::new_from_uuid(application_user.get_id().get_value()),
             device_id: DeviceId::new(MaybeOwned::Borrowed(device_id)),
             value: Value::new(MaybeOwned::Owned(Uuid::new_v4().to_string())),
             created_at: DateTime::new(),
-            expired_at: DateExpirationCreator::create_interval()
+            expired_at: DateExpirationCreator::create()
         };
     }
 
     pub fn new_from_model(existing: &'outer Existing) -> Self {
         return Self {
             id: UuidV4::new_from_uuid(existing.get_id()),
-            application_user_id: MaybeOwned::Owned(UuidV4::new_from_uuid(existing.get_application_user_id())),
+            application_user_id: UuidV4::new_from_uuid(existing.get_application_user_id()),
             device_id: DeviceId::new(MaybeOwned::Borrowed(existing.get_device_id())),
             value: Value::new(MaybeOwned::Borrowed(existing.get_value_hash())),
             created_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(existing.get_created_at())),
@@ -41,7 +41,7 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {    // TODO Redis disc  
     }
 
     pub fn refresh_expired_at(&'this mut self) -> &'this mut Self {
-        self.expired_at = DateExpirationCreator::create_interval();
+        self.expired_at = DateExpirationCreator::create();
 
         return self;
     }

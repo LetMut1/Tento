@@ -7,28 +7,28 @@ use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_
 use crate::utility::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use maybe_owned::MaybeOwned;
 
-pub struct Payload<'this, 'outer: 'this> {
-    application_user_id: MaybeOwned<'outer, UuidV4<'outer>>,
-    device_id: MaybeOwned<'outer, DeviceId<'outer>>,
-    value: MaybeOwned<'outer, Value<'outer>>,
-    exp: DateTime<'this>
+pub struct Payload<'outer> {
+    application_user_id: UuidV4<'outer>,
+    device_id: DeviceId<'outer>,
+    value: Value<'outer>,
+    exp: DateTime<'outer>
 }
 
-impl<'this, 'outer: 'this> Payload<'this, 'outer> {
+impl<'this, 'outer: 'this> Payload<'outer> {
     pub fn new_from_json_refresh_web_token(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
         return Self {
-            application_user_id: MaybeOwned::Borrowed(json_refresh_web_token.get_application_user_id()),
-            device_id: MaybeOwned::Borrowed(json_refresh_web_token.get_device_id()),
-            value: MaybeOwned::Borrowed(json_refresh_web_token.get_value()),
-            exp: DateExpirationCreator::create_interval()
+            application_user_id: UuidV4::new_from_uuid(json_refresh_web_token.get_application_user_id().get_value()),
+            device_id: DeviceId::new(MaybeOwned::Borrowed(json_refresh_web_token.get_device_id().get_value())),
+            value: Value::new(MaybeOwned::Borrowed(json_refresh_web_token.get_value().get_value())),
+            exp: DateExpirationCreator::create()
         };
     }
 
     pub fn new_from_dto_common(common: &'outer Common<'outer>) -> Self {
         return Self {
-            application_user_id: MaybeOwned::Owned(UuidV4::new_from_string(common.get_application_user_id())),
-            device_id: MaybeOwned::Owned(DeviceId::new(MaybeOwned::Borrowed(common.get_device_id()))),
-            value: MaybeOwned::Owned(Value::new(MaybeOwned::Borrowed(common.get_json_refresh_web_token_value()))),
+            application_user_id: UuidV4::new_from_string(common.get_application_user_id()),
+            device_id: DeviceId::new(MaybeOwned::Borrowed(common.get_device_id())),
+            value: Value::new(MaybeOwned::Borrowed(common.get_json_refresh_web_token_value())),
             exp: DateTime::new_from_string(common.get_exp())
         };
     }
