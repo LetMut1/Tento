@@ -24,7 +24,7 @@ impl Handler {
             Some(value) => {
                 let application_user: ApplicationUser = ApplicationUser::new_from_model(value);
 
-                if  PasswordEncoder::is_valid(request.get_password(), application_user.get_passord_hash().get_value()) {
+                if  PasswordEncoder::is_valid(request.get_password(), application_user.get_passord_hash()) {
                     if application_user.is_confirmed() {
                         let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(&application_user, DeviceId::new(request.device_id));
 

@@ -6,7 +6,6 @@ use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::entity::entity::application_user::core::password_hash::PasswordHash;
 use crate::entity::entity::application_user::core::password::Password;
-use crate::utility::_in_context_for::entity::entity::application_user::core::password::_new_for_context::password_encoder::PasswordEncoder;
 
 pub struct ApplicationUser {
     id: UuidV4,
@@ -18,12 +17,12 @@ pub struct ApplicationUser {
 }
 
 impl<'this> ApplicationUser {
-    pub fn new(email: String, nickname: String, password: String) -> Self {
+    pub fn new(email: Email, nickname: Nickname, password: Password) -> Self {
         return Self {
             id: UuidV4::new(),
-            email: Email::new(email),
-            nickname: Nickname::new(nickname),
-            password_hash: PasswordHash::new(PasswordEncoder::encode(&password)),
+            email,
+            nickname,
+            password_hash: PasswordHash::new_from_password(password),
             created_at: DateTime::new(),
             confirmed: Confirmed::new(false)
         };
@@ -57,7 +56,7 @@ impl<'this> ApplicationUser {
     }
 
     pub fn set_password(&'this mut self, password: Password) -> &'this mut Self {
-        self.password_hash = PasswordHash::new(PasswordEncoder::encode(password.get_value()));
+        self.password_hash = PasswordHash::new_from_password(password);
 
         return self;
     }
