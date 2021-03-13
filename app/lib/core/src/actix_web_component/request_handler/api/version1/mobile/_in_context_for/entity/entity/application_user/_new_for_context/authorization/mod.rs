@@ -23,10 +23,10 @@ impl Authorization {
         let query: CheckEmailForExistingQuery = query.into_inner();
 
         match CheckEmailForExistingHanlder::handle(query) {
-            Ok(ref value) => {
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value));
+            Ok(ref handler_result) => {
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(handler_result));
             },
-            Err(ref value) => {
+            Err(ref main_error_kind) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 return StandartResponseCreator::create_internal_server_error();
             }
@@ -37,10 +37,10 @@ impl Authorization {
         let query: CheckNicknameForExistingQuery = query.into_inner();
 
         match CheckNicknameForExistingHanlder::handle(query) {
-            Ok(ref value) => {
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value));
+            Ok(ref handler_result) => {
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(handler_result));
             },
-            Err(ref value) => {
+            Err(ref main_error_kind) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 return StandartResponseCreator::create_internal_server_error();
             }
@@ -51,15 +51,15 @@ impl Authorization {
         let request: RegisterRequest = request.into_inner();
 
         match RegisterHandler::handle(request) {
-            Ok(ref value) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value)); 
+            Ok(ref handler_result) => { 
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(handler_result)); 
             },
-            Err(ref value) => {
-                match value {
-                    MainErrorKind::EntityErrorKind(ref value) => {
-                        match value {
-                            EntityErrorKind::ApplicationUserErrorKind(ref value) => {
-                                match value {
+            Err(ref main_error_kind) => {
+                match main_error_kind {
+                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                        match entity_error_kind {
+                            EntityErrorKind::ApplicationUserErrorKind(ref application_user_error_kind) => {
+                                match application_user_error_kind {
                                     ApplicationUserErrorKind::AlreadyExist => {
                                         return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau01"));
                                     },
@@ -91,15 +91,15 @@ impl Authorization {
         let request: LogInRequest = request.into_inner();
         
         match LogInHandler::handle(request) {
-            Ok(ref value) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(value)); 
+            Ok(ref handler_result) => { 
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(handler_result)); 
             },
-            Err(ref value) => {
-                match value {
-                    MainErrorKind::EntityErrorKind(ref value) => {
-                        match value {
-                            EntityErrorKind::ApplicationUserErrorKind(ref value) => {
-                                match value {
+            Err(ref main_error_kind) => {
+                match main_error_kind {
+                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                        match entity_error_kind {
+                            EntityErrorKind::ApplicationUserErrorKind(ref application_user_error_kind) => {
+                                match application_user_error_kind {
                                     ApplicationUserErrorKind::NotFound => {
                                         return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau05"));
                                     },

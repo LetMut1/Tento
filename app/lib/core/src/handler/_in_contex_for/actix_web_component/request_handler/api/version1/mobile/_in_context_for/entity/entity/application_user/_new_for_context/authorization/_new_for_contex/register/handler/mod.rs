@@ -39,17 +39,17 @@ impl Handler {
 
                                 BaseSender::send_by_email(&application_user_registration_confirmation_token, application_user.get_email())?;
                             },
-                            Err(value) => {
+                            Err(diesel_error_kind) => {
                                 connection_manager.rollback_transaction()?;
 
-                                return Err(value)?;
+                                return Err(diesel_error_kind)?;
                             }
                         };
                     },
-                    Err(value) => {
+                    Err(diesel_error_kind) => {
                         connection_manager.rollback_transaction()?;
 
-                        return Err(value)?;
+                        return Err(diesel_error_kind)?;
                     }
                 };
             } else {

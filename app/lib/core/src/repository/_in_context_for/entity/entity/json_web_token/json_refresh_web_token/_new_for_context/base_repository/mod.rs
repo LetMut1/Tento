@@ -11,7 +11,7 @@ impl<'outer> BaseRepository {
     pub fn create(connection_manager: &'outer ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Result<(), DieselErrorKind> {
         match diesel::insert_into(json_refresh_web_token::table).values(New::new(json_refresh_web_token)).execute(connection_manager.get_connection()) {
             Ok(_) => { return Ok(()); },
-            Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
         };
     }
 }

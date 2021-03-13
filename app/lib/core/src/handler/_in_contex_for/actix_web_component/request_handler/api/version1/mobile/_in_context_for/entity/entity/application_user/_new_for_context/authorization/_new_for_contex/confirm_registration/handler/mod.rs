@@ -13,14 +13,13 @@
 // pub struct Handler;
 
 // impl<'outer> Handler {
-//     pub fn handle(request: &'outer Request) -> Result<HandlerResult, MainErrorKind> {
+//     pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
 //         let mut connection_manager: ConnectionManager = ConnectionManager::new();
 //         connection_manager.establish_connection()?;
 
 //         match ApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())? {
-//             Some(ref value) => {
-//                 let application_user: ApplicationUser<'_> = ApplicationUser::new_from_model(value);
-//                 if !application_user.is_confirmed() {
+//             Some(value) => {
+//                 if !value.is_confirmed() {
 //                     match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_application_user_id(&connection_manager, application_user.get_id().get_value())? {
 //                         Some(ref value) => {
 //                             let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> = ApplicationUserRegistrationConfirmationToken::new_from_model(value);

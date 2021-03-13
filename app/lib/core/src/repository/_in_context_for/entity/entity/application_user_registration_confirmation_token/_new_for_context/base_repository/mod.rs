@@ -17,20 +17,20 @@ impl<'outer> BaseRepository {
     pub fn create(connection_manager: &'outer ConnectionManager, application_user_registration_confirmation_token: &'outer ApplicationUserRegistrationConfirmationToken<'outer>) -> Result<(), DieselErrorKind> {
         match diesel::insert_into(application_user_registration_confirmation_token::table).values(New::new(application_user_registration_confirmation_token)).execute(connection_manager.get_connection()) {
             Ok(_) => { return Ok(()); },
-            Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
         };
     }
 
     pub fn get_by_application_user_id(connection_manager: &'outer ConnectionManager, application_user_id: &'outer Uuid) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'outer>>, DieselErrorKind> {
         match application_user_registration_confirmation_token::table.filter(application_user_registration_confirmation_token::application_user_id.eq(application_user_id))
             .get_result::<Existing>(connection_manager.get_connection()).optional() {
-            Ok(value) => { 
-                match value {
-                    Some(value) => { return Ok(Some(ApplicationUserRegistrationConfirmationToken::new_from_model(value))); },
+            Ok(existing) => { 
+                match existing {
+                    Some(existing) => { return Ok(Some(ApplicationUserRegistrationConfirmationToken::new_from_model(existing))); },
                     None => { return Ok(None); }
                 };
              },
-            Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
         };
     }
 }

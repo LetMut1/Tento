@@ -21,13 +21,13 @@ impl<'this> ConnectionManager {
             Some(_) => { panic!("Logic error, PgConnection is already exist"); }, // TODO error
             None => { 
                 match PgConnection::establish("postgres://root:password@postgresql/mem_is") {  // TODO from env
-                    Ok(value) => {
-                        self.pg_connection = Some(value);
+                    Ok(pg_connection) => {
+                        self.pg_connection = Some(pg_connection);
 
                         return Ok(());
                     },
-                    Err(value) => {
-                        return Err(ConnectionErrorKind::Postgresql(PostgresqlConnectionErrorKind::new_can_not_establish(value, None)));
+                    Err(connection_error) => {
+                        return Err(ConnectionErrorKind::Postgresql(PostgresqlConnectionErrorKind::new_can_not_establish(connection_error, None)));
                     }
                 };
              }
@@ -43,17 +43,17 @@ impl<'this> ConnectionManager {
 
     pub fn get_connection(&'this self) -> &'this PgConnection {
         match self.pg_connection {
-            Some(ref value) => { return value; },
+            Some(ref pg_connection) => { return pg_connection; },
             None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
         };
     }
 
     pub fn  begin_transaction(&'this self) -> Result<(), DieselErrorKind> {
         match self.pg_connection {
-            Some(ref value) => { 
-                match value.transaction_manager().begin_transaction(value) {
+            Some(ref pg_connection) => { 
+                match pg_connection.transaction_manager().begin_transaction(pg_connection) {
                     Ok(_) => { return Ok(()); },
-                    Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+                    Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
                 };
              },
             None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
@@ -62,10 +62,10 @@ impl<'this> ConnectionManager {
 
     pub fn  commit_transaction(&'this self) -> Result<(), DieselErrorKind> {
         match self.pg_connection {
-            Some(ref value) => { 
-                match value.transaction_manager().commit_transaction(value) {
+            Some(ref pg_connection) => { 
+                match pg_connection.transaction_manager().commit_transaction(pg_connection) {
                     Ok(_) => { return Ok(()); },
-                    Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+                    Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
                 };
              },
             None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
@@ -74,10 +74,10 @@ impl<'this> ConnectionManager {
 
     pub fn  rollback_transaction(&'this self) -> Result<(), DieselErrorKind> {
         match self.pg_connection {
-            Some(ref value) => { 
-                match value.transaction_manager().rollback_transaction(value) {
+            Some(ref pg_connection) => { 
+                match pg_connection.transaction_manager().rollback_transaction(pg_connection) {
                     Ok(_) => { return Ok(()); },
-                    Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+                    Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
                 };
              },
             None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error

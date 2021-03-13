@@ -20,10 +20,10 @@ impl Handler {
         connection_manager.establish_connection()?;
 
         match ApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())? {
-            Some(value) => {
-                if  PasswordEncoder::is_valid(request.get_password(), value.get_passord_hash()) {
-                    if value.is_confirmed() {
-                        let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(&value, DeviceId::new(request.device_id));
+            Some(application_user) => {
+                if  PasswordEncoder::is_valid(request.get_password(), application_user.get_passord_hash()) {
+                    if application_user.is_confirmed() {
+                        let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(&application_user, DeviceId::new(request.device_id));
 
                         JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
 

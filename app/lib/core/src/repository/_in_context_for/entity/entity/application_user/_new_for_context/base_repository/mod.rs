@@ -16,40 +16,40 @@ impl<'outer> BaseRepository {
     pub fn create(connection_manager: &'outer ConnectionManager, application_user: &'outer ApplicationUser) -> Result<(), DieselErrorKind> {
         match diesel::insert_into(application_user::table).values(New::new(application_user)).execute(connection_manager.get_connection()) {   // TODO нужно ли обработать количество вернувшихся строк
             Ok(_) => { return Ok(()); },
-            Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
         };
     }
 
     pub fn is_exist_by_nickanme(connection_manager: &'outer ConnectionManager, nickname: &'outer str) -> Result<bool, DieselErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
         match diesel::select(dsl::exists(application_user::table.filter(application_user::nickname.eq(nickname)))).get_result::<bool>(connection_manager.get_connection()) { // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            Ok(value) => { return Ok(value); },
-            Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+            Ok(is_exist) => { return Ok(is_exist); },
+            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
         };
     }
 
     pub fn is_exist_by_email(connection_manager: &'outer ConnectionManager, email: &'outer str) -> Result<bool, DieselErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
         match diesel::select(dsl::exists(application_user::table.filter(application_user::email.eq(email)))).get_result::<bool>(connection_manager.get_connection()) { // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            Ok(value) => { return Ok(value); },
-            Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+            Ok(is_exist) => { return Ok(is_exist); },
+            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
         };
     }
 
     pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer str) -> Result<Option<ApplicationUser>, DieselErrorKind> {
         match application_user::table.filter(application_user::email.eq(email)).get_result::<Existing>(connection_manager.get_connection()).optional() {
-            Ok(value) => {
-                match value {
-                    Some(value) => { return Ok(Some(ApplicationUser::new_from_model(value))); },
+            Ok(existing) => {
+                match existing {
+                    Some(existing) => { return Ok(Some(ApplicationUser::new_from_model(existing))); },
                     None => { return Ok(None); }
                 };
             },
-            Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
         };
     }
 
     // pub fn delete(connection_manager: &'outer ConnectionManager, application_user: &'outer ApplicationUser<'outer>) -> Result<(), DieselErrorKind> {
     //     match diesel::delete(application_user::table.filter(application_user::id.eq(application_user.get_id().get_value()))).execute(connection_manager.get_connection()) {
     //         Ok(_) => { return Ok(()); },
-    //         Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
+    //         Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
     //     };
     // }
 }
