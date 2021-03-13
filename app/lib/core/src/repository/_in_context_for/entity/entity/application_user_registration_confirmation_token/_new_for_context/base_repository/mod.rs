@@ -21,10 +21,15 @@ impl<'outer> BaseRepository {
         };
     }
 
-    pub fn get_by_application_user_id(connection_manager: &'outer ConnectionManager, application_user_id: &'outer Uuid) -> Result<Option<Existing>, DieselErrorKind> {
+    pub fn get_by_application_user_id(connection_manager: &'outer ConnectionManager, application_user_id: &'outer Uuid) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'outer>>, DieselErrorKind> {
         match application_user_registration_confirmation_token::table.filter(application_user_registration_confirmation_token::application_user_id.eq(application_user_id))
             .get_result::<Existing>(connection_manager.get_connection()).optional() {
-            Ok(value) => { return Ok(value); },
+            Ok(value) => { 
+                match value {
+                    Some(value) => { return Ok(Some(ApplicationUserRegistrationConfirmationToken::new_from_model(value))); },
+                    None => { return Ok(None); }
+                };
+             },
             Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
         };
     }

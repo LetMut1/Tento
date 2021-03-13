@@ -34,9 +34,14 @@ impl<'outer> BaseRepository {
         };
     }
 
-    pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer str) -> Result<Option<Existing>, DieselErrorKind> {
+    pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer str) -> Result<Option<ApplicationUser>, DieselErrorKind> {
         match application_user::table.filter(application_user::email.eq(email)).get_result::<Existing>(connection_manager.get_connection()).optional() {
-            Ok(value) => { return Ok(value); },
+            Ok(value) => {
+                match value {
+                    Some(value) => { return Ok(Some(ApplicationUser::new_from_model(value))); },
+                    None => { return Ok(None); }
+                };
+            },
             Err(value) => { return Err(DieselErrorKind::new_any(value, None)); }
         };
     }
