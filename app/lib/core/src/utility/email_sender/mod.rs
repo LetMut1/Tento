@@ -14,7 +14,7 @@ use std::convert::Into;
 pub struct EmailSender;
 
 impl<'outer> EmailSender {
-    pub fn send(subject: String, body: String, to: String) -> Result<(), EmailErrorKind> {
+    pub fn send(subject: &'outer str, body: String, to: &'outer str) -> Result<(), EmailErrorKind> {
         let email: Email;
 
         match EmailBuilder::new()

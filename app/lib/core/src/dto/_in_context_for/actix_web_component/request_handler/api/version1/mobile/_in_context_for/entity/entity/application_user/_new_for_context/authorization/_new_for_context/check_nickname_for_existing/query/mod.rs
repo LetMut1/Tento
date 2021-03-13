@@ -6,7 +6,7 @@ pub struct Query {
 }
 
 impl<'this> Query {
-    pub fn get_nickname(&'this self) -> &'this String {
-        return &self.nickname;
+    pub fn get_nickname(&'this self) -> &'this str {
+        return self.nickname.as_str();
     }
 }

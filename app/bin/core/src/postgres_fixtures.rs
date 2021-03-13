@@ -6,7 +6,7 @@
 // use self_::entity::entity::application_user::ApplicationUser;
 
 
-fn main() -> () {       // TODO delete from CargoToml
+fn main() -> () { 
     // let mut application_user_registry: Vec<ApplicationUser<'LIFETIME>> = vec![];
     
     // for i in 1..1000 {
@@ -19,6 +19,6 @@ fn main() -> () {       // TODO delete from CargoToml
     // .values(&application_user_registry)
     // .execute(&PgConnection::establish("postgres://root:password@postgresql/mem_is").expect(&format!("Error connecting")))
     // .expect("Error saving new post");
-    
+
     return ();
 }

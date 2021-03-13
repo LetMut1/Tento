@@ -9,15 +9,15 @@ use uuid::Uuid;
 #[table_name = "application_user"]
 pub struct New<'outer> {                    // TODO описать id Аттрибутами
     id: &'outer Uuid,
-    email: &'outer String,
-    nickname: &'outer String,
-    password_hash: &'outer String,
+    email: &'outer str,
+    nickname: &'outer str,
+    password_hash: &'outer str,
     created_at: &'outer ChronoDateTime<Utc>,
     confirmed: bool
 }
 
 impl<'outer> New<'outer> {
-    pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
+    pub fn new(application_user: &'outer ApplicationUser) -> Self {
         return Self {
             id: application_user.get_id().get_value(),
             email: application_user.get_email().get_value(),

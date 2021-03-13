@@ -10,8 +10,8 @@ use uuid::Uuid;
 pub struct New<'outer> {
     id: &'outer Uuid,
     application_user_id: &'outer Uuid,
-    device_id: &'outer String,
-    value: &'outer String,
+    device_id: &'outer str,
+    value: &'outer str,
     created_at: &'outer ChronoDateTime<Utc>,
     expired_at: &'outer ChronoDateTime<Utc>
 }

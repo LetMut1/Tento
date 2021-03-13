@@ -6,7 +6,7 @@ pub struct Query {
 }
 
 impl<'this> Query {
-    pub fn get_email(&'this self) -> &'this String {
-        return &self.email;
+    pub fn get_email(&'this self) -> &'this str {
+        return self.email.as_str();
     }
 }

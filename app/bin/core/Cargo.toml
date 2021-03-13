@@ -15,3 +15,9 @@ path = "./src/postgres_fixtures.rs"
 [dependencies]
 actix-web = { version = "3.3.2" }
 core_lib = { path = "./../../lib/core", version = "0.1.0" }
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3

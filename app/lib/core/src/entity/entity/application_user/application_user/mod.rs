@@ -1,4 +1,4 @@
-use crate::resourse_model::_in_context_for::entity::entity::application_user::_new_for_context::existing::Existing;
+use crate::dto::resourse_model::_in_context_for::entity::entity::application_user::_new_for_context::existing::Existing;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::core::confirmed::Confirmed;
@@ -7,37 +7,36 @@ use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::entity::entity::application_user::core::password_hash::PasswordHash;
 use crate::entity::entity::application_user::core::password::Password;
 use crate::utility::_in_context_for::entity::entity::application_user::core::password::_new_for_context::password_encoder::PasswordEncoder;
-use maybe_owned::MaybeOwned;
 
-pub struct ApplicationUser<'outer> {
-    id: UuidV4<'outer>,
-    email: Email<'outer>,
-    nickname: Nickname<'outer>,
-    password_hash: PasswordHash<'outer>,
-    created_at: DateTime<'outer>,           // TODO  Roles
+pub struct ApplicationUser {
+    id: UuidV4,
+    email: Email,
+    nickname: Nickname,
+    password_hash: PasswordHash,
+    created_at: DateTime,           // TODO  Roles
     confirmed: Confirmed
 }
 
-impl<'this, 'outer: 'this> ApplicationUser<'outer> {
-    pub fn new(email: &'outer String, nickname: &'outer String, password: &'outer String) -> Self {
+impl<'this> ApplicationUser {
+    pub fn new(email: String, nickname: String, password: String) -> Self {
         return Self {
             id: UuidV4::new(),
-            email: Email::new(MaybeOwned::Borrowed(email)),
-            nickname: Nickname::new(MaybeOwned::Borrowed(nickname)),
-            password_hash: PasswordHash::new(MaybeOwned::Owned(PasswordEncoder::encode(password))),
+            email: Email::new(email),
+            nickname: Nickname::new(nickname),
+            password_hash: PasswordHash::new(PasswordEncoder::encode(&password)),
             created_at: DateTime::new(),
             confirmed: Confirmed::new(false)
         };
     }
 
-    pub fn new_from_model(existing: &'outer Existing) -> Self {
+    pub fn new_from_model(existing: Existing) -> Self {
         return Self {
-            id: UuidV4::new_from_uuid(existing.get_id()),
-            email: Email::new(MaybeOwned::Borrowed(existing.get_emal())),
-            nickname: Nickname::new(MaybeOwned::Borrowed(existing.get_nickname())),
-            password_hash: PasswordHash::new(MaybeOwned::Borrowed(existing.get_password_hash())),
-            created_at: DateTime::new_from_date_time(MaybeOwned::Borrowed(existing.get_created_at())),
-            confirmed: Confirmed::new(existing.get_confirmed())
+            id: UuidV4::new_from_uuid(existing.id),
+            email: Email::new(existing.email),
+            nickname: Nickname::new(existing.nickname),
+            password_hash: PasswordHash::new(existing.password_hash),
+            created_at: DateTime::new_from_date_time(existing.created_at),
+            confirmed: Confirmed::new(existing.confirmed)
         };
     }
 
@@ -45,41 +44,41 @@ impl<'this, 'outer: 'this> ApplicationUser<'outer> {
         return (&self.confirmed).get_value();
     }
 
-    pub fn set_email(&'this mut self, email: Email<'outer>) -> &'this mut Self {
+    pub fn set_email(&'this mut self, email: Email) -> &'this mut Self {
         self.email = email;
 
         return self;
     }
 
-    pub fn set_nickname(&'this mut self, nickname: Nickname<'outer>) -> &'this mut Self {
+    pub fn set_nickname(&'this mut self, nickname: Nickname) -> &'this mut Self {
         self.nickname = nickname;
 
         return self;
     }
 
-    pub fn set_password(&'this mut self, password: Password<'outer>) -> &'this mut Self {
-        self.password_hash = PasswordHash::new(MaybeOwned::Owned(PasswordEncoder::encode(password.get_value())));
+    pub fn set_password(&'this mut self, password: Password) -> &'this mut Self {
+        self.password_hash = PasswordHash::new(PasswordEncoder::encode(password.get_value()));
 
         return self;
     }
 
-    pub fn get_id(&'this self) -> &'this UuidV4<'outer> {
+    pub fn get_id(&'this self) -> &'this UuidV4 {
         return &self.id;
     }
 
-    pub fn get_email(&'this self) -> &'this Email<'outer> {
+    pub fn get_email(&'this self) -> &'this Email {
         return &self.email;
     }
 
-    pub fn get_nickname(&'this self) -> &'this Nickname<'outer> {
+    pub fn get_nickname(&'this self) -> &'this Nickname {
         return &self.nickname;
     }
 
-    pub fn get_passord_hash(&'this self) -> &'this PasswordHash<'outer> {
+    pub fn get_passord_hash(&'this self) -> &'this PasswordHash {
         return &self.password_hash;
     }
 
-    pub fn get_created_at(&'this self) -> &'this DateTime<'outer> {
+    pub fn get_created_at(&'this self) -> &'this DateTime {
         return &self.created_at;
     }
 

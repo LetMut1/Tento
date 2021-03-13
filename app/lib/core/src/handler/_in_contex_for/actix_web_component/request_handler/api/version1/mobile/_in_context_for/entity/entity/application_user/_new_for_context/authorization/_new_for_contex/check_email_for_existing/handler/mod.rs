@@ -6,8 +6,8 @@ use crate::utility::_in_context_for::diesel_component::_new_for_context::postgre
 
 pub struct Handler;
 
-impl<'outer> Handler {
-    pub fn handle(query: &'outer Query) -> Result<HandlerResult, MainErrorKind> {
+impl Handler {
+    pub fn handle(query: Query) -> Result<HandlerResult, MainErrorKind> {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
