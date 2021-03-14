@@ -1,0 +1,16 @@
+use crate::entity::entity::application_user::core::email::Email;
+use crate::entity::entity::pre_registered_application_user_registration_confirmation_token::pre_registered_application_user_registration_confirmation_token::PreRegisteredApplicationUserRegistrationConfirmationToken;
+use crate::error::main_error_kind::core::_in_context_for::utility::email_sender::_new_for_context::email_error_kind::EmailErrorKind;
+use crate::utility::email_sender::EmailSender;
+
+pub struct BaseSender;
+
+impl<'outer> BaseSender {
+    pub fn send_by_email(pre_registered_application_user_registration_confirmation_token: &'outer PreRegisteredApplicationUserRegistrationConfirmationToken, email: &'outer Email) -> Result<(), EmailErrorKind> {
+        EmailSender::send(
+            "Registration confirmation", "Your code: ".to_string() + pre_registered_application_user_registration_confirmation_token.get_value().get_value(), email.get_value()
+        )?;
+
+        return Ok(());
+    }
+}

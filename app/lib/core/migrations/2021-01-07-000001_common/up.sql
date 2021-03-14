@@ -1,25 +1,28 @@
+CREATE TABLE pre_confirmed_application_user ( 
+    id UUID NOT NULL,
+    email VARCHAR NOT NULL
+    PRIMARY KEY (id)
+);
 CREATE TABLE application_user ( 
     id UUID NOT NULL,
     email VARCHAR NOT NULL,
     nickname VARCHAR NOT NULL,
     password_hash VARCHAR NOT NULL,
     created_at TIMESTAMPTZ NOT NULL,
-    confirmed BOOLEAN NOT NULL,
     PRIMARY KEY (id)
 );
 -- // TODO On delete cascade (при удалении юзра должны удалятьсявсе зависимые таблицы)
--- // TODO Create Constraints !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-CREATE TABLE application_user_registration_confirmation_token (
+CREATE TABLE pre_registered_application_user_registration_confirmation_token (
     id UUID NOT NULL,
-    application_user_id UUID NOT NULL,  
+    pre_confirmed_application_user_id UUID NOT NULL,  
     -- // TODO application_user_id  - уникальность 
     value VARCHAR NOT NULL,
     expired_at TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (application_user_id) REFERENCES application_user (id)
+    FOREIGN KEY (pre_confirmed_application_user_id) REFERENCES pre_confirmed_application_user (id)
 );
 -- // TODO Create Constraints !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+-- // TODO Сделать индексы на внешние ключи ( посмотреть, где это нужно)
 
 
 

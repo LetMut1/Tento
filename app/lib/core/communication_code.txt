@@ -3,5 +3,4 @@ Entity:
         eau01 -> already exist,
         eau02 -> invalid email,
         eau03 -> wrong password,
-        eau04 -> not confirmed,
-        eau05 -> not found
+        eau04 -> not found

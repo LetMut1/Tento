@@ -2,9 +2,10 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Request {
-    pub email: String,
-    pub password: String,
-    pub nickname: String
+    email: String,
+    token: String,
+    pub nickname: String,
+    pub password: String
 }
 
 impl<'this> Request {
@@ -12,8 +13,8 @@ impl<'this> Request {
         return self.email.as_str();
     }
 
-    pub fn get_password(&'this self) -> &'this str {
-        return self.password.as_str();
+    pub fn get_token(&'this self) -> &'this str {
+        return self.token.as_str();
     }
 
     pub fn get_nickname(&'this self) -> &'this str {

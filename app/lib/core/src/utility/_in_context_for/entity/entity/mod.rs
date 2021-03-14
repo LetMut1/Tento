@@ -1,3 +1,3 @@
-pub mod apllication_user_registration_confirmation_token;
 pub mod application_user;
 pub mod json_web_token;
+pub mod pre_registered_apllication_user_registration_confirmation_token;

@@ -12,19 +12,17 @@ pub struct New<'outer> {                    // TODO описать id Аттри
     email: &'outer str,
     nickname: &'outer str,
     password_hash: &'outer str,
-    created_at: &'outer ChronoDateTime<Utc>,
-    confirmed: bool
+    created_at: &'outer ChronoDateTime<Utc>
 }
 
 impl<'outer> New<'outer> {
-    pub fn new(application_user: &'outer ApplicationUser) -> Self {
+    pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
         return Self {
             id: application_user.get_id().get_value(),
             email: application_user.get_email().get_value(),
             nickname: application_user.get_nickname().get_value(),
             password_hash: application_user.get_passord_hash().get_value(),
-            created_at: application_user.get_created_at().get_value(),
-            confirmed: application_user.get_confirmed().get_value()
+            created_at: application_user.get_created_at().get_value()
         };
     }
 }

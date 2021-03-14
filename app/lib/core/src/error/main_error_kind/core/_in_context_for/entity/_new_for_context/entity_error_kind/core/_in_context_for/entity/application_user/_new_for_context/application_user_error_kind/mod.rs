@@ -8,7 +8,6 @@ pub enum ApplicationUserErrorKind {
     AlreadyConfirmed,
     AlreadyExist,
     InvalidEmail,
-    NotConfirmed,
     NotFound,
     WrongPassword
 }

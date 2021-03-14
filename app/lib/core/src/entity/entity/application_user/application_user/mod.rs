@@ -1,50 +1,46 @@
 use crate::dto::resourse_model::_in_context_for::entity::entity::application_user::_new_for_context::existing::Existing;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
-use crate::entity::entity::application_user::core::confirmed::Confirmed;
 use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::entity::entity::application_user::core::password_hash::PasswordHash;
 use crate::entity::entity::application_user::core::password::Password;
+use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
+use std::borrow::Cow;
 
-pub struct ApplicationUser {
+pub struct ApplicationUser<'outer> {
     id: UuidV4,
-    email: Email,
+    email: Cow<'outer, Email>,
     nickname: Nickname,
     password_hash: PasswordHash,
-    created_at: DateTime,           // TODO  Roles
-    confirmed: Confirmed
+    created_at: DateTime           // TODO  Roles
 }
 
-impl<'this> ApplicationUser {
-    pub fn new(email: Email, nickname: Nickname, password: Password) -> Self {
+impl<'this, 'outer: 'this> ApplicationUser<'outer> {
+    pub fn new_from_pre_confirmed_application_user(
+        pre_confirmed_application_user: &'outer PreConfirmedApplicationUser, nickname: Nickname, password: Password
+    ) -> Self {
         return Self {
             id: UuidV4::new(),
-            email,
+            email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
             nickname,
             password_hash: PasswordHash::new_from_password(password),
-            created_at: DateTime::new(),
-            confirmed: Confirmed::new(false)
+            created_at: DateTime::new()
         };
     }
 
     pub fn new_from_model(existing: Existing) -> Self {
         return Self {
             id: UuidV4::new_from_uuid(existing.id),
-            email: Email::new(existing.email),
+            email: Cow::Owned(Email::new(existing.email)),
             nickname: Nickname::new(existing.nickname),
             password_hash: PasswordHash::new(existing.password_hash),
-            created_at: DateTime::new_from_date_time(existing.created_at),
-            confirmed: Confirmed::new(existing.confirmed)
+            created_at: DateTime::new_from_date_time(existing.created_at)
         };
     }
 
-    pub fn is_confirmed(&'this self) -> bool {
-        return (&self.confirmed).get_value();
-    }
-
     pub fn set_email(&'this mut self, email: Email) -> &'this mut Self {
-        self.email = email;
+        self.email = Cow::Owned(email);
 
         return self;
     }
@@ -66,7 +62,7 @@ impl<'this> ApplicationUser {
     }
 
     pub fn get_email(&'this self) -> &'this Email {
-        return &self.email;
+        return self.email.as_ref();
     }
 
     pub fn get_nickname(&'this self) -> &'this Nickname {
@@ -79,9 +75,5 @@ impl<'this> ApplicationUser {
 
     pub fn get_created_at(&'this self) -> &'this DateTime {
         return &self.created_at;
-    }
-
-    pub fn get_confirmed(&'this self) -> &'this Confirmed {
-        return &self.confirmed;
     }
 }

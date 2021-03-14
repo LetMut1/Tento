@@ -9,6 +9,5 @@ pub struct Existing {
     pub email: String,
     pub nickname: String,
     pub password_hash: String,
-    pub created_at: ChronoDateTime<Utc>,
-    pub confirmed: bool
+    pub created_at: ChronoDateTime<Utc>
 }
