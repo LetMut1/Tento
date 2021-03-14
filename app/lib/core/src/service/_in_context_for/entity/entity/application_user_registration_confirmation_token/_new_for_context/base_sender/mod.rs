@@ -1,5 +1,5 @@
-use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
+use crate::entity::entity::application_user::application_user::core::email::Email;
 use crate::error::main_error_kind::core::_in_context_for::utility::email_sender::_new_for_context::email_error_kind::EmailErrorKind;
 use crate::utility::email_sender::EmailSender;
 

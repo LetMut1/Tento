@@ -1,3 +1,2 @@
-pub mod application_user;
 pub mod application_user_registration_confirmation_token;
-pub mod pre_confirmed_application_user;
+pub mod application_user;

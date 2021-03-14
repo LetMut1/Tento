@@ -1,2 +1,2 @@
 pub mod application_user;
-pub mod core;
+pub mod pre_confirmed_application_user;
