@@ -12,7 +12,7 @@ CREATE TABLE application_user (
     PRIMARY KEY (id)
 );
 -- // TODO On delete cascade (при удалении юзра должны удалятьсявсе зависимые таблицы)
-CREATE TABLE pre_registered_application_user_registration_confirmation_token (
+CREATE TABLE application_user_registration_confirmation_token (
     id UUID NOT NULL,
     pre_confirmed_application_user_id UUID NOT NULL,  
     -- // TODO application_user_id  - уникальность 

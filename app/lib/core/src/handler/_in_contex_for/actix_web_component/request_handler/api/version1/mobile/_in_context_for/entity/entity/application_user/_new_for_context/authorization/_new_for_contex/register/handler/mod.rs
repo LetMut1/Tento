@@ -5,12 +5,12 @@ use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::entity::entity::application_user::core::password::Password;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::pre_registered_application_user_registration_confirmation_token::_new_for_context::pre_registered_application_user_registration_confirmation_token_error_kind::PreRegisteredApplicationUserRegistrationConfirmationTokenErrorKind;
+use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error_kind::ApplicationUserRegistrationConfirmationTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::postgresql::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
-use crate::repository::_in_context_for::entity::entity::pre_registered_application_user_registration_confirmation_token::_new_for_context::postgresql::base_repository::BaseRepository as PreRegisteredApplicationUserRegistrationConfirmationTokenBaseRepository;
+use crate::repository::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
 
 pub struct Handler;
@@ -23,16 +23,16 @@ impl<'outer> Handler {
         if !ApplicationUserBaseRepository::is_exist_by_nickanme(&connection_manager, request.get_nickname())? {
             match PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())? {
                 Some(pre_confirmed_application_user) => {
-                    match PreRegisteredApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id().get_value())? {
-                        Some(pre_registered_application_user_registration_confirmation_token) => {
-                            if !pre_registered_application_user_registration_confirmation_token.is_expired() {
-                                if request.get_token() == pre_registered_application_user_registration_confirmation_token.get_value().get_value() {
+                    match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id().get_value())? {
+                        Some(application_user_registration_confirmation_token) => {
+                            if !application_user_registration_confirmation_token.is_expired() {
+                                if request.get_token() == application_user_registration_confirmation_token.get_value().get_value() {
                                    let application_user: ApplicationUser<'_> = ApplicationUser::new_from_pre_confirmed_application_user(&pre_confirmed_application_user, Nickname::new(request.nickname), Password::new(request.password));
 
                                    connection_manager.begin_transaction()?;
                                    match ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
                                         Ok(_) => {
-                                            match PreRegisteredApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&connection_manager, &pre_registered_application_user_registration_confirmation_token) {
+                                            match ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&connection_manager, &application_user_registration_confirmation_token) {
                                                 Ok(_) => {
                                                     match PreConfirmedApplicationUserBaseRepository::delete(&connection_manager, &pre_confirmed_application_user) {
                                                         Ok(_) => {
@@ -67,18 +67,18 @@ impl<'outer> Handler {
                                 } else {
                                     connection_manager.close_connection();
 
-                                    return Err(EntityErrorKind::PreRegisteredApplicationUserRegistrationConfirmationTokenErrorKind(PreRegisteredApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue))?;
+                                    return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue))?;
                                 }
                             } else {
                                 connection_manager.close_connection();
 
-                                return Err(EntityErrorKind::PreRegisteredApplicationUserRegistrationConfirmationTokenErrorKind(PreRegisteredApplicationUserRegistrationConfirmationTokenErrorKind::AlreadyExpired))?;
+                                return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::AlreadyExpired))?;
                             }
                         },
                         None => {
                             connection_manager.close_connection();
 
-                            return Err(EntityErrorKind::PreRegisteredApplicationUserRegistrationConfirmationTokenErrorKind(PreRegisteredApplicationUserRegistrationConfirmationTokenErrorKind::NotFound))?;
+                            return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound))?;
                         }
                     };
                 },

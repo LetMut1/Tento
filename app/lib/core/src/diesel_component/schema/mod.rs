@@ -23,7 +23,7 @@ pub mod public {
     table! {
         use diesel::sql_types::*;
 
-        pre_registered_application_user_registration_confirmation_token (id) {
+        application_user_registration_confirmation_token (id) {
             id -> Uuid,
             pre_confirmed_application_user_id -> Uuid,
             value -> Varchar,
@@ -44,12 +44,12 @@ pub mod public {
         }
     }
 
-    joinable!(pre_registered_application_user_registration_confirmation_token -> pre_confirmed_application_user (pre_confirmed_application_user_id));
+    joinable!(application_user_registration_confirmation_token -> pre_confirmed_application_user (pre_confirmed_application_user_id));
     joinable!(json_refresh_web_token -> application_user (application_user_id));
 
     allow_tables_to_appear_in_same_query!(
         application_user,
-        pre_registered_application_user_registration_confirmation_token,
+        application_user_registration_confirmation_token,
         json_refresh_web_token,
         pre_confirmed_application_user,
     );

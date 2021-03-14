@@ -2,7 +2,7 @@ use crate::dto::_in_context_for::actix_web_component::request_handler::api::vers
 use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::handler::_new_for_context::handler_result::HandlerResult;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserBaseRepository;
-use crate::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::postgresql::base_repository::BaseRepository as PreRegisteredApplicationUserBaseRepository;
+use crate::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::postgresql::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
 
 pub struct Handler;
@@ -14,7 +14,7 @@ impl Handler {
 
         let handler_result: HandlerResult = HandlerResult::new(
             ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, query.get_email())?
-            || PreRegisteredApplicationUserBaseRepository::is_exist_by_email(&connection_manager, query.get_email())?
+            || PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, query.get_email())?
         );
 
         connection_manager.close_connection();

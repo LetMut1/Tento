@@ -1,20 +1,20 @@
-use crate::dto::resourse_model::_in_context_for::entity::entity::pre_registered_application_user_registration_confirmation_token::_new_for_context::existing::Existing;
+use crate::dto::resourse_model::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::existing::Existing;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
-use crate::entity::entity::pre_registered_application_user_registration_confirmation_token::core::value::Value;
+use crate::entity::entity::application_user_registration_confirmation_token::core::value::Value;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
-use crate::utility::_in_context_for::entity::entity::pre_registered_apllication_user_registration_confirmation_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
+use crate::utility::_in_context_for::entity::entity::apllication_user_registration_confirmation_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use std::borrow::Cow;
 
-pub struct PreRegisteredApplicationUserRegistrationConfirmationToken<'outer> {
+pub struct ApplicationUserRegistrationConfirmationToken<'outer> {
     id: UuidV4,
     pre_confirmed_application_user_id: Cow<'outer, UuidV4>,
     value: Value,
     expired_at: DateTime
 }
 
-impl<'this, 'outer: 'this> PreRegisteredApplicationUserRegistrationConfirmationToken<'outer> {
+impl<'this, 'outer: 'this> ApplicationUserRegistrationConfirmationToken<'outer> {
     pub fn new(pre_confirmed_application_user: &'outer PreConfirmedApplicationUser) -> Self {
         return Self {
             id: UuidV4::new(),

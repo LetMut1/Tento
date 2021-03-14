@@ -4,16 +4,16 @@ use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
 
 #[derive(Debug)]
-pub enum PreRegisteredApplicationUserRegistrationConfirmationTokenErrorKind {
+pub enum ApplicationUserRegistrationConfirmationTokenErrorKind {
     AlreadyExpired,
     InvalidValue,
     NotFound
 }
 
-impl Display for PreRegisteredApplicationUserRegistrationConfirmationTokenErrorKind {
+impl Display for ApplicationUserRegistrationConfirmationTokenErrorKind {
     fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
         return Ok(());  // TODO 
     }
 }
 
-impl Error for PreRegisteredApplicationUserRegistrationConfirmationTokenErrorKind {}
+impl Error for ApplicationUserRegistrationConfirmationTokenErrorKind {}

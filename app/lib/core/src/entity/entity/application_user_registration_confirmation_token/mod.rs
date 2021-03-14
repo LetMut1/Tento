@@ -1,2 +1,2 @@
-pub mod json_web_token;
+pub mod core;
 pub mod application_user_registration_confirmation_token;

@@ -1,2 +1,0 @@
-pub mod core;
-pub mod pre_registered_application_user_registration_confirmation_token;
