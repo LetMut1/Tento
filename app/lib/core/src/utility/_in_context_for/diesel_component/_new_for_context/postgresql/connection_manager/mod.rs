@@ -37,7 +37,11 @@ impl<'this> ConnectionManager {
 
     pub fn close_connection(&'this mut self) -> () {
         match self.pg_connection {
-            Some(_) => { self.pg_connection = None; },
+            Some(_) => { 
+                self.pg_connection = None;
+
+                return ();
+            },
             None => { panic!("Logic error, PgConnection does not exist"); } // TODO error
         };
     }
@@ -87,11 +91,15 @@ impl<'this> ConnectionManager {
 
     fn close_connection_on_drop(&'this mut self) -> () {
         self.pg_connection = None;
+
+        return ();
     }
 }
 
 impl Drop for ConnectionManager {
-    fn drop(&mut self) {
+    fn drop(&mut self) -> () {
         self.close_connection_on_drop();
+
+        return ();
     }
 }
