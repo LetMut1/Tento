@@ -6,7 +6,7 @@ use crate::utility::email_sender::EmailSender;
 pub struct BaseSender;
 
 impl<'outer> BaseSender {
-    pub fn send_by_email(application_user_registration_confirmation_token: &'outer ApplicationUserRegistrationConfirmationToken, email: &'outer Email) -> Result<(), EmailErrorKind> {
+    pub fn send_by_email(application_user_registration_confirmation_token: &'outer ApplicationUserRegistrationConfirmationToken<'outer>, email: &'outer Email) -> Result<(), EmailErrorKind> {
         EmailSender::send(
             "Registration confirmation", "Your code: ".to_string() + application_user_registration_confirmation_token.get_value().get_value(), email.get_value()
         )?;
