@@ -10,11 +10,10 @@ use diesel::ExpressionMethods;
 use diesel::OptionalExtension;
 use diesel::QueryDsl;
 use diesel::RunQueryDsl;
-use uuid::Uuid;
 
 pub struct BaseRepository;
 
-impl<'outer> BaseRepository {
+impl<'outer, 'vague> BaseRepository {
     pub fn create(
         connection_manager: &'outer ConnectionManager, 
         application_user_registration_confirmation_token: &'outer ApplicationUserRegistrationConfirmationToken<'outer>
@@ -59,7 +58,7 @@ impl<'outer> BaseRepository {
 
     pub fn get_by_pre_confirmed_application_user(
         connection_manager: &'outer ConnectionManager, pre_confirmed_application_user: &'outer PreConfirmedApplicationUser
-    ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'outer>>, DieselErrorKind> {
+    ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'vague>>, DieselErrorKind> {
         match application_user_registration_confirmation_token_schema::table.filter(
             application_user_registration_confirmation_token_schema::pre_confirmed_application_user_id.eq(pre_confirmed_application_user.get_id().get_value())
         ).get_result::<Existing>(connection_manager.get_connection()).optional() {
