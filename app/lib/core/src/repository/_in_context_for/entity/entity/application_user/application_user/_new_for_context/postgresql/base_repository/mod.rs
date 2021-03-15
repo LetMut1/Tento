@@ -20,15 +20,6 @@ impl<'outer, 'vague> BaseRepository {
         };
     }
 
-    // pub fn update(
-    //     connection_manager: &'outer ConnectionManager, application_user: &'outer ApplicationUser<'outer>,
-    //     with_id: bool, with_email: bool, with_nickname: bool, with_password_hash: bool, with_confirmed: bool
-    // ) -> Result<(), DieselErrorKind> {
-    //     // let target = application_user_schema::table.filter(application_user_schema::id.eq(application_user.get_id().get_value()));
-    //     // diesel::update(target).set()
-
-    // }
-
     pub fn is_exist_by_nickanme(connection_manager: &'outer ConnectionManager, nickname: &'outer str) -> Result<bool, DieselErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
         match diesel::select(
             dsl::exists(application_user_schema::table.filter(application_user_schema::nickname.eq(nickname)))

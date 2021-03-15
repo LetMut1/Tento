@@ -4,6 +4,7 @@ use crate::error::main_error_kind::core::connection_error_kind::core::postgresql
 use diesel::Connection;
 use diesel::connection::TransactionManager;
 use diesel::pg::PgConnection;
+use std::ops::Drop;
 
 pub struct ConnectionManager {
     pg_connection: Option<PgConnection>,
@@ -82,5 +83,15 @@ impl<'this> ConnectionManager {
              },
             None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
         };
+    }
+
+    fn close_connection_on_drop(&'this mut self) -> () {
+        self.pg_connection = None;
+    }
+}
+
+impl Drop for ConnectionManager {
+    fn drop(&mut self) {
+        self.close_connection_on_drop();
     }
 }

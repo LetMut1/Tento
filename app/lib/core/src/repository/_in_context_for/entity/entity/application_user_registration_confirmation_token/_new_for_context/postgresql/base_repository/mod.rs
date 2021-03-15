@@ -38,6 +38,24 @@ impl<'outer> BaseRepository {
         };
     }
 
+    pub fn update(
+        connection_manager: &'outer ConnectionManager,
+        application_user_registration_confirmation_token: &'outer ApplicationUserRegistrationConfirmationToken<'outer>
+    ) -> Result<(), DieselErrorKind> {
+        match diesel::update(
+            application_user_registration_confirmation_token_schema::table
+            .filter(application_user_registration_confirmation_token_schema::id.eq(application_user_registration_confirmation_token.get_id().get_value()))
+        ).set(
+            (
+                application_user_registration_confirmation_token_schema::value.eq(application_user_registration_confirmation_token.get_value().get_value()),
+                application_user_registration_confirmation_token_schema::expired_at.eq(application_user_registration_confirmation_token.get_expired_at().get_value())
+            )
+        ).execute(connection_manager.get_connection()) {
+            Ok(_) => { return Ok(()); },
+            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+        };
+    }
+
     pub fn get_by_pre_confirmed_application_user_id(
         connection_manager: &'outer ConnectionManager, pre_confirmed_application_user_id: &'outer Uuid
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'outer>>, DieselErrorKind> {

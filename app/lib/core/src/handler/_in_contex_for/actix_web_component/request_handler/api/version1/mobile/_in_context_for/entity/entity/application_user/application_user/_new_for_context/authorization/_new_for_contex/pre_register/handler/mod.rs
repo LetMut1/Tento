@@ -37,8 +37,7 @@ impl Handler {
                                     connection_manager.close_connection();
 
                                     BaseSender::send_by_email(&application_user_registration_confirmation_token, pre_confirmed_application_user.get_email())?;
-
-                                                
+       
                                     return Ok(HandlerResult::new());
                                 },
                                 Err(diesel_error_kind) => {
@@ -55,13 +54,9 @@ impl Handler {
                         }
                     };
                 } else {
-                    connection_manager.close_connection();
-
                     return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;
                 }
             } else {
-                connection_manager.close_connection();
-
                 return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyExist))?;
             }
         } else {

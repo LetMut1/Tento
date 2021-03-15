@@ -32,14 +32,10 @@ impl Handler {
                     
                     return Ok(HandlerResult::new(SerializationFormResolver::serialize(&json_access_web_token)));
                 } else {
-                    connection_manager.close_connection();
-
                     return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::WrongPassword))?;
                 }
             },
             None => {
-                connection_manager.close_connection();
-                
                 return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound))?;
             }
         };

@@ -19,7 +19,7 @@ impl<'this, 'outer: 'this> ApplicationUserRegistrationConfirmationToken<'outer> 
         return Self {
             id: UuidV4::new(),
             pre_confirmed_application_user_id: Cow::Borrowed(pre_confirmed_application_user.get_id()),
-            value: Value::new(UuidV4::new().get_value().to_string()),       // TODO какое значени лучше генерировать
+            value: Value::new(UuidV4::new().get_value().to_string()),       // TODO создать генератор значения + метода Рефреш ниже
             expired_at: DateExpirationCreator::create()
         };
     }
@@ -31,6 +31,18 @@ impl<'this, 'outer: 'this> ApplicationUserRegistrationConfirmationToken<'outer> 
             value: Value::new(existing.value),
             expired_at: DateTime::new_from_date_time(existing.expired_at)
         };
+    }
+
+    pub fn refresh_value(&'this mut self) -> &'this mut Self {
+        self.value = Value::new(UuidV4::new().get_value().to_string());
+
+        return self;
+    }
+
+    pub fn refresh_expired_at(&'this mut self) -> &'this mut Self {
+        self.expired_at = DateExpirationCreator::create();
+
+        return self;
     }
 
     pub fn is_expired(&'this self) -> bool {

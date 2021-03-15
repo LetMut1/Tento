@@ -37,13 +37,11 @@ impl<'outer> Handler {
                                                     match PreConfirmedApplicationUserBaseRepository::delete(&connection_manager, &pre_confirmed_application_user) {
                                                         Ok(_) => {
                                                             connection_manager.commit_transaction()?;
-                                                            connection_manager.close_connection();
-
-                                                            return Ok(HandlerResult::new(true));
+                                                            
+                                                            return Ok(HandlerResult::new());
                                                         },
                                                         Err(diesel_error_kind) => {
                                                             connection_manager.rollback_transaction()?;
-                                                            connection_manager.close_connection();
              
                                                             return Err(diesel_error_kind)?;
                                                         }
@@ -51,7 +49,6 @@ impl<'outer> Handler {
                                                 }, 
                                                 Err(diesel_error_kind) => {
                                                     connection_manager.rollback_transaction()?;
-                                                    connection_manager.close_connection();
      
                                                     return Err(diesel_error_kind)?;
                                                 }
@@ -59,44 +56,31 @@ impl<'outer> Handler {
                                         },
                                         Err(diesel_error_kind) => {
                                             connection_manager.rollback_transaction()?;
-                                            connection_manager.close_connection();
 
                                             return Err(diesel_error_kind)?;
                                         }
                                     };
                                 } else {
-                                    connection_manager.close_connection();
-
                                     return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue))?;
                                 }
                             } else {
-                                connection_manager.close_connection();
-
                                 return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::AlreadyExpired))?;
                             }
                         },
                         None => {
-                            connection_manager.close_connection();
-
                             return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound))?;
                         }
                     };
                 },
                 None => {
                     if ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, request.get_email())? {
-                        connection_manager.close_connection();
-
                         return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyRegistered))?;
                     } else {
-                        connection_manager.close_connection();
-                        
                         return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::NotFound))?;
                     }
                 }
             };
         } else {
-            connection_manager.close_connection();
-
             return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;
         }
     }
