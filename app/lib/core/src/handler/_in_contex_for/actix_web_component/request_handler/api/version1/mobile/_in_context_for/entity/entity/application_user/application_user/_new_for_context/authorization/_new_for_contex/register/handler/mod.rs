@@ -23,7 +23,7 @@ impl<'outer> Handler {
         if !ApplicationUserBaseRepository::is_exist_by_nickanme(&connection_manager, request.get_nickname())? {
             match PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())? {
                 Some(pre_confirmed_application_user) => {
-                    match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id().get_value())? {
+                    match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user(&connection_manager, &pre_confirmed_application_user)? {
                         Some(application_user_registration_confirmation_token) => {
                             if !application_user_registration_confirmation_token.is_expired() {
                                 if request.get_token() == application_user_registration_confirmation_token.get_value().get_value() {
@@ -37,7 +37,7 @@ impl<'outer> Handler {
                                                     match PreConfirmedApplicationUserBaseRepository::delete(&connection_manager, &pre_confirmed_application_user) {
                                                         Ok(_) => {
                                                             connection_manager.commit_transaction()?;
-                                                            
+
                                                             return Ok(HandlerResult::new());
                                                         },
                                                         Err(diesel_error_kind) => {
