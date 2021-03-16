@@ -5,7 +5,8 @@ pub struct Request {
     email: String,
     token: String,
     pub nickname: String,
-    pub password: String
+    pub password: String,
+    pub device_id: String
 }
 
 impl<'this> Request {

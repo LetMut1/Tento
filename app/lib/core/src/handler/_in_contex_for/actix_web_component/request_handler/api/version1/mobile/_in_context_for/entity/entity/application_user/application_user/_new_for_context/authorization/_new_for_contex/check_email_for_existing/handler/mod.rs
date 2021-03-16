@@ -12,11 +12,13 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        return Ok(
-            HandlerResult::new(
-                ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, query.get_email())?
-                || PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, query.get_email())?
-            )
+        let handler_result: HandlerResult = HandlerResult::new(
+            ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, query.get_email())?
+            || PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, query.get_email())?
         );
+
+        connection_manager.close_connection();
+
+        return Ok(handler_result);
     }
 }

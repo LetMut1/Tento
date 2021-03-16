@@ -4,7 +4,7 @@ use actix_web::web::Form;
 use actix_web::web::Query;
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::query::Query as CheckEmailForExistingQuery;
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::query::Query as CheckNicknameForExistingQuery;
-use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::log_in::request::Request as LogInRequest;
+use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::request::Request as PreLogInRequest;
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_register::request::Request as PreRegisterRequest;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
@@ -12,7 +12,7 @@ use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_conte
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
-use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::log_in::handler::Handler as LogInHandler;
+use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::pre_log_in::handler::Handler as PreLogInHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::pre_register::handler::Handler as PreRegisterHandler;
 use crate::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_json_response_body_wrapper::StandartJsonResponseBodyWrapper;
 use crate::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_response_creator::StandartResponseCreator;
@@ -99,10 +99,10 @@ impl Authorization {
         };
     }
 
-    pub async fn log_in(request: Form<LogInRequest>) -> HttpResponse<Body> {
-        let request: LogInRequest = request.into_inner();
+    pub async fn pre_log_in(request: Form<PreLogInRequest>) -> HttpResponse<Body> {
+        let request: PreLogInRequest = request.into_inner();
         
-        match LogInHandler::handle(request) {
+        match PreLogInHandler::handle(request) {
             Ok(ref handler_result) => { 
                 return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(handler_result)); 
             },

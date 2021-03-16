@@ -1,5 +1,5 @@
-use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::log_in::request::Request;
-use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::log_in::handler::_new_for_context::handler_result::HandlerResult;
+use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::request::Request;
+use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::handler::_new_for_context::handler_result::HandlerResult;
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::entity::entity::json_web_token::json_refresh_web_token::core::device_id::DeviceId;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
@@ -28,9 +28,7 @@ impl Handler {
 
                     connection_manager.close_connection(); 
                     
-                    let json_access_web_token: JsonAccessWebToken<'_> = JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token);
-                    
-                    return Ok(HandlerResult::new(SerializationFormResolver::serialize(&json_access_web_token)));
+                    return Ok(HandlerResult::new(SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token))));
                 } else {
                     return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::WrongPassword))?;
                 }

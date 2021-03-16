@@ -11,6 +11,10 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        return Ok(HandlerResult::new(BaseRepository::is_exist_by_nickanme(&connection_manager, query.get_nickname())?));
+        let handler_result: HandlerResult = HandlerResult::new(BaseRepository::is_exist_by_nickanme(&connection_manager, query.get_nickname())?);
+        
+        connection_manager.close_connection();
+
+        return Ok(handler_result);
     }
 }

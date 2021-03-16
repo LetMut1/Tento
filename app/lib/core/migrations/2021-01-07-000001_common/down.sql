@@ -4,4 +4,5 @@ DROP TABLE json_refresh_web_token;
 
 DROP TABLE application_user_registration_confirmation_token;
 DROP TABLE pre_confirmed_application_user;
+DROP TABLE application_user_log_in_token;
 DROP TABLE application_user;

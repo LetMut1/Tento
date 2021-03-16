@@ -13,7 +13,7 @@ async fn main() -> Result<()> {
             web::scope("")              // TODO сделать правильно
             // .route("/user/register", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::register))
             .route("/user/cnfe", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::check_nickname_for_existing))
-            .route("/user/log_in", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::log_in))
+            .route("/user/pre_log_in", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::pre_log_in))
             .route("/user/cefe", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::check_email_for_existing))
         )
     }).bind("0.0.0.0:80")?.run().await;
