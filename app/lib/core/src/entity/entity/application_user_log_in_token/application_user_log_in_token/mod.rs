@@ -1,24 +1,27 @@
 use crate::dto::resourse_model::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::existing::Existing;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
-use crate::entity::entity::application_user_registration_confirmation_token::core::value::Value;
 use crate::entity::entity::application_user::application_user::application_user::ApplicationUser;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use crate::utility::_in_context_for::entity::entity::apllication_user_log_in_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use std::borrow::Cow;
+use super::core::device_id::DeviceId;
+use super::core::value::Value;
 
 pub struct ApplicationUserLogInToken<'outer> {
     id: UuidV4,
     application_user_id: Cow<'outer, UuidV4>,
+    device_id: DeviceId,
     value: Value,
     expired_at: DateTime
 }
 
 impl<'this, 'outer: 'this> ApplicationUserLogInToken<'outer> {
-    pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
+    pub fn new(application_user: &'outer ApplicationUser<'outer>, device_id: DeviceId) -> Self {
         return Self {
             id: UuidV4::new(),
             application_user_id: Cow::Borrowed(application_user.get_id()),
+            device_id,
             value: Value::new(UuidV4::new().get_value().to_string()),       // TODO создать генератор значения + метода Рефреш ниже
             expired_at: DateExpirationCreator::create()
         };
@@ -28,6 +31,7 @@ impl<'this, 'outer: 'this> ApplicationUserLogInToken<'outer> {
         return Self {
             id: UuidV4::new_from_uuid(existing.id),
             application_user_id: Cow::Owned(UuidV4::new_from_uuid(existing.application_user_id)),
+            device_id: DeviceId::new(existing.device_id),
             value: Value::new(existing.value),
             expired_at: DateTime::new_from_date_time(existing.expired_at)
         };
@@ -55,6 +59,10 @@ impl<'this, 'outer: 'this> ApplicationUserLogInToken<'outer> {
 
     pub fn get_application_user_id(&'this self) -> &'this UuidV4 {
         return self.application_user_id.as_ref();
+    }
+
+    pub fn get_device_id(&'this self) -> &'this DeviceId {
+        return &self.device_id;
     }
 
     pub fn get_value(&'this self) -> &'this Value {

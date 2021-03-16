@@ -10,6 +10,7 @@ use uuid::Uuid;
 pub struct New<'outer> {
     id: &'outer Uuid,
     application_user_id: &'outer Uuid,
+    device_id: &'outer str,
     value: &'outer str,
     expired_at: &'outer ChronoDateTime<Utc>
 }
@@ -19,6 +20,7 @@ impl<'outer> New<'outer> {
         return Self {
             id: application_user_log_in_token.get_id().get_value(),
             application_user_id: application_user_log_in_token.get_application_user_id().get_value(),
+            device_id: application_user_log_in_token.get_device_id().get_value(),
             value: application_user_log_in_token.get_value().get_value(),
             expired_at: application_user_log_in_token.get_expired_at().get_value()
         };

@@ -37,6 +37,7 @@ pub mod public {
         application_user_log_in_token (id) {
             id -> Uuid,
             application_user_id -> Uuid,
+            device_id -> Varchar,
             value -> Varchar,
             expired_at -> Timestamptz,
         }

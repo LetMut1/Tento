@@ -25,6 +25,7 @@ CREATE TABLE application_user_log_in_token (
     id UUID NOT NULL,
     application_user_id UUID NOT NULL,  
     -- // TODO application_user_id  - уникальность 
+    device_id VARCHAR NOT NULL,
     value VARCHAR NOT NULL,
     expired_at TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (id),
