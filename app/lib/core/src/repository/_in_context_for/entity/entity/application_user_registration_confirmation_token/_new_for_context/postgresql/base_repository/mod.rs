@@ -56,7 +56,7 @@ impl<'outer, 'vague> BaseRepository {
         };
     }
 
-    pub fn get_by_pre_confirmed_application_user(
+    pub fn get_by_pre_confirmed_application_user_id(
         connection_manager: &'outer ConnectionManager, pre_confirmed_application_user_id: &'outer UuidV4
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'vague>>, DieselErrorKind> {
         match application_user_registration_confirmation_token_schema::table.filter(

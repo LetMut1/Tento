@@ -13,7 +13,7 @@ pub struct ApplicationUser<'outer> {
     email: Cow<'outer, Email>,
     nickname: Nickname,
     password_hash: PasswordHash,
-    created_at: DateTime           // TODO  Roles
+    created_at: DateTime           // TODO  Roles   // TODO нужен ли массив ДевайсовId (Логин-flow)
 }
 
 impl<'this, 'outer: 'this> ApplicationUser<'outer> {

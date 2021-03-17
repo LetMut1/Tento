@@ -2,11 +2,11 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Request {
-    email: String,
-    token: String,
+    pub device_id: String,
     pub nickname: String,
     pub password: String,
-    pub device_id: String
+    email: String,
+    token: String
 }
 
 impl<'this> Request {
@@ -14,7 +14,7 @@ impl<'this> Request {
         return self.email.as_str();
     }
 
-    pub fn get_token(&'this self) -> &'this str {
+    pub fn get_token_value(&'this self) -> &'this str {
         return self.token.as_str();
     }
 

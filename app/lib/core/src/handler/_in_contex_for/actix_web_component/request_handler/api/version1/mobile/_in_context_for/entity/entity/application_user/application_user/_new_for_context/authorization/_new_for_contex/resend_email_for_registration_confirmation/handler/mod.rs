@@ -18,7 +18,7 @@ impl Handler {
 
         match PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())? {
             Some(pre_confirmed_application_user) => {
-                match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user(&connection_manager, pre_confirmed_application_user.get_id())? {
+                match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? {
                     Some(mut application_user_registration_confirmation_token) => {
                         if application_user_registration_confirmation_token.is_expired() {
                             application_user_registration_confirmation_token.refresh_value().refresh_expired_at();

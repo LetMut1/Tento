@@ -56,12 +56,24 @@ impl<'outer, 'vague> BaseRepository {
         };
     }
 
-    pub fn get_application_user_id(
+    pub fn is_exist_by_application_user_id(
         connection_manager: &'outer ConnectionManager, application_user_id: &'outer UuidV4
+    ) -> Result<bool, DieselErrorKind> {
+        match diesel::select(
+            dsl::exists(application_user_log_in_token_schema::table.filter(application_user_log_in_token_schema::application_user_id.eq(application_user_id.get_value())))
+        ).get_result::<bool>(connection_manager.get_connection()) { // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            Ok(is_exist) => { return Ok(is_exist); },
+            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+        };
+    }
+
+    pub fn get_by_device_id_and_value(
+        connection_manager: &'outer ConnectionManager, device_id: &'outer str, value: &'outer str,
     ) -> Result<Option<ApplicationUserLogInToken<'vague>>, DieselErrorKind> {
-        match application_user_log_in_token_schema::table.filter(
-            application_user_log_in_token_schema::application_user_id.eq(application_user_id.get_value())
-        ).get_result::<Existing>(connection_manager.get_connection()).optional() {
+        match application_user_log_in_token_schema::table
+        .filter(application_user_log_in_token_schema::device_id.eq(device_id))
+        .filter(application_user_log_in_token_schema::value.eq(value))
+        .get_result::<Existing>(connection_manager.get_connection()).optional() {
             Ok(existing) => { 
                 match existing {
                     Some(existing) => { return Ok(Some(ApplicationUserLogInToken::new_from_model(existing))); },

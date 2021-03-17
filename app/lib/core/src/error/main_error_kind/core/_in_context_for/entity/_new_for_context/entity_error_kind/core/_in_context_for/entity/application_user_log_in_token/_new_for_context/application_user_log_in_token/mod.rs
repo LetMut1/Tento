@@ -4,16 +4,16 @@ use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
 
 #[derive(Debug)]
-pub enum PreConfirmedApplicationUserErrorKind {
+pub enum ApplicationUserLogInTokenErrorKind {
     AlreadyExist,
-    AlreadyConfirmed,
-    NotFound,
+    AlreadyExpired,
+    NotFound
 }
 
-impl Display for PreConfirmedApplicationUserErrorKind {
+impl Display for ApplicationUserLogInTokenErrorKind {
     fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
         return Ok(());  // TODO 
     }
 }
 
-impl Error for PreConfirmedApplicationUserErrorKind {}
+impl Error for ApplicationUserLogInTokenErrorKind {}
