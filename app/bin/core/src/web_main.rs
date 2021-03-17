@@ -4,7 +4,7 @@ extern crate core_lib as core;
 use actix_web::App;
 use actix_web::HttpServer;
 use actix_web::web;
-use std::io::Result;      // TODO Везде ли Нужен МэйбиОвнед? при создании экземпляра в архументы можно положить сразу референс. - То есть, в основном, будут референсы
+use std::io::Result;
 
 #[actix_web::main]
 async fn main() -> Result<()> {
@@ -32,6 +32,7 @@ async fn main() -> Result<()> {
 // Do not remove this block until the problems have been fixed }
 
 // TODO #[inline] - нужно ли оптимизировать с помощью этого атрибута
+// TODO Проверить запросы в системы (Postgresql, Redis )
 // TODO Зaщита от SQL-инъекций
 // TODO Разобраться, что именно ФРэймворк параллелит, на каком этапе. (Параллелит ли это файл? - не должен)
 // TODO create async Database connections pool (r2d2) - нужно ли. r2d2 держит пул соендинений открытыми и раздает их на каждый хэндлер ( в контексте акстикс веб).
