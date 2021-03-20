@@ -1,4 +1,5 @@
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::request::Request;
+use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::handler::_new_for_context::result::Result as HandlerResult;
 use crate::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
@@ -14,7 +15,7 @@ use crate::utility::_in_context_for::entity::entity::application_user::applicati
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(request: Request) -> Result<(), MainErrorKind> {
+    pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
@@ -30,7 +31,7 @@ impl Handler {
 
                         BaseSender::send_by_email(&application_user_log_in_token, application_user.get_email())?;
 
-                        return Ok(());
+                        return Ok(HandlerResult::new(application_user.get_id().get_value().to_string()));
                     } else {
                         return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExist))?;
                     }

@@ -24,8 +24,8 @@ impl Authorization {
         let query: CheckEmailForExistingQuery = query.into_inner();
 
         match CheckEmailForExistingHanlder::handle(query) {
-            Ok(ref handler_result) => {
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(handler_result));
+            Ok(ref result) => {
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(result));
             },
             Err(ref main_error_kind) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -38,8 +38,8 @@ impl Authorization {
         let query: CheckNicknameForExistingQuery = query.into_inner();
 
         match CheckNicknameForExistingHanlder::handle(query) {
-            Ok(ref handler_result) => {
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(handler_result));
+            Ok(ref result) => {
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(result));
             },
             Err(ref main_error_kind) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -103,8 +103,8 @@ impl Authorization {
         let request: PreLogInRequest = request.into_inner();
         
         match PreLogInHandler::handle(request) {
-            Ok(_) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success()); 
+            Ok(ref result) => { 
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(result)); 
             },
             Err(ref main_error_kind) => {
                 match main_error_kind {

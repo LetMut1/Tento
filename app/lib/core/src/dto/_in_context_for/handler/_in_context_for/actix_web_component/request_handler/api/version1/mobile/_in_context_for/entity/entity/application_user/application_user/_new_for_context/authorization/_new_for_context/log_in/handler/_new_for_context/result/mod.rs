@@ -1,12 +1,12 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct HandlerResult {
+pub struct Result {
     #[serde(rename(serialize = "jawt"))]
     json_access_web_token: String
 }
 
-impl HandlerResult {
+impl Result {
     pub fn new(json_access_web_token: String) -> Self {
         return Self {
             json_access_web_token

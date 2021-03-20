@@ -4,5 +4,5 @@ pub mod log_in;
 pub mod pre_log_in;
 pub mod pre_register;
 pub mod register;
-pub mod resend_email_for_registration_confirmation;
+pub mod resend_email_for_registrer;
 pub mod resend_email_for_log_in;
