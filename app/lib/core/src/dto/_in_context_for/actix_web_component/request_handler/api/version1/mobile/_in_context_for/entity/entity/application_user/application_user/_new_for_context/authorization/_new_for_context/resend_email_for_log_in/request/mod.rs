@@ -4,8 +4,8 @@ use serde::Deserialize;
 pub struct Request {
     #[serde(rename(deserialize = "di"))]
     device_id: String,
-    #[serde(rename(deserialize = "tv"))]
-    token_value: String
+    #[serde(rename(deserialize = "e"))]
+    email: String
 }
 
 impl<'this> Request {
@@ -13,7 +13,7 @@ impl<'this> Request {
         return self.device_id.as_str();
     }
 
-    pub fn get_token_value(&'this self) -> &'this str {
-        return self.token_value.as_str();
+    pub fn get_email(&'this self) -> &'this str {
+        return self.email.as_str();
     }
 }

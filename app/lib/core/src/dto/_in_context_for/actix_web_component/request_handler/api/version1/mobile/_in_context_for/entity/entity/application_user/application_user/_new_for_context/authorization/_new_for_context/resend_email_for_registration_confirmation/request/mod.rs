@@ -2,6 +2,7 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Request {
+    #[serde(rename(deserialize = "e"))]
     email: String
 }
 

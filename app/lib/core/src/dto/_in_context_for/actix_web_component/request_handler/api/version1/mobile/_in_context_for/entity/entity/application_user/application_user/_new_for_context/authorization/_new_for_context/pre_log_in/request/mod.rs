@@ -2,8 +2,11 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Request {
+    #[serde(rename(deserialize = "e"))]
     email: String,
+    #[serde(rename(deserialize = "p"))]
     password: String,
+    #[serde(rename(deserialize = "di"))]
     pub device_id: String
 }
 

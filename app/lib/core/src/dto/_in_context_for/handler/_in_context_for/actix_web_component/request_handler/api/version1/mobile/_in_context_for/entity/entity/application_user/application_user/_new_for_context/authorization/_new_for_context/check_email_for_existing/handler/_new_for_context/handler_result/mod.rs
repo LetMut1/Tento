@@ -2,6 +2,7 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct HandlerResult {
+    #[serde(rename(serialize = "r"))]
     result: bool
 }
 

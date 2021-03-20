@@ -5,4 +5,5 @@ pub mod pre_log_in;
 pub mod pre_register;
 pub mod refresh_json_access_web_token_value;
 pub mod register;
+pub mod resend_email_for_log_in;
 pub mod resend_email_for_registration_confirmation;

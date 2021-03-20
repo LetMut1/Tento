@@ -25,7 +25,7 @@ impl Authorization {
 
         match CheckEmailForExistingHanlder::handle(query) {
             Ok(ref handler_result) => {
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(handler_result));
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(handler_result));
             },
             Err(ref main_error_kind) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -39,7 +39,7 @@ impl Authorization {
 
         match CheckNicknameForExistingHanlder::handle(query) {
             Ok(ref handler_result) => {
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(handler_result));
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(handler_result));
             },
             Err(ref main_error_kind) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -52,8 +52,8 @@ impl Authorization {
         let request: PreRegisterRequest = request.into_inner();
 
         match PreRegisterHandler::handle(request) {
-            Ok(ref handler_result) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(handler_result)); 
+            Ok(_) => { 
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success()); 
             },
             Err(ref main_error_kind) => {
                 match main_error_kind {
@@ -62,10 +62,10 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(ref application_user_error_kind) => {
                                 match application_user_error_kind {
                                     ApplicationUserErrorKind::AlreadyExist => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau01"));
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eau01"));
                                     },
                                     ApplicationUserErrorKind::InvalidEmail => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau02"));
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eau02"));
                                     }
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
@@ -76,7 +76,7 @@ impl Authorization {
                             EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
                                 match pre_confirmed_application_user_error_kind {
                                     PreConfirmedApplicationUserErrorKind::AlreadyExist => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau01"));
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eau01"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
@@ -103,8 +103,8 @@ impl Authorization {
         let request: PreLogInRequest = request.into_inner();
         
         match PreLogInHandler::handle(request) {
-            Ok(ref handler_result) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success(handler_result)); 
+            Ok(_) => { 
+                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success()); 
             },
             Err(ref main_error_kind) => {
                 match main_error_kind {
@@ -113,10 +113,10 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(ref application_user_error_kind) => {
                                 match application_user_error_kind {
                                     ApplicationUserErrorKind::NotFound => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau04"));
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eau04"));
                                     },
                                     ApplicationUserErrorKind::WrongPassword => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail("eau03"));
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eau03"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны

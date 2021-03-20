@@ -1,5 +1,4 @@
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_register::request::Request;
-use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_register::handler::_new_for_context::handler_result::HandlerResult;
 use crate::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::entity::entity::application_user::application_user::core::email::Email;
 use crate::entity::entity::application_user::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
@@ -17,7 +16,7 @@ use crate::utility::_in_context_for::entity::entity::application_user::applicati
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
+    pub fn handle(request: Request) -> Result<(), MainErrorKind> {
         if EmailSimpleValidator::is_valid(request.get_email()) {
             let mut connection_manager: ConnectionManager = ConnectionManager::new();
             connection_manager.establish_connection()?;
@@ -38,7 +37,7 @@ impl Handler {
 
                                     BaseSender::send_by_email(&application_user_registration_confirmation_token, pre_confirmed_application_user.get_email())?;
        
-                                    return Ok(HandlerResult::new());
+                                    return Ok(());
                                 },
                                 Err(diesel_error_kind) => {
                                     connection_manager.rollback_transaction()?;

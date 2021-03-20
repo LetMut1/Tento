@@ -1,22 +1,15 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct SuccessResult<'outer, S> 
-where
-    S: Serialize
-{
+pub struct SuccessResult {
+    #[serde(rename(serialize = "s"))]
     success: bool,
-    body: &'outer S
 }
 
-impl<'outer, S> SuccessResult<'outer, S>
-where 
-    S: Serialize
-{
-    pub fn new(body: &'outer S) -> Self {
+impl SuccessResult {
+    pub fn new() -> Self {
         return Self {
-            success: true,
-            body
+            success: true
         };
     }
 }
