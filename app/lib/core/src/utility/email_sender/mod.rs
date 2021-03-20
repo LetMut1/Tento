@@ -34,13 +34,21 @@ impl<'outer> EmailSender {
                 //             .transport();
 
                 //         match smtp_transport.send(email.into()) {
-                //             Ok(_) => { return Ok(()); },
-                //             Err(error) => { return Err(EmailErrorKind::new_sending(error, None)); }
+                //             Ok(_) => { 
+                //                 return Ok(()); 
+                //             },
+                //             Err(error) => { 
+                //                 return Err(EmailErrorKind::new_sending(error, None)); 
+                //             }
                 //         };
                 //     },
-                //     Err(error) => { return Err(EmailErrorKind::new_sending(error, None)); }
+                //     Err(error) => { 
+                //         return Err(EmailErrorKind::new_sending(error, None)); 
+                //     }
                 // };
                 // TODO uncomment }
+
+
 
 
 
@@ -61,8 +69,15 @@ impl<'outer> EmailSender {
                 // TODO delete under
 
 
+
+
+
+
+
             },
-            Err(error) => { return Err(EmailErrorKind::new_creating(error, None)); }
+            Err(error) => { 
+                return Err(EmailErrorKind::new_creating(error, None)); 
+            }
         };
     }
 }

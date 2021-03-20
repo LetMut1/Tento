@@ -16,8 +16,12 @@ impl<'outer> BaseRepository {
     pub fn create(connection_manager: &'outer ConnectionManager, pre_confirmed_application_user: &'outer PreConfirmedApplicationUser) -> Result<(), DieselErrorKind> {
         match diesel::insert_into(pre_confirmed_application_user_schema::table).values(New::new(pre_confirmed_application_user))
         .execute(connection_manager.get_connection()) {   // TODO нужно ли обработать количество вернувшихся строк
-            Ok(_) => { return Ok(()); },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Ok(_) => { 
+                return Ok(()); 
+            },
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 
@@ -26,8 +30,12 @@ impl<'outer> BaseRepository {
             pre_confirmed_application_user_schema::table
             .filter(pre_confirmed_application_user_schema::id.eq(pre_confirmed_application_user.get_id().get_value()))
         ).execute(connection_manager.get_connection()) {
-            Ok(_) => { return Ok(()); },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Ok(_) => { 
+                return Ok(()); 
+            },
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 
@@ -38,8 +46,12 @@ impl<'outer> BaseRepository {
                 .filter(pre_confirmed_application_user_schema::email.eq(email))
             )
         ).get_result::<bool>(connection_manager.get_connection()) { // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            Ok(is_exist) => { return Ok(is_exist); },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Ok(is_exist) => { 
+                return Ok(is_exist); 
+            },
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 
@@ -48,11 +60,17 @@ impl<'outer> BaseRepository {
         .get_result::<Existing>(connection_manager.get_connection()).optional() {
             Ok(existing) => {
                 match existing {
-                    Some(existing) => { return Ok(Some(PreConfirmedApplicationUser::new_from_model(existing))); },
-                    None => { return Ok(None); }
+                    Some(existing) => { 
+                        return Ok(Some(PreConfirmedApplicationUser::new_from_model(existing))); 
+                    },
+                    None => { 
+                        return Ok(None); 
+                    }
                 };
             },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 }

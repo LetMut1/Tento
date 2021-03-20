@@ -48,7 +48,9 @@ impl<'this> ConnectionManager {
 
     pub fn get_connection(&'this self) -> &'this PgConnection {
         match self.pg_connection {
-            Some(ref pg_connection) => { return pg_connection; },
+            Some(ref pg_connection) => { 
+                return pg_connection; 
+            },
             None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
         };
     }
@@ -57,8 +59,12 @@ impl<'this> ConnectionManager {
         match self.pg_connection {
             Some(ref pg_connection) => { 
                 match pg_connection.transaction_manager().begin_transaction(pg_connection) {
-                    Ok(_) => { return Ok(()); },
-                    Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+                    Ok(_) => { 
+                        return Ok(()); 
+                    },
+                    Err(error) => { 
+                        return Err(DieselErrorKind::new_any(error, None)); 
+                    }
                 };
              },
             None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
@@ -69,8 +75,12 @@ impl<'this> ConnectionManager {
         match self.pg_connection {
             Some(ref pg_connection) => { 
                 match pg_connection.transaction_manager().commit_transaction(pg_connection) {
-                    Ok(_) => { return Ok(()); },
-                    Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+                    Ok(_) => { 
+                        return Ok(()); 
+                    },
+                    Err(error) => { 
+                        return Err(DieselErrorKind::new_any(error, None)); 
+                    }
                 };
              },
             None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
@@ -81,8 +91,12 @@ impl<'this> ConnectionManager {
         match self.pg_connection {
             Some(ref pg_connection) => { 
                 match pg_connection.transaction_manager().rollback_transaction(pg_connection) {
-                    Ok(_) => { return Ok(()); },
-                    Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+                    Ok(_) => { 
+                        return Ok(()); 
+                    },
+                    Err(error) => { 
+                        return Err(DieselErrorKind::new_any(error, None)); 
+                    }
                 };
              },
             None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error

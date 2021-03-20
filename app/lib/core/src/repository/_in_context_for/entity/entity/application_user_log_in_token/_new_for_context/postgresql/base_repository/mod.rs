@@ -20,8 +20,12 @@ impl<'outer, 'vague> BaseRepository {
     ) -> Result<(), DieselErrorKind> {
         match diesel::insert_into(application_user_log_in_token_schema::table).values(New::new(application_user_log_in_token))
         .execute(connection_manager.get_connection()) {
-            Ok(_) => { return Ok(()); },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Ok(_) => { 
+                return Ok(()); 
+            },
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 
@@ -33,8 +37,12 @@ impl<'outer, 'vague> BaseRepository {
             application_user_log_in_token_schema::table
             .filter(application_user_log_in_token_schema::id.eq(application_user_log_in_token.get_id().get_value()))
         ).execute(connection_manager.get_connection()) {
-            Ok(_) => { return Ok(()); },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Ok(_) => { 
+                return Ok(()); 
+            },
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 
@@ -51,8 +59,12 @@ impl<'outer, 'vague> BaseRepository {
                 application_user_log_in_token_schema::expired_at.eq(application_user_log_in_token.get_expired_at().get_value())
             )
         ).execute(connection_manager.get_connection()) {
-            Ok(_) => { return Ok(()); },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Ok(_) => { 
+                return Ok(()); 
+            },
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 
@@ -62,8 +74,12 @@ impl<'outer, 'vague> BaseRepository {
         match diesel::select(
             dsl::exists(application_user_log_in_token_schema::table.filter(application_user_log_in_token_schema::application_user_id.eq(application_user_id.get_value())))
         ).get_result::<bool>(connection_manager.get_connection()) { // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            Ok(is_exist) => { return Ok(is_exist); },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Ok(is_exist) => { 
+                return Ok(is_exist); 
+            },
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 
@@ -76,11 +92,17 @@ impl<'outer, 'vague> BaseRepository {
         .get_result::<Existing>(connection_manager.get_connection()).optional() {
             Ok(existing) => { 
                 match existing {
-                    Some(existing) => { return Ok(Some(ApplicationUserLogInToken::new_from_model(existing))); },
-                    None => { return Ok(None); }
+                    Some(existing) => { 
+                        return Ok(Some(ApplicationUserLogInToken::new_from_model(existing))); 
+                    },
+                    None => { 
+                        return Ok(None); 
+                    }
                 };
              },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 }

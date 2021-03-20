@@ -20,8 +20,12 @@ impl<'outer, 'vague> BaseRepository {
     ) -> Result<(), DieselErrorKind> {
         match diesel::insert_into(application_user_registration_confirmation_token_schema::table).values(New::new(application_user_registration_confirmation_token))
         .execute(connection_manager.get_connection()) {
-            Ok(_) => { return Ok(()); },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Ok(_) => { 
+                return Ok(()); 
+            },
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 
@@ -33,8 +37,12 @@ impl<'outer, 'vague> BaseRepository {
             application_user_registration_confirmation_token_schema::table
             .filter(application_user_registration_confirmation_token_schema::id.eq(application_user_registration_confirmation_token.get_id().get_value()))
         ).execute(connection_manager.get_connection()) {
-            Ok(_) => { return Ok(()); },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Ok(_) => { 
+                return Ok(()); 
+            },
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 
@@ -51,8 +59,12 @@ impl<'outer, 'vague> BaseRepository {
                 application_user_registration_confirmation_token_schema::expired_at.eq(application_user_registration_confirmation_token.get_expired_at().get_value())
             )
         ).execute(connection_manager.get_connection()) {
-            Ok(_) => { return Ok(()); },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Ok(_) => { 
+                return Ok(()); 
+            },
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 
@@ -64,11 +76,17 @@ impl<'outer, 'vague> BaseRepository {
         ).get_result::<Existing>(connection_manager.get_connection()).optional() {
             Ok(existing) => { 
                 match existing {
-                    Some(existing) => { return Ok(Some(ApplicationUserRegistrationConfirmationToken::new_from_model(existing))); },
-                    None => { return Ok(None); }
+                    Some(existing) => { 
+                        return Ok(Some(ApplicationUserRegistrationConfirmationToken::new_from_model(existing))); 
+                    },
+                    None => { 
+                        return Ok(None); 
+                    }
                 };
              },
-            Err(error) => { return Err(DieselErrorKind::new_any(error, None)); }
+            Err(error) => { 
+                return Err(DieselErrorKind::new_any(error, None)); 
+            }
         };
     }
 }
