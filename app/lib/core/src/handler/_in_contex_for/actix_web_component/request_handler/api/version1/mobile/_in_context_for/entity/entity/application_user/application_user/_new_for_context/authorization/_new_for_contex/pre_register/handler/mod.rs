@@ -39,17 +39,17 @@ impl Handler {
        
                                     return Ok(());
                                 },
-                                Err(diesel_error_kind) => {
+                                Err(diesel_error) => {
                                     connection_manager.rollback_transaction()?;
 
-                                    return Err(diesel_error_kind)?;
+                                    return Err(diesel_error)?;
                                 }
                             };
                         },
-                        Err(diesel_error_kind) => {
+                        Err(diesel_error) => {
                             connection_manager.rollback_transaction()?;
 
-                            return Err(diesel_error_kind)?;
+                            return Err(diesel_error)?;
                         }
                     };
                 } else {

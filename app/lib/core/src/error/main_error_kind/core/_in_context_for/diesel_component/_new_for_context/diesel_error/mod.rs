@@ -1,0 +1,33 @@
+use diesel::result::Error as BaseDieselError;
+use std::convert::From;
+use std::error::Error;
+use std::fmt::Display;
+use std::fmt::Formatter;
+use std::fmt::Result as FmtResult;
+
+#[derive(Debug)]
+pub struct DieselError {
+    diesel_error: BaseDieselError
+}
+
+impl DieselError {
+    pub fn new(diesel_error: BaseDieselError) -> Self {
+        return Self {
+            diesel_error
+        };
+    }
+}
+
+impl Display for DieselError {
+    fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
+        return Ok(());  // TODO 
+    }
+}
+
+impl Error for DieselError {}
+
+impl From<BaseDieselError> for DieselError {
+    fn from(diesel_error: BaseDieselError) -> Self {
+        return Self::new(diesel_error);
+    }
+}

@@ -1,1 +1,1 @@
-pub mod diesel_error_kind;
+pub mod diesel_error;

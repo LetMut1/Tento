@@ -1,12 +1,13 @@
+use std::convert::From;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
-use super::core::postgresql::postgresql_connection_error_kind::PostgresqlConnectionErrorKind;
+use super::core::postgresql::postgresql_connection_error::PostgresqlConnectionError;
 
 #[derive(Debug)]
 pub enum ConnectionErrorKind {
-    Postgresql(PostgresqlConnectionErrorKind)
+    PostgresqlConnectionError(PostgresqlConnectionError)
 }
 
 impl Display for ConnectionErrorKind {
@@ -16,3 +17,9 @@ impl Display for ConnectionErrorKind {
 }
 
 impl Error for ConnectionErrorKind {}
+
+impl From<PostgresqlConnectionError> for ConnectionErrorKind {
+    fn from(postgresql_connection_error: PostgresqlConnectionError) -> Self {
+        return Self::PostgresqlConnectionError(postgresql_connection_error);
+    }
+}

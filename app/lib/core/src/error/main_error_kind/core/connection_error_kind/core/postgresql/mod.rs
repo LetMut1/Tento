@@ -1,1 +1,1 @@
-pub mod postgresql_connection_error_kind;
+pub mod postgresql_connection_error;

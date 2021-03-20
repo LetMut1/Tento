@@ -52,24 +52,24 @@ impl<'outer> Handler {
 
                                                             return Ok(HandlerResult::new(SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token))));
                                                         },
-                                                        Err(diesel_error_kind) => {
+                                                        Err(diesel_error) => {
                                                             connection_manager.rollback_transaction()?;
              
-                                                            return Err(diesel_error_kind)?;
+                                                            return Err(diesel_error)?;
                                                         }
                                                     };
                                                 }, 
-                                                Err(diesel_error_kind) => {
+                                                Err(diesel_error) => {
                                                     connection_manager.rollback_transaction()?;
      
-                                                    return Err(diesel_error_kind)?;
+                                                    return Err(diesel_error)?;
                                                 }
                                             };
                                         },
-                                        Err(diesel_error_kind) => {
+                                        Err(diesel_error) => {
                                             connection_manager.rollback_transaction()?;
 
-                                            return Err(diesel_error_kind)?;
+                                            return Err(diesel_error)?;
                                         }
                                     };
                                 } else {
