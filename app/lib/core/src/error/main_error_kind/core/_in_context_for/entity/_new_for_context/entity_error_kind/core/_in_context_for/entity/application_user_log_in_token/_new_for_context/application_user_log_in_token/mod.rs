@@ -7,6 +7,7 @@ use std::fmt::Result as FmtResult;
 pub enum ApplicationUserLogInTokenErrorKind {
     AlreadyExist,
     AlreadyExpired,
+    InvalidValue,
     NotFound
 }
 

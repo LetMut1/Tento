@@ -37,7 +37,7 @@ pub mod public {
         application_user_log_in_token (id) {
             id -> Uuid,
             application_user_id -> Uuid,
-            device_id -> Varchar,
+            device_id -> Uuid,
             value -> Varchar,
             expired_at -> Timestamptz,
         }
@@ -48,7 +48,7 @@ pub mod public {
 
         json_refresh_web_token (id) {
             id -> Uuid,
-            device_id -> Varchar,
+            device_id -> Uuid,
             value -> Varchar,
             application_user_id -> Uuid,
             expired_at -> Timestamptz,

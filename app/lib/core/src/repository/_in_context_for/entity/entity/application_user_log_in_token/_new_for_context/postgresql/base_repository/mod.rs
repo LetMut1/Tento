@@ -67,12 +67,12 @@ impl<'outer, 'vague> BaseRepository {
         };
     }
 
-    pub fn get_by_device_id_and_value(
-        connection_manager: &'outer ConnectionManager, device_id: &'outer str, value: &'outer str,
+    pub fn get_by_application_user_id_and_device_id(
+        connection_manager: &'outer ConnectionManager, application_user_id: &'outer UuidV4, device_id: &'outer UuidV4,
     ) -> Result<Option<ApplicationUserLogInToken<'vague>>, DieselErrorKind> {
         match application_user_log_in_token_schema::table
-        .filter(application_user_log_in_token_schema::device_id.eq(device_id))
-        .filter(application_user_log_in_token_schema::value.eq(value))
+        .filter(application_user_log_in_token_schema::application_user_id.eq(application_user_id.get_value()))
+        .filter(application_user_log_in_token_schema::device_id.eq(device_id.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional() {
             Ok(existing) => { 
                 match existing {

@@ -1,5 +1,6 @@
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::log_in::request::Request;
 use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::log_in::handler::_new_for_context::result::Result as HandlerResult;
+use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
@@ -18,37 +19,41 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        match ApplicationUserLogInTokenBaseRepository::get_by_device_id_and_value(&connection_manager, request.get_device_id(), request.get_token_value())? {
+        match ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(&connection_manager, &UuidV4::new_from_str(request.get_application_user_id()), &UuidV4::new_from_str(request.get_device_id()))? {
             Some(ref application_user_log_in_token) => {
-                if !application_user_log_in_token.is_expired() {
-                    let json_refresh_web_token: JsonRefreshWebToken<'_> = 
-                        JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), Cow::Borrowed(application_user_log_in_token.get_device_id()));
+                if application_user_log_in_token.get_value().get_value() == request.get_token_value() {
+                    if !application_user_log_in_token.is_expired() {
+                        let json_refresh_web_token: JsonRefreshWebToken<'_> = 
+                            JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), Cow::Borrowed(application_user_log_in_token.get_device_id()));
 
-                    connection_manager.begin_transaction()?;
-                    match ApplicationUserLogInTokenBaseRepository::delete(&connection_manager, application_user_log_in_token) {
-                        Ok(_) => {
-                            match JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token) {
-                                Ok(_) => {
-                                    connection_manager.commit_transaction()?;
-                                    connection_manager.close_connection();
+                        connection_manager.begin_transaction()?;
+                        match ApplicationUserLogInTokenBaseRepository::delete(&connection_manager, application_user_log_in_token) {
+                            Ok(_) => {
+                                match JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token) {
+                                    Ok(_) => {
+                                        connection_manager.commit_transaction()?;
+                                        connection_manager.close_connection();
 
-                                    return Ok(HandlerResult::new(SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token))));
-                                },
-                                Err(diesel_error_kind) => {
-                                    connection_manager.rollback_transaction()?;
-        
-                                    return Err(diesel_error_kind)?;
-                                }
-                            };
-                        },
-                        Err(diesel_error_kind) => {
-                            connection_manager.rollback_transaction()?;
+                                        return Ok(HandlerResult::new(SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token))));
+                                    },
+                                    Err(diesel_error_kind) => {
+                                        connection_manager.rollback_transaction()?;
+            
+                                        return Err(diesel_error_kind)?;
+                                    }
+                                };
+                            },
+                            Err(diesel_error_kind) => {
+                                connection_manager.rollback_transaction()?;
 
-                            return Err(diesel_error_kind)?;
-                        }
-                    };
+                                return Err(diesel_error_kind)?;
+                            }
+                        };
+                    } else {
+                        return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExpired))?;
+                    }
                 } else {
-                    return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExpired))?;
+                    return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::InvalidValue))?;
                 }
             },
             None => {

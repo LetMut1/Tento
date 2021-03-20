@@ -31,10 +31,9 @@ CREATE TABLE application_user_registration_confirmation_token (
 CREATE TABLE application_user_log_in_token (    
     id UUID NOT NULL,
     application_user_id UUID NOT NULL,  
-    -- // TODO device_id + value - уникальное
-    -- // TODO applicationuserid - индекс
+    -- // TODO applicationuserid + device_id- уникальное   ((как блокировать пользователя, если он делает перебор value?))
     -- // TODO удалять висящие кортежи (написать функцию либо через крон по бинарнику)
-    device_id VARCHAR NOT NULL,
+    device_id UUID NOT NULL,
     value VARCHAR NOT NULL,
     expired_at TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (id),
@@ -49,9 +48,8 @@ CREATE TABLE application_user_log_in_token (
 -- // TODO delete 
 CREATE TABLE json_refresh_web_token (   -- // TODO Redis
     id UUID NOT NULL,
-    device_id VARCHAR NOT NULL,
-    -- // TODO device_id + value- уникальное
-    -- // TODO applicationuserid - индексе
+    device_id UUID NOT NULL,
+    -- // TODO device_id + applicationuserid - уникальное
     value VARCHAR NOT NULL,
     application_user_id UUID NOT NULL,
     expired_at TIMESTAMPTZ NOT NULL,

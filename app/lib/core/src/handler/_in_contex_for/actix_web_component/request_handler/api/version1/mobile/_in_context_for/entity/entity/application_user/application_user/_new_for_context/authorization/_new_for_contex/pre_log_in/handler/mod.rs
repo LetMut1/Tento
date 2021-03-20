@@ -1,7 +1,7 @@
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::request::Request;
 use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::handler::_new_for_context::result::Result as HandlerResult;
+use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
@@ -23,7 +23,7 @@ impl Handler {
             Some(ref application_user) => {
                 if PasswordEncoder::is_valid(request.get_password(), application_user.get_passord_hash()) {
                     if !ApplicationUserLogInTokenBaseRepository::is_exist_by_application_user_id(&connection_manager, application_user.get_id())? {
-                        let application_user_log_in_token: ApplicationUserLogInToken<'_> = ApplicationUserLogInToken::new(application_user, DeviceId::new(request.device_id));
+                        let application_user_log_in_token: ApplicationUserLogInToken<'_> = ApplicationUserLogInToken::new(application_user, UuidV4::new_from_str(request.device_id.as_str()));
 
                         ApplicationUserLogInTokenBaseRepository::create(&connection_manager, &application_user_log_in_token)?;
 
