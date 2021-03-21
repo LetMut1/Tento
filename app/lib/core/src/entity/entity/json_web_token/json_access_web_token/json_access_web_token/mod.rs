@@ -1,4 +1,4 @@
-use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::payload::_new_fro_context::common_from::CommonFrom;
+use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::payload::_new_fro_context::common::Common;
 use crate::entity::entity::json_web_token::json_access_web_token::core::header::header::Header;
 use crate::entity::entity::json_web_token::json_access_web_token::core::payload::Payload;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
@@ -16,9 +16,9 @@ impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
         };
     }
 
-    pub fn new_from_payload_common_from(common_from: CommonFrom) -> Self {
+    pub fn new_from_payload_common(common: Common<'outer>) -> Self {
         return Self {
-            payload: Payload::new_from_common_from(common_from)
+            payload: Payload::new_from_common(common)
         };
     }
 

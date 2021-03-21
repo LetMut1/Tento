@@ -1,4 +1,4 @@
-use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::payload::_new_fro_context::common_from::CommonFrom;
+use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::payload::_new_fro_context::common::Common;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_web_token::json_refresh_web_token::core::value::Value;
@@ -23,12 +23,12 @@ impl<'this, 'outer: 'this> Payload<'outer> {
         };
     }
 
-    pub fn new_from_common_from(common_from: CommonFrom) -> Self {
+    pub fn new_from_common(common: Common<'outer>) -> Self {
         return Self {
-            application_user_id: Cow::Owned(UuidV4::new_from_str(common_from.application_user_id.as_str())),
-            application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_str(common_from.application_user_log_in_token_device_id.as_str())),
-            json_refresh_web_token_value: Cow::Owned(Value::new(common_from.json_refresh_web_token_value)),
-            exp: DateTime::new_from_string(common_from.exp.as_str())
+            application_user_id: Cow::Owned(UuidV4::new_from_str(common.application_user_id.as_str())),
+            application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_str(common.application_user_log_in_token_device_id.as_str())),
+            json_refresh_web_token_value: Cow::Owned(Value::new(common.json_refresh_web_token_value.into_owned())),
+            exp: DateTime::new_from_string(common.exp.as_str())
         };
     }
 
