@@ -1,6 +1,0 @@
-Entity:
-    ApplicationUser:
-        eau01 -> already exist,
-        eau02 -> invalid email,
-        eau03 -> wrong password,
-        eau04 -> not found

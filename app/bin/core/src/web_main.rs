@@ -10,7 +10,7 @@ use std::io::Result;
 async fn main() -> Result<()> {
     return HttpServer::new(|| {         // TODO переместить Scops в разные методы? 
         App::new().service(
-            web::scope("")              // TODO сделать правильно
+            web::scope("")              // TODO guards для роутов о наличии джвт 
             // .route("/user/register", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::register))
             .route("/user/cnfe", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::check_nickname_for_existing))
             .route("/user/pre_log_in", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::pre_log_in))
