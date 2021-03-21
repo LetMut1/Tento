@@ -2,7 +2,7 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Result {
-    #[serde(rename(serialize = "jawt"))]
+    #[serde(rename(serialize = "t"))]
     json_access_web_token: String
 }
 

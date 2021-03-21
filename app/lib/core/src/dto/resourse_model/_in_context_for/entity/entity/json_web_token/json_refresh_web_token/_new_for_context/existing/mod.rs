@@ -7,7 +7,7 @@ use uuid::Uuid;
 pub struct Existing {
     pub id: Uuid,
     pub application_user_id: Uuid,
-    pub device_id: Uuid,
+    pub application_user_log_in_token_device_id: Uuid,
     pub value: String,
     pub created_at: ChronoDateTime<Utc>,
     pub expired_at: ChronoDateTime<Utc>

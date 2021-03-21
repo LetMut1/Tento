@@ -9,7 +9,7 @@ use uuid::Uuid;
 pub struct JsonRefreshWebToken<'outer> {
     id: UuidV4,
     application_user_id: Cow<'outer, UuidV4>,
-    device_id: Cow<'outer, UuidV4>,
+    application_user_log_in_token_device_id: Cow<'outer, UuidV4>,
     value: Value,
     created_at: DateTime,    // TODO нужно ли это поле 
     expired_at: DateTime
@@ -20,7 +20,7 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {    // TODO Redis disc  
         return Self {
             id: UuidV4::new(),
             application_user_id: Cow::Borrowed(application_user_id),
-            device_id,
+            application_user_log_in_token_device_id: device_id,
             value: Value::new(Uuid::new_v4().to_string()),
             created_at: DateTime::new(),
             expired_at: DateExpirationCreator::create()
@@ -31,7 +31,7 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {    // TODO Redis disc  
         return Self {
             id: UuidV4::new_from_uuid(existing.id),
             application_user_id: Cow::Owned(UuidV4::new_from_uuid(existing.application_user_id)),
-            device_id: Cow::Owned(UuidV4::new_from_uuid(existing.device_id)),
+            application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_uuid(existing.application_user_log_in_token_device_id)),
             value: Value::new(existing.value),
             created_at: DateTime::new_from_date_time(existing.created_at),
             expired_at: DateTime::new_from_date_time(existing.expired_at)
@@ -58,8 +58,8 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {    // TODO Redis disc  
         return &self.application_user_id;
     }
 
-    pub fn get_device_id(&'this self) -> &'this UuidV4 {
-        return self.device_id.as_ref();
+    pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this UuidV4 {
+        return self.application_user_log_in_token_device_id.as_ref();
     }
 
     pub fn get_value(&'this self) -> &'this Value {

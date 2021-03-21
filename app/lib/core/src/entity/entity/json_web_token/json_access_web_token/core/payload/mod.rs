@@ -8,8 +8,8 @@ use std::borrow::Cow;
 
 pub struct Payload<'outer> {
     application_user_id: Cow<'outer, UuidV4>,
-    device_id: Cow<'outer, UuidV4>,
-    value: Cow<'outer, Value>,
+    application_user_log_in_token_device_id: Cow<'outer, UuidV4>,
+    json_refresh_web_token_value: Cow<'outer, Value>,
     exp: DateTime
 }
 
@@ -17,8 +17,8 @@ impl<'this, 'outer: 'this> Payload<'outer> {
     pub fn new_from_json_refresh_web_token(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
         return Self {
             application_user_id: Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
-            device_id: Cow::Borrowed(json_refresh_web_token.get_device_id()),
-            value: Cow::Borrowed(json_refresh_web_token.get_value()),
+            application_user_log_in_token_device_id: Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
+            json_refresh_web_token_value: Cow::Borrowed(json_refresh_web_token.get_value()),
             exp: DateExpirationCreator::create()
         };
     }
@@ -26,8 +26,8 @@ impl<'this, 'outer: 'this> Payload<'outer> {
     pub fn new_from_common_from(common_from: CommonFrom) -> Self {
         return Self {
             application_user_id: Cow::Owned(UuidV4::new_from_str(common_from.application_user_id.as_str())),
-            device_id: Cow::Owned(UuidV4::new_from_str(common_from.device_id.as_str())),
-            value: Cow::Owned(Value::new(common_from.json_refresh_web_token_value)),
+            application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_str(common_from.application_user_log_in_token_device_id.as_str())),
+            json_refresh_web_token_value: Cow::Owned(Value::new(common_from.json_refresh_web_token_value)),
             exp: DateTime::new_from_string(common_from.exp.as_str())
         };
     }
@@ -36,12 +36,12 @@ impl<'this, 'outer: 'this> Payload<'outer> {
         return &self.application_user_id;
     }
 
-    pub fn get_device_id(&'this self) -> &'this UuidV4 {
-        return &self.device_id;
+    pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this UuidV4 {
+        return &self.application_user_log_in_token_device_id;
     }
 
-    pub fn get_value(&'this self) -> &'this Value {
-        return &self.value;
+    pub fn get_json_refresh_web_token_value(&'this self) -> &'this Value {
+        return &self.json_refresh_web_token_value;
     }
 
     pub fn get_exp(&'this self) -> &'this DateTime {

@@ -2,7 +2,7 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Result {
-    #[serde(rename(serialize = "aui"))]
+    #[serde(rename(serialize = "i"))]
     application_user_id: String
 }
 
