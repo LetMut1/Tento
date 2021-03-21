@@ -3,11 +3,5 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 pub struct Request {
     #[serde(rename(deserialize = "e"))]
-    pub email: String
-}
-
-impl<'this> Request {
-    pub fn get_email(&'this self) -> &'this str {
-        return self.email.as_str();
-    }
+    pub application_user_email: String
 }

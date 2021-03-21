@@ -1,4 +1,5 @@
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_registrer::request::Request;
+use crate::entity::entity::application_user::application_user::core::email::Email;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error_kind::ApplicationUserRegistrationConfirmationTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
@@ -15,7 +16,7 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        match PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())? {
+        match PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, &Email::new(request.application_user_email))? {
             Some(pre_confirmed_application_user) => {
                 match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? {
                     Some(mut application_user_registration_confirmation_token) => {

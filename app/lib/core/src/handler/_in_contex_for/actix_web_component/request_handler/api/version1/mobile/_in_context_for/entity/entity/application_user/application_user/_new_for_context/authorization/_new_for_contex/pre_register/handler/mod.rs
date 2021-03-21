@@ -17,13 +17,15 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(request: Request) -> Result<(), MainErrorKind> {
-        if EmailSimpleValidator::is_valid(request.get_email()) {
+        let email: Email = Email::new(request.application_user_email);
+
+        if EmailSimpleValidator::is_valid(&email) {
             let mut connection_manager: ConnectionManager = ConnectionManager::new();
             connection_manager.establish_connection()?;
 
-            if !PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, request.get_email())? {
-                if !ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, request.get_email())? {
-                    let pre_confirmed_application_user: PreConfirmedApplicationUser = PreConfirmedApplicationUser::new(Email::new(request.email));  
+            if !PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)? {
+                if !ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)? {
+                    let pre_confirmed_application_user: PreConfirmedApplicationUser = PreConfirmedApplicationUser::new(email);  
 
                     let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> = ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user);
                     

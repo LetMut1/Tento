@@ -19,9 +19,11 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        match ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(&connection_manager, &UuidV4::new_from_str(request.get_application_user_id()), &UuidV4::new_from_str(request.get_device_id()))? {
+        match ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
+            &connection_manager, &UuidV4::new_from_str(request.application_user_id.as_str()), &UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())
+        )? {
             Some(ref application_user_log_in_token) => {
-                if application_user_log_in_token.get_value().get_value() == request.get_token_value() {
+                if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value {
                     if !application_user_log_in_token.is_expired() {
                         let json_refresh_web_token: JsonRefreshWebToken<'_> = 
                             JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), Cow::Borrowed(application_user_log_in_token.get_device_id()));

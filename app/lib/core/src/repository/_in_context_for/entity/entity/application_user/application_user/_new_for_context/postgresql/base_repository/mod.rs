@@ -10,6 +10,8 @@ use diesel::ExpressionMethods;
 use diesel::OptionalExtension;
 use diesel::QueryDsl;
 use diesel::RunQueryDsl;
+use crate::entity::entity::application_user::application_user::core::nickname::Nickname;
+use crate::entity::entity::application_user::application_user::core::email::Email;
 
 pub struct BaseRepository;
 
@@ -20,22 +22,22 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn is_exist_by_nickanme(connection_manager: &'outer ConnectionManager, nickname: &'outer str) -> Result<bool, DieselError> {
+    pub fn is_exist_by_nickanme(connection_manager: &'outer ConnectionManager, nickname: &'outer Nickname) -> Result<bool, DieselError> {
         return Ok(diesel::select(
-            dsl::exists(application_user_schema::table.filter(application_user_schema::nickname.eq(nickname)))
+            dsl::exists(application_user_schema::table.filter(application_user_schema::nickname.eq(nickname.get_value())))
         ).get_result::<bool>(connection_manager.get_connection())?
         );// TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    pub fn is_exist_by_email(connection_manager: &'outer ConnectionManager, email: &'outer str) -> Result<bool, DieselError> {
+    pub fn is_exist_by_email(connection_manager: &'outer ConnectionManager, email: &'outer Email) -> Result<bool, DieselError> {
         return Ok(diesel::select(
-            dsl::exists(application_user_schema::table.filter(application_user_schema::email.eq(email)))
+            dsl::exists(application_user_schema::table.filter(application_user_schema::email.eq(email.get_value())))
         ).get_result::<bool>(connection_manager.get_connection())?
         );      // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer str) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
-        match application_user_schema::table.filter(application_user_schema::email.eq(email))
+    pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer Email) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
+        match application_user_schema::table.filter(application_user_schema::email.eq(email.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? {
             Some(existing) => { 
                 return Ok(Some(ApplicationUser::new_from_model(existing))); 

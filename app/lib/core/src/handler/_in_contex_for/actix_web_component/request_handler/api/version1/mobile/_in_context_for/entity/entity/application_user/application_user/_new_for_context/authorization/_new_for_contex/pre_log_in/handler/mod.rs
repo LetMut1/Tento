@@ -2,6 +2,8 @@ use crate::dto::_in_context_for::actix_web_component::request_handler::api::vers
 use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::handler::_new_for_context::result::Result as HandlerResult;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
+use crate::entity::entity::application_user::application_user::core::email::Email;
+use crate::entity::entity::application_user::application_user::core::password::Password;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
@@ -19,11 +21,12 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        match ApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())? {
+        match ApplicationUserBaseRepository::get_by_email(&connection_manager, &Email::new(request.application_user_email))? {
             Some(ref application_user) => {
-                if PasswordEncoder::is_valid(request.get_password(), application_user.get_passord_hash()) {
+                if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash()) {
                     if !ApplicationUserLogInTokenBaseRepository::is_exist_by_application_user_id(&connection_manager, application_user.get_id())? {
-                        let application_user_log_in_token: ApplicationUserLogInToken<'_> = ApplicationUserLogInToken::new(application_user, UuidV4::new_from_str(request.device_id.as_str()));
+                        let application_user_log_in_token: ApplicationUserLogInToken<'_> = 
+                            ApplicationUserLogInToken::new(application_user, UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str()));
 
                         ApplicationUserLogInTokenBaseRepository::create(&connection_manager, &application_user_log_in_token)?;
 

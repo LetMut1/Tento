@@ -2,6 +2,7 @@ use crate::dto::_in_context_for::actix_web_component::request_handler::api::vers
 use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::register::handler::_new_for_context::result::Result as HandlerResult;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::application_user::application_user::ApplicationUser;
+use crate::entity::entity::application_user::application_user::core::email::Email;
 use crate::entity::entity::application_user::application_user::core::nickname::Nickname;
 use crate::entity::entity::application_user::application_user::core::password::Password;
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
@@ -23,20 +24,24 @@ pub struct Handler;
 
 impl<'outer> Handler {
     pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
+        let nickname: Nickname = Nickname::new(request.application_user_nickname);
+        let email: Email = Email::new(request.application_user_email);
+
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        if !ApplicationUserBaseRepository::is_exist_by_nickanme(&connection_manager, request.get_nickname())? {
-            match PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, request.get_email())? {
+        if !ApplicationUserBaseRepository::is_exist_by_nickanme(&connection_manager, &nickname)? {
+            match PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, &email)? {
                 Some(ref pre_confirmed_application_user) => {
                     match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? {
                         Some(ref application_user_registration_confirmation_token) => {
                             if !application_user_registration_confirmation_token.is_expired() {
-                                if request.get_token_value() == application_user_registration_confirmation_token.get_value().get_value() {
-                                   let application_user: ApplicationUser<'_> = ApplicationUser::new_from_pre_confirmed_application_user(pre_confirmed_application_user, Nickname::new(request.nickname), Password::new(request.password));
+                                if request.application_user_registration_confirmation_token_value == application_user_registration_confirmation_token.get_value().get_value() {
+                                    let application_user: ApplicationUser<'_> = 
+                                        ApplicationUser::new_from_pre_confirmed_application_user(pre_confirmed_application_user, nickname, Password::new(request.application_user_password));
 
-                                   connection_manager.begin_transaction()?;
-                                   match ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
+                                    connection_manager.begin_transaction()?;
+                                    match ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
                                         Ok(_) => {
                                             match ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&connection_manager, application_user_registration_confirmation_token) {
                                                 Ok(_) => {
@@ -44,7 +49,8 @@ impl<'outer> Handler {
                                                         Ok(_) => {
                                                             connection_manager.commit_transaction()?;
 
-                                                            let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.device_id.as_str())));
+                                                            let json_refresh_web_token: JsonRefreshWebToken<'_> = 
+                                                                JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())));
 
                                                             JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
                                         
@@ -85,7 +91,7 @@ impl<'outer> Handler {
                     };
                 },
                 None => {
-                    if ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, request.get_email())? {
+                    if ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)? {
                         return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyConfirmed))?;
                     } else {
                         return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::NotFound))?;

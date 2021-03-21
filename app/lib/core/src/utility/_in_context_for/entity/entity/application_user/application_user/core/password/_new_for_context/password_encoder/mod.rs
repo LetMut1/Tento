@@ -12,7 +12,7 @@ impl<'outer> PasswordEncoder {      // TODO отрабатывает за 320 м
         return argon2::hash_encoded(password.get_value().as_bytes(), Uuid::new_v4().as_bytes(), &config).unwrap();  // TODO error
     }
 
-    pub fn is_valid(password: &'outer str, password_hash: &'outer PasswordHash) -> bool {
-        return argon2::verify_encoded(password_hash.get_value(), password.as_bytes()).unwrap();  // TODO error
+    pub fn is_valid(password: &'outer Password, password_hash: &'outer PasswordHash) -> bool {
+        return argon2::verify_encoded(password_hash.get_value(), password.get_value().as_bytes()).unwrap();  // TODO error
     }
 }
