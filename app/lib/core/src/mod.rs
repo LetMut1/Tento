@@ -1,9 +1,11 @@
 #[macro_use] extern crate diesel;
+extern crate actix_service;
 extern crate actix_web;
 extern crate argon2;
 extern crate base64;
 extern crate chrono;
 extern crate crypto;
+extern crate futures;
 extern crate hex;
 extern crate lettre_email;
 extern crate lettre;

@@ -7,10 +7,11 @@ use actix_web::web;
 use std::io::Result;
 
 #[actix_web::main]
-async fn main() -> Result<()> {
-    return HttpServer::new(|| {         // TODO переместить Scops в разные методы? 
+async fn main() -> Result<()> {             // TODO default_service 
+    return HttpServer::new(|| {         // TODO переместить Scopes в разные методы (https://actix.rs/docs/application/   "Configure")
         App::new().service(
             web::scope("")              // TODO guards для роутов о наличии джвт 
+            // .wrap(core::actix_web_component::middleware::scope::test::CheckLogin)
             // .route("/user/register", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::register))
             .route("/user/cnfe", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::check_nickname_for_existing))
             .route("/user/pre_log_in", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::pre_log_in))
@@ -32,14 +33,13 @@ async fn main() -> Result<()> {
 // Do not remove this block until the problems have been fixed }
 
 // TODO #[inline] - нужно ли оптимизировать с помощью этого атрибута
+// TODO разобраться в Cargo.toml (все атрибуты, атрибуты пакетов, ...)
 // TODO Проверить запросы в системы (Postgresql, Redis )
 // TODO Зaщита от SQL-инъекций
 // TODO Разобраться, что именно ФРэймворк параллелит, на каком этапе. (Параллелит ли это файл? - не должен)
 // TODO create async Database connections pool (r2d2) - нужно ли. r2d2 держит пул соендинений открытыми и раздает их на каждый хэндлер ( в контексте акстикс веб).
 //  То есть, соединения не переоткрываются, а используются постоянные. Сейчас же на каждом воркере будут открыто свое обычное соединение и закрыто.
-// TODO default_service 
 // TODO дефолтный ответ, если нет роута
 // TOOD можно ли изменить деолтный ответ при несовпадении Http параметров с ДТО
-// TODO Middleware for Scope/Resource
 // TODO Can we acces to HTTpRequest in Guard? (Check the Params setting opportunity)
 // TODO https://www.reddit.com/r/rust/comments/frkta2/manytomany_relationships_in_diesel_does_anybody/      Diesel MANY-TO-MANY Association example
