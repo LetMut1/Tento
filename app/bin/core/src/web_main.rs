@@ -9,15 +9,16 @@ use std::io::Result;
 #[actix_web::main]
 async fn main() -> Result<()> {             // TODO default_service 
     return HttpServer::new(|| {         // TODO переместить Scopes в разные методы (https://actix.rs/docs/application/   "Configure")
-        App::new().service(             // TODO https://actix.rs/actix-web/actix_web/struct.Scope.html (Service - что это и зачем)
+        App::new().
+        service(             // TODO https://actix.rs/actix-web/actix_web/struct.Scope.html (Service - что это и зачем)
             web::scope("")              // TODO guards для роутов о наличии джвт 
             // .wrap(core::actix_web_component::middleware::scope::test::CheckLogin)
-            .route("/user/pre_register", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::pre_register))
+            .route("/user/pre_register", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::pre_register))
             .route("/user/register", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::register))
-            .route("/user/resend_email_for_register", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::resend_email_for_register))
+            .route("/user/resend_email_for_register", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::resend_email_for_register))
             .route("/user/pre_log_in", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::pre_log_in))
-            .route("/user/resend_email_for_log_in", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::resend_email_for_log_in))
-            .route("/user/log_in", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::log_in))
+            .route("/user/resend_email_for_log_in", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::resend_email_for_log_in))
+            .route("/user/log_in", web::post().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::log_in))
             .route("/user/check_nickname_for_existing", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::check_nickname_for_existing))
             .route("/user/check_email_for_existing", web::get().to(core::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization::check_email_for_existing))
         )
