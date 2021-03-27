@@ -2,6 +2,7 @@ use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use std::clone::Clone;
 
+#[derive(Clone)]
 pub struct DateTime {
     value: ChronoDateTime<Utc>
 }
@@ -27,11 +28,5 @@ impl<'this, 'outer: 'this> DateTime {
 
     pub fn get_value(&'this self) -> &'this ChronoDateTime<Utc> {
         return &self.value;
-    }
-}
-
-impl Clone for DateTime {
-    fn clone(&self) -> Self {
-        panic!("It shouldn't be cloned");
     }
 }

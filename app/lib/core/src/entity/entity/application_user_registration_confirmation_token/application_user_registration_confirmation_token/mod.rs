@@ -46,7 +46,7 @@ impl<'this, 'outer: 'this> ApplicationUserRegistrationConfirmationToken<'outer> 
     }
 
     pub fn is_expired(&'this self) -> bool {
-        return !DateTimeManipulator::is_greate_or_equal_than_now(&self.expired_at);
+        return !DateTimeManipulator::is_greater_or_equal_than_now(&self.expired_at);
     }
 
     pub fn get_id(&'this self) -> &'this UuidV4 {

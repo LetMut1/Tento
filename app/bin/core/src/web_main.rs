@@ -21,6 +21,7 @@ async fn main() -> Result<()> {             // TODO default_service
 }
 
 // TODO Do not remove this block until the problems have been fixed {
+    // TODO -2 Пройтись по всем Unwrap() ( и второму аналогу)
     // TODO -1. Attack types (DDOS, for example)
     // TODO 0. Header Connection: Keep-alive - disable https://developer.mozilla.org/ru/docs/Web/HTTP/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BA%D0%B8/Connection
     // TODO 1. Work with JRWT via Redis, create BlacList for Access Token in Redis

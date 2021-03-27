@@ -20,15 +20,15 @@ impl<'outer, 'vague> SerializationFormResolver {
         );
     }
 
-    pub fn deserialize(classic_form: &'outer str) -> PayloadCommon<'vague> {
+    pub fn deserialize(classic_form: &'outer str) -> Result<JsonAccessWebToken<'vague>, ()> {
         let classic_form_parts: Vec<&'_ str> = classic_form.split(Self::LINE_SEPARATOR).collect::<Vec<&'_ str>>();
 
         if Self::is_valid(&classic_form_parts) {
             let paylod_json_encoded: &'_ [u8] = &base64::decode(classic_form_parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
             
-            return serde_json::from_slice::<'_, PayloadCommon<'_>>(paylod_json_encoded).unwrap();  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
+            return Ok(JsonAccessWebToken::new_from_payload_common(serde_json::from_slice::<'_, PayloadCommon<'_>>(paylod_json_encoded).unwrap()));  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
         } else {
-            panic!("Выбрасываем исключение, то есть, возвращаем Резалт с кастомной ошибкой");   // TODO 
+            return Err(());
         }
     }
 

@@ -1,5 +1,3 @@
-use std::clone::Clone;
-
 pub struct Nickname {
     value: String
 }
@@ -13,11 +11,5 @@ impl<'this> Nickname {
 
     pub fn get_value(&'this self) -> &'this str {
         return self.value.as_str();
-    }
-}
-
-impl Clone for Nickname {
-    fn clone(&self) -> Self {
-        panic!("It shouldn't be cloned");
     }
 }

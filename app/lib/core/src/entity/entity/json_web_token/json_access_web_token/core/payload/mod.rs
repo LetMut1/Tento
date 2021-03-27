@@ -5,7 +5,9 @@ use crate::entity::entity::json_web_token::json_refresh_web_token::core::value::
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::utility::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use std::borrow::Cow;
+use std::clone::Clone;
 
+#[derive(Clone)]
 pub struct Payload<'outer> {
     application_user_id: Cow<'outer, UuidV4>,
     application_user_log_in_token_device_id: Cow<'outer, UuidV4>,

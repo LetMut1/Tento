@@ -2,7 +2,10 @@ use actix_service::Service;
 use actix_web::dev::ServiceRequest;
 use actix_web::dev::ServiceResponse;
 use actix_web::Error;
+use actix_web::HttpMessage;
 use actix_web::HttpResponse;
+use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
+use crate::service::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use futures::future::Either;
 use futures::future::ok as FutureOk;
 use futures::future::Ready;
@@ -43,14 +46,30 @@ where
         return self.service.poll_ready(context);
     }
 
-    fn call(&mut self, request: ServiceRequest) -> Self::Future {
+    fn call(&mut self, service_request: ServiceRequest) -> Self::Future {
+        // request.extensions_mut().insert::<BBB>(BBB {a: "Yep".to_string()});
+        match service_request.headers().get("X-Auth-Token") {
+            Some(header_value) => {
+                match header_value.to_str() {
+                    Ok(header_value) => {
+                        match SerializationFormResolver::deserialize(header_value) {
+                            Ok(json_access_web_token) => {
+                                if !json_access_web_token.is_expired() {
+                                    // TODO BlackList
+                                    service_request.extensions_mut().insert::<JsonAccessWebToken<'_>>(json_access_web_token);
 
-        // TODO
-            if request.path() == "/nop" {
-                return Either::Left(self.service.call(request))
-            } else {
-                return Either::Right(FutureOk(request.into_response(HttpResponse::Ok().body("sfsf").into_body())));
-            }
-        // TODO 
+                                    return Either::Left(self.service.call(service_request));
+                                }
+                            },
+                            Err(_) => {}
+                        };
+                    },
+                    Err(_) => {}
+                };
+            },
+            None => {}
+        };
+
+        return Either::Right(FutureOk(service_request.into_response(HttpResponse::NotFound().finish().into_body())));
     }
 }

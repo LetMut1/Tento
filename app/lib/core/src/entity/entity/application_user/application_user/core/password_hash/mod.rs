@@ -1,5 +1,4 @@
 use crate::utility::_in_context_for::entity::entity::application_user::application_user::core::password::_new_for_context::password_encoder::PasswordEncoder;
-use std::clone::Clone;
 use super::password::Password;
 
 pub struct PasswordHash {
@@ -21,11 +20,5 @@ impl<'this> PasswordHash {
 
     pub fn get_value(&'this self) -> &'this str {
         return self.value.as_str();
-    }
-}
-
-impl Clone for PasswordHash {
-    fn clone(&self) -> Self {
-        panic!("It shouldn't be cloned");
     }
 }

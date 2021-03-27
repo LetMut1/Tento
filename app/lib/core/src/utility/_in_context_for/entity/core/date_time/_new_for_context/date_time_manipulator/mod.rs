@@ -16,8 +16,8 @@ impl<'outer> DateTimeManipulator {
         return DateTime::new_from_date_time(Utc::now().checked_add_signed(Duration::minutes(quantity_of_minutes)).unwrap());    // TODO unwrap
     }
 
-    pub fn is_greate_or_equal_than_now(subject_date_time: &'outer DateTime) -> bool
+    pub fn is_greater_or_equal_than_now(subject_date_time: &'outer DateTime) -> bool
     {
-        return ChronoDateTimeManipulator::is_greate_or_equal_than(subject_date_time.get_value(), &Utc::now());
+        return ChronoDateTimeManipulator::is_greater_or_equal_than(subject_date_time.get_value(), &Utc::now());
     }
 }

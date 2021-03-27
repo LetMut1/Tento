@@ -1,7 +1,8 @@
-use std::clone::Clone;
 use std::convert::TryInto;
 use uuid::Uuid;
+use std::clone::Clone;
 
+#[derive(Clone)]
 pub struct UuidV4 {
     value: Uuid
 }
@@ -33,11 +34,5 @@ impl<'this, 'outer: 'this> UuidV4 {
 
     pub fn get_value(&'this self) -> &'this Uuid {
         return &self.value;
-    }
-}
-
-impl Clone for UuidV4 {
-    fn clone(&self) -> Self {
-        panic!("It shouldn't be cloned");
     }
 }

@@ -7,13 +7,15 @@ use super::core::_in_context_for::diesel_component::_new_for_context::diesel_err
 use super::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
 use super::core::_in_context_for::utility::email_sender::_new_for_context::email_error_kind::EmailErrorKind;
 use super::core::connection_error_kind::connection_error_kind::ConnectionErrorKind;
+use super::core::logic_error::LogicError;
 
 #[derive(Debug)]
 pub enum MainErrorKind {
-    DieselErrorKind(DieselError),
     ConnectionError(ConnectionErrorKind),
+    DieselErrorKind(DieselError),
+    EmailErrorKind(EmailErrorKind),
     EntityErrorKind(EntityErrorKind),
-    EmailErrorKind(EmailErrorKind)
+    LogicError(LogicError)
 }
 
 impl Display for MainErrorKind {
@@ -45,5 +47,11 @@ impl From<EntityErrorKind> for MainErrorKind {
 impl From<EmailErrorKind> for MainErrorKind {
     fn from(email_error_kind: EmailErrorKind) -> Self {
         return Self::EmailErrorKind(email_error_kind);
+    }
+}
+
+impl From<LogicError> for MainErrorKind {
+    fn from(logic_error: LogicError) -> Self {
+        return Self::LogicError(logic_error);
     }
 }
