@@ -7,10 +7,11 @@ use core_lib::actix_web_component::configuration::main_service_configurator::Mai
 use std::io::Result;
 
 #[actix_web::main]
-async fn main() -> Result<()> {             // TODO default_service 
+async fn main() -> Result<()> {
     return HttpServer::new(|| {
         App::new().configure(MainServiceConfigurator::configure)
-    }).bind("0.0.0.0:80")?.run().await;
+    })
+    .bind("0.0.0.0:80")?.run().await;
 }
 
 // TODO Do not remove this block until the problems have been fixed {

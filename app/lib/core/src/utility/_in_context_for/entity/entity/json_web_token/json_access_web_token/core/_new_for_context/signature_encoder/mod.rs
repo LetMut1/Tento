@@ -5,7 +5,7 @@ use crypto::sha2::Sha512;
 pub struct SignatureEncoder;
 
 impl<'outer> SignatureEncoder {
-    const PRIVATE_KEY: &'static str = "Jd2DffsFi3sc8Mz2udB0bz8zH12asu4S1ksS2v8cs5fFm6dcfLk";
+    const PRIVATE_KEY: &'static str = "Jd2DffsFi3sc8Mz2udB0qRbz8zH12asu4S1ksSsZ6e2v8cs5fFm6dcfLk";  // TODO где должен быть ключ
 
     pub fn encode(subject: &'outer str) -> String {
         let mut hmac: Hmac<Sha512> = Self::get_configured_hmac();
