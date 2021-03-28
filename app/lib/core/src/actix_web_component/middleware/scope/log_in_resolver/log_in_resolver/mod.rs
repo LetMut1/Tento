@@ -47,7 +47,6 @@ where
     }
 
     fn call(&mut self, service_request: ServiceRequest) -> Self::Future {
-        // request.extensions_mut().insert::<BBB>(BBB {a: "Yep".to_string()});
         match service_request.headers().get("X-Auth-Token") {
             Some(header_value) => {
                 match header_value.to_str() {

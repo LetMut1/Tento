@@ -21,10 +21,12 @@ impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
         };
     }
 
-    pub fn new_from_payload_common(common: Common<'outer>) -> Self {
-        return Self {
-            payload: Payload::new_from_common(common)
-        };
+    pub fn new_from_payload_common(common: Common<'outer>) -> Result<Self, ()> {
+        return Ok(
+            Self {
+                payload: Payload::new_from_common(common)?
+            }
+        );
     }
 
     pub fn get_header(&'this self) -> &'this Header {

@@ -26,7 +26,7 @@ impl<'outer, 'vague> SerializationFormResolver {
         if Self::is_valid(&classic_form_parts) {
             let paylod_json_encoded: &'_ [u8] = &base64::decode(classic_form_parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
             
-            return Ok(JsonAccessWebToken::new_from_payload_common(serde_json::from_slice::<'_, PayloadCommon<'_>>(paylod_json_encoded).unwrap()));  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
+            return Ok(JsonAccessWebToken::new_from_payload_common(serde_json::from_slice::<'_, PayloadCommon<'_>>(paylod_json_encoded).unwrap())?);  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
         } else {
             return Err(());
         }

@@ -25,13 +25,15 @@ impl<'this, 'outer: 'this> Payload<'outer> {
         };
     }
 
-    pub fn new_from_common(common: Common<'outer>) -> Self {
-        return Self {
-            application_user_id: Cow::Owned(UuidV4::new_from_str(common.application_user_id.as_str())),
-            application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_str(common.application_user_log_in_token_device_id.as_str())),
-            json_refresh_web_token_value: Cow::Owned(Value::new(common.json_refresh_web_token_value.into_owned())),
-            exp: DateTime::new_from_string(common.exp.as_str())
-        };
+    pub fn new_from_common(common: Common<'outer>) -> Result<Self, ()> {
+        return Ok (
+            Self {
+                application_user_id: Cow::Owned(UuidV4::new_from_str(common.application_user_id.as_str())?),
+                application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_str(common.application_user_log_in_token_device_id.as_str())?),
+                json_refresh_web_token_value: Cow::Owned(Value::new(common.json_refresh_web_token_value.into_owned())),
+                exp: DateTime::new_from_string(common.exp.as_str())
+            }
+        );
     }
 
     pub fn get_application_user_id(&'this self) -> &'this UuidV4 {

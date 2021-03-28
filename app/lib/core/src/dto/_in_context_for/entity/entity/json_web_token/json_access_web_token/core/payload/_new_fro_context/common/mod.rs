@@ -11,7 +11,7 @@ pub struct Common<'outer> {
     pub application_user_log_in_token_device_id: String,
     #[serde(rename = "v")]
     pub json_refresh_web_token_value: Cow<'outer, str>,
-    #[serde(rename = "v")]
+    #[serde(rename = "e")]
     pub exp: String
 }
 

@@ -15,6 +15,7 @@ pub enum MainErrorKind {
     DieselErrorKind(DieselError),
     EmailErrorKind(EmailErrorKind),
     EntityErrorKind(EntityErrorKind),
+    InvalidArgument,
     LogicError(LogicError)
 }
 
@@ -53,5 +54,11 @@ impl From<EmailErrorKind> for MainErrorKind {
 impl From<LogicError> for MainErrorKind {
     fn from(logic_error: LogicError) -> Self {
         return Self::LogicError(logic_error);
+    }
+}
+
+impl From<()> for MainErrorKind {
+    fn from(_: ()) -> Self {
+        return Self::InvalidArgument
     }
 }

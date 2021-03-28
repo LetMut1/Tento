@@ -4,7 +4,7 @@ use crate::entity::entity::application_user::application_user::core::email::Emai
 
 pub struct PreConfirmedApplicationUser {
     id: UuidV4,
-    email: Email
+    email: Email    // TODO add created_at (чтобы по крону удалять )
 }
 
 impl<'this> PreConfirmedApplicationUser {

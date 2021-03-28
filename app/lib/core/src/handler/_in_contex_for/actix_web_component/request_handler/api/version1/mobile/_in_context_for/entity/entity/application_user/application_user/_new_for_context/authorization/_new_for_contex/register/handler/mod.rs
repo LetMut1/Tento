@@ -50,7 +50,7 @@ impl<'outer> Handler {
                                                             connection_manager.commit_transaction()?;
 
                                                             let json_refresh_web_token: JsonRefreshWebToken<'_> = 
-                                                                JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())));
+                                                                JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?));
 
                                                             JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
                                         

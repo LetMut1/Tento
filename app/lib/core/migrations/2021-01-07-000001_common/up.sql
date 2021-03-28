@@ -3,7 +3,7 @@ CREATE TABLE pre_confirmed_application_user (
     -- // email value - уникальное
         -- // TODO удалять висящие кортежи (написать функцию либо через крон по бинарнику)
             -- // TODO Каскадное уделаение
-    email VARCHAR NOT NULL
+    email VARCHAR NOT NULL,
     PRIMARY KEY (id)
 );
 CREATE TABLE application_user ( 

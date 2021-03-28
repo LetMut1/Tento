@@ -133,8 +133,8 @@ impl Authorization {
                             },
                             EntityErrorKind::PreConfirmedApplicationUserErrorKind(ref pre_confirmed_application_user_error_kind) => {
                                 match pre_confirmed_application_user_error_kind {
-                                    PreConfirmedApplicationUserErrorKind::AlreadyExist => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus01"));
+                                    PreConfirmedApplicationUserErrorKind::AlreadyConfirmed => {
+                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus03"));
                                     },
                                     PreConfirmedApplicationUserErrorKind::NotFound => {
                                         return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus02"));

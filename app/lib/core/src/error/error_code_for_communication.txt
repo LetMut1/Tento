@@ -7,6 +7,7 @@ Entity: (01 -> already exist, 02 -> not found)
     PreConfirmedApplicationUser:
         eprcoapus01 -> already exist,
         eprcoapus02 -> not found,
+        eprcoapus03 -> already confirmed,
     ApplicationUserRegistrationConfirmationToken:
         eapusrecoto02 -> not found,
         eapusrecoto03 -> invalid value,

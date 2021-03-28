@@ -1,4 +1,3 @@
-use std::convert::TryInto;
 use uuid::Uuid;
 use std::clone::Clone;
 
@@ -20,16 +19,19 @@ impl<'this, 'outer: 'this> UuidV4 {
         };
     }
 
-    pub fn new_from_str(value: &'outer str) -> Self {
-        let value_bytes: &'_ [u8] = value.as_bytes();
-
-        if value_bytes.len() == 16 {
-            return Self { 
-                value: Uuid::from_bytes(value_bytes.try_into().unwrap()) // TODO ВЫбрасывать ошибку 
+    pub fn new_from_str(value: &'outer str) -> Result<Self, ()> {
+        match Uuid::parse_str(value) {
+            Ok(uuid) => {
+                return Ok(
+                    Self { 
+                        value: uuid
+                    }
+                );
+            },
+            Err(error) => {
+                return Err(());
             }
-        } else {
-            panic!("выбрасывать Ошибки"); // TODO 
-        }
+        };
     }
 
     pub fn get_value(&'this self) -> &'this Uuid {
