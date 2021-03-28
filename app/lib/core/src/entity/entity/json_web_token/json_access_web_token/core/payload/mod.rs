@@ -36,6 +36,12 @@ impl<'this, 'outer: 'this> Payload<'outer> {
         );
     }
 
+    pub fn set_json_refresh_web_token_value(&'this mut self, json_refresh_web_token_value: &'outer Value) -> &'this mut Self {
+        self.json_refresh_web_token_value = Cow::Borrowed(json_refresh_web_token_value);
+
+        return self;
+    }
+
     pub fn get_application_user_id(&'this self) -> &'this UuidV4 {
         return &self.application_user_id;
     }

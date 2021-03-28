@@ -3,7 +3,7 @@ pub mod check_nickaname_for_existing;
 pub mod log_in;
 pub mod pre_log_in;
 pub mod pre_register;
-pub mod refresh_json_access_web_token_value;
+pub mod refresh_json_access_web_token;
 pub mod register;
 pub mod resend_email_for_log_in;
 pub mod resend_email_for_register;

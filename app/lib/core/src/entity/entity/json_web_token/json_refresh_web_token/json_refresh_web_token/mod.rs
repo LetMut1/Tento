@@ -10,7 +10,7 @@ pub struct JsonRefreshWebToken<'outer> {
     id: UuidV4,
     application_user_id: Cow<'outer, UuidV4>,
     application_user_log_in_token_device_id: Cow<'outer, UuidV4>,
-    value: Value,
+    value: Value,   // TODO Кодировать значение
     created_at: DateTime,    // TODO нужно ли это поле 
     expired_at: DateTime
 }

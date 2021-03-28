@@ -1,11 +1,14 @@
 use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::payload::_new_fro_context::common::Common;
+use crate::entity::core::date_time::DateTime;
+use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_web_token::json_access_web_token::core::header::header::Header;
 use crate::entity::entity::json_web_token::json_access_web_token::core::payload::Payload;
-use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_web_token::json_refresh_web_token::core::value::Value;
+use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use std::clone::Clone;
+use super::core::header::core::alg::Alg;
+use super::core::header::core::typ::Typ;
 
 #[derive(Clone)]
 pub struct JsonAccessWebToken<'outer> {
@@ -29,12 +32,22 @@ impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
         );
     }
 
-    pub fn get_header(&'this self) -> &'this Header {
-        return &Self::HEADER;
+    pub fn is_expired(&'this self) -> bool {
+        return !DateTimeManipulator::is_greater_or_equal_than_now(&self.payload.get_exp());
     }
 
-    pub fn get_payload(&'this self) -> &'this Payload<'outer> {
-        return &self.payload;
+    pub fn set_json_refresh_web_token_value(&'this mut self, json_refresh_web_token_value: &'outer Value) -> &'this mut Self {
+        self.payload.set_json_refresh_web_token_value(json_refresh_web_token_value);
+
+        return self;
+    }
+
+    pub fn get_alg(&'this self) -> &'this Alg {
+        return Self::HEADER.get_alg();
+    }
+
+    pub fn get_typ(&'this self) -> &'this Typ {
+        return Self::HEADER.get_typ();
     }
 
     pub fn get_application_user_id(&'this self) -> &'this UuidV4 {
@@ -49,8 +62,7 @@ impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
         return &self.payload.get_json_refresh_web_token_value();
     }
 
-    pub fn is_expired(&'this self) -> bool {
-        return !DateTimeManipulator::is_greater_or_equal_than_now(&self.payload.get_exp());
+    pub fn get_exp(&'this self) -> &'this DateTime {
+        return &self.payload.get_exp();
     }
-
 }
