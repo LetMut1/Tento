@@ -18,7 +18,8 @@ impl<'outer, 'vague> BaseRepository {
         connection_manager: &'outer ConnectionManager, 
         application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
     ) -> Result<(), DieselError> {
-        diesel::insert_into(application_user_log_in_token_schema::table).values(New::new(application_user_log_in_token))
+        diesel::insert_into(application_user_log_in_token_schema::table)
+        .values(New::new(application_user_log_in_token))
         .execute(connection_manager.get_connection())?;
 
         return Ok(());
@@ -56,9 +57,10 @@ impl<'outer, 'vague> BaseRepository {
     pub fn is_exist_by_application_user_id(
         connection_manager: &'outer ConnectionManager, application_user_id: &'outer UuidV4
     ) -> Result<bool, DieselError> {
-        return Ok(diesel::select(
-            dsl::exists(application_user_log_in_token_schema::table.filter(application_user_log_in_token_schema::application_user_id.eq(application_user_id.get_value())))
-        ).get_result::<bool>(connection_manager.get_connection())?
+        return Ok(
+            diesel::select(
+                dsl::exists(application_user_log_in_token_schema::table.filter(application_user_log_in_token_schema::application_user_id.eq(application_user_id.get_value())))
+            ).get_result::<bool>(connection_manager.get_connection())?
         ); // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 

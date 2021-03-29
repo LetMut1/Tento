@@ -40,8 +40,8 @@ pub mod public {
         json_refresh_web_token (id) {
             id -> Uuid,
             application_user_log_in_token_device_id -> Uuid,
-            value -> Varchar,
             application_user_id -> Uuid,
+            value -> Varchar,
             expired_at -> Timestamptz,
             created_at -> Timestamptz,
         }

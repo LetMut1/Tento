@@ -23,21 +23,32 @@ impl<'outer, 'vague> BaseRepository {
     }
 
     pub fn is_exist_by_nickanme(connection_manager: &'outer ConnectionManager, nickname: &'outer Nickname) -> Result<bool, DieselError> {
-        return Ok(diesel::select(
-            dsl::exists(application_user_schema::table.filter(application_user_schema::nickname.eq(nickname.get_value())))
-        ).get_result::<bool>(connection_manager.get_connection())?
+        return Ok(
+            diesel::select(
+                dsl::exists(
+                    application_user_schema::table
+                    .filter(application_user_schema::nickname.eq(nickname.get_value()))
+                )
+            )
+            .get_result::<bool>(connection_manager.get_connection())?
         );// TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     pub fn is_exist_by_email(connection_manager: &'outer ConnectionManager, email: &'outer Email) -> Result<bool, DieselError> {
-        return Ok(diesel::select(
-            dsl::exists(application_user_schema::table.filter(application_user_schema::email.eq(email.get_value())))
-        ).get_result::<bool>(connection_manager.get_connection())?
+        return Ok(
+            diesel::select(
+                dsl::exists(
+                    application_user_schema::table
+                    .filter(application_user_schema::email.eq(email.get_value()))
+                )
+            )
+            .get_result::<bool>(connection_manager.get_connection())?
         );      // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer Email) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
-        match application_user_schema::table.filter(application_user_schema::email.eq(email.get_value()))
+        match application_user_schema::table
+        .filter(application_user_schema::email.eq(email.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? {
             Some(existing) => { 
                 return Ok(Some(ApplicationUser::new_from_model(existing))); 
@@ -49,7 +60,8 @@ impl<'outer, 'vague> BaseRepository {
     }
 
     pub fn get_by_id(connection_manager: &'outer ConnectionManager, id: &'outer UuidV4) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
-        match application_user_schema::table.filter(application_user_schema::id.eq(id.get_value()))
+        match application_user_schema::table
+        .filter(application_user_schema::id.eq(id.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? {
             Some(existing) => { 
                 return Ok(Some(ApplicationUser::new_from_model(existing))); 

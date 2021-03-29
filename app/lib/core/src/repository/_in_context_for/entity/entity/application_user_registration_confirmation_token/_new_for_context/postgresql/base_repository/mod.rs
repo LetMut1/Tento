@@ -18,7 +18,8 @@ impl<'outer, 'vague> BaseRepository {
         connection_manager: &'outer ConnectionManager, 
         application_user_registration_confirmation_token: &'outer ApplicationUserRegistrationConfirmationToken<'outer>
     ) -> Result<(), DieselError> {
-        diesel::insert_into(application_user_registration_confirmation_token_schema::table).values(New::new(application_user_registration_confirmation_token))
+        diesel::insert_into(application_user_registration_confirmation_token_schema::table)
+        .values(New::new(application_user_registration_confirmation_token))
         .execute(connection_manager.get_connection())?;
 
         return Ok(());
@@ -56,9 +57,9 @@ impl<'outer, 'vague> BaseRepository {
     pub fn get_by_pre_confirmed_application_user_id(
         connection_manager: &'outer ConnectionManager, pre_confirmed_application_user_id: &'outer UuidV4
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'vague>>, DieselError> {
-        match application_user_registration_confirmation_token_schema::table.filter(
-            application_user_registration_confirmation_token_schema::pre_confirmed_application_user_id.eq(pre_confirmed_application_user_id.get_value())
-        ).get_result::<Existing>(connection_manager.get_connection()).optional()? {
+        match application_user_registration_confirmation_token_schema::table
+        .filter(application_user_registration_confirmation_token_schema::pre_confirmed_application_user_id.eq(pre_confirmed_application_user_id.get_value()))
+        .get_result::<Existing>(connection_manager.get_connection()).optional()? {
             Some(existing) => { 
                 return Ok(Some(ApplicationUserRegistrationConfirmationToken::new_from_model(existing))); 
             },

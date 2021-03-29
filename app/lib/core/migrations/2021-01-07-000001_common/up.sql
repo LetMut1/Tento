@@ -49,9 +49,9 @@ CREATE TABLE application_user_log_in_token (
 CREATE TABLE json_refresh_web_token (   -- // TODO Redis
     id UUID NOT NULL,
     application_user_log_in_token_device_id UUID NOT NULL,
-    -- // TODO device_id + applicationuserid - уникальное
-    value VARCHAR NOT NULL,
+    -- // TODO  applicationuserid + device_id +уникальное
     application_user_id UUID NOT NULL,
+    value VARCHAR NOT NULL,
     expired_at TIMESTAMPTZ NOT NULL,
     created_at TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (id),

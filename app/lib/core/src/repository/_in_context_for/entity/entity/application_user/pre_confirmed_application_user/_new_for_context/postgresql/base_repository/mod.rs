@@ -15,7 +15,8 @@ pub struct BaseRepository;
 
 impl<'outer> BaseRepository {
     pub fn create(connection_manager: &'outer ConnectionManager, pre_confirmed_application_user: &'outer PreConfirmedApplicationUser) -> Result<(), DieselError> {
-        diesel::insert_into(pre_confirmed_application_user_schema::table).values(New::new(pre_confirmed_application_user))
+        diesel::insert_into(pre_confirmed_application_user_schema::table)
+        .values(New::new(pre_confirmed_application_user))
         .execute(connection_manager.get_connection())?;   // TODO нужно ли обработать количество вернувшихся строк
 
         return Ok(());
@@ -31,17 +32,19 @@ impl<'outer> BaseRepository {
     }
 
     pub fn is_exist_by_email(connection_manager: &'outer ConnectionManager, email: &'outer Email) -> Result<bool, DieselError> { // TODO сделать возможномть устанавливать фильтр ? 
-        return Ok(diesel::select(
-            dsl::exists(
-                pre_confirmed_application_user_schema::table
-                .filter(pre_confirmed_application_user_schema::email.eq(email.get_value()))
-            )
-        ).get_result::<bool>(connection_manager.get_connection())?
+        return Ok(
+            diesel::select(
+                dsl::exists(
+                    pre_confirmed_application_user_schema::table
+                    .filter(pre_confirmed_application_user_schema::email.eq(email.get_value()))
+                )
+            ).get_result::<bool>(connection_manager.get_connection())?
         );          // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer Email) -> Result<Option<PreConfirmedApplicationUser>, DieselError> {
-        match pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::email.eq(email.get_value()))
+        match pre_confirmed_application_user_schema::table
+        .filter(pre_confirmed_application_user_schema::email.eq(email.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? {
             Some(existing) => { 
                 return Ok(Some(PreConfirmedApplicationUser::new_from_model(existing))); 
