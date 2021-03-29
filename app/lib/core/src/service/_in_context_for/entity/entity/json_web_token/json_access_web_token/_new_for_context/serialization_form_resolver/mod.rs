@@ -12,11 +12,11 @@ impl<'outer, 'vague> SerializationFormResolver {
     pub fn serialize(json_access_web_token: &'outer JsonAccessWebToken<'outer>) -> String {
         let header_common: HeaderCommon<'_> = HeaderCommon::new_from_entity(json_access_web_token);
 
-        let payload_common: PayloadCommon<'_> = PayloadCommon::new(json_access_web_token);
+        let payload_common: PayloadCommon = PayloadCommon::new(json_access_web_token);
 
         return Self::create_classic_form(
             serde_json::to_string::<HeaderCommon<'_>>(&header_common).unwrap().as_str(), 
-            serde_json::to_string::<PayloadCommon<'_>>(&payload_common).unwrap().as_str()
+            serde_json::to_string::<PayloadCommon>(&payload_common).unwrap().as_str()
         );
     }
 
@@ -26,7 +26,7 @@ impl<'outer, 'vague> SerializationFormResolver {
         if Self::is_valid(&classic_form_parts) {
             let paylod_json_encoded: &'_ [u8] = &base64::decode(classic_form_parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
             
-            return Ok(JsonAccessWebToken::new_from_payload_common(serde_json::from_slice::<'_, PayloadCommon<'_>>(paylod_json_encoded).unwrap())?);  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
+            return Ok(JsonAccessWebToken::new_from_payload_common(serde_json::from_slice::<'_, PayloadCommon>(paylod_json_encoded).unwrap())?);  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
         } else {
             return Err(());
         }
