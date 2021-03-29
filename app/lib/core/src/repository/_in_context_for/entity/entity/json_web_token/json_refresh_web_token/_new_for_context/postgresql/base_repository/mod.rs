@@ -31,7 +31,8 @@ impl<'outer, 'vague> BaseRepository {
         match json_refresh_web_token_schema::table
         .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
         .filter(json_refresh_web_token_schema::application_user_log_in_token_device_id.eq(application_user_log_in_token_device_id.get_value()))
-        .get_result::<Existing>(connection_manager.get_connection()).optional()? {
+        .get_result::<Existing>(connection_manager.get_connection()).optional()?
+        {
             Some(existing) => { 
                 return Ok(Some(JsonRefreshWebToken::new_from_model(existing))); 
             },

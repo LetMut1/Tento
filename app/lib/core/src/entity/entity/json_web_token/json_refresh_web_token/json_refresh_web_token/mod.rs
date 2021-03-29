@@ -15,13 +15,13 @@ pub struct JsonRefreshWebToken<'outer> {
     expired_at: DateTime
 }
 
-impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {    // TODO Redis disc      // TODO  create ValHas with CustomHasher, value - это изменяемое после каждого использования токена поле. Может, завязать на device_id?
+impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {
     pub fn new(application_user_id: &'outer UuidV4, device_id: Cow<'outer, UuidV4>) -> Self {
         return Self {
             id: UuidV4::new(),
             application_user_id: Cow::Borrowed(application_user_id),
             application_user_log_in_token_device_id: device_id,
-            value: Value::new(Uuid::new_v4().to_string()),
+            value: Value::new(Uuid::new_v4().to_string()),  // TODO  create ValHas with CustomHasher, value - это изменяемое после каждого использования токена поле. Может, завязать на device_id?
             created_at: DateTime::new(),
             expired_at: DateExpirationCreator::create()
         };

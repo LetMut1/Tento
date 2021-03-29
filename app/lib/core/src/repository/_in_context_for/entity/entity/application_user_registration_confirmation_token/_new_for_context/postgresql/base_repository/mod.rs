@@ -59,7 +59,8 @@ impl<'outer, 'vague> BaseRepository {
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'vague>>, DieselError> {
         match application_user_registration_confirmation_token_schema::table
         .filter(application_user_registration_confirmation_token_schema::pre_confirmed_application_user_id.eq(pre_confirmed_application_user_id.get_value()))
-        .get_result::<Existing>(connection_manager.get_connection()).optional()? {
+        .get_result::<Existing>(connection_manager.get_connection()).optional()? 
+        {
             Some(existing) => { 
                 return Ok(Some(ApplicationUserRegistrationConfirmationToken::new_from_model(existing))); 
             },

@@ -15,11 +15,12 @@ pub struct EmailSender;
 impl<'outer> EmailSender {
     pub fn send(subject: &'outer str, body: String, to: &'outer str) -> Result<(), EmailErrorKind> {
         match EmailBuilder::new()
-            .subject(subject)
-            .text(body)
-            .from("from_changethis@yandex.ru".to_string())
-            .to(to)
-            .build() {
+        .subject(subject)
+        .text(body)
+        .from("from_changethis@yandex.ru".to_string())
+        .to(to)
+        .build() 
+        {
             Ok(email) => { 
                 // TODO uncomment {  
                 // match SmtpClient::new_simple("TODO") {  // TODO Для Prod нужен этот код, для Dev -тот, что ниже

@@ -70,7 +70,8 @@ impl<'outer, 'vague> BaseRepository {
         match application_user_log_in_token_schema::table
         .filter(application_user_log_in_token_schema::application_user_id.eq(application_user_id.get_value()))
         .filter(application_user_log_in_token_schema::device_id.eq(device_id.get_value()))
-        .get_result::<Existing>(connection_manager.get_connection()).optional()? {
+        .get_result::<Existing>(connection_manager.get_connection()).optional()? 
+        {
             Some(existing) => { 
                 return Ok(Some(ApplicationUserLogInToken::new_from_model(existing))); 
             },
