@@ -8,7 +8,7 @@ pub struct Common<'outer> {
 }
 
 impl<'outer> Common<'outer> {
-    pub fn new_from_entity(json_access_web_token: &'outer JsonAccessWebToken<'outer>) -> Self {
+    pub fn new(json_access_web_token: &'outer JsonAccessWebToken<'outer>) -> Self {
         return Self {
             alg: json_access_web_token.get_alg().get_value(),
             typ: json_access_web_token.get_typ().get_value()
