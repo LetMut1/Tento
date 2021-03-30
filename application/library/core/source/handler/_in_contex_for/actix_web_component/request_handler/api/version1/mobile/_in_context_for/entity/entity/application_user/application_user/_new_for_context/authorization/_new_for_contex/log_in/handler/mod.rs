@@ -36,6 +36,9 @@ impl Handler {
                                         connection_manager.commit_transaction()?;
                                         connection_manager.close_connection();
 
+                                        // TODO // TODO // TODO // TODO // TODO Если уже есть в JRWT (юзерайди+девайсайди) (повторный логин, по сути, то делаем РАЗЛОГИН и выбрасываем еррор), значит сделать перелогин, то есть, инвалидировать предыдущие значения
+                                        // удалить имеющийся JRWT, записать его аксесс в блэклист
+
                                         return Ok(HandlerResult::new(SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token))));
                                     },
                                     Err(diesel_error) => {
