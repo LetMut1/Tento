@@ -1,0 +1,4 @@
+[print_schema]
+file = "./source/diesel_component/schema/mod.rs"
+schema = "public"
+import_types = ["diesel::sql_types::*"]

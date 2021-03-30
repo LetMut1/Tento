@@ -1,0 +1,32 @@
+[package]
+name = "core_library"
+version = "0.1.0"
+authors = ["zda"]
+edition = "2018"
+
+[lib]
+name = "core_library"
+path = "./source/mod.rs"
+
+[dependencies]
+actix-service = {version = "1.0.6"}
+actix-web = {version = "3.3.2"}
+base64 = {version = "0.13.0"}
+chrono = {version = "0.4.19"}
+diesel = {version = "1.4.4", features = ["postgres", "uuidv07", "chrono"]}
+futures = {version = "0.3.13"}
+hex = {version = "0.4.2"}
+lettre = {version = "0.9"}
+lettre_email = {version = "0.9"}
+regex = {version = "1.4.3"}
+rust-argon2 = {version = "0.8"}
+rust-crypto = {version = "0.2.36"}
+serde = {version = "1.0.123", features = ["derive"]}
+serde_json = {version = "1.0"}
+uuid = {version = "0.8.1", features = ["v4", "v1"]}
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3

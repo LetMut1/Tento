@@ -12,7 +12,7 @@ services:
             - ./../../../:/usr/local/MemIs/
         ports:
             - 8080:80
-        working_dir: /usr/local/MemIs/app/
+        working_dir: /usr/local/MemIs/application/
         restart: always
         tty: true
         init: true
@@ -24,8 +24,8 @@ services:
         environment: 
             USER: ${USER}
         volumes:
-            - ./../../../app/:/usr/local/MemIs/app/
-        working_dir: /usr/local/MemIs/app/
+            - ./../../../application/:/usr/local/MemIs/application/
+        working_dir: /usr/local/MemIs/application/
         restart: always
         tty: true
         init: true
