@@ -53,7 +53,7 @@ impl<'outer> EmailSender {
 
 
 
-                // TODO delete below
+                // TODO delete below-------------------------------------------------------------
                 // TODO сделать возможность пробрасывать среду dev/prod с конфига
                 let mut smtp_transport: SmtpTransport;
                 match SmtpClient::new(("mailhog", 1025), ClientSecurity::None) {
@@ -67,7 +67,7 @@ impl<'outer> EmailSender {
                     Ok(_) => { return Ok(()); },
                     Err(value) => { return Err(EmailErrorKind::new_sending(value, None)); }
                 };
-                // TODO delete under
+                // TODO delete under ---------------------------------------------------------------
 
 
 

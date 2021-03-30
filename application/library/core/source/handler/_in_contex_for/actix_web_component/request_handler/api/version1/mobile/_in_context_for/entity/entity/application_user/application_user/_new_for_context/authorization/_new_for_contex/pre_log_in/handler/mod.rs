@@ -26,7 +26,7 @@ impl Handler {
                 if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash()) {
                     if !ApplicationUserLogInTokenBaseRepository::is_exist_by_application_user_id(&connection_manager, application_user.get_id())? {
                         let application_user_log_in_token: ApplicationUserLogInToken<'_> = 
-                            ApplicationUserLogInToken::new(application_user, UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?);
+                        ApplicationUserLogInToken::new(application_user, UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?);
 
                         ApplicationUserLogInTokenBaseRepository::create(&connection_manager, &application_user_log_in_token)?;
 

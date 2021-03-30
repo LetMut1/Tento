@@ -17,6 +17,7 @@ use crate::repository::_in_context_for::entity::entity::application_user::applic
 use crate::repository::_in_context_for::entity::entity::application_user::pre_confirmed_application_user::_new_for_context::postgresql::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
 use crate::repository::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::postgresql::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
+use crate::service::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
 use std::borrow::Cow;
 
@@ -38,7 +39,7 @@ impl<'outer> Handler {
                             if request.application_user_registration_confirmation_token_value == application_user_registration_confirmation_token.get_value().get_value() {
                                 if !application_user_registration_confirmation_token.is_expired() {
                                     let application_user: ApplicationUser<'_> = 
-                                        ApplicationUser::new_from_pre_confirmed_application_user(pre_confirmed_application_user, nickname, Password::new(request.application_user_password));
+                                    ApplicationUser::new_from_pre_confirmed_application_user(pre_confirmed_application_user, nickname, Password::new(request.application_user_password));
 
                                     connection_manager.begin_transaction()?;
                                     match ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
@@ -50,13 +51,18 @@ impl<'outer> Handler {
                                                             connection_manager.commit_transaction()?;
 
                                                             let json_refresh_web_token: JsonRefreshWebToken<'_> = 
-                                                                JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?));
+                                                            JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?));
 
                                                             JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
                                         
                                                             connection_manager.close_connection(); 
 
-                                                            return Ok(HandlerResult::new(SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token))));
+                                                            return Ok(
+                                                                HandlerResult::new(
+                                                                    SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token)),
+                                                                    Encoder::encode(&json_refresh_web_token)
+                                                                )
+                                                            );
                                                         },
                                                         Err(diesel_error) => {
                                                             connection_manager.rollback_transaction()?;
