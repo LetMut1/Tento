@@ -10,14 +10,16 @@ use std::clone::Clone;
 pub struct Payload<'outer> {
     application_user_id: Cow<'outer, UuidV4>,
     application_user_log_in_token_device_id: Cow<'outer, UuidV4>,
+    json_refresh_web_token_id: Cow<'outer, UuidV4>,
     exp: DateTime
 }
 
 impl<'this, 'outer: 'this> Payload<'outer> {
-    pub fn new_from_json_refresh_web_token(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self { // TODO РЕфреш создается с Аксесса, а Аксесс просто с параметров
+    pub fn new_from_json_refresh_web_token(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
         return Self {
             application_user_id: Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
             application_user_log_in_token_device_id: Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
+            json_refresh_web_token_id: Cow::Borrowed(json_refresh_web_token.get_id()),
             exp: DateExpirationCreator::create()
         };
     }
@@ -27,6 +29,7 @@ impl<'this, 'outer: 'this> Payload<'outer> {
             Self {
                 application_user_id: Cow::Owned(UuidV4::new_from_str(common.application_user_id.as_str())?),
                 application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_str(common.application_user_log_in_token_device_id.as_str())?),
+                json_refresh_web_token_id: Cow::Owned(UuidV4::new_from_str(common.json_refresh_web_token_id.as_str())?),
                 exp: DateTime::new_from_string(common.exp.as_str())
             }
         );
@@ -38,6 +41,10 @@ impl<'this, 'outer: 'this> Payload<'outer> {
 
     pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this UuidV4 {
         return &self.application_user_log_in_token_device_id;
+    }
+
+    pub fn get_json_refresh_web_token_id(&'this self) -> &'this UuidV4 {
+        return &self.json_refresh_web_token_id;
     }
 
     pub fn get_exp(&'this self) -> &'this DateTime {
