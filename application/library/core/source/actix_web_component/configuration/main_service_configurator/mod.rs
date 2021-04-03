@@ -7,7 +7,7 @@ pub struct MainServiceConfigurator;
 
 impl<'outer> MainServiceConfigurator {
     pub fn configure(service_config: &mut ServiceConfig) -> () {
-        service_config       // TODO default_service 
+        service_config                                                      // TODO default_service 
         .service(
             web::scope("/api")
             .service(
@@ -15,7 +15,7 @@ impl<'outer> MainServiceConfigurator {
                 .service(
                     web::scope("/m")
                     .service(
-                        web::scope("/nl")     // TODO 
+                        web::scope("/na")     // TODO можно ли объединить в Скопе без роута. ( Если есть Скоуп с пустым Роуом, то другие Скоцпы не воспринимаютмя)
                         .service( 
                             web::scope("/authentication")
                             .route("/pr", web::post().to(Authorization::pre_register))
@@ -29,7 +29,7 @@ impl<'outer> MainServiceConfigurator {
                         )
                     )
                     .service(
-                        web::scope("/l")
+                        web::scope("/a")
                         .wrap(LogInResolverFactory)
                         .service( 
                             web::scope("/authentication")
