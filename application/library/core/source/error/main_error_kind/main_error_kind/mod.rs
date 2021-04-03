@@ -16,7 +16,6 @@ pub enum MainErrorKind {
     DieselErrorKind(DieselError),
     EmailErrorKind(EmailErrorKind),
     EntityErrorKind(EntityErrorKind),
-    InvalidDeleteThisArgument,  // TODO delete this ( и имплементации)
     InvalidArgumentError,
     LogicError(LogicError)
 }
@@ -60,14 +59,7 @@ impl From<LogicError> for MainErrorKind {
 }
 
 impl From<InvalidArgumentError> for MainErrorKind {
-    fn from(invalid_argument_error: InvalidArgumentError) -> Self {
+    fn from(_: InvalidArgumentError) -> Self {
         return Self::InvalidArgumentError;
-    }
-}
-
-// TODO delete
-impl From<()> for MainErrorKind {
-    fn from(_: ()) -> Self {
-        return Self::InvalidDeleteThisArgument;
     }
 }
