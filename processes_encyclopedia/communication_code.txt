@@ -1,0 +1,22 @@
+Entity: (01 -> already exist, 02 -> not found)
+    ApplicationUser:
+        enapus01 -> already exist,
+        enapus02 -> not found,
+        enapus03 -> wrong password,
+        enapus04 -> invalid email,
+    PreConfirmedApplicationUser:
+        enprcoapus01 -> already exist,
+        enprcoapus02 -> not found,
+        enprcoapus03 -> already confirmed,
+    ApplicationUserRegistrationConfirmationToken:
+        enapusrecoto02 -> not found,
+        enapusrecoto03 -> invalid value,
+        enapusrecoto04 -> already expired,
+    ApplicationUserLogInToken:
+        enapuslointo01 -> already exist,
+        enapuslointo02 -> not found,
+        enapuslointo03 -> invalid value,
+        enapuslointo04 -> already expired,
+    JsonAccessWebToken:
+        enjsacweto03 -> already expired,
+

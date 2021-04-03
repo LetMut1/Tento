@@ -41,6 +41,7 @@ CREATE TABLE application_user_log_in_token (
 );
 -- // TODO Create Constraints (Внешние ключи обязательно ставить все. Если уникальное поле из 3 значений, то ставить внешний ключ на каждое, если эо поле по факту внешний ключ)
 -- // TODO Сделать индексы на внешние ключи ( посмотреть, где это нужно)
+-- // TODO все, где есть дата експирации, удалять по крону бинарнику (или из-под бд сразу)
 -- // TODO проврить down
 
 
@@ -56,14 +57,9 @@ CREATE TABLE json_refresh_web_token (   -- // TODO Redis
     FOREIGN KEY (application_user_id) REFERENCES application_user (id)
 );
 
--- CREATE TABLE json_access_web_token_black_list (        -- // TODO Redis
---     id UUID NOT NULL,
---     device_id VARCHAR NOT NULL,  колонки ДРУГИЕ !!!!!!!!!
---     value VARCHAR NOT NULL,
---     application_user_id UUID NOT NULL,
---     expired_at TIMESTAMPTZ NOT NULL,
---     created_at TIMESTAMPTZ NOT NULL,
---     PRIMARY KEY (id),
---     FOREIGN KEY (application_user_id) REFERENCES application_user (id)
--- );
+CREATE TABLE json_access_web_token_black_list (        -- // TODO Redis
+    json_refresh_web_token_id UUID NOT NULL,
+    PRIMARY KEY (json_refresh_web_token_id),
+    FOREIGN KEY (json_refresh_web_token_id) REFERENCES json_refresh_web_token (id)
+);
 -- // TODO delete 

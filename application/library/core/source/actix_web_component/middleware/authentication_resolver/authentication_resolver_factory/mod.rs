@@ -5,11 +5,11 @@ use actix_web::dev::ServiceResponse;
 use actix_web::Error;
 use futures::future::ok as FutureOk; 
 use futures::future::Ready; 
-use super::log_in_resolver::LogInResolver;
+use super::authentication_resolver::AuthenticationResolver;
 
-pub struct LogInResolverFactory;
+pub struct AuthenticationResolverFactory;
 
-impl<S, B> Transform<S> for LogInResolverFactory
+impl<S, B> Transform<S> for AuthenticationResolverFactory
 where
     S: Service<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static
@@ -18,10 +18,10 @@ where
     type Response = ServiceResponse<B>;
     type Error = Error;
     type InitError = ();
-    type Transform = LogInResolver<S, B>;
+    type Transform = AuthenticationResolver<S, B>;
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        return FutureOk(LogInResolver::new(service));
+        return FutureOk(AuthenticationResolver::new(service));
     }
 }

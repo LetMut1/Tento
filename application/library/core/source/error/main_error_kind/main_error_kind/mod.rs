@@ -7,6 +7,7 @@ use super::core::_in_context_for::diesel_component::_new_for_context::diesel_err
 use super::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
 use super::core::_in_context_for::utility::email_sender::_new_for_context::email_error_kind::EmailErrorKind;
 use super::core::connection_error_kind::connection_error_kind::ConnectionErrorKind;
+use super::core::invalid_argument_error::InvalidArgumentError;
 use super::core::logic_error::LogicError;
 
 #[derive(Debug)]
@@ -15,7 +16,8 @@ pub enum MainErrorKind {
     DieselErrorKind(DieselError),
     EmailErrorKind(EmailErrorKind),
     EntityErrorKind(EntityErrorKind),
-    InvalidArgument,
+    InvalidDeleteThisArgument,  // TODO delete this ( и имплементации)
+    InvalidArgumentError,
     LogicError(LogicError)
 }
 
@@ -57,8 +59,15 @@ impl From<LogicError> for MainErrorKind {
     }
 }
 
+impl From<InvalidArgumentError> for MainErrorKind {
+    fn from(invalid_argument_error: InvalidArgumentError) -> Self {
+        return Self::InvalidArgumentError;
+    }
+}
+
+// TODO delete
 impl From<()> for MainErrorKind {
     fn from(_: ()) -> Self {
-        return Self::InvalidArgument
+        return Self::InvalidDeleteThisArgument;
     }
 }

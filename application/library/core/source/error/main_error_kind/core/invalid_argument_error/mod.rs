@@ -4,16 +4,13 @@ use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
 
 #[derive(Debug)]
-pub enum JsonAccessWebTokenErrorKind {
-    AlreadyExpired,
-    InJsonAccessWebTokenBlackList,
-    NotExpired
-}
+pub struct InvalidArgumentError;
 
-impl Display for JsonAccessWebTokenErrorKind {
+impl Display for InvalidArgumentError {
     fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
         return Ok(());  // TODO 
     }
 }
 
-impl Error for JsonAccessWebTokenErrorKind {}
+impl Error for InvalidArgumentError {}
+

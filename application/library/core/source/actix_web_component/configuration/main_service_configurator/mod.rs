@@ -1,6 +1,6 @@
 use actix_web::web;
 use actix_web::web::ServiceConfig;
-use crate::actix_web_component::middleware::log_in_resolver::log_in_resolver_factory::LogInResolverFactory;
+use crate::actix_web_component::middleware::authentication_resolver::authentication_resolver_factory::AuthenticationResolverFactory;
 use crate::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::Authorization;
 
 pub struct MainServiceConfigurator;
@@ -30,7 +30,7 @@ impl<'outer> MainServiceConfigurator {
                     )
                     .service(
                         web::scope("/a")
-                        .wrap(LogInResolverFactory)
+                        .wrap(AuthenticationResolverFactory)
                         .service( 
                             web::scope("/authentication")
                             // .route("/t", web::get().to(Authorization::ttttt))
