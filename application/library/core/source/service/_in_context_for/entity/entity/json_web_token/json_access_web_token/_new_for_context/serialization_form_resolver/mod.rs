@@ -10,43 +10,32 @@ impl<'outer, 'vague> SerializationFormResolver {
     const LINE_SEPARATOR: &'static str = ".";
 
     pub fn serialize(json_access_web_token: &'outer JsonAccessWebToken<'outer>) -> String {
-        return Self::create_classic_form(
-            serde_json::to_string(&HeaderCommon::new(json_access_web_token)).unwrap().as_str(), 
-            serde_json::to_string(&PayloadCommon::new(json_access_web_token)).unwrap().as_str()
-        );
+        let header_and_payload: String = 
+        base64::encode(serde_json::to_string(&HeaderCommon::new(json_access_web_token)).unwrap().as_bytes()) 
+        + Self::LINE_SEPARATOR 
+        + base64::encode(serde_json::to_string(&PayloadCommon::new(json_access_web_token)).unwrap().as_bytes()).as_str();
+        
+        let signature: String = SignatureCreator::create(&header_and_payload);
+
+        return header_and_payload + Self::LINE_SEPARATOR + signature.as_str();
     }
 
     pub fn deserialize(classic_form: &'outer str) -> Result<JsonAccessWebToken<'vague>, ()> {
         let classic_form_parts: Vec<&'_ str> = classic_form.split(Self::LINE_SEPARATOR).collect::<Vec<&'_ str>>();
 
-        if Self::is_valid(&classic_form_parts) {
-            let paylod_json_encoded: &'_ [u8] = &base64::decode(classic_form_parts[1].as_bytes()).unwrap(); // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
-            
-            return Ok(JsonAccessWebToken::new_from_payload_common(serde_json::from_slice::<'_, PayloadCommon>(paylod_json_encoded).unwrap())?);  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
-        } else {
-            return Err(());
-        }
-    }
-
-    fn create_classic_form(header: &'vague str, payload: &'vague str) -> String {
-        let header_and_payload: String = base64::encode(header.as_bytes()) + Self::LINE_SEPARATOR + base64::encode(payload.as_bytes()).as_str();
-        
-        let signature: String = SignatureCreator::create(&header_and_payload);
-
-        return header_and_payload + Self::LINE_SEPARATOR + &signature;
-    }
-
-    fn is_valid(json_access_web_token_parts: &'vague Vec<&'vague str>) -> bool {
-        if json_access_web_token_parts.len() == 3 {
+        if classic_form_parts.len() == 3 {
             if SignatureCreator::is_valid(
-                (String::new() + json_access_web_token_parts[0] + Self::LINE_SEPARATOR + json_access_web_token_parts[1]).as_str(), json_access_web_token_parts[2]
-            ) {
-                return true;
-            } else {
-                return false;
+                (String::new() + classic_form_parts[0] + Self::LINE_SEPARATOR + classic_form_parts[1]).as_str(), classic_form_parts[2]
+            ) 
+            {
+                return Ok(
+                    JsonAccessWebToken::new_from_payload_common(
+                        serde_json::from_slice::<'_, PayloadCommon>(&base64::decode(classic_form_parts[1].as_bytes()).unwrap()).unwrap()  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
+                    )?
+                );
             }
-        } else {
-            return false;
         }
+
+        return Err(());
     }
 } 
