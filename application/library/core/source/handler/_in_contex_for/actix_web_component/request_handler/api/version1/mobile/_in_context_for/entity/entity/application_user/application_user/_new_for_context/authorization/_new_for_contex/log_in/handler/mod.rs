@@ -20,57 +20,50 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        match ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
+        if let Some(ref application_user_log_in_token) = ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
             &connection_manager, &UuidV4::new_from_str(request.application_user_id.as_str())?, &UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?
-        )? 
+        )?
         {
-            Some(ref application_user_log_in_token) => {
-                if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value {
-                    if !application_user_log_in_token.is_expired() {
-                        let json_refresh_web_token: JsonRefreshWebToken<'_> = 
-                        JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), Cow::Borrowed(application_user_log_in_token.get_device_id()));
+            if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value {
+                if !application_user_log_in_token.is_expired() {
+                    let json_refresh_web_token: JsonRefreshWebToken<'_> = 
+                    JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), Cow::Borrowed(application_user_log_in_token.get_device_id()));
 
-                        connection_manager.begin_transaction()?;
-                        match ApplicationUserLogInTokenBaseRepository::delete(&connection_manager, application_user_log_in_token) {
-                            Ok(_) => {
-                                match JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token) {
-                                    Ok(_) => {
-                                        connection_manager.commit_transaction()?;
-                                        connection_manager.close_connection();
+                    connection_manager.begin_transaction()?;
 
-                                        // TODO // TODO // TODO // TODO // TODO Если уже есть в JRWT (юзерайди+девайсайди) (повторный логин, по сути, то делаем РАЗЛОГИН старого токена), значит сделать перелогин, то есть, инвалидировать предыдущие значения
-                                        // удалить имеющийся JRWT, записать его аксесс в блэклист
+                    if let Err(diesel_error) = ApplicationUserLogInTokenBaseRepository::delete(&connection_manager, application_user_log_in_token) { 
+                        connection_manager.rollback_transaction()?;
 
-                                        return Ok(
-                                            HandlerResult::new(
-                                                SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token)),
-                                                Encoder::encode(&json_refresh_web_token)
-                                            )
-                                        );
-                                    },
-                                    Err(diesel_error) => {
-                                        connection_manager.rollback_transaction()?;
-            
-                                        return Err(diesel_error)?;
-                                    }
-                                }
-                            },
-                            Err(diesel_error) => {
-                                connection_manager.rollback_transaction()?;
-
-                                return Err(diesel_error)?;
-                            }
-                        }
-                    } else {
-                        return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExpired))?;
+                        return Err(diesel_error)?;
+                        
                     }
-                } else {
-                    return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::InvalidValue))?;
+
+                    if let Err(diesel_error) = JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token) {
+                        connection_manager.rollback_transaction()?;
+
+                        return Err(diesel_error)?;
+                    }
+
+                    connection_manager.commit_transaction()?;
+                    connection_manager.close_connection();
+
+                    // TODO // TODO // TODO // TODO // TODO Если уже есть в JRWT (юзерайди+девайсайди) (повторный логин, по сути, то делаем РАЗЛОГИН старого токена), значит сделать перелогин, то есть, инвалидировать предыдущие значения
+                    // удалить имеющийся JRWT, записать его аксесс в блэклист
+
+                    return Ok(
+                        HandlerResult::new(
+                            SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token)),
+                            Encoder::encode(&json_refresh_web_token)
+                        )
+                    );
                 }
-            },
-            None => {
-                return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::NotFound))?;
+                
+                return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExpired))?;
             }
+            
+            return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::InvalidValue))?;
         }
+
+        return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::NotFound))?;
     }
 }

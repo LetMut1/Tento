@@ -30,38 +30,31 @@ impl Handler {
                     let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> = ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user);
                     
                     connection_manager.begin_transaction()?;
-                    match PreConfirmedApplicationUserBaseRepository::create(&connection_manager, &pre_confirmed_application_user) {
-                        Ok(_) => {
-                            match ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&connection_manager, &application_user_registration_confirmation_token) {
-                                Ok(_) => {
-                                    connection_manager.commit_transaction()?;
-                                    connection_manager.close_connection();
+                    if let Err(diesel_error) = PreConfirmedApplicationUserBaseRepository::create(&connection_manager, &pre_confirmed_application_user) {
+                        connection_manager.rollback_transaction()?;
 
-                                    BaseSender::send_by_email(&application_user_registration_confirmation_token, pre_confirmed_application_user.get_email())?;
-       
-                                    return Ok(());
-                                },
-                                Err(diesel_error) => {
-                                    connection_manager.rollback_transaction()?;
-
-                                    return Err(diesel_error)?;
-                                }
-                            }
-                        },
-                        Err(diesel_error) => {
-                            connection_manager.rollback_transaction()?;
-
-                            return Err(diesel_error)?;
-                        }
+                        return Err(diesel_error)?;
                     }
-                } else {
-                    return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;
+
+                    if let Err(diesel_error) = ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&connection_manager, &application_user_registration_confirmation_token) {
+                        connection_manager.rollback_transaction()?;
+
+                        return Err(diesel_error)?;
+                    }
+                    connection_manager.commit_transaction()?;
+                    connection_manager.close_connection();
+
+                    BaseSender::send_by_email(&application_user_registration_confirmation_token, pre_confirmed_application_user.get_email())?;
+
+                    return Ok(());
                 }
-            } else {
-                return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyExist))?;
+                
+                return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;
             }
-        } else {
-            return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::InvalidEmail))?;
+            
+            return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyExist))?;
         }
+        
+        return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::InvalidEmail))?;
     }
 }

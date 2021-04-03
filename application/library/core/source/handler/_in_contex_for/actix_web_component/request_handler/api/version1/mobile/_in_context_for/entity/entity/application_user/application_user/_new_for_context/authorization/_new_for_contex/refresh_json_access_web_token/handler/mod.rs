@@ -19,24 +19,22 @@
 //             let mut connection_manager: ConnectionManager = ConnectionManager::new();
 //             connection_manager.establish_connection()?;
 
-//             match BaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
+//             if let Some (json_refresh_web_token) = BaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
 //                 &connection_manager, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
-//             )? 
+//             )?
 //             {
-//                 Some (json_refresh_web_token) => {
-//                     if json_refresh_web_token.get_value().get_value() == json_access_web_token.get_json_refresh_web_token_value().get_value() {
-//                         json_refresh_web_token.refresh_expired_at()
-//                     } else {
-//                         return Err(EntityErrorKind::JsonRefreshWebTokenErrorKind(JsonRefreshWebTokenErrorKind::InvalidValue))?
-//                     }
-//                 },
-//                 None => {
-//                     return Err(EntityErrorKind::JsonRefreshWebTokenErrorKind(JsonRefreshWebTokenErrorKind::NotExist))?
+//                 if json_refresh_web_token.get_value().get_value() == json_access_web_token.get_json_refresh_web_token_value().get_value() {
+//                     json_refresh_web_token.refresh_expired_at()
 //                 }
+                
+//                 return Err(EntityErrorKind::JsonRefreshWebTokenErrorKind(JsonRefreshWebTokenErrorKind::InvalidValue))?;
 //             }
-//         } else {
-//             return Err(EntityErrorKind::JsonAccessWebTokenErrorKind(JsonAccessWebTokenErrorKind::NotExpired))?;
+
+//             return Err(EntityErrorKind::JsonRefreshWebTokenErrorKind(JsonRefreshWebTokenErrorKind::NotExist))?;
 //         }
+        
+//         return Err(EntityErrorKind::JsonAccessWebTokenErrorKind(JsonAccessWebTokenErrorKind::NotExpired))?;
 //     }
 // }
-// брать из кеша рефреш по айди ( лежащему в аксессе), проверять хэш рефреша.
+
+//  TODO брать из кеша рефреш по айди ( лежащему в аксессе), проверять хэш рефреша.

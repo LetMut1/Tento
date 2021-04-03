@@ -21,30 +21,28 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        match ApplicationUserBaseRepository::get_by_email(&connection_manager, &Email::new(request.application_user_email))? {
-            Some(ref application_user) => {
-                if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash()) {
-                    if !ApplicationUserLogInTokenBaseRepository::is_exist_by_application_user_id(&connection_manager, application_user.get_id())? {
-                        let application_user_log_in_token: ApplicationUserLogInToken<'_> = 
-                        ApplicationUserLogInToken::new(application_user, UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?);
+        if let Some(ref application_user) = ApplicationUserBaseRepository::get_by_email(&connection_manager, &Email::new(request.application_user_email))? {
+            if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash()) {
+                if !ApplicationUserLogInTokenBaseRepository::is_exist_by_application_user_id(&connection_manager, application_user.get_id())? {
+                    let application_user_log_in_token: ApplicationUserLogInToken<'_> = 
+                    ApplicationUserLogInToken::new(application_user, UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?);
 
-                        ApplicationUserLogInTokenBaseRepository::create(&connection_manager, &application_user_log_in_token)?;
+                    ApplicationUserLogInTokenBaseRepository::create(&connection_manager, &application_user_log_in_token)?;
 
-                        connection_manager.close_connection();
+                    connection_manager.close_connection();
 
-                        BaseSender::send_by_email(&application_user_log_in_token, application_user.get_email())?;
+                    BaseSender::send_by_email(&application_user_log_in_token, application_user.get_email())?;
 
-                        return Ok(HandlerResult::new(application_user.get_id().get_value().to_string()));
-                    } else {
-                        return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExist))?;
-                    }
-                } else {
-                    return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::WrongPassword))?;
+                    return Ok(HandlerResult::new(application_user.get_id().get_value().to_string()));
                 }
-            },
-            None => {
-                return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound))?;
+                
+                return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExist))?;
             }
+            
+            return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::WrongPassword))?;
+            
         }
+
+        return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound))?;
     }
 }

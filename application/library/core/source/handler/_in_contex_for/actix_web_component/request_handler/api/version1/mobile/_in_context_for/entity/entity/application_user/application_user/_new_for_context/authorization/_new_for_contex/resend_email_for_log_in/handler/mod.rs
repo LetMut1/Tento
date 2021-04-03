@@ -16,29 +16,25 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        match ApplicationUserBaseRepository::get_by_id(&connection_manager, &UuidV4::new_from_str(request.application_user_id.as_str())?)? {
-            Some(application_user) => {
-                match ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(&connection_manager, application_user.get_id(), &UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?)? {
-                    Some(mut application_user_log_in_token) => {
-                        if application_user_log_in_token.is_expired() {
-                            application_user_log_in_token.refresh_value().refresh_expired_at();
+        if let Some(application_user) = ApplicationUserBaseRepository::get_by_id(&connection_manager, &UuidV4::new_from_str(request.application_user_id.as_str())?)? {
+            if let Some(mut application_user_log_in_token) = 
+            ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(&connection_manager, application_user.get_id(), &UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?)? 
+            {
+                if application_user_log_in_token.is_expired() {
+                    application_user_log_in_token.refresh_value().refresh_expired_at();
 
-                            ApplicationUserLogInTokenBaseRepository::update(&connection_manager, &application_user_log_in_token)?;
-                        }
-                        connection_manager.close_connection();
-
-                        BaseSender::send_by_email(&application_user_log_in_token, application_user.get_email())?;
-
-                        return Ok(());
-                    },
-                    None => {
-                        return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::NotFound))?;
-                    }
+                    ApplicationUserLogInTokenBaseRepository::update(&connection_manager, &application_user_log_in_token)?;
                 }
-            },
-            None => {
-                return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound))?;
+                connection_manager.close_connection();
+
+                BaseSender::send_by_email(&application_user_log_in_token, application_user.get_email())?;
+
+                return Ok(());
             }
+
+            return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::NotFound))?;
         }
+
+        return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound))?;
     }
 }

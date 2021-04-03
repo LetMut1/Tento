@@ -18,84 +18,68 @@ impl<'this> ConnectionManager {
     }
 
     pub fn establish_connection(&'this mut self) -> Result<(), ConnectionErrorKind> {
-        match self.pg_connection {
-            Some(_) => { panic!("Logic error, PgConnection is already exist"); }, // TODO error
-            None => { 
-                match PgConnection::establish("postgres://root:password@postgresql/mem_is") {  // TODO from env
-                    Ok(pg_connection) => {
-                        self.pg_connection = Some(pg_connection);
+        if let None = self.pg_connection {
+            match PgConnection::establish("postgres://root:password@postgresql/mem_is") {  // TODO from env
+                Ok(pg_connection) => {
+                    self.pg_connection = Some(pg_connection);
 
-                        return Ok(());
-                    },
-                    Err(connection_error) => {
-                        return Err(ConnectionErrorKind::PostgresqlConnectionError(PostgresqlConnectionError::new(connection_error)));
-                    }
+                    return Ok(());
+                },
+                Err(connection_error) => {
+                    return Err(ConnectionErrorKind::PostgresqlConnectionError(PostgresqlConnectionError::new(connection_error)));
                 }
             }
         }
+
+        panic!("Logic error, PgConnection is already exist"); // TODO 
     }
 
     pub fn close_connection(&'this mut self) -> () {
-        match self.pg_connection {
-            Some(_) => { 
-                self.pg_connection = None;
+        if let Some(_) = self.pg_connection {
+            self.pg_connection = None;
 
-                return ();
-            },
-            None => { 
-                panic!("Logic error, PgConnection does not exist");
-            } // TODO error
+            return ();
         }
+
+        panic!("Logic error, PgConnection does not exist"); // TODO
     }
 
     pub fn get_connection(&'this self) -> &'this PgConnection {
-        match self.pg_connection {
-            Some(ref pg_connection) => { 
-                return pg_connection; 
-            },
-            None => { 
-                panic!("Logic error, PgConnection does not exist"); 
-            } // TODO Error
+        if let Some(ref pg_connection) = self.pg_connection {
+            return pg_connection; 
         }
+
+        panic!("Logic error, PgConnection does not exist");  // TODO 
     }
 
     pub fn  begin_transaction(&'this self) -> Result<(), DieselError> {
-        match self.pg_connection {
-            Some(ref pg_connection) => { 
-                pg_connection.transaction_manager().begin_transaction(pg_connection)?;
+        if let Some(ref pg_connection) = self.pg_connection {
+            pg_connection.transaction_manager().begin_transaction(pg_connection)?;
 
-                return Ok(());
-            },
-            None => { 
-                panic!("Logic error, PgConnection does not exist"); 
-            } // TODO Error
+            return Ok(());
         }
+
+        panic!("Logic error, PgConnection does not exist"); // TODO
     }
 
     pub fn  commit_transaction(&'this self) -> Result<(), DieselError> {
-        match self.pg_connection {
-            Some(ref pg_connection) => { 
-                pg_connection.transaction_manager().commit_transaction(pg_connection)?;
+        if let Some(ref pg_connection) = self.pg_connection {
+            pg_connection.transaction_manager().commit_transaction(pg_connection)?;
 
-                return Ok(());
-            },
-            None => {
-                panic!("Logic error, PgConnection does not exist"); 
-            } // TODO Error
+            return Ok(());
         }
+
+        panic!("Logic error, PgConnection does not exist"); // TODO
     }
 
     pub fn  rollback_transaction(&'this self) -> Result<(), DieselError> {
-        match self.pg_connection {
-            Some(ref pg_connection) => { 
-                pg_connection.transaction_manager().rollback_transaction(pg_connection)?;
+        if let Some(ref pg_connection) = self.pg_connection {
+            pg_connection.transaction_manager().rollback_transaction(pg_connection)?;
 
-                return Ok(());
-            },
-            None => { 
-                panic!("Logic error, PgConnection does not exist"); 
-            } // TODO Error
+            return Ok(());
         }
+
+        panic!("Logic error, PgConnection does not exist"); // TODO
     }
 
     fn close_connection_on_drop(&'this mut self) -> () {

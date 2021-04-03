@@ -32,80 +32,66 @@ impl<'outer> Handler {
         connection_manager.establish_connection()?;
 
         if !ApplicationUserBaseRepository::is_exist_by_nickanme(&connection_manager, &nickname)? {
-            match PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, &email)? {
-                Some(ref pre_confirmed_application_user) => {
-                    match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? {
-                        Some(ref application_user_registration_confirmation_token) => {
-                            if request.application_user_registration_confirmation_token_value == application_user_registration_confirmation_token.get_value().get_value() {
-                                if !application_user_registration_confirmation_token.is_expired() {
-                                    let application_user: ApplicationUser<'_> = 
-                                    ApplicationUser::new_from_pre_confirmed_application_user(pre_confirmed_application_user, nickname, Password::new(request.application_user_password));
+            if let Some(ref pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, &email)? {
+                if let Some(ref application_user_registration_confirmation_token) = 
+                ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? 
+                {
+                    if request.application_user_registration_confirmation_token_value == application_user_registration_confirmation_token.get_value().get_value() {
+                        if !application_user_registration_confirmation_token.is_expired() {
+                            let application_user: ApplicationUser<'_> = 
+                            ApplicationUser::new_from_pre_confirmed_application_user(pre_confirmed_application_user, nickname, Password::new(request.application_user_password));
 
-                                    connection_manager.begin_transaction()?;
-                                    match ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
-                                        Ok(_) => {
-                                            match ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&connection_manager, application_user_registration_confirmation_token) {
-                                                Ok(_) => {
-                                                    match PreConfirmedApplicationUserBaseRepository::delete(&connection_manager, pre_confirmed_application_user) {
-                                                        Ok(_) => {
-                                                            connection_manager.commit_transaction()?;
+                            connection_manager.begin_transaction()?;
+                            if let Err(diesel_error) = ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
+                                connection_manager.rollback_transaction()?;
 
-                                                            let json_refresh_web_token: JsonRefreshWebToken<'_> = 
-                                                            JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?));
-
-                                                            JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
-                                        
-                                                            connection_manager.close_connection(); 
-
-                                                            return Ok(
-                                                                HandlerResult::new(
-                                                                    SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token)),
-                                                                    Encoder::encode(&json_refresh_web_token)
-                                                                )
-                                                            );
-                                                        },
-                                                        Err(diesel_error) => {
-                                                            connection_manager.rollback_transaction()?;
-             
-                                                            return Err(diesel_error)?;
-                                                        }
-                                                    }
-                                                }, 
-                                                Err(diesel_error) => {
-                                                    connection_manager.rollback_transaction()?;
-     
-                                                    return Err(diesel_error)?;
-                                                }
-                                            }
-                                        },
-                                        Err(diesel_error) => {
-                                            connection_manager.rollback_transaction()?;
-
-                                            return Err(diesel_error)?;
-                                        }
-                                    }
-                                } else {
-                                    return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::AlreadyExpired))?;
-                                }
-                            } else {
-                                return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue))?;
+                                return Err(diesel_error)?;
                             }
-                        },
-                        None => {
-                            return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound))?;
+
+                            if let Err(diesel_error) = ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&connection_manager, application_user_registration_confirmation_token) {
+                                connection_manager.rollback_transaction()?;
+
+                                return Err(diesel_error)?; 
+                            }
+
+                            if let Err(diesel_error) = PreConfirmedApplicationUserBaseRepository::delete(&connection_manager, pre_confirmed_application_user) {
+                                connection_manager.rollback_transaction()?;
+
+                                return Err(diesel_error)?;
+                            }
+                            connection_manager.commit_transaction()?;
+
+                            let json_refresh_web_token: JsonRefreshWebToken<'_> = 
+                            JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?));
+
+                            JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
+                            
+                            connection_manager.close_connection(); 
+
+                            return Ok(
+                                HandlerResult::new(
+                                    SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token)),
+                                    Encoder::encode(&json_refresh_web_token)
+                                )
+                            );
                         }
+                        
+                        return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::AlreadyExpired))?;
                     }
-                },
-                None => {
-                    if ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)? {
-                        return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyConfirmed))?;
-                    } else {
-                        return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::NotFound))?;
-                    }
+                    
+                    return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue))?;
                 }
+
+                return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound))?;
             }
-        } else {
-            return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;
+
+            if ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)? {
+                return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyConfirmed))?;
+            }
+            
+            return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::NotFound))?;
         }
+        
+        return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;
     }
 }

@@ -47,30 +47,26 @@ impl<'outer, 'vague> BaseRepository {
     }
 
     pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer Email) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
-        match application_user_schema::table
+        if let Some(existing) = 
+        application_user_schema::table
         .filter(application_user_schema::email.eq(email.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? 
         {
-            Some(existing) => { 
-                return Ok(Some(ApplicationUser::new_from_model(existing))); 
-            },
-            None => {
-                return Ok(None); 
-            }
+            return Ok(Some(ApplicationUser::new_from_model(existing))); 
         }
+
+        return Ok(None); 
     }
 
     pub fn get_by_id(connection_manager: &'outer ConnectionManager, id: &'outer UuidV4) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
-        match application_user_schema::table
+        if let Some(existing) =
+        application_user_schema::table
         .filter(application_user_schema::id.eq(id.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? 
         {
-            Some(existing) => { 
-                return Ok(Some(ApplicationUser::new_from_model(existing))); 
-            },
-            None => { 
-                return Ok(None); 
-            }
+            return Ok(Some(ApplicationUser::new_from_model(existing))); 
         }
+
+        return Ok(None); 
     }
 }
