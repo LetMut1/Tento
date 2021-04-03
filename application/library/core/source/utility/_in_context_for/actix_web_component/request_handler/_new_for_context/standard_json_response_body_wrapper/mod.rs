@@ -1,12 +1,12 @@
-use crate::dto::_in_context_for::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_json_response_body_wrapper::_new_for_context::fail_result_with_code::FailResultWithCode;
-use crate::dto::_in_context_for::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_json_response_body_wrapper::_new_for_context::success_result_with_body::SuccessResultWithBody;
-use crate::dto::_in_context_for::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_json_response_body_wrapper::_new_for_context::success_result::SuccessResult;
+use crate::dto::_in_context_for::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standard_json_response_body_wrapper::_new_for_context::fail_result_with_code::FailResultWithCode;
+use crate::dto::_in_context_for::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standard_json_response_body_wrapper::_new_for_context::success_result_with_body::SuccessResultWithBody;
+use crate::dto::_in_context_for::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standard_json_response_body_wrapper::_new_for_context::success_result::SuccessResult;
 use serde_json;
 use serde::Serialize;
 
-pub struct StandartJsonResponseBodyWrapper;
+pub struct StandardJsonResponseBodyWrapper;
 
-impl<'outer> StandartJsonResponseBodyWrapper {
+impl<'outer> StandardJsonResponseBodyWrapper {
     pub fn wrap_for_success_with_body<S>(body: &'outer S) -> String 
     where 
         S: Serialize

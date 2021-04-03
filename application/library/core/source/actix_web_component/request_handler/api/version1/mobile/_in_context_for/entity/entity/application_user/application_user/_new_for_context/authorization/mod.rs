@@ -24,8 +24,8 @@ use crate::handler::_in_contex_for::actix_web_component::request_handler::api::v
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::register::handler::Handler as RegisterHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_log_in::handler::Handler as ResendEmailForLogInHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_register::handler::Handler as ResendEmailForRegisterHandler;
-use crate::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_json_response_body_wrapper::StandartJsonResponseBodyWrapper;
-use crate::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standart_response_creator::StandartResponseCreator;
+use crate::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standard_json_response_body_wrapper::StandardJsonResponseBodyWrapper;
+use crate::utility::_in_context_for::actix_web_component::request_handler::_new_for_context::standard_response_creator::StandardResponseCreator;
 
 pub struct Authorization;
 
@@ -35,11 +35,11 @@ impl Authorization {
 
         match CheckEmailForExistingHanlder::handle(check_email_for_existing_query) {
             Ok(ref result) => {
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(result));
+                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(result));
             },
             Err(ref main_error_kind) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                return StandartResponseCreator::create_internal_server_error();
+                return StandardResponseCreator::create_internal_server_error();
             }
         };
     }
@@ -49,11 +49,11 @@ impl Authorization {
 
         match CheckNicknameForExistingHanlder::handle(check_nickname_for_existing_query) {
             Ok(ref result) => {
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(result));
+                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(result));
             },
             Err(ref main_error_kind) => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                return StandartResponseCreator::create_internal_server_error();
+                return StandardResponseCreator::create_internal_server_error();
             }
         };
     }
@@ -63,7 +63,7 @@ impl Authorization {
 
         match PreRegisterHandler::handle(pre_register_request) {
             Ok(_) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success()); 
+                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
             },
             Err(ref main_error_kind) => {
                 match main_error_kind {
@@ -72,37 +72,37 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(ref application_user_error_kind) => {
                                 match application_user_error_kind {
                                     ApplicationUserErrorKind::AlreadyExist => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus01"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus01"));
                                     },
                                     ApplicationUserErrorKind::InvalidEmail => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus04"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus04"));
                                     }
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
                             EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
                                 match pre_confirmed_application_user_error_kind {
                                     PreConfirmedApplicationUserErrorKind::AlreadyExist => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus01"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus01"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 };
                             }
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandartResponseCreator::create_internal_server_error();
+                                return StandardResponseCreator::create_internal_server_error();
                             }
                         };
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return StandartResponseCreator::create_internal_server_error();
+                        return StandardResponseCreator::create_internal_server_error();
                     }
                 };
             }
@@ -114,7 +114,7 @@ impl Authorization {
         
         match RegisterHandler::handle(register_request) {
             Ok(ref result) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(result)); 
+                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(result)); 
             },
             Err(ref main_error_kind) => {
                 match main_error_kind {
@@ -123,50 +123,50 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(ref application_user_error_kind) => {
                                 match application_user_error_kind {
                                     ApplicationUserErrorKind::AlreadyExist => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus01"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus01"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
                             EntityErrorKind::PreConfirmedApplicationUserErrorKind(ref pre_confirmed_application_user_error_kind) => {
                                 match pre_confirmed_application_user_error_kind {
                                     PreConfirmedApplicationUserErrorKind::AlreadyConfirmed => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus03"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus03"));
                                     },
                                     PreConfirmedApplicationUserErrorKind::NotFound => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus02"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
                             EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ref application_user_registration_confirmation_error_kind) => {
                                 match application_user_registration_confirmation_error_kind {
                                     ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapusrecoto02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapusrecoto02"));
                                     },
                                     ApplicationUserRegistrationConfirmationTokenErrorKind::AlreadyExpired => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapusrecoto04"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapusrecoto04"));
                                     },
                                     ApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapusrecoto03"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapusrecoto03"));
                                     }
                                 };
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandartResponseCreator::create_internal_server_error();
+                                return StandardResponseCreator::create_internal_server_error();
                             }
                         };
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return StandartResponseCreator::create_internal_server_error();
+                        return StandardResponseCreator::create_internal_server_error();
                     }
                 };
             }
@@ -178,7 +178,7 @@ impl Authorization {
 
         match ResendEmailForRegisterHandler::handle(resend_email_for_register_request) {
             Ok(_) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success()); 
+                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
             },
             Err(ref main_error_kind) => {
                 match main_error_kind {
@@ -187,35 +187,35 @@ impl Authorization {
                             EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
                                 match pre_confirmed_application_user_error_kind {
                                     PreConfirmedApplicationUserErrorKind::NotFound => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eprcoapus02"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
                             EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ref application_user_registration_confirmation_error_kind) => {
                                 match application_user_registration_confirmation_error_kind {
                                     ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapusrecoto02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapusrecoto02"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
 
                                 };
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandartResponseCreator::create_internal_server_error();
+                                return StandardResponseCreator::create_internal_server_error();
                             }
                         };
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return StandartResponseCreator::create_internal_server_error();
+                        return StandardResponseCreator::create_internal_server_error();
                     }
                 };
             }
@@ -227,7 +227,7 @@ impl Authorization {
         
         match PreLogInHandler::handle(pre_log_in) {
             Ok(ref result) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(result)); 
+                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(result)); 
             },
             Err(ref main_error_kind) => {
                 match main_error_kind {
@@ -236,37 +236,37 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(ref application_user_error_kind) => {
                                 match application_user_error_kind {
                                     ApplicationUserErrorKind::NotFound => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus02"));
                                     },
                                     ApplicationUserErrorKind::WrongPassword => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus03"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus03"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
                             EntityErrorKind::ApplicationUserLogInTokenErrorKind(ref application_user_log_in_token_error_kind) => {
                                 match application_user_log_in_token_error_kind {
                                     ApplicationUserLogInTokenErrorKind::AlreadyExist => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapuslointo01"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapuslointo01"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandartResponseCreator::create_internal_server_error();
+                                return StandardResponseCreator::create_internal_server_error();
                             }
                         };
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return StandartResponseCreator::create_internal_server_error();
+                        return StandardResponseCreator::create_internal_server_error();
                     }
                 };
             }
@@ -278,7 +278,7 @@ impl Authorization {
         
         match LogInHandler::handle(log_in_request) {
             Ok(ref result) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success_with_body(result)); 
+                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(result)); 
             },
             Err(ref main_error_kind) => {
                 match main_error_kind {
@@ -287,29 +287,29 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserLogInTokenErrorKind(ref application_user_log_in_token_error_kind) => {
                                 match application_user_log_in_token_error_kind {
                                     ApplicationUserLogInTokenErrorKind::NotFound => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapuslointo02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapuslointo02"));
                                     },
                                     ApplicationUserLogInTokenErrorKind::InvalidValue => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapuslointo03"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapuslointo03"));
                                     },
                                     ApplicationUserLogInTokenErrorKind::AlreadyExpired => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapuslointo04"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapuslointo04"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandartResponseCreator::create_internal_server_error();
+                                return StandardResponseCreator::create_internal_server_error();
                             }
                         };
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return StandartResponseCreator::create_internal_server_error();
+                        return StandardResponseCreator::create_internal_server_error();
                     }
                 };
             }
@@ -321,7 +321,7 @@ impl Authorization {
         
         match ResendEmailForLogInHandler::handle(resend_email_for_log_in_request) {
             Ok(_) => { 
-                return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_success()); 
+                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
             },
             Err(ref main_error_kind) => {
                 match main_error_kind {
@@ -330,34 +330,34 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(ref application_user_error_kind) => {
                                 match application_user_error_kind {
                                     ApplicationUserErrorKind::NotFound => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapus02"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
                             EntityErrorKind::ApplicationUserLogInTokenErrorKind(ref application_user_log_in_token_error_kind) => {
                                 match application_user_log_in_token_error_kind {
                                     ApplicationUserLogInTokenErrorKind::NotFound => {
-                                        return StandartResponseCreator::create_ok(StandartJsonResponseBodyWrapper::wrap_for_fail_with_code("eapuslointo02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapuslointo02"));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandartResponseCreator::create_internal_server_error();
+                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 };
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandartResponseCreator::create_internal_server_error();
+                                return StandardResponseCreator::create_internal_server_error();
                             }
                         };
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return StandartResponseCreator::create_internal_server_error();
+                        return StandardResponseCreator::create_internal_server_error();
                     }
                 };
             }
