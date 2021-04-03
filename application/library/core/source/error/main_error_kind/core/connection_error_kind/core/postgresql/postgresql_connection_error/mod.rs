@@ -28,6 +28,8 @@ impl Error for PostgresqlConnectionError {}
 
 impl From<ConnectionError> for PostgresqlConnectionError {
     fn from(connection_error: ConnectionError) -> Self {
-        return Self::new(connection_error);
+        return Self {
+            connection_error
+        };
     }
 }

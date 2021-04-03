@@ -1,25 +1,15 @@
-use crate::error::context::Context;
 use lettre_email::error::Error as LettreEmailError;
-use lettre::smtp::error::Error as LettreError;
+use lettre::smtp::error::Error as LettreSmtpError;
 use std::error::Error;
+use std::convert::From;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
 
 #[derive(Debug)]
 pub enum EmailErrorKind {
-    Creating(Context<LettreEmailError>),
-    Sending(Context<LettreError>)
-}
-
-impl EmailErrorKind {
-    pub fn new_creating(lettre_email_error: LettreEmailError, message: Option<String>) -> Self {
-        return Self::Creating(Context::new(Some(lettre_email_error), message));
-    }
-
-    pub fn new_sending(lettre_error: LettreError, message: Option<String>) -> Self {
-        return Self::Sending(Context::new(Some(lettre_error), message));
-    }
+    CanNotCreate(LettreEmailError),
+    CanNotSend(LettreSmtpError)
 }
 
 impl Display for EmailErrorKind {
@@ -29,3 +19,15 @@ impl Display for EmailErrorKind {
 }
 
 impl Error for EmailErrorKind {}
+
+impl From<LettreEmailError> for EmailErrorKind {
+    fn from(lettre_email_error: LettreEmailError) -> Self {
+        return Self::CanNotCreate(lettre_email_error)
+    }
+}
+
+impl From<LettreSmtpError> for EmailErrorKind {
+    fn from(lettre_smtp_error: LettreSmtpError) -> Self {
+        return Self::CanNotSend(lettre_smtp_error)
+    }
+}

@@ -10,14 +10,6 @@ pub struct DieselError {
     diesel_error: BaseDieselError
 }
 
-impl DieselError {
-    pub fn new(diesel_error: BaseDieselError) -> Self {
-        return Self {
-            diesel_error
-        };
-    }
-}
-
 impl Display for DieselError {
     fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
         return Ok(());  // TODO 
@@ -28,6 +20,8 @@ impl Error for DieselError {}
 
 impl From<BaseDieselError> for DieselError {
     fn from(diesel_error: BaseDieselError) -> Self {
-        return Self::new(diesel_error);
+        return Self {
+            diesel_error
+        };
     }
 }

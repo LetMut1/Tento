@@ -39,12 +39,12 @@ impl<'outer> EmailSender {
                 //                 return Ok(()); 
                 //             },
                 //             Err(error) => { 
-                //                 return Err(EmailErrorKind::new_sending(error, None)); 
+                //                 return Err(EmailErrorKind::CanNotSend(error)); 
                 //             }
                 //         }
                 //     },
                 //     Err(error) => { 
-                //         return Err(EmailErrorKind::new_sending(error, None)); 
+                //         return Err(EmailErrorKind::CanNotSend(error)); 
                 //     }
                 // }
                 // TODO uncomment }
@@ -60,12 +60,12 @@ impl<'outer> EmailSender {
                     Ok(smtp_client) => {
                         smtp_transport = smtp_client.transport();
                     },
-                    Err(value) => { return Err(EmailErrorKind::new_sending(value, None)); }
+                    Err(value) => { return Err(EmailErrorKind::CanNotSend(value)); }
                 }
 
                 match smtp_transport.send(email.into()) {
                     Ok(_) => { return Ok(()); },
-                    Err(value) => { return Err(EmailErrorKind::new_sending(value, None)); }
+                    Err(value) => { return Err(EmailErrorKind::CanNotSend(value)); }
                 }
                 // TODO delete under ---------------------------------------------------------------
 
@@ -77,7 +77,7 @@ impl<'outer> EmailSender {
 
             },
             Err(error) => { 
-                return Err(EmailErrorKind::new_creating(error, None)); 
+                return Err(EmailErrorKind::CanNotCreate(error)); 
             }
         }
     }
