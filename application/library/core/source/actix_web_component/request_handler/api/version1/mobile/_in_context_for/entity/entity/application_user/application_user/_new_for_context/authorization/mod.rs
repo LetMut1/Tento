@@ -41,7 +41,7 @@ impl Authorization {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 return StandardResponseCreator::create_internal_server_error();
             }
-        };
+        }
     }
 
     pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> HttpResponse<Body> {
@@ -55,7 +55,7 @@ impl Authorization {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 return StandardResponseCreator::create_internal_server_error();
             }
-        };
+        }
     }
 
     pub async fn pre_register(form: Form<PreRegisterRequest>) -> HttpResponse<Body> {
@@ -81,7 +81,7 @@ impl Authorization {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
-                                };
+                                }
                             },
                             EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
                                 match pre_confirmed_application_user_error_kind {
@@ -92,21 +92,21 @@ impl Authorization {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
-                                };
+                                }
                             }
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                                 return StandardResponseCreator::create_internal_server_error();
                             }
-                        };
+                        }
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                };
+                }
             }
-        };
+        }
     }
 
     pub async fn register(form: Form<RegisterRequest>) -> HttpResponse<Body> {
@@ -129,7 +129,7 @@ impl Authorization {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
-                                };
+                                }
                             },
                             EntityErrorKind::PreConfirmedApplicationUserErrorKind(ref pre_confirmed_application_user_error_kind) => {
                                 match pre_confirmed_application_user_error_kind {
@@ -143,7 +143,7 @@ impl Authorization {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
-                                };
+                                }
                             },
                             EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ref application_user_registration_confirmation_error_kind) => {
                                 match application_user_registration_confirmation_error_kind {
@@ -156,21 +156,21 @@ impl Authorization {
                                     ApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("eapusrecoto03"));
                                     }
-                                };
+                                }
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                                 return StandardResponseCreator::create_internal_server_error();
                             }
-                        };
+                        }
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                };
+                }
             }
-        };
+        }
     }
 
     pub async fn resend_email_for_register(form: Form<ResendEmailForRegisterRequest>) -> HttpResponse<Body> {
@@ -193,7 +193,7 @@ impl Authorization {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
-                                };
+                                }
                             },
                             EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ref application_user_registration_confirmation_error_kind) => {
                                 match application_user_registration_confirmation_error_kind {
@@ -205,21 +205,21 @@ impl Authorization {
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
 
-                                };
+                                }
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                                 return StandardResponseCreator::create_internal_server_error();
                             }
-                        };
+                        }
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                };
+                }
             }
-        };
+        }
     }
 
     pub async fn pre_log_in(form: Form<PreLogInRequest>) -> HttpResponse<Body> {
@@ -245,7 +245,7 @@ impl Authorization {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
-                                };
+                                }
                             },
                             EntityErrorKind::ApplicationUserLogInTokenErrorKind(ref application_user_log_in_token_error_kind) => {
                                 match application_user_log_in_token_error_kind {
@@ -256,19 +256,19 @@ impl Authorization {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
-                                };
+                                }
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                                 return StandardResponseCreator::create_internal_server_error();
                             }
-                        };
+                        }
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                };
+                }
             }
         }
     }
@@ -299,21 +299,21 @@ impl Authorization {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
-                                };
+                                }
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                                 return StandardResponseCreator::create_internal_server_error();
                             }
-                        };
+                        }
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                };
+                }
             }
-        };
+        }
     }
 
     pub async fn resend_email_for_log_in(form: Form<ResendEmailForLogInRequest>) -> HttpResponse<Body> {
@@ -336,7 +336,7 @@ impl Authorization {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
-                                };
+                                }
                             },
                             EntityErrorKind::ApplicationUserLogInTokenErrorKind(ref application_user_log_in_token_error_kind) => {
                                 match application_user_log_in_token_error_kind {
@@ -347,20 +347,20 @@ impl Authorization {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
-                                };
+                                }
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                                 return StandardResponseCreator::create_internal_server_error();
                             }
-                        };
+                        }
                     },
                     _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                };
+                }
             }
-        };
+        }
     }
 }

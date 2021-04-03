@@ -20,18 +20,15 @@ impl<'this, 'outer: 'this> UuidV4 {
     }
 
     pub fn new_from_str(value: &'outer str) -> Result<Self, ()> {
-        match Uuid::parse_str(value) {
-            Ok(uuid) => {
-                return Ok(
-                    Self { 
-                        value: uuid
-                    }
-                );
-            },
-            Err(error) => {
-                return Err(());
-            }
-        };
+        if let Ok(uuid) = Uuid::parse_str(value) {
+            return Ok(
+                Self { 
+                    value: uuid
+                }
+            );
+        }
+
+        return Err(());
     }
 
     pub fn get_value(&'this self) -> &'this Uuid {

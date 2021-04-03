@@ -33,7 +33,7 @@
 //                 None => {
 //                     return Err(EntityErrorKind::JsonRefreshWebTokenErrorKind(JsonRefreshWebTokenErrorKind::NotExist))?
 //                 }
-//             };
+//             }
 //         } else {
 //             return Err(EntityErrorKind::JsonAccessWebTokenErrorKind(JsonAccessWebTokenErrorKind::NotExpired))?;
 //         }

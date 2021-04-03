@@ -34,11 +34,11 @@ impl Handler {
                     None => {
                         return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound))?;
                     }
-                };
+                }
             },
             None => {
                 return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::NotFound))?
             }
-        };
+        }
     }
 }

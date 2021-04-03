@@ -38,7 +38,7 @@ impl Handler {
                                         connection_manager.commit_transaction()?;
                                         connection_manager.close_connection();
 
-                                        // TODO // TODO // TODO // TODO // TODO Если уже есть в JRWT (юзерайди+девайсайди) (повторный логин, по сути, то делаем РАЗЛОГИН и выбрасываем еррор), значит сделать перелогин, то есть, инвалидировать предыдущие значения
+                                        // TODO // TODO // TODO // TODO // TODO Если уже есть в JRWT (юзерайди+девайсайди) (повторный логин, по сути, то делаем РАЗЛОГИН старого токена), значит сделать перелогин, то есть, инвалидировать предыдущие значения
                                         // удалить имеющийся JRWT, записать его аксесс в блэклист
 
                                         return Ok(
@@ -53,14 +53,14 @@ impl Handler {
             
                                         return Err(diesel_error)?;
                                     }
-                                };
+                                }
                             },
                             Err(diesel_error) => {
                                 connection_manager.rollback_transaction()?;
 
                                 return Err(diesel_error)?;
                             }
-                        };
+                        }
                     } else {
                         return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExpired))?;
                     }
@@ -71,6 +71,6 @@ impl Handler {
             None => {
                 return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::NotFound))?;
             }
-        };
+        }
     }
 }

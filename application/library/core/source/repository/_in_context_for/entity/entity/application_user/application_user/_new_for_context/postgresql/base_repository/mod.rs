@@ -57,7 +57,7 @@ impl<'outer, 'vague> BaseRepository {
             None => {
                 return Ok(None); 
             }
-        };
+        }
     }
 
     pub fn get_by_id(connection_manager: &'outer ConnectionManager, id: &'outer UuidV4) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
@@ -71,6 +71,6 @@ impl<'outer, 'vague> BaseRepository {
             None => { 
                 return Ok(None); 
             }
-        };
+        }
     }
 }

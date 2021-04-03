@@ -34,11 +34,11 @@ impl Handler {
                     None => {
                         return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::NotFound))?;
                     }
-                };
+                }
             },
             None => {
                 return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound))?;
             }
-        };
+        }
     }
 }

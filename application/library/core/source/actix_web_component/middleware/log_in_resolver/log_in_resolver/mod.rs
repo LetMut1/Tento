@@ -47,26 +47,17 @@ where
     }
 
     fn call(&mut self, service_request: ServiceRequest) -> Self::Future {
-        match service_request.headers().get("X-Auth-Token") {
-            Some(header_value) => {
-                match header_value.to_str() {
-                    Ok(header_value) => {
-                        match SerializationFormResolver::deserialize(header_value) {
-                            Ok(json_access_web_token) => {
-                                if !json_access_web_token.is_expired() {
-                                    // TODO BlackList
-                                    service_request.extensions_mut().insert::<JsonAccessWebToken<'_>>(json_access_web_token);
+        if let Some(header_value) = service_request.headers().get("X-Auth-Token") {
+            if let Ok(header_value) = header_value.to_str() {
+                if let Ok(json_access_web_token) = SerializationFormResolver::deserialize(header_value) {
+                    if !json_access_web_token.is_expired() {
+                        // TODO BlackList проверять
+                        service_request.extensions_mut().insert::<JsonAccessWebToken<'_>>(json_access_web_token);
 
-                                    return Either::Left(self.service.call(service_request));
-                                }
-                            },
-                            Err(_) => {}
-                        };
-                    },
-                    Err(_) => {}
+                        return Either::Left(self.service.call(service_request));
+                    }
                 };
-            },
-            None => {}
+            };
         };
 
         return Either::Right(FutureOk(service_request.into_response(HttpResponse::NotFound().finish().into_body())));

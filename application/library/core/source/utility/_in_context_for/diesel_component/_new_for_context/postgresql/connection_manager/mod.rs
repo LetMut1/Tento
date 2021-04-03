@@ -30,9 +30,9 @@ impl<'this> ConnectionManager {
                     Err(connection_error) => {
                         return Err(ConnectionErrorKind::PostgresqlConnectionError(PostgresqlConnectionError::new(connection_error)));
                     }
-                };
-             }
-        };
+                }
+            }
+        }
     }
 
     pub fn close_connection(&'this mut self) -> () {
@@ -42,8 +42,10 @@ impl<'this> ConnectionManager {
 
                 return ();
             },
-            None => { panic!("Logic error, PgConnection does not exist"); } // TODO error
-        };
+            None => { 
+                panic!("Logic error, PgConnection does not exist");
+            } // TODO error
+        }
     }
 
     pub fn get_connection(&'this self) -> &'this PgConnection {
@@ -51,8 +53,10 @@ impl<'this> ConnectionManager {
             Some(ref pg_connection) => { 
                 return pg_connection; 
             },
-            None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
-        };
+            None => { 
+                panic!("Logic error, PgConnection does not exist"); 
+            } // TODO Error
+        }
     }
 
     pub fn  begin_transaction(&'this self) -> Result<(), DieselError> {
@@ -61,9 +65,11 @@ impl<'this> ConnectionManager {
                 pg_connection.transaction_manager().begin_transaction(pg_connection)?;
 
                 return Ok(());
-             },
-            None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
-        };
+            },
+            None => { 
+                panic!("Logic error, PgConnection does not exist"); 
+            } // TODO Error
+        }
     }
 
     pub fn  commit_transaction(&'this self) -> Result<(), DieselError> {
@@ -72,9 +78,11 @@ impl<'this> ConnectionManager {
                 pg_connection.transaction_manager().commit_transaction(pg_connection)?;
 
                 return Ok(());
-             },
-            None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
-        };
+            },
+            None => {
+                panic!("Logic error, PgConnection does not exist"); 
+            } // TODO Error
+        }
     }
 
     pub fn  rollback_transaction(&'this self) -> Result<(), DieselError> {
@@ -83,9 +91,11 @@ impl<'this> ConnectionManager {
                 pg_connection.transaction_manager().rollback_transaction(pg_connection)?;
 
                 return Ok(());
-             },
-            None => { panic!("Logic error, PgConnection does not exist"); } // TODO Error
-        };
+            },
+            None => { 
+                panic!("Logic error, PgConnection does not exist"); 
+            } // TODO Error
+        }
     }
 
     fn close_connection_on_drop(&'this mut self) -> () {

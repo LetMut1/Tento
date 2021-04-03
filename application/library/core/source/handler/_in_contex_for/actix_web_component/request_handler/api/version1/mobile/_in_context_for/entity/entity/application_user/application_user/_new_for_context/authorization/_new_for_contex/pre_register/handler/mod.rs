@@ -46,14 +46,14 @@ impl Handler {
 
                                     return Err(diesel_error)?;
                                 }
-                            };
+                            }
                         },
                         Err(diesel_error) => {
                             connection_manager.rollback_transaction()?;
 
                             return Err(diesel_error)?;
                         }
-                    };
+                    }
                 } else {
                     return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;
                 }

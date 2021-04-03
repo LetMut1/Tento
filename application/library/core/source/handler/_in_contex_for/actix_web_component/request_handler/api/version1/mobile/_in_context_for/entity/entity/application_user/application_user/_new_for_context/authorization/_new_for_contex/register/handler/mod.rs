@@ -69,21 +69,21 @@ impl<'outer> Handler {
              
                                                             return Err(diesel_error)?;
                                                         }
-                                                    };
+                                                    }
                                                 }, 
                                                 Err(diesel_error) => {
                                                     connection_manager.rollback_transaction()?;
      
                                                     return Err(diesel_error)?;
                                                 }
-                                            };
+                                            }
                                         },
                                         Err(diesel_error) => {
                                             connection_manager.rollback_transaction()?;
 
                                             return Err(diesel_error)?;
                                         }
-                                    };
+                                    }
                                 } else {
                                     return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::AlreadyExpired))?;
                                 }
@@ -94,7 +94,7 @@ impl<'outer> Handler {
                         None => {
                             return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound))?;
                         }
-                    };
+                    }
                 },
                 None => {
                     if ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)? {
@@ -103,7 +103,7 @@ impl<'outer> Handler {
                         return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::NotFound))?;
                     }
                 }
-            };
+            }
         } else {
             return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;
         }

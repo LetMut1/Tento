@@ -45,6 +45,6 @@ impl Handler {
             None => {
                 return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound))?;
             }
-        };
+        }
     }
 }

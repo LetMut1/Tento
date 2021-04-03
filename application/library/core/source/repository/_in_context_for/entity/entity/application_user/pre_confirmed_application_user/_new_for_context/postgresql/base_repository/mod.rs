@@ -53,6 +53,6 @@ impl<'outer> BaseRepository {
             None => { 
                 return Ok(None); 
             }
-        };
+        }
     }
 }

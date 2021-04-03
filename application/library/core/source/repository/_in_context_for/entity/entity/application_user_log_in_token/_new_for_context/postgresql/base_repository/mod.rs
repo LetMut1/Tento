@@ -78,6 +78,6 @@ impl<'outer, 'vague> BaseRepository {
             None => { 
                 return Ok(None); 
             }
-        };
+        }
     }
 }
