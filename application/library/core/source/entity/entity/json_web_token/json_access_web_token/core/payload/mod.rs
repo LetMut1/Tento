@@ -2,6 +2,7 @@ use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
+use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use crate::utility::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use std::borrow::Cow;
 use std::clone::Clone;
@@ -24,7 +25,7 @@ impl<'this, 'outer: 'this> Payload<'outer> {
         };
     }
 
-    pub fn new_from_common(common: Common) -> Result<Self, ()> {
+    pub fn new_from_common(common: Common) -> Result<Self, InvalidArgumentError> {
         return Ok (
             Self {
                 application_user_id: Cow::Owned(UuidV4::new_from_str(common.application_user_id.as_str())?),

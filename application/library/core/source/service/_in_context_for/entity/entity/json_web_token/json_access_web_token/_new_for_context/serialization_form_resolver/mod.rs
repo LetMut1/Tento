@@ -1,6 +1,7 @@
 use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::header::header::_new_for_context::common::Common as HeaderCommon;
 use crate::dto::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::payload::_new_fro_context::common::Common as PayloadCommon;
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
+use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use crate::utility::_in_context_for::entity::entity::json_web_token::json_access_web_token::core::_new_for_context::signature_creator::SignatureCreator;
 use serde_json;
 
@@ -20,7 +21,7 @@ impl<'outer, 'vague> SerializationFormResolver {
         return header_and_payload + Self::LINE_SEPARATOR + signature.as_str();
     }
 
-    pub fn deserialize(classic_form: &'outer str) -> Result<JsonAccessWebToken<'vague>, ()> {
+    pub fn deserialize(classic_form: &'outer str) -> Result<JsonAccessWebToken<'vague>, InvalidArgumentError> {
         let classic_form_parts: Vec<&'_ str> = classic_form.split(Self::LINE_SEPARATOR).collect::<Vec<&'_ str>>();
 
         if classic_form_parts.len() == 3 {
@@ -36,6 +37,6 @@ impl<'outer, 'vague> SerializationFormResolver {
             }
         }
 
-        return Err(());
+        return Err(InvalidArgumentError);
     }
 } 

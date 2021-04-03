@@ -1,3 +1,4 @@
+use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use uuid::Uuid;
 use std::clone::Clone;
 
@@ -19,7 +20,7 @@ impl<'this, 'outer: 'this> UuidV4 {
         };
     }
 
-    pub fn new_from_str(value: &'outer str) -> Result<Self, ()> {
+    pub fn new_from_str(value: &'outer str) -> Result<Self, InvalidArgumentError> {
         if let Ok(uuid) = Uuid::parse_str(value) {
             return Ok(
                 Self { 
@@ -28,7 +29,7 @@ impl<'this, 'outer: 'this> UuidV4 {
             );
         }
 
-        return Err(());
+        return Err(InvalidArgumentError);
     }
 
     pub fn get_value(&'this self) -> &'this Uuid {

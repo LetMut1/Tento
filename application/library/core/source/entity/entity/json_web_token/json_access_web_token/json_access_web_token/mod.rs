@@ -4,6 +4,7 @@ use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_web_token::json_access_web_token::core::header::header::Header;
 use crate::entity::entity::json_web_token::json_access_web_token::core::payload::Payload;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
+use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use std::clone::Clone;
 use super::core::header::core::alg::Alg;
@@ -23,7 +24,7 @@ impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
         };
     }
 
-    pub fn new_from_payload_common(common: Common) -> Result<Self, ()> {
+    pub fn new_from_payload_common(common: Common) -> Result<Self, InvalidArgumentError> {
         return Ok(
             Self {
                 payload: Payload::new_from_common(common)?
