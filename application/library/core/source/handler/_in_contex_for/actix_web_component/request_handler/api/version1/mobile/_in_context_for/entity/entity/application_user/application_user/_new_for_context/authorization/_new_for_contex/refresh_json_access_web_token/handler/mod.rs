@@ -15,31 +15,30 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
-        let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(request.json_access_web_token.as_str())?;
+        let mut json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(request.json_access_web_token.as_str())?;
 
         if json_access_web_token.is_expired() {
             let mut connection_manager: ConnectionManager = ConnectionManager::new();
             connection_manager.establish_connection()?;
 
-            if let Some (mut json_refresh_web_token) = JsonRefreshWebTokenBaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                &connection_manager, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
+            if let Some (mut json_refresh_web_token) = JsonRefreshWebTokenBaseRepository::get_by_json_access_web_token_id(
+                &connection_manager, json_access_web_token.get_application_user_id()
             )?
             {
-                if &(json_access_web_token.get_id().get_value().as_bytes())[..] == &(json_refresh_web_token.get_json_access_web_token_id().get_value().as_bytes())[..] {
-                    if Encoder::is_valid(&json_refresh_web_token, request.json_refresh_web_token.as_str()) {
-                        json_refresh_web_token.refresh();
+                if Encoder::is_valid(&json_refresh_web_token, request.json_refresh_web_token.as_str()) {
+                    json_refresh_web_token.refresh();
+                    json_access_web_token.refresh();
 
-                        JsonRefreshWebTokenBaseRepository::update(&connection_manager, &json_refresh_web_token)?;
+                    JsonRefreshWebTokenBaseRepository::update(&connection_manager, &json_refresh_web_token)?;
 
-                        connection_manager.close_connection();
+                    connection_manager.close_connection();
 
-                        return Ok(
-                            HandlerResult::new(
-                                SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token)),
-                                Encoder::encode(&json_refresh_web_token)
-                            )
-                        );
-                    }
+                    return Ok(
+                        HandlerResult::new(
+                            SerializationFormResolver::serialize(&json_access_web_token),
+                            Encoder::encode(&json_refresh_web_token)
+                        )
+                    );
                 }
 
                 return Err(InvalidArgumentError)?;

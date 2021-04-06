@@ -61,8 +61,7 @@ impl<'outer> Handler {
                             }
                             connection_manager.commit_transaction()?;
 
-                            let json_refresh_web_token: JsonRefreshWebToken<'_> = 
-                            JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?));
+                            let json_refresh_web_token: JsonRefreshWebToken = JsonRefreshWebToken::new();
 
                             JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
                             
@@ -70,7 +69,8 @@ impl<'outer> Handler {
 
                             return Ok(
                                 HandlerResult::new(
-                                    SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token)),
+                                    SerializationFormResolver::serialize(
+                                        &JsonAccessWebToken::new(&json_refresh_web_token, application_user.get_id(), &UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?)),
                                     Encoder::encode(&json_refresh_web_token)
                                 )
                             );

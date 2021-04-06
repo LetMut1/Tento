@@ -43,8 +43,7 @@ impl<'outer> BaseRepository {
     }
 
     pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer Email) -> Result<Option<PreConfirmedApplicationUser>, DieselError> {
-        if let Some(existing) = 
-        pre_confirmed_application_user_schema::table
+        if let Some(existing) = pre_confirmed_application_user_schema::table
         .filter(pre_confirmed_application_user_schema::email.eq(email.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? 
         {

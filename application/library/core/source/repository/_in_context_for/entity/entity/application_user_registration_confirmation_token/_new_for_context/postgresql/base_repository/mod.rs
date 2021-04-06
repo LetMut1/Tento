@@ -57,8 +57,7 @@ impl<'outer, 'vague> BaseRepository {
     pub fn get_by_pre_confirmed_application_user_id(
         connection_manager: &'outer ConnectionManager, pre_confirmed_application_user_id: &'outer UuidV4
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'vague>>, DieselError> {
-        if let Some(existing) = 
-        application_user_registration_confirmation_token_schema::table
+        if let Some(existing) = application_user_registration_confirmation_token_schema::table
         .filter(application_user_registration_confirmation_token_schema::pre_confirmed_application_user_id.eq(pre_confirmed_application_user_id.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? 
         {

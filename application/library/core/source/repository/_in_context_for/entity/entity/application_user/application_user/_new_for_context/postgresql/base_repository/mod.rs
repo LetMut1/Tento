@@ -47,8 +47,7 @@ impl<'outer, 'vague> BaseRepository {
     }
 
     pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer Email) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
-        if let Some(existing) = 
-        application_user_schema::table
+        if let Some(existing) = application_user_schema::table
         .filter(application_user_schema::email.eq(email.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? 
         {
@@ -59,8 +58,7 @@ impl<'outer, 'vague> BaseRepository {
     }
 
     pub fn get_by_id(connection_manager: &'outer ConnectionManager, id: &'outer UuidV4) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
-        if let Some(existing) =
-        application_user_schema::table
+        if let Some(existing) = application_user_schema::table
         .filter(application_user_schema::id.eq(id.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? 
         {

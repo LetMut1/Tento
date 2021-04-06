@@ -26,8 +26,7 @@ impl Handler {
         {
             if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value {
                 if !application_user_log_in_token.is_expired() {
-                    let json_refresh_web_token: JsonRefreshWebToken<'_> = 
-                    JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), Cow::Borrowed(application_user_log_in_token.get_device_id()));
+                    let json_refresh_web_token: JsonRefreshWebToken = JsonRefreshWebToken::new();
 
                     connection_manager.begin_transaction()?;
 
@@ -52,7 +51,9 @@ impl Handler {
 
                     return Ok(
                         HandlerResult::new(
-                            SerializationFormResolver::serialize(&JsonAccessWebToken::new_from_json_refresh_web_token(&json_refresh_web_token)),
+                            SerializationFormResolver::serialize(
+                                &JsonAccessWebToken::new(&json_refresh_web_token, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id())
+                            ),
                             Encoder::encode(&json_refresh_web_token)
                         )
                     );

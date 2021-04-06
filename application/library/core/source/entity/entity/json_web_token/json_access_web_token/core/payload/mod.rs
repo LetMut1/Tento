@@ -16,11 +16,15 @@ pub struct Payload<'outer> {
 }
 
 impl<'this, 'outer: 'this> Payload<'outer> {
-    pub fn new_from_json_refresh_web_token(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
+    pub fn new(
+        json_refresh_web_token: &'outer JsonRefreshWebToken, 
+        application_user_id: &'outer UuidV4, 
+        application_user_log_in_token_device_id: &'outer UuidV4
+    ) -> Self {
         return Self {
             id: Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
-            application_user_id: Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
-            application_user_log_in_token_device_id: Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
+            application_user_id: Cow::Borrowed(application_user_id),
+            application_user_log_in_token_device_id: Cow::Borrowed(application_user_log_in_token_device_id),
             exp: DateExpirationCreator::create()
         };
     }
@@ -34,6 +38,16 @@ impl<'this, 'outer: 'this> Payload<'outer> {
                 exp: DateTime::new_from_string(common.exp.as_str())
             }
         );
+    }
+
+    pub fn refresh(&'this mut self) -> &'this mut Self {
+        return self.refresh_exp();
+    }
+
+    fn refresh_exp(&'this mut self) -> &'this mut Self {
+        self.exp = DateExpirationCreator::create();
+
+        return self;
     }
 
     pub fn get_id(&'this self) -> &'this UuidV4 {

@@ -9,17 +9,13 @@ use uuid::Uuid;
 #[table_name = "json_refresh_web_token"]
 pub struct New<'outer> {
     json_access_web_token_id: &'outer Uuid,
-    application_user_id: &'outer Uuid,
-    application_user_log_in_token_device_id: &'outer Uuid,
     expired_at: &'outer ChronoDateTime<Utc>
 }
 
 impl<'outer> New<'outer> {
-    pub fn new(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
+    pub fn new(json_refresh_web_token: &'outer JsonRefreshWebToken) -> Self {
         return Self {
             json_access_web_token_id: json_refresh_web_token.get_json_access_web_token_id().get_value(),
-            application_user_id: json_refresh_web_token.get_application_user_id().get_value(),
-            application_user_log_in_token_device_id: json_refresh_web_token.get_application_user_log_in_token_device_id().get_value(),
             expired_at: json_refresh_web_token.get_expired_at().get_value()
         };
     }

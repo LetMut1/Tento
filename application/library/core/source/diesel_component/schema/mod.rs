@@ -39,8 +39,6 @@ pub mod public {
 
         json_refresh_web_token (json_access_web_token_id) {
             json_access_web_token_id -> Uuid,
-            application_user_log_in_token_device_id -> Uuid,
-            application_user_id -> Uuid,
             expired_at -> Timestamptz,
         }
     }
@@ -64,7 +62,6 @@ pub mod public {
 
     joinable!(application_user_log_in_token -> application_user (application_user_id));
     joinable!(application_user_registration_confirmation_token -> pre_confirmed_application_user (pre_confirmed_application_user_id));
-    joinable!(json_refresh_web_token -> application_user (application_user_id));
     joinable!(json_access_web_token_black_list -> json_refresh_web_token (json_access_web_token_id));
 
     allow_tables_to_appear_in_same_query!(

@@ -18,9 +18,13 @@ pub struct JsonAccessWebToken<'outer> {
 impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
     const HEADER: Header = Header::new();
 
-    pub fn new_from_json_refresh_web_token(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
+    pub fn new(
+        json_refresh_web_token: &'outer JsonRefreshWebToken,
+        application_user_id: &'outer UuidV4, 
+        application_user_log_in_token_device_id: &'outer UuidV4
+    ) -> Self {
         return Self {
-            payload: Payload::new_from_json_refresh_web_token(json_refresh_web_token)
+            payload: Payload::new(json_refresh_web_token, application_user_id, application_user_log_in_token_device_id)
         };
     }
 
@@ -30,6 +34,12 @@ impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
                 payload: Payload::new_from_common(common)?
             }
         );
+    }
+
+    pub fn refresh(&'this mut self) -> &'this mut Self {
+        self.payload.refresh();
+
+        return self;
     }
 
     pub fn is_expired(&'this self) -> bool {

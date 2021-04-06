@@ -15,7 +15,7 @@ pub struct BaseRepository;
 
 impl<'outer, 'vague> BaseRepository {
     pub fn create(
-        connection_manager: &'outer ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+        connection_manager: &'outer ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken
     ) -> Result<(), DieselError> {
         diesel::insert_into(json_refresh_web_token_schema::table).values(New::new(json_refresh_web_token))
         .execute(connection_manager.get_connection())?;
@@ -25,12 +25,11 @@ impl<'outer, 'vague> BaseRepository {
 
     pub fn update(
         connection_manager: &'outer ConnectionManager,
-        json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+        json_refresh_web_token: &'outer JsonRefreshWebToken
     ) -> Result<(), DieselError> {
         diesel::update(
             json_refresh_web_token_schema::table
-            .filter(json_refresh_web_token_schema::application_user_id.eq(json_refresh_web_token.get_application_user_id().get_value()))
-            .filter(json_refresh_web_token_schema::application_user_log_in_token_device_id.eq(json_refresh_web_token.get_application_user_log_in_token_device_id().get_value()))
+            .filter(json_refresh_web_token_schema::json_access_web_token_id.eq(json_refresh_web_token.get_json_access_web_token_id().get_value()))
         ).set(
             json_refresh_web_token_schema::expired_at.eq(json_refresh_web_token.get_expired_at().get_value())
         ).execute(connection_manager.get_connection())?;
@@ -38,15 +37,11 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
-        connection_manager: &'outer ConnectionManager, 
-        application_user_id: &'outer UuidV4, 
-        application_user_log_in_token_device_id: &'outer UuidV4,
-    ) -> Result<Option<JsonRefreshWebToken<'vague>>, DieselError> {
-        if let Some(existing) = 
-        json_refresh_web_token_schema::table
-        .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
-        .filter(json_refresh_web_token_schema::application_user_log_in_token_device_id.eq(application_user_log_in_token_device_id.get_value()))
+    pub fn get_by_json_access_web_token_id(
+        connection_manager: &'outer ConnectionManager, json_access_web_token_id: &'outer UuidV4, 
+    ) -> Result<Option<JsonRefreshWebToken>, DieselError> {
+        if let Some(existing) = json_refresh_web_token_schema::table
+        .filter(json_refresh_web_token_schema::json_access_web_token_id.eq(json_access_web_token_id.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()?
         {
             return Ok(Some(JsonRefreshWebToken::new_from_model(existing))); 
@@ -57,6 +52,6 @@ impl<'outer, 'vague> BaseRepository {
 }
 
 // TODO При переходе на РЕдис:
-// хранить рефреш-токен по ключу "апплтикэйшн-юзер-айди + логин-девайс_айди".
-// для Выхода со всех устройств храниь все ДевайсыАди по ключу "АппликэйшнЮзерАйди"
+// хранить рефреш-токен по ключу "accestokenId".
+// для Выхода со всех устройств храниь все "accestokenId" по ключу "applicationUserId"
 // ставить срок экспирации кеша, равный сроку экспирации токена ( так же и в БлэкЛист)
