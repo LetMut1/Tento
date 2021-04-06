@@ -48,18 +48,18 @@ CREATE TABLE application_user_log_in_token (
 
 -- // TODO delete 
 CREATE TABLE json_refresh_web_token (   -- // TODO Redis
-    id UUID NOT NULL,
+    json_access_web_token_id UUID NOT NULL,
     application_user_log_in_token_device_id UUID NOT NULL,
     -- // TODO  applicationuserid + device_id +уникальное
     application_user_id UUID NOT NULL,
     expired_at TIMESTAMPTZ NOT NULL,
-    PRIMARY KEY (id),
+    PRIMARY KEY (json_access_web_token_id),
     FOREIGN KEY (application_user_id) REFERENCES application_user (id)
 );
 
 CREATE TABLE json_access_web_token_black_list (        -- // TODO Redis
     json_refresh_web_token_id UUID NOT NULL,
-    PRIMARY KEY (json_refresh_web_token_id),
-    FOREIGN KEY (json_refresh_web_token_id) REFERENCES json_refresh_web_token (id)
+    PRIMARY KEY (json_access_web_token_id),
+    FOREIGN KEY (json_access_web_token_id) REFERENCES json_refresh_web_token (json_access_web_token_id)
 );
 -- // TODO delete 

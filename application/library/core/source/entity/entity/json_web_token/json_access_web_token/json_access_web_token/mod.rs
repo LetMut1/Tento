@@ -44,16 +44,16 @@ impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
         return Self::HEADER.get_typ();
     }
 
+    pub fn get_id(&'this self) -> &'this UuidV4 {
+        return &self.payload.get_id();
+    }
+
     pub fn get_application_user_id(&'this self) -> &'this UuidV4 {
         return &self.payload.get_application_user_id();
     }
 
     pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this UuidV4 {
         return &self.payload.get_application_user_log_in_token_device_id();
-    }
-
-    pub fn get_json_refresh_web_token_id(&'this self) -> &'this UuidV4 {
-        return &self.payload.get_json_refresh_web_token_id();
     }
 
     pub fn get_exp(&'this self) -> &'this DateTime {

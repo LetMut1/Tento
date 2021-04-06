@@ -19,8 +19,8 @@ impl<'outer> Handler {
                         let mut connection_manager: ConnectionManager = ConnectionManager::new();
                         connection_manager.establish_connection()?;
 
-                        if !JsonAccessWebTokenBlackListBaseRepository::is_exist_by_json_refresh_token_id(
-                            &connection_manager, json_access_web_token.get_json_refresh_web_token_id()
+                        if !JsonAccessWebTokenBlackListBaseRepository::is_exist_by_json_access_token_id(
+                            &connection_manager, json_access_web_token.get_id()
                         )? 
                         {
                             connection_manager.close_connection();
