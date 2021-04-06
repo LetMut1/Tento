@@ -30,7 +30,11 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {
         };
     }
 
-    pub fn refresh_expired_at(&'this mut self) -> &'this mut Self {
+    pub fn refresh(&'this mut self) -> &'this mut Self {
+        return self.refresh_expired_at();
+    }
+
+    fn refresh_expired_at(&'this mut self) -> &'this mut Self {
         self.expired_at = DateExpirationCreator::create();
 
         return self;

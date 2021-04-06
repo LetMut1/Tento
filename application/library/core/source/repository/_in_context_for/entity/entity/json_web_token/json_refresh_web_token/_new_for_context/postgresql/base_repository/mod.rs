@@ -23,6 +23,21 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
+    pub fn update(
+        connection_manager: &'outer ConnectionManager,
+        json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+    ) -> Result<(), DieselError> {
+        diesel::update(
+            json_refresh_web_token_schema::table
+            .filter(json_refresh_web_token_schema::application_user_id.eq(json_refresh_web_token.get_application_user_id().get_value()))
+            .filter(json_refresh_web_token_schema::application_user_log_in_token_device_id.eq(json_refresh_web_token.get_application_user_log_in_token_device_id().get_value()))
+        ).set(
+            json_refresh_web_token_schema::expired_at.eq(json_refresh_web_token.get_expired_at().get_value())
+        ).execute(connection_manager.get_connection())?;
+
+        return Ok(());
+    }
+
     pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
         connection_manager: &'outer ConnectionManager, 
         application_user_id: &'outer UuidV4, 
