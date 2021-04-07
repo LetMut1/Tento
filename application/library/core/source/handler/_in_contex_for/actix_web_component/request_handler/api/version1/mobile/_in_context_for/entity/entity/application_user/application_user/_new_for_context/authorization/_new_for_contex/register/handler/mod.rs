@@ -19,6 +19,7 @@ use crate::repository::_in_context_for::entity::entity::json_web_token::json_ref
 use crate::service::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
+use std::borrow::Cow;
 
 pub struct Handler;
 
@@ -60,7 +61,8 @@ impl<'outer> Handler {
                             }
                             connection_manager.commit_transaction()?;
 
-                            let json_refresh_web_token: JsonRefreshWebToken = JsonRefreshWebToken::new();
+                            let json_refresh_web_token: JsonRefreshWebToken<'_> = 
+                            JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?));
 
                             JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
                             
@@ -68,8 +70,7 @@ impl<'outer> Handler {
 
                             return Ok(
                                 HandlerResult::new(
-                                    SerializationFormResolver::serialize(
-                                        &JsonAccessWebToken::new(&json_refresh_web_token, application_user.get_id(), &UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?)),
+                                    SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)),
                                     Encoder::encode(&json_refresh_web_token)
                                 )
                             );

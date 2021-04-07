@@ -21,8 +21,8 @@ impl Handler {
             let mut connection_manager: ConnectionManager = ConnectionManager::new();
             connection_manager.establish_connection()?;
 
-            if let Some (mut json_refresh_web_token) = JsonRefreshWebTokenBaseRepository::get_by_json_access_web_token_id(
-                &connection_manager, json_access_web_token.get_application_user_id()
+            if let Some (mut json_refresh_web_token) = JsonRefreshWebTokenBaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
+                &connection_manager, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
             )?
             {
                 if Encoder::is_valid(&json_refresh_web_token, request.json_refresh_web_token.as_str()) {

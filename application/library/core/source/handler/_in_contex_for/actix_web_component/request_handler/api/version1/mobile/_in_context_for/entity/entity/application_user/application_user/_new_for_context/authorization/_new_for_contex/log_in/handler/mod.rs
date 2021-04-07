@@ -11,6 +11,7 @@ use crate::repository::_in_context_for::entity::entity::json_web_token::json_ref
 use crate::service::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
+use std::borrow::Cow;
 
 pub struct Handler;
 
@@ -25,7 +26,8 @@ impl Handler {
         {
             if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value {
                 if !application_user_log_in_token.is_expired() {
-                    let json_refresh_web_token: JsonRefreshWebToken = JsonRefreshWebToken::new();
+                    let json_refresh_web_token: JsonRefreshWebToken<'_> =
+                    JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), Cow::Borrowed(application_user_log_in_token.get_device_id()));
 
                     connection_manager.begin_transaction()?;
 
@@ -50,9 +52,7 @@ impl Handler {
 
                     return Ok(
                         HandlerResult::new(
-                            SerializationFormResolver::serialize(
-                                &JsonAccessWebToken::new(&json_refresh_web_token, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id())
-                            ),
+                            SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)),
                             Encoder::encode(&json_refresh_web_token)
                         )
                     );

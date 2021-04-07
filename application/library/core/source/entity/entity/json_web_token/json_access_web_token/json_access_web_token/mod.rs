@@ -18,13 +18,9 @@ pub struct JsonAccessWebToken<'outer> {
 impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
     const HEADER: Header = Header::new();
 
-    pub fn new(
-        json_refresh_web_token: &'outer JsonRefreshWebToken,
-        application_user_id: &'outer UuidV4, 
-        application_user_log_in_token_device_id: &'outer UuidV4
-    ) -> Self {
+    pub fn new(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
         return Self {
-            payload: Payload::new(json_refresh_web_token, application_user_id, application_user_log_in_token_device_id)
+            payload: Payload::new(json_refresh_web_token)
         };
     }
 

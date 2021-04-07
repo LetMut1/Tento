@@ -10,7 +10,7 @@ pub struct Encoder;
 impl<'outer> Encoder {
     const PRIVATE_KEY: &'static str = "kC2a1mXFi3sc9gE2udB0qL02gzJd2asu4S1ksMsJp12v8cs5fFm6dV2wq";  // TODO где должен быть ключ ( в енв)
 
-    pub fn encode(json_refresh_web_token: &'outer JsonRefreshWebToken) -> String {
+    pub fn encode(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> String {
         let mut hmac: Hmac<Sha512> = Self::get_configured_hmac();
         
         hmac.input(serde_json::to_string(&Common::new(json_refresh_web_token)).unwrap().as_bytes());
@@ -18,7 +18,7 @@ impl<'outer> Encoder {
         return hex::encode(hmac.result().code());
     }
 
-    pub fn is_valid(json_refresh_web_token: &'outer JsonRefreshWebToken, json_refresh_web_token_hash: &'outer str) -> bool {
+    pub fn is_valid(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>, json_refresh_web_token_hash: &'outer str) -> bool {
         return Self::encode(json_refresh_web_token) == *json_refresh_web_token_hash;
     }
 
