@@ -44,7 +44,7 @@ impl Handler {
                 return Err(InvalidArgumentError)?;
             }
 
-            return Err(EntityErrorKind::JsonRefreshWebTokenErrorKind(JsonRefreshWebTokenErrorKind::NotExist))?;
+            return Err(EntityErrorKind::JsonRefreshWebTokenErrorKind(JsonRefreshWebTokenErrorKind::NotFound))?;
         }
         
         return Err(EntityErrorKind::JsonAccessWebTokenErrorKind(JsonAccessWebTokenErrorKind::NotExpired))?;

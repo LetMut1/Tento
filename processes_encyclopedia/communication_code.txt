@@ -19,4 +19,6 @@ Entity: (01 -> already exist, 02 -> not found)
         enapuslointo04 -> already expired,
     JsonAccessWebToken:
         enjsacweto03 -> already expired,
-
+        enjsacweto04 -> not expired,
+    JsonRefreshWebToken:
+        enjsreweto02 -> not found,

@@ -5,7 +5,7 @@ use std::fmt::Result as FmtResult;
 
 #[derive(Debug)]
 pub enum JsonRefreshWebTokenErrorKind {
-    NotExist
+    NotFound
 }
 
 impl Display for JsonRefreshWebTokenErrorKind {

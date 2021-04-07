@@ -11,7 +11,6 @@ use crate::repository::_in_context_for::entity::entity::json_web_token::json_ref
 use crate::service::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
-use std::borrow::Cow;
 
 pub struct Handler;
 
@@ -20,7 +19,7 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        if let Some(ref application_user_log_in_token) = ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
+        if let Some(application_user_log_in_token) = ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
             &connection_manager, &UuidV4::new_from_str(request.application_user_id.as_str())?, &UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?
         )?
         {
@@ -30,7 +29,7 @@ impl Handler {
 
                     connection_manager.begin_transaction()?;
 
-                    if let Err(diesel_error) = ApplicationUserLogInTokenBaseRepository::delete(&connection_manager, application_user_log_in_token) { 
+                    if let Err(diesel_error) = ApplicationUserLogInTokenBaseRepository::delete(&connection_manager, &application_user_log_in_token) { 
                         connection_manager.rollback_transaction()?;
 
                         return Err(diesel_error)?;

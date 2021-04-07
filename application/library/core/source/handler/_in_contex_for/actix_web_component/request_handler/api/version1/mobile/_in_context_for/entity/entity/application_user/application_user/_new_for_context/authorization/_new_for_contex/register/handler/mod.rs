@@ -19,7 +19,6 @@ use crate::repository::_in_context_for::entity::entity::json_web_token::json_ref
 use crate::service::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
-use std::borrow::Cow;
 
 pub struct Handler;
 
@@ -32,14 +31,14 @@ impl<'outer> Handler {
         connection_manager.establish_connection()?;
 
         if !ApplicationUserBaseRepository::is_exist_by_nickanme(&connection_manager, &nickname)? {
-            if let Some(ref pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, &email)? {
-                if let Some(ref application_user_registration_confirmation_token) = 
+            if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, &email)? {
+                if let Some(application_user_registration_confirmation_token) = 
                 ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? 
                 {
                     if request.application_user_registration_confirmation_token_value == application_user_registration_confirmation_token.get_value().get_value() {
                         if !application_user_registration_confirmation_token.is_expired() {
                             let application_user: ApplicationUser<'_> = 
-                            ApplicationUser::new_from_pre_confirmed_application_user(pre_confirmed_application_user, nickname, Password::new(request.application_user_password));
+                            ApplicationUser::new_from_pre_confirmed_application_user(&pre_confirmed_application_user, nickname, Password::new(request.application_user_password));
 
                             connection_manager.begin_transaction()?;
                             if let Err(diesel_error) = ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
@@ -48,13 +47,13 @@ impl<'outer> Handler {
                                 return Err(diesel_error)?;
                             }
 
-                            if let Err(diesel_error) = ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&connection_manager, application_user_registration_confirmation_token) {
+                            if let Err(diesel_error) = ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&connection_manager, &application_user_registration_confirmation_token) {
                                 connection_manager.rollback_transaction()?;
 
                                 return Err(diesel_error)?; 
                             }
 
-                            if let Err(diesel_error) = PreConfirmedApplicationUserBaseRepository::delete(&connection_manager, pre_confirmed_application_user) {
+                            if let Err(diesel_error) = PreConfirmedApplicationUserBaseRepository::delete(&connection_manager, &pre_confirmed_application_user) {
                                 connection_manager.rollback_transaction()?;
 
                                 return Err(diesel_error)?;

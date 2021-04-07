@@ -21,11 +21,11 @@ impl Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        if let Some(ref application_user) = ApplicationUserBaseRepository::get_by_email(&connection_manager, &Email::new(request.application_user_email))? {
+        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(&connection_manager, &Email::new(request.application_user_email))? {
             if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash()) {
                 if !ApplicationUserLogInTokenBaseRepository::is_exist_by_application_user_id(&connection_manager, application_user.get_id())? {
                     let application_user_log_in_token: ApplicationUserLogInToken<'_> = 
-                    ApplicationUserLogInToken::new(application_user, UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?);
+                    ApplicationUserLogInToken::new(&application_user, UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?);
 
                     ApplicationUserLogInTokenBaseRepository::create(&connection_manager, &application_user_log_in_token)?;
 

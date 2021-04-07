@@ -49,11 +49,11 @@ where
     }
 
     fn call(&mut self, service_request: ServiceRequest) -> Self::Future {
-        if let Err(ref main_error_kind) = CallHandler::handle(&service_request) {
+        if let Err(main_error_kind) = CallHandler::handle(&service_request) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::JsonAccessWebTokenErrorKind(ref json_access_web_token_error_kind) => {
+                        EntityErrorKind::JsonAccessWebTokenErrorKind(json_access_web_token_error_kind) => {
                             match json_access_web_token_error_kind {
                                 JsonAccessWebTokenErrorKind::AlreadyExpired => {
                                     return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enjsacweto03")).into_body())));
