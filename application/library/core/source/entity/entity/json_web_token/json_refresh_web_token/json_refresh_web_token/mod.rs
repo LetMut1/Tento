@@ -12,11 +12,11 @@ pub struct JsonRefreshWebToken<'outer> {
 }
 
 impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {
-    pub fn new(application_user_id: &'outer UuidV4, device_id: Cow<'outer, UuidV4>) -> Self {
+    pub fn new(application_user_id: &'outer UuidV4, application_user_log_in_token_device_id: Cow<'outer, UuidV4>) -> Self {
         return Self {
             json_access_web_token_id: UuidV4::new(),
             application_user_id: Cow::Borrowed(application_user_id),
-            application_user_log_in_token_device_id: device_id,
+            application_user_log_in_token_device_id,
             expired_at: DateExpirationCreator::create()
         };
     }
