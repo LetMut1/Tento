@@ -1,12 +1,14 @@
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::log_in::request::Request;
 use crate::dto::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::log_in::handler::_new_for_context::result::Result as HandlerResult;
 use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::json_access_web_token_black_list::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::entity::entity::json_web_token::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
+use crate::repository::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::postgresql::base_repository::BaseRepository as JsonAccessWebTokenBlackListRepository;
 use crate::repository::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::postgresql::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::encoder::Encoder;
@@ -26,11 +28,20 @@ impl Handler {
         {
             if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value {
                 if !application_user_log_in_token.is_expired() {
+                    
+                    if let Some(existing_json_refresh_web_token) = JsonRefreshWebTokenBaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
+                        &connection_manager, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
+                    )? 
+                    {
+                        JsonAccessWebTokenBlackListRepository::create(
+                            &connection_manager, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
+                        );
+                    }
+
                     let json_refresh_web_token: JsonRefreshWebToken<'_> =
                     JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), Cow::Borrowed(application_user_log_in_token.get_device_id()));
 
                     connection_manager.begin_transaction()?;
-
                     if let Err(diesel_error) = ApplicationUserLogInTokenBaseRepository::delete(&connection_manager, &application_user_log_in_token) { 
                         connection_manager.rollback_transaction()?;
 
@@ -45,10 +56,8 @@ impl Handler {
                     }
 
                     connection_manager.commit_transaction()?;
-                    connection_manager.close_connection();
 
-                    // TODO // TODO // TODO // TODO // TODO Если уже есть в JRWT (юзерайди+девайсайди) (повторный логин, по сути, то делаем РАЗЛОГИН старого токена), значит сделать перелогин, то есть, инвалидировать предыдущие значения
-                    // удалить имеющийся JRWT, записать его аксесс в блэклист
+                    connection_manager.close_connection();
 
                     return Ok(
                         HandlerResult::new(

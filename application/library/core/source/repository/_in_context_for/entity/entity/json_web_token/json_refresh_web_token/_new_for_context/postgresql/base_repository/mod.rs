@@ -23,6 +23,15 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
+    pub fn delete(connection_manager: &'outer ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Result<(), DieselError> {
+        diesel::delete(
+            json_refresh_web_token_schema::table
+            .filter(json_refresh_web_token_schema::json_access_web_token_id.eq(json_refresh_web_token.get_json_access_web_token_id().get_value()))
+        ).execute(connection_manager.get_connection())?;
+
+        return Ok(());
+    }
+
     pub fn update(
         connection_manager: &'outer ConnectionManager,
         json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
@@ -60,3 +69,4 @@ impl<'outer, 'vague> BaseRepository {
 // хранить рефреш-токен по ключу "апплтикэйшн-юзер-айди + логин-девайс_айди".
 // для Выхода со всех устройств храниь все ДевайсыАди по ключу "АппликэйшнЮзерАйди"
 // ставить срок экспирации кеша, равный сроку экспирации токена ( так же и в БлэкЛист)
+// // TODO // TODO обратить внимение на Транзакции, в которых используется методы ( то есть, пройти по РекуэстХэндлерам для Authentication)

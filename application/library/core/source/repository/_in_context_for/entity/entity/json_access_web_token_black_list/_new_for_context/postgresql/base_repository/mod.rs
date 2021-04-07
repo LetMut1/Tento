@@ -6,7 +6,6 @@ use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
 use diesel::dsl; 
 use diesel::ExpressionMethods;
-use diesel::OptionalExtension;
 use diesel::QueryDsl;
 use diesel::RunQueryDsl;
 
@@ -31,6 +30,8 @@ impl<'outer, 'vague> BaseRepository {
                 )
             )
             .get_result::<bool>(connection_manager.get_connection())?
-        );  // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        );
     }
 }
+
+// При переходе на Редис  делать срок экспирации// TODO // TODO обратить внимение на Транзакции, в которых используется методы ( то есть, пройти по РекуэстХэндлерам для Authentication)
