@@ -9,7 +9,7 @@ use std::io::Result;
 #[actix_web::main]
 async fn main() -> Result<()> {
     return HttpServer::new(|| {
-        App::new().configure(MainServiceConfigurator::configure)
+        App::new().configure(MainServiceConfigurator::get_configuration)
     })
     .bind("0.0.0.0:80")?.run().await;
 }

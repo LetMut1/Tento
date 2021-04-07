@@ -19,7 +19,6 @@ use crate::repository::_in_context_for::entity::entity::json_web_token::json_ref
 use crate::service::_in_context_for::entity::entity::json_web_token::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_web_token::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
-use std::borrow::Cow;
 
 pub struct Handler;
 
@@ -27,6 +26,7 @@ impl<'outer> Handler {
     pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
         let nickname: Nickname = Nickname::new(request.application_user_nickname);
         let email: Email = Email::new(request.application_user_email);
+        let application_user_log_in_token_device_id: UuidV4 = UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?;
 
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
@@ -61,8 +61,7 @@ impl<'outer> Handler {
                             }
                             connection_manager.commit_transaction()?;
 
-                            let json_refresh_web_token: JsonRefreshWebToken<'_> = 
-                            JsonRefreshWebToken::new(application_user.get_id(), Cow::Owned(UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?));
+                            let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id(), &application_user_log_in_token_device_id);
 
                             JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
                             

@@ -6,7 +6,7 @@ use crate::actix_web_component::request_handler::api::version1::mobile::_in_cont
 pub struct MainServiceConfigurator;
 
 impl<'outer> MainServiceConfigurator {
-    pub fn configure(service_config: &mut ServiceConfig) -> () {
+    pub fn get_configuration(service_config: &mut ServiceConfig) -> () {
         service_config                                                      // TODO default_service 
         .service(
             web::scope("/api")
@@ -26,6 +26,7 @@ impl<'outer> MainServiceConfigurator {
                             .route("/li", web::post().to(Authorization::log_in))
                             .route("/cnfe", web::get().to(Authorization::check_nickname_for_existing))
                             .route("/cefe", web::get().to(Authorization::check_email_for_existing))
+                            .route("/rjawt", web::get().to(Authorization::refresh_json_access_web_token))
                         )
                     )
                     .service(
