@@ -34,7 +34,7 @@ impl<'outer> MainServiceConfigurator {
                         .wrap(AuthenticationResolverFactory)
                         .service( 
                             web::scope("/authentication")
-                            // .route("/t", web::get().to(Authorization::ttttt))
+                            .route("/lo", web::get().to(Authorization::log_out))
                         )
                     )
                 )

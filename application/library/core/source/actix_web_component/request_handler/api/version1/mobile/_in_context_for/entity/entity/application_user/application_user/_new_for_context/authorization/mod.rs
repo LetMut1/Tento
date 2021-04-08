@@ -2,6 +2,7 @@ use actix_web::dev::Body;
 use actix_web::HttpResponse;
 use actix_web::web::Form;
 use actix_web::web::Query;
+use actix_web::web::ReqData;
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::query::Query as CheckEmailForExistingQuery;
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::query::Query as CheckNicknameForExistingQuery;
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::log_in::request::Request as LogInRequest;
@@ -11,6 +12,7 @@ use crate::dto::_in_context_for::actix_web_component::request_handler::api::vers
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::register::request::Request as RegisterRequest;
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_log_in::request::Request as ResendEmailForLogInRequest;
 use crate::dto::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_register::request::Request as ResendEmailForRegisterRequest;
+use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error_kind::ApplicationUserRegistrationConfirmationTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
@@ -22,6 +24,7 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::log_in::handler::Handler as LogInHandler;
+use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::log_out::handler::Handler as LogOutHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::pre_log_in::handler::Handler as PreLogInHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::pre_register::handler::Handler as PreRegisterHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token::handler::Handler as RefreshJsonAccessWebTokenHandler;
@@ -33,11 +36,9 @@ use crate::utility::_in_context_for::actix_web_component::_new_for_context::stan
 
 pub struct Authorization;
 
-impl Authorization {
+impl<'vague> Authorization {
     pub async fn check_email_for_existing(query: Query<CheckEmailForExistingQuery>) -> HttpResponse<Body> {
-        let check_email_for_existing_query: CheckEmailForExistingQuery = query.into_inner();
-
-        match CheckEmailForExistingHanlder::handle(check_email_for_existing_query) {
+        match CheckEmailForExistingHanlder::handle(query.into_inner()) {
             Ok(result) => {
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
             },
@@ -56,9 +57,7 @@ impl Authorization {
     }
 
     pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> HttpResponse<Body> {
-        let check_nickname_for_existing_query: CheckNicknameForExistingQuery = query.into_inner();
-
-        match CheckNicknameForExistingHanlder::handle(check_nickname_for_existing_query) {
+        match CheckNicknameForExistingHanlder::handle(query.into_inner()) {
             Ok(result) => {
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
             },
@@ -77,9 +76,7 @@ impl Authorization {
     }
 
     pub async fn pre_register(form: Form<PreRegisterRequest>) -> HttpResponse<Body> {
-        let pre_register_request: PreRegisterRequest = form.into_inner();
-
-        if let Err(main_error_kind) = PreRegisterHandler::handle(pre_register_request) {
+        if let Err(main_error_kind) = PreRegisterHandler::handle(form.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
@@ -128,9 +125,7 @@ impl Authorization {
     }
 
     pub async fn register(form: Form<RegisterRequest>) -> HttpResponse<Body> {
-        let register_request: RegisterRequest = form.into_inner();
-        
-        match RegisterHandler::handle(register_request) {
+        match RegisterHandler::handle(form.into_inner()) {
             Ok(result) => { 
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
             },
@@ -195,9 +190,7 @@ impl Authorization {
     }
 
     pub async fn resend_email_for_register(form: Form<ResendEmailForRegisterRequest>) -> HttpResponse<Body> {
-        let resend_email_for_register_request: ResendEmailForRegisterRequest = form.into_inner();
-
-        if let Err(main_error_kind) = ResendEmailForRegisterHandler::handle(resend_email_for_register_request) {
+        if let Err(main_error_kind) = ResendEmailForRegisterHandler::handle(form.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
@@ -244,9 +237,7 @@ impl Authorization {
     }
 
     pub async fn pre_log_in(form: Form<PreLogInRequest>) -> HttpResponse<Body> {
-        let pre_log_in: PreLogInRequest = form.into_inner();
-        
-        match PreLogInHandler::handle(pre_log_in) {
+        match PreLogInHandler::handle(form.into_inner()) {
             Ok(result) => { 
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
             },
@@ -298,9 +289,7 @@ impl Authorization {
     }
 
     pub async fn log_in(form: Form<LogInRequest>) -> HttpResponse<Body> {
-        let log_in_request: LogInRequest = form.into_inner();
-        
-        match LogInHandler::handle(log_in_request) {
+        match LogInHandler::handle(form.into_inner()) {
             Ok(result) => { 
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
             },
@@ -344,9 +333,7 @@ impl Authorization {
     }
 
     pub async fn resend_email_for_log_in(form: Form<ResendEmailForLogInRequest>) -> HttpResponse<Body> {
-        let resend_email_for_log_in_request: ResendEmailForLogInRequest = form.into_inner();
-        
-        if let Err(main_error_kind) = ResendEmailForLogInHandler::handle(resend_email_for_log_in_request) {
+        if let Err(main_error_kind) = ResendEmailForLogInHandler::handle(form.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
@@ -392,9 +379,7 @@ impl Authorization {
     }
 
     pub async fn refresh_json_access_web_token(form: Form<RefreshJsonAccessWebTokenRequest>) -> HttpResponse<Body> {
-        let refresh_json_access_web_token_request: RefreshJsonAccessWebTokenRequest = form.into_inner();
-
-        match RefreshJsonAccessWebTokenHandler::handle(refresh_json_access_web_token_request) {
+        match RefreshJsonAccessWebTokenHandler::handle(form.into_inner()) {
             Ok(result) => {
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
             },
@@ -419,7 +404,7 @@ impl Authorization {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enjsreweto02"));
                                     }
                                 }
-                            }
+                            },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                                 return StandardResponseCreator::create_internal_server_error();
@@ -436,5 +421,36 @@ impl Authorization {
                 }
             }
         }
+    }
+
+    pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'vague>>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = LogOutHandler::handle(&req_data.into_inner()) {
+            match main_error_kind {
+                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                    match entity_error_kind {
+                        EntityErrorKind::JsonRefreshWebTokenErrorKind(json_refresh_web_token_error_kind) => {
+                            match json_refresh_web_token_error_kind {
+                                JsonRefreshWebTokenErrorKind::NotFound => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enjsreweto02"));
+                                }
+                            }
+                        },
+                        _ => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
+                },
+                MainErrorKind::InvalidArgumentError => {
+                    return StandardResponseCreator::create_bad_request();
+                },
+                _ => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    return StandardResponseCreator::create_internal_server_error();
+                }
+            }
+        }
+        
+        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success());
     }
 }
