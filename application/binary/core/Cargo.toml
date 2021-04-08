@@ -13,8 +13,8 @@ name = "core_binary_postgres_fixtures"
 path = "./source/postgres_fixtures/mod.rs"
 
 [dependencies]
-actix-web = { version = "3.3.2" }
-core_library = { path = "./../../library/core", version = "0.1.0" }
+actix-web = {version = "3.3.2"}
+core_library = {path = "./../../library/core", version = "0.1.0"}
 
 [profile.dev]
 opt-level = 0

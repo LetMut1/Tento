@@ -7,11 +7,11 @@ use core_library::actix_web_component::configuration::main_service_configurator:
 use std::io::Result;
 
 #[actix_web::main]
-async fn main() -> Result<()> {
+async fn main() -> Result<()>
+{
     return HttpServer::new(|| {
-        App::new().configure(MainServiceConfigurator::get_configuration)
-    })
-    .bind("0.0.0.0:80")?.run().await;
+        return App::new().configure(MainServiceConfigurator::get_configuration);
+    }).bind("0.0.0.0:80")?.run().await; // TODO адрес через метод брать, 
 }
 
 // TODO Do not remove this block until the problems have been fixed {
