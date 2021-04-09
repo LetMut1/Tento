@@ -17,7 +17,7 @@ impl<'outer> MainServiceConfigurator {
                     .service(
                         web::scope("/na")     // TODO можно ли объединить в Скопе без роута. ( Если есть Скоуп с пустым Роуом, то другие Скоцпы не воспринимаютмя)
                         .service( 
-                            web::scope("/authentication")
+                            web::scope("/au")
                             .route("/pr", web::post().to(Authorization::pre_register))
                             .route("/r", web::post().to(Authorization::register))
                             .route("/refr", web::post().to(Authorization::resend_email_for_register))
@@ -26,14 +26,14 @@ impl<'outer> MainServiceConfigurator {
                             .route("/li", web::post().to(Authorization::log_in))
                             .route("/cnfe", web::get().to(Authorization::check_nickname_for_existing))
                             .route("/cefe", web::get().to(Authorization::check_email_for_existing))
-                            .route("/rjawt", web::get().to(Authorization::refresh_json_access_web_token))
+                            .route("/rjawt", web::post().to(Authorization::refresh_json_access_web_token))
                         )
                     )
                     .service(
                         web::scope("/a")
                         .wrap(AuthenticationResolverFactory)
                         .service( 
-                            web::scope("/authentication")
+                            web::scope("/au")
                             .route("/lo", web::get().to(Authorization::log_out))
                         )
                     )
