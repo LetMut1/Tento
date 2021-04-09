@@ -47,13 +47,35 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
+    pub fn get_by_application_user_id(
+        connection_manager: &'outer ConnectionManager, 
+        application_user_id: &'outer UuidV4
+    ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, DieselError> {
+        let existing_registry = json_refresh_web_token_schema::table
+        .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
+        .get_results::<Existing>(connection_manager.get_connection())?;
+        
+        if !existing_registry.is_empty() {
+            return Ok(
+                Some(
+                    existing_registry.into_iter().map(
+                        |existing: Existing| -> JsonRefreshWebToken<'vague> { 
+                            return JsonRefreshWebToken::new_from_model(existing); 
+                        }
+                    ).collect::<Vec<JsonRefreshWebToken<'vague>>>()
+                )
+            ); 
+        }
+        
+        return Ok(None); 
+    }
+
     pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
         connection_manager: &'outer ConnectionManager, 
         application_user_id: &'outer UuidV4, 
         application_user_log_in_token_device_id: &'outer UuidV4,
     ) -> Result<Option<JsonRefreshWebToken<'vague>>, DieselError> {
-        if let Some(existing) = 
-        json_refresh_web_token_schema::table
+        if let Some(existing) = json_refresh_web_token_schema::table
         .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
         .filter(json_refresh_web_token_schema::application_user_log_in_token_device_id.eq(application_user_log_in_token_device_id.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()?

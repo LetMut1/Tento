@@ -24,6 +24,7 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::log_in::handler::Handler as LogInHandler;
+use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices::handler::Handler as LogOutFromAllDevicesHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::log_out::handler::Handler as LogOutHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::pre_log_in::handler::Handler as PreLogInHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::pre_register::handler::Handler as PreRegisterHandler;
@@ -425,6 +426,37 @@ impl<'vague> Authorization {
 
     pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'vague>>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = LogOutHandler::handle(&req_data.into_inner()) {
+            match main_error_kind {
+                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                    match entity_error_kind {
+                        EntityErrorKind::JsonRefreshWebTokenErrorKind(json_refresh_web_token_error_kind) => {
+                            match json_refresh_web_token_error_kind {
+                                JsonRefreshWebTokenErrorKind::NotFound => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enjsreweto02"));
+                                }
+                            }
+                        },
+                        _ => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
+                },
+                MainErrorKind::InvalidArgumentError => {
+                    return StandardResponseCreator::create_bad_request();
+                },
+                _ => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    return StandardResponseCreator::create_internal_server_error();
+                }
+            }
+        }
+        
+        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success());
+    }
+
+    pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'vague>>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = LogOutFromAllDevicesHandler::handle(&req_data.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
