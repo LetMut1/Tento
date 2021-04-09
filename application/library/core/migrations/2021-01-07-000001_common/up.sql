@@ -58,7 +58,7 @@ CREATE TABLE json_refresh_web_token (   -- // TODO Redis
 );
 
 CREATE TABLE json_access_web_token_black_list (        -- // TODO Redis
-    json_refresh_web_token_id UUID NOT NULL,
+    json_access_web_token_id UUID NOT NULL,
     PRIMARY KEY (json_access_web_token_id),
     FOREIGN KEY (json_access_web_token_id) REFERENCES json_refresh_web_token (json_access_web_token_id)
 );
