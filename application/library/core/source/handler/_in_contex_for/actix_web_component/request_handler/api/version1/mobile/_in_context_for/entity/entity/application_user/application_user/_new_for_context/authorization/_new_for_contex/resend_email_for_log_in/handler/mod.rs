@@ -18,10 +18,12 @@ impl Handler {
 
         if let Some(application_user) = ApplicationUserBaseRepository::get_by_id(&connection_manager, &UuidV4::new_from_str(request.application_user_id.as_str())?)? {
             if let Some(mut application_user_log_in_token) = 
-            ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(&connection_manager, application_user.get_id(), &UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?)? 
+            ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
+                &connection_manager, application_user.get_id(), &UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?
+            )? 
             {
                 if application_user_log_in_token.is_expired() {
-                    application_user_log_in_token.refresh_value().refresh_expired_at();
+                    application_user_log_in_token.refresh();
 
                     ApplicationUserLogInTokenBaseRepository::update(&connection_manager, &application_user_log_in_token)?;
                 }

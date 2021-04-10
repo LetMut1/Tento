@@ -33,13 +33,19 @@ impl<'this, 'outer: 'this> ApplicationUserRegistrationConfirmationToken<'outer> 
         };
     }
 
-    pub fn refresh_value(&'this mut self) -> &'this mut Self {
+    pub fn refresh(&'this mut self) -> &'this mut Self {
+        self.refresh_value().refresh_expired_at();
+
+        return self;
+    }
+
+    fn refresh_value(&'this mut self) -> &'this mut Self {
         self.value = Value::new(UuidV4::new().get_value().to_string());
 
         return self;
     }
 
-    pub fn refresh_expired_at(&'this mut self) -> &'this mut Self {
+    fn refresh_expired_at(&'this mut self) -> &'this mut Self {
         self.expired_at = DateExpirationCreator::create();
 
         return self;

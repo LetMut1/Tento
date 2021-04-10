@@ -1,4 +1,5 @@
-CREATE TABLE pre_confirmed_application_user ( 
+                                        -- // TODO // TODO // TODO // TODO // TODOделать все Ограничения (даже FK) (кроме PK) через Alter Table !!!!!!
+CREATE TABLE pre_confirmed_application_user (       -- // TODO изучить полный синтаксис создания таблиц
     id UUID NOT NULL,
     -- // email value - уникальное
         -- // TODO удалять висящие кортежи (написать функцию либо через крон по бинарнику)
@@ -16,6 +17,8 @@ CREATE TABLE application_user (
     created_at TIMESTAMPTZ NOT NULL,    
     PRIMARY KEY (id)
 );
+ALTER TABLE application_user ADD CONSTRAINT email_1 UNIQUE (email);
+
 -- // TODO On delete cascade (при удалении юзра должны удалятьсявсе зависимые таблицы)
 CREATE TABLE application_user_registration_confirmation_token (
     id UUID NOT NULL,
@@ -46,7 +49,7 @@ CREATE TABLE application_user_log_in_token (
 
 
 
--- // TODO delete 
+-- // TODO delete  (!!!!!!!! ПРОВЕРИТЬ down.sql)
 CREATE TABLE json_refresh_web_token (   -- // TODO Redis
     json_access_web_token_id UUID NOT NULL,
     application_user_log_in_token_device_id UUID NOT NULL,
@@ -61,5 +64,14 @@ CREATE TABLE json_access_web_token_black_list (        -- // TODO Redis
     json_access_web_token_id UUID NOT NULL,
     PRIMARY KEY (json_access_web_token_id),
     FOREIGN KEY (json_access_web_token_id) REFERENCES json_refresh_web_token (json_access_web_token_id)
+);
+
+CREATE TABLE reset_password_token (       -- // TODO Redis
+    id UUID NOT NULL,
+    application_user_email VARCHAR NOT NULL,
+    value VARCHAR NOT NULL,
+    expired_at TIMESTAMPTZ NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (application_user_email) REFERENCES application_user (email)
 );
 -- // TODO delete 
