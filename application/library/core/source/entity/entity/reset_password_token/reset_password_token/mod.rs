@@ -2,7 +2,6 @@ use crate::dto::resourse_model::_in_context_for::entity::entity::reset_password_
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::application_user::core::email::Email;
-use crate::entity::entity::application_user::application_user::application_user::ApplicationUser;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use crate::utility::_in_context_for::entity::entity::apllication_user_log_in_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use std::borrow::Cow;
@@ -16,10 +15,10 @@ pub struct ResetPasswordToken<'outer> {
 }
 
 impl<'this, 'outer: 'this> ResetPasswordToken<'outer> {
-    pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
+    pub fn new(application_user_email: &'outer Email) -> Self {
         return Self {
             id: UuidV4::new(),
-            application_user_email: Cow::Borrowed(application_user.get_email()),
+            application_user_email: Cow::Borrowed(application_user_email),
             value: Value::new(UuidV4::new().get_value().to_string()),       // TODO создать генератор значения + метода Рефреш ниже
             expired_at: DateExpirationCreator::create()
         };
@@ -34,13 +33,7 @@ impl<'this, 'outer: 'this> ResetPasswordToken<'outer> {
         };
     }
 
-    pub fn refresh_value(&'this mut self) -> &'this mut Self {
-        self.value = Value::new(UuidV4::new().get_value().to_string());
-
-        return self;
-    }
-
-    pub fn refresh_expired_at(&'this mut self) -> &'this mut Self {
+    pub fn refresh(&'this mut self) -> &'this mut Self {
         self.expired_at = DateExpirationCreator::create();
 
         return self;
@@ -65,4 +58,4 @@ impl<'this, 'outer: 'this> ResetPasswordToken<'outer> {
     pub fn get_expired_at(&'this self) -> &'this DateTime {
         return &self.expired_at;
     }
-}   // TODO Хандлер ддля контеста Редис с экспирацией.
+}

@@ -5,6 +5,7 @@ pub mod log_out_from_all_devices;
 pub mod log_out;
 pub mod pre_log_in;
 pub mod pre_register;
+pub mod pre_reset_password;
 pub mod refresh_json_access_web_token;
 pub mod register;
 pub mod resend_email_for_log_in;

@@ -27,6 +27,7 @@ impl<'outer> MainServiceConfigurator {
                             .route("/cnfe", web::get().to(Authorization::check_nickname_for_existing))
                             .route("/cefe", web::get().to(Authorization::check_email_for_existing))
                             .route("/rjawt", web::post().to(Authorization::refresh_json_access_web_token))
+                            .route("/prp", web::post().to(Authorization::pre_reset_password))
                         )
                     )
                     .service(

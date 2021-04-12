@@ -8,6 +8,7 @@ use crate::dto::request_parameters::_in_context_for::actix_web_component::reques
 use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::log_in::request::Request as LogInRequest;
 use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::request::Request as PreLogInRequest;
 use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_register::request::Request as PreRegisterRequest;
+use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_reset_password::request::Request as PreResetPasswordRequest;
 use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::request::Request as RefreshJsonAccessWebTokenRequest;
 use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::register::request::Request as RegisterRequest;
 use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_log_in::request::Request as ResendEmailForLogInRequest;
@@ -28,6 +29,7 @@ use crate::handler::_in_contex_for::actix_web_component::request_handler::api::v
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::log_out::handler::Handler as LogOutHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::pre_log_in::handler::Handler as PreLogInHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::pre_register::handler::Handler as PreRegisterHandler;
+use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::pre_reset_password::handler::Handler as PreResetPasswordHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token::handler::Handler as RefreshJsonAccessWebTokenHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::register::handler::Handler as RegisterHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_log_in::handler::Handler as ResendEmailForLogInHandler;
@@ -484,5 +486,41 @@ impl<'vague> Authorization {
         }
         
         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success());
+    }
+
+    pub async fn pre_reset_password(form: Form<PreResetPasswordRequest>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = PreResetPasswordHandler::handle(form.into_inner()) {
+            match main_error_kind {
+                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                    match entity_error_kind {
+                        EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
+                            match application_user_error_kind {
+                                ApplicationUserErrorKind::NotFound => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus02"));
+                                },
+                                _ => {
+                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    return StandardResponseCreator::create_internal_server_error();
+                                }
+
+                            }
+                        },
+                        _ => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
+                },
+                MainErrorKind::InvalidArgumentError => {
+                    return StandardResponseCreator::create_bad_request();
+                },
+                _ => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    return StandardResponseCreator::create_internal_server_error();
+                }
+            }
+        }
+
+        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
     }
 }

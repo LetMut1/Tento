@@ -6,8 +6,12 @@ use crate::utility::email_sender::EmailSender;
 pub struct BaseSender;
 
 impl<'outer> BaseSender {
-    pub fn send_by_email(application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>, email: &'outer Email) -> Result<(), EmailErrorKind> {
-        EmailSender::send("Log in confirmation", "Your code: ".to_string() + application_user_log_in_token.get_value().get_value(), email.get_value())?;
+    pub fn send_by_email(
+        application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>, recipient_email: &'outer Email
+    ) -> Result<(), EmailErrorKind> {
+        EmailSender::send(
+            "Log in confirmation", "Your code: ".to_string() + application_user_log_in_token.get_value().get_value(), recipient_email.get_value()
+        )?;
 
         return Ok(());
     }
