@@ -8,6 +8,7 @@ use super::core::_in_context_for::entity::application_user::application_user::_n
 use super::core::_in_context_for::entity::application_user::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
 use super::core::_in_context_for::entity::json_web_token::json_access_web_token::_new_for_context::json_access_web_token_error_kind::JsonAccessWebTokenErrorKind;
 use super::core::_in_context_for::entity::json_web_token::json_refresh_web_token::_new_for_context::json_refresh_web_token_error_kind::JsonRefreshWebTokenErrorKind;
+use super::core::_in_context_for::entity::reset_password_token::_new_for_context::reset_password_token::ResetPasswordTokenErrorKind;
 
 #[derive(Debug)]
 pub enum EntityErrorKind {
@@ -16,7 +17,8 @@ pub enum EntityErrorKind {
     ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind),
     JsonAccessWebTokenErrorKind(JsonAccessWebTokenErrorKind),
     JsonRefreshWebTokenErrorKind(JsonRefreshWebTokenErrorKind),
-    PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind)
+    PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind),
+    ResetPasswordTokenErrorKind(ResetPasswordTokenErrorKind)
 }
 
 impl Display for EntityErrorKind {

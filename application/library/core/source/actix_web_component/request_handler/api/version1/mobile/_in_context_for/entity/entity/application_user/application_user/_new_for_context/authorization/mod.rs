@@ -13,6 +13,7 @@ use crate::dto::request_parameters::_in_context_for::actix_web_component::reques
 use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::register::request::Request as RegisterRequest;
 use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_log_in::request::Request as ResendEmailForLogInRequest;
 use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_register::request::Request as ResendEmailForRegisterRequest;
+use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_reset_password::request::Request as ResendEmailForResetPasswordRequest;
 use crate::entity::entity::json_web_token::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error_kind::ApplicationUserRegistrationConfirmationTokenErrorKind;
@@ -20,6 +21,7 @@ use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_conte
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::json_web_token::json_access_web_token::_new_for_context::json_access_web_token_error_kind::JsonAccessWebTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::json_web_token::json_refresh_web_token::_new_for_context::json_refresh_web_token_error_kind::JsonRefreshWebTokenErrorKind;
+use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::reset_password_token::_new_for_context::reset_password_token::ResetPasswordTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
@@ -34,6 +36,7 @@ use crate::handler::_in_contex_for::actix_web_component::request_handler::api::v
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::register::handler::Handler as RegisterHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_log_in::handler::Handler as ResendEmailForLogInHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_register::handler::Handler as ResendEmailForRegisterHandler;
+use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_reset_password::handler::Handler as ResendEmailForResetPasswordHandler;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_json_response_body_wrapper::StandardJsonResponseBodyWrapper;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_response_creator::StandardResponseCreator;
 
@@ -482,6 +485,42 @@ impl<'vague> Authorization {
                             match application_user_error_kind {
                                 ApplicationUserErrorKind::NotFound => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus02"));
+                                },
+                                _ => {
+                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    return StandardResponseCreator::create_internal_server_error();
+                                }
+
+                            }
+                        },
+                        _ => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
+                },
+                MainErrorKind::InvalidArgumentError => {
+                    return StandardResponseCreator::create_bad_request();
+                },
+                _ => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    return StandardResponseCreator::create_internal_server_error();
+                }
+            }
+        }
+
+        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
+    }
+
+    pub async fn resend_email_for_reset_password(form: Form<ResendEmailForResetPasswordRequest>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = ResendEmailForResetPasswordHandler::handle(form.into_inner()) {
+            match main_error_kind {
+                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                    match entity_error_kind {
+                        EntityErrorKind::ResetPasswordTokenErrorKind(reset_password_token_error_kind) => {
+                            match reset_password_token_error_kind {
+                                ResetPasswordTokenErrorKind::NotFound => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enrepato02"));
                                 },
                                 _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
