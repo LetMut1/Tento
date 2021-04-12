@@ -57,7 +57,6 @@ impl Handler {
                     }
 
                     connection_manager.commit_transaction()?;
-
                     connection_manager.close_connection();
 
                     return Ok(

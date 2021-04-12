@@ -17,15 +17,15 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(request: Request) -> Result<(), MainErrorKind> {
-        let email: Email = Email::new(request.application_user_email);
+        let application_user_email: Email = Email::new(request.application_user_email);
 
-        if EmailSimpleValidator::is_valid(&email) {
+        if EmailSimpleValidator::is_valid(&application_user_email) {
             let mut connection_manager: ConnectionManager = ConnectionManager::new();
             connection_manager.establish_connection()?;
 
-            if !PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)? {
-                if !ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)? {
-                    let pre_confirmed_application_user: PreConfirmedApplicationUser = PreConfirmedApplicationUser::new(email);  
+            if !PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)? {
+                if !ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)? {
+                    let pre_confirmed_application_user: PreConfirmedApplicationUser = PreConfirmedApplicationUser::new(application_user_email);  
 
                     let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> = ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user);
                     
@@ -41,6 +41,7 @@ impl Handler {
 
                         return Err(diesel_error)?;
                     }
+                    
                     connection_manager.commit_transaction()?;
                     connection_manager.close_connection();
 

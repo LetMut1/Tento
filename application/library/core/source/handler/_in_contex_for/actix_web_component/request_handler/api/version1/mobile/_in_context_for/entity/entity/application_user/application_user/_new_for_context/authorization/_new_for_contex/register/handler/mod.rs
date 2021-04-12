@@ -24,22 +24,24 @@ pub struct Handler;
 
 impl<'outer> Handler {
     pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
-        let nickname: Nickname = Nickname::new(request.application_user_nickname);
-        let email: Email = Email::new(request.application_user_email);
+        let application_user_nickname: Nickname = Nickname::new(request.application_user_nickname);
+
+        let application_user_email: Email = Email::new(request.application_user_email);
+
         let application_user_log_in_token_device_id: UuidV4 = UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?;
 
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        if !ApplicationUserBaseRepository::is_exist_by_nickanme(&connection_manager, &nickname)? {
-            if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, &email)? {
+        if !ApplicationUserBaseRepository::is_exist_by_nickanme(&connection_manager, &application_user_nickname)? {
+            if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, &application_user_email)? {
                 if let Some(application_user_registration_confirmation_token) = 
                 ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? 
                 {
                     if request.application_user_registration_confirmation_token_value == application_user_registration_confirmation_token.get_value().get_value() {
                         if !application_user_registration_confirmation_token.is_expired() {
                             let application_user: ApplicationUser<'_> = 
-                            ApplicationUser::new_from_pre_confirmed_application_user(&pre_confirmed_application_user, nickname, Password::new(request.application_user_password));
+                            ApplicationUser::new_from_pre_confirmed_application_user(&pre_confirmed_application_user, application_user_nickname, Password::new(request.application_user_password));
 
                             connection_manager.begin_transaction()?;
                             if let Err(diesel_error) = ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
@@ -59,6 +61,7 @@ impl<'outer> Handler {
 
                                 return Err(diesel_error)?;
                             }
+                            
                             connection_manager.commit_transaction()?;
 
                             let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id(), &application_user_log_in_token_device_id);
@@ -84,7 +87,7 @@ impl<'outer> Handler {
                 return Err(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound))?;
             }
 
-            if ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)? {
+            if ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)? {
                 return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyConfirmed))?;
             }
             

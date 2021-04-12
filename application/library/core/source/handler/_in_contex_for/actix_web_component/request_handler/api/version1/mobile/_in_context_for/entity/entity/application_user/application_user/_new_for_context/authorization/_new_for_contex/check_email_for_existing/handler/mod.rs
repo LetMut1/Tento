@@ -10,14 +10,14 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(query: Query) -> Result<HandlerResult, MainErrorKind> {
-        let email: Email = Email::new(query.application_user_email);
+        let application_user_email: Email = Email::new(query.application_user_email);
 
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
         let handler_result: HandlerResult = HandlerResult::new(
-            ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)?
-            || PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &email)?
+            ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)?
+            || PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)?
         );
 
         connection_manager.close_connection();

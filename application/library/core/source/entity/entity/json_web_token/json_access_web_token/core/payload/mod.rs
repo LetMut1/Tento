@@ -37,10 +37,6 @@ impl<'this, 'outer: 'this> Payload<'outer> {
     }
 
     pub fn refresh(&'this mut self) -> &'this mut Self {
-        return self.refresh_exp();
-    }
-
-    fn refresh_exp(&'this mut self) -> &'this mut Self {
         self.exp = DateExpirationCreator::create();
 
         return self;
