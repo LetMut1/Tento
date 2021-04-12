@@ -17,14 +17,9 @@ impl Handler {
         connection_manager.establish_connection()?;
 
         if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, &Email::new(request.application_user_email))? {
-            if let Some(mut application_user_registration_confirmation_token) = 
+            if let Some(application_user_registration_confirmation_token) = 
             ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? 
             {
-                if application_user_registration_confirmation_token.is_expired() {
-                    application_user_registration_confirmation_token.refresh();
-
-                    ApplicationUserRegistrationConfirmationTokenBaseRepository::update(&connection_manager, &application_user_registration_confirmation_token)?;
-                }
                 connection_manager.close_connection();
                 
                 BaseSender::send_by_email(&application_user_registration_confirmation_token, pre_confirmed_application_user.get_email())?;

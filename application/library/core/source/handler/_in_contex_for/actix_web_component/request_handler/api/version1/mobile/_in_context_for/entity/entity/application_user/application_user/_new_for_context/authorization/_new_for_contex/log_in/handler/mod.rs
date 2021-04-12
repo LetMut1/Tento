@@ -17,7 +17,7 @@ use crate::utility::_in_context_for::diesel_component::_new_for_context::postgre
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
+    pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
@@ -43,6 +43,7 @@ impl Handler {
                     JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id());
 
                     connection_manager.begin_transaction()?;
+                    
                     if let Err(diesel_error) = ApplicationUserLogInTokenBaseRepository::delete(&connection_manager, &application_user_log_in_token) { 
                         connection_manager.rollback_transaction()?;
 

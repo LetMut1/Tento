@@ -23,7 +23,7 @@ use crate::utility::_in_context_for::diesel_component::_new_for_context::postgre
 pub struct Handler;
 
 impl<'outer> Handler {
-    pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
+    pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let application_user_nickname: Nickname = Nickname::new(request.application_user_nickname);
 
         let application_user_email: Email = Email::new(request.application_user_email);
@@ -44,6 +44,7 @@ impl<'outer> Handler {
                             ApplicationUser::new_from_pre_confirmed_application_user(&pre_confirmed_application_user, application_user_nickname, Password::new(request.application_user_password));
 
                             connection_manager.begin_transaction()?;
+                            
                             if let Err(diesel_error) = ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
                                 connection_manager.rollback_transaction()?;
 

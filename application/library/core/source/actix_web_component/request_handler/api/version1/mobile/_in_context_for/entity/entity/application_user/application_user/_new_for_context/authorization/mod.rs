@@ -262,17 +262,6 @@ impl<'vague> Authorization {
                                     }
                                 }
                             },
-                            EntityErrorKind::ApplicationUserLogInTokenErrorKind(application_user_log_in_token_error_kind) => {
-                                match application_user_log_in_token_error_kind {
-                                    ApplicationUserLogInTokenErrorKind::AlreadyExist => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapuslointo01"));
-                                    },
-                                    _ => {
-                                        // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandardResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
                                 return StandardResponseCreator::create_internal_server_error();
@@ -310,10 +299,6 @@ impl<'vague> Authorization {
                                     },
                                     ApplicationUserLogInTokenErrorKind::AlreadyExpired => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapuslointo04"));
-                                    },
-                                    _ => {
-                                        // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandardResponseCreator::create_internal_server_error();
                                     }
                                 }
                             },

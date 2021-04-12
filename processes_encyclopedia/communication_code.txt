@@ -13,7 +13,6 @@ Entity: (01 -> already exist, 02 -> not found)
         enapusrecoto03 -> invalid value,
         enapusrecoto04 -> already expired,
     ApplicationUserLogInToken:
-        enapuslointo01 -> already exist,
         enapuslointo02 -> not found,
         enapuslointo03 -> invalid value,
         enapuslointo04 -> already expired,

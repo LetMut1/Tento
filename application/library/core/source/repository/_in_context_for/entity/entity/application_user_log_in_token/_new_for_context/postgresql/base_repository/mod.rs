@@ -54,16 +54,6 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn is_exist_by_application_user_id(
-        connection_manager: &'outer ConnectionManager, application_user_id: &'outer UuidV4
-    ) -> Result<bool, DieselError> {
-        return Ok(
-            diesel::select(
-                dsl::exists(application_user_log_in_token_schema::table.filter(application_user_log_in_token_schema::application_user_id.eq(application_user_id.get_value())))
-            ).get_result::<bool>(connection_manager.get_connection())?
-        ); // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    }
-
     pub fn get_by_application_user_id_and_device_id(
         connection_manager: &'outer ConnectionManager, application_user_id: &'outer UuidV4, device_id: &'outer UuidV4,
     ) -> Result<Option<ApplicationUserLogInToken<'vague>>, DieselError> {
