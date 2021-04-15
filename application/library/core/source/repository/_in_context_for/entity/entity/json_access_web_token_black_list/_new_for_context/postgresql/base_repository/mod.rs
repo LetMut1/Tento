@@ -1,5 +1,5 @@
 use crate::diesel_component::schema::public::json_access_web_token_black_list as json_access_web_token_black_list_schema;
-use crate::dto::resourse_model::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::new::New;
+use crate::dto::resource_model::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::new::New;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_access_web_token_black_list::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error::DieselError;

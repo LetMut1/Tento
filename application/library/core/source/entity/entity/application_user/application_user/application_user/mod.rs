@@ -1,4 +1,4 @@
-use crate::dto::resourse_model::_in_context_for::entity::entity::application_user::application_user::_new_for_context::existing::Existing;
+use crate::dto::resource_model::_in_context_for::entity::entity::application_user::application_user::_new_for_context::existing::Existing;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;

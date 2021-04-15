@@ -1,6 +1,6 @@
 use crate::diesel_component::schema::public::application_user as application_user_schema;
-use crate::dto::resourse_model::_in_context_for::entity::entity::application_user::application_user::_new_for_context::existing::Existing;
-use crate::dto::resourse_model::_in_context_for::entity::entity::application_user::application_user::_new_for_context::new::New;
+use crate::dto::resource_model::_in_context_for::entity::entity::application_user::application_user::_new_for_context::existing::Existing;
+use crate::dto::resource_model::_in_context_for::entity::entity::application_user::application_user::_new_for_context::new::New;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::application_user::application_user::ApplicationUser;
 use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error::DieselError;
