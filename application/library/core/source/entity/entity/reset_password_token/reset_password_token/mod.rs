@@ -1,6 +1,7 @@
 use crate::dto::resourse_model::_in_context_for::entity::entity::reset_password_token::_new_for_context::existing::Existing;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user::application_user::application_user::ApplicationUser;
 use crate::entity::entity::application_user::application_user::core::email::Email;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use crate::utility::_in_context_for::entity::entity::reset_password_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
@@ -9,16 +10,18 @@ use super::core::value::Value;
 
 pub struct ResetPasswordToken<'outer> {
     id: UuidV4,
+    application_user_id: Cow<'outer, UuidV4>,
     application_user_email: Cow<'outer, Email>,
     value: Value,
     expired_at: DateTime
 }
 
 impl<'this, 'outer: 'this> ResetPasswordToken<'outer> {
-    pub fn new(application_user_email: &'outer Email) -> Self {
+    pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
         return Self {
             id: UuidV4::new(),
-            application_user_email: Cow::Borrowed(application_user_email),
+            application_user_id: Cow::Borrowed(application_user.get_id()),
+            application_user_email: Cow::Borrowed(application_user.get_email()),
             value: Value::new(UuidV4::new().get_value().to_string()),       // TODO создать генератор значения + метода Рефреш ниже
             expired_at: DateExpirationCreator::create()
         };
@@ -27,6 +30,7 @@ impl<'this, 'outer: 'this> ResetPasswordToken<'outer> {
     pub fn new_from_model(existing: Existing) -> Self {
         return Self {
             id: UuidV4::new_from_uuid(existing.id),
+            application_user_id: Cow::Owned(UuidV4::new_from_uuid(existing.application_user_id)),
             application_user_email: Cow::Owned(Email::new(existing.application_user_email)),
             value: Value::new(existing.value),
             expired_at: DateTime::new_from_date_time(existing.expired_at)
@@ -45,6 +49,10 @@ impl<'this, 'outer: 'this> ResetPasswordToken<'outer> {
 
     pub fn get_id(&'this self) -> &'this UuidV4 {
         return &self.id;
+    }
+
+    pub fn get_application_user_id(&'this self) -> &'this UuidV4 {
+        return self.application_user_id.as_ref();
     }
 
     pub fn get_application_user_email(&'this self) -> &'this Email {

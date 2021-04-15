@@ -1,7 +1,7 @@
 use crate::diesel_component::schema::public::reset_password_token as reset_password_token_schema;
 use crate::dto::resourse_model::_in_context_for::entity::entity::reset_password_token::_new_for_context::existing::Existing;
 use crate::dto::resourse_model::_in_context_for::entity::entity::reset_password_token::_new_for_context::new::New;
-use crate::entity::entity::application_user::application_user::core::email::Email;
+use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::reset_password_token::reset_password_token::ResetPasswordToken;
 use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error::DieselError;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
@@ -51,11 +51,11 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn get_by_application_user_email(
-        connection_manager: &'outer ConnectionManager, application_user_email: &'outer Email
+    pub fn get_by_application_user_id(
+        connection_manager: &'outer ConnectionManager, application_user_id: &'outer UuidV4
     ) -> Result<Option<ResetPasswordToken<'vague>>, DieselError> {
         if let Some(existing) = reset_password_token_schema::table
-        .filter(reset_password_token_schema::application_user_email.eq(application_user_email.get_value()))
+        .filter(reset_password_token_schema::application_user_id.eq(application_user_id.get_value()))
         .get_result::<Existing>(connection_manager.get_connection()).optional()? 
         {
             return Ok(Some(ResetPasswordToken::new_from_model(existing))); 

@@ -477,39 +477,42 @@ impl<'vague> Authorization {
     }
 
     pub async fn pre_reset_password(form: Form<PreResetPasswordRequest>) -> HttpResponse<Body> {
-        if let Err(main_error_kind) = PreResetPasswordHandler::handle(form.into_inner()) {
-            match main_error_kind {
-                MainErrorKind::EntityErrorKind(entity_error_kind) => {
-                    match entity_error_kind {
-                        EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
-                            match application_user_error_kind {
-                                ApplicationUserErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus02"));
-                                },
-                                _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                    return StandardResponseCreator::create_internal_server_error();
-                                }
+        match PreResetPasswordHandler::handle(form.into_inner()) {
+            Ok(result) => {
+                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
+            },
+            Err(main_error_kind) => {
+                match main_error_kind {
+                    MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                        match entity_error_kind {
+                            EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
+                                match application_user_error_kind {
+                                    ApplicationUserErrorKind::NotFound => {
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus02"));
+                                    },
+                                    _ => {
+                                        // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                                        return StandardResponseCreator::create_internal_server_error();
+                                    }
 
-                            }
-                        },
-                        _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
-                        }
-                    }
-                },
-                MainErrorKind::InvalidArgumentError => {
-                    return StandardResponseCreator::create_bad_request();
-                },
-                _ => {
+                                }
+                            },
+                            _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                    return StandardResponseCreator::create_internal_server_error();
+                                return StandardResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    },
+                    MainErrorKind::InvalidArgumentError => {
+                        return StandardResponseCreator::create_bad_request();
+                    },
+                    _ => {
+                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                        return StandardResponseCreator::create_internal_server_error();
+                    }
                 }
             }
         }
-
-        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
     }
 
     pub async fn resend_email_for_reset_password(form: Form<ResendEmailForResetPasswordRequest>) -> HttpResponse<Body> {

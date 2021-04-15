@@ -2,6 +2,6 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Request {
-    #[serde(rename = "e")]
-    pub application_user_email: String
+    #[serde(rename = "i")]
+    pub application_user_id: String
 }

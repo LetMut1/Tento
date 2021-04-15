@@ -67,6 +67,7 @@ pub mod public {
 
         reset_password_token (id) {
             id -> Uuid,
+            application_user_id -> Uuid,
             application_user_email -> Varchar,
             value -> Varchar,
             expired_at -> Timestamptz,
@@ -77,6 +78,7 @@ pub mod public {
     joinable!(application_user_registration_confirmation_token -> pre_confirmed_application_user (pre_confirmed_application_user_id));
     joinable!(json_access_web_token_black_list -> json_refresh_web_token (json_access_web_token_id));
     joinable!(json_refresh_web_token -> application_user (application_user_id));
+    joinable!(reset_password_token -> application_user (application_user_id));
 
     allow_tables_to_appear_in_same_query!(
         application_user,
