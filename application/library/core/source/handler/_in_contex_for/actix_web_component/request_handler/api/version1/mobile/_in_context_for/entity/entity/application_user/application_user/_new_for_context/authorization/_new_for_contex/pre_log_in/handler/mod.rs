@@ -45,7 +45,7 @@ impl Handler {
 
                 connection_manager.close_connection();
 
-                BaseSender::send_by_email(&application_user_log_in_token, application_user.get_email())?;
+                BaseSender::send_by_email(&application_user_log_in_token)?;
 
                 return Ok(HandlerResult::new(application_user.get_id().get_value().to_string()));
             }

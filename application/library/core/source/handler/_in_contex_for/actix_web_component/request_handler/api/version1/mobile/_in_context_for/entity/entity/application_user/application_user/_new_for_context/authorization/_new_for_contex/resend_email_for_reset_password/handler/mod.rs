@@ -19,7 +19,7 @@ impl<'outer> Handler {
         if let Some(reset_password_token) = ResetPasswordTokenBaseRepository::get_by_application_user_id(&connection_manager, &application_user_id)? {
             connection_manager.close_connection();
 
-            BaseSender::send_by_email(&reset_password_token, reset_password_token.get_application_user_email())?;
+            BaseSender::send_by_email(&reset_password_token)?;
     
             return Ok(());
         }

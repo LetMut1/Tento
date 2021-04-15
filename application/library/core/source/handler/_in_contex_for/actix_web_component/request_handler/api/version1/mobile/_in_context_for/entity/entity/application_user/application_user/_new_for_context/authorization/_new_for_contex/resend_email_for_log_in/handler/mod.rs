@@ -25,7 +25,7 @@ impl Handler {
         {
             connection_manager.close_connection();
 
-            BaseSender::send_by_email(&application_user_log_in_token, application_user_log_in_token.get_application_user_email())?;
+            BaseSender::send_by_email(&application_user_log_in_token)?;
 
             return Ok(());
         }

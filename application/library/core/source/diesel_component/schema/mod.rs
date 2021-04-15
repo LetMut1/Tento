@@ -30,6 +30,7 @@ pub mod public {
         application_user_registration_confirmation_token (id) {
             id -> Uuid,
             pre_confirmed_application_user_id -> Uuid,
+            application_user_email -> Varchar,
             value -> Varchar,
             expired_at -> Timestamptz,
         }

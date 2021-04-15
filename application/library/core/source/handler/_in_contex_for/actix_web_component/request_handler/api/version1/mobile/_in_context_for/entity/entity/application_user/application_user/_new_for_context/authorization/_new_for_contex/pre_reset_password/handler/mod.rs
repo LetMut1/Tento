@@ -14,12 +14,10 @@ pub struct Handler;
 
 impl<'outer> Handler {
     pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
-        let application_user_email: Email = Email::new(request.application_user_email);
-
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(&connection_manager, &application_user_email)? {
+        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(&connection_manager, &Email::new(request.application_user_email))? {
             let mut reset_password_token: ResetPasswordToken<'_>;
 
             match ResetPasswordTokenBaseRepository::get_by_application_user_id(&connection_manager, application_user.get_id())? {
@@ -38,7 +36,7 @@ impl<'outer> Handler {
 
             connection_manager.close_connection();
 
-            BaseSender::send_by_email(&reset_password_token, &application_user_email)?;
+            BaseSender::send_by_email(&reset_password_token)?;
 
             return Ok(HandlerResult::new(application_user.get_id().get_value().to_string()));
         }

@@ -50,6 +50,7 @@ CREATE TABLE application_user_registration_confirmation_token (
     -- // TODO application_user_id  - уникальность   (два отдельно)
     -- // TODO value - уникальное
     -- // TODO удалять висящие кортежи (написать функцию либо через крон по бинарнику)
+    application_user_email VARCHAR NOT NULL,
     value VARCHAR NOT NULL,
     expired_at TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (id),
