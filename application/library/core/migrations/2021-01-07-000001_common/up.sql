@@ -62,6 +62,7 @@ CREATE TABLE application_user_log_in_token (
     -- // TODO applicationuserid + device_id- уникальное   ((как блокировать пользователя, если он делает перебор value?))
     -- // TODO удалять висящие кортежи (написать функцию либо через крон по бинарнику)
     device_id UUID NOT NULL,
+    application_user_email VARCHAR NOT NULL,
     value VARCHAR NOT NULL,
     expired_at TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (id),

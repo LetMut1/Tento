@@ -18,6 +18,7 @@ pub mod public {
             id -> Uuid,
             application_user_id -> Uuid,
             device_id -> Uuid,
+            application_user_email -> Varchar,
             value -> Varchar,
             expired_at -> Timestamptz,
         }

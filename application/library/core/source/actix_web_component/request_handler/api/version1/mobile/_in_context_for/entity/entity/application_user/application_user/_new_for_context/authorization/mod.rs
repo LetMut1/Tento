@@ -328,17 +328,6 @@ impl<'vague> Authorization {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
-                            match application_user_error_kind {
-                                ApplicationUserErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus02"));
-                                },
-                                _ => {
-                                    // TODO написать в лог !!! Сюда вообще попадать не должны
-                                    return StandardResponseCreator::create_internal_server_error();
-                                }
-                            }
-                        },
                         EntityErrorKind::ApplicationUserLogInTokenErrorKind(application_user_log_in_token_error_kind) => {
                             match application_user_log_in_token_error_kind {
                                 ApplicationUserLogInTokenErrorKind::NotFound => {

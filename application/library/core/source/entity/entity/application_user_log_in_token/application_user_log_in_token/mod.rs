@@ -1,6 +1,7 @@
 use crate::dto::resource_model::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::existing::Existing;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user::application_user::core::email::Email;
 use crate::entity::entity::application_user::application_user::application_user::ApplicationUser;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use crate::utility::_in_context_for::entity::entity::apllication_user_log_in_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
@@ -11,6 +12,7 @@ pub struct ApplicationUserLogInToken<'outer> {
     id: UuidV4,
     application_user_id: Cow<'outer, UuidV4>,
     device_id: UuidV4,
+    application_user_email: Cow<'outer, Email>,
     value: Value,
     expired_at: DateTime
 }
@@ -21,6 +23,7 @@ impl<'this, 'outer: 'this> ApplicationUserLogInToken<'outer> {
             id: UuidV4::new(),
             application_user_id: Cow::Borrowed(application_user.get_id()),
             device_id,
+            application_user_email: Cow::Borrowed(application_user.get_email()),
             value: Value::new(UuidV4::new().get_value().to_string()),       // TODO создать генератор значения + метода Рефреш ниже
             expired_at: DateExpirationCreator::create()
         };
@@ -31,6 +34,7 @@ impl<'this, 'outer: 'this> ApplicationUserLogInToken<'outer> {
             id: UuidV4::new_from_uuid(existing.id),
             application_user_id: Cow::Owned(UuidV4::new_from_uuid(existing.application_user_id)),
             device_id: UuidV4::new_from_uuid(existing.device_id),
+            application_user_email: Cow::Owned(Email::new(existing.application_user_email)),
             value: Value::new(existing.value),
             expired_at: DateTime::new_from_date_time(existing.expired_at)
         };
@@ -56,6 +60,10 @@ impl<'this, 'outer: 'this> ApplicationUserLogInToken<'outer> {
 
     pub fn get_device_id(&'this self) -> &'this UuidV4 {
         return &self.device_id;
+    }
+
+    pub fn get_application_user_email(&'this self) -> &'this Email {
+        return self.application_user_email.as_ref();
     }
 
     pub fn get_value(&'this self) -> &'this Value {
