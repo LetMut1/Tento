@@ -2,4 +2,5 @@ pub mod apllication_user_log_in_token;
 pub mod apllication_user_registration_confirmation_token;
 pub mod application_user_reset_password_token;
 pub mod application_user;
-pub mod json_web_token;
+pub mod json_access_web_token;
+pub mod json_refresh_web_token;

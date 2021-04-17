@@ -1,0 +1,60 @@
+use crate::dto::_in_context_for::entity::entity::json_access_web_token::core::payload::_new_fro_context::common::Common;
+use crate::entity::core::date_time::DateTime;
+use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
+use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
+use crate::utility::_in_context_for::entity::entity::json_access_web_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
+use std::borrow::Cow;
+use std::clone::Clone;
+
+#[derive(Clone)]
+pub struct Payload<'outer> {
+    id: Cow<'outer, UuidV4>,
+    application_user_id: Cow<'outer, UuidV4>,
+    application_user_log_in_token_device_id: Cow<'outer, UuidV4>,
+    exp: DateTime
+}
+
+impl<'this, 'outer: 'this> Payload<'outer> {
+    pub fn new(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
+        return Self {
+            id: Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
+            application_user_id: Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
+            application_user_log_in_token_device_id: Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
+            exp: DateExpirationCreator::create()
+        };
+    }
+
+    pub fn new_from_common(common: Common) -> Result<Self, InvalidArgumentError> {
+        return Ok (
+            Self {
+                id: Cow::Owned(UuidV4::new_from_string(common.json_access_web_token_id)?),
+                application_user_id: Cow::Owned(UuidV4::new_from_string(common.application_user_id)?),
+                application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_string(common.application_user_log_in_token_device_id)?),
+                exp: DateTime::new_from_string(common.exp.as_str())
+            }
+        );
+    }
+
+    pub fn refresh(&'this mut self) -> &'this mut Self {
+        self.exp = DateExpirationCreator::create();
+
+        return self;
+    }
+
+    pub fn get_id(&'this self) -> &'this UuidV4 {
+        return &self.id;
+    }
+
+    pub fn get_application_user_id(&'this self) -> &'this UuidV4 {
+        return &self.application_user_id;
+    }
+
+    pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this UuidV4 {
+        return &self.application_user_log_in_token_device_id;
+    }
+
+    pub fn get_exp(&'this self) -> &'this DateTime {
+        return &self.exp;
+    }
+}
