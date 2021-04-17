@@ -4,16 +4,16 @@ use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
 
 #[derive(Debug)]
-pub enum ResetPasswordTokenErrorKind {
+pub enum ApplicationUserResetPasswordTokenErrorKind {
     AlreadyExpired,
     InvalidValue,
     NotFound,
 }
 
-impl Display for ResetPasswordTokenErrorKind {
+impl Display for ApplicationUserResetPasswordTokenErrorKind {
     fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
         return Ok(());  // TODO 
     }
 }
 
-impl Error for ResetPasswordTokenErrorKind {}
+impl Error for ApplicationUserResetPasswordTokenErrorKind {}

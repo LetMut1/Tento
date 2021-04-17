@@ -1,4 +1,4 @@
 pub mod application_user_log_in_token;
 pub mod application_user_registration_confirmation_token;
+pub mod application_user_reset_password_token;
 pub mod json_web_token;
-pub mod reset_password_token;

@@ -7,5 +7,5 @@ pub struct Request {
     #[serde(rename = "p")]
     pub application_user_password: String,
     #[serde(rename = "v")]
-    pub reset_password_token_value: String
+    pub application_user_reset_password_token_value: String
 }

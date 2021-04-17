@@ -22,7 +22,7 @@ use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_conte
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::json_web_token::json_access_web_token::_new_for_context::json_access_web_token_error_kind::JsonAccessWebTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::json_web_token::json_refresh_web_token::_new_for_context::json_refresh_web_token_error_kind::JsonRefreshWebTokenErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::reset_password_token::_new_for_context::reset_password_token::ResetPasswordTokenErrorKind;
+use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token::ApplicationUserResetPasswordTokenErrorKind;
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
@@ -503,7 +503,7 @@ impl<'vague> Authorization {
                         EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                             match application_user_error_kind {
                                 ApplicationUserErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enrepato03"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato03"));
                                 },
                                 _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -512,13 +512,13 @@ impl<'vague> Authorization {
 
                             }
                         },
-                        EntityErrorKind::ResetPasswordTokenErrorKind(reset_password_token_error_kind) => {
-                            match reset_password_token_error_kind {
-                                ResetPasswordTokenErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enrepato02"));
+                        EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(application_user_reset_password_token_error_kind) => {
+                            match application_user_reset_password_token_error_kind {
+                                ApplicationUserResetPasswordTokenErrorKind::NotFound => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato02"));
                                 },
-                                ResetPasswordTokenErrorKind::InvalidValue => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enrepato03"));
+                                ApplicationUserResetPasswordTokenErrorKind::InvalidValue => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato03"));
                                 }
                                 _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -550,10 +550,10 @@ impl<'vague> Authorization {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::ResetPasswordTokenErrorKind(reset_password_token_error_kind) => {
-                            match reset_password_token_error_kind {
-                                ResetPasswordTokenErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enrepato02"));
+                        EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(application_user_reset_password_token_error_kind) => {
+                            match application_user_reset_password_token_error_kind {
+                                ApplicationUserResetPasswordTokenErrorKind::NotFound => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato02"));
                                 },
                                 _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!

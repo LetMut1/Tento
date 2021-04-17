@@ -70,7 +70,7 @@ CREATE TABLE application_user_log_in_token (
     FOREIGN KEY (application_user_id) REFERENCES application_user (id)
 );
 
-CREATE TABLE reset_password_token (       -- // TODO Redis
+CREATE TABLE application_user_reset_password_token (       -- // TODO Redis
     id UUID NOT NULL,
     application_user_id UUID NOT NULL,
     application_user_email VARCHAR NOT NULL,

@@ -1,14 +1,14 @@
-use crate::dto::resource_model::_in_context_for::entity::entity::reset_password_token::_new_for_context::existing::Existing;
+use crate::dto::resource_model::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::existing::Existing;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::application_user::application_user::ApplicationUser;
 use crate::entity::entity::application_user::application_user::core::email::Email;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
-use crate::utility::_in_context_for::entity::entity::reset_password_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
+use crate::utility::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use std::borrow::Cow;
 use super::core::value::Value;
 
-pub struct ResetPasswordToken<'outer> {
+pub struct ApplicationUserResetPasswordToken<'outer> {
     id: UuidV4,
     application_user_id: Cow<'outer, UuidV4>,
     application_user_email: Cow<'outer, Email>,
@@ -16,7 +16,7 @@ pub struct ResetPasswordToken<'outer> {
     expired_at: DateTime
 }
 
-impl<'this, 'outer: 'this> ResetPasswordToken<'outer> {
+impl<'this, 'outer: 'this> ApplicationUserResetPasswordToken<'outer> {
     pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
         return Self {
             id: UuidV4::new(),
