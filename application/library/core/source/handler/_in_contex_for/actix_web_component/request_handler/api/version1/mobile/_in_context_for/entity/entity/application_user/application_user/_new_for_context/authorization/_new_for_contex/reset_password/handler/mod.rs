@@ -25,6 +25,8 @@ impl<'outer> Handler {
 
                     ApplicationUserBaseRepository::update_password(&connection_manager, &application_user)?;
 
+                    ResetPasswordTokenBaseRepository::delete(&connection_manager, &reset_password_token)?;
+
                     return Ok(());
                 }
 
