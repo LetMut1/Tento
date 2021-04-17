@@ -1,0 +1,27 @@
+use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::query::Query;
+use crate::dto::response_parameters::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::handler::_new_for_context::result::Result as HandlerResult;
+use crate::entity::entity::application_user::core::email::Email;
+use crate::error::main_error_kind::main_error_kind::MainErrorKind;
+use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserBaseRepository;
+use crate::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::postgresql::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
+use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
+
+pub struct Handler;
+
+impl Handler {
+    pub fn handle(query: Query) -> Result<HandlerResult, MainErrorKind> {
+        let application_user_email: Email = Email::new(query.application_user_email);
+
+        let mut connection_manager: ConnectionManager = ConnectionManager::new();
+        connection_manager.establish_connection()?;
+
+        let handler_result: HandlerResult = HandlerResult::new(
+            ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)?
+            || PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)?
+        );
+
+        connection_manager.close_connection();
+
+        return Ok(handler_result);
+    }
+}

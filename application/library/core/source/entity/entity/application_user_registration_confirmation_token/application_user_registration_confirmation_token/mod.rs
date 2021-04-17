@@ -2,8 +2,8 @@ use crate::dto::resource_model::_in_context_for::entity::entity::application_use
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_registration_confirmation_token::core::value::Value;
-use crate::entity::entity::application_user::application_user::core::email::Email;
-use crate::entity::entity::application_user::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
+use crate::entity::entity::application_user::core::email::Email;
+use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use crate::utility::_in_context_for::entity::entity::apllication_user_registration_confirmation_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use std::borrow::Cow;
