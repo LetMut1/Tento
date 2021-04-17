@@ -119,6 +119,10 @@ impl<'vague> Authorization {
                         }
                     }
                 },
+                MainErrorKind::EmailErrorKind(email_error_kind) => {
+                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
@@ -220,6 +224,10 @@ impl<'vague> Authorization {
                         }
                     }
                 },
+                MainErrorKind::EmailErrorKind(email_error_kind) => {
+                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
@@ -261,6 +269,10 @@ impl<'vague> Authorization {
                                 return StandardResponseCreator::create_internal_server_error();
                             }
                         }
+                    },
+                    MainErrorKind::EmailErrorKind(email_error_kind) => {
+                        // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
                     },
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
@@ -335,6 +347,10 @@ impl<'vague> Authorization {
                             return StandardResponseCreator::create_internal_server_error();
                         }
                     }
+                },
+                MainErrorKind::EmailErrorKind(email_error_kind) => {
+                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
@@ -483,6 +499,10 @@ impl<'vague> Authorization {
                             }
                         }
                     },
+                    MainErrorKind::EmailErrorKind(email_error_kind) => {
+                        // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                    },
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
@@ -566,6 +586,10 @@ impl<'vague> Authorization {
                             return StandardResponseCreator::create_internal_server_error();
                         }
                     }
+                },
+                MainErrorKind::EmailErrorKind(email_error_kind) => {
+                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
