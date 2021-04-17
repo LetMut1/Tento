@@ -4,7 +4,7 @@ use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_conte
 use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
-use crate::service::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::base_sender::BaseSender;
+use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
 
 pub struct Handler;
@@ -19,7 +19,7 @@ impl<'outer> Handler {
         if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(&connection_manager, &application_user_id)? {
             connection_manager.close_connection();
 
-            BaseSender::send_by_email(&application_user_reset_password_token)?;
+            EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;
     
             return Ok(());
         }
