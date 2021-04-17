@@ -11,9 +11,9 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(request: Request) -> Result<(), MainErrorKind> { // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        let application_user_id: UuidV4 = UuidV4::new_from_str(request.application_user_id.as_str())?;
+        let application_user_id: UuidV4 = UuidV4::new_from_string(request.application_user_id)?;
 
-        let application_user_log_in_token_device_id: UuidV4 = UuidV4::new_from_str(request.application_user_log_in_token_device_id.as_str())?;
+        let application_user_log_in_token_device_id: UuidV4 = UuidV4::new_from_string(request.application_user_log_in_token_device_id)?;
 
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;

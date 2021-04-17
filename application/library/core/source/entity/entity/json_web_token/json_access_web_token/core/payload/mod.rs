@@ -28,9 +28,9 @@ impl<'this, 'outer: 'this> Payload<'outer> {
     pub fn new_from_common(common: Common) -> Result<Self, InvalidArgumentError> {
         return Ok (
             Self {
-                id: Cow::Owned(UuidV4::new_from_str(common.json_access_web_token_id.as_str())?),
-                application_user_id: Cow::Owned(UuidV4::new_from_str(common.application_user_id.as_str())?),
-                application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_str(common.application_user_log_in_token_device_id.as_str())?),
+                id: Cow::Owned(UuidV4::new_from_string(common.json_access_web_token_id)?),
+                application_user_id: Cow::Owned(UuidV4::new_from_string(common.application_user_id)?),
+                application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_string(common.application_user_log_in_token_device_id)?),
                 exp: DateTime::new_from_string(common.exp.as_str())
             }
         );
