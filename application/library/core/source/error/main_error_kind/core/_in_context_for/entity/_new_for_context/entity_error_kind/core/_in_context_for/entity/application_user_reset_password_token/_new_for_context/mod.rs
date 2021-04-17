@@ -1,1 +1,1 @@
-pub mod application_user_reset_password_token;
+pub mod application_user_reset_password_token_error_kind;
