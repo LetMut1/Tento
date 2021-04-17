@@ -15,7 +15,7 @@ impl<'outer> SignatureCreator {
     }
 
     pub fn is_valid(header_and_payload: &'outer str, signature: &'outer str) -> bool {
-        return Self::create(header_and_payload) == *signature;
+        return Self::create(header_and_payload).as_str() == signature;
     }
 
     fn get_configured_hmac() -> Hmac<Sha512> {

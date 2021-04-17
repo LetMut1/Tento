@@ -18,6 +18,7 @@ Entity: (01 -> already exist, 02 -> not found)
         enapuslointo04 -> already expired,
     ResetPasswordToken:
         enrepato02 -> not found,
+        enrepato03 -> invalid value,
     JsonAccessWebToken:
         enjsacweto03 -> already expired,
         enjsacweto04 -> not expired,

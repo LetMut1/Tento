@@ -19,7 +19,7 @@ impl<'outer> Encoder {
     }
 
     pub fn is_valid(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>, json_refresh_web_token_hash: &'outer str) -> bool {
-        return Self::encode(json_refresh_web_token) == *json_refresh_web_token_hash;
+        return Self::encode(json_refresh_web_token).as_str() == json_refresh_web_token_hash;
     }
 
     fn get_configured_hmac() -> Hmac<Sha512> {

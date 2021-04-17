@@ -29,7 +29,7 @@ impl Handler {
             &connection_manager, &application_user_id, &application_user_log_in_token_device_id
         )?
         {
-            if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value {
+            if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value.as_str() {
                 if !application_user_log_in_token.is_expired() {
                     
                     if let Some(existing_json_refresh_web_token) = JsonRefreshWebTokenBaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(

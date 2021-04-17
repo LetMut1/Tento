@@ -22,6 +22,20 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
+    pub fn update_password(
+        connection_manager: &'outer ConnectionManager,
+        application_user: &'outer ApplicationUser<'outer>
+    ) -> Result<(), DieselError> {
+        diesel::update(
+            application_user_schema::table
+            .filter(application_user_schema::id.eq(application_user.get_id().get_value()))
+        ).set(
+            application_user_schema::password_hash.eq(application_user.get_passord_hash().get_value())
+        ).execute(connection_manager.get_connection())?;
+
+        return Ok(());
+    }
+
     pub fn is_exist_by_nickanme(connection_manager: &'outer ConnectionManager, nickname: &'outer Nickname) -> Result<bool, DieselError> {
         return Ok(
             diesel::select(

@@ -38,7 +38,7 @@ impl<'outer> Handler {
                 if let Some(application_user_registration_confirmation_token) = 
                 ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? 
                 {
-                    if request.application_user_registration_confirmation_token_value == application_user_registration_confirmation_token.get_value().get_value() {
+                    if request.application_user_registration_confirmation_token_value.as_str() == application_user_registration_confirmation_token.get_value().get_value() {
                         if !application_user_registration_confirmation_token.is_expired() {
                             let application_user: ApplicationUser<'_> = 
                             ApplicationUser::new_from_pre_confirmed_application_user(&pre_confirmed_application_user, application_user_nickname, Password::new(request.application_user_password));

@@ -9,3 +9,4 @@ pub mod register;
 pub mod resend_email_for_log_in;
 pub mod resend_email_for_register;
 pub mod resend_email_for_reset_password;
+pub mod reset_password;
