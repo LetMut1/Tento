@@ -1,5 +1,4 @@
 use crate::dto::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_register::request::Request;
-use crate::dto::response_parameters::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::application_user::_new_for_context::authorization::_new_for_context::pre_register::handler::_new_for_context::result::Result as HandlerResult;
 use crate::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::entity::entity::application_user::application_user::core::email::Email;
 use crate::entity::entity::application_user::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
@@ -17,7 +16,7 @@ use crate::utility::_in_context_for::entity::entity::application_user::applicati
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
+    pub fn handle(request: Request) -> Result<(), MainErrorKind> {
         let application_user_email: Email = Email::new(request.application_user_email);
 
         if EmailSimpleValidator::is_valid(&application_user_email) {
@@ -28,33 +27,17 @@ impl Handler {
                 if !ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)? {
                     let pre_confirmed_application_user: PreConfirmedApplicationUser = PreConfirmedApplicationUser::new(application_user_email);  
 
-                    let mut application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;
+                    let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> =
+                    ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user);
 
-                    match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? {
-                        Some(existing_application_user_registration_confirmation_token) => {
-                            application_user_registration_confirmation_token = existing_application_user_registration_confirmation_token;
-                            application_user_registration_confirmation_token.refresh();
+                    connection_manager.begin_transaction()?;
 
-                            connection_manager.begin_transaction()?;
+                    if let Err(diesel_error) = ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&connection_manager, &application_user_registration_confirmation_token) {
+                        connection_manager.rollback_transaction()?;
 
-                            if let Err(diesel_error) = ApplicationUserRegistrationConfirmationTokenBaseRepository::update(&connection_manager, &application_user_registration_confirmation_token) {
-                                connection_manager.rollback_transaction()?;
-        
-                                return Err(diesel_error)?;
-                            }
-                        },
-                        None => {
-                            application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user);
-
-                            connection_manager.begin_transaction()?;
-
-                            if let Err(diesel_error) = ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&connection_manager, &application_user_registration_confirmation_token) {
-                                connection_manager.rollback_transaction()?;
-        
-                                return Err(diesel_error)?;
-                            }
-                        }
+                        return Err(diesel_error)?;
                     }
+                     
 
                     if let Err(diesel_error) = PreConfirmedApplicationUserBaseRepository::create(&connection_manager, &pre_confirmed_application_user) {
                         connection_manager.rollback_transaction()?;
@@ -67,7 +50,7 @@ impl Handler {
 
                     BaseSender::send_by_email(&application_user_registration_confirmation_token)?;
 
-                    return Ok(HandlerResult::new(pre_confirmed_application_user.get_id().get_value().to_string()));
+                    return Ok(());
                 }
                 
                 return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;

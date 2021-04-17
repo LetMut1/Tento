@@ -84,55 +84,52 @@ impl<'vague> Authorization {
     }
 
     pub async fn pre_register(form: Form<PreRegisterRequest>) -> HttpResponse<Body> {
-        match PreRegisterHandler::handle(form.into_inner()) {
-            Ok(result) => {
-                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
-            },
-            Err(main_error_kind) => {
-                match main_error_kind {
-                    MainErrorKind::EntityErrorKind(entity_error_kind) => {
-                        match entity_error_kind {
-                            EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
-                                match application_user_error_kind {
-                                    ApplicationUserErrorKind::AlreadyExist => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus01"));
-                                    },
-                                    ApplicationUserErrorKind::InvalidEmail => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus04"));
-                                    }
-                                    _ => {
-                                        // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandardResponseCreator::create_internal_server_error();
-                                    }
+        if let Err(main_error_kind) = PreRegisterHandler::handle(form.into_inner()) {
+            match main_error_kind {
+                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                    match entity_error_kind {
+                        EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
+                            match application_user_error_kind {
+                                ApplicationUserErrorKind::AlreadyExist => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus01"));
+                                },
+                                ApplicationUserErrorKind::InvalidEmail => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus04"));
                                 }
-                            },
-                            EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
-                                match pre_confirmed_application_user_error_kind {
-                                    PreConfirmedApplicationUserErrorKind::AlreadyExist => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enprcoapus01"));
-                                    },
-                                    _ => {
-                                        // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandardResponseCreator::create_internal_server_error();
-                                    }
+                                _ => {
+                                    // TODO написать в лог !!! Сюда вообще попадать не должны
+                                    return StandardResponseCreator::create_internal_server_error();
                                 }
                             }
-                            _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_internal_server_error();
+                        },
+                        EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
+                            match pre_confirmed_application_user_error_kind {
+                                PreConfirmedApplicationUserErrorKind::AlreadyExist => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enprcoapus01"));
+                                },
+                                _ => {
+                                    // TODO написать в лог !!! Сюда вообще попадать не должны
+                                    return StandardResponseCreator::create_internal_server_error();
+                                }
                             }
                         }
-                    },
-                    MainErrorKind::InvalidArgumentError => {
-                        return StandardResponseCreator::create_bad_request();
-                    },
-                    _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return StandardResponseCreator::create_internal_server_error();
+                        _ => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
                     }
+                },
+                MainErrorKind::InvalidArgumentError => {
+                    return StandardResponseCreator::create_bad_request();
+                },
+                _ => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    return StandardResponseCreator::create_internal_server_error();
                 }
             }
         }
+
+        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
     }
 
     pub async fn register(form: Form<RegisterRequest>) -> HttpResponse<Body> {
@@ -205,10 +202,10 @@ impl<'vague> Authorization {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(application_user_registration_confirmation_error_kind) => {
-                            match application_user_registration_confirmation_error_kind {
-                                ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrecoto02"));
+                        EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
+                            match pre_confirmed_application_user_error_kind {
+                                PreConfirmedApplicationUserErrorKind::NotFound => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enprcoapus02"));
                                 },
                                 _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
