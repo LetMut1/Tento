@@ -1,4 +1,4 @@
-use crate::dto::_in_context_for::entity::entity::json_access_web_token::core::payload::_new_fro_context::common::Common;
+use crate::data_transfer_object::_in_context_for::entity::entity::json_access_web_token::core::payload::_new_fro_context::common::Common;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_access_web_token::core::header::header::Header;

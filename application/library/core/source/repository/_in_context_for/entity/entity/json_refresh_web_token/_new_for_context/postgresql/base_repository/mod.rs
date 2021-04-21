@@ -1,6 +1,6 @@
 use crate::diesel_component::schema::public::json_refresh_web_token as json_refresh_web_token_schema;
-use crate::dto::resource_model::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::existing::Existing;
-use crate::dto::resource_model::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::new::New;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::existing::Existing;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::new::New;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error::DieselError;

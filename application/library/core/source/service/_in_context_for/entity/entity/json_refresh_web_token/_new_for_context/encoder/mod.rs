@@ -1,5 +1,5 @@
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::dto::_in_context_for::entity::entity::json_refresh_web_token::_new_fro_context::common::Common;
+use crate::data_transfer_object::_in_context_for::entity::entity::json_refresh_web_token::_new_fro_context::common::Common;
 use crypto::hmac::Hmac;
 use crypto::mac::Mac;
 use crypto::sha2::Sha512;
