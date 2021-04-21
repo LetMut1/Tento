@@ -1,37 +1,40 @@
-use crate::diesel_component::schema::public::application_user as application_user_schema;
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::select::Select;
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::insert::Insert;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::select::Select;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::update::Update;
+use crate::diesel_component::schema::public::application_user as application_user_schema;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
+use crate::entity::entity::application_user::core::email::Email;
+use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error::DieselError;
+use crate::utility::_in_context_for::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
 use diesel::dsl;
 use diesel::ExpressionMethods;
 use diesel::OptionalExtension;
 use diesel::QueryDsl;
 use diesel::RunQueryDsl;
-use crate::entity::entity::application_user::core::nickname::Nickname;
-use crate::entity::entity::application_user::core::email::Email;
 
 pub struct BaseRepository;
 
 impl<'outer, 'vague> BaseRepository {
-    pub fn create(connection_manager: &'outer ConnectionManager, application_user: &'outer ApplicationUser<'outer>) -> Result<(), DieselError> {
-        diesel::insert_into(application_user_schema::table).values(Insert::new(application_user)).execute(connection_manager.get_connection())?;  // TODO нужно ли обработать количество вернувшихся строк
+    pub fn create(
+        connection_manager: &'outer ConnectionManager, application_user: &'outer ApplicationUser<'outer>
+    ) -> Result<(), DieselError> {
+        diesel::insert_into(application_user_schema::table)
+        .values(Insert::new(application_user))
+        .execute(connection_manager.get_connection())?;  // TODO нужно ли обработать количество вернувшихся строк
 
         return Ok(());
     }
 
-    pub fn update_password(
-        connection_manager: &'outer ConnectionManager,
-        application_user: &'outer ApplicationUser<'outer>
+    pub fn update(
+        connection_manager: &'outer ConnectionManager, application_user: &'outer ApplicationUser<'outer>, update_resolver: UpdateResolver
     ) -> Result<(), DieselError> {
         diesel::update(
-            application_user_schema::table
-            .filter(application_user_schema::id.eq(application_user.get_id().get_value()))
-        ).set(
-            application_user_schema::password_hash.eq(application_user.get_passord_hash().get_value())
-        ).execute(connection_manager.get_connection())?;
+            application_user_schema::table.filter(application_user_schema::id.eq(application_user.get_id().get_value()))
+        ).set(&Update::new(application_user, update_resolver))
+        .execute(connection_manager.get_connection())?;
 
         return Ok(());
     }

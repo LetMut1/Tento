@@ -7,6 +7,7 @@ use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_conte
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
+use crate::utility::_in_context_for::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;
 use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
 
 pub struct Handler;
@@ -23,7 +24,9 @@ impl<'outer> Handler {
                 if let Some(mut application_user) = ApplicationUserBaseRepository::get_by_id(&connection_manager, &application_user_id)? {
                     application_user.set_password(Password::new(request.application_user_password));
 
-                    ApplicationUserBaseRepository::update_password(&connection_manager, &application_user)?;
+                    ApplicationUserBaseRepository::update(
+                        &connection_manager, &application_user, UpdateResolver::new(false, false, true, false)
+                    )?;
 
                     ApplicationUserResetPasswordTokenBaseRepository::delete(&connection_manager, &application_user_reset_password_token)?;
 
