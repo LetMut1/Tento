@@ -1,6 +1,6 @@
 use crate::diesel_component::schema::public::application_user as application_user_schema;
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::existing::Existing;
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::new::New;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::select::Select;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::insert::Insert;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error::DieselError;
@@ -17,7 +17,7 @@ pub struct BaseRepository;
 
 impl<'outer, 'vague> BaseRepository {
     pub fn create(connection_manager: &'outer ConnectionManager, application_user: &'outer ApplicationUser<'outer>) -> Result<(), DieselError> {
-        diesel::insert_into(application_user_schema::table).values(New::new(application_user)).execute(connection_manager.get_connection())?;  // TODO нужно ли обработать количество вернувшихся строк
+        diesel::insert_into(application_user_schema::table).values(Insert::new(application_user)).execute(connection_manager.get_connection())?;  // TODO нужно ли обработать количество вернувшихся строк
 
         return Ok(());
     }
@@ -63,9 +63,9 @@ impl<'outer, 'vague> BaseRepository {
     pub fn get_by_email(connection_manager: &'outer ConnectionManager, email: &'outer Email) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
         if let Some(existing) = application_user_schema::table
         .filter(application_user_schema::email.eq(email.get_value()))
-        .get_result::<Existing>(connection_manager.get_connection()).optional()? 
+        .get_result::<Select>(connection_manager.get_connection()).optional()? 
         {
-            return Ok(Some(ApplicationUser::new_from_model(existing))); 
+            return Ok(Some(ApplicationUser::new_from_resource_model(existing))); 
         }
 
         return Ok(None); 
@@ -74,9 +74,9 @@ impl<'outer, 'vague> BaseRepository {
     pub fn get_by_id(connection_manager: &'outer ConnectionManager, id: &'outer UuidV4) -> Result<Option<ApplicationUser<'vague>>, DieselError> {
         if let Some(existing) = application_user_schema::table
         .filter(application_user_schema::id.eq(id.get_value()))
-        .get_result::<Existing>(connection_manager.get_connection()).optional()? 
+        .get_result::<Select>(connection_manager.get_connection()).optional()? 
         {
-            return Ok(Some(ApplicationUser::new_from_model(existing))); 
+            return Ok(Some(ApplicationUser::new_from_resource_model(existing))); 
         }
 
         return Ok(None); 

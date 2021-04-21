@@ -1,4 +1,4 @@
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::existing::Existing;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::select::Select;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
@@ -29,13 +29,13 @@ impl<'this, 'outer: 'this> ApplicationUser<'outer> {
         };
     }
 
-    pub fn new_from_model(existing: Existing) -> Self {
+    pub fn new_from_resource_model(select: Select) -> Self {
         return Self {
-            id: UuidV4::new_from_uuid(existing.id),
-            email: Cow::Owned(Email::new(existing.email)),
-            nickname: Nickname::new(existing.nickname),
-            password_hash: PasswordHash::new(existing.password_hash),
-            created_at: DateTime::new_from_date_time(existing.created_at)
+            id: UuidV4::new_from_uuid(select.id),
+            email: Cow::Owned(Email::new(select.email)),
+            nickname: Nickname::new(select.nickname),
+            password_hash: PasswordHash::new(select.password_hash),
+            created_at: DateTime::new_from_date_time(select.created_at)
         };
     }
 

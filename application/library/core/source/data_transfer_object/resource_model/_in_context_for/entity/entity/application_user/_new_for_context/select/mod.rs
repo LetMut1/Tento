@@ -4,7 +4,7 @@ use diesel::Queryable;
 use uuid::Uuid;
 
 #[derive(Queryable)]
-pub struct Existing {
+pub struct Select {
     pub id: Uuid,
     pub email: String,
     pub nickname: String,
