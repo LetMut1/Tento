@@ -32,14 +32,13 @@ impl Handler {
 
                     connection_manager.begin_transaction()?;
 
-                    if let Err(diesel_error) = ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&connection_manager, &application_user_registration_confirmation_token) {
+                    if let Err(diesel_error) = PreConfirmedApplicationUserBaseRepository::create(&connection_manager, &pre_confirmed_application_user) {
                         connection_manager.rollback_transaction()?;
 
                         return Err(diesel_error)?;
                     }
-                     
-
-                    if let Err(diesel_error) = PreConfirmedApplicationUserBaseRepository::create(&connection_manager, &pre_confirmed_application_user) {
+                    
+                    if let Err(diesel_error) = ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&connection_manager, &application_user_registration_confirmation_token) {
                         connection_manager.rollback_transaction()?;
 
                         return Err(diesel_error)?;
