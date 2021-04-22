@@ -15,6 +15,12 @@ services:
         volumes:
             - postgresql_data:/var/lib/postgresql/data
         restart: always
+    redis:
+        container_name: memis_redis
+        build:
+            context: ./service/redis
+            dockerfile: dockerfile
+        restart: always
     mailhog:
         container_name: memis_mailhog
         build:
