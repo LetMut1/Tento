@@ -2,7 +2,7 @@ use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use crate::diesel_component::schema::public::application_user;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
-use crate::utility::_in_context_for::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;
+use crate::utility::_in_context_for::data_transfer_object::resource_model::_new_for_context::update_resolver::_in_context_for::_in_context_for::entity::entity::application_user::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;
 use diesel::AsChangeset;
 
 #[derive(AsChangeset)]
