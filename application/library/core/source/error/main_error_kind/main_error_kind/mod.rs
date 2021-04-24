@@ -12,7 +12,7 @@ use super::core::logic_error::LogicError;
 
 #[derive(Debug)]
 pub enum MainErrorKind {
-    ConnectionError(ConnectionErrorKind),
+    ConnectionErrorKind(ConnectionErrorKind),
     DieselErrorKind(DieselError),
     EmailErrorKind(EmailErrorKind),
     EntityErrorKind(EntityErrorKind),
@@ -36,7 +36,7 @@ impl From<DieselError> for MainErrorKind {
 
 impl From<ConnectionErrorKind> for MainErrorKind {
     fn from(connection_error_kind: ConnectionErrorKind) -> Self {
-        return Self::ConnectionError(connection_error_kind);
+        return Self::ConnectionErrorKind(connection_error_kind);
     }
 }
 
