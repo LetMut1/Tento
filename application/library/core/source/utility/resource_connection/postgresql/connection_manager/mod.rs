@@ -1,6 +1,6 @@
 use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error::DieselError;
-use crate::error::main_error_kind::core::connection_error_kind::connection_error_kind::ConnectionErrorKind;
-use crate::error::main_error_kind::core::connection_error_kind::core::postgresql::postgresql_connection_error::PostgresqlConnectionError;
+use crate::error::main_error_kind::core::_in_context_for::utility::resource_connection::_new_for_context::connection_error_kind::connection_error_kind::ConnectionErrorKind;
+use crate::error::main_error_kind::core::_in_context_for::utility::resource_connection::_new_for_context::connection_error_kind::core::_in_context_for::postgresql::_new_for_context::postgresql_connection_error::PostgresqlConnectionError;
 use diesel::Connection;
 use diesel::connection::TransactionManager;
 use diesel::pg::PgConnection;

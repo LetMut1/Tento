@@ -1,5 +1,4 @@
 use diesel::result::ConnectionError;
-use std::convert::From;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
@@ -25,11 +24,3 @@ impl Display for PostgresqlConnectionError {
 }
 
 impl Error for PostgresqlConnectionError {}
-
-impl From<ConnectionError> for PostgresqlConnectionError {
-    fn from(connection_error: ConnectionError) -> Self {
-        return Self {
-            connection_error
-        };
-    }
-}

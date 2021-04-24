@@ -7,7 +7,7 @@ use std::fmt::Result as FmtResult;
 
 #[derive(Debug)]
 pub struct DieselError {
-    diesel_error: BaseDieselError
+    base_diesel_error: BaseDieselError
 }
 
 impl Display for DieselError {
@@ -21,7 +21,7 @@ impl Error for DieselError {}
 impl From<BaseDieselError> for DieselError {
     fn from(diesel_error: BaseDieselError) -> Self {
         return Self {
-            diesel_error
+            base_diesel_error: diesel_error
         };
     }
 }

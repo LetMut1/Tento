@@ -3,7 +3,7 @@ use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
-use super::core::postgresql::postgresql_connection_error::PostgresqlConnectionError;
+use super::core::_in_context_for::postgresql::_new_for_context::postgresql_connection_error::PostgresqlConnectionError;
 
 #[derive(Debug)]
 pub enum ConnectionErrorKind {
