@@ -1,8 +1,7 @@
 use actix_web::dev::ServiceRequest;
 use actix_web::HttpMessage;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::json_access_web_token::_new_for_context::json_access_web_token_error_kind::JsonAccessWebTokenErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
-use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error_kind::JsonAccessWebTokenErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::postgresql::base_repository::BaseRepository as JsonAccessWebTokenBlackListBaseRepository;
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
@@ -30,14 +29,14 @@ impl<'outer> Handler {
                             return Ok(());
                         }
 
-                        return Err(EntityErrorKind::JsonAccessWebTokenErrorKind(JsonAccessWebTokenErrorKind::InJsonAccessWebTokenBlackList))?;
+                        return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::JsonAccessWebTokenErrorKind(JsonAccessWebTokenErrorKind::InJsonAccessWebTokenBlackList)));
                     }
 
-                    return Err(EntityErrorKind::JsonAccessWebTokenErrorKind(JsonAccessWebTokenErrorKind::AlreadyExpired))?;
+                    return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::JsonAccessWebTokenErrorKind(JsonAccessWebTokenErrorKind::AlreadyExpired)));
                 }
             }
         }
 
-        return Err(InvalidArgumentError)?;
+        return Err(MainErrorKind::InvalidArgumentError);
     }
 }

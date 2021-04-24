@@ -4,8 +4,8 @@ use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_access_web_token_black_list::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::postgresql::base_repository::BaseRepository as JsonAccessWebTokenBlackListRepository;
@@ -48,17 +48,17 @@ impl Handler {
 
                     connection_manager.begin_transaction()?;
                     
-                    if let Err(diesel_error) = ApplicationUserLogInTokenBaseRepository::delete(&connection_manager, &application_user_log_in_token) { 
+                    if let Err(resource_error_kind) = ApplicationUserLogInTokenBaseRepository::delete(&connection_manager, &application_user_log_in_token) { 
                         connection_manager.rollback_transaction()?;
 
-                        return Err(diesel_error)?;
+                        return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
                         
                     }
 
-                    if let Err(diesel_error) = JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token) {
+                    if let Err(resource_error_kind) = JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token) {
                         connection_manager.rollback_transaction()?;
 
-                        return Err(diesel_error)?;
+                        return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
                     }
 
                     connection_manager.commit_transaction()?;
@@ -72,12 +72,12 @@ impl Handler {
                     );
                 }
                 
-                return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExpired))?;
+                return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExpired)));
             }
             
-            return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::InvalidValue))?;
+            return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::InvalidValue)));
         }
 
-        return Err(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::NotFound))?;
+        return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::NotFound)));
     }
 }

@@ -1,5 +1,5 @@
-use crate::error::main_error_kind::core::_in_context_for::utility::resource_connection::_new_for_context::connection_error_kind::connection_error_kind::ConnectionErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::utility::resource_connection::_new_for_context::connection_error_kind::core::_in_context_for::redis::_new_for_context::redis_connection_error::RedisConnectionError;
+use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
+use crate::error::main_error_kind::core::resource_error_kind::core::redis::redis_error_kind::RedisErrorKind;
 use redis::Client;
 use redis::Connection as RedisConnection;
 use std::ops::Drop;
@@ -15,7 +15,7 @@ impl<'this> ConnectionManager {
         };
     }
 
-    pub fn establish_connection(&'this mut self) -> Result<(), ConnectionErrorKind> {
+    pub fn establish_connection(&'this mut self) -> Result<(), ResourceErrorKind> {
         if let None = self.redis_connection {
             match Client::open("redis://redis") {  // TODO from env
                 Ok(client) => {
@@ -26,12 +26,12 @@ impl<'this> ConnectionManager {
                             return Ok(());
                         },
                         Err(redis_error) => {
-                            return Err(ConnectionErrorKind::RedisConnectionError(RedisConnectionError::new(redis_error)));
+                            return Err(ResourceErrorKind::RedisErrorKind(RedisErrorKind::ConnectionError(redis_error)));
                         }
                     }
                 },
                 Err(redis_error) => {
-                    return Err(ConnectionErrorKind::RedisConnectionError(RedisConnectionError::new(redis_error)));
+                    return Err(ResourceErrorKind::RedisErrorKind(RedisErrorKind::ConnectionError(redis_error)));
                 }
             }
         }

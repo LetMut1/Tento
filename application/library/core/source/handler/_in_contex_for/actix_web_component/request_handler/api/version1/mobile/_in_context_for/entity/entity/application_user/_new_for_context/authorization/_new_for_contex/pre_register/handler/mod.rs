@@ -2,9 +2,9 @@ use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_
 use crate::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserBaseRepository;
@@ -32,16 +32,16 @@ impl Handler {
 
                     connection_manager.begin_transaction()?;
 
-                    if let Err(diesel_error) = PreConfirmedApplicationUserBaseRepository::create(&connection_manager, &pre_confirmed_application_user) {
+                    if let Err(resource_error_kind) = PreConfirmedApplicationUserBaseRepository::create(&connection_manager, &pre_confirmed_application_user) {
                         connection_manager.rollback_transaction()?;
 
-                        return Err(diesel_error)?;
+                        return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
                     }
                     
-                    if let Err(diesel_error) = ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&connection_manager, &application_user_registration_confirmation_token) {
+                    if let Err(resource_error_kind) = ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&connection_manager, &application_user_registration_confirmation_token) {
                         connection_manager.rollback_transaction()?;
 
-                        return Err(diesel_error)?;
+                        return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
                     }
                     
                     connection_manager.commit_transaction()?;
@@ -52,12 +52,12 @@ impl Handler {
                     return Ok(());
                 }
                 
-                return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist))?;
+                return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist)));
             }
             
-            return Err(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyExist))?;
+            return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyExist)));
         }
         
-        return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::InvalidEmail))?;
+        return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::InvalidEmail)));
     }
 }

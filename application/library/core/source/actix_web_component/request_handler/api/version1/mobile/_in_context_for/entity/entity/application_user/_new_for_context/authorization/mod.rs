@@ -16,14 +16,15 @@ use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_reset_password::request::Request as ResendEmailForResetPasswordRequest;
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password::request::Request as ResetPasswordRequest;
 use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error_kind::ApplicationUserRegistrationConfirmationTokenErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::json_access_web_token::_new_for_context::json_access_web_token_error_kind::JsonAccessWebTokenErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error_kind::JsonRefreshWebTokenErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error_kind::ApplicationUserResetPasswordTokenErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error_kind::ApplicationUserRegistrationConfirmationTokenErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error_kind::ApplicationUserResetPasswordTokenErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error_kind::JsonAccessWebTokenErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error_kind::JsonRefreshWebTokenErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
+use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
@@ -119,9 +120,17 @@ impl<'vague> Authorization {
                         }
                     }
                 },
-                MainErrorKind::EmailErrorKind(email_error_kind) => {
-                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                MainErrorKind::ResourceErrorKind(resource_error_kind) => {
+                    match resource_error_kind {
+                        ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                        },
+                        _ => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
@@ -224,9 +233,17 @@ impl<'vague> Authorization {
                         }
                     }
                 },
-                MainErrorKind::EmailErrorKind(email_error_kind) => {
-                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                MainErrorKind::ResourceErrorKind(resource_error_kind) => {
+                    match resource_error_kind {
+                        ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                        },
+                        _ => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
@@ -270,9 +287,17 @@ impl<'vague> Authorization {
                             }
                         }
                     },
-                    MainErrorKind::EmailErrorKind(email_error_kind) => {
-                        // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                    MainErrorKind::ResourceErrorKind(resource_error_kind) => {
+                        match resource_error_kind {
+                            ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                            },
+                            _ => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                                return StandardResponseCreator::create_internal_server_error();
+                            }
+                        }
                     },
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
@@ -348,9 +373,17 @@ impl<'vague> Authorization {
                         }
                     }
                 },
-                MainErrorKind::EmailErrorKind(email_error_kind) => {
-                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                MainErrorKind::ResourceErrorKind(resource_error_kind) => {
+                    match resource_error_kind {
+                        ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                        },
+                        _ => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
@@ -499,9 +532,17 @@ impl<'vague> Authorization {
                             }
                         }
                     },
-                    MainErrorKind::EmailErrorKind(email_error_kind) => {
-                        // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                    MainErrorKind::ResourceErrorKind(resource_error_kind) => {
+                        match resource_error_kind {
+                            ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                            },
+                            _ => {
+                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                                return StandardResponseCreator::create_internal_server_error();
+                            }
+                        }
                     },
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
@@ -587,9 +628,17 @@ impl<'vague> Authorization {
                         }
                     }
                 },
-                MainErrorKind::EmailErrorKind(email_error_kind) => {
-                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                MainErrorKind::ResourceErrorKind(resource_error_kind) => {
+                    match resource_error_kind {
+                        ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                        },
+                        _ => {
+                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();

@@ -3,7 +3,7 @@ use crate::data_transfer_object::resource_model::_in_context_for::entity::entity
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::new::New;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error::DieselError;
+use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
 use diesel::dsl; 
 use diesel::ExpressionMethods;
@@ -15,35 +15,29 @@ pub struct BaseRepository;
 
 impl<'outer, 'vague> BaseRepository {
     pub fn create(
-        connection_manager: &'outer ConnectionManager, 
-        application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
-    ) -> Result<(), DieselError> {
-        diesel::insert_into(application_user_log_in_token_schema::table)
-        .values(New::new(application_user_log_in_token))
+        connection_manager: &'outer ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
+    ) -> Result<(), ResourceErrorKind> {
+        diesel::insert_into(application_user_log_in_token_schema::table).values(New::new(application_user_log_in_token))
         .execute(connection_manager.get_connection())?;
 
         return Ok(());
     }
 
     pub fn delete(
-        connection_manager: &'outer ConnectionManager, 
-        application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
-    ) -> Result<(), DieselError> {
+        connection_manager: &'outer ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
+    ) -> Result<(), ResourceErrorKind> {
         diesel::delete(
-            application_user_log_in_token_schema::table
-            .filter(application_user_log_in_token_schema::id.eq(application_user_log_in_token.get_id().get_value()))
+            application_user_log_in_token_schema::table.filter(application_user_log_in_token_schema::id.eq(application_user_log_in_token.get_id().get_value()))
         ).execute(connection_manager.get_connection())?;
 
         return Ok(());
     }
 
     pub fn update(
-        connection_manager: &'outer ConnectionManager,
-        application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
-    ) -> Result<(), DieselError> {
+        connection_manager: &'outer ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
+    ) -> Result<(), ResourceErrorKind> {
         diesel::update(
-            application_user_log_in_token_schema::table
-            .filter(application_user_log_in_token_schema::id.eq(application_user_log_in_token.get_id().get_value()))
+            application_user_log_in_token_schema::table.filter(application_user_log_in_token_schema::id.eq(application_user_log_in_token.get_id().get_value()))
         ).set(
             (
                 application_user_log_in_token_schema::value.eq(application_user_log_in_token.get_value().get_value()),
@@ -56,7 +50,7 @@ impl<'outer, 'vague> BaseRepository {
 
     pub fn get_by_application_user_id_and_device_id(
         connection_manager: &'outer ConnectionManager, application_user_id: &'outer UuidV4, device_id: &'outer UuidV4,
-    ) -> Result<Option<ApplicationUserLogInToken<'vague>>, DieselError> {
+    ) -> Result<Option<ApplicationUserLogInToken<'vague>>, ResourceErrorKind> {
         if let Some(existing) = application_user_log_in_token_schema::table
         .filter(application_user_log_in_token_schema::application_user_id.eq(application_user_id.get_value()))
         .filter(application_user_log_in_token_schema::device_id.eq(device_id.get_value()))

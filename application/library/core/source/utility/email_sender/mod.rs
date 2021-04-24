@@ -1,4 +1,5 @@
-use crate::error::main_error_kind::core::_in_context_for::utility::email_sender::_new_for_context::email_error_kind::EmailErrorKind;
+use crate::error::main_error_kind::core::resource_error_kind::core::email_server::email_server_error_kind::EmailServerErrorKind;
+use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use lettre_email::EmailBuilder;
 use lettre::ClientSecurity;
 use lettre::smtp::authentication::Credentials;
@@ -13,7 +14,7 @@ use std::convert::Into;
 pub struct EmailSender;
 
 impl<'outer> EmailSender {
-    pub fn send(subject: &'outer str, body: String, to: &'outer str) -> Result<(), EmailErrorKind> {
+    pub fn send(subject: &'outer str, body: String, to: &'outer str) -> Result<(), ResourceErrorKind> {
         match EmailBuilder::new()
         .subject(subject)
         .text(body)
@@ -34,17 +35,14 @@ impl<'outer> EmailSender {
                 //             .connection_reuse(ConnectionReuseParameters::NoReuse)// TODO 
                 //             .transport();
 
-                //         match smtp_transport.send(email.into()) {
-                //             Ok(_) => { 
-                //                 return Ok(()); 
-                //             },
-                //             Err(error) => { 
-                //                 return Err(EmailErrorKind::CanNotSend(error)); 
-                //             }
+                //         if let Err(error) = smtp_transport.send(email.into()) { 
+                //             return Err(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(value)));
                 //         }
+
+                //         return Ok(());   
                 //     },
                 //     Err(error) => { 
-                //         return Err(EmailErrorKind::CanNotSend(error)); 
+                //         return Err(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(value)));
                 //     }
                 // }
                 // TODO uncomment }
@@ -60,12 +58,12 @@ impl<'outer> EmailSender {
                     Ok(smtp_client) => {
                         smtp_transport = smtp_client.transport();
                     },
-                    Err(value) => { return Err(EmailErrorKind::CanNotSend(value)); }
+                    Err(value) => { return Err(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(value))); }
                 }
 
                 match smtp_transport.send(email.into()) {
                     Ok(_) => { return Ok(()); },
-                    Err(value) => { return Err(EmailErrorKind::CanNotSend(value)); }
+                    Err(value) => { return Err(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(value))); }
                 }
                 // TODO delete under ---------------------------------------------------------------
 
@@ -77,7 +75,7 @@ impl<'outer> EmailSender {
 
             },
             Err(error) => { 
-                return Err(EmailErrorKind::CanNotCreate(error)); 
+                return Err(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::EmailError(error)));
             }
         }
     }

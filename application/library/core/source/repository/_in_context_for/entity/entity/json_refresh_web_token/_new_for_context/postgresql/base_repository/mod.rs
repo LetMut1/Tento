@@ -3,7 +3,7 @@ use crate::data_transfer_object::resource_model::_in_context_for::entity::entity
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::new::New;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error::DieselError;
+use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
 use diesel::dsl; 
 use diesel::ExpressionMethods;
@@ -16,14 +16,14 @@ pub struct BaseRepository;
 impl<'outer, 'vague> BaseRepository {
     pub fn create(
         connection_manager: &'outer ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
-    ) -> Result<(), DieselError> {
+    ) -> Result<(), ResourceErrorKind> {
         diesel::insert_into(json_refresh_web_token_schema::table).values(New::new(json_refresh_web_token))
         .execute(connection_manager.get_connection())?;
 
         return Ok(());
     }
 
-    pub fn delete(connection_manager: &'outer ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Result<(), DieselError> {
+    pub fn delete(connection_manager: &'outer ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Result<(), ResourceErrorKind> {
         diesel::delete(
             json_refresh_web_token_schema::table
             .filter(json_refresh_web_token_schema::json_access_web_token_id.eq(json_refresh_web_token.get_json_access_web_token_id().get_value()))
@@ -35,7 +35,7 @@ impl<'outer, 'vague> BaseRepository {
     pub fn update(
         connection_manager: &'outer ConnectionManager,
         json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
-    ) -> Result<(), DieselError> {
+    ) -> Result<(), ResourceErrorKind> {
         diesel::update(
             json_refresh_web_token_schema::table
             .filter(json_refresh_web_token_schema::application_user_id.eq(json_refresh_web_token.get_application_user_id().get_value()))
@@ -50,7 +50,7 @@ impl<'outer, 'vague> BaseRepository {
     pub fn get_by_application_user_id(
         connection_manager: &'outer ConnectionManager, 
         application_user_id: &'outer UuidV4
-    ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, DieselError> {
+    ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
         let existing_registry = json_refresh_web_token_schema::table
         .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
         .get_results::<Existing>(connection_manager.get_connection())?;
@@ -74,7 +74,7 @@ impl<'outer, 'vague> BaseRepository {
         connection_manager: &'outer ConnectionManager, 
         application_user_id: &'outer UuidV4, 
         application_user_log_in_token_device_id: &'outer UuidV4,
-    ) -> Result<Option<JsonRefreshWebToken<'vague>>, DieselError> {
+    ) -> Result<Option<JsonRefreshWebToken<'vague>>, ResourceErrorKind> {
         if let Some(existing) = json_refresh_web_token_schema::table
         .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
         .filter(json_refresh_web_token_schema::application_user_log_in_token_device_id.eq(application_user_log_in_token_device_id.get_value()))

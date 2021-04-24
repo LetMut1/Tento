@@ -1,9 +1,9 @@
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password::request::Request;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::core::password::Password;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::core::_in_context_for::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error_kind::ApplicationUserResetPasswordTokenErrorKind;
-use crate::error::main_error_kind::core::_in_context_for::entity::_new_for_context::entity_error_kind::entity_error_kind::EntityErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error_kind::ApplicationUserResetPasswordTokenErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
@@ -33,12 +33,12 @@ impl<'outer> Handler {
                     return Ok(());
                 }
 
-                return Err(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound))?;
+                return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound)));
             }
 
-            return Err(EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(ApplicationUserResetPasswordTokenErrorKind::InvalidValue))?;
+            return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(ApplicationUserResetPasswordTokenErrorKind::InvalidValue)));
         }
 
-        return Err(EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(ApplicationUserResetPasswordTokenErrorKind::NotFound))?;
+        return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(ApplicationUserResetPasswordTokenErrorKind::NotFound)));
     }
 }
