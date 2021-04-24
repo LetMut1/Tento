@@ -4,10 +4,12 @@ use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
 use super::core::_in_context_for::postgresql::_new_for_context::postgresql_connection_error::PostgresqlConnectionError;
+use super::core::_in_context_for::redis::_new_for_context::redis_connection_error::RedisConnectionError;
 
 #[derive(Debug)]
 pub enum ConnectionErrorKind {
-    PostgresqlConnectionError(PostgresqlConnectionError)
+    PostgresqlConnectionError(PostgresqlConnectionError),
+    RedisConnectionError(RedisConnectionError)
 }
 
 impl Display for ConnectionErrorKind {
@@ -17,9 +19,3 @@ impl Display for ConnectionErrorKind {
 }
 
 impl Error for ConnectionErrorKind {}
-
-impl From<PostgresqlConnectionError> for ConnectionErrorKind {
-    fn from(postgresql_connection_error: PostgresqlConnectionError) -> Self {
-        return Self::PostgresqlConnectionError(postgresql_connection_error);
-    }
-}

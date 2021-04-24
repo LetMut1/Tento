@@ -1,1 +1,1 @@
-pub mod redis_connection_error_kind;
+pub mod redis_connection_error;
