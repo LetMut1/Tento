@@ -4,7 +4,7 @@ use crate::data_transfer_object::resource_model::_in_context_for::entity::entity
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::error::main_error_kind::core::_in_context_for::diesel_component::_new_for_context::diesel_error::DieselError;
-use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
+use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
 use diesel::dsl; 
 use diesel::ExpressionMethods;
 use diesel::OptionalExtension;

@@ -7,7 +7,7 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::postgresql::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
-use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
+use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
 
 pub struct Handler;
 

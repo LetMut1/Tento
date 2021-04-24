@@ -9,7 +9,7 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::postgresql::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
-use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
+use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
 
 pub struct Handler;
 

@@ -10,7 +10,7 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
-use crate::utility::_in_context_for::diesel_component::_new_for_context::postgresql::connection_manager::ConnectionManager;
+use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
 use crate::utility::_in_context_for::entity::entity::application_user::core::password::_new_for_context::password_encoder::PasswordEncoder;
 
 pub struct Handler;
