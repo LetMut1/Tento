@@ -71,9 +71,10 @@ impl<'outer> Handler {
 
                             let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id(), &application_user_log_in_token_device_id);
 
-                            JsonRefreshWebTokenBaseRepository::create(&postgresql_connection_manager, &json_refresh_web_token)?;
+                            JsonRefreshWebTokenBaseRepository::create(&mut redis_connection_manager, &json_refresh_web_token)?;
                             
                             redis_connection_manager.close_connection(); 
+
                             postgresql_connection_manager.close_connection(); 
 
                             return Ok(

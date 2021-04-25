@@ -8,7 +8,7 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::postgresql::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
-use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
+use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
 
 pub struct Handler;
 
@@ -21,7 +21,7 @@ impl Handler {
             connection_manager.establish_connection()?;
 
             if let Some (mut json_refresh_web_token) = JsonRefreshWebTokenBaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                &connection_manager, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
+                &mut connection_manager, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
             )?
             {
                 if &(json_access_web_token.get_id().get_value().as_bytes())[..] == &(json_refresh_web_token.get_json_access_web_token_id().get_value().as_bytes())[..] {
@@ -29,7 +29,7 @@ impl Handler {
                         json_refresh_web_token.refresh();
                         json_access_web_token.refresh();
 
-                        JsonRefreshWebTokenBaseRepository::update(&connection_manager, &json_refresh_web_token)?;
+                        JsonRefreshWebTokenBaseRepository::update(&mut connection_manager, &json_refresh_web_token)?;
 
                         connection_manager.close_connection();
 

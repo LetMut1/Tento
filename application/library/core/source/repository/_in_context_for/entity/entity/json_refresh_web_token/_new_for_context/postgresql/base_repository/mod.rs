@@ -1,91 +1,94 @@
-use crate::diesel_component::schema::public::json_refresh_web_token as json_refresh_web_token_schema;
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::existing::Existing;
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::new::New;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::common::Common;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
-use diesel::dsl; 
-use diesel::ExpressionMethods;
-use diesel::OptionalExtension;
-use diesel::QueryDsl;
-use diesel::RunQueryDsl;
+use crate::utility::_in_context_for::entity::entity::json_refresh_web_token::_new_context_for::date_expiration_creator::DateExpirationCreator;
+use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
+use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
+use redis::Commands;
 
 pub struct BaseRepository;
 
 impl<'outer, 'vague> BaseRepository {
     pub fn create(
-        connection_manager: &'outer ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+        connection_manager: &'outer mut ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        diesel::insert_into(json_refresh_web_token_schema::table).values(New::new(json_refresh_web_token))
-        .execute(connection_manager.get_connection())?;
-
-        return Ok(());
-    }
-
-    pub fn delete(connection_manager: &'outer ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Result<(), ResourceErrorKind> {
-        diesel::delete(
-            json_refresh_web_token_schema::table
-            .filter(json_refresh_web_token_schema::json_access_web_token_id.eq(json_refresh_web_token.get_json_access_web_token_id().get_value()))
-        ).execute(connection_manager.get_connection())?;
-
-        return Ok(());
+        // TODO // TODO // TODO Класть в храгилище девайс-айди.
+        return Ok(
+            connection_manager.get_connection().set_ex::<String, String, ()>(
+                RedisStorageKeyResolver::get_first_for_json_refresh_web_token_base_repository(
+                    json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
+                ), 
+                serde_json::to_string(&Common::new(json_refresh_web_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
+                (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
+            )?
+        );
     }
 
     pub fn update(
-        connection_manager: &'outer ConnectionManager,
-        json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+        connection_manager: &'outer mut ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        diesel::update(
-            json_refresh_web_token_schema::table
-            .filter(json_refresh_web_token_schema::application_user_id.eq(json_refresh_web_token.get_application_user_id().get_value()))
-            .filter(json_refresh_web_token_schema::application_user_log_in_token_device_id.eq(json_refresh_web_token.get_application_user_log_in_token_device_id().get_value()))
-        ).set(
-            json_refresh_web_token_schema::expired_at.eq(json_refresh_web_token.get_expired_at().get_value())
-        ).execute(connection_manager.get_connection())?;
-
-        return Ok(());
+        return Self::create(connection_manager, json_refresh_web_token);
     }
 
-    pub fn get_by_application_user_id(
-        connection_manager: &'outer ConnectionManager, 
+
+    pub fn delete(
+        connection_manager: &'outer mut ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+    ) -> Result<(), ResourceErrorKind> {
+        // TODO // TODO // TODO УДалять из хранилища девайс айди
+        return Ok(
+            connection_manager.get_connection().del::<String, ()>(
+                RedisStorageKeyResolver::get_first_for_json_refresh_web_token_base_repository(
+                    json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
+                )
+            )?
+        );
+    }
+
+    pub fn get_by_application_user_id(  // TODO rename?     // TODO удаление массовое сделать внутри метода Репозетория
+        connection_manager: &'outer mut ConnectionManager, 
         application_user_id: &'outer UuidV4
     ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
-        let existing_registry = json_refresh_web_token_schema::table
-        .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
-        .get_results::<Existing>(connection_manager.get_connection())?;
+        // let existing_registry = json_refresh_web_token_schema::table
+        // .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
+        // .get_results::<Existing>(connection_manager.get_connection())?;
         
-        if !existing_registry.is_empty() {
-            return Ok(
-                Some(
-                    existing_registry.into_iter().map(
-                        |existing: Existing| -> JsonRefreshWebToken<'vague> { 
-                            return JsonRefreshWebToken::new_from_model(existing); 
-                        }
-                    ).collect::<Vec<JsonRefreshWebToken<'vague>>>()
-                )
-            ); 
-        }
+        // if !existing_registry.is_empty() {
+        //     return Ok(
+        //         Some(
+        //             existing_registry.into_iter().map(
+        //                 |existing: Existing| -> JsonRefreshWebToken<'vague> { 
+        //                     return JsonRefreshWebToken::new_from_model(existing); 
+        //                 }
+        //             ).collect::<Vec<JsonRefreshWebToken<'vague>>>()
+        //         )
+        //     ); 
+        // }
         
         return Ok(None); 
     }
 
     pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
-        connection_manager: &'outer ConnectionManager, 
-        application_user_id: &'outer UuidV4, 
-        application_user_log_in_token_device_id: &'outer UuidV4,
+        connection_manager: &'outer mut ConnectionManager, 
+        application_user_id: &'outer UuidV4, application_user_log_in_token_device_id: &'outer UuidV4,
     ) -> Result<Option<JsonRefreshWebToken<'vague>>, ResourceErrorKind> {
-        if let Some(existing) = json_refresh_web_token_schema::table
-        .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
-        .filter(json_refresh_web_token_schema::application_user_log_in_token_device_id.eq(application_user_log_in_token_device_id.get_value()))
-        .get_result::<Existing>(connection_manager.get_connection()).optional()?
+        match connection_manager.get_connection().get::<String, Option<String>>(
+            RedisStorageKeyResolver::get_first_for_json_refresh_web_token_base_repository(application_user_id, application_user_log_in_token_device_id)
+        )?
         {
-            return Ok(Some(JsonRefreshWebToken::new_from_model(existing))); 
+            Some(json_encoded_common) => {
+                return Ok(Some(JsonRefreshWebToken::new_from_model(
+                    serde_json::from_str::<'_, Common>(json_encoded_common.as_str()).unwrap()   // TODO error 
+                ).unwrap()));    // TODO error 
+            },
+            None => {
+                return Ok(None);
+            }
         }
-
-        return Ok(None); 
     }
 }
+// TODO какой срок ескпирации для ключа, хранящего все значения девайсов 
+
 
 // TODO При переходе на РЕдис:
 // хранить рефреш-токен по ключу "апплтикэйшн-юзер-айди + логин-девайс_айди".

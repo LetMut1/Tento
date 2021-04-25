@@ -6,29 +6,26 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::postgresql::base_repository::BaseRepository as JsonAccessWebTokenBlackListRepository;
 use crate::repository::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::postgresql::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;
 use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager as PostgresqlConnectionManager;
-use crate::utility::resource_connection::redis::connection_manager::ConnectionManager as RedisConnectionManager;
+use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
 
 pub struct Handler;
 
 impl<'outer> Handler {
     pub fn handle(json_access_web_token: &'outer JsonAccessWebToken<'outer>) -> Result<(), MainErrorKind> {
-        let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
-        postgresql_connection_manager.establish_connection()?;
-
-        let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
-        redis_connection_manager.establish_connection()?;
+        let mut connection_manager: ConnectionManager = ConnectionManager::new();
+        connection_manager.establish_connection()?;
 
         if let Some(json_refresh_web_token_registry) = JsonRefreshWebTokenBaseRepository::get_by_application_user_id(
-            &postgresql_connection_manager, json_access_web_token.get_application_user_id()
+            &mut connection_manager, json_access_web_token.get_application_user_id()
         )?
         {
             for json_refresh_web_token in json_refresh_web_token_registry.iter() {  // TODO без транзакции, так как все будет на кеше (Удалить это сообщение, как только перепишу на Кеш)
-                JsonRefreshWebTokenBaseRepository::delete(&postgresql_connection_manager, json_refresh_web_token)?;
+                JsonRefreshWebTokenBaseRepository::delete(&mut connection_manager, json_refresh_web_token)?;
 
-                JsonAccessWebTokenBlackListRepository::create(&mut redis_connection_manager, &JsonAccessWebTokenBlackList::new(json_access_web_token.get_id()))?;
+                JsonAccessWebTokenBlackListRepository::create(&mut connection_manager, &JsonAccessWebTokenBlackList::new(json_access_web_token.get_id()))?;
             }
 
-            redis_connection_manager.close_connection();
+            connection_manager.close_connection();
             
             return Ok(());
         }

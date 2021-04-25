@@ -37,14 +37,14 @@ impl Handler {
                 if !application_user_log_in_token.is_expired() {
                     
                     if let Some(existing_json_refresh_web_token) = JsonRefreshWebTokenBaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                        &postgresql_connection_manager, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
+                        &mut redis_connection_manager, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                     )? 
                     {
                         JsonAccessWebTokenBlackListRepository::create(
                             &mut redis_connection_manager, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
                         )?;
 
-                        JsonRefreshWebTokenBaseRepository::delete(&postgresql_connection_manager, &existing_json_refresh_web_token)?;
+                        JsonRefreshWebTokenBaseRepository::delete(&mut redis_connection_manager, &existing_json_refresh_web_token)?;
                     }
 
                     let json_refresh_web_token: JsonRefreshWebToken<'_> =
@@ -59,7 +59,7 @@ impl Handler {
                         
                     }
 
-                    if let Err(resource_error_kind) = JsonRefreshWebTokenBaseRepository::create(&postgresql_connection_manager, &json_refresh_web_token) {
+                    if let Err(resource_error_kind) = JsonRefreshWebTokenBaseRepository::create(&mut redis_connection_manager, &json_refresh_web_token) {
                         postgresql_connection_manager.rollback_transaction()?;
 
                         return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
