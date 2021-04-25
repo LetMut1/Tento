@@ -18,7 +18,8 @@ use crate::repository::_in_context_for::entity::entity::pre_confirmed_applicatio
 use crate::repository::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::postgresql::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
-use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
+use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager as PostgresqlConnectionManager;
+use crate::utility::resource_connection::redis::connection_manager::ConnectionManager as RedisConnectionManager;
 
 pub struct Handler;
 
@@ -30,46 +31,50 @@ impl<'outer> Handler {
 
         let application_user_log_in_token_device_id: UuidV4 = UuidV4::new_from_string(request.application_user_log_in_token_device_id)?;
 
-        let mut connection_manager: ConnectionManager = ConnectionManager::new();
-        connection_manager.establish_connection()?;
+        let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
+        postgresql_connection_manager.establish_connection()?;
 
-        if !ApplicationUserBaseRepository::is_exist_by_nickanme(&connection_manager, &application_user_nickname)? {
-            if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&connection_manager, &application_user_email)? {
+        if !ApplicationUserBaseRepository::is_exist_by_nickanme(&postgresql_connection_manager, &application_user_nickname)? {
+            if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&postgresql_connection_manager, &application_user_email)? {
+                let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
+                redis_connection_manager.establish_connection()?;
+
                 if let Some(application_user_registration_confirmation_token) = 
-                ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&connection_manager, pre_confirmed_application_user.get_id())? 
+                ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&mut redis_connection_manager, pre_confirmed_application_user.get_id())? 
                 {
                     if request.application_user_registration_confirmation_token_value.as_str() == application_user_registration_confirmation_token.get_value().get_value() {
                         if !application_user_registration_confirmation_token.is_expired() {
                             let application_user: ApplicationUser<'_> = 
                             ApplicationUser::new_from_pre_confirmed_application_user(&pre_confirmed_application_user, application_user_nickname, Password::new(request.application_user_password));
 
-                            connection_manager.begin_transaction()?;
+                            postgresql_connection_manager.begin_transaction()?;
                             
-                            if let Err(resource_error_kind) = ApplicationUserBaseRepository::create(&connection_manager, &application_user) {
-                                connection_manager.rollback_transaction()?;
+                            if let Err(resource_error_kind) = ApplicationUserBaseRepository::create(&postgresql_connection_manager, &application_user) {
+                                postgresql_connection_manager.rollback_transaction()?;
 
                                 return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
                             }
 
-                            if let Err(resource_error_kind) = ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&connection_manager, &application_user_registration_confirmation_token) {
-                                connection_manager.rollback_transaction()?;
+                            if let Err(resource_error_kind) = ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&mut redis_connection_manager, &application_user_registration_confirmation_token) {
+                                postgresql_connection_manager.rollback_transaction()?;
 
                                 return Err(MainErrorKind::ResourceErrorKind(resource_error_kind)); 
                             }
 
-                            if let Err(resource_error_kind) = PreConfirmedApplicationUserBaseRepository::delete(&connection_manager, &pre_confirmed_application_user) {
-                                connection_manager.rollback_transaction()?;
+                            if let Err(resource_error_kind) = PreConfirmedApplicationUserBaseRepository::delete(&postgresql_connection_manager, &pre_confirmed_application_user) {
+                                postgresql_connection_manager.rollback_transaction()?;
 
                                 return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
                             }
                             
-                            connection_manager.commit_transaction()?;
+                            postgresql_connection_manager.commit_transaction()?;
 
                             let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id(), &application_user_log_in_token_device_id);
 
-                            JsonRefreshWebTokenBaseRepository::create(&connection_manager, &json_refresh_web_token)?;
+                            JsonRefreshWebTokenBaseRepository::create(&postgresql_connection_manager, &json_refresh_web_token)?;
                             
-                            connection_manager.close_connection(); 
+                            redis_connection_manager.close_connection(); 
+                            postgresql_connection_manager.close_connection(); 
 
                             return Ok(
                                 HandlerResult::new(
@@ -88,7 +93,7 @@ impl<'outer> Handler {
                 return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound)));
             }
 
-            if ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)? {
+            if ApplicationUserBaseRepository::is_exist_by_email(&postgresql_connection_manager, &application_user_email)? {
                 return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyConfirmed)));
             }
             

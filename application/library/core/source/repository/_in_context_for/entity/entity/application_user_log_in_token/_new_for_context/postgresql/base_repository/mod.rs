@@ -39,7 +39,7 @@ impl<'outer, 'vague> BaseRepository {
     pub fn update(
         connection_manager: &'outer mut ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        return Ok(Self::create(connection_manager, application_user_log_in_token)?);
+        return Self::create(connection_manager, application_user_log_in_token);
     }
 
     pub fn get_by_application_user_id_and_device_id(
