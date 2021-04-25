@@ -1,4 +1,3 @@
-use diesel::result::ConnectionError as DieselConnectionError;
 use diesel::result::Error as DieselError;
 use lettre_email::error::Error as LettreEmailError;
 use lettre::smtp::error::Error as LettreSmtpError;

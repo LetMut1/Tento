@@ -1,66 +1,63 @@
-use crate::diesel_component::schema::public::application_user_reset_password_token as application_user_reset_password_token_schema;
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::existing::Existing;
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::new::New;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::common::Common;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
-use diesel::dsl; 
-use diesel::ExpressionMethods;
-use diesel::OptionalExtension;
-use diesel::QueryDsl;
-use diesel::RunQueryDsl;
+use crate::utility::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
+use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
+use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
+use redis::Commands;
 
 pub struct BaseRepository;
 
 impl<'outer, 'vague> BaseRepository {
     pub fn create(
-        connection_manager: &'outer ConnectionManager, 
+        connection_manager: &'outer mut ConnectionManager, 
         application_user_reset_password_token: &'outer ApplicationUserResetPasswordToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        diesel::insert_into(application_user_reset_password_token_schema::table)
-        .values(New::new(application_user_reset_password_token))
-        .execute(connection_manager.get_connection())?;
-
-        return Ok(());
+        return Ok(
+            connection_manager.get_connection().set_ex::<String, String, ()>(
+                RedisStorageKeyResolver::get_first_for_application_user_reset_password_token_base_repository(
+                    application_user_reset_password_token.get_application_user_id()
+                ), 
+                serde_json::to_string(&Common::new(application_user_reset_password_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
+                (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
+            )?
+        );
     }
 
     pub fn update(
-        connection_manager: &'outer ConnectionManager,
+        connection_manager: &'outer mut ConnectionManager,
         application_user_reset_password_token: &'outer ApplicationUserResetPasswordToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        diesel::update(
-            application_user_reset_password_token_schema::table
-            .filter(application_user_reset_password_token_schema::id.eq(application_user_reset_password_token.get_id().get_value()))
-        ).set(
-            application_user_reset_password_token_schema::expired_at.eq(application_user_reset_password_token.get_expired_at().get_value())
-        ).execute(connection_manager.get_connection())?;
-
-        return Ok(());
+        return Self::create(connection_manager, application_user_reset_password_token);
     }
 
     pub fn delete(
-        connection_manager: &'outer ConnectionManager, 
+        connection_manager: &'outer mut ConnectionManager, 
         application_user_reset_password_token: &'outer ApplicationUserResetPasswordToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        diesel::delete(
-            application_user_reset_password_token_schema::table
-            .filter(application_user_reset_password_token_schema::id.eq(application_user_reset_password_token.get_id().get_value()))
-        ).execute(connection_manager.get_connection())?;
-
-        return Ok(());
+        return Ok(
+            connection_manager.get_connection().del::<String, ()>(
+                RedisStorageKeyResolver::get_first_for_application_user_reset_password_token_base_repository(
+                    application_user_reset_password_token.get_application_user_id()
+                )
+            )?
+        );
     }
 
     pub fn get_by_application_user_id(
-        connection_manager: &'outer ConnectionManager, application_user_id: &'outer UuidV4
+        connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4
     ) -> Result<Option<ApplicationUserResetPasswordToken<'vague>>, ResourceErrorKind> {
-        if let Some(existing) = application_user_reset_password_token_schema::table
-        .filter(application_user_reset_password_token_schema::application_user_id.eq(application_user_id.get_value()))
-        .get_result::<Existing>(connection_manager.get_connection()).optional()? 
+        match connection_manager.get_connection().get::<String, Option<String>>(
+            RedisStorageKeyResolver::get_first_for_application_user_reset_password_token_base_repository(application_user_id)
+        )?
         {
-            return Ok(Some(ApplicationUserResetPasswordToken::new_from_model(existing))); 
+            Some(json_encoded_common) => {
+                return Ok(Some(ApplicationUserResetPasswordToken::new_from_model(serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap()).unwrap()));    // TODO error 
+            },
+            None => {
+                return Ok(None);
+            }
         }
-
-        return Ok(None);
     }
 }

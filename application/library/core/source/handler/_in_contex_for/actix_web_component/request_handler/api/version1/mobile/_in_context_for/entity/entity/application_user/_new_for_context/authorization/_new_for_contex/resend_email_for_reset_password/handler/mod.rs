@@ -5,7 +5,7 @@ use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::E
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
-use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
+use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
 
 pub struct Handler;
 
@@ -16,7 +16,7 @@ impl<'outer> Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(&connection_manager, &application_user_id)? {
+        if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(&mut connection_manager, &application_user_id)? {
             connection_manager.close_connection();
 
             EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;
