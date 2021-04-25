@@ -20,7 +20,7 @@ impl<'this, 'outer: 'this> DateTime {
         };
     }
 
-    pub fn new_from_string(value: &'outer str) -> Self {
+    pub fn new_from_str(value: &'outer str) -> Self {
         return Self {
             value: ChronoDateTime::parse_from_rfc3339(value).unwrap().with_timezone(&Utc)      // TODO выбрасывать ошибку
         };

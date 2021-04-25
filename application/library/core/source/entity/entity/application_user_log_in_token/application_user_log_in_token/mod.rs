@@ -1,8 +1,9 @@
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::existing::Existing;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::common::Common;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
-use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
+use crate::entity::entity::application_user::core::email::Email;
+use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use crate::utility::_in_context_for::entity::entity::apllication_user_log_in_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use std::borrow::Cow;
@@ -29,15 +30,17 @@ impl<'this, 'outer: 'this> ApplicationUserLogInToken<'outer> {
         };
     }
 
-    pub fn new_from_model(existing: Existing) -> Self {
-        return Self {
-            id: UuidV4::new_from_uuid(existing.id),
-            application_user_id: Cow::Owned(UuidV4::new_from_uuid(existing.application_user_id)),
-            device_id: UuidV4::new_from_uuid(existing.device_id),
-            application_user_email: Cow::Owned(Email::new(existing.application_user_email)),
-            value: Value::new(existing.value),
-            expired_at: DateTime::new_from_date_time(existing.expired_at)
-        };
+    pub fn new_from_model(common: Common) -> Result<Self, InvalidArgumentError> {
+        return Ok(
+            Self {
+                id: UuidV4::new_from_string(common.id)?,
+                application_user_id: Cow::Owned(UuidV4::new_from_string(common.application_user_id)?),
+                device_id: UuidV4::new_from_string(common.device_id)?,
+                application_user_email: Cow::Owned(Email::new(common.application_user_email.into_owned())),
+                value: Value::new(common.value.into_owned()),
+                expired_at: DateTime::new_from_str(common.expired_at.as_str())
+            }
+        );
     }
 
     pub fn refresh(&'this mut self) -> &'this mut Self {

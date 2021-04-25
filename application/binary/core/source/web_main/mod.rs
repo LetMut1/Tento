@@ -29,6 +29,7 @@ async fn main() -> Result<()>
     // TODO 3. Open/Close connection (Postgres, Redis) or keep connection opened?
     // TODO 4. Work with TimeZone;
     // TODO 5. Update ActixWeb
+    // TODO 6. Изучить конфигурации Рсурсов( Postgresql, Redis, ...)
 // Do not remove this block until the problems have been fixed }
 
 // TODO #[inline] - нужно ли оптимизировать с помощью этого атрибута

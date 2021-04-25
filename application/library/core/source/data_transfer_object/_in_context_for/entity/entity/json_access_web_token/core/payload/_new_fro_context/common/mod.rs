@@ -10,7 +10,7 @@ pub struct Common {
     pub application_user_id: String,
     #[serde(rename = "di")]
     pub application_user_log_in_token_device_id: String,
-    #[serde(rename = "exp")]
+    #[serde(rename = "p")]
     pub exp: String
 }
 

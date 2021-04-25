@@ -1,64 +1,63 @@
-use crate::diesel_component::schema::public::application_user_log_in_token as application_user_log_in_token_schema;
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::existing::Existing;
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::new::New;
+use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::common::Common;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
-use diesel::dsl; 
-use diesel::ExpressionMethods;
-use diesel::OptionalExtension;
-use diesel::QueryDsl;
-use diesel::RunQueryDsl;
+use crate::utility::_in_context_for::entity::entity::apllication_user_log_in_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
+use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
+use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
+use redis::Commands;
 
 pub struct BaseRepository;
 
 impl<'outer, 'vague> BaseRepository {
     pub fn create(
-        connection_manager: &'outer ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
+        connection_manager: &'outer mut ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        diesel::insert_into(application_user_log_in_token_schema::table).values(New::new(application_user_log_in_token))
-        .execute(connection_manager.get_connection())?;
-
-        return Ok(());
+        return Ok(
+            connection_manager.get_connection().set_ex::<String, String, ()>(
+                RedisStorageKeyResolver::get_first_for_application_user_log_in_token_base_repository(
+                    application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
+                ), 
+                serde_json::to_string(&Common::new(application_user_log_in_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
+                (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
+            )?
+        );
     }
 
     pub fn delete(
-        connection_manager: &'outer ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
+        connection_manager: &'outer mut ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        diesel::delete(
-            application_user_log_in_token_schema::table.filter(application_user_log_in_token_schema::id.eq(application_user_log_in_token.get_id().get_value()))
-        ).execute(connection_manager.get_connection())?;
-
-        return Ok(());
+        return Ok(
+            connection_manager.get_connection().del::<String, ()>(
+                RedisStorageKeyResolver::get_first_for_application_user_log_in_token_base_repository(
+                    application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
+                )
+            )?
+        );
     }
 
     pub fn update(
-        connection_manager: &'outer ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
+        connection_manager: &'outer mut ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        diesel::update(
-            application_user_log_in_token_schema::table.filter(application_user_log_in_token_schema::id.eq(application_user_log_in_token.get_id().get_value()))
-        ).set(
-            (
-                application_user_log_in_token_schema::value.eq(application_user_log_in_token.get_value().get_value()),
-                application_user_log_in_token_schema::expired_at.eq(application_user_log_in_token.get_expired_at().get_value())
-            )
-        ).execute(connection_manager.get_connection())?;
-
-        return Ok(());
+        return Ok(Self::create(connection_manager, application_user_log_in_token)?);
     }
 
     pub fn get_by_application_user_id_and_device_id(
-        connection_manager: &'outer ConnectionManager, application_user_id: &'outer UuidV4, device_id: &'outer UuidV4,
+        connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4, device_id: &'outer UuidV4,
     ) -> Result<Option<ApplicationUserLogInToken<'vague>>, ResourceErrorKind> {
-        if let Some(existing) = application_user_log_in_token_schema::table
-        .filter(application_user_log_in_token_schema::application_user_id.eq(application_user_id.get_value()))
-        .filter(application_user_log_in_token_schema::device_id.eq(device_id.get_value()))
-        .get_result::<Existing>(connection_manager.get_connection()).optional()? 
-        {
-            return Ok(Some(ApplicationUserLogInToken::new_from_model(existing))); 
-        }
-
-        return Ok(None); 
+        // match connection_manager.get_connection().get::<String, String>(
+        //     RedisStorageKeyResolver::get_first_for_application_user_log_in_token_base_repository(application_user_id, device_id)
+        // ) 
+        // {
+        //                     //     Ok(value) => {
+        //                     //     return Ok(Some(ApplicationUserLogInToken::new_from_model(serde_json::from_str::<'_, Common>(s).unwrap())))
+        //                     //     },
+        //                     //     Err(error) => {
+        //                     //         println!("error3");
+        //                     //         println!("{:?}", error);
+        //                     //     }
+        //                     // }
+        // }
+        return Ok(None);
     }
 }

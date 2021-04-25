@@ -51,15 +51,9 @@ impl From<DieselError> for ResourceErrorKind {
     }
 }
 
-impl From<DieselConnectionError> for ResourceErrorKind {
-    fn from(diesel_connection_error: DieselConnectionError) -> Self {
-        return Self::PostgresqlErrorKind(PostgresqlErrorKind::ConnectionError(diesel_connection_error));
-    }
-}
-
 impl From<RedisError> for ResourceErrorKind {
     fn from(redis_error: RedisError) -> Self {
-        return Self::RedisErrorKind(RedisErrorKind::ConnectionError(redis_error));
+        return Self::RedisErrorKind(RedisErrorKind::RuntimeError(redis_error));
     }
 }
 

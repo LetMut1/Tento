@@ -31,7 +31,7 @@ impl<'this, 'outer: 'this> Payload<'outer> {
                 id: Cow::Owned(UuidV4::new_from_string(common.json_access_web_token_id)?),
                 application_user_id: Cow::Owned(UuidV4::new_from_string(common.application_user_id)?),
                 application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_string(common.application_user_log_in_token_device_id)?),
-                exp: DateTime::new_from_string(common.exp.as_str())
+                exp: DateTime::new_from_str(common.exp.as_str())
             }
         );
     }

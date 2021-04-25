@@ -11,14 +11,14 @@ impl<'outer> StandardJsonResponseBodyWrapper {
     where 
         S: Serialize
     {
-        return serde_json::to_string::<SuccessResultWithBody<S>>(&SuccessResultWithBody::new(body)).unwrap();    // TODO обработать
+        return serde_json::to_string(&SuccessResultWithBody::new(body)).unwrap();    // TODO обработать
     }
 
     pub fn wrap_for_success() -> String {
-        return serde_json::to_string::<SuccessResult>(&SuccessResult::new()).unwrap();    // TODO обработать
+        return serde_json::to_string(&SuccessResult::new()).unwrap();    // TODO обработать
     }
 
     pub fn wrap_for_fail_with_code(code: &'static str) -> String {
-        return serde_json::to_string::<FailResultWithCode>(&FailResultWithCode::new(code)).unwrap();        // TODO Обработать LogikError это не должно выбрасываться 
+        return serde_json::to_string(&FailResultWithCode::new(code)).unwrap();        // TODO Обработать LogikError это не должно выбрасываться 
     }
 }
