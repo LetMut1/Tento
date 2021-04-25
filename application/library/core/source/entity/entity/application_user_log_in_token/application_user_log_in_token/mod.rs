@@ -30,7 +30,7 @@ impl<'this, 'outer: 'this> ApplicationUserLogInToken<'outer> {
         };
     }
 
-    pub fn new_from_model(common: Common) -> Result<Self, InvalidArgumentError> {
+    pub fn new_from_model(common: Common<'outer>) -> Result<Self, InvalidArgumentError> {
         return Ok(
             Self {
                 id: UuidV4::new_from_string(common.id)?,

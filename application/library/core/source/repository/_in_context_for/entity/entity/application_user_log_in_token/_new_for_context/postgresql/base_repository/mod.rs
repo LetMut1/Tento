@@ -45,19 +45,16 @@ impl<'outer, 'vague> BaseRepository {
     pub fn get_by_application_user_id_and_device_id(
         connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4, device_id: &'outer UuidV4,
     ) -> Result<Option<ApplicationUserLogInToken<'vague>>, ResourceErrorKind> {
-        // match connection_manager.get_connection().get::<String, String>(
-        //     RedisStorageKeyResolver::get_first_for_application_user_log_in_token_base_repository(application_user_id, device_id)
-        // ) 
-        // {
-        //                     //     Ok(value) => {
-        //                     //     return Ok(Some(ApplicationUserLogInToken::new_from_model(serde_json::from_str::<'_, Common>(s).unwrap())))
-        //                     //     },
-        //                     //     Err(error) => {
-        //                     //         println!("error3");
-        //                     //         println!("{:?}", error);
-        //                     //     }
-        //                     // }
-        // }
-        return Ok(None);
+        match connection_manager.get_connection().get::<String, Option<String>>(
+            RedisStorageKeyResolver::get_first_for_application_user_log_in_token_base_repository(application_user_id, device_id)
+        )?
+        {
+            Some(json_encoded_common) => {
+                return Ok(Some(ApplicationUserLogInToken::new_from_model(serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap()).unwrap()));    // TODO error 
+            },
+            None => {
+                return Ok(None);
+            }
+        }
     }
 }
