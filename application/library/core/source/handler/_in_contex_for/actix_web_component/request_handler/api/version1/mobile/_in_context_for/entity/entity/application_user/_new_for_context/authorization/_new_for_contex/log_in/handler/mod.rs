@@ -41,7 +41,7 @@ impl Handler {
                     )? 
                     {
                         JsonAccessWebTokenBlackListRepository::create(
-                            &postgresql_connection_manager, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
+                            &mut redis_connection_manager, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
                         )?;
 
                         JsonRefreshWebTokenBaseRepository::delete(&postgresql_connection_manager, &existing_json_refresh_web_token)?;

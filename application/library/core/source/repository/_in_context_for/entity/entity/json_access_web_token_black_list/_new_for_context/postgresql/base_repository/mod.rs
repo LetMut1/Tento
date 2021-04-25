@@ -1,37 +1,36 @@
-use crate::diesel_component::schema::public::json_access_web_token_black_list as json_access_web_token_black_list_schema;
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::new::New;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_access_web_token_black_list::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager;
-use diesel::dsl; 
-use diesel::ExpressionMethods;
-use diesel::QueryDsl;
-use diesel::RunQueryDsl;
+use crate::utility::_in_context_for::entity::entity::json_access_web_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
+use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
+use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
+use redis::Commands;
 
 pub struct BaseRepository;
 
 impl<'outer, 'vague> BaseRepository {
     pub fn create(
-        connection_manager: &'outer ConnectionManager, json_access_web_token_black_list: &'outer JsonAccessWebTokenBlackList<'outer>
+        connection_manager: &'outer mut ConnectionManager, json_access_web_token_black_list: &'outer JsonAccessWebTokenBlackList<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        diesel::insert_into(json_access_web_token_black_list_schema::table).values(New::new(json_access_web_token_black_list))
-        .execute(connection_manager.get_connection())?;
-
-        return Ok(());
-    }
-
-    pub fn is_exist_by_json_access_token_id(connection_manager: &'outer ConnectionManager, json_access_web_token_id: &'outer UuidV4) -> Result<bool, ResourceErrorKind> {
         return Ok(
-            diesel::select(
-                dsl::exists(
-                    json_access_web_token_black_list_schema::table
-                    .filter(json_access_web_token_black_list_schema::json_access_web_token_id.eq(json_access_web_token_id.get_value()))
-                )
-            )
-            .get_result::<bool>(connection_manager.get_connection())?
+            connection_manager.get_connection().set_ex::<String, u8, ()>(
+                RedisStorageKeyResolver::get_first_for_json_access_web_token_bkack_list_base_repository(
+                    json_access_web_token_black_list.get_json_access_web_token_id()
+                ), 
+                1,
+                (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
+            )?
         );
     }
-}
 
-// При переходе на Редис  делать срок экспирации// TODO // TODO обратить внимение на Транзакции, в которых используется методы ( то есть, пройти по РекуэстХэндлерам для Authentication)
+    pub fn is_exist_by_json_access_token_id(
+        connection_manager: &'outer mut ConnectionManager, json_access_web_token_id: &'outer UuidV4
+    ) -> Result<bool, ResourceErrorKind> {
+        // let t = connection_manager.get_connection().exists::<String, bool>( // TODO Дописать.
+        //     RedisStorageKeyResolver::get_first_for_json_access_web_token_bkack_list_base_repository(
+        //         json_access_web_token_black_list.get_json_access_web_token_id()
+        //     )
+        // )?;
+        return Ok(true);
+    }
+}
