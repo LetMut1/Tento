@@ -62,14 +62,13 @@ impl<'outer> ProcessingDeviceIdStorage {
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id)
         )?
         {
-            return Ok(Some(
-                application_user_log_in_token_device_id_sequence.split::<'_, &'_ str>(Self::SEPARATOR)
-                .map(
-                    |application_user_log_in_token_device_id: &'_ str| -> String {
-                        return application_user_log_in_token_device_id.to_string();
-                    }
-                ).collect::<Vec<String>>()
-            ));
+            let mut application_user_log_in_token_device_id_registry: Vec<String> = Vec::new();
+
+            for application_user_log_in_token_device_id in application_user_log_in_token_device_id_sequence.split::<'_, &'_ str>(Self::SEPARATOR) {
+                application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id.to_string());
+            }
+
+            return Ok(Some(application_user_log_in_token_device_id_registry));
         }
         
         return Ok(None);
