@@ -6,7 +6,7 @@ use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
-use crate::utility::_in_context_for::entity::entity::apllication_user_registration_confirmation_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
+use crate::utility::date_time_expiration_creator::DateTimeExpirationCreator;
 use std::borrow::Cow;
 
 pub struct ApplicationUserRegistrationConfirmationToken<'outer> {
@@ -24,7 +24,7 @@ impl<'this, 'outer: 'this> ApplicationUserRegistrationConfirmationToken<'outer> 
             pre_confirmed_application_user_id: Cow::Borrowed(pre_confirmed_application_user.get_id()),
             application_user_email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
             value: Value::new(UuidV4::new().get_value().to_string()),       // TODO создать генератор значения + метода Рефреш ниже
-            expired_at: DateExpirationCreator::create()
+            expired_at: DateTimeExpirationCreator::create_application_user_registration_confirmation_token_first()
         };
     }
 
@@ -41,7 +41,7 @@ impl<'this, 'outer: 'this> ApplicationUserRegistrationConfirmationToken<'outer> 
     }
 
     pub fn refresh(&'this mut self) -> &'this mut Self {
-        self.expired_at = DateExpirationCreator::create();
+        self.expired_at = DateTimeExpirationCreator::create_application_user_registration_confirmation_token_first();
 
         return self;
     }

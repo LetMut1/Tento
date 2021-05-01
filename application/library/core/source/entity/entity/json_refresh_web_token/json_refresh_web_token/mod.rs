@@ -2,7 +2,7 @@ use crate::data_transfer_object::resource_model::_in_context_for::entity::entity
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
-use crate::utility::_in_context_for::entity::entity::json_refresh_web_token::_new_context_for::date_expiration_creator::DateExpirationCreator;
+use crate::utility::date_time_expiration_creator::DateTimeExpirationCreator;
 use std::borrow::Cow;
 
 pub struct JsonRefreshWebToken<'outer> {
@@ -18,7 +18,7 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {
             json_access_web_token_id: UuidV4::new(),
             application_user_id: Cow::Borrowed(application_user_id),
             application_user_log_in_token_device_id: Cow::Borrowed(application_user_log_in_token_device_id),
-            expired_at: DateExpirationCreator::create()
+            expired_at: DateTimeExpirationCreator::create_json_refresh_web_token_first()
         };
     }
 
@@ -38,7 +38,7 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {
     }
 
     fn refresh_expired_at(&'this mut self) -> &'this mut Self {
-        self.expired_at = DateExpirationCreator::create();
+        self.expired_at = DateTimeExpirationCreator::create_json_refresh_web_token_first();
 
         return self;
     }

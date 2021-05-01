@@ -5,7 +5,7 @@ use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::entity::entity::application_user::core::email::Email;
 use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
-use crate::utility::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
+use crate::utility::date_time_expiration_creator::DateTimeExpirationCreator;
 use std::borrow::Cow;
 use super::core::value::Value;
 
@@ -24,7 +24,7 @@ impl<'this, 'outer: 'this> ApplicationUserResetPasswordToken<'outer> {
             application_user_id: Cow::Borrowed(application_user.get_id()),
             application_user_email: Cow::Borrowed(application_user.get_email()),
             value: Value::new(UuidV4::new().get_value().to_string()),       // TODO создать генератор значения + метода Рефреш ниже
-            expired_at: DateExpirationCreator::create()
+            expired_at: DateTimeExpirationCreator::create_application_user_reset_password_token_first()
         };
     }
 
@@ -41,7 +41,7 @@ impl<'this, 'outer: 'this> ApplicationUserResetPasswordToken<'outer> {
     }
 
     pub fn refresh(&'this mut self) -> &'this mut Self {
-        self.expired_at = DateExpirationCreator::create();
+        self.expired_at = DateTimeExpirationCreator::create_application_user_reset_password_token_first();
 
         return self;
     }

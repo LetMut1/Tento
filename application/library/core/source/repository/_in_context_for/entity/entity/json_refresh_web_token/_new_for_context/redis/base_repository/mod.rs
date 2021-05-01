@@ -2,8 +2,8 @@ use crate::data_transfer_object::resource_model::_in_context_for::entity::entity
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use crate::utility::_in_context_for::entity::entity::json_refresh_web_token::_new_context_for::date_expiration_creator::DateExpirationCreator;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
+use crate::utility::date_time_expiration_creator::DateTimeExpirationCreator;
 use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
 use redis::Commands;
 
@@ -18,7 +18,7 @@ impl<'outer, 'vague> BaseRepository {
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
             ), 
             serde_json::to_string(&Common::new(json_refresh_web_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
-            (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
+            (DateTimeExpirationCreator::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
         )?;
 
         return Ok(());

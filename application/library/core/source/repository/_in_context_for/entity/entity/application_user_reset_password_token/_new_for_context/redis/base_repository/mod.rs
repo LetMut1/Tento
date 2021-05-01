@@ -2,8 +2,8 @@ use crate::data_transfer_object::resource_model::_in_context_for::entity::entity
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use crate::utility::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::date_expiration_creator::DateExpirationCreator;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
+use crate::utility::date_time_expiration_creator::DateTimeExpirationCreator;
 use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
 use redis::Commands;
 
@@ -19,7 +19,7 @@ impl<'outer, 'vague> BaseRepository {
                 application_user_reset_password_token.get_application_user_id()
             ), 
             serde_json::to_string(&Common::new(application_user_reset_password_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
-            (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
+            (DateTimeExpirationCreator::QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST * 60) as usize
         )?;
         
         return Ok(());
