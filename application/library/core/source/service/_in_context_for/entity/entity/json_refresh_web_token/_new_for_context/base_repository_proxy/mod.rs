@@ -58,13 +58,20 @@ impl<'outer, 'vague> BaseRepositoryProxy { // TODO можно ли сделат�
 
         if let Some(mut application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection_manager, json_refresh_web_token.get_application_user_id())? 
         {
-            if let Some(index) = application_user_log_in_token_device_id_registry.iter().position(
-                |application_user_log_in_token_device_id: &'_ String| -> bool {
-                    return *application_user_log_in_token_device_id == json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().to_string();
+            let application_user_log_in_token_device_id: String = json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().to_string();
+
+            let mut aplication_user_log_in_token_device_id_index_option: Option<usize> = None;
+
+            for (index, existing_application_user_log_in_token_device_id) in application_user_log_in_token_device_id_registry.iter().enumerate() {
+                if *existing_application_user_log_in_token_device_id == application_user_log_in_token_device_id {
+                    aplication_user_log_in_token_device_id_index_option = Some(index);
+
+                    break;
                 }
-            )
-            {
-                application_user_log_in_token_device_id_registry.remove(index);
+            }
+
+            if let Some(aplication_user_log_in_token_device_id_index) = aplication_user_log_in_token_device_id_index_option {
+                application_user_log_in_token_device_id_registry.remove(aplication_user_log_in_token_device_id_index);
 
                 if !application_user_log_in_token_device_id_registry.is_empty() {
                     ProcessingDeviceIdStorage::update(
