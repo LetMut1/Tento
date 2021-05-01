@@ -8,25 +8,25 @@ use serde_json;
 pub struct SerializationFormResolver;
 
 impl<'outer, 'vague> SerializationFormResolver {
-    const ROW_SEPARATOR: &'static str = ".";
+    const SEPARATOR: &'static str = ".";
 
     pub fn serialize(json_access_web_token: &'outer JsonAccessWebToken<'outer>) -> String {
         let header_and_payload: String = 
         base64::encode(serde_json::to_string(&HeaderCommon::new(json_access_web_token)).unwrap().as_bytes()) 
-        + Self::ROW_SEPARATOR 
+        + Self::SEPARATOR 
         + base64::encode(serde_json::to_string(&PayloadCommon::new(json_access_web_token)).unwrap().as_bytes()).as_str();
         
         let signature: String = SignatureCreator::create(&header_and_payload);
 
-        return header_and_payload + Self::ROW_SEPARATOR + signature.as_str();
+        return header_and_payload + Self::SEPARATOR + signature.as_str();
     }
 
     pub fn deserialize(classic_form: &'outer str) -> Result<JsonAccessWebToken<'vague>, InvalidArgumentError> {
-        let classic_form_parts: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::ROW_SEPARATOR).collect::<Vec<&'_ str>>();
+        let classic_form_parts: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::SEPARATOR).collect::<Vec<&'_ str>>();
 
         if classic_form_parts.len() == 3 {
             if SignatureCreator::is_valid(
-                (String::new() + classic_form_parts[0] + Self::ROW_SEPARATOR + classic_form_parts[1]).as_str(), classic_form_parts[2]
+                (String::new() + classic_form_parts[0] + Self::SEPARATOR + classic_form_parts[1]).as_str(), classic_form_parts[2]
             ) 
             {
                 return Ok(

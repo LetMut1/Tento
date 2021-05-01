@@ -8,7 +8,7 @@ use redis::Commands;
 
 pub struct BaseRepository;
 
-impl<'outer, 'vague> BaseRepository {
+impl<'outer> BaseRepository {
     pub fn create(
         connection_manager: &'outer mut ConnectionManager, json_access_web_token_black_list: &'outer JsonAccessWebTokenBlackList<'outer>
     ) -> Result<(), ResourceErrorKind> {

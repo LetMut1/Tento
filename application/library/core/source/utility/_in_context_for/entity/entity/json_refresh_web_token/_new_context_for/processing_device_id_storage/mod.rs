@@ -8,7 +8,7 @@ use redis::Commands;
 pub struct ProcessingDeviceIdStorage;
 
 impl<'outer> ProcessingDeviceIdStorage {
-    const ROW_SEPARATOR: &'static str = ":";
+    const SEPARATOR: &'static str = ":";
 
     pub fn create(
         connection_manager: &'outer mut ConnectionManager, 
@@ -17,7 +17,7 @@ impl<'outer> ProcessingDeviceIdStorage {
     ) -> Result<(), ResourceErrorKind> {
         connection_manager.get_connection().set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id), 
-            application_user_log_in_token_device_id_registry.join(Self::ROW_SEPARATOR),
+            application_user_log_in_token_device_id_registry.join(Self::SEPARATOR),
             (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
         )?;
 
@@ -63,7 +63,7 @@ impl<'outer> ProcessingDeviceIdStorage {
         )?
         {
             return Ok(Some(
-                application_user_log_in_token_device_id_sequence.split::<'_, &'_ str>(Self::ROW_SEPARATOR)
+                application_user_log_in_token_device_id_sequence.split::<'_, &'_ str>(Self::SEPARATOR)
                 .map(
                     |application_user_log_in_token_device_id: &'_ str| -> String {
                         return application_user_log_in_token_device_id.to_string();

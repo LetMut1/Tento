@@ -66,7 +66,7 @@ impl<'outer, 'vague> BaseRepository {
     pub fn get_by_application_user_id(
         connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4, application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
-        let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'vague>> = Vec::new();
+        let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = Vec::new();
 
         for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
             if let Some(json_refresh_web_token) = Self::get_by_application_user_id_and_application_user_log_in_token_device_id(
