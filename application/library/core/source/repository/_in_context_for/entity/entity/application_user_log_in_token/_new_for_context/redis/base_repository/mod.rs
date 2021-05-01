@@ -13,33 +13,35 @@ impl<'outer, 'vague> BaseRepository {
     pub fn create(
         connection_manager: &'outer mut ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        return Ok(
-            connection_manager.get_connection().set_ex::<String, String, ()>(
-                RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
-                    application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
-                ), 
-                serde_json::to_string(&Common::new(application_user_log_in_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
-                (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
-            )?
-        );
+        connection_manager.get_connection().set_ex::<String, String, ()>(
+            RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
+                application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
+            ), 
+            serde_json::to_string(&Common::new(application_user_log_in_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
+            (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
+        )?;
+        
+        return Ok(());
     }
 
     pub fn delete(
         connection_manager: &'outer mut ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        return Ok(
-            connection_manager.get_connection().del::<String, ()>(
-                RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
-                    application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
-                )
-            )?
-        );
+        connection_manager.get_connection().del::<String, ()>(
+            RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
+                application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
+            )
+        )?;
+        
+        return Ok(());
     }
 
     pub fn update(
         connection_manager: &'outer mut ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        return Self::create(connection_manager, application_user_log_in_token);
+        Self::create(connection_manager, application_user_log_in_token)?;
+
+        return Ok(());
     }
 
     pub fn get_by_application_user_id_and_device_id(

@@ -7,8 +7,8 @@ use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonR
 use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
 use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
-use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
-use crate::repository::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::postgresql::base_repository::BaseRepository as JsonAccessWebTokenBlackListRepository;
+use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::redis::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
+use crate::repository::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::redis::base_repository::BaseRepository as JsonAccessWebTokenBlackListRepository;
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::BaseRepositoryProxy;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;

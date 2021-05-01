@@ -12,15 +12,15 @@ impl<'outer, 'vague> BaseRepository {
     pub fn create(
         connection_manager: &'outer mut ConnectionManager, json_access_web_token_black_list: &'outer JsonAccessWebTokenBlackList<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        return Ok(
-            connection_manager.get_connection().set_ex::<String, u8, ()>(
-                RedisStorageKeyResolver::get_repository_json_access_web_token_bkack_list_first(
-                    json_access_web_token_black_list.get_json_access_web_token_id()
-                ), 
-                1,
-                (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
-            )?
-        );
+        connection_manager.get_connection().set_ex::<String, u8, ()>(
+            RedisStorageKeyResolver::get_repository_json_access_web_token_bkack_list_first(
+                json_access_web_token_black_list.get_json_access_web_token_id()
+            ), 
+            1,
+            (DateExpirationCreator::QUANTITY_OF_MINUTES * 60) as usize
+        )?;
+
+        return Ok(());
     }
 
     pub fn is_exist_by_json_access_token_id(

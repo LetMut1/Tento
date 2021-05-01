@@ -6,7 +6,7 @@ use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_fo
 use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserBaseRepository;
-use crate::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
+use crate::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::redis::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager as PostgresqlConnectionManager;
 use crate::utility::resource_connection::redis::connection_manager::ConnectionManager as RedisConnectionManager;

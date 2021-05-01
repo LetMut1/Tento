@@ -4,7 +4,7 @@ use crate::entity::entity::application_user::core::email::Email;
 use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
 use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
-use crate::repository::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
+use crate::repository::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::redis::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::postgresql::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager as PostgresqlConnectionManager;
