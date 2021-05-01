@@ -70,3 +70,28 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(None); 
     }
 }
+
+// TODO // TODO // TODO // TODO // TODO // TODO // TODO
+// delete this after writing same query for another entity (Exampe of multyrow Select)
+// pub fn get_by_application_user_id(
+//     connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4
+// ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
+//     let existing_registry = json_refresh_web_token_schema::table
+//     .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
+//     .get_results::<Existing>(connection_manager.get_connection())?;
+    
+//     if !existing_registry.is_empty() {
+//         return Ok(
+//             Some(
+//                 existing_registry.into_iter().map(
+//                     |existing: Existing| -> JsonRefreshWebToken<'vague> { 
+//                         return JsonRefreshWebToken::new_from_model(existing); 
+//                     }
+//                 ).collect::<Vec<JsonRefreshWebToken<'vague>>>()
+//             )
+//         ); 
+//     }
+    
+//     return Ok(None); 
+// }
+// TODO // TODO // TODO // TODO // TODO // TODO // TODO

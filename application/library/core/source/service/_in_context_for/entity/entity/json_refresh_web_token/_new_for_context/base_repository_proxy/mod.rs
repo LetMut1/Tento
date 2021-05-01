@@ -1,0 +1,99 @@
+use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
+use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
+use crate::repository::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::postgresql::base_repository::BaseRepository;
+use crate::utility::_in_context_for::entity::entity::json_refresh_web_token::_new_context_for::processing_device_id_storage::ProcessingDeviceIdStorage;
+use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
+
+pub struct BaseRepositoryProxy;
+
+impl<'outer, 'vague> BaseRepositoryProxy { // TODO можно ли сделать в аналоге транзакции?
+    pub fn create(
+        connection_manager: &'outer mut ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+    ) -> Result<(), ResourceErrorKind> {
+        let application_user_log_in_token_device_id: String = 
+        json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().to_string();
+
+        match ProcessingDeviceIdStorage::get(connection_manager, json_refresh_web_token.get_application_user_id())? {
+            Some(mut application_user_log_in_token_device_id_registry) => {
+                if !application_user_log_in_token_device_id_registry.contains(&application_user_log_in_token_device_id) {
+                    application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id);
+
+                    ProcessingDeviceIdStorage::update(
+                        connection_manager, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
+                    )?;
+                } else {
+                    ProcessingDeviceIdStorage::update_expiration_time(connection_manager, json_refresh_web_token.get_application_user_id())?;
+                }
+            },
+            None => {
+                let mut application_user_log_in_token_device_id_registry: Vec<String> = Vec::new();
+                application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id);
+
+                ProcessingDeviceIdStorage::create(
+                    connection_manager, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
+                )?;
+            }
+        }
+          
+        BaseRepository::create(connection_manager, json_refresh_web_token)?;
+
+        return Ok(());
+    }
+
+    pub fn update(
+        connection_manager: &'outer mut ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+    ) -> Result<(), ResourceErrorKind> {
+        ProcessingDeviceIdStorage::update_expiration_time(connection_manager, json_refresh_web_token.get_application_user_id())?;
+
+        BaseRepository::update(connection_manager, json_refresh_web_token)?;
+
+        return Ok(());
+    }
+
+    pub fn delete(
+        connection_manager: &'outer mut ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+    ) -> Result<(), ResourceErrorKind> {
+        BaseRepository::delete(connection_manager, json_refresh_web_token)?;
+
+        if let Some(mut application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection_manager, json_refresh_web_token.get_application_user_id())? 
+        {
+            if let Some(index) = application_user_log_in_token_device_id_registry.iter().position(
+                |application_user_log_in_token_device_id: &'_ String| -> bool {
+                    return *application_user_log_in_token_device_id == json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().to_string();
+                }
+            )
+            {
+                application_user_log_in_token_device_id_registry.remove(index);
+
+                if !application_user_log_in_token_device_id_registry.is_empty() {
+                    ProcessingDeviceIdStorage::update(
+                        connection_manager, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
+                    )?;
+                } else {
+                    ProcessingDeviceIdStorage::delete(connection_manager, json_refresh_web_token.get_application_user_id())?
+                }
+            }
+        }
+
+        return Ok(());
+    }
+
+    pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
+        connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4, application_user_log_in_token_device_id: &'outer UuidV4,
+    ) -> Result<Option<JsonRefreshWebToken<'vague>>, ResourceErrorKind> {
+        return BaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
+            connection_manager, application_user_id, application_user_log_in_token_device_id
+        );
+    }
+
+    pub fn get_by_application_user_id(
+        connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4
+    ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
+        if let Some(application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection_manager, application_user_id)? {
+            return BaseRepository::get_by_application_user_id(connection_manager, application_user_id, application_user_log_in_token_device_id_registry);
+        }
+
+        return Ok(None);
+    }
+}

@@ -16,7 +16,7 @@ impl<'outer, 'vague> BaseRepository {
     ) -> Result<(), ResourceErrorKind> {
         return Ok(
             connection_manager.get_connection().set_ex::<String, String, ()>(
-                RedisStorageKeyResolver::get_first_for_application_user_registration_confirmation_token_base_repository(
+                RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                     application_user_registration_confirmation_token.get_pre_confirmed_application_user_id()
                 ), 
                 serde_json::to_string(&Common::new(application_user_registration_confirmation_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
@@ -31,7 +31,7 @@ impl<'outer, 'vague> BaseRepository {
     ) -> Result<(), ResourceErrorKind> {
         return Ok(
             connection_manager.get_connection().del::<String, ()>(
-                RedisStorageKeyResolver::get_first_for_application_user_registration_confirmation_token_base_repository(
+                RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                     application_user_registration_confirmation_token.get_pre_confirmed_application_user_id()
                 )
             )?
@@ -49,7 +49,7 @@ impl<'outer, 'vague> BaseRepository {
         connection_manager: &'outer mut ConnectionManager, pre_confirmed_application_user_id: &'outer UuidV4
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'vague>>, ResourceErrorKind> {
         match connection_manager.get_connection().get::<String, Option<String>>(
-            RedisStorageKeyResolver::get_first_for_application_user_registration_confirmation_token_base_repository(pre_confirmed_application_user_id)
+            RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(pre_confirmed_application_user_id)
         )?
         {
             Some(json_encoded_common) => {

@@ -4,8 +4,7 @@ use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_fo
 use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::postgresql::base_repository::BaseRepository as JsonAccessWebTokenBlackListRepository;
-use crate::repository::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::postgresql::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;
-use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager as PostgresqlConnectionManager;
+use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::BaseRepositoryProxy;
 use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
 
 pub struct Handler;
@@ -15,12 +14,12 @@ impl<'outer> Handler {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 
-        if let Some(json_refresh_web_token_registry) = JsonRefreshWebTokenBaseRepository::get_by_application_user_id(
+        if let Some(json_refresh_web_token_registry) = BaseRepositoryProxy::get_by_application_user_id(
             &mut connection_manager, json_access_web_token.get_application_user_id()
         )?
         {
             for json_refresh_web_token in json_refresh_web_token_registry.iter() {  // TODO без транзакции, так как все будет на кеше (Удалить это сообщение, как только перепишу на Кеш)
-                JsonRefreshWebTokenBaseRepository::delete(&mut connection_manager, json_refresh_web_token)?;
+                BaseRepositoryProxy::delete(&mut connection_manager, json_refresh_web_token)?;
 
                 JsonAccessWebTokenBlackListRepository::create(&mut connection_manager, &JsonAccessWebTokenBlackList::new(json_access_web_token.get_id()))?;
             }

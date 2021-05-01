@@ -9,8 +9,8 @@ use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::E
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::postgresql::base_repository::BaseRepository as JsonAccessWebTokenBlackListRepository;
-use crate::repository::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::postgresql::base_repository::BaseRepository as JsonRefreshWebTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
+use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::BaseRepositoryProxy;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager as PostgresqlConnectionManager;
 use crate::utility::resource_connection::redis::connection_manager::ConnectionManager as RedisConnectionManager;
@@ -36,7 +36,7 @@ impl Handler {
             if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value.as_str() {
                 if !application_user_log_in_token.is_expired() {
                     
-                    if let Some(existing_json_refresh_web_token) = JsonRefreshWebTokenBaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
+                    if let Some(existing_json_refresh_web_token) = BaseRepositoryProxy::get_by_application_user_id_and_application_user_log_in_token_device_id(
                         &mut redis_connection_manager, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                     )? 
                     {
@@ -44,7 +44,7 @@ impl Handler {
                             &mut redis_connection_manager, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
                         )?;
 
-                        JsonRefreshWebTokenBaseRepository::delete(&mut redis_connection_manager, &existing_json_refresh_web_token)?;
+                        BaseRepositoryProxy::delete(&mut redis_connection_manager, &existing_json_refresh_web_token)?;
                     }
 
                     let json_refresh_web_token: JsonRefreshWebToken<'_> =
@@ -59,7 +59,7 @@ impl Handler {
                         
                     }
 
-                    if let Err(resource_error_kind) = JsonRefreshWebTokenBaseRepository::create(&mut redis_connection_manager, &json_refresh_web_token) {
+                    if let Err(resource_error_kind) = BaseRepositoryProxy::create(&mut redis_connection_manager, &json_refresh_web_token) {
                         postgresql_connection_manager.rollback_transaction()?;
 
                         return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));

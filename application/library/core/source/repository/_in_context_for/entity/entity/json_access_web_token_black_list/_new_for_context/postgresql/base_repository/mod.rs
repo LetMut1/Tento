@@ -14,7 +14,7 @@ impl<'outer, 'vague> BaseRepository {
     ) -> Result<(), ResourceErrorKind> {
         return Ok(
             connection_manager.get_connection().set_ex::<String, u8, ()>(
-                RedisStorageKeyResolver::get_first_for_json_access_web_token_bkack_list_base_repository(
+                RedisStorageKeyResolver::get_repository_json_access_web_token_bkack_list_first(
                     json_access_web_token_black_list.get_json_access_web_token_id()
                 ), 
                 1,
@@ -28,7 +28,7 @@ impl<'outer, 'vague> BaseRepository {
     ) -> Result<bool, ResourceErrorKind> {
         return Ok(
             connection_manager.get_connection().exists::<String, bool>(
-                RedisStorageKeyResolver::get_first_for_json_access_web_token_bkack_list_base_repository(json_access_web_token_id)
+                RedisStorageKeyResolver::get_repository_json_access_web_token_bkack_list_first(json_access_web_token_id)
             )?
         );
     }
