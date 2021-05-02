@@ -40,7 +40,7 @@ impl Handler {
                         ApplicationUserLogInTokenBaseRepository::update_expiration_time(&mut redis_connection_manager, &application_user_log_in_token)?;
                     },
                     None => {
-                        application_user_log_in_token = ApplicationUserLogInToken::new(&application_user, application_user_log_in_token_device_id);
+                        application_user_log_in_token = ApplicationUserLogInToken::new(&application_user, &application_user_log_in_token_device_id);
 
                         ApplicationUserLogInTokenBaseRepository::create(&mut redis_connection_manager, &application_user_log_in_token)?;
                     }

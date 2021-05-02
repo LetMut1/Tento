@@ -9,7 +9,7 @@ use redis::Commands;
 
 pub struct BaseRepository;
 
-impl<'outer, 'vague> BaseRepository {
+impl<'outer> BaseRepository {
     pub fn create(
         connection_manager: &'outer mut ConnectionManager, application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
@@ -49,17 +49,19 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn get_by_application_user_id_and_device_id(
-        connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4, device_id: &'outer UuidV4,
-    ) -> Result<Option<ApplicationUserLogInToken<'vague>>, ResourceErrorKind> {
+    pub fn get_by_application_user_id_and_device_id<'outer_a>(
+        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer UuidV4, device_id: &'outer UuidV4,
+    ) -> Result<Option<ApplicationUserLogInToken<'outer>>, ResourceErrorKind> {
         match connection_manager.get_connection().get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(application_user_id, device_id)
         )?
         {
             Some(json_encoded_common) => {
-                return Ok(Some(ApplicationUserLogInToken::new_from_model(
-                    serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap()       // TODO error 
-                ).unwrap()));    // TODO error 
+                return Ok(Some(
+                    ApplicationUserLogInToken::new_from_model(
+                        serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap(), application_user_id, device_id       // TODO error 
+                    )
+                ));
             },
             None => {
                 return Ok(None);
