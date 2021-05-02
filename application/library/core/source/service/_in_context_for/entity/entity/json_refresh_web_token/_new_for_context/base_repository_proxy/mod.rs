@@ -7,7 +7,7 @@ use crate::utility::resource_connection::redis::connection_manager::ConnectionMa
 
 pub struct BaseRepositoryProxy;
 
-impl<'outer, 'vague> BaseRepositoryProxy { // TODO можно ли сделать в аналоге транзакции?
+impl<'outer, 'vague> BaseRepositoryProxy {
     pub fn create(
         connection_manager: &'outer mut ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
     ) -> Result<(), ResourceErrorKind> {

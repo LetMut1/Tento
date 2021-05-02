@@ -30,26 +30,16 @@ impl Handler {
 
                     let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> =
                     ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user);
-
-                    postgresql_connection_manager.begin_transaction()?;
-
-                    if let Err(resource_error_kind) = PreConfirmedApplicationUserBaseRepository::create(&postgresql_connection_manager, &pre_confirmed_application_user) {
-                        postgresql_connection_manager.rollback_transaction()?;
-
-                        return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
-                    }
                     
                     let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
                     redis_connection_manager.establish_connection()?;
 
-                    if let Err(resource_error_kind) = ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&mut redis_connection_manager, &application_user_registration_confirmation_token) {
-                        postgresql_connection_manager.rollback_transaction()?;
+                    ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&mut redis_connection_manager, &application_user_registration_confirmation_token)?;
 
-                        return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
-                    }
-                    
-                    postgresql_connection_manager.commit_transaction()?;
+                    PreConfirmedApplicationUserBaseRepository::create(&postgresql_connection_manager, &pre_confirmed_application_user)?;
+
                     redis_connection_manager.close_connection();
+
                     postgresql_connection_manager.close_connection();
 
                     EmailSender::send_application_user_registration_confirmation_token(&application_user_registration_confirmation_token)?;

@@ -28,9 +28,7 @@ impl<'outer> Handler {
                 if let Some(mut application_user) = ApplicationUserBaseRepository::get_by_id(&postgresql_connection_manager, &application_user_id)? {
                     application_user.set_password(Password::new(request.application_user_password));
 
-                    ApplicationUserBaseRepository::update(
-                        &postgresql_connection_manager, &application_user, UpdateResolver::new(false, false, true, false)
-                    )?;
+                    ApplicationUserBaseRepository::update(&postgresql_connection_manager, &application_user, UpdateResolver::new(false, false, true, false))?;
 
                     postgresql_connection_manager.close_connection();
 

@@ -12,8 +12,7 @@ use crate::repository::_in_context_for::entity::entity::json_access_web_token_bl
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::BaseRepositoryProxy;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
-use crate::utility::resource_connection::postgresql::connection_manager::ConnectionManager as PostgresqlConnectionManager;
-use crate::utility::resource_connection::redis::connection_manager::ConnectionManager as RedisConnectionManager;
+use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
 
 pub struct Handler;
 
@@ -23,48 +22,33 @@ impl Handler {
 
         let application_user_log_in_token_device_id: UuidV4 = UuidV4::new_from_string(request.application_user_log_in_token_device_id)?;
 
-        let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
-        redis_connection_manager.establish_connection()?;
+        let mut connection_manager: ConnectionManager = ConnectionManager::new();
+        connection_manager.establish_connection()?;
 
         if let Some(application_user_log_in_token) = ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
-            &mut redis_connection_manager, &application_user_id, &application_user_log_in_token_device_id
+            &mut connection_manager, &application_user_id, &application_user_log_in_token_device_id
         )?
         {
-            let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
-            postgresql_connection_manager.establish_connection()?;
-
             if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value.as_str() {
                 if let Some(existing_json_refresh_web_token) = BaseRepositoryProxy::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                    &mut redis_connection_manager, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
+                    &mut connection_manager, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 )? 
                 {
                     JsonAccessWebTokenBlackListRepository::create(
-                        &mut redis_connection_manager, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
+                        &mut connection_manager, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
                     )?;
 
-                    BaseRepositoryProxy::delete(&mut redis_connection_manager, &existing_json_refresh_web_token)?;
+                    BaseRepositoryProxy::delete(&mut connection_manager, &existing_json_refresh_web_token)?;
                 }
 
                 let json_refresh_web_token: JsonRefreshWebToken<'_> =
                 JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id());
-
-                postgresql_connection_manager.begin_transaction()?;
                 
-                if let Err(resource_error_kind) = ApplicationUserLogInTokenBaseRepository::delete(&mut redis_connection_manager, &application_user_log_in_token) { 
-                    postgresql_connection_manager.rollback_transaction()?;
+                ApplicationUserLogInTokenBaseRepository::delete(&mut connection_manager, &application_user_log_in_token)?;
 
-                    return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
-                    
-                }
+                BaseRepositoryProxy::create(&mut connection_manager, &json_refresh_web_token)?;
 
-                if let Err(resource_error_kind) = BaseRepositoryProxy::create(&mut redis_connection_manager, &json_refresh_web_token) {
-                    postgresql_connection_manager.rollback_transaction()?;
-
-                    return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
-                }
-
-                postgresql_connection_manager.commit_transaction()?;
-                postgresql_connection_manager.close_connection();
+                connection_manager.close_connection();
 
                 return Ok(
                     HandlerResult::new(

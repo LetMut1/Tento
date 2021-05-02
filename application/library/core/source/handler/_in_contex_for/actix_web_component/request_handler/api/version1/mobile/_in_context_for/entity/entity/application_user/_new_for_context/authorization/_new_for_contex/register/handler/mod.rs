@@ -46,18 +46,14 @@ impl<'outer> Handler {
                         let application_user: ApplicationUser<'_> = 
                         ApplicationUser::new_from_pre_confirmed_application_user(&pre_confirmed_application_user, application_user_nickname, Password::new(request.application_user_password));
 
+                        ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&mut redis_connection_manager, &application_user_registration_confirmation_token)?;
+
                         postgresql_connection_manager.begin_transaction()?;
                         
                         if let Err(resource_error_kind) = ApplicationUserBaseRepository::create(&postgresql_connection_manager, &application_user) {
                             postgresql_connection_manager.rollback_transaction()?;
 
                             return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
-                        }
-
-                        if let Err(resource_error_kind) = ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(&mut redis_connection_manager, &application_user_registration_confirmation_token) {
-                            postgresql_connection_manager.rollback_transaction()?;
-
-                            return Err(MainErrorKind::ResourceErrorKind(resource_error_kind)); 
                         }
 
                         if let Err(resource_error_kind) = PreConfirmedApplicationUserBaseRepository::delete(&postgresql_connection_manager, &pre_confirmed_application_user) {

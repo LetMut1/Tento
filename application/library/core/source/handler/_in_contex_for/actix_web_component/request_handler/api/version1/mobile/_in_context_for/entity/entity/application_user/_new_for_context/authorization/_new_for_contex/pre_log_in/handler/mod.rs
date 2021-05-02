@@ -47,6 +47,7 @@ impl Handler {
                 }
 
                 redis_connection_manager.close_connection();
+                
                 postgresql_connection_manager.close_connection();
 
                 EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;

@@ -18,7 +18,7 @@ impl<'outer> Handler {
             &mut connection_manager, json_access_web_token.get_application_user_id()
         )?
         {
-            for json_refresh_web_token in json_refresh_web_token_registry.iter() {  // TODO без транзакции, так как все будет на кеше (Удалить это сообщение, как только перепишу на Кеш)
+            for json_refresh_web_token in json_refresh_web_token_registry.iter() {
                 BaseRepositoryProxy::delete(&mut connection_manager, json_refresh_web_token)?;
 
                 JsonAccessWebTokenBlackListRepository::create(&mut connection_manager, &JsonAccessWebTokenBlackList::new(json_access_web_token.get_id()))?;
