@@ -7,7 +7,6 @@ use std::borrow::Cow;
 use super::core::value::Value;
 
 pub struct ApplicationUserResetPasswordToken<'outer> {
-    id: UuidV4,
     application_user_id: Cow<'outer, UuidV4>,
     application_user_email: Cow<'outer, Email>,
     value: Value
@@ -16,7 +15,6 @@ pub struct ApplicationUserResetPasswordToken<'outer> {
 impl<'this, 'outer: 'this> ApplicationUserResetPasswordToken<'outer> {
     pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
         return Self {
-            id: UuidV4::new(),
             application_user_id: Cow::Borrowed(application_user.get_id()),
             application_user_email: Cow::Borrowed(application_user.get_email()),
             value: Value::new(UuidV4::new().get_value().to_string())     // TODO создать генератор значения + метода Рефреш ниже
@@ -26,16 +24,11 @@ impl<'this, 'outer: 'this> ApplicationUserResetPasswordToken<'outer> {
     pub fn new_from_model(common: Common<'outer>) -> Result<Self, InvalidArgumentError> {
         return Ok(
             Self {
-                id: UuidV4::new_from_string(common.id)?,
                 application_user_id: Cow::Owned(UuidV4::new_from_string(common.application_user_id)?),
                 application_user_email: Cow::Owned(Email::new(common.application_user_email.into_owned())),
                 value: Value::new(common.value.into_owned())
             }
         );
-    }
-
-    pub fn get_id(&'this self) -> &'this UuidV4 {
-        return &self.id;
     }
 
     pub fn get_application_user_id(&'this self) -> &'this UuidV4 {
