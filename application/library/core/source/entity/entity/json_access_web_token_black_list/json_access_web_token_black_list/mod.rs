@@ -1,12 +1,12 @@
 use crate::entity::core::uuid_v4::UuidV4;
 use std::borrow::Cow;
 
-pub struct JsonAccessWebTokenBlackList<'outer> {
-    json_access_web_token_id: Cow<'outer, UuidV4>
+pub struct JsonAccessWebTokenBlackList<'outer_a> {
+    json_access_web_token_id: Cow<'outer_a, UuidV4>
 }
 
-impl<'this, 'outer: 'this> JsonAccessWebTokenBlackList<'outer> {
-    pub fn new(json_access_web_token_id: &'outer UuidV4) -> Self {
+impl<'this, 'outer_a: 'this> JsonAccessWebTokenBlackList<'outer_a> {
+    pub fn new(json_access_web_token_id: &'outer_a UuidV4) -> Self {
         return Self {
             json_access_web_token_id: Cow::Borrowed(json_access_web_token_id)
         };

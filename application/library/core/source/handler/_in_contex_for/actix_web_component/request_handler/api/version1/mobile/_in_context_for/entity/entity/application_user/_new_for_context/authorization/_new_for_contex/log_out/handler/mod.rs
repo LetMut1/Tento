@@ -9,8 +9,8 @@ use crate::utility::resource_connection::redis::connection_manager::ConnectionMa
 
 pub struct Handler;
 
-impl<'outer> Handler {
-    pub fn handle(json_access_web_token: &'outer JsonAccessWebToken<'outer>) -> Result<(), MainErrorKind> {
+impl<'outer_a> Handler {
+    pub fn handle(json_access_web_token: &'outer_a JsonAccessWebToken<'outer_a>) -> Result<(), MainErrorKind> {
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;
 

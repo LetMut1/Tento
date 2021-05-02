@@ -11,14 +11,14 @@ use super::core::header::core::alg::Alg;
 use super::core::header::core::typ::Typ;
 
 #[derive(Clone)]
-pub struct JsonAccessWebToken<'outer> {
-    payload: Payload<'outer>
+pub struct JsonAccessWebToken<'outer_a> {
+    payload: Payload<'outer_a>
 }
 
-impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
+impl<'this, 'outer_a: 'this> JsonAccessWebToken<'outer_a> {
     const HEADER: Header = Header::new();
 
-    pub fn new(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
+    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>) -> Self {
         return Self {
             payload: Payload::new(json_refresh_web_token)
         };

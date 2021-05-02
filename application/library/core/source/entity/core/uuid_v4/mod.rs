@@ -7,7 +7,7 @@ pub struct UuidV4 {
     value: Uuid
 }
 
-impl<'this, 'outer: 'this> UuidV4 {
+impl<'this, 'outer_a: 'this> UuidV4 {
     pub fn new() -> Self {
         return Self {
             value: Uuid::new_v4()

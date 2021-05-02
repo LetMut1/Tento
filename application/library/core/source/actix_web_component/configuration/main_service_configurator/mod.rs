@@ -5,7 +5,7 @@ use crate::actix_web_component::request_handler::api::version1::mobile::_in_cont
 
 pub struct MainServiceConfigurator;
 
-impl<'outer> MainServiceConfigurator {
+impl<'outer_a> MainServiceConfigurator {
     pub fn configure(service_config: &mut ServiceConfig) -> () {
         service_config                                                      // TODO default_service 
         .service(

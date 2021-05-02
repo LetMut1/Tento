@@ -9,10 +9,10 @@ use redis::Commands;
 
 pub struct BaseRepository;
 
-impl<'outer> BaseRepository {
+impl<'outer_a> BaseRepository {
     pub fn create(
-        connection_manager: &'outer mut ConnectionManager, 
-        application_user_reset_password_token: &'outer ApplicationUserResetPasswordToken<'outer>
+        connection_manager: &'outer_a mut ConnectionManager, 
+        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         connection_manager.get_connection().set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
@@ -26,8 +26,8 @@ impl<'outer> BaseRepository {
     }
 
     pub fn delete(
-        connection_manager: &'outer mut ConnectionManager, 
-        application_user_reset_password_token: &'outer ApplicationUserResetPasswordToken<'outer>
+        connection_manager: &'outer_a mut ConnectionManager, 
+        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         connection_manager.get_connection().del::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
@@ -39,8 +39,8 @@ impl<'outer> BaseRepository {
     }
 
     pub fn update_expiration_time(
-        connection_manager: &'outer mut ConnectionManager,
-        application_user_reset_password_token: &'outer ApplicationUserResetPasswordToken<'outer>
+        connection_manager: &'outer_a mut ConnectionManager,
+        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         connection_manager.get_connection().expire::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
@@ -52,9 +52,9 @@ impl<'outer> BaseRepository {
         return Ok(());
     }
 
-    pub fn get_by_application_user_id<'outer_a>(
-        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer UuidV4
-    ) -> Result<Option<ApplicationUserResetPasswordToken<'outer>>, ResourceErrorKind> {
+    pub fn get_by_application_user_id<'outer_a_b>(
+        connection_manager: &'outer_a_b mut ConnectionManager, application_user_id: &'outer_a UuidV4
+    ) -> Result<Option<ApplicationUserResetPasswordToken<'outer_a>>, ResourceErrorKind> {
         match connection_manager.get_connection().get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(application_user_id)
         )?

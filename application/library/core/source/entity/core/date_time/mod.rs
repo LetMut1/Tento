@@ -7,7 +7,7 @@ pub struct DateTime {
     value: ChronoDateTime<Utc>
 }
 
-impl<'this, 'outer: 'this> DateTime {
+impl<'this, 'outer_a: 'this> DateTime {
     pub fn new() -> Self {
         return Self {
             value: Utc::now()
@@ -20,7 +20,7 @@ impl<'this, 'outer: 'this> DateTime {
         };
     }
 
-    pub fn new_from_str(value: &'outer str) -> Self {
+    pub fn new_from_str(value: &'outer_a str) -> Self {
         return Self {
             value: ChronoDateTime::parse_from_rfc3339(value).unwrap().with_timezone(&Utc)      // TODO выбрасывать ошибку
         };

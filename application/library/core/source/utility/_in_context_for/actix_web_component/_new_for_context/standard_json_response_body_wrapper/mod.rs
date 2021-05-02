@@ -6,8 +6,8 @@ use serde::Serialize;
 
 pub struct StandardJsonResponseBodyWrapper;
 
-impl<'outer> StandardJsonResponseBodyWrapper {
-    pub fn wrap_for_success_with_body<S>(body: &'outer S) -> String 
+impl<'outer_a> StandardJsonResponseBodyWrapper {
+    pub fn wrap_for_success_with_body<S>(body: &'outer_a S) -> String 
     where 
         S: Serialize
     {

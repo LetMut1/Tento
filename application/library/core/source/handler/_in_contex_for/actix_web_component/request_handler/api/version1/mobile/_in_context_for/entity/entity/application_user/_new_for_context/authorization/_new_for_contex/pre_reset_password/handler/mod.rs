@@ -13,7 +13,7 @@ use crate::utility::resource_connection::redis::connection_manager::ConnectionMa
 
 pub struct Handler;
 
-impl<'outer> Handler {
+impl<'outer_a> Handler {
     pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
         let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
         postgresql_connection_manager.establish_connection()?;

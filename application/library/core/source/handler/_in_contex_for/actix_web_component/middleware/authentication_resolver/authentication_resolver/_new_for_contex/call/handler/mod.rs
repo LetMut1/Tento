@@ -9,8 +9,8 @@ use crate::utility::resource_connection::redis::connection_manager::ConnectionMa
 
 pub struct Handler;
 
-impl<'outer> Handler {
-    pub fn handle(service_request: &'outer ServiceRequest) -> Result<(), MainErrorKind> {
+impl<'outer_a> Handler {
+    pub fn handle(service_request: &'outer_a ServiceRequest) -> Result<(), MainErrorKind> {
         if let Some(header_value) = service_request.headers().get("X-Auth-Token") {
             if let Ok(header_value) = header_value.to_str() {
                 if let Ok(json_access_web_token) = SerializationFormResolver::deserialize(header_value) {

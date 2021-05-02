@@ -5,14 +5,14 @@ use crate::entity::entity::application_user::core::email::Email;
 use std::borrow::Cow;
 use super::core::value::Value;
 
-pub struct ApplicationUserResetPasswordToken<'outer> {
-    application_user_id: &'outer UuidV4,
-    application_user_email: Cow<'outer, Email>,
+pub struct ApplicationUserResetPasswordToken<'outer_a> {
+    application_user_id: &'outer_a UuidV4,
+    application_user_email: Cow<'outer_a, Email>,
     value: Value
 }
 
-impl<'this, 'outer: 'this> ApplicationUserResetPasswordToken<'outer> {
-    pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
+impl<'this, 'outer_a: 'this> ApplicationUserResetPasswordToken<'outer_a> {
+    pub fn new(application_user: &'outer_a ApplicationUser<'outer_a>) -> Self {
         return Self {
             application_user_id: application_user.get_id(),
             application_user_email: Cow::Borrowed(application_user.get_email()),
@@ -20,7 +20,7 @@ impl<'this, 'outer: 'this> ApplicationUserResetPasswordToken<'outer> {
         };
     }
 
-    pub fn new_from_model(common: Common<'outer>, application_user_id: &'outer UuidV4) -> Self {
+    pub fn new_from_model(common: Common<'outer_a>, application_user_id: &'outer_a UuidV4) -> Self {
         return Self {
             application_user_id,
             application_user_email: Cow::Owned(Email::new(common.application_user_email.into_owned())),

@@ -2,15 +2,15 @@ use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAcc
 use serde::Serialize;
 
 #[derive(Serialize, Debug)]
-pub struct Common<'outer> {
+pub struct Common<'outer_a> {
     #[serde(rename = "alg")]
-    json_access_web_token_payload_alg: &'outer str,
+    json_access_web_token_payload_alg: &'outer_a str,
     #[serde(rename = "typ")]
-    json_access_web_token_payload_typ: &'outer str,
+    json_access_web_token_payload_typ: &'outer_a str,
 }
 
-impl<'outer> Common<'outer> {
-    pub fn new(json_access_web_token: &'outer JsonAccessWebToken<'outer>) -> Self {
+impl<'outer_a> Common<'outer_a> {
+    pub fn new(json_access_web_token: &'outer_a JsonAccessWebToken<'outer_a>) -> Self {
         return Self {
             json_access_web_token_payload_alg: json_access_web_token.get_alg().get_value(),
             json_access_web_token_payload_typ: json_access_web_token.get_typ().get_value()

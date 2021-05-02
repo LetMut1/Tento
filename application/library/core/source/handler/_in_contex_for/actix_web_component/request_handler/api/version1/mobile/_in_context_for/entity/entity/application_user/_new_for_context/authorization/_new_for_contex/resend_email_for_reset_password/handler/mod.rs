@@ -9,7 +9,7 @@ use crate::utility::resource_connection::redis::connection_manager::ConnectionMa
 
 pub struct Handler;
 
-impl<'outer> Handler {
+impl<'outer_a> Handler {
     pub fn handle(request: Request) -> Result<(), MainErrorKind> {
         let application_user_id: UuidV4 = UuidV4::new_from_string(request.application_user_id)?;
 

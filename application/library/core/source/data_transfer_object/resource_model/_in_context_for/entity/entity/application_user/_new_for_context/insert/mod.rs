@@ -7,16 +7,16 @@ use uuid::Uuid;
 
 #[derive(Insertable)]
 #[table_name = "application_user"]
-pub struct Insert<'outer> {                    // TODO описать id Аттрибутами
-    id: &'outer Uuid,
-    email: &'outer str,
-    nickname: &'outer str,
-    password_hash: &'outer str,
-    created_at: &'outer ChronoDateTime<Utc>
+pub struct Insert<'outer_a> {                    // TODO описать id Аттрибутами
+    id: &'outer_a Uuid,
+    email: &'outer_a str,
+    nickname: &'outer_a str,
+    password_hash: &'outer_a str,
+    created_at: &'outer_a ChronoDateTime<Utc>
 }
 
-impl<'outer> Insert<'outer> {
-    pub fn new(application_user: &'outer ApplicationUser<'outer>) -> Self {
+impl<'outer_a> Insert<'outer_a> {
+    pub fn new(application_user: &'outer_a ApplicationUser<'outer_a>) -> Self {
         return Self {
             id: application_user.get_id().get_value(),
             email: application_user.get_email().get_value(),

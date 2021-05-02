@@ -7,12 +7,12 @@ use redis::Commands;
 
 pub struct ProcessingDeviceIdStorage;
 
-impl<'outer> ProcessingDeviceIdStorage {
+impl<'outer_a> ProcessingDeviceIdStorage {
     const SEPARATOR: &'static str = ":";
 
     pub fn create(
-        connection_manager: &'outer mut ConnectionManager, 
-        application_user_id: &'outer UuidV4,
+        connection_manager: &'outer_a mut ConnectionManager, 
+        application_user_id: &'outer_a UuidV4,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), ResourceErrorKind> {
         connection_manager.get_connection().set_ex::<String, String, ()>(
@@ -25,8 +25,8 @@ impl<'outer> ProcessingDeviceIdStorage {
     }
 
     pub fn update(
-        connection_manager: &'outer mut ConnectionManager, 
-        application_user_id: &'outer UuidV4,
+        connection_manager: &'outer_a mut ConnectionManager, 
+        application_user_id: &'outer_a UuidV4,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), ResourceErrorKind> {
         Self::create(connection_manager, application_user_id, application_user_log_in_token_device_id_registry)?;
@@ -35,7 +35,7 @@ impl<'outer> ProcessingDeviceIdStorage {
     }
 
     pub fn delete(
-        connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4,
+        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a UuidV4,
     ) -> Result<(), ResourceErrorKind> {
         connection_manager.get_connection().del::<String, ()>(
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id)
@@ -45,7 +45,7 @@ impl<'outer> ProcessingDeviceIdStorage {
     }
 
     pub fn update_expiration_time(
-        connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4
+        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a UuidV4
     ) -> Result<(), ResourceErrorKind> {
         connection_manager.get_connection().expire::<String, ()>(
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id),
@@ -56,7 +56,7 @@ impl<'outer> ProcessingDeviceIdStorage {
     }
 
     pub fn get(
-        connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4
+        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a UuidV4
     ) -> Result<Option<Vec<String>>, ResourceErrorKind> {
         if let Some(application_user_log_in_token_device_id_sequence) = connection_manager.get_connection().get::<String, Option<String>>(
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id)

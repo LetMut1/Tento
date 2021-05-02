@@ -5,13 +5,13 @@ use uuid::Uuid;
 
 #[derive(Insertable)]
 #[table_name = "pre_confirmed_application_user"]
-pub struct New<'outer> {
-    id: &'outer Uuid,
-    email: &'outer str
+pub struct New<'outer_a> {
+    id: &'outer_a Uuid,
+    email: &'outer_a str
 }
 
-impl<'outer> New<'outer> {
-    pub fn new(pre_confirmed_application_user: &'outer PreConfirmedApplicationUser) -> Self {
+impl<'outer_a> New<'outer_a> {
+    pub fn new(pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser) -> Self {
         return Self {
             id: pre_confirmed_application_user.get_id().get_value(),
             email: pre_confirmed_application_user.get_email().get_value()

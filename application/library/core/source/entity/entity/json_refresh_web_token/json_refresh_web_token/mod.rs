@@ -5,15 +5,15 @@ use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgument
 use std::borrow::Cow;
 use super::core::obfuscation_value::ObfuscationValue;
 
-pub struct JsonRefreshWebToken<'outer> {
+pub struct JsonRefreshWebToken<'outer_a> {
     json_access_web_token_id: UuidV4,
-    application_user_id: Cow<'outer, UuidV4>,
-    application_user_log_in_token_device_id: Cow<'outer, UuidV4>,
+    application_user_id: Cow<'outer_a, UuidV4>,
+    application_user_log_in_token_device_id: Cow<'outer_a, UuidV4>,
     obfuscation_value: ObfuscationValue
 }
 
-impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {
-    pub fn new(application_user_id: &'outer UuidV4, application_user_log_in_token_device_id: &'outer UuidV4) -> Self {
+impl<'this, 'outer_a: 'this> JsonRefreshWebToken<'outer_a> {
+    pub fn new(application_user_id: &'outer_a UuidV4, application_user_log_in_token_device_id: &'outer_a UuidV4) -> Self {
         return Self {
             json_access_web_token_id: UuidV4::new(),
             application_user_id: Cow::Borrowed(application_user_id),
@@ -22,7 +22,7 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {
         };
     }
 
-    pub fn new_from_model(common: Common<'outer>) -> Result<Self, InvalidArgumentError> {
+    pub fn new_from_model(common: Common<'outer_a>) -> Result<Self, InvalidArgumentError> {
         return Ok(
             Self {
                 json_access_web_token_id: UuidV4::new_from_string(common.json_access_web_token_id)?,

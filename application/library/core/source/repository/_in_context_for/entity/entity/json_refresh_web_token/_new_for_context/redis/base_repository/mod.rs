@@ -9,9 +9,9 @@ use redis::Commands;
 
 pub struct BaseRepository;
 
-impl<'outer, 'vague> BaseRepository {
+impl<'outer_a, 'vague> BaseRepository {
     pub fn create(
-        connection_manager: &'outer mut ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+        connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         connection_manager.get_connection().set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
@@ -25,7 +25,7 @@ impl<'outer, 'vague> BaseRepository {
     }
 
     pub fn update(
-        connection_manager: &'outer mut ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+        connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         Self::create(connection_manager, json_refresh_web_token)?;
 
@@ -34,7 +34,7 @@ impl<'outer, 'vague> BaseRepository {
 
 
     pub fn delete(
-        connection_manager: &'outer mut ConnectionManager, json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>
+        connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         connection_manager.get_connection().del::<String, ()>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
@@ -46,7 +46,7 @@ impl<'outer, 'vague> BaseRepository {
     }
 
     pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
-        connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4, application_user_log_in_token_device_id: &'outer UuidV4,
+        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a UuidV4, application_user_log_in_token_device_id: &'outer_a UuidV4,
     ) -> Result<Option<JsonRefreshWebToken<'vague>>, ResourceErrorKind> {
         match connection_manager.get_connection().get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(application_user_id, application_user_log_in_token_device_id)
@@ -64,7 +64,7 @@ impl<'outer, 'vague> BaseRepository {
     }
 
     pub fn get_by_application_user_id(
-        connection_manager: &'outer mut ConnectionManager, application_user_id: &'outer UuidV4, application_user_log_in_token_device_id_registry: Vec<String>
+        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a UuidV4, application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
         let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = Vec::new();
 

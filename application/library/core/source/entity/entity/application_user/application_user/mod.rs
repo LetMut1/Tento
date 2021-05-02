@@ -8,17 +8,17 @@ use super::core::nickname::Nickname;
 use super::core::password_hash::PasswordHash;
 use super::core::password::Password;
 
-pub struct ApplicationUser<'outer> {
+pub struct ApplicationUser<'outer_a> {
     id: UuidV4,
-    email: Cow<'outer, Email>,
+    email: Cow<'outer_a, Email>,
     nickname: Nickname,
     password_hash: PasswordHash,
     created_at: DateTime
 }
 
-impl<'this, 'outer: 'this> ApplicationUser<'outer> {
+impl<'this, 'outer_a: 'this> ApplicationUser<'outer_a> {
     pub fn new_from_pre_confirmed_application_user(
-        pre_confirmed_application_user: &'outer PreConfirmedApplicationUser, nickname: Nickname, password: Password
+        pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser, nickname: Nickname, password: Password
     ) -> Self {
         return Self {
             id: UuidV4::new(),

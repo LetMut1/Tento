@@ -7,19 +7,19 @@ use diesel::AsChangeset;
 
 #[derive(AsChangeset)]
 #[table_name = "application_user"]
-pub struct Update<'outer> {
-    email: Option<&'outer str>,
-    nickname: Option<&'outer str>,
-    password_hash: Option<&'outer str>,
-    created_at: Option<&'outer ChronoDateTime<Utc>>
+pub struct Update<'outer_a> {
+    email: Option<&'outer_a str>,
+    nickname: Option<&'outer_a str>,
+    password_hash: Option<&'outer_a str>,
+    created_at: Option<&'outer_a ChronoDateTime<Utc>>
 }
 
-impl<'outer> Update<'outer> {
-    pub fn new(application_user: &'outer ApplicationUser<'outer>, update_resolver: UpdateResolver) -> Self {
-        let mut email: Option<&'outer str> = None;
-        let mut nickname: Option<&'outer str> = None;
-        let mut password_hash: Option<&'outer str> = None;
-        let mut created_at: Option<&'outer ChronoDateTime<Utc>> = None;
+impl<'outer_a> Update<'outer_a> {
+    pub fn new(application_user: &'outer_a ApplicationUser<'outer_a>, update_resolver: UpdateResolver) -> Self {
+        let mut email: Option<&'outer_a str> = None;
+        let mut nickname: Option<&'outer_a str> = None;
+        let mut password_hash: Option<&'outer_a str> = None;
+        let mut created_at: Option<&'outer_a ChronoDateTime<Utc>> = None;
 
         if update_resolver.is_change_email() {
             email = Some(application_user.get_email().get_value());

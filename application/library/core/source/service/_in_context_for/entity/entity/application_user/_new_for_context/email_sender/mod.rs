@@ -6,9 +6,9 @@ use crate::utility::email_sender::EmailSender as BaseEmailSender;
 
 pub struct EmailSender;
 
-impl<'outer> EmailSender {
+impl<'outer_a> EmailSender {
     pub fn send_application_user_log_in_token(
-        application_user_log_in_token: &'outer ApplicationUserLogInToken<'outer>
+        application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         BaseEmailSender::send(
             "Log in confirmation", "Your code: ".to_string() + application_user_log_in_token.get_value().get_value(),
@@ -19,7 +19,7 @@ impl<'outer> EmailSender {
     }
 
     pub fn send_application_user_registration_confirmation_token(
-        application_user_registration_confirmation_token: &'outer ApplicationUserRegistrationConfirmationToken<'outer>
+        application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         BaseEmailSender::send(
             "Registration confirmation", 
@@ -31,7 +31,7 @@ impl<'outer> EmailSender {
     }
 
     pub fn send_application_user_reset_password_token(
-        application_user_reset_password_token: &'outer ApplicationUserResetPasswordToken<'outer>
+        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         BaseEmailSender::send(
             "Reset password confirmation",

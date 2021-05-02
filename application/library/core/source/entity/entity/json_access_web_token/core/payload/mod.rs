@@ -8,15 +8,15 @@ use std::borrow::Cow;
 use std::clone::Clone;
 
 #[derive(Clone)]
-pub struct Payload<'outer> {
-    id: Cow<'outer, UuidV4>,
-    application_user_id: Cow<'outer, UuidV4>,
-    application_user_log_in_token_device_id: Cow<'outer, UuidV4>,
+pub struct Payload<'outer_a> {
+    id: Cow<'outer_a, UuidV4>,
+    application_user_id: Cow<'outer_a, UuidV4>,
+    application_user_log_in_token_device_id: Cow<'outer_a, UuidV4>,
     exp: DateTime
 }
 
-impl<'this, 'outer: 'this> Payload<'outer> {
-    pub fn new(json_refresh_web_token: &'outer JsonRefreshWebToken<'outer>) -> Self {
+impl<'this, 'outer_a: 'this> Payload<'outer_a> {
+    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>) -> Self {
         return Self {
             id: Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
             application_user_id: Cow::Borrowed(json_refresh_web_token.get_application_user_id()),

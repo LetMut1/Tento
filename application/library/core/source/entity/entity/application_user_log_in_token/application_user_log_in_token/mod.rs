@@ -5,15 +5,15 @@ use crate::entity::entity::application_user::core::email::Email;
 use std::borrow::Cow;
 use super::core::value::Value;
 
-pub struct ApplicationUserLogInToken<'outer> {
-    application_user_id: &'outer UuidV4,
-    device_id: &'outer UuidV4,
-    application_user_email: Cow<'outer, Email>,
+pub struct ApplicationUserLogInToken<'outer_a> {
+    application_user_id: &'outer_a UuidV4,
+    device_id: &'outer_a UuidV4,
+    application_user_email: Cow<'outer_a, Email>,
     value: Value
 }
 
-impl<'this, 'outer: 'this> ApplicationUserLogInToken<'outer> {
-    pub fn new(application_user: &'outer ApplicationUser<'outer>, device_id: &'outer UuidV4) -> Self {
+impl<'this, 'outer_a: 'this> ApplicationUserLogInToken<'outer_a> {
+    pub fn new(application_user: &'outer_a ApplicationUser<'outer_a>, device_id: &'outer_a UuidV4) -> Self {
         return Self {
             application_user_id: application_user.get_id(),
             device_id,
@@ -22,7 +22,7 @@ impl<'this, 'outer: 'this> ApplicationUserLogInToken<'outer> {
         };
     }
 
-    pub fn new_from_model(common: Common<'outer>, application_user_id: &'outer UuidV4, device_id: &'outer UuidV4) -> Self {
+    pub fn new_from_model(common: Common<'outer_a>, application_user_id: &'outer_a UuidV4, device_id: &'outer_a UuidV4) -> Self {
         return Self {
             application_user_id,
             device_id,
