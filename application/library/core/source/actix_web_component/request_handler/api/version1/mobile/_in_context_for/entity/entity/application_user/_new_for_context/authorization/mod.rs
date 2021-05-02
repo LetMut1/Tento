@@ -184,9 +184,6 @@ impl<'vague> Authorization {
                                     ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrecoto02"));
                                     },
-                                    ApplicationUserRegistrationConfirmationTokenErrorKind::AlreadyExpired => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrecoto04"));
-                                    },
                                     ApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrecoto03"));
                                     }
@@ -327,9 +324,6 @@ impl<'vague> Authorization {
                                     },
                                     ApplicationUserLogInTokenErrorKind::InvalidValue => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapuslointo03"));
-                                    },
-                                    ApplicationUserLogInTokenErrorKind::AlreadyExpired => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapuslointo04"));
                                     }
                                 }
                             },
@@ -564,7 +558,7 @@ impl<'vague> Authorization {
                         EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                             match application_user_error_kind {
                                 ApplicationUserErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato03"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato03"));  // TODO код правильный?
                                 },
                                 _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!

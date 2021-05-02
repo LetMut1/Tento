@@ -20,7 +20,7 @@ impl Handler {
         if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&postgresql_connection_manager, &Email::new(request.application_user_email))? {
             postgresql_connection_manager.close_connection();
 
-            let mut application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;
+            let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;
 
             let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
             redis_connection_manager.establish_connection()?;
@@ -28,9 +28,8 @@ impl Handler {
             match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(&mut redis_connection_manager, pre_confirmed_application_user.get_id())? {
                 Some(existing_application_user_registration_confirmation_token) => {
                     application_user_registration_confirmation_token = existing_application_user_registration_confirmation_token;
-                    application_user_registration_confirmation_token.refresh();
 
-                    ApplicationUserRegistrationConfirmationTokenBaseRepository::update(&mut redis_connection_manager, &application_user_registration_confirmation_token)?;
+                    ApplicationUserRegistrationConfirmationTokenBaseRepository::update_expiration_time(&mut redis_connection_manager, &application_user_registration_confirmation_token)?;
                 },
                 None => {
                     application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user);

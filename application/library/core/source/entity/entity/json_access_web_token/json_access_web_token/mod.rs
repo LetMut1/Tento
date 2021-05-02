@@ -32,12 +32,6 @@ impl<'this, 'outer: 'this> JsonAccessWebToken<'outer> {
         );
     }
 
-    pub fn refresh(&'this mut self) -> &'this mut Self {
-        self.payload.refresh();
-
-        return self;
-    }
-
     pub fn is_expired(&'this self) -> bool {
         return !DateTimeManipulator::is_greater_or_equal_than_now(&self.payload.get_exp());
     }

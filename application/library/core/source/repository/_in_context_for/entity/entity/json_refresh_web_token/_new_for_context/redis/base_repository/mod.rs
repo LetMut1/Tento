@@ -54,7 +54,7 @@ impl<'outer, 'vague> BaseRepository {
         {
             Some(json_encoded_common) => {
                 return Ok(Some(JsonRefreshWebToken::new_from_model(
-                    serde_json::from_str::<'_, Common>(json_encoded_common.as_str()).unwrap()   // TODO error 
+                    serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap()   // TODO error 
                 ).unwrap()));    // TODO error 
             },
             None => {

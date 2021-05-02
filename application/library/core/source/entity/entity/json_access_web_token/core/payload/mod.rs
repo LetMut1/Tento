@@ -36,12 +36,6 @@ impl<'this, 'outer: 'this> Payload<'outer> {
         );
     }
 
-    pub fn refresh(&'this mut self) -> &'this mut Self {
-        self.exp = DateTimeExpirationCreator::create_json_access_web_token_first();
-
-        return self;
-    }
-
     pub fn get_id(&'this self) -> &'this UuidV4 {
         return &self.id;
     }

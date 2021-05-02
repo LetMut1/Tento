@@ -19,7 +19,7 @@ impl<'outer> Handler {
         postgresql_connection_manager.establish_connection()?;
 
         if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(&postgresql_connection_manager, &Email::new(request.application_user_email))? {
-            let mut application_user_reset_password_token: ApplicationUserResetPasswordToken<'_>;
+            let application_user_reset_password_token: ApplicationUserResetPasswordToken<'_>;
 
             let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
             redis_connection_manager.establish_connection()?;
@@ -27,9 +27,8 @@ impl<'outer> Handler {
             match ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(&mut redis_connection_manager, application_user.get_id())? {
                 Some(existing_application_user_reset_password_token) => {
                     application_user_reset_password_token = existing_application_user_reset_password_token;
-                    application_user_reset_password_token.refresh();
 
-                    ApplicationUserResetPasswordTokenBaseRepository::update(&mut redis_connection_manager, &application_user_reset_password_token)?;
+                    ApplicationUserResetPasswordTokenBaseRepository::update_expiration_time(&mut redis_connection_manager, &application_user_reset_password_token)?;
                 },
                 None => {
                     application_user_reset_password_token = ApplicationUserResetPasswordToken::new(&application_user);

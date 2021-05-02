@@ -25,15 +25,6 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn update(
-        connection_manager: &'outer mut ConnectionManager,
-        application_user_reset_password_token: &'outer ApplicationUserResetPasswordToken<'outer>
-    ) -> Result<(), ResourceErrorKind> {
-        Self::create(connection_manager, application_user_reset_password_token)?;
-
-        return Ok(());
-    }
-
     pub fn delete(
         connection_manager: &'outer mut ConnectionManager, 
         application_user_reset_password_token: &'outer ApplicationUserResetPasswordToken<'outer>
@@ -44,6 +35,20 @@ impl<'outer, 'vague> BaseRepository {
             )
         )?;
         
+        return Ok(());
+    }
+
+    pub fn update_expiration_time(
+        connection_manager: &'outer mut ConnectionManager,
+        application_user_reset_password_token: &'outer ApplicationUserResetPasswordToken<'outer>
+    ) -> Result<(), ResourceErrorKind> {
+        connection_manager.get_connection().expire::<String, ()>(
+            RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
+                application_user_reset_password_token.get_application_user_id()
+            ),
+            (DateTimeExpirationCreator::QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST * 60) as usize
+        )?;
+
         return Ok(());
     }
 

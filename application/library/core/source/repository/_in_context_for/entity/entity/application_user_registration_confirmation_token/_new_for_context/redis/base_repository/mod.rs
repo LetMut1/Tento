@@ -38,11 +38,16 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn update(
+    pub fn update_expiration_time(
         connection_manager: &'outer mut ConnectionManager,
         application_user_registration_confirmation_token: &'outer ApplicationUserRegistrationConfirmationToken<'outer>
     ) -> Result<(), ResourceErrorKind> {
-        Self::create(connection_manager, application_user_registration_confirmation_token)?;
+        connection_manager.get_connection().expire::<String, ()>(
+            RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
+                application_user_registration_confirmation_token.get_pre_confirmed_application_user_id()
+            ),
+            (DateTimeExpirationCreator::QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST * 60) as usize
+        )?;
 
         return Ok(());
     }

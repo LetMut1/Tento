@@ -5,7 +5,6 @@ use std::fmt::Result as FmtResult;
 
 #[derive(Debug)]
 pub enum ApplicationUserRegistrationConfirmationTokenErrorKind {
-    AlreadyExpired,
     InvalidValue,
     NotFound
 }

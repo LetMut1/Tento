@@ -2,14 +2,14 @@ use crate::data_transfer_object::resource_model::_in_context_for::entity::entity
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
-use crate::utility::date_time_expiration_creator::DateTimeExpirationCreator;
 use std::borrow::Cow;
+use super::core::obfuscation_value::ObfuscationValue;
 
 pub struct JsonRefreshWebToken<'outer> {
     json_access_web_token_id: UuidV4,
     application_user_id: Cow<'outer, UuidV4>,
     application_user_log_in_token_device_id: Cow<'outer, UuidV4>,
-    expired_at: DateTime
+    obfuscation_value: ObfuscationValue
 }
 
 impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {
@@ -18,27 +18,23 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {
             json_access_web_token_id: UuidV4::new(),
             application_user_id: Cow::Borrowed(application_user_id),
             application_user_log_in_token_device_id: Cow::Borrowed(application_user_log_in_token_device_id),
-            expired_at: DateTimeExpirationCreator::create_json_refresh_web_token_first()
+            obfuscation_value: ObfuscationValue::new(UuidV4::new().get_value().to_string())
         };
     }
 
-    pub fn new_from_model(common: Common) -> Result<Self, InvalidArgumentError> {
+    pub fn new_from_model(common: Common<'outer>) -> Result<Self, InvalidArgumentError> {
         return Ok(
             Self {
                 json_access_web_token_id: UuidV4::new_from_string(common.json_access_web_token_id)?,
                 application_user_id: Cow::Owned(UuidV4::new_from_string(common.application_user_id)?),
                 application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_string(common.application_user_log_in_token_device_id)?),
-                expired_at: DateTime::new_from_str(common.expired_at.as_str())
+                obfuscation_value: ObfuscationValue::new(common.obfuscation_value.into_owned())
             }
         );
     }
 
     pub fn refresh(&'this mut self) -> &'this mut Self {
-        return self.refresh_expired_at();
-    }
-
-    fn refresh_expired_at(&'this mut self) -> &'this mut Self {
-        self.expired_at = DateTimeExpirationCreator::create_json_refresh_web_token_first();
+        self.obfuscation_value = ObfuscationValue::new(UuidV4::new().get_value().to_string());
 
         return self;
     }
@@ -55,7 +51,7 @@ impl<'this, 'outer: 'this> JsonRefreshWebToken<'outer> {
         return self.application_user_log_in_token_device_id.as_ref();
     }
 
-    pub fn get_expired_at(&'this self) -> &'this DateTime {
-        return &self.expired_at;
+    pub fn get_obfuscation_value(&'this self) -> &'this ObfuscationValue {
+        return &self.obfuscation_value;
     }
 }

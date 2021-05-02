@@ -14,9 +14,7 @@ pub struct Common<'outer> {
     #[serde(rename = "e")]
     pub application_user_email: Cow<'outer, str>,
     #[serde(rename = "v")]
-    pub value: Cow<'outer, str>,
-    #[serde(rename = "a")]
-    pub expired_at: String
+    pub value: Cow<'outer, str>
 }
 
 impl<'outer> Common<'outer> {
@@ -26,8 +24,7 @@ impl<'outer> Common<'outer> {
             application_user_id: application_user_log_in_token.get_application_user_id().get_value().to_string(),
             device_id: application_user_log_in_token.get_device_id().get_value().to_string(),
             application_user_email: Cow::Borrowed(application_user_log_in_token.get_application_user_email().get_value()),
-            value: Cow::Borrowed(application_user_log_in_token.get_value().get_value()),
-            expired_at: application_user_log_in_token.get_expired_at().get_value().to_rfc3339()
+            value: Cow::Borrowed(application_user_log_in_token.get_value().get_value())
         };
     }
 }

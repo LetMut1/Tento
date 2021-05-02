@@ -12,11 +12,9 @@ _InContextFor:
         ApplicationUserRegistrationConfirmationToken:
             enapusrecoto02 -> not found,
             enapusrecoto03 -> invalid value,
-            enapusrecoto04 -> already expired,
         ApplicationUserLogInToken:
             enapuslointo02 -> not found,
             enapuslointo03 -> invalid value,
-            enapuslointo04 -> already expired,
         ApplicationUserResetPasswordToken:
             enapusrepato02 -> not found,
             enapusrepato03 -> invalid value,

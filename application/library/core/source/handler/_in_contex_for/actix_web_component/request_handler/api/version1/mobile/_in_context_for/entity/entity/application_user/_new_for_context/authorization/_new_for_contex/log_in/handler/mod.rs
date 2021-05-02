@@ -34,49 +34,44 @@ impl Handler {
             postgresql_connection_manager.establish_connection()?;
 
             if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value.as_str() {
-                if !application_user_log_in_token.is_expired() {
-                    
-                    if let Some(existing_json_refresh_web_token) = BaseRepositoryProxy::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                        &mut redis_connection_manager, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
-                    )? 
-                    {
-                        JsonAccessWebTokenBlackListRepository::create(
-                            &mut redis_connection_manager, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
-                        )?;
+                if let Some(existing_json_refresh_web_token) = BaseRepositoryProxy::get_by_application_user_id_and_application_user_log_in_token_device_id(
+                    &mut redis_connection_manager, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
+                )? 
+                {
+                    JsonAccessWebTokenBlackListRepository::create(
+                        &mut redis_connection_manager, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
+                    )?;
 
-                        BaseRepositoryProxy::delete(&mut redis_connection_manager, &existing_json_refresh_web_token)?;
-                    }
-
-                    let json_refresh_web_token: JsonRefreshWebToken<'_> =
-                    JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id());
-
-                    postgresql_connection_manager.begin_transaction()?;
-                    
-                    if let Err(resource_error_kind) = ApplicationUserLogInTokenBaseRepository::delete(&mut redis_connection_manager, &application_user_log_in_token) { 
-                        postgresql_connection_manager.rollback_transaction()?;
-
-                        return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
-                        
-                    }
-
-                    if let Err(resource_error_kind) = BaseRepositoryProxy::create(&mut redis_connection_manager, &json_refresh_web_token) {
-                        postgresql_connection_manager.rollback_transaction()?;
-
-                        return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
-                    }
-
-                    postgresql_connection_manager.commit_transaction()?;
-                    postgresql_connection_manager.close_connection();
-
-                    return Ok(
-                        HandlerResult::new(
-                            SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)),
-                            Encoder::encode(&json_refresh_web_token)
-                        )
-                    );
+                    BaseRepositoryProxy::delete(&mut redis_connection_manager, &existing_json_refresh_web_token)?;
                 }
+
+                let json_refresh_web_token: JsonRefreshWebToken<'_> =
+                JsonRefreshWebToken::new(application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id());
+
+                postgresql_connection_manager.begin_transaction()?;
                 
-                return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::AlreadyExpired)));
+                if let Err(resource_error_kind) = ApplicationUserLogInTokenBaseRepository::delete(&mut redis_connection_manager, &application_user_log_in_token) { 
+                    postgresql_connection_manager.rollback_transaction()?;
+
+                    return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
+                    
+                }
+
+                if let Err(resource_error_kind) = BaseRepositoryProxy::create(&mut redis_connection_manager, &json_refresh_web_token) {
+                    postgresql_connection_manager.rollback_transaction()?;
+
+                    return Err(MainErrorKind::ResourceErrorKind(resource_error_kind));
+                }
+
+                postgresql_connection_manager.commit_transaction()?;
+                postgresql_connection_manager.close_connection();
+
+                return Ok(
+                    HandlerResult::new(
+                        SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)),
+                        Encoder::encode(&json_refresh_web_token)
+                    )
+                );
             }
             
             return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::InvalidValue)));

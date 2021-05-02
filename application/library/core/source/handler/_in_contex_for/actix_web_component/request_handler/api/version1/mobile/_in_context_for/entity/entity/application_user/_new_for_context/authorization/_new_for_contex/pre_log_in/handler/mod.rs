@@ -25,7 +25,7 @@ impl Handler {
 
         if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(&postgresql_connection_manager, &Email::new(request.application_user_email))? {
             if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash()) {
-                let mut application_user_log_in_token: ApplicationUserLogInToken<'_>;
+                let application_user_log_in_token: ApplicationUserLogInToken<'_>;
 
                 let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
                 redis_connection_manager.establish_connection()?;
@@ -36,9 +36,8 @@ impl Handler {
                 {
                     Some(existing_application_user_log_in_token) => {
                         application_user_log_in_token = existing_application_user_log_in_token;
-                        application_user_log_in_token.refresh();
 
-                        ApplicationUserLogInTokenBaseRepository::update(&mut redis_connection_manager, &application_user_log_in_token)?;
+                        ApplicationUserLogInTokenBaseRepository::update_expiration_time(&mut redis_connection_manager, &application_user_log_in_token)?;
                     },
                     None => {
                         application_user_log_in_token = ApplicationUserLogInToken::new(&application_user, application_user_log_in_token_device_id);
