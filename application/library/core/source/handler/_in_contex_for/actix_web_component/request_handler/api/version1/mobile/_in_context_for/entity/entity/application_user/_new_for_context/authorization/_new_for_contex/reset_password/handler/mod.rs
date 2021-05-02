@@ -22,7 +22,7 @@ impl<'outer_a> Handler {
         redis_connection_manager.establish_connection()?;
 
         if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(&mut redis_connection_manager, &application_user_id)? {
-            if application_user_reset_password_token.get_value().get_value() == request.application_user_reset_password_token_value.as_str() {  // TODO переписать через НЕ
+            if application_user_reset_password_token.get_value().get_value() == request.application_user_reset_password_token_value.as_str() {
                 let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
                 postgresql_connection_manager.establish_connection()?;
 
