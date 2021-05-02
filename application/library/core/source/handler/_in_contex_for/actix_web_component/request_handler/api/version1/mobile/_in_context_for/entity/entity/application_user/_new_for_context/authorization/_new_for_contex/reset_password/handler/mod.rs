@@ -1,8 +1,9 @@
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password::request::Request;
 use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::entity::entity::application_user::core::password::Password;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
 use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error_kind::ApplicationUserResetPasswordTokenErrorKind;
+use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
 use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::postgresql::base_repository::BaseRepository as ApplicationUserBaseRepository;
@@ -20,7 +21,7 @@ impl<'outer_a> Handler {
         let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
         redis_connection_manager.establish_connection()?;
 
-        if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(&mut redis_connection_manager, &application_user_id)? {
+        if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(&mut redis_connection_manager, &application_user_id)? {
             if application_user_reset_password_token.get_value().get_value() == request.application_user_reset_password_token_value.as_str() {  // TODO переписать через НЕ
                 let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
                 postgresql_connection_manager.establish_connection()?;
@@ -41,6 +42,13 @@ impl<'outer_a> Handler {
 
                 return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound)));
             }
+
+            application_user_reset_password_token.increment_wrong_enter_tries_quantity();
+
+            if application_user_reset_password_token.get_wrong_enter_tries_quantity().get_value() >= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                ApplicationUserResetPasswordTokenBaseRepository::delete(&mut redis_connection_manager, &application_user_reset_password_token)?;
+            }
+
 
             return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(ApplicationUserResetPasswordTokenErrorKind::InvalidValue)));
         }

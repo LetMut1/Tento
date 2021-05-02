@@ -4,19 +4,24 @@ use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::entity::entity::application_user::core::email::Email;
 use std::borrow::Cow;
 use super::core::value::Value;
+use super::core::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
 
 pub struct ApplicationUserResetPasswordToken<'outer_a> {
     application_user_id: &'outer_a UuidV4,
     application_user_email: Cow<'outer_a, Email>,
-    value: Value
+    value: Value,
+    wrong_enter_tries_quantity: WrongEnterTriesQuanity
 }
 
 impl<'this, 'outer_a: 'this> ApplicationUserResetPasswordToken<'outer_a> {
+    pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: u8 = 5;
+
     pub fn new(application_user: &'outer_a ApplicationUser<'outer_a>) -> Self {
         return Self {
             application_user_id: application_user.get_id(),
             application_user_email: Cow::Borrowed(application_user.get_email()),
-            value: Value::new(UuidV4::new().get_value().to_string())     // TODO создать генератор значения + метода Рефреш ниже
+            value: Value::new(UuidV4::new().get_value().to_string()),    // TODO создать генератор значения + метода Рефреш ниже
+            wrong_enter_tries_quantity: WrongEnterTriesQuanity::new(0)
         };
     }
 
@@ -24,7 +29,8 @@ impl<'this, 'outer_a: 'this> ApplicationUserResetPasswordToken<'outer_a> {
         return Self {
             application_user_id,
             application_user_email: Cow::Owned(Email::new(common.application_user_email.into_owned())),
-            value: Value::new(common.value.into_owned())
+            value: Value::new(common.value.into_owned()),
+            wrong_enter_tries_quantity: WrongEnterTriesQuanity::new(common.wrong_enter_tries_quantity)
         };
     }
 
@@ -38,5 +44,15 @@ impl<'this, 'outer_a: 'this> ApplicationUserResetPasswordToken<'outer_a> {
 
     pub fn get_value(&'this self) -> &'this Value {
         return &self.value;
+    }
+
+    pub fn get_wrong_enter_tries_quantity(&'this self) -> &'this WrongEnterTriesQuanity {
+        return &self.wrong_enter_tries_quantity;
+    }
+
+    pub fn increment_wrong_enter_tries_quantity(&'this mut self) -> &'this mut Self {
+        self.wrong_enter_tries_quantity.increment();
+
+        return self;
     }
 }

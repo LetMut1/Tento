@@ -1,1 +1,1 @@
-pub(crate) mod schema;
+pub mod schema;
