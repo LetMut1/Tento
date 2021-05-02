@@ -3,11 +3,10 @@ use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_registration_confirmation_token::core::value::Value;
 use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
-use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use std::borrow::Cow;
 
 pub struct ApplicationUserRegistrationConfirmationToken<'outer> {
-    pre_confirmed_application_user_id: Cow<'outer, UuidV4>,
+    pre_confirmed_application_user_id: &'outer UuidV4,
     application_user_email: Cow<'outer, Email>,
     value: Value
 }
@@ -15,24 +14,22 @@ pub struct ApplicationUserRegistrationConfirmationToken<'outer> {
 impl<'this, 'outer: 'this> ApplicationUserRegistrationConfirmationToken<'outer> {
     pub fn new(pre_confirmed_application_user: &'outer PreConfirmedApplicationUser) -> Self {
         return Self {
-            pre_confirmed_application_user_id: Cow::Borrowed(pre_confirmed_application_user.get_id()),
+            pre_confirmed_application_user_id: pre_confirmed_application_user.get_id(),
             application_user_email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
             value: Value::new(UuidV4::new().get_value().to_string())       // TODO создать генератор значения + метода Рефреш ниже
         };
     }
 
-    pub fn new_from_model(common: Common<'outer>) -> Result<Self, InvalidArgumentError> {
-        return Ok(
-            Self {
-                pre_confirmed_application_user_id: Cow::Owned(UuidV4::new_from_string(common.pre_confirmed_application_user_id)?),
-                application_user_email: Cow::Owned(Email::new(common.application_user_email.into_owned())),
-                value: Value::new(common.value.into_owned())
-            }
-        );
+    pub fn new_from_model(common: Common<'outer>, pre_confirmed_application_user_id: &'outer UuidV4) -> Self{
+        return Self {
+            pre_confirmed_application_user_id,
+            application_user_email: Cow::Owned(Email::new(common.application_user_email.into_owned())),
+            value: Value::new(common.value.into_owned())
+        };
     }
 
     pub fn get_pre_confirmed_application_user_id(&'this self) -> &'this UuidV4 {
-        return self.pre_confirmed_application_user_id.as_ref();
+        return self.pre_confirmed_application_user_id;
     }
 
     pub fn get_application_user_email(&'this self) -> &'this Email {

@@ -9,7 +9,7 @@ use redis::Commands;
 
 pub struct BaseRepository;
 
-impl<'outer, 'vague> BaseRepository {
+impl<'outer> BaseRepository {
     pub fn create(
         connection_manager: &'outer mut ConnectionManager, 
         application_user_registration_confirmation_token: &'outer ApplicationUserRegistrationConfirmationToken<'outer>
@@ -52,17 +52,19 @@ impl<'outer, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn get_by_pre_confirmed_application_user_id(
-        connection_manager: &'outer mut ConnectionManager, pre_confirmed_application_user_id: &'outer UuidV4
-    ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'vague>>, ResourceErrorKind> {
+    pub fn get_by_pre_confirmed_application_user_id<'outer_a>(
+        connection_manager: &'outer_a mut ConnectionManager, pre_confirmed_application_user_id: &'outer UuidV4
+    ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'outer>>, ResourceErrorKind> {
         match connection_manager.get_connection().get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(pre_confirmed_application_user_id)
         )?
         {
             Some(json_encoded_common) => {
-                return Ok(Some(ApplicationUserRegistrationConfirmationToken::new_from_model(
-                    serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap()   // TODO error 
-                ).unwrap()));    // TODO error 
+                return Ok(Some(
+                    ApplicationUserRegistrationConfirmationToken::new_from_model(
+                        serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap(), pre_confirmed_application_user_id  // TODO error 
+                    )
+                ));
             },
             None => {
                 return Ok(None);
