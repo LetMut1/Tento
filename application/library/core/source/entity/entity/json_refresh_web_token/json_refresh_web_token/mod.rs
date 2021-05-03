@@ -2,12 +2,13 @@ use crate::data_transfer_object::resource_model::_in_context_for::entity::entity
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
+use crate::entity::entity::json_access_web_token::core::payload::core::id::Id as JsonAccessWebTokenId;
 use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use std::borrow::Cow;
 use super::core::obfuscation_value::ObfuscationValue;
 
 pub struct JsonRefreshWebToken<'outer_a> {
-    json_access_web_token_id: UuidV4,
+    json_access_web_token_id: JsonAccessWebTokenId,
     application_user_id: Cow<'outer_a, ApplicationUserId>,
     application_user_log_in_token_device_id: Cow<'outer_a, ApplicationUserLogInTokenDeviceId>,
     obfuscation_value: ObfuscationValue
@@ -18,7 +19,7 @@ impl<'this, 'outer_a: 'this> JsonRefreshWebToken<'outer_a> {
         application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
     ) -> Self {
         return Self {
-            json_access_web_token_id: UuidV4::new(),
+            json_access_web_token_id: JsonAccessWebTokenId::new(),
             application_user_id: Cow::Borrowed(application_user_id),
             application_user_log_in_token_device_id: Cow::Borrowed(application_user_log_in_token_device_id),
             obfuscation_value: ObfuscationValue::new(UuidV4::new().get_value().to_string())
@@ -28,7 +29,7 @@ impl<'this, 'outer_a: 'this> JsonRefreshWebToken<'outer_a> {
     pub fn new_from_model(common: Common<'outer_a>) -> Result<Self, InvalidArgumentError> {
         return Ok(
             Self {
-                json_access_web_token_id: UuidV4::new_from_string(common.json_access_web_token_id)?,
+                json_access_web_token_id: JsonAccessWebTokenId::new_from_string(common.json_access_web_token_id)?,
                 application_user_id: Cow::Owned(ApplicationUserId::new_from_string(common.application_user_id)?),
                 application_user_log_in_token_device_id: Cow::Owned(ApplicationUserLogInTokenDeviceId::new_from_string(common.application_user_log_in_token_device_id)?),
                 obfuscation_value: ObfuscationValue::new(common.obfuscation_value.into_owned())
@@ -42,7 +43,7 @@ impl<'this, 'outer_a: 'this> JsonRefreshWebToken<'outer_a> {
         return self;
     }
 
-    pub fn get_json_access_web_token_id(&'this self) -> &'this UuidV4 {
+    pub fn get_json_access_web_token_id(&'this self) -> &'this JsonAccessWebTokenId {
         return &self.json_access_web_token_id;
     }
 

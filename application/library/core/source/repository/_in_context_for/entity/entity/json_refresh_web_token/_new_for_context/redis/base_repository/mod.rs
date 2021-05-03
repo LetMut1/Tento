@@ -75,7 +75,7 @@ impl<'outer_a, 'vague> BaseRepository {
 
         for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
             if let Some(json_refresh_web_token) = Self::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                connection_manager, application_user_id, &ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id).unwrap()
+                connection_manager, application_user_id, &ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id).unwrap()  // TODO err
             )?
             {
                 json_refresh_web_token_registry.push(json_refresh_web_token);

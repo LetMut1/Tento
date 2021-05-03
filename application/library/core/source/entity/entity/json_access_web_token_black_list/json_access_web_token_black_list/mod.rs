@@ -1,18 +1,18 @@
-use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::json_access_web_token::core::payload::core::id::Id as JsonAccessWebTokenId;
 use std::borrow::Cow;
 
 pub struct JsonAccessWebTokenBlackList<'outer_a> {
-    json_access_web_token_id: Cow<'outer_a, UuidV4>
+    json_access_web_token_id: &'outer_a JsonAccessWebTokenId
 }
 
 impl<'this, 'outer_a: 'this> JsonAccessWebTokenBlackList<'outer_a> {
-    pub fn new(json_access_web_token_id: &'outer_a UuidV4) -> Self {
+    pub fn new(json_access_web_token_id: &'outer_a JsonAccessWebTokenId) -> Self {
         return Self {
-            json_access_web_token_id: Cow::Borrowed(json_access_web_token_id)
+            json_access_web_token_id: json_access_web_token_id
         };
     }
 
-    pub fn get_json_access_web_token_id(&'this self) -> &'this UuidV4 {
-        return self.json_access_web_token_id.as_ref();
+    pub fn get_json_access_web_token_id(&'this self) -> &'this JsonAccessWebTokenId {
+        return &self.json_access_web_token_id;
     }
 }

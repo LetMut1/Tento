@@ -2,10 +2,10 @@ use crate::error::main_error_kind::core::resource_error_kind::core::email_server
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use lettre_email::EmailBuilder;
 use lettre::ClientSecurity;
-use lettre::smtp::authentication::Credentials;
-use lettre::smtp::authentication::Mechanism;
-use lettre::smtp::ConnectionReuseParameters;
-use lettre::smtp::extension::ClientId;
+// use lettre::smtp::authentication::Credentials;
+// use lettre::smtp::authentication::Mechanism;
+// use lettre::smtp::ConnectionReuseParameters;
+// use lettre::smtp::extension::ClientId;
 use lettre::SmtpClient;
 use lettre::SmtpTransport;
 use lettre::Transport;

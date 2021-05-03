@@ -24,7 +24,7 @@ impl Handler {
                 &mut connection_manager, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
             )?
             {
-                if &(json_access_web_token.get_id().get_value().as_bytes())[..] == &(json_refresh_web_token.get_json_access_web_token_id().get_value().as_bytes())[..] {
+                if &(json_access_web_token.get_id().get_value().get_value().as_bytes())[..] == &(json_refresh_web_token.get_json_access_web_token_id().get_value().get_value().as_bytes())[..] {
                     if Encoder::is_valid(&json_refresh_web_token, request.json_refresh_web_token.as_str()) {
                         json_refresh_web_token.refresh();
 
