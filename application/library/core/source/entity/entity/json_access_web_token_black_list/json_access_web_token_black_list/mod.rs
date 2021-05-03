@@ -7,7 +7,7 @@ pub struct JsonAccessWebTokenBlackList<'outer_a> {
 impl<'this, 'outer_a: 'this> JsonAccessWebTokenBlackList<'outer_a> {
     pub fn new(json_access_web_token_id: &'outer_a JsonAccessWebTokenId) -> Self {
         return Self {
-            json_access_web_token_id: json_access_web_token_id
+            json_access_web_token_id
         };
     }
 
