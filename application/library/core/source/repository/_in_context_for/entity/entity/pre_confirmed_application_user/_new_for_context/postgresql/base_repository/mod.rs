@@ -27,7 +27,9 @@ impl<'outer_a> BaseRepository {
         connection_manager: &'outer_a ConnectionManager, pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser
     ) -> Result<(), ResourceErrorKind> {
         diesel::delete(
-            pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::id.eq(pre_confirmed_application_user.get_id().get_value()))
+            pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::id.eq(
+                pre_confirmed_application_user.get_id().get_value().get_value()
+            ))
         ).execute(connection_manager.get_connection())?;
 
         return Ok(());

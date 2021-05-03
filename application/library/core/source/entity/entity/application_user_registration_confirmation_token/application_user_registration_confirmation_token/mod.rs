@@ -1,6 +1,7 @@
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::common::Common;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::core::email::Email;
+use crate::entity::entity::pre_confirmed_application_user::core::id::Id as PreConfirmedApplicationUserId;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use std::borrow::Cow;
 use super::core::value::Value;
@@ -8,7 +9,7 @@ use super::core::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
 
 
 pub struct ApplicationUserRegistrationConfirmationToken<'outer_a> {
-    pre_confirmed_application_user_id: &'outer_a UuidV4,
+    pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId,
     application_user_email: Cow<'outer_a, Email>,
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuanity
@@ -26,7 +27,7 @@ impl<'this, 'outer_a: 'this> ApplicationUserRegistrationConfirmationToken<'outer
         };
     }
 
-    pub fn new_from_model(common: Common<'outer_a>, pre_confirmed_application_user_id: &'outer_a UuidV4) -> Self{
+    pub fn new_from_model(common: Common<'outer_a>, pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId) -> Self{
         return Self {
             pre_confirmed_application_user_id,
             application_user_email: Cow::Owned(Email::new(common.application_user_email.into_owned())),
@@ -35,7 +36,7 @@ impl<'this, 'outer_a: 'this> ApplicationUserRegistrationConfirmationToken<'outer
         };
     }
 
-    pub fn get_pre_confirmed_application_user_id(&'this self) -> &'this UuidV4 {
+    pub fn get_pre_confirmed_application_user_id(&'this self) -> &'this PreConfirmedApplicationUserId {
         return self.pre_confirmed_application_user_id;
     }
 

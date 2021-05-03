@@ -13,7 +13,7 @@ pub struct New<'outer_a> {
 impl<'outer_a> New<'outer_a> {
     pub fn new(pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser) -> Self {
         return Self {
-            id: pre_confirmed_application_user.get_id().get_value(),
+            id: pre_confirmed_application_user.get_id().get_value().get_value(),
             email: pre_confirmed_application_user.get_email().get_value()
         };
     }

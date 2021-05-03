@@ -1,7 +1,7 @@
-use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_access_web_token::core::payload::core::id::Id as JsonAccessWebTokenId;
+use crate::entity::entity::pre_confirmed_application_user::core::id::Id as PreConfirmedApplicationUserId;
 
 pub struct RedisStorageKeyResolver;
 
@@ -22,10 +22,10 @@ impl<'outer_a> RedisStorageKeyResolver {
     }
     
     pub fn get_repository_application_user_registration_confirmation_token_first(
-        pre_confirmed_application_user_id: &'outer_a UuidV4
+        pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId
     ) -> String {
         return Self::PREFIX_REPOSITORY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST.to_string()
-        + pre_confirmed_application_user_id.get_value().to_string().as_str();
+        + pre_confirmed_application_user_id.get_value().get_value().to_string().as_str();
     }
 
     pub fn get_repository_application_user_reset_password_token_first(
