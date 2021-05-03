@@ -34,7 +34,7 @@ impl<'outer_a> Update<'outer_a> {
         }
 
         if update_resolver.is_change_created_at() {
-            created_at = Some(application_user.get_created_at().get_value());
+            created_at = Some(application_user.get_created_at().get_value().get_value());
         }
 
         return Self {

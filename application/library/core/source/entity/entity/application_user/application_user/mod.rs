@@ -1,7 +1,7 @@
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::select::Select;
-use crate::entity::core::date_time::DateTime;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use std::borrow::Cow;
+use super::core::created_at::CreatedAt;
 use super::core::email::Email;
 use super::core::id::Id;
 use super::core::nickname::Nickname;
@@ -13,7 +13,7 @@ pub struct ApplicationUser<'outer_a> {
     email: Cow<'outer_a, Email>,
     nickname: Nickname,
     password_hash: PasswordHash,
-    created_at: DateTime
+    created_at: CreatedAt
 }
 
 impl<'this, 'outer_a: 'this> ApplicationUser<'outer_a> {
@@ -25,7 +25,7 @@ impl<'this, 'outer_a: 'this> ApplicationUser<'outer_a> {
             email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
             nickname,
             password_hash: PasswordHash::new_from_password(password),
-            created_at: DateTime::new()
+            created_at: CreatedAt::new()
         };
     }
 
@@ -35,7 +35,7 @@ impl<'this, 'outer_a: 'this> ApplicationUser<'outer_a> {
             email: Cow::Owned(Email::new(select.email)),
             nickname: Nickname::new(select.nickname),
             password_hash: PasswordHash::new(select.password_hash),
-            created_at: DateTime::new_from_date_time(select.created_at)
+            created_at: CreatedAt::new_from_date_time(select.created_at)
         };
     }
 
@@ -73,7 +73,7 @@ impl<'this, 'outer_a: 'this> ApplicationUser<'outer_a> {
         return &self.password_hash;
     }
 
-    pub fn get_created_at(&'this self) -> &'this DateTime {
+    pub fn get_created_at(&'this self) -> &'this CreatedAt {
         return &self.created_at;
     }
 }

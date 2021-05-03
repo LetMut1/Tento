@@ -1,8 +1,8 @@
 use crate::data_transfer_object::_in_context_for::entity::entity::json_access_web_token::core::payload::_new_fro_context::common::Common;
-use crate::entity::core::date_time::DateTime;
 use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_access_web_token::core::header::header::Header;
+use crate::entity::entity::json_access_web_token::core::payload::core::exp::Exp;
 use crate::entity::entity::json_access_web_token::core::payload::core::id::Id;
 use crate::entity::entity::json_access_web_token::core::payload::payload::Payload;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
@@ -35,7 +35,7 @@ impl<'this, 'outer_a: 'this> JsonAccessWebToken<'outer_a> {
     }
 
     pub fn is_expired(&'this self) -> bool {
-        return !DateTimeManipulator::is_greater_or_equal_than_now(&self.payload.get_exp());
+        return !DateTimeManipulator::is_greater_or_equal_than_now(&self.payload.get_exp().get_value());
     }
 
     pub fn get_alg(&'this self) -> &'this Alg {
@@ -58,7 +58,7 @@ impl<'this, 'outer_a: 'this> JsonAccessWebToken<'outer_a> {
         return &self.payload.get_application_user_log_in_token_device_id();
     }
 
-    pub fn get_exp(&'this self) -> &'this DateTime {
+    pub fn get_exp(&'this self) -> &'this Exp {
         return &self.payload.get_exp();
     }
 }

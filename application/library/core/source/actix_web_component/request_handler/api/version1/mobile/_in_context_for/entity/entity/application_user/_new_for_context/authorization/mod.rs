@@ -575,10 +575,6 @@ impl<'vague> Authorization {
                                 ApplicationUserResetPasswordTokenErrorKind::InvalidValue => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato03"));
                                 }
-                                _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                    return StandardResponseCreator::create_internal_server_error();
-                                }
                             }
                         },
                         _ => {
