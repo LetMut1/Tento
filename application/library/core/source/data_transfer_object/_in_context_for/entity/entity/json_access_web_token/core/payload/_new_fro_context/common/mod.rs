@@ -17,10 +17,10 @@ pub struct Common {
 impl<'outer_a> Common {
     pub fn new(json_access_web_token: &'outer_a JsonAccessWebToken<'outer_a>) -> Self {
         return Self {
-            json_access_web_token_id: json_access_web_token.get_id().get_value().get_value().to_string(),
-            application_user_id: json_access_web_token.get_application_user_id().get_value().get_value().to_string(),
-            application_user_log_in_token_device_id: json_access_web_token.get_application_user_log_in_token_device_id().get_value().get_value().to_string(),
-            exp: json_access_web_token.get_exp().get_value().get_value().to_rfc3339()
+            json_access_web_token_id: json_access_web_token.get_id().to_string(),
+            application_user_id: json_access_web_token.get_application_user_id().to_string(),
+            application_user_log_in_token_device_id: json_access_web_token.get_application_user_log_in_token_device_id().to_string(),
+            exp: json_access_web_token.get_exp().to_string()
         };
     }
 }

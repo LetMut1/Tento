@@ -26,4 +26,8 @@ impl<'this> DeviceId {
     pub fn get_value(&'this self) -> &'this UuidV4 {
         return &self.value;
     }
+
+    pub fn to_string(&'this self) -> String {
+        return self.value.get_value().to_string();
+    }
 }

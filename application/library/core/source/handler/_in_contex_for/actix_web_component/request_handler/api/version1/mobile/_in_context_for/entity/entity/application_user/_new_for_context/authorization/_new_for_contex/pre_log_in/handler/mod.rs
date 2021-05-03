@@ -53,7 +53,7 @@ impl Handler {
 
                 EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
 
-                return Ok(HandlerResult::new(application_user.get_id().get_value().get_value().to_string()));
+                return Ok(HandlerResult::new(application_user.get_id().to_string()));
             }
             
             return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::WrongPassword)));

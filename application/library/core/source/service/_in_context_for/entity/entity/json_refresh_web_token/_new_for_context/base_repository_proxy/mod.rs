@@ -13,7 +13,7 @@ impl<'outer_a, 'vague> BaseRepositoryProxy {
         connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         let application_user_log_in_token_device_id: String = 
-        json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().get_value().to_string();
+        json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
         match ProcessingDeviceIdStorage::get(connection_manager, json_refresh_web_token.get_application_user_id())? {
             Some(mut application_user_log_in_token_device_id_registry) => {
@@ -59,7 +59,7 @@ impl<'outer_a, 'vague> BaseRepositoryProxy {
 
         if let Some(mut application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection_manager, json_refresh_web_token.get_application_user_id())? 
         {
-            let application_user_log_in_token_device_id: String = json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().get_value().to_string();
+            let application_user_log_in_token_device_id: String = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
             let mut aplication_user_log_in_token_device_id_index_option: Option<usize> = None;
 

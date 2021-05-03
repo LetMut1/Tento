@@ -26,4 +26,8 @@ impl<'this, 'outer_a: 'this> CreatedAt {
     pub fn get_value(&'this self) -> &'this DateTime {
         return &self.value;
     }
+
+    pub fn to_string(&'this self) -> String {
+        return self.value.get_value().to_rfc3339();
+    }
 }
