@@ -1,6 +1,6 @@
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::register::request::Request;
 use crate::data_transfer_object::response_parameters::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::register::handler::_new_for_context::result::Result as HandlerResult;
-use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::entity::entity::application_user::core::email::Email;
@@ -30,7 +30,8 @@ impl<'outer_a> Handler {
 
         let application_user_email: Email = Email::new(request.application_user_email);
 
-        let application_user_log_in_token_device_id: UuidV4 = UuidV4::new_from_string(request.application_user_log_in_token_device_id)?;
+        let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId =
+        ApplicationUserLogInTokenDeviceId::new_from_string(request.application_user_log_in_token_device_id)?;
 
         let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
         postgresql_connection_manager.establish_connection()?;

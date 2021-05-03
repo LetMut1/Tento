@@ -1,5 +1,6 @@
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::common::Common;
 use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use std::borrow::Cow;
@@ -8,12 +9,14 @@ use super::core::obfuscation_value::ObfuscationValue;
 pub struct JsonRefreshWebToken<'outer_a> {
     json_access_web_token_id: UuidV4,
     application_user_id: Cow<'outer_a, ApplicationUserId>,
-    application_user_log_in_token_device_id: Cow<'outer_a, UuidV4>,
+    application_user_log_in_token_device_id: Cow<'outer_a, ApplicationUserLogInTokenDeviceId>,
     obfuscation_value: ObfuscationValue
 }
 
 impl<'this, 'outer_a: 'this> JsonRefreshWebToken<'outer_a> {
-    pub fn new(application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a UuidV4) -> Self {
+    pub fn new(
+        application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
+    ) -> Self {
         return Self {
             json_access_web_token_id: UuidV4::new(),
             application_user_id: Cow::Borrowed(application_user_id),
@@ -27,7 +30,7 @@ impl<'this, 'outer_a: 'this> JsonRefreshWebToken<'outer_a> {
             Self {
                 json_access_web_token_id: UuidV4::new_from_string(common.json_access_web_token_id)?,
                 application_user_id: Cow::Owned(ApplicationUserId::new_from_string(common.application_user_id)?),
-                application_user_log_in_token_device_id: Cow::Owned(UuidV4::new_from_string(common.application_user_log_in_token_device_id)?),
+                application_user_log_in_token_device_id: Cow::Owned(ApplicationUserLogInTokenDeviceId::new_from_string(common.application_user_log_in_token_device_id)?),
                 obfuscation_value: ObfuscationValue::new(common.obfuscation_value.into_owned())
             }
         );
@@ -47,7 +50,7 @@ impl<'this, 'outer_a: 'this> JsonRefreshWebToken<'outer_a> {
         return self.application_user_id.as_ref();
     }
 
-    pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this UuidV4 {
+    pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this ApplicationUserLogInTokenDeviceId {
         return self.application_user_log_in_token_device_id.as_ref();
     }
 

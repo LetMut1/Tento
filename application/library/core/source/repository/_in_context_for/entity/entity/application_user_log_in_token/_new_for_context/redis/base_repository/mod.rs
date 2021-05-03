@@ -1,6 +1,6 @@
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::common::Common;
-use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
+use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
@@ -51,7 +51,7 @@ impl<'outer_a> BaseRepository {
     }
 
     pub fn get_by_application_user_id_and_device_id<'outer_b>(
-        connection_manager: &'outer_b mut ConnectionManager, application_user_id: &'outer_a ApplicationUserId, device_id: &'outer_a UuidV4,
+        connection_manager: &'outer_b mut ConnectionManager, application_user_id: &'outer_a ApplicationUserId, device_id: &'outer_a ApplicationUserLogInTokenDeviceId,
     ) -> Result<Option<ApplicationUserLogInToken<'outer_a>>, ResourceErrorKind> {
         match connection_manager.get_connection().get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(application_user_id, device_id)

@@ -1,5 +1,5 @@
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::common::Common;
-use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
@@ -47,7 +47,9 @@ impl<'outer_a, 'vague> BaseRepository {
     }
 
     pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
-        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a UuidV4,
+        connection_manager: &'outer_a mut ConnectionManager, 
+        application_user_id: &'outer_a ApplicationUserId, 
+        application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId,
     ) -> Result<Option<JsonRefreshWebToken<'vague>>, ResourceErrorKind> {
         match connection_manager.get_connection().get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(application_user_id, application_user_log_in_token_device_id)
@@ -65,13 +67,15 @@ impl<'outer_a, 'vague> BaseRepository {
     }
 
     pub fn get_by_application_user_id(
-        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id_registry: Vec<String>
+        connection_manager: &'outer_a mut ConnectionManager, 
+        application_user_id: &'outer_a ApplicationUserId, 
+        application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
         let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = Vec::new();
 
         for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
             if let Some(json_refresh_web_token) = Self::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                connection_manager, application_user_id, &UuidV4::new_from_string(application_user_log_in_token_device_id).unwrap()
+                connection_manager, application_user_id, &ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id).unwrap()
             )?
             {
                 json_refresh_web_token_registry.push(json_refresh_web_token);

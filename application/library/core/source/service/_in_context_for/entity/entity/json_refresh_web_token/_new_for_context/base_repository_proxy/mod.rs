@@ -1,4 +1,4 @@
-use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
@@ -13,7 +13,7 @@ impl<'outer_a, 'vague> BaseRepositoryProxy {
         connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         let application_user_log_in_token_device_id: String = 
-        json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().to_string();
+        json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().get_value().to_string();
 
         match ProcessingDeviceIdStorage::get(connection_manager, json_refresh_web_token.get_application_user_id())? {
             Some(mut application_user_log_in_token_device_id_registry) => {
@@ -59,7 +59,7 @@ impl<'outer_a, 'vague> BaseRepositoryProxy {
 
         if let Some(mut application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection_manager, json_refresh_web_token.get_application_user_id())? 
         {
-            let application_user_log_in_token_device_id: String = json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().to_string();
+            let application_user_log_in_token_device_id: String = json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().get_value().to_string();
 
             let mut aplication_user_log_in_token_device_id_index_option: Option<usize> = None;
 
@@ -88,7 +88,9 @@ impl<'outer_a, 'vague> BaseRepositoryProxy {
     }
 
     pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
-        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a UuidV4,
+        connection_manager: &'outer_a mut ConnectionManager, 
+        application_user_id: &'outer_a ApplicationUserId, 
+        application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
     ) -> Result<Option<JsonRefreshWebToken<'vague>>, ResourceErrorKind> {
         return BaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
             connection_manager, application_user_id, application_user_log_in_token_device_id

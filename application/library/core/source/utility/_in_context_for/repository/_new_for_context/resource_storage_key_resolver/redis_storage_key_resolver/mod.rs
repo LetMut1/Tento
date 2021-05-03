@@ -1,4 +1,5 @@
 use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 
 pub struct RedisStorageKeyResolver;
@@ -12,11 +13,11 @@ impl<'outer_a> RedisStorageKeyResolver {
     const PREFIX_UTILITY_JSON_REFRESH_WEB_TOKEN_FIRST: &'static str = "ut:jsreweto:first:";
     
     pub fn get_repository_application_user_log_in_token_first(
-        application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a UuidV4
+        application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
     ) -> String {
         return Self::PREFIX_REPOSITORY_APPLICATION_USER_LOG_IN_TOKEN_FIRST.to_string()
         + application_user_id.get_value().get_value().to_string().as_str() + ":"
-        + application_user_log_in_token_device_id.get_value().to_string().as_str();
+        + application_user_log_in_token_device_id.get_value().get_value().to_string().as_str();
     }
     
     pub fn get_repository_application_user_registration_confirmation_token_first(
@@ -41,11 +42,11 @@ impl<'outer_a> RedisStorageKeyResolver {
     }
 
     pub fn get_repository_json_refresh_web_token_first(
-        application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a UuidV4,
+        application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId,
     ) -> String {
         return Self::PREFIX_REPOSITORY_JSON_REFRESH_WEB_TOKEN_FIRST.to_string()
         + application_user_id.get_value().get_value().to_string().as_str() + ":"
-        + application_user_log_in_token_device_id.get_value().to_string().as_str();
+        + application_user_log_in_token_device_id.get_value().get_value().to_string().as_str();
     }
 
     pub fn get_utility_json_refresh_web_token_first(application_user_id: &'outer_a ApplicationUserId) -> String {

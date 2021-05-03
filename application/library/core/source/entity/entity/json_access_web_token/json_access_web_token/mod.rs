@@ -1,6 +1,7 @@
 use crate::data_transfer_object::_in_context_for::entity::entity::json_access_web_token::core::payload::_new_fro_context::common::Common;
 use crate::entity::core::date_time::DateTime;
 use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_access_web_token::core::header::header::Header;
 use crate::entity::entity::json_access_web_token::core::payload::Payload;
@@ -53,7 +54,7 @@ impl<'this, 'outer_a: 'this> JsonAccessWebToken<'outer_a> {
         return &self.payload.get_application_user_id();
     }
 
-    pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this UuidV4 {
+    pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this ApplicationUserLogInTokenDeviceId {
         return &self.payload.get_application_user_log_in_token_device_id();
     }
 

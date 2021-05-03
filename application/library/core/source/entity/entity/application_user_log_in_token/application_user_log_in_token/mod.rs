@@ -4,12 +4,13 @@ use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use std::borrow::Cow;
+use super::core::device_id::DeviceId;
 use super::core::value::Value;
 use super::core::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
 
 pub struct ApplicationUserLogInToken<'outer_a> {
     application_user_id: &'outer_a ApplicationUserId,
-    device_id: &'outer_a UuidV4,
+    device_id: &'outer_a DeviceId,
     application_user_email: Cow<'outer_a, Email>,
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuanity
@@ -18,7 +19,7 @@ pub struct ApplicationUserLogInToken<'outer_a> {
 impl<'this, 'outer_a: 'this> ApplicationUserLogInToken<'outer_a> {
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: u8 = 5;
 
-    pub fn new(application_user: &'outer_a ApplicationUser<'outer_a>, device_id: &'outer_a UuidV4) -> Self {
+    pub fn new(application_user: &'outer_a ApplicationUser<'outer_a>, device_id: &'outer_a DeviceId) -> Self {
         return Self {
             application_user_id: application_user.get_id(),
             device_id,
@@ -29,7 +30,7 @@ impl<'this, 'outer_a: 'this> ApplicationUserLogInToken<'outer_a> {
     }
 
     pub fn new_from_model(
-        common: Common<'outer_a>, application_user_id: &'outer_a ApplicationUserId, device_id: &'outer_a UuidV4
+        common: Common<'outer_a>, application_user_id: &'outer_a ApplicationUserId, device_id: &'outer_a DeviceId
     ) -> Self {
         return Self {
             application_user_id,
@@ -44,7 +45,7 @@ impl<'this, 'outer_a: 'this> ApplicationUserLogInToken<'outer_a> {
         return self.application_user_id;
     }
 
-    pub fn get_device_id(&'this self) -> &'this UuidV4 {
+    pub fn get_device_id(&'this self) -> &'this DeviceId {
         return self.device_id;
     }
 
