@@ -35,16 +35,21 @@ impl<'outer_a> BaseRepository {
         return Ok(());
     }
 
-    pub fn is_exist_by_email(connection_manager: &'outer_a ConnectionManager, email: &'outer_a Email) -> Result<bool, ResourceErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
+    pub fn is_exist_by_application_user_email(
+        connection_manager: &'outer_a ConnectionManager, application_user_email: &'outer_a Email
+    ) -> Result<bool, ResourceErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
         return Ok(
-            diesel::select(dsl::exists(pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::email.eq(email.get_value()))))
+            diesel::select(dsl::exists(pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::email.eq(application_user_email.get_value()))))
             .get_result::<bool>(connection_manager.get_connection())?
         );          // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    pub fn get_by_email(connection_manager: &'outer_a ConnectionManager, email: &'outer_a Email) -> Result<Option<PreConfirmedApplicationUser>, ResourceErrorKind> {
-        if let Some(existing) = pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::email.eq(email.get_value()))
-        .get_result::<Existing>(connection_manager.get_connection()).optional()? 
+    pub fn get_by_application_user_email(
+        connection_manager: &'outer_a ConnectionManager, application_user_email: &'outer_a Email
+    ) -> Result<Option<PreConfirmedApplicationUser>, ResourceErrorKind> {
+        if let Some(existing) = pre_confirmed_application_user_schema::table.filter(
+            pre_confirmed_application_user_schema::email.eq(application_user_email.get_value())
+        ).get_result::<Existing>(connection_manager.get_connection()).optional()? 
         {
             return Ok(Some(PreConfirmedApplicationUser::new_from_model(existing))); 
         }

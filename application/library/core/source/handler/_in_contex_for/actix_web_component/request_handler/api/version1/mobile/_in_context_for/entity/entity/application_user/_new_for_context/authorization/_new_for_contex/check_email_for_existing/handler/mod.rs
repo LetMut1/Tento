@@ -17,7 +17,7 @@ impl Handler {
 
         let handler_result: HandlerResult = HandlerResult::new(
             ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)?
-            || PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)?
+            || PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(&connection_manager, &application_user_email)?
         );
 
         connection_manager.close_connection();

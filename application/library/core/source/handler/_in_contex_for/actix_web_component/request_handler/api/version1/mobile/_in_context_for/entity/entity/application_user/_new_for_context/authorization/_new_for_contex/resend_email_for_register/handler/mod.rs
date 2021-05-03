@@ -17,7 +17,7 @@ impl Handler {
         let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
         postgresql_connection_manager.establish_connection()?;
 
-        if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&postgresql_connection_manager, &Email::new(request.application_user_email))? {
+        if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_application_user_email(&postgresql_connection_manager, &Email::new(request.application_user_email))? {
             postgresql_connection_manager.close_connection();
 
             let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;

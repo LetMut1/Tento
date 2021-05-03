@@ -24,7 +24,7 @@ impl Handler {
             let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
             postgresql_connection_manager.establish_connection()?;
 
-            if !PreConfirmedApplicationUserBaseRepository::is_exist_by_email(&postgresql_connection_manager, &application_user_email)? {
+            if !PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(&postgresql_connection_manager, &application_user_email)? {
                 if !ApplicationUserBaseRepository::is_exist_by_email(&postgresql_connection_manager, &application_user_email)? {
                     let pre_confirmed_application_user: PreConfirmedApplicationUser = PreConfirmedApplicationUser::new(application_user_email);  
 

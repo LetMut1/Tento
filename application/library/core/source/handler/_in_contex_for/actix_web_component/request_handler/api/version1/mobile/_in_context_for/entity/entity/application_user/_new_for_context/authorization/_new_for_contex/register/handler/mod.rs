@@ -37,7 +37,7 @@ impl<'outer_a> Handler {
         postgresql_connection_manager.establish_connection()?;
 
         if !ApplicationUserBaseRepository::is_exist_by_nickanme(&postgresql_connection_manager, &application_user_nickname)? {
-            if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_email(&postgresql_connection_manager, &application_user_email)? {
+            if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_application_user_email(&postgresql_connection_manager, &application_user_email)? {
                 let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
                 redis_connection_manager.establish_connection()?;
 
