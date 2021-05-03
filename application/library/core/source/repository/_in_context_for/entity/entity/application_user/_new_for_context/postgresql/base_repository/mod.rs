@@ -2,9 +2,9 @@ use crate::data_transfer_object::resource_model::_in_context_for::entity::entity
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::select::Select;
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::update::Update;
 use crate::diesel_component::schema::public::application_user as application_user_schema;
-use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::entity::entity::application_user::core::email::Email;
+use crate::entity::entity::application_user::core::id::Id;
 use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::utility::_in_context_for::data_transfer_object::resource_model::_new_for_context::update_resolver::_in_context_for::_in_context_for::entity::entity::application_user::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;
@@ -30,7 +30,7 @@ impl<'outer_a, 'vague> BaseRepository {
     pub fn update(
         connection_manager: &'outer_a ConnectionManager, application_user: &'outer_a ApplicationUser<'outer_a>, update_resolver: UpdateResolver
     ) -> Result<(), ResourceErrorKind> {
-        diesel::update(application_user_schema::table.filter(application_user_schema::id.eq(application_user.get_id().get_value())))
+        diesel::update(application_user_schema::table.filter(application_user_schema::id.eq(application_user.get_id().get_value().get_value())))
         .set(&Update::new(application_user, update_resolver)).execute(connection_manager.get_connection())?;
 
         return Ok(());
@@ -60,8 +60,8 @@ impl<'outer_a, 'vague> BaseRepository {
         return Ok(None); 
     }
 
-    pub fn get_by_id(connection_manager: &'outer_a ConnectionManager, id: &'outer_a UuidV4) -> Result<Option<ApplicationUser<'vague>>, ResourceErrorKind> {
-        if let Some(existing) = application_user_schema::table.filter(application_user_schema::id.eq(id.get_value()))
+    pub fn get_by_id(connection_manager: &'outer_a ConnectionManager, id: &'outer_a Id) -> Result<Option<ApplicationUser<'vague>>, ResourceErrorKind> {
+        if let Some(existing) = application_user_schema::table.filter(application_user_schema::id.eq(id.get_value().get_value()))
         .get_result::<Select>(connection_manager.get_connection()).optional()? 
         {
             return Ok(Some(ApplicationUser::new_from_resource_model(existing))); 

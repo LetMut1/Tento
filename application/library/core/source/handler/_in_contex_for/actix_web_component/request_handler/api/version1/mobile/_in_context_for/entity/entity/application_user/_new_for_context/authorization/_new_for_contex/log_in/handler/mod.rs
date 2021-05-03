@@ -2,6 +2,7 @@ use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_
 use crate::data_transfer_object::response_parameters::_in_context_for::handler::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::log_in::handler::_new_for_context::result::Result as HandlerResult;
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
+use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_access_web_token_black_list::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
@@ -14,12 +15,11 @@ use crate::service::_in_context_for::entity::entity::json_access_web_token::_new
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::BaseRepositoryProxy;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
-
 pub struct Handler;
 
 impl Handler {
     pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        let application_user_id: UuidV4 = UuidV4::new_from_string(request.application_user_id)?;
+        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
 
         let application_user_log_in_token_device_id: UuidV4 = UuidV4::new_from_string(request.application_user_log_in_token_device_id)?;
 

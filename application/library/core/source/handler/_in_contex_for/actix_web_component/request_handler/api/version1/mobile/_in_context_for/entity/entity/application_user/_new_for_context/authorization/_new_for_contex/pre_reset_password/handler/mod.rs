@@ -43,7 +43,7 @@ impl<'outer_a> Handler {
 
             EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;
 
-            return Ok(HandlerResult::new(application_user.get_id().get_value().to_string()));
+            return Ok(HandlerResult::new(application_user.get_id().get_value().get_value().to_string()));
         }
 
         return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::NotFound)));

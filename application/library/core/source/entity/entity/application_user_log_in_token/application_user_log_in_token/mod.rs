@@ -2,12 +2,13 @@ use crate::data_transfer_object::resource_model::_in_context_for::entity::entity
 use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
 use crate::entity::entity::application_user::core::email::Email;
+use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use std::borrow::Cow;
 use super::core::value::Value;
 use super::core::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
 
 pub struct ApplicationUserLogInToken<'outer_a> {
-    application_user_id: &'outer_a UuidV4,
+    application_user_id: &'outer_a ApplicationUserId,
     device_id: &'outer_a UuidV4,
     application_user_email: Cow<'outer_a, Email>,
     value: Value,
@@ -27,7 +28,9 @@ impl<'this, 'outer_a: 'this> ApplicationUserLogInToken<'outer_a> {
         };
     }
 
-    pub fn new_from_model(common: Common<'outer_a>, application_user_id: &'outer_a UuidV4, device_id: &'outer_a UuidV4) -> Self {
+    pub fn new_from_model(
+        common: Common<'outer_a>, application_user_id: &'outer_a ApplicationUserId, device_id: &'outer_a UuidV4
+    ) -> Self {
         return Self {
             application_user_id,
             device_id,
@@ -37,7 +40,7 @@ impl<'this, 'outer_a: 'this> ApplicationUserLogInToken<'outer_a> {
         };
     }
 
-    pub fn get_application_user_id(&'this self) -> &'this UuidV4 {
+    pub fn get_application_user_id(&'this self) -> &'this ApplicationUserId {
         return self.application_user_id;
     }
 

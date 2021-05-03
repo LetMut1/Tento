@@ -1,5 +1,5 @@
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_reset_password::request::Request;
-use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error_kind::ApplicationUserResetPasswordTokenErrorKind;
 use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
@@ -11,7 +11,7 @@ pub struct Handler;
 
 impl<'outer_a> Handler {
     pub fn handle(request: Request) -> Result<(), MainErrorKind> {
-        let application_user_id: UuidV4 = UuidV4::new_from_string(request.application_user_id)?;
+        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
 
         let mut connection_manager: ConnectionManager = ConnectionManager::new();
         connection_manager.establish_connection()?;

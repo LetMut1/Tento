@@ -1,15 +1,15 @@
 use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::application_user::_new_for_context::select::Select;
 use crate::entity::core::date_time::DateTime;
-use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use std::borrow::Cow;
 use super::core::email::Email;
+use super::core::id::Id;
 use super::core::nickname::Nickname;
 use super::core::password_hash::PasswordHash;
 use super::core::password::Password;
 
 pub struct ApplicationUser<'outer_a> {
-    id: UuidV4,
+    id: Id,
     email: Cow<'outer_a, Email>,
     nickname: Nickname,
     password_hash: PasswordHash,
@@ -21,7 +21,7 @@ impl<'this, 'outer_a: 'this> ApplicationUser<'outer_a> {
         pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser, nickname: Nickname, password: Password
     ) -> Self {
         return Self {
-            id: UuidV4::new(),
+            id: Id::new(),
             email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
             nickname,
             password_hash: PasswordHash::new_from_password(password),
@@ -31,7 +31,7 @@ impl<'this, 'outer_a: 'this> ApplicationUser<'outer_a> {
 
     pub fn new_from_resource_model(select: Select) -> Self {
         return Self {
-            id: UuidV4::new_from_uuid(select.id),
+            id: Id::new_from_uuid(select.id),
             email: Cow::Owned(Email::new(select.email)),
             nickname: Nickname::new(select.nickname),
             password_hash: PasswordHash::new(select.password_hash),
@@ -57,7 +57,7 @@ impl<'this, 'outer_a: 'this> ApplicationUser<'outer_a> {
         return self;
     }
 
-    pub fn get_id(&'this self) -> &'this UuidV4 {
+    pub fn get_id(&'this self) -> &'this Id {
         return &self.id;
     }
 

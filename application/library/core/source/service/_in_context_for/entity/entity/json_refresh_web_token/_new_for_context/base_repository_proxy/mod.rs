@@ -1,4 +1,5 @@
 use crate::entity::core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::repository::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::redis::base_repository::BaseRepository;
@@ -87,7 +88,7 @@ impl<'outer_a, 'vague> BaseRepositoryProxy {
     }
 
     pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
-        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a UuidV4, application_user_log_in_token_device_id: &'outer_a UuidV4,
+        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a UuidV4,
     ) -> Result<Option<JsonRefreshWebToken<'vague>>, ResourceErrorKind> {
         return BaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
             connection_manager, application_user_id, application_user_log_in_token_device_id
@@ -95,7 +96,7 @@ impl<'outer_a, 'vague> BaseRepositoryProxy {
     }
 
     pub fn get_by_application_user_id(
-        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a UuidV4
+        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a ApplicationUserId
     ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
         if let Some(application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection_manager, application_user_id)? {
             return BaseRepository::get_by_application_user_id(connection_manager, application_user_id, application_user_log_in_token_device_id_registry);

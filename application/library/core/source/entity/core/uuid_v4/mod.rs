@@ -20,8 +20,8 @@ impl<'this, 'outer_a: 'this> UuidV4 {
         };
     }
 
-    pub fn new_from_string(value: String) -> Result<Self, InvalidArgumentError> {
-        if let Ok(uuid) = Uuid::parse_str(value.as_str()) {
+    pub fn new_from_string(uuid: String) -> Result<Self, InvalidArgumentError> {
+        if let Ok(uuid) = Uuid::parse_str(uuid.as_str()) {
             return Ok(
                 Self { 
                     value: uuid
