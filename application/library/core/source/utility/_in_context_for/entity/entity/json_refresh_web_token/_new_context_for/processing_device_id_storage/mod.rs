@@ -1,7 +1,7 @@
 use crate::entity::entity::application_user::core::id::Id;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
-use crate::utility::date_time_expiration_creator::DateTimeExpirationCreator;
+use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
 use redis::Commands;
 
@@ -18,7 +18,7 @@ impl<'outer_a> ProcessingDeviceIdStorage {
         connection_manager.get_connection().set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id), 
             application_user_log_in_token_device_id_registry.join(Self::SEPARATOR),
-            (DateTimeExpirationCreator::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
         )?;
 
         return Ok(());
@@ -49,7 +49,7 @@ impl<'outer_a> ProcessingDeviceIdStorage {
     ) -> Result<(), ResourceErrorKind> {
         connection_manager.get_connection().expire::<String, ()>(
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id),
-            (DateTimeExpirationCreator::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
         )?;
 
         return Ok(());

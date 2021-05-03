@@ -3,7 +3,7 @@ use crate::entity::entity::application_user_registration_confirmation_token::app
 use crate::entity::entity::pre_confirmed_application_user::core::id::Id as PreConfirmedApplicationUserId;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
-use crate::utility::date_time_expiration_creator::DateTimeExpirationCreator;
+use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use crate::utility::resource_connection::redis::connection_manager::ConnectionManager;
 use redis::Commands;
 
@@ -19,7 +19,7 @@ impl<'outer_a> BaseRepository {
                 application_user_registration_confirmation_token.get_pre_confirmed_application_user_id()
             ), 
             serde_json::to_string(&Common::new(application_user_registration_confirmation_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
-            (DateTimeExpirationCreator::QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST * 60) as usize
         )?;
         
         return Ok(());
@@ -46,7 +46,7 @@ impl<'outer_a> BaseRepository {
             RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                 application_user_registration_confirmation_token.get_pre_confirmed_application_user_id()
             ),
-            (DateTimeExpirationCreator::QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST * 60) as usize
         )?;
 
         return Ok(());

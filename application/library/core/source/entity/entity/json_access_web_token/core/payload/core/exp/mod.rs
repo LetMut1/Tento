@@ -1,7 +1,7 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use crate::entity::core::date_time::DateTime;
-use crate::utility::date_time_expiration_creator::DateTimeExpirationCreator;
+use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use std::clone::Clone;
 
 #[derive(Clone)]
@@ -12,7 +12,7 @@ pub struct Exp {
 impl<'this, 'outer_a: 'this> Exp {
     pub fn new() -> Self {
         return Self {
-            value: DateTimeExpirationCreator::create_json_access_web_token_first()
+            value: DateTimeExpirationResolver::create_json_access_web_token_first()
         };
     }
 
