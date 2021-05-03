@@ -1,5 +1,4 @@
 use crate::entity::entity::json_access_web_token::core::payload::core::id::Id as JsonAccessWebTokenId;
-use std::borrow::Cow;
 
 pub struct JsonAccessWebTokenBlackList<'outer_a> {
     json_access_web_token_id: &'outer_a JsonAccessWebTokenId
