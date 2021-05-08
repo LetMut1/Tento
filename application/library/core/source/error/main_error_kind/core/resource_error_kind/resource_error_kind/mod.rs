@@ -7,9 +7,9 @@ use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
-use super::core::email_server::email_server_error_kind::EmailServerErrorKind;
-use super::core::postgresql::postgresql_error_kind::PostgresqlErrorKind;
-use super::core::redis::redis_error_kind::RedisErrorKind;
+use super::core::_in_context_for::resource::email_server::_new_for_context::email_server_error_kind::EmailServerErrorKind;
+use super::core::_in_context_for::resource::postgresql::_new_for_context::postgresql_error_kind::PostgresqlErrorKind;
+use super::core::_in_context_for::resource::redis::_new_for_context::redis_error_kind::RedisErrorKind;
 
 #[derive(Debug)]
 pub enum ResourceErrorKind {

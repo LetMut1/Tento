@@ -1,4 +1,4 @@
-use crate::error::main_error_kind::core::resource_error_kind::core::email_server::email_server_error_kind::EmailServerErrorKind;
+use crate::error::main_error_kind::core::resource_error_kind::core::_in_context_for::resource::email_server::_new_for_context::email_server_error_kind::EmailServerErrorKind;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use lettre_email::EmailBuilder;
 use lettre::ClientSecurity;
