@@ -1,1 +1,1 @@
-pub mod connection_pool_registry_storage;
+pub mod aggregate_connection_pool;

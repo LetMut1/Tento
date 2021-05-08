@@ -9,6 +9,7 @@ extern crate futures;
 extern crate hex;
 extern crate lettre_email;
 extern crate lettre;
+extern crate r2d2_redis;
 extern crate r2d2;
 extern crate redis;
 extern crate regex;
