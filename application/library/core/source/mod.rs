@@ -23,6 +23,6 @@ pub mod handler;
 pub(crate) mod diesel_component;
 pub(crate) mod entity;
 pub(crate) mod repository;
-pub(crate) mod resource;
+pub(crate) mod _resource;
 pub(crate) mod service;
 pub(crate) mod utility;

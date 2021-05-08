@@ -2,7 +2,7 @@ use crate::entity::entity::application_user::core::id::Id;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
-use crate::utility::_in_context_for::resource::redis::_new_for_context::connection_manager::ConnectionManager;
+use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager;
 use redis::Commands;
 
 pub struct ProcessingDeviceIdStorage;

@@ -1,4 +1,4 @@
-use crate::data_transfer_object::resource_model::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::existing::Existing;
+use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::existing::Existing;
 use crate::entity::entity::application_user::core::email::Email;
 use super::core::id::Id;
 

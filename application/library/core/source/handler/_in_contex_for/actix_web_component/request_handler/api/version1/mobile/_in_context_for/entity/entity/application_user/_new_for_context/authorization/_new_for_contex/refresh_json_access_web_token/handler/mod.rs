@@ -8,7 +8,7 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::BaseRepositoryProxy;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
-use crate::utility::_in_context_for::resource::redis::_new_for_context::connection_manager::ConnectionManager;
+use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager;
 
 pub struct Handler;
 
