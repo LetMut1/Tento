@@ -11,20 +11,22 @@ use crate::repository::_in_context_for::entity::entity::application_user_log_in_
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::utility::_in_context_for::entity::entity::application_user::core::password::_new_for_context::password_encoder::PasswordEncoder;
-use crate::utility::_in_context_for::_resource::postgresql::_new_for_context::connection_manager::ConnectionManager as PostgresqlConnectionManager;
 use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager as RedisConnectionManager;
+use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
+use diesel::PgConnection as PostgresqlConnection;
+use std::sync::Arc;
 
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
+    pub fn handle(request: Request, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<HandlerResult, MainErrorKind> {
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId =
         ApplicationUserLogInTokenDeviceId::new_from_string(request.application_user_log_in_token_device_id)?;
 
-        let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
-        postgresql_connection_manager.establish_connection()?;
+        let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(aggregate_connection_pool)?;
 
-        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(&postgresql_connection_manager, &Email::new(request.application_user_email))? {
+        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(&postgresql_connection, &Email::new(request.application_user_email))? {
             if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash()) {
                 let application_user_log_in_token: ApplicationUserLogInToken<'_>;
 
@@ -49,7 +51,6 @@ impl Handler {
 
                 redis_connection_manager.close_connection();
                 
-                postgresql_connection_manager.close_connection();
 
                 EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
 

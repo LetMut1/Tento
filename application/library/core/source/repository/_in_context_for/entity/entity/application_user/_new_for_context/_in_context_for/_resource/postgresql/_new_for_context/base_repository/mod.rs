@@ -8,10 +8,10 @@ use crate::entity::entity::application_user::core::id::Id;
 use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::utility::_in_context_for::data_transfer_object::resource_model::_new_for_context::update_resolver::_in_context_for::_in_context_for::entity::entity::application_user::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;
-use crate::utility::_in_context_for::_resource::postgresql::_new_for_context::connection_manager::ConnectionManager;
 use diesel::dsl;
 use diesel::ExpressionMethods;
 use diesel::OptionalExtension;
+use diesel::PgConnection as Connection;
 use diesel::QueryDsl;
 use diesel::RunQueryDsl;
 
@@ -19,40 +19,40 @@ pub struct BaseRepository;
 
 impl<'outer_a, 'vague> BaseRepository {
     pub fn create(
-        connection_manager: &'outer_a ConnectionManager, application_user: &'outer_a ApplicationUser<'outer_a>
+        connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         diesel::insert_into(application_user_schema::table).values(Insert::new(application_user))
-        .execute(connection_manager.get_connection())?;  // TODO нужно ли обработать количество вернувшихся строк
+        .execute(connection)?;  // TODO нужно ли обработать количество вернувшихся строк
 
         return Ok(());
     }
 
     pub fn update(
-        connection_manager: &'outer_a ConnectionManager, application_user: &'outer_a ApplicationUser<'outer_a>, update_resolver: UpdateResolver
+        connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'outer_a>, update_resolver: UpdateResolver
     ) -> Result<(), ResourceErrorKind> {
         diesel::update(application_user_schema::table.filter(application_user_schema::id.eq(application_user.get_id().get_value().get_value())))
-        .set(&Update::new(application_user, update_resolver)).execute(connection_manager.get_connection())?;
+        .set(&Update::new(application_user, update_resolver)).execute(connection)?;
 
         return Ok(());
     }
 
-    pub fn is_exist_by_nickanme(connection_manager: &'outer_a ConnectionManager, nickname: &'outer_a Nickname) -> Result<bool, ResourceErrorKind> {
+    pub fn is_exist_by_nickanme(connection: &'outer_a Connection, nickname: &'outer_a Nickname) -> Result<bool, ResourceErrorKind> {
         return Ok(
             diesel::select(dsl::exists(application_user_schema::table.filter(application_user_schema::nickname.eq(nickname.get_value()))))
-            .get_result::<bool>(connection_manager.get_connection())?
+            .get_result::<bool>(connection)?
         );// TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    pub fn is_exist_by_email(connection_manager: &'outer_a ConnectionManager, email: &'outer_a Email) -> Result<bool, ResourceErrorKind> {
+    pub fn is_exist_by_email(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<bool, ResourceErrorKind> {
         return Ok(
             diesel::select(dsl::exists(application_user_schema::table.filter(application_user_schema::email.eq(email.get_value()))))
-            .get_result::<bool>(connection_manager.get_connection())?
+            .get_result::<bool>(connection)?
         );      // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    pub fn get_by_email(connection_manager: &'outer_a ConnectionManager, email: &'outer_a Email) -> Result<Option<ApplicationUser<'vague>>, ResourceErrorKind> {
+    pub fn get_by_email(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<Option<ApplicationUser<'vague>>, ResourceErrorKind> {
         if let Some(existing) = application_user_schema::table.filter(application_user_schema::email.eq(email.get_value()))
-        .get_result::<Select>(connection_manager.get_connection()).optional()? 
+        .get_result::<Select>(connection).optional()? 
         {
             return Ok(Some(ApplicationUser::new_from_resource_model(existing))); 
         }
@@ -60,9 +60,9 @@ impl<'outer_a, 'vague> BaseRepository {
         return Ok(None); 
     }
 
-    pub fn get_by_id(connection_manager: &'outer_a ConnectionManager, id: &'outer_a Id) -> Result<Option<ApplicationUser<'vague>>, ResourceErrorKind> {
+    pub fn get_by_id(connection: &'outer_a Connection, id: &'outer_a Id) -> Result<Option<ApplicationUser<'vague>>, ResourceErrorKind> {
         if let Some(existing) = application_user_schema::table.filter(application_user_schema::id.eq(id.get_value().get_value()))
-        .get_result::<Select>(connection_manager.get_connection()).optional()? 
+        .get_result::<Select>(connection).optional()? 
         {
             return Ok(Some(ApplicationUser::new_from_resource_model(existing))); 
         }

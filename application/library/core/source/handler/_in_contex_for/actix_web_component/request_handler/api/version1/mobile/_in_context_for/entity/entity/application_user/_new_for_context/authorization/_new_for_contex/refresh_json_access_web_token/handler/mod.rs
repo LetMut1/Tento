@@ -9,11 +9,14 @@ use crate::service::_in_context_for::entity::entity::json_access_web_token::_new
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::BaseRepositoryProxy;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager;
+use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
+use std::sync::Arc;
 
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
+    pub fn handle(request: Request, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<HandlerResult, MainErrorKind> {
         let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(request.json_access_web_token.as_str())?;
 
         if json_access_web_token.is_expired() {

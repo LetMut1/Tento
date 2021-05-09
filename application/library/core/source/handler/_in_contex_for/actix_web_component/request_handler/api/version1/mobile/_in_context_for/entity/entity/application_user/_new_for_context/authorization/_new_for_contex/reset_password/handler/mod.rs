@@ -9,13 +9,16 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::utility::_in_context_for::data_transfer_object::resource_model::_new_for_context::update_resolver::_in_context_for::_in_context_for::entity::entity::application_user::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;
-use crate::utility::_in_context_for::_resource::postgresql::_new_for_context::connection_manager::ConnectionManager as PostgresqlConnectionManager;
 use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager as RedisConnectionManager;
+use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
+use diesel::PgConnection as PostgresqlConnection;
+use std::sync::Arc;
 
 pub struct Handler;
 
 impl<'outer_a> Handler {
-    pub fn handle(request: Request) -> Result<(), MainErrorKind> {
+    pub fn handle(request: Request, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<(), MainErrorKind> {
         let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
 
         let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
@@ -23,15 +26,12 @@ impl<'outer_a> Handler {
 
         if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(&mut redis_connection_manager, &application_user_id)? {
             if application_user_reset_password_token.get_value().get_value() == request.application_user_reset_password_token_value.as_str() {
-                let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
-                postgresql_connection_manager.establish_connection()?;
+                let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(aggregate_connection_pool)?;
 
-                if let Some(mut application_user) = ApplicationUserBaseRepository::get_by_id(&postgresql_connection_manager, &application_user_id)? {
+                if let Some(mut application_user) = ApplicationUserBaseRepository::get_by_id(&postgresql_connection, &application_user_id)? {
                     application_user.set_password(Password::new(request.application_user_password));
 
-                    ApplicationUserBaseRepository::update(&postgresql_connection_manager, &application_user, UpdateResolver::new(false, false, true, false))?;
-
-                    postgresql_connection_manager.close_connection();
+                    ApplicationUserBaseRepository::update(&postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?; // Загулить, чтл можно сделать для обеспечения транзакции на две системы (зкроме, запоминания состояния через третью ссистпму)
 
                     ApplicationUserResetPasswordTokenBaseRepository::delete(&mut redis_connection_manager, &application_user_reset_password_token)?;
 

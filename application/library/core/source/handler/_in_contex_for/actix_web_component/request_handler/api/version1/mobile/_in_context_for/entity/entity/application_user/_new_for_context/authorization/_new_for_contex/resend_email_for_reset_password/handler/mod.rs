@@ -5,12 +5,15 @@ use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::E
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
+use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager;
+use std::sync::Arc;
 
 pub struct Handler;
 
 impl<'outer_a> Handler {
-    pub fn handle(request: Request) -> Result<(), MainErrorKind> {
+    pub fn handle(request: Request, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<(), MainErrorKind> {
         let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
 
         let mut connection_manager: ConnectionManager = ConnectionManager::new();

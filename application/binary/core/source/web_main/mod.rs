@@ -10,7 +10,7 @@ use std::io::Result;
 async fn main() -> Result<()>
 {
     return HttpServer::new(|| {
-        return App::new().configure(MainServiceConfigurator::configure);
+        return App::new().configure(MainServiceConfigurator::safely_configure);
     }).bind("0.0.0.0:80")?.run().await; // TODO адрес через метод брать, 
 }
 

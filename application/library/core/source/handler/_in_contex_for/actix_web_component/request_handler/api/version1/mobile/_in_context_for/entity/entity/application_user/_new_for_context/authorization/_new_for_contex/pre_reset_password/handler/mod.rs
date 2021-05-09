@@ -8,17 +8,19 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
-use crate::utility::_in_context_for::_resource::postgresql::_new_for_context::connection_manager::ConnectionManager as PostgresqlConnectionManager;
 use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager as RedisConnectionManager;
+use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
+use std::sync::Arc;
 
 pub struct Handler;
 
 impl<'outer_a> Handler {
-    pub fn handle(request: Request) -> Result<HandlerResult, MainErrorKind> {
-        let mut postgresql_connection_manager: PostgresqlConnectionManager = PostgresqlConnectionManager::new();
-        postgresql_connection_manager.establish_connection()?;
-
-        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(&postgresql_connection_manager, &Email::new(request.application_user_email))? {
+    pub fn handle(request: Request, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<HandlerResult, MainErrorKind> {
+        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(
+            &*ConnectionExtractor::get_postgresql_connection(aggregate_connection_pool)?, &Email::new(request.application_user_email)
+        )? 
+        {
             let application_user_reset_password_token: ApplicationUserResetPasswordToken<'_>;
 
             let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
@@ -38,8 +40,6 @@ impl<'outer_a> Handler {
             }
 
             redis_connection_manager.close_connection();
-
-            postgresql_connection_manager.close_connection();
 
             EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;
 

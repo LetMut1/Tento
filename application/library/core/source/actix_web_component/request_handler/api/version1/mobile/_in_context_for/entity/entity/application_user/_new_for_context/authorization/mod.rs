@@ -1,5 +1,6 @@
 use actix_web::dev::Body;
 use actix_web::HttpResponse;
+use actix_web::web::Data;
 use actix_web::web::Form;
 use actix_web::web::Query;
 use actix_web::web::ReqData;
@@ -40,14 +41,15 @@ use crate::handler::_in_contex_for::actix_web_component::request_handler::api::v
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_register::handler::Handler as ResendEmailForRegisterHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_reset_password::handler::Handler as ResendEmailForResetPasswordHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password::handler::Handler as ResetPasswordHandler;
+use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_json_response_body_wrapper::StandardJsonResponseBodyWrapper;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_response_creator::StandardResponseCreator;
 
 pub struct Authorization;
 
 impl<'vague> Authorization {
-    pub async fn check_email_for_existing(query: Query<CheckEmailForExistingQuery>) -> HttpResponse<Body> {
-        match CheckEmailForExistingHanlder::handle(query.into_inner()) {
+    pub async fn check_email_for_existing(query: Query<CheckEmailForExistingQuery>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match CheckEmailForExistingHanlder::handle(query.into_inner(), data.into_inner()) {
             Ok(result) => {
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
             },
@@ -65,8 +67,8 @@ impl<'vague> Authorization {
         }
     }
 
-    pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>) -> HttpResponse<Body> {
-        match CheckNicknameForExistingHanlder::handle(query.into_inner()) {
+    pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match CheckNicknameForExistingHanlder::handle(query.into_inner(), data.into_inner()) {
             Ok(result) => {
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
             },
@@ -84,8 +86,8 @@ impl<'vague> Authorization {
         }
     }
 
-    pub async fn pre_register(form: Form<PreRegisterRequest>) -> HttpResponse<Body> {
-        if let Err(main_error_kind) = PreRegisterHandler::handle(form.into_inner()) {
+    pub async fn pre_register(form: Form<PreRegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = PreRegisterHandler::handle(form.into_inner(), data.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
@@ -145,8 +147,8 @@ impl<'vague> Authorization {
         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
     }
 
-    pub async fn register(form: Form<RegisterRequest>) -> HttpResponse<Body> {
-        match RegisterHandler::handle(form.into_inner()) {
+    pub async fn register(form: Form<RegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match RegisterHandler::handle(form.into_inner(), data.into_inner()) {
             Ok(result) => { 
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
             },
@@ -207,8 +209,8 @@ impl<'vague> Authorization {
         }
     }
 
-    pub async fn resend_email_for_register(form: Form<ResendEmailForRegisterRequest>) -> HttpResponse<Body> {
-        if let Err(main_error_kind) = ResendEmailForRegisterHandler::handle(form.into_inner()) {
+    pub async fn resend_email_for_register(form: Form<ResendEmailForRegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = ResendEmailForRegisterHandler::handle(form.into_inner(), data.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
@@ -255,8 +257,8 @@ impl<'vague> Authorization {
         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
     }
 
-    pub async fn pre_log_in(form: Form<PreLogInRequest>) -> HttpResponse<Body> {
-        match PreLogInHandler::handle(form.into_inner()) {
+    pub async fn pre_log_in(form: Form<PreLogInRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match PreLogInHandler::handle(form.into_inner(), data.into_inner()) {
             Ok(result) => { 
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
             },
@@ -308,8 +310,8 @@ impl<'vague> Authorization {
         }
     }
 
-    pub async fn log_in(form: Form<LogInRequest>) -> HttpResponse<Body> {
-        match LogInHandler::handle(form.into_inner()) {
+    pub async fn log_in(form: Form<LogInRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match LogInHandler::handle(form.into_inner(), data.into_inner()) {
             Ok(result) => { 
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
             },
@@ -345,8 +347,8 @@ impl<'vague> Authorization {
         }
     }
 
-    pub async fn resend_email_for_log_in(form: Form<ResendEmailForLogInRequest>) -> HttpResponse<Body> {
-        if let Err(main_error_kind) = ResendEmailForLogInHandler::handle(form.into_inner()) {
+    pub async fn resend_email_for_log_in(form: Form<ResendEmailForLogInRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = ResendEmailForLogInHandler::handle(form.into_inner(), data.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
@@ -392,8 +394,8 @@ impl<'vague> Authorization {
         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
     }
 
-    pub async fn refresh_json_access_web_token(form: Form<RefreshJsonAccessWebTokenRequest>) -> HttpResponse<Body> {
-        match RefreshJsonAccessWebTokenHandler::handle(form.into_inner()) {
+    pub async fn refresh_json_access_web_token(form: Form<RefreshJsonAccessWebTokenRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match RefreshJsonAccessWebTokenHandler::handle(form.into_inner(), data.into_inner()) {
             Ok(result) => {
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
             },
@@ -437,8 +439,8 @@ impl<'vague> Authorization {
         }
     }
 
-    pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'vague>>) -> HttpResponse<Body> {
-        if let Err(main_error_kind) = LogOutHandler::handle(&req_data.into_inner()) {
+    pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'vague>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = LogOutHandler::handle(&req_data.into_inner(), data.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
@@ -468,8 +470,8 @@ impl<'vague> Authorization {
         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success());
     }
 
-    pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'vague>>) -> HttpResponse<Body> {
-        if let Err(main_error_kind) = LogOutFromAllDevicesHandler::handle(&req_data.into_inner()) {
+    pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'vague>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = LogOutFromAllDevicesHandler::handle(&req_data.into_inner(), data.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
@@ -499,8 +501,8 @@ impl<'vague> Authorization {
         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success());
     }
 
-    pub async fn pre_reset_password(form: Form<PreResetPasswordRequest>) -> HttpResponse<Body> {
-        match PreResetPasswordHandler::handle(form.into_inner()) {
+    pub async fn pre_reset_password(form: Form<PreResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match PreResetPasswordHandler::handle(form.into_inner(), data.into_inner()) {
             Ok(result) => {
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
             },
@@ -550,8 +552,8 @@ impl<'vague> Authorization {
         }
     }
 
-    pub async fn reset_password(form: Form<ResetPasswordRequest>) -> HttpResponse<Body> {
-        if let Err(main_error_kind) = ResetPasswordHandler::handle(form.into_inner()) {
+    pub async fn reset_password(form: Form<ResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = ResetPasswordHandler::handle(form.into_inner(), data.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {
@@ -596,8 +598,8 @@ impl<'vague> Authorization {
         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success());         
     }
 
-    pub async fn resend_email_for_reset_password(form: Form<ResendEmailForResetPasswordRequest>) -> HttpResponse<Body> {
-        if let Err(main_error_kind) = ResendEmailForResetPasswordHandler::handle(form.into_inner()) {
+    pub async fn resend_email_for_reset_password(form: Form<ResendEmailForResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(main_error_kind) = ResendEmailForResetPasswordHandler::handle(form.into_inner(), data.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
                     match entity_error_kind {

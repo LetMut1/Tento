@@ -4,23 +4,23 @@ use crate::entity::entity::application_user::core::email::Email;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
-use crate::utility::_in_context_for::_resource::postgresql::_new_for_context::connection_manager::ConnectionManager;
+use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
+use diesel::PgConnection as Connection;
+use std::sync::Arc;
 
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(query: Query) -> Result<HandlerResult, MainErrorKind> {
+    pub fn handle(query: Query, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<HandlerResult, MainErrorKind> {
+        let connection: &'_ Connection = &*ConnectionExtractor::get_postgresql_connection(aggregate_connection_pool)?;
+
         let application_user_email: Email = Email::new(query.application_user_email);
 
-        let mut connection_manager: ConnectionManager = ConnectionManager::new();
-        connection_manager.establish_connection()?;
-
         let handler_result: HandlerResult = HandlerResult::new(
-            ApplicationUserBaseRepository::is_exist_by_email(&connection_manager, &application_user_email)?
-            || PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(&connection_manager, &application_user_email)?
+            ApplicationUserBaseRepository::is_exist_by_email(&connection, &application_user_email)?
+            || PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(&connection, &application_user_email)?
         );
-
-        connection_manager.close_connection();
 
         return Ok(handler_result);
     }
