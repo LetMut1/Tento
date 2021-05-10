@@ -5,7 +5,7 @@ use r2d2_redis::RedisConnectionManager;
 use r2d2::Pool;
 
 pub struct AggregateConnectionPool {
-    postgresql_connection_pool: Pool<PostgresqlConnectionManager<PostgresqlConnection>>,            // TODO Скорее всего, нужно Mutex<T>. https://doc.rust-lang.org/std/sync/struct.Arc.html
+    postgresql_connection_pool: Pool<PostgresqlConnectionManager<PostgresqlConnection>>,
     redis_connection_pool: Pool<RedisConnectionManager>
 }
 

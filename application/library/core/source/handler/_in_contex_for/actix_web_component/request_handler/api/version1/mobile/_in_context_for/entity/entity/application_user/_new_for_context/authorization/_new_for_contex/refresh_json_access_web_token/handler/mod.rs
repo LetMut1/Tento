@@ -8,9 +8,9 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::BaseRepositoryProxy;
 use crate::service::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
-use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
+use redis::Connection;
 use std::sync::Arc;
 
 pub struct Handler;
@@ -20,20 +20,17 @@ impl Handler {
         let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(request.json_access_web_token.as_str())?;
 
         if json_access_web_token.is_expired() {
-            let mut connection_manager: ConnectionManager = ConnectionManager::new();
-            connection_manager.establish_connection()?;
+            let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
             if let Some (mut json_refresh_web_token) = BaseRepositoryProxy::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                &mut connection_manager, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
+                connection, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
             )?
             {
                 if &(json_access_web_token.get_id().get_value().get_value().as_bytes())[..] == &(json_refresh_web_token.get_json_access_web_token_id().get_value().get_value().as_bytes())[..] {
                     if Encoder::is_valid(&json_refresh_web_token, request.json_refresh_web_token.as_str()) {
                         json_refresh_web_token.refresh();
 
-                        BaseRepositoryProxy::update(&mut connection_manager, &json_refresh_web_token)?;
-
-                        connection_manager.close_connection();
+                        BaseRepositoryProxy::update(connection, &json_refresh_web_token)?;
 
                         return Ok(
                             HandlerResult::new(

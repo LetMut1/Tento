@@ -7,7 +7,7 @@ use crate::repository::_in_context_for::entity::entity::application_user_reset_p
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
-use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager;
+use redis::Connection;
 use std::sync::Arc;
 
 pub struct Handler;
@@ -16,11 +16,9 @@ impl<'outer_a> Handler {
     pub fn handle(request: Request, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<(), MainErrorKind> {
         let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
 
-        let mut connection_manager: ConnectionManager = ConnectionManager::new();
-        connection_manager.establish_connection()?;
+        let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-        if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(&mut connection_manager, &application_user_id)? {
-            connection_manager.close_connection();
+        if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(connection, &application_user_id)? {
 
             EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;
     

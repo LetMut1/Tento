@@ -13,13 +13,13 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(query: Query, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<HandlerResult, MainErrorKind> {
-        let connection: &'_ Connection = &*ConnectionExtractor::get_postgresql_connection(aggregate_connection_pool)?;
+        let connection: &'_ Connection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
         let application_user_email: Email = Email::new(query.application_user_email);
 
         let handler_result: HandlerResult = HandlerResult::new(
-            ApplicationUserBaseRepository::is_exist_by_email(&connection, &application_user_email)?
-            || PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(&connection, &application_user_email)?
+            ApplicationUserBaseRepository::is_exist_by_email(connection, &application_user_email)?
+            || PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(connection, &application_user_email)?
         );
 
         return Ok(handler_result);

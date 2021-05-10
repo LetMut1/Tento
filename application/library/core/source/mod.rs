@@ -17,6 +17,7 @@ extern crate serde_json;
 extern crate serde;
 extern crate uuid;
 
+mod _resource;
 pub mod actix_web_component;
 pub mod data_transfer_object;
 pub mod error;
@@ -24,6 +25,5 @@ pub mod handler;
 pub(crate) mod diesel_component;
 pub(crate) mod entity;
 pub(crate) mod repository;
-pub(crate) mod _resource;
 pub(crate) mod service;
 pub(crate) mod utility;

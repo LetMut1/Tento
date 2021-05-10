@@ -5,19 +5,18 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
-use diesel::PgConnection as Connection;
 use std::sync::Arc;
 
 pub struct Handler;
 
 impl Handler {
     pub fn handle(query: Query, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<HandlerResult, MainErrorKind> {
-        let connection: &'_ Connection = &*ConnectionExtractor::get_postgresql_connection(aggregate_connection_pool)?;
-
-        let handler_result: HandlerResult = HandlerResult::new(
-            ApplicationUserBaseRepository::is_exist_by_nickanme(&connection, &Nickname::new(query.application_user_nickname))?
+        return Ok(
+            HandlerResult::new(
+                ApplicationUserBaseRepository::is_exist_by_nickanme(
+                    &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Nickname::new(query.application_user_nickname)
+                )?
+            )
         );
-
-        return Ok(handler_result);
     }
 }

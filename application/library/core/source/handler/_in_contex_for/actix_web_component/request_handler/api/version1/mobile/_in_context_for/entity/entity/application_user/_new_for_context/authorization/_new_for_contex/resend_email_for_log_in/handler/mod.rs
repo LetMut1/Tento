@@ -6,7 +6,6 @@ use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::E
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
-use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
 use std::sync::Arc;
@@ -20,16 +19,11 @@ impl Handler {
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId =
         ApplicationUserLogInTokenDeviceId::new_from_string(request.application_user_log_in_token_device_id)?;
 
-        let mut connection_manager: ConnectionManager = ConnectionManager::new();
-        connection_manager.establish_connection()?;
-
         if let Some(application_user_log_in_token) = 
         ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
-            &mut connection_manager, &application_user_id, &application_user_log_in_token_device_id
+            &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_id, &application_user_log_in_token_device_id
         )? 
         {
-            connection_manager.close_connection();
-
             EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
 
             return Ok(());

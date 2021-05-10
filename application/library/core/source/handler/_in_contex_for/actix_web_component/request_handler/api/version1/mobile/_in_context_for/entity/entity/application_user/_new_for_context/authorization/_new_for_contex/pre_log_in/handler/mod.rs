@@ -10,11 +10,10 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
-use crate::utility::_in_context_for::entity::entity::application_user::core::password::_new_for_context::password_encoder::PasswordEncoder;
-use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager as RedisConnectionManager;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
-use diesel::PgConnection as PostgresqlConnection;
+use crate::utility::_in_context_for::entity::entity::application_user::core::password::_new_for_context::password_encoder::PasswordEncoder;
+use redis::Connection;
 use std::sync::Arc;
 
 pub struct Handler;
@@ -24,32 +23,30 @@ impl Handler {
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId =
         ApplicationUserLogInTokenDeviceId::new_from_string(request.application_user_log_in_token_device_id)?;
 
-        let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(aggregate_connection_pool)?;
-
-        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(&postgresql_connection, &Email::new(request.application_user_email))? {
+        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(
+            &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(request.application_user_email)
+        )? 
+        {
             if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash()) {
                 let application_user_log_in_token: ApplicationUserLogInToken<'_>;
 
-                let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
-                redis_connection_manager.establish_connection()?;
+                let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
                 match ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
-                    &mut redis_connection_manager, application_user.get_id(), &application_user_log_in_token_device_id
+                    connection, application_user.get_id(), &application_user_log_in_token_device_id
                 )? 
                 {
                     Some(existing_application_user_log_in_token) => {
                         application_user_log_in_token = existing_application_user_log_in_token;
 
-                        ApplicationUserLogInTokenBaseRepository::update_expiration_time(&mut redis_connection_manager, &application_user_log_in_token)?;
+                        ApplicationUserLogInTokenBaseRepository::update_expiration_time(connection, &application_user_log_in_token)?;
                     },
                     None => {
                         application_user_log_in_token = ApplicationUserLogInToken::new(&application_user, &application_user_log_in_token_device_id);
 
-                        ApplicationUserLogInTokenBaseRepository::create(&mut redis_connection_manager, &application_user_log_in_token)?;
+                        ApplicationUserLogInTokenBaseRepository::create(connection, &application_user_log_in_token)?;
                     }
                 }
-
-                redis_connection_manager.close_connection();
                 
 
                 EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;

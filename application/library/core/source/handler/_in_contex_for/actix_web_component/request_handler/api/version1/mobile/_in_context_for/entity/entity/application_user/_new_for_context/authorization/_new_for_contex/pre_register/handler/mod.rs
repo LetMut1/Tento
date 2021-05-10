@@ -10,10 +10,9 @@ use crate::repository::_in_context_for::entity::entity::application_user_registr
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
-use crate::utility::_in_context_for::entity::entity::application_user::core::email::_new_for_context::email_simple_validator::EmailSimpleValidator;
-use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager as RedisConnectionManager;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
+use crate::utility::_in_context_for::entity::entity::application_user::core::email::_new_for_context::email_simple_validator::EmailSimpleValidator;
 use diesel::PgConnection as PostgresqlConnection;
 use std::sync::Arc;
 
@@ -24,23 +23,20 @@ impl Handler {
         let application_user_email: Email = Email::new(request.application_user_email);
 
         if EmailSimpleValidator::is_valid(&application_user_email) {
-            let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(aggregate_connection_pool)?;
+            let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
-            if !PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(&postgresql_connection, &application_user_email)? {
-                if !ApplicationUserBaseRepository::is_exist_by_email(&postgresql_connection, &application_user_email)? {
+            if !PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(postgresql_connection, &application_user_email)? {
+                if !ApplicationUserBaseRepository::is_exist_by_email(postgresql_connection, &application_user_email)? {
                     let pre_confirmed_application_user: PreConfirmedApplicationUser = PreConfirmedApplicationUser::new(application_user_email);  
 
                     let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> =
                     ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user);
                     
-                    let mut redis_connection_manager: RedisConnectionManager = RedisConnectionManager::new();
-                    redis_connection_manager.establish_connection()?;
+                    ApplicationUserRegistrationConfirmationTokenBaseRepository::create(
+                        &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_registration_confirmation_token
+                    )?;
 
-                    ApplicationUserRegistrationConfirmationTokenBaseRepository::create(&mut redis_connection_manager, &application_user_registration_confirmation_token)?;
-
-                    PreConfirmedApplicationUserBaseRepository::create(&postgresql_connection, &pre_confirmed_application_user)?;
-
-                    redis_connection_manager.close_connection();
+                    PreConfirmedApplicationUserBaseRepository::create(postgresql_connection, &pre_confirmed_application_user)?;
 
                     EmailSender::send_application_user_registration_confirmation_token(&application_user_registration_confirmation_token)?;
 

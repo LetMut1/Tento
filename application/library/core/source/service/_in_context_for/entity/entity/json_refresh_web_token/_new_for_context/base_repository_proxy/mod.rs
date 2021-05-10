@@ -4,27 +4,27 @@ use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonR
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::repository::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository;
 use crate::utility::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::processing_device_id_storage::ProcessingDeviceIdStorage;
-use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager;
+use redis::Connection;
 
 pub struct BaseRepositoryProxy;
 
 impl<'outer_a, 'vague> BaseRepositoryProxy {
     pub fn create(
-        connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
+        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
         let application_user_log_in_token_device_id: String = 
         json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
-        match ProcessingDeviceIdStorage::get(connection_manager, json_refresh_web_token.get_application_user_id())? {
+        match ProcessingDeviceIdStorage::get(connection, json_refresh_web_token.get_application_user_id())? {
             Some(mut application_user_log_in_token_device_id_registry) => {
                 if !application_user_log_in_token_device_id_registry.contains(&application_user_log_in_token_device_id) {
                     application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id);
 
                     ProcessingDeviceIdStorage::update(
-                        connection_manager, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
+                        connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
                     )?;
                 } else {
-                    ProcessingDeviceIdStorage::update_expiration_time(connection_manager, json_refresh_web_token.get_application_user_id())?;
+                    ProcessingDeviceIdStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
                 }
             },
             None => {
@@ -32,32 +32,32 @@ impl<'outer_a, 'vague> BaseRepositoryProxy {
                 application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id);
 
                 ProcessingDeviceIdStorage::create(
-                    connection_manager, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
+                    connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
                 )?;
             }
         }
           
-        BaseRepository::create(connection_manager, json_refresh_web_token)?;
+        BaseRepository::create(connection, json_refresh_web_token)?;
 
         return Ok(());
     }
 
     pub fn update(
-        connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
+        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
-        ProcessingDeviceIdStorage::update_expiration_time(connection_manager, json_refresh_web_token.get_application_user_id())?;
+        ProcessingDeviceIdStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
 
-        BaseRepository::update(connection_manager, json_refresh_web_token)?;
+        BaseRepository::update(connection, json_refresh_web_token)?;
 
         return Ok(());
     }
 
     pub fn delete(
-        connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
+        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
-        BaseRepository::delete(connection_manager, json_refresh_web_token)?;
+        BaseRepository::delete(connection, json_refresh_web_token)?;
 
-        if let Some(mut application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection_manager, json_refresh_web_token.get_application_user_id())? 
+        if let Some(mut application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection, json_refresh_web_token.get_application_user_id())? 
         {
             let application_user_log_in_token_device_id: String = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
@@ -76,10 +76,10 @@ impl<'outer_a, 'vague> BaseRepositoryProxy {
 
                 if !application_user_log_in_token_device_id_registry.is_empty() {
                     ProcessingDeviceIdStorage::update(
-                        connection_manager, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
+                        connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
                     )?;
                 } else {
-                    ProcessingDeviceIdStorage::delete(connection_manager, json_refresh_web_token.get_application_user_id())?
+                    ProcessingDeviceIdStorage::delete(connection, json_refresh_web_token.get_application_user_id())?
                 }
             }
         }
@@ -88,20 +88,20 @@ impl<'outer_a, 'vague> BaseRepositoryProxy {
     }
 
     pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
-        connection_manager: &'outer_a mut ConnectionManager, 
+        connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a ApplicationUserId, 
         application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
     ) -> Result<Option<JsonRefreshWebToken<'vague>>, ResourceErrorKind> {
         return BaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
-            connection_manager, application_user_id, application_user_log_in_token_device_id
+            connection, application_user_id, application_user_log_in_token_device_id
         );
     }
 
     pub fn get_by_application_user_id(
-        connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a ApplicationUserId
+        connection: &'outer_a mut Connection, application_user_id: &'outer_a ApplicationUserId
     ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
-        if let Some(application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection_manager, application_user_id)? {
-            return BaseRepository::get_by_application_user_id(connection_manager, application_user_id, application_user_log_in_token_device_id_registry);
+        if let Some(application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection, application_user_id)? {
+            return BaseRepository::get_by_application_user_id(connection, application_user_id, application_user_log_in_token_device_id_registry);
         }
 
         return Ok(None);

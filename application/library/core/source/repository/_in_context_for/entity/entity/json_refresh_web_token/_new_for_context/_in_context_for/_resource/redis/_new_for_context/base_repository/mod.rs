@@ -4,17 +4,17 @@ use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
-use crate::utility::_in_context_for::_resource::redis::_new_for_context::connection_manager::ConnectionManager;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use redis::Commands;
+use redis::Connection;
 
 pub struct BaseRepository;
 
 impl<'outer_a, 'vague> BaseRepository {
     pub fn create(
-        connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
+        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
-        connection_manager.get_connection().set_ex::<String, String, ()>(
+        connection.set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
             ), 
@@ -26,18 +26,18 @@ impl<'outer_a, 'vague> BaseRepository {
     }
 
     pub fn update(
-        connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
+        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
-        Self::create(connection_manager, json_refresh_web_token)?;
+        Self::create(connection, json_refresh_web_token)?;
 
         return Ok(());
     }
 
 
     pub fn delete(
-        connection_manager: &'outer_a mut ConnectionManager, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
+        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
     ) -> Result<(), ResourceErrorKind> {
-        connection_manager.get_connection().del::<String, ()>(
+        connection.del::<String, ()>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
             )
@@ -47,11 +47,11 @@ impl<'outer_a, 'vague> BaseRepository {
     }
 
     pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
-        connection_manager: &'outer_a mut ConnectionManager, 
+        connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a ApplicationUserId, 
         application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId,
     ) -> Result<Option<JsonRefreshWebToken<'vague>>, ResourceErrorKind> {
-        match connection_manager.get_connection().get::<String, Option<String>>(
+        match connection.get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(application_user_id, application_user_log_in_token_device_id)
         )?
         {
@@ -67,7 +67,7 @@ impl<'outer_a, 'vague> BaseRepository {
     }
 
     pub fn get_by_application_user_id(
-        connection_manager: &'outer_a mut ConnectionManager, 
+        connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a ApplicationUserId, 
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
@@ -75,7 +75,7 @@ impl<'outer_a, 'vague> BaseRepository {
 
         for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
             if let Some(json_refresh_web_token) = Self::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                connection_manager, application_user_id, &ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id).unwrap()  // TODO err
+                connection, application_user_id, &ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id).unwrap()  // TODO err
             )?
             {
                 json_refresh_web_token_registry.push(json_refresh_web_token);
