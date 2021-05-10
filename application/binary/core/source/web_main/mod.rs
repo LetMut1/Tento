@@ -4,14 +4,25 @@ extern crate core_library;
 use actix_web::App;
 use actix_web::HttpServer;
 use core_library::actix_web_component::configuration::main_service_configurator::MainServiceConfigurator;
+use core_library::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use std::io::Result;
 
 #[actix_web::main]
 async fn main() -> Result<()>
 {
-    return HttpServer::new(|| {
-        return App::new().configure(MainServiceConfigurator::safely_configure);
-    }).bind("0.0.0.0:80")?.run().await; // TODO адрес через метод брать, 
+    match AggregateConnectionPool::new() {
+        Ok(aggregate_connection_pool) => {
+            return HttpServer::new(move || {
+                return App::new()
+                .data::<AggregateConnectionPool>(aggregate_connection_pool.clone())
+                .configure(MainServiceConfigurator::configure);
+            })
+            .bind("0.0.0.0:80")?.run().await; // TODO env or method 
+        },
+        Err(resource_error_kind) => {
+            panic!(format!("{:?}", resource_error_kind));
+        }
+    }
 }
 
 // TODO Do not remove this block until the problems have been fixed {

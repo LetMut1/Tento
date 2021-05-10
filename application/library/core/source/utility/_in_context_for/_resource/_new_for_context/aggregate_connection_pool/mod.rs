@@ -3,7 +3,9 @@ use diesel::pg::PgConnection as PostgresqlConnection;
 use diesel::r2d2::ConnectionManager as PostgresqlConnectionManager;
 use r2d2_redis::RedisConnectionManager;
 use r2d2::Pool;
+use std::clone::Clone;
 
+#[derive(Clone)]
 pub struct AggregateConnectionPool {
     postgresql_connection_pool: Pool<PostgresqlConnectionManager<PostgresqlConnection>>,
     redis_connection_pool: Pool<RedisConnectionManager>
