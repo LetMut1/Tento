@@ -19,7 +19,7 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(request: Request, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<HandlerResult, MainErrorKind> {
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, MainErrorKind> {
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId =
         ApplicationUserLogInTokenDeviceId::new_from_string(request.application_user_log_in_token_device_id)?;
 

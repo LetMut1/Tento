@@ -10,7 +10,7 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(query: Query, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<HandlerResult, MainErrorKind> {
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, query: Query) -> Result<HandlerResult, MainErrorKind> {
         return Ok(
             HandlerResult::new(
                 ApplicationUserBaseRepository::is_exist_by_nickanme(

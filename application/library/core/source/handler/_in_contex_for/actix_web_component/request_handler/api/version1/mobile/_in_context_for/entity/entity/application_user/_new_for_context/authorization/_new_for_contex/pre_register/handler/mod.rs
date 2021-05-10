@@ -19,7 +19,7 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(request: Request, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<(), MainErrorKind> {
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), MainErrorKind> {
         let application_user_email: Email = Email::new(request.application_user_email);
 
         if EmailSimpleValidator::is_valid(&application_user_email) {

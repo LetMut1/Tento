@@ -12,7 +12,7 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(query: Query, aggregate_connection_pool: Arc<AggregateConnectionPool>) -> Result<HandlerResult, MainErrorKind> {
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, query: Query) -> Result<HandlerResult, MainErrorKind> {
         let connection: &'_ Connection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
         let application_user_email: Email = Email::new(query.application_user_email);
