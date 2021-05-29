@@ -13,8 +13,8 @@ use std::convert::Into;
 
 pub struct EmailSender;
 
-impl<'outer_a> EmailSender {
-    pub fn send(subject: &'outer_a str, body: String, to: &'outer_a str) -> Result<(), ResourceErrorKind> {
+impl EmailSender {
+    pub fn send<'outer_a>(subject: &'outer_a str, body: String, to: &'outer_a str) -> Result<(), ResourceErrorKind> {
         match EmailBuilder::new()
         .subject(subject)
         .text(body)

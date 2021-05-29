@@ -16,7 +16,7 @@ pub struct ApplicationUser<'outer_a> {
     created_at: CreatedAt
 }
 
-impl<'this, 'outer_a: 'this> ApplicationUser<'outer_a> {
+impl<'outer_a> ApplicationUser<'outer_a> {
     pub fn new_from_pre_confirmed_application_user(
         pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser, nickname: Nickname, password: Password
     ) -> Self {
@@ -39,41 +39,41 @@ impl<'this, 'outer_a: 'this> ApplicationUser<'outer_a> {
         };
     }
 
-    pub fn set_email(&'this mut self, email: Email) -> &'this mut Self {
+    pub fn set_email<'this>(&'this mut self, email: Email) -> &'this mut Self {
         self.email = Cow::Owned(email);
 
         return self;
     }
 
-    pub fn set_nickname(&'this mut self, nickname: Nickname) -> &'this mut Self {
+    pub fn set_nickname<'this>(&'this mut self, nickname: Nickname) -> &'this mut Self {
         self.nickname = nickname;
 
         return self;
     }
 
-    pub fn set_password(&'this mut self, password: Password) -> &'this mut Self {
+    pub fn set_password<'this>(&'this mut self, password: Password) -> &'this mut Self {
         self.password_hash = PasswordHash::new_from_password(password);
 
         return self;
     }
 
-    pub fn get_id(&'this self) -> &'this Id {
+    pub fn get_id<'this>(&'this self) -> &'this Id {
         return &self.id;
     }
 
-    pub fn get_email(&'this self) -> &'this Email {
+    pub fn get_email<'this>(&'this self) -> &'this Email {
         return self.email.as_ref();
     }
 
-    pub fn get_nickname(&'this self) -> &'this Nickname {
+    pub fn get_nickname<'this>(&'this self) -> &'this Nickname {
         return &self.nickname;
     }
 
-    pub fn get_passord_hash(&'this self) -> &'this PasswordHash {
+    pub fn get_passord_hash<'this>(&'this self) -> &'this PasswordHash {
         return &self.password_hash;
     }
 
-    pub fn get_created_at(&'this self) -> &'this CreatedAt {
+    pub fn get_created_at<'this>(&'this self) -> &'this CreatedAt {
         return &self.created_at;
     }
 }

@@ -28,7 +28,7 @@ use std::sync::Arc;
 
 pub struct Handler;
 
-impl<'outer_a> Handler {
+impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, MainErrorKind> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let application_user_nickname: Nickname = Nickname::new(request.application_user_nickname);
 

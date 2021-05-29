@@ -7,7 +7,7 @@ pub struct PreConfirmedApplicationUser {
     application_user_email: Email    // TODO add created_at (чтобы по крону удалять )
 }
 
-impl<'this> PreConfirmedApplicationUser {
+impl PreConfirmedApplicationUser {
     pub fn new(email: Email) -> Self {
         return Self {
             id: Id::new(),
@@ -22,11 +22,11 @@ impl<'this> PreConfirmedApplicationUser {
         };
     }
 
-    pub fn get_id(&'this self) -> &'this Id {
+    pub fn get_id<'this>(&'this self) -> &'this Id {
         return &self.id;
     }
 
-    pub fn get_email(&'this self) -> &'this Email {
+    pub fn get_email<'this>(&'this self) -> &'this Email {
         return &self.application_user_email;
     }
 }

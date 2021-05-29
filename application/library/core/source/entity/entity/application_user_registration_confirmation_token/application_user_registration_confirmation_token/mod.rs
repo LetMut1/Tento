@@ -15,7 +15,7 @@ pub struct ApplicationUserRegistrationConfirmationToken<'outer_a> {
     wrong_enter_tries_quantity: WrongEnterTriesQuanity
 }
 
-impl<'this, 'outer_a: 'this> ApplicationUserRegistrationConfirmationToken<'outer_a> {
+impl<'outer_a> ApplicationUserRegistrationConfirmationToken<'outer_a> {
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: u8 = 5;
 
     pub fn new(pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser) -> Self {
@@ -27,7 +27,7 @@ impl<'this, 'outer_a: 'this> ApplicationUserRegistrationConfirmationToken<'outer
         };
     }
 
-    pub fn new_from_model(common: Common<'outer_a>, pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId) -> Self{
+    pub fn new_from_model(common: Common<'_>, pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId) -> Self{
         return Self {
             pre_confirmed_application_user_id,
             application_user_email: Cow::Owned(Email::new(common.application_user_email.into_owned())),
@@ -36,25 +36,25 @@ impl<'this, 'outer_a: 'this> ApplicationUserRegistrationConfirmationToken<'outer
         };
     }
 
-    pub fn get_pre_confirmed_application_user_id(&'this self) -> &'this PreConfirmedApplicationUserId {
-        return self.pre_confirmed_application_user_id;
-    }
-
-    pub fn get_application_user_email(&'this self) -> &'this Email {
-        return self.application_user_email.as_ref();
-    }
-
-    pub fn get_value(&'this self) -> &'this Value {
-        return &self.value;
-    }
-
-    pub fn get_wrong_enter_tries_quantity(&'this self) -> &'this WrongEnterTriesQuanity {
-        return &self.wrong_enter_tries_quantity;
-    }
-
-    pub fn increment_wrong_enter_tries_quantity(&'this mut self) -> &'this mut Self {
+    pub fn increment_wrong_enter_tries_quantity<'this>(&'this mut self) -> &'this mut Self {
         self.wrong_enter_tries_quantity.increment();
 
         return self;
+    }
+    
+    pub fn get_pre_confirmed_application_user_id<'this>(&'this self) -> &'this PreConfirmedApplicationUserId {
+        return self.pre_confirmed_application_user_id;
+    }
+
+    pub fn get_application_user_email<'this>(&'this self) -> &'this Email {
+        return self.application_user_email.as_ref();
+    }
+
+    pub fn get_value<'this>(&'this self) -> &'this Value {
+        return &self.value;
+    }
+
+    pub fn get_wrong_enter_tries_quantity<'this>(&'this self) -> &'this WrongEnterTriesQuanity {
+        return &self.wrong_enter_tries_quantity;
     }
 }

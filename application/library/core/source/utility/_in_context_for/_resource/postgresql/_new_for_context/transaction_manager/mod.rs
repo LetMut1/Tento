@@ -5,20 +5,20 @@ use diesel::PgConnection as Connection;
 
 pub struct TransactionManager;
 
-impl<'outer_a> TransactionManager {
-    pub fn  begin_transaction(connection: &'outer_a Connection) -> Result<(), ResourceErrorKind> {
+impl TransactionManager {
+    pub fn  begin_transaction<'outer_a>(connection: &'outer_a Connection) -> Result<(), ResourceErrorKind> {
         connection.transaction_manager().begin_transaction(connection)?;  // TODO все ли тут определяется, или нужн обловфиш
 
         return Ok(());
     }
 
-    pub fn  commit_transaction(connection: &'outer_a Connection) -> Result<(), ResourceErrorKind> {
+    pub fn  commit_transaction<'outer_a>(connection: &'outer_a Connection) -> Result<(), ResourceErrorKind> {
         connection.transaction_manager().commit_transaction(connection)?;
 
         return Ok(());
     }
 
-    pub fn  rollback_transaction(connection: &'outer_a Connection) -> Result<(), ResourceErrorKind> {
+    pub fn  rollback_transaction<'outer_a>(connection: &'outer_a Connection) -> Result<(), ResourceErrorKind> {
         connection.transaction_manager().rollback_transaction(connection)?;
 
         return Ok(());

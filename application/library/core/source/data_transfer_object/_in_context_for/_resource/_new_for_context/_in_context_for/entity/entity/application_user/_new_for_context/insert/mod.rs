@@ -16,7 +16,7 @@ pub struct Insert<'outer_a> {                    // TODO описать id Ат�
 }
 
 impl<'outer_a> Insert<'outer_a> {
-    pub fn new(application_user: &'outer_a ApplicationUser<'outer_a>) -> Self {
+    pub fn new(application_user: &'outer_a ApplicationUser<'_>) -> Self {
         return Self {
             id: application_user.get_id().get_value().get_value(),
             email: application_user.get_email().get_value(),

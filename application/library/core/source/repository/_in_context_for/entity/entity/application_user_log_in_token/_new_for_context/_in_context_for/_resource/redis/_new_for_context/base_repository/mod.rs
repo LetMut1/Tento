@@ -10,9 +10,9 @@ use redis::Connection;
 
 pub struct BaseRepository;
 
-impl<'outer_a> BaseRepository {
-    pub fn create(
-        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'outer_a>
+impl BaseRepository {
+    pub fn create<'outer_a>(
+        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         connection.set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
@@ -25,8 +25,8 @@ impl<'outer_a> BaseRepository {
         return Ok(());
     }
 
-    pub fn delete(
-        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'outer_a>
+    pub fn delete<'outer_a>(
+        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         connection.del::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
@@ -37,8 +37,8 @@ impl<'outer_a> BaseRepository {
         return Ok(());
     }
 
-    pub fn update_expiration_time(
-        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'outer_a>
+    pub fn update_expiration_time<'outer_a>(
+        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         connection.expire::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
@@ -50,9 +50,9 @@ impl<'outer_a> BaseRepository {
         return Ok(());
     }
 
-    pub fn get_by_application_user_id_and_device_id<'outer_b>(
+    pub fn get_by_application_user_id_and_device_id<'outer_a, 'outer_b>(    // TODO еще раз проверить лайфтаймы вл всех методах
         connection: &'outer_b mut Connection, application_user_id: &'outer_a ApplicationUserId, device_id: &'outer_a ApplicationUserLogInTokenDeviceId,
-    ) -> Result<Option<ApplicationUserLogInToken<'outer_a>>, ResourceErrorKind> {
+    ) -> Result<Option<ApplicationUserLogInToken<'outer_a>>, ResourceErrorKind> { // TODO проверить, каклй здесь лайфтайм должен быть
         match connection.get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(application_user_id, device_id)
         )?

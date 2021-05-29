@@ -15,7 +15,7 @@ use std::sync::Arc;
 
 pub struct Handler;
 
-impl<'outer_a> Handler {
+impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, MainErrorKind> {
         if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(
             &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(request.application_user_email)

@@ -6,7 +6,7 @@ pub struct Header {
     typ: Typ
 }
 
-impl<'this> Header {
+impl Header {
     pub const fn new() -> Self {
         return Self {
             alg: Alg::new(),
@@ -14,11 +14,11 @@ impl<'this> Header {
         };
     }
 
-    pub fn get_alg(&'this self) -> &'this Alg {
+    pub fn get_alg<'this>(&'this self) -> &'this Alg {
         return &self.alg;
     }
 
-    pub fn get_typ(&'this self) -> &'this Typ {
+    pub fn get_typ<'this>(&'this self) -> &'this Typ {
         return &self.typ;
     }
 }

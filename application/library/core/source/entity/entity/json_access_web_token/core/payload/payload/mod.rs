@@ -16,8 +16,8 @@ pub struct Payload<'outer_a> {
     exp: Exp
 }
 
-impl<'this, 'outer_a: 'this> Payload<'outer_a> {
-    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>) -> Self {
+impl<'outer_a> Payload<'outer_a> {
+    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>) -> Self {
         return Self {
             id: Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
             application_user_id: Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
@@ -37,19 +37,19 @@ impl<'this, 'outer_a: 'this> Payload<'outer_a> {
         );
     }
 
-    pub fn get_id(&'this self) -> &'this Id {
+    pub fn get_id<'this>(&'this self) -> &'this Id {
         return &self.id;
     }
 
-    pub fn get_application_user_id(&'this self) -> &'this ApplicationUserId {
+    pub fn get_application_user_id<'this>(&'this self) -> &'this ApplicationUserId {
         return self.application_user_id.as_ref();
     }
 
-    pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this ApplicationUserLogInTokenDeviceId {
+    pub fn get_application_user_log_in_token_device_id<'this>(&'this self) -> &'this ApplicationUserLogInTokenDeviceId {
         return self.application_user_log_in_token_device_id.as_ref();
     }
 
-    pub fn get_exp(&'this self) -> &'this Exp {
+    pub fn get_exp<'this>(&'this self) -> &'this Exp {
         return &self.exp;
     }
 }

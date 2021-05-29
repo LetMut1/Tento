@@ -9,10 +9,10 @@ use redis::Connection;
 
 pub struct BaseRepository;
 
-impl<'outer_a> BaseRepository {
-    pub fn create(
+impl BaseRepository {
+    pub fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
-        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'outer_a>
+        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         connection.set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
@@ -25,9 +25,9 @@ impl<'outer_a> BaseRepository {
         return Ok(());
     }
 
-    pub fn delete(
+    pub fn delete<'outer_a>(
         connection: &'outer_a mut Connection, 
-        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'outer_a>
+        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         connection.del::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
@@ -38,9 +38,9 @@ impl<'outer_a> BaseRepository {
         return Ok(());
     }
 
-    pub fn update_expiration_time(
+    pub fn update_expiration_time<'outer_a>(
         connection: &'outer_a mut Connection,
-        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'outer_a>
+        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         connection.expire::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
@@ -52,7 +52,7 @@ impl<'outer_a> BaseRepository {
         return Ok(());
     }
 
-    pub fn get_by_application_user_id<'outer_b>(
+    pub fn get_by_application_user_id<'outer_a, 'outer_b>(
         connection: &'outer_b mut Connection, application_user_id: &'outer_a ApplicationUserId
     ) -> Result<Option<ApplicationUserResetPasswordToken<'outer_a>>, ResourceErrorKind> {
         match connection.get::<String, Option<String>>(

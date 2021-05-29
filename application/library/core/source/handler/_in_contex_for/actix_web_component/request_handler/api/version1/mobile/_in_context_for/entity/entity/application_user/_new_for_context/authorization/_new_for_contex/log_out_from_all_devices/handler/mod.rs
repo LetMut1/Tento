@@ -12,9 +12,9 @@ use std::sync::Arc;
 
 pub struct Handler;
 
-impl<'outer_a> Handler {
-    pub fn handle(
-        aggregate_connection_pool: Arc<AggregateConnectionPool>, json_access_web_token: &'outer_a JsonAccessWebToken<'outer_a>
+impl Handler {
+    pub fn handle<'outer_a>(
+        aggregate_connection_pool: Arc<AggregateConnectionPool>, json_access_web_token: &'outer_a JsonAccessWebToken<'_>
     ) -> Result<(), MainErrorKind> {
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 

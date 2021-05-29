@@ -17,9 +17,9 @@ use diesel::RunQueryDsl;
 
 pub struct BaseRepository;
 
-impl<'outer_a, 'vague> BaseRepository {
-    pub fn create(
-        connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'outer_a>
+impl BaseRepository {
+    pub fn create<'outer_a>(
+        connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'_>
     ) -> Result<(), ResourceErrorKind> {
         diesel::insert_into(application_user_schema::table).values(Insert::new(application_user))
         .execute(connection)?;  // TODO нужно ли обработать количество вернувшихся строк
@@ -27,8 +27,8 @@ impl<'outer_a, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn update(
-        connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'outer_a>, update_resolver: UpdateResolver
+    pub fn update<'outer_a>(
+        connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'_>, update_resolver: UpdateResolver
     ) -> Result<(), ResourceErrorKind> {
         diesel::update(application_user_schema::table.filter(application_user_schema::id.eq(application_user.get_id().get_value().get_value())))
         .set(&Update::new(application_user, update_resolver)).execute(connection)?;
@@ -36,35 +36,35 @@ impl<'outer_a, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn is_exist_by_nickanme(connection: &'outer_a Connection, nickname: &'outer_a Nickname) -> Result<bool, ResourceErrorKind> {
+    pub fn is_exist_by_nickanme<'outer_a>(connection: &'outer_a Connection, nickname: &'outer_a Nickname) -> Result<bool, ResourceErrorKind> {
         return Ok(
             diesel::select(dsl::exists(application_user_schema::table.filter(application_user_schema::nickname.eq(nickname.get_value()))))
             .get_result::<bool>(connection)?
         );// TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    pub fn is_exist_by_email(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<bool, ResourceErrorKind> {
+    pub fn is_exist_by_email<'outer_a>(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<bool, ResourceErrorKind> {
         return Ok(
             diesel::select(dsl::exists(application_user_schema::table.filter(application_user_schema::email.eq(email.get_value()))))
             .get_result::<bool>(connection)?
         );      // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    pub fn get_by_email(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<Option<ApplicationUser<'vague>>, ResourceErrorKind> {
-        if let Some(existing) = application_user_schema::table.filter(application_user_schema::email.eq(email.get_value()))
+    pub fn get_by_email<'outer_a, 'vague>(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<Option<ApplicationUser<'vague>>, ResourceErrorKind> {
+        if let Some(select) = application_user_schema::table.filter(application_user_schema::email.eq(email.get_value()))
         .get_result::<Select>(connection).optional()? 
         {
-            return Ok(Some(ApplicationUser::new_from_resource_model(existing))); 
+            return Ok(Some(ApplicationUser::new_from_resource_model(select))); 
         }
 
         return Ok(None); 
     }
 
-    pub fn get_by_id(connection: &'outer_a Connection, id: &'outer_a Id) -> Result<Option<ApplicationUser<'vague>>, ResourceErrorKind> {
-        if let Some(existing) = application_user_schema::table.filter(application_user_schema::id.eq(id.get_value().get_value()))
+    pub fn get_by_id<'outer_a, 'vague>(connection: &'outer_a Connection, id: &'outer_a Id) -> Result<Option<ApplicationUser<'vague>>, ResourceErrorKind> {
+        if let Some(select) = application_user_schema::table.filter(application_user_schema::id.eq(id.get_value().get_value()))
         .get_result::<Select>(connection).optional()? 
         {
-            return Ok(Some(ApplicationUser::new_from_resource_model(existing))); 
+            return Ok(Some(ApplicationUser::new_from_resource_model(select))); 
         }
 
         return Ok(None); 
@@ -73,7 +73,7 @@ impl<'outer_a, 'vague> BaseRepository {
 
 // TODO // TODO // TODO // TODO // TODO // TODO // TODO
 // delete this after writing same query for another entity (Exampe of multyrow Select)
-// pub fn get_by_application_user_id(
+// pub fn get_by_application_user_id<'outer_a>(
 //     connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a UuidV4
 // ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, ResourceErrorKind> {
 //     let existing_registry = json_refresh_web_token_schema::table

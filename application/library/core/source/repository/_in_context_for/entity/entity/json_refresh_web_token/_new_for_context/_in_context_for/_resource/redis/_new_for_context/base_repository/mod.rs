@@ -10,9 +10,9 @@ use redis::Connection;
 
 pub struct BaseRepository;
 
-impl<'outer_a, 'vague> BaseRepository {
-    pub fn create(
-        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
+impl BaseRepository {
+    pub fn create<'outer_a>(
+        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         connection.set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
@@ -25,8 +25,8 @@ impl<'outer_a, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn update(
-        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
+    pub fn update<'outer_a>(
+        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         Self::create(connection, json_refresh_web_token)?;
 
@@ -34,8 +34,8 @@ impl<'outer_a, 'vague> BaseRepository {
     }
 
 
-    pub fn delete(
-        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>
+    pub fn delete<'outer_a>(
+        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         connection.del::<String, ()>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
@@ -46,7 +46,7 @@ impl<'outer_a, 'vague> BaseRepository {
         return Ok(());
     }
 
-    pub fn get_by_application_user_id_and_application_user_log_in_token_device_id(
+    pub fn get_by_application_user_id_and_application_user_log_in_token_device_id<'outer_a, 'vague>(
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a ApplicationUserId, 
         application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId,
@@ -66,7 +66,7 @@ impl<'outer_a, 'vague> BaseRepository {
         }
     }
 
-    pub fn get_by_application_user_id(
+    pub fn get_by_application_user_id<'outer_a, 'vague>(
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a ApplicationUserId, 
         application_user_log_in_token_device_id_registry: Vec<String>

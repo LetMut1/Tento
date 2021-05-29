@@ -17,7 +17,7 @@ use std::sync::Arc;
 
 pub struct Handler;
 
-impl<'outer_a> Handler {
+impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), MainErrorKind> {
         let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
 

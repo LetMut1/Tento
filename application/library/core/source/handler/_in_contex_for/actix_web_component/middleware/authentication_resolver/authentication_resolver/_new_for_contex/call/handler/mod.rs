@@ -12,8 +12,8 @@ use crate::utility::_in_context_for::_resource::_new_for_context::connection_ext
 
 pub struct Handler;
 
-impl<'outer_a> Handler {
-    pub fn handle(service_request: &'outer_a ServiceRequest) -> Result<(), MainErrorKind> {
+impl Handler {
+    pub fn handle<'outer_a>(service_request: &'outer_a ServiceRequest) -> Result<(), MainErrorKind> {
         if let Some(data) = service_request.app_data::<Data<AggregateConnectionPool>>() {
             if let Some(header_value) = service_request.headers().get("X-Auth-Token") {
                 if let Ok(header_value) = header_value.to_str() {

@@ -6,9 +6,9 @@ use crate::utility::email_sender::EmailSender as BaseEmailSender;
 
 pub struct EmailSender;
 
-impl<'outer_a> EmailSender {
-    pub fn send_application_user_log_in_token(
-        application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'outer_a>
+impl EmailSender {
+    pub fn send_application_user_log_in_token<'outer_a>(
+        application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         BaseEmailSender::send(
             "Log in confirmation", "Your code: ".to_string() + application_user_log_in_token.get_value().get_value(),
@@ -18,8 +18,8 @@ impl<'outer_a> EmailSender {
         return Ok(());
     }
 
-    pub fn send_application_user_registration_confirmation_token(
-        application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'outer_a>
+    pub fn send_application_user_registration_confirmation_token<'outer_a>(
+        application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         BaseEmailSender::send(
             "Registration confirmation", 
@@ -30,8 +30,8 @@ impl<'outer_a> EmailSender {
         return Ok(());
     }
 
-    pub fn send_application_user_reset_password_token(
-        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'outer_a>
+    pub fn send_application_user_reset_password_token<'outer_a>(
+        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), ResourceErrorKind> {
         BaseEmailSender::send(
             "Reset password confirmation",

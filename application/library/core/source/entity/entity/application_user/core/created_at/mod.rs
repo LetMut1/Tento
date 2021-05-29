@@ -6,7 +6,7 @@ pub struct CreatedAt {
     value: DateTime
 }
 
-impl<'this, 'outer_a: 'this> CreatedAt {
+impl CreatedAt {
     pub fn new() -> Self {
         return Self {
             value: DateTime::new()
@@ -19,17 +19,17 @@ impl<'this, 'outer_a: 'this> CreatedAt {
         };
     }
 
-    pub fn new_from_str(date_time: &'outer_a str) -> Self {
+    pub fn new_from_str<'outer_a>(date_time: &'outer_a str) -> Self {
         return Self {
             value: DateTime::new_from_str(date_time)
         }
     }
 
-    pub fn get_value(&'this self) -> &'this DateTime {
-        return &self.value;
+    pub fn to_string<'this>(&'this self) -> String {
+        return self.value.get_value().to_rfc3339();
     }
 
-    pub fn to_string(&'this self) -> String {
-        return self.value.get_value().to_rfc3339();
+    pub fn get_value<'this>(&'this self) -> &'this DateTime {
+        return &self.value;
     }
 }

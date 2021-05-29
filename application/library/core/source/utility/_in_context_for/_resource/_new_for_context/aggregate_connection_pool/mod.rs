@@ -11,7 +11,7 @@ pub struct AggregateConnectionPool {
     redis_connection_pool: Pool<RedisConnectionManager>
 }
 
-impl<'this> AggregateConnectionPool {
+impl AggregateConnectionPool {
     pub fn new() -> Result<Self, ResourceErrorKind> {
         return Ok (
             Self {
@@ -33,11 +33,11 @@ impl<'this> AggregateConnectionPool {
         );   // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix
     }
 
-    pub fn get_postgresql_connection_pool(&'this self) -> &'this Pool<PostgresqlConnectionManager<PostgresqlConnection>> {
+    pub fn get_postgresql_connection_pool<'this>(&'this self) -> &'this Pool<PostgresqlConnectionManager<PostgresqlConnection>> {
         return &self.postgresql_connection_pool;
     }
 
-    pub fn get_redis_connection_pool(&'this self) -> &'this Pool<RedisConnectionManager> {
+    pub fn get_redis_connection_pool<'this>(&'this self) -> &'this Pool<RedisConnectionManager> {
         return &self.redis_connection_pool;
     }
 }

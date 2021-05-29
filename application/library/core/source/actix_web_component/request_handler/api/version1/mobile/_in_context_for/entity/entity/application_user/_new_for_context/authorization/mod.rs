@@ -47,7 +47,7 @@ use crate::utility::_in_context_for::actix_web_component::_new_for_context::stan
 
 pub struct Authorization;
 
-impl<'vague> Authorization {
+impl Authorization {
     pub async fn check_email_for_existing(query: Query<CheckEmailForExistingQuery>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         match CheckEmailForExistingHanlder::handle(data.into_inner(), query.into_inner()) {
             Ok(result) => {
@@ -439,7 +439,7 @@ impl<'vague> Authorization {
         }
     }
 
-    pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'vague>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+    pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = LogOutHandler::handle(data.into_inner(), &req_data.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
@@ -470,7 +470,7 @@ impl<'vague> Authorization {
         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success());
     }
 
-    pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'vague>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+    pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = LogOutFromAllDevicesHandler::handle(data.into_inner(), &req_data.into_inner()) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {

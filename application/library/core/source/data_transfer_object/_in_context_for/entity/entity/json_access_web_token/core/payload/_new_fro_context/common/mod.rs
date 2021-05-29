@@ -14,8 +14,8 @@ pub struct Common {
     pub exp: String
 }
 
-impl<'outer_a> Common {
-    pub fn new(json_access_web_token: &'outer_a JsonAccessWebToken<'outer_a>) -> Self {
+impl Common {
+    pub fn new<'outer_a>(json_access_web_token: &'outer_a JsonAccessWebToken<'_>) -> Self {
         return Self {
             json_access_web_token_id: json_access_web_token.get_id().to_string(),
             application_user_id: json_access_web_token.get_application_user_id().to_string(),

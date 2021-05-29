@@ -8,9 +8,9 @@ use redis::Connection;
 
 pub struct BaseRepository;
 
-impl<'outer_a> BaseRepository {
-    pub fn create(
-        connection: &'outer_a mut Connection, json_access_web_token_black_list: &'outer_a JsonAccessWebTokenBlackList<'outer_a>
+impl BaseRepository {
+    pub fn create<'outer_a>(
+        connection: &'outer_a mut Connection, json_access_web_token_black_list: &'outer_a JsonAccessWebTokenBlackList<'_>
     ) -> Result<(), ResourceErrorKind> {
         connection.set_ex::<String, u8, ()>(
             RedisStorageKeyResolver::get_repository_json_access_web_token_bkack_list_first(
@@ -23,7 +23,7 @@ impl<'outer_a> BaseRepository {
         return Ok(());
     }
 
-    pub fn is_exist_by_json_access_token_id(
+    pub fn is_exist_by_json_access_token_id<'outer_a>(
         connection: &'outer_a mut Connection, json_access_web_token_id: &'outer_a JsonAccessWebTokenId
     ) -> Result<bool, ResourceErrorKind> {
         return Ok(

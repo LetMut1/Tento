@@ -17,10 +17,10 @@ pub struct JsonAccessWebToken<'outer_a> {
     payload: Payload<'outer_a>
 }
 
-impl<'this, 'outer_a: 'this> JsonAccessWebToken<'outer_a> {
+impl<'outer_a> JsonAccessWebToken<'outer_a> {
     const HEADER: Header = Header::new();
 
-    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'outer_a>) -> Self {
+    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>) -> Self {
         return Self {
             payload: Payload::new(json_refresh_web_token)
         };
@@ -34,31 +34,31 @@ impl<'this, 'outer_a: 'this> JsonAccessWebToken<'outer_a> {
         );
     }
 
-    pub fn is_expired(&'this self) -> bool {
+    pub fn is_expired<'this>(&'this self) -> bool {
         return !DateTimeManipulator::is_greater_or_equal_than_now(&self.payload.get_exp().get_value());
     }
 
-    pub fn get_alg(&'this self) -> &'this Alg {
+    pub fn get_alg<'this>(&'this self) -> &'this Alg {
         return Self::HEADER.get_alg();
     }
 
-    pub fn get_typ(&'this self) -> &'this Typ {
+    pub fn get_typ<'this>(&'this self) -> &'this Typ {
         return Self::HEADER.get_typ();
     }
 
-    pub fn get_id(&'this self) -> &'this Id {
+    pub fn get_id<'this>(&'this self) -> &'this Id {
         return &self.payload.get_id();
     }
 
-    pub fn get_application_user_id(&'this self) -> &'this ApplicationUserId {
+    pub fn get_application_user_id<'this>(&'this self) -> &'this ApplicationUserId {
         return &self.payload.get_application_user_id();
     }
 
-    pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this ApplicationUserLogInTokenDeviceId {
+    pub fn get_application_user_log_in_token_device_id<'this>(&'this self) -> &'this ApplicationUserLogInTokenDeviceId {
         return &self.payload.get_application_user_log_in_token_device_id();
     }
 
-    pub fn get_exp(&'this self) -> &'this Exp {
+    pub fn get_exp<'this>(&'this self) -> &'this Exp {
         return &self.payload.get_exp();
     }
 }

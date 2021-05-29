@@ -4,14 +4,14 @@ pub struct JsonAccessWebTokenBlackList<'outer_a> {
     json_access_web_token_id: &'outer_a JsonAccessWebTokenId
 }
 
-impl<'this, 'outer_a: 'this> JsonAccessWebTokenBlackList<'outer_a> {
+impl<'outer_a> JsonAccessWebTokenBlackList<'outer_a> {
     pub fn new(json_access_web_token_id: &'outer_a JsonAccessWebTokenId) -> Self {
         return Self {
             json_access_web_token_id
         };
     }
 
-    pub fn get_json_access_web_token_id(&'this self) -> &'this JsonAccessWebTokenId {
+    pub fn get_json_access_web_token_id<'this>(&'this self) -> &'this JsonAccessWebTokenId {
         return &self.json_access_web_token_id;
     }
 }

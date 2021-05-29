@@ -3,8 +3,8 @@ use regex::Regex;
 
 pub struct EmailSimpleValidator;
 
-impl<'outer_a> EmailSimpleValidator {
-    pub fn is_valid(email: &'outer_a Email) -> bool {
+impl EmailSimpleValidator {
+    pub fn is_valid<'outer_a>(email: &'outer_a Email) -> bool {
         return Regex::new(r"\S+@\S+").unwrap().is_match(email.get_value());
     }
 }

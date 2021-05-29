@@ -7,7 +7,7 @@ pub struct UuidV4 {
     value: Uuid
 }
 
-impl<'this, 'outer_a: 'this> UuidV4 {
+impl UuidV4 {
     pub fn new() -> Self {
         return Self {
             value: Uuid::new_v4()
@@ -32,7 +32,7 @@ impl<'this, 'outer_a: 'this> UuidV4 {
         return Err(InvalidArgumentError);
     }
 
-    pub fn get_value(&'this self) -> &'this Uuid {
+    pub fn get_value<'this>(&'this self) -> &'this Uuid {
         return &self.value;
     }
 }

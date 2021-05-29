@@ -14,7 +14,7 @@ pub struct JsonRefreshWebToken<'outer_a> {
     obfuscation_value: ObfuscationValue
 }
 
-impl<'this, 'outer_a: 'this> JsonRefreshWebToken<'outer_a> {
+impl<'outer_a> JsonRefreshWebToken<'outer_a> {
     pub fn new(
         application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
     ) -> Self {
@@ -26,7 +26,7 @@ impl<'this, 'outer_a: 'this> JsonRefreshWebToken<'outer_a> {
         };
     }
 
-    pub fn new_from_model(common: Common<'outer_a>) -> Result<Self, InvalidArgumentError> {
+    pub fn new_from_model(common: Common<'_>) -> Result<Self, InvalidArgumentError> {
         return Ok(
             Self {
                 json_access_web_token_id: JsonAccessWebTokenId::new_from_string(common.json_access_web_token_id)?,
@@ -37,25 +37,25 @@ impl<'this, 'outer_a: 'this> JsonRefreshWebToken<'outer_a> {
         );
     }
 
-    pub fn refresh(&'this mut self) -> &'this mut Self {
+    pub fn refresh<'this>(&'this mut self) -> &'this mut Self {
         self.obfuscation_value = ObfuscationValue::new(UuidV4::new().get_value().to_string());
 
         return self;
     }
 
-    pub fn get_json_access_web_token_id(&'this self) -> &'this JsonAccessWebTokenId {
+    pub fn get_json_access_web_token_id<'this>(&'this self) -> &'this JsonAccessWebTokenId {
         return &self.json_access_web_token_id;
     }
 
-    pub fn get_application_user_id(&'this self) -> &'this ApplicationUserId {
+    pub fn get_application_user_id<'this>(&'this self) -> &'this ApplicationUserId {
         return self.application_user_id.as_ref();
     }
 
-    pub fn get_application_user_log_in_token_device_id(&'this self) -> &'this ApplicationUserLogInTokenDeviceId {
+    pub fn get_application_user_log_in_token_device_id<'this>(&'this self) -> &'this ApplicationUserLogInTokenDeviceId {
         return self.application_user_log_in_token_device_id.as_ref();
     }
 
-    pub fn get_obfuscation_value(&'this self) -> &'this ObfuscationValue {
+    pub fn get_obfuscation_value<'this>(&'this self) -> &'this ObfuscationValue {
         return &self.obfuscation_value;
     }
 }

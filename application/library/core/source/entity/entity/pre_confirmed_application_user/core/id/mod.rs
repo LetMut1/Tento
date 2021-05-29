@@ -6,7 +6,7 @@ pub struct Id {
     value: UuidV4
 }
 
-impl<'this> Id {
+impl Id {
     pub fn new() -> Self {
         return Self {
             value: UuidV4::new()
@@ -27,11 +27,11 @@ impl<'this> Id {
         );
     }
 
-    pub fn get_value(&'this self) -> &'this UuidV4 {
-        return &self.value;
+    pub fn to_string<'this>(&'this self) -> String {
+        return self.value.get_value().to_string();
     }
 
-    pub fn to_string(&'this self) -> String {
-        return self.value.get_value().to_string();
+    pub fn get_value<'this>(&'this self) -> &'this UuidV4 {
+        return &self.value;
     }
 }

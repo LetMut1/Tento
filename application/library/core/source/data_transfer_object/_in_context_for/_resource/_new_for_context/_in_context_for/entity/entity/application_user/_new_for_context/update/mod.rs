@@ -15,7 +15,7 @@ pub struct Update<'outer_a> {
 }
 
 impl<'outer_a> Update<'outer_a> {
-    pub fn new(application_user: &'outer_a ApplicationUser<'outer_a>, update_resolver: UpdateResolver) -> Self {
+    pub fn new(application_user: &'outer_a ApplicationUser<'_>, update_resolver: UpdateResolver) -> Self {
         let mut email: Option<&'outer_a str> = None;
         let mut nickname: Option<&'outer_a str> = None;
         let mut password_hash: Option<&'outer_a str> = None;

@@ -8,7 +8,7 @@ pub struct DeviceId {
     value: UuidV4
 }
 
-impl<'this> DeviceId {
+impl DeviceId {
     pub fn new() -> Self {
         return Self {
             value: UuidV4::new()
@@ -23,11 +23,11 @@ impl<'this> DeviceId {
         );
     }
 
-    pub fn get_value(&'this self) -> &'this UuidV4 {
+    pub fn get_value<'this>(&'this self) -> &'this UuidV4 {
         return &self.value;
     }
 
-    pub fn to_string(&'this self) -> String {
+    pub fn to_string<'this>(&'this self) -> String {
         return self.value.get_value().to_string();
     }
 }

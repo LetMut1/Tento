@@ -7,10 +7,10 @@ use redis::Connection;
 
 pub struct ProcessingDeviceIdStorage;
 
-impl<'outer_a> ProcessingDeviceIdStorage {
+impl ProcessingDeviceIdStorage {
     const SEPARATOR: &'static str = ":";
 
-    pub fn create(
+    pub fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a Id,
         application_user_log_in_token_device_id_registry: Vec<String>
@@ -24,7 +24,7 @@ impl<'outer_a> ProcessingDeviceIdStorage {
         return Ok(());
     }
 
-    pub fn update(
+    pub fn update<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a Id,
         application_user_log_in_token_device_id_registry: Vec<String>
@@ -34,7 +34,7 @@ impl<'outer_a> ProcessingDeviceIdStorage {
         return Ok(());
     }
 
-    pub fn delete(
+    pub fn delete<'outer_a>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_a Id,
     ) -> Result<(), ResourceErrorKind> {
         connection.del::<String, ()>(
@@ -44,7 +44,7 @@ impl<'outer_a> ProcessingDeviceIdStorage {
         return Ok(());
     }
 
-    pub fn update_expiration_time(
+    pub fn update_expiration_time<'outer_a>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_a Id
     ) -> Result<(), ResourceErrorKind> {
         connection.expire::<String, ()>(
@@ -55,7 +55,7 @@ impl<'outer_a> ProcessingDeviceIdStorage {
         return Ok(());
     }
 
-    pub fn get(
+    pub fn get<'outer_a>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_a Id
     ) -> Result<Option<Vec<String>>, ResourceErrorKind> {
         if let Some(application_user_log_in_token_device_id_sequence) = connection.get::<String, Option<String>>(

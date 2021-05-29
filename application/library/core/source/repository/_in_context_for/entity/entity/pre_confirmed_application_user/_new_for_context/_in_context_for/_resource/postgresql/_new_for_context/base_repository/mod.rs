@@ -13,8 +13,8 @@ use diesel::RunQueryDsl;
 
 pub struct BaseRepository;
 
-impl<'outer_a> BaseRepository {
-    pub fn create(
+impl BaseRepository {
+    pub fn create<'outer_a>(
         connection: &'outer_a Connection, pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser
     ) -> Result<(), ResourceErrorKind> {
         diesel::insert_into(pre_confirmed_application_user_schema::table).values(New::new(pre_confirmed_application_user))
@@ -23,7 +23,7 @@ impl<'outer_a> BaseRepository {
         return Ok(());
     }
 
-    pub fn delete(
+    pub fn delete<'outer_a>(
         connection: &'outer_a Connection, pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser
     ) -> Result<(), ResourceErrorKind> {
         diesel::delete(
@@ -35,7 +35,7 @@ impl<'outer_a> BaseRepository {
         return Ok(());
     }
 
-    pub fn is_exist_by_application_user_email(
+    pub fn is_exist_by_application_user_email<'outer_a>(
         connection: &'outer_a Connection, application_user_email: &'outer_a Email
     ) -> Result<bool, ResourceErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
         return Ok(
@@ -44,14 +44,14 @@ impl<'outer_a> BaseRepository {
         );          // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    pub fn get_by_application_user_email(
+    pub fn get_by_application_user_email<'outer_a>(
         connection: &'outer_a Connection, application_user_email: &'outer_a Email
     ) -> Result<Option<PreConfirmedApplicationUser>, ResourceErrorKind> {
-        if let Some(existing) = pre_confirmed_application_user_schema::table.filter(
+        if let Some(select) = pre_confirmed_application_user_schema::table.filter(
             pre_confirmed_application_user_schema::email.eq(application_user_email.get_value())
         ).get_result::<Existing>(connection).optional()? 
         {
-            return Ok(Some(PreConfirmedApplicationUser::new_from_model(existing))); 
+            return Ok(Some(PreConfirmedApplicationUser::new_from_model(select))); 
         }
 
         return Ok(None); 

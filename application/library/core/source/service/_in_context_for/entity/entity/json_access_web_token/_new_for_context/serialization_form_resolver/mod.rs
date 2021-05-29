@@ -7,10 +7,10 @@ use serde_json;
 
 pub struct SerializationFormResolver;
 
-impl<'outer_a, 'vague> SerializationFormResolver {
+impl SerializationFormResolver {
     const SEPARATOR: &'static str = ".";
 
-    pub fn serialize(json_access_web_token: &'outer_a JsonAccessWebToken<'outer_a>) -> String {
+    pub fn serialize<'outer_a>(json_access_web_token: &'outer_a JsonAccessWebToken<'_>) -> String {
         let header_and_payload: String = 
         base64::encode(serde_json::to_string(&HeaderCommon::new(json_access_web_token)).unwrap().as_bytes()) 
         + Self::SEPARATOR 
@@ -21,7 +21,7 @@ impl<'outer_a, 'vague> SerializationFormResolver {
         return header_and_payload + Self::SEPARATOR + signature.as_str();
     }
 
-    pub fn deserialize(classic_form: &'outer_a str) -> Result<JsonAccessWebToken<'vague>, InvalidArgumentError> {
+    pub fn deserialize<'outer_a, 'vague>(classic_form: &'outer_a str) -> Result<JsonAccessWebToken<'vague>, InvalidArgumentError> {
         let classic_form_parts: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::SEPARATOR).collect::<Vec<&'_ str>>();
 
         if classic_form_parts.len() == 3 {

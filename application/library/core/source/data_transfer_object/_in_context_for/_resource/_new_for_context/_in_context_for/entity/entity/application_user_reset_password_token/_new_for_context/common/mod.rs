@@ -14,7 +14,7 @@ pub struct Common<'outer_a> {
 }
 
 impl<'outer_a> Common<'outer_a> {
-    pub fn new(application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'outer_a>) -> Self {
+    pub fn new(application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>) -> Self {
         return Self {
             application_user_email: Cow::Borrowed(application_user_reset_password_token.get_application_user_email().get_value()),
             value: Cow::Borrowed(application_user_reset_password_token.get_value().get_value()),
