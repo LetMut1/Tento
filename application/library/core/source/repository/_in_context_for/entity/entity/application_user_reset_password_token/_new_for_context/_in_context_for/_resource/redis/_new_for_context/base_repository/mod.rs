@@ -53,8 +53,8 @@ impl BaseRepository {
     }
 
     pub fn get_by_application_user_id<'outer_a, 'outer_b>(
-        connection: &'outer_b mut Connection, application_user_id: &'outer_a ApplicationUserId
-    ) -> Result<Option<ApplicationUserResetPasswordToken<'outer_a>>, ResourceErrorKind> {
+        connection: &'outer_a mut Connection, application_user_id: &'outer_b ApplicationUserId
+    ) -> Result<Option<ApplicationUserResetPasswordToken<'outer_b>>, ResourceErrorKind> {
         match connection.get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(application_user_id)
         )?

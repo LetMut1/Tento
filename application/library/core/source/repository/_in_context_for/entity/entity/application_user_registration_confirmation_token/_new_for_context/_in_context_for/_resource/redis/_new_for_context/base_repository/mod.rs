@@ -53,8 +53,8 @@ impl BaseRepository {
     }
 
     pub fn get_by_pre_confirmed_application_user_id<'outer_a, 'outer_b>(
-        connection: &'outer_b mut Connection, pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId
-    ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'outer_a>>, ResourceErrorKind> {
+        connection: &'outer_a mut Connection, pre_confirmed_application_user_id: &'outer_b PreConfirmedApplicationUserId
+    ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'outer_b>>, ResourceErrorKind> {
         match connection.get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(pre_confirmed_application_user_id)
         )?
