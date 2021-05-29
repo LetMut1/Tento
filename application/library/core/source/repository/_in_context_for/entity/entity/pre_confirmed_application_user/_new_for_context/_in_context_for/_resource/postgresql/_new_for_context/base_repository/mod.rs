@@ -1,6 +1,6 @@
 use crate::diesel_component::schema::public::pre_confirmed_application_user as pre_confirmed_application_user_schema;
-use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::existing::Existing;
-use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::new::New;
+use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::select::Select;
+use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::insert::Insert;
 use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
@@ -17,7 +17,7 @@ impl BaseRepository {
     pub fn create<'outer_a>(
         connection: &'outer_a Connection, pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser
     ) -> Result<(), ResourceErrorKind> {
-        diesel::insert_into(pre_confirmed_application_user_schema::table).values(New::new(pre_confirmed_application_user))
+        diesel::insert_into(pre_confirmed_application_user_schema::table).values(Insert::new(pre_confirmed_application_user))
         .execute(connection)?;   // TODO нужно ли обработать количество вернувшихся строк
 
         return Ok(());
@@ -49,7 +49,7 @@ impl BaseRepository {
     ) -> Result<Option<PreConfirmedApplicationUser>, ResourceErrorKind> {
         if let Some(select) = pre_confirmed_application_user_schema::table.filter(
             pre_confirmed_application_user_schema::email.eq(application_user_email.get_value())
-        ).get_result::<Existing>(connection).optional()? 
+        ).get_result::<Select>(connection).optional()? 
         {
             return Ok(Some(PreConfirmedApplicationUser::new_from_model(select))); 
         }
