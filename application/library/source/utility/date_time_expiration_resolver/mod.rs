@@ -4,11 +4,11 @@ use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::
 pub struct DateTimeExpirationResolver;
 
 impl DateTimeExpirationResolver {
-    pub const QUANTITY_OF_MINUTES_APPLICATION_USER_LOG_IN_TOKEN_FIRST: i64 = 60 * 6;
+    pub const QUANTITY_OF_MINUTES_APPLICATION_USER_LOG_IN_TOKEN_FIRST: i64 = 10;
     pub const QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST: i64 = 60 * 24;
-    pub const QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST: i64 = 60;
+    pub const QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST: i64 = 10;
     pub const QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST: i64 = 30;
-    pub const QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST: i64 = 60 * 24 * 14;
+    pub const QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST: i64 = 60 * 24 * 21;
 
     pub fn create_json_access_web_token_first() -> DateTime {
         return DateTimeManipulator::add_interval_from_now(Self::QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST);
