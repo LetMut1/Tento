@@ -8,6 +8,7 @@ use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::handler::_in_contex_for::actix_web_component::middleware::authentication_resolver::authentication_resolver::_new_for_contex::call::handler::Handler as CallHandler;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_json_response_body_wrapper::StandardJsonResponseBodyWrapper;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_response_creator::StandardResponseCreator;
+use crate::utility::_in_context_for::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use futures::future::Either;
 use futures::future::ok as FutureOk;
 use futures::future::Ready;
@@ -56,7 +57,11 @@ where
                         EntityErrorKind::JsonAccessWebTokenErrorKind(json_access_web_token_error_kind) => {
                             match json_access_web_token_error_kind {
                                 JsonAccessWebTokenErrorKind::AlreadyExpired => {
-                                    return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enjsacweto03")).into_body())));
+                                    return Either::Right(FutureOk(service_request.into_response(
+                                        StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
+                                        )).into_body()
+                                    )));
                                 },
                                 JsonAccessWebTokenErrorKind::InJsonAccessWebTokenBlackList => {
                                     return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_unauthorized().into_body())));

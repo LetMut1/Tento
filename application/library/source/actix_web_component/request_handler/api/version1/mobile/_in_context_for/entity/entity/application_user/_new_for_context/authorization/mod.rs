@@ -44,6 +44,7 @@ use crate::handler::_in_contex_for::actix_web_component::request_handler::api::v
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_json_response_body_wrapper::StandardJsonResponseBodyWrapper;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_response_creator::StandardResponseCreator;
+use crate::utility::_in_context_for::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 
 pub struct Authorization;
 
@@ -94,10 +95,14 @@ impl Authorization {
                         EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                             match application_user_error_kind {
                                 ApplicationUserErrorKind::AlreadyExist => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus01"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_ALREADY_EXIST
+                                    ));
                                 },
                                 ApplicationUserErrorKind::InvalidEmail => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus04"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
+                                    ));
                                 }
                                 _ => {
                                     // TODO написать в лог !!! Сюда вообще попадать не должны
@@ -108,7 +113,9 @@ impl Authorization {
                         EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
                             match pre_confirmed_application_user_error_kind {
                                 PreConfirmedApplicationUserErrorKind::AlreadyExist => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enprcoapus01"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_ALREADY_EXIST
+                                    ));
                                 },
                                 _ => {
                                     // TODO написать в лог !!! Сюда вообще попадать не должны
@@ -126,7 +133,9 @@ impl Authorization {
                     match resource_error_kind {
                         ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
                             // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                            ));
                         },
                         _ => {
                             // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -159,7 +168,9 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                                 match application_user_error_kind {
                                     ApplicationUserErrorKind::AlreadyExist => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus01"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_ALREADY_EXIST
+                                        ));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
@@ -170,10 +181,14 @@ impl Authorization {
                             EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
                                 match pre_confirmed_application_user_error_kind {
                                     PreConfirmedApplicationUserErrorKind::AlreadyConfirmed => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enprcoapus03"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_ALREADY_CONFIRMED
+                                        ));
                                     },
                                     PreConfirmedApplicationUserErrorKind::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enprcoapus02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_NOT_FOUND
+                                        ));
                                     },
                                     _ => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -184,10 +199,14 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(application_user_registration_confirmation_error_kind) => {
                                 match application_user_registration_confirmation_error_kind {
                                     ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrecoto02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
+                                        ));
                                     },
                                     ApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrecoto03"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE
+                                        ));
                                     }
                                 }
                             },
@@ -217,7 +236,9 @@ impl Authorization {
                         EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
                             match pre_confirmed_application_user_error_kind {
                                 PreConfirmedApplicationUserErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enprcoapus02"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_NOT_FOUND
+                                    ));
                                 },
                                 _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -236,7 +257,9 @@ impl Authorization {
                     match resource_error_kind {
                         ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
                             // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                            ));
                         },
                         _ => {
                             // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -269,10 +292,14 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                                 match application_user_error_kind {
                                     ApplicationUserErrorKind::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
+                                        ));
                                     },
                                     ApplicationUserErrorKind::WrongPassword => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus03"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_PASSWORD
+                                        ));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
@@ -290,7 +317,9 @@ impl Authorization {
                         match resource_error_kind {
                             ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                                ));
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -322,10 +351,14 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserLogInTokenErrorKind(application_user_log_in_token_error_kind) => {
                                 match application_user_log_in_token_error_kind {
                                     ApplicationUserLogInTokenErrorKind::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapuslointo02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
+                                        ));
                                     },
                                     ApplicationUserLogInTokenErrorKind::InvalidValue => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapuslointo03"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE
+                                        ));
                                     }
                                 }
                             },
@@ -355,7 +388,9 @@ impl Authorization {
                         EntityErrorKind::ApplicationUserLogInTokenErrorKind(application_user_log_in_token_error_kind) => {
                             match application_user_log_in_token_error_kind {
                                 ApplicationUserLogInTokenErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapuslointo02"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
+                                    ));
                                 },
                                 _ => {
                                     // TODO написать в лог !!! Сюда вообще попадать не должны
@@ -373,7 +408,9 @@ impl Authorization {
                     match resource_error_kind {
                         ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
                             // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                            ));
                         },
                         _ => {
                             // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -406,7 +443,9 @@ impl Authorization {
                             EntityErrorKind::JsonAccessWebTokenErrorKind(json_access_web_token_error_kind) => {
                                 match json_access_web_token_error_kind {
                                     JsonAccessWebTokenErrorKind::NotExpired => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enjsacweto04"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED
+                                        ));
                                     },
                                     _ => {
                                         // TODO написать в лог !!! Сюда вообще попадать не должны
@@ -417,7 +456,9 @@ impl Authorization {
                             EntityErrorKind::JsonRefreshWebTokenErrorKind(json_refresh_web_token_error_kind) => {
                                 match json_refresh_web_token_error_kind {
                                     JsonRefreshWebTokenErrorKind::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enjsreweto02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
+                                        ));
                                     }
                                 }
                             },
@@ -447,7 +488,9 @@ impl Authorization {
                         EntityErrorKind::JsonRefreshWebTokenErrorKind(json_refresh_web_token_error_kind) => {
                             match json_refresh_web_token_error_kind {
                                 JsonRefreshWebTokenErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enjsreweto02"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
+                                    ));
                                 }
                             }
                         },
@@ -478,7 +521,9 @@ impl Authorization {
                         EntityErrorKind::JsonRefreshWebTokenErrorKind(json_refresh_web_token_error_kind) => {
                             match json_refresh_web_token_error_kind {
                                 JsonRefreshWebTokenErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enjsreweto02"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
+                                    ));
                                 }
                             }
                         },
@@ -513,7 +558,9 @@ impl Authorization {
                             EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                                 match application_user_error_kind {
                                     ApplicationUserErrorKind::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapus02"));
+                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
+                                        ));
                                     },
                                     _ => {
                                         // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -532,7 +579,9 @@ impl Authorization {
                         match resource_error_kind {
                             ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                                ));
                             },
                             _ => {
                                 // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -560,7 +609,9 @@ impl Authorization {
                         EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                             match application_user_error_kind {
                                 ApplicationUserErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato03"));  // TODO код правильный?
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
+                                    ));  // TODO код правильный?
                                 },
                                 _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -572,10 +623,14 @@ impl Authorization {
                         EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(application_user_reset_password_token_error_kind) => {
                             match application_user_reset_password_token_error_kind {
                                 ApplicationUserResetPasswordTokenErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato02"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
+                                    ));
                                 },
                                 ApplicationUserResetPasswordTokenErrorKind::InvalidValue => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato03"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
+                                    ));
                                 }
                             }
                         },
@@ -606,7 +661,9 @@ impl Authorization {
                         EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(application_user_reset_password_token_error_kind) => {
                             match application_user_reset_password_token_error_kind {
                                 ApplicationUserResetPasswordTokenErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("enapusrepato02"));
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
+                                    ));
                                 },
                                 _ => {
                                     // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -624,7 +681,9 @@ impl Authorization {
                     match resource_error_kind {
                         ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
                             // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code("emse01"));
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                            ));
                         },
                         _ => {
                             // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
