@@ -18,6 +18,7 @@ futures = {version = "0.3.13"}
 hex = {version = "0.4.2"}
 lettre = {version = "0.9"}
 lettre_email = {version = "0.9"}
+log4rs = {version = "1.0.0", features = ["rolling_file_appender"]}
 r2d2 = {version = "0.8.9"}
 r2d2_redis = {version = "0.14.0"}
 redis = {version = "0.20.0", features = ["r2d2"]}
