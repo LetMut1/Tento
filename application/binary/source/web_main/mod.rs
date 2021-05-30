@@ -1,28 +1,20 @@
 extern crate actix_web;
-extern crate core_library;
+extern crate library;
 
-use actix_web::App;
-use actix_web::HttpServer;
-use core_library::actix_web_component::configuration::main_service_configurator::MainServiceConfigurator;
-use core_library::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use library::handler::_in_context_for_binary::source::web_main::_new_for_context::handler::Handler;
 use std::io::Result;
 
 #[actix_web::main]
 async fn main() -> Result<()>
 {
-    match AggregateConnectionPool::new() {
-        Ok(aggregate_connection_pool) => {
-            return HttpServer::new(move || {
-                return App::new()
-                .data::<AggregateConnectionPool>(aggregate_connection_pool.clone())
-                .configure(MainServiceConfigurator::configure);
-            })
-            .bind("0.0.0.0:80")?.run().await; // TODO env or method 
-        },
-        Err(resource_error_kind) => {
-            panic!(format!("{:?}", resource_error_kind));
-        }
+    if let Err(error) = Handler::handle().await {
+        panic!(format!("{:?}", error)); 
+        // TODO спросить, правильное ли это завершение команды, или нужны отдавать ок для перезапуска. 
+        // TODO спросить, изменилось ли что-то после переноса в хендлер относиельно того, что было, когда реализация была здесь. То есть
+        // TODO не привнесло ли перенос в хендлер какого-то нового Ненужного эффекта.
     }
+
+    return Ok(());
 }
 
 // TODO Do not remove this block until the problems have been fixed {
