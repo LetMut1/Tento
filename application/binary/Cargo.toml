@@ -5,12 +5,8 @@ authors = ["zda"]
 edition = "2018"
 
 [[bin]]
-name = "core_binary_web_main"
+name = "binary_web_main"
 path = "./source/web_main/mod.rs"
-
-[[bin]]
-name = "core_binary_postgres_fixtures"
-path = "./source/postgres_fixtures/mod.rs"
 
 [dependencies]
 actix-web = {version = "3.3.2"}

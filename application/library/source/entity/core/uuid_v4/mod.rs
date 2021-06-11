@@ -32,6 +32,10 @@ impl UuidV4 {
         return Err(InvalidArgumentError);
     }
 
+    pub fn to_string<'this>(&'this self) -> String {
+        return self.value.to_string();
+    }
+
     pub fn get_value<'this>(&'this self) -> &'this Uuid {
         return &self.value;
     }

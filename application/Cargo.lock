@@ -1253,6 +1253,7 @@ dependencies = [
  "hex",
  "lettre",
  "lettre_email",
+ "log",
  "log4rs",
  "r2d2",
  "r2d2_redis",

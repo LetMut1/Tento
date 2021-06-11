@@ -2,7 +2,7 @@ use std::convert::From;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
-use std::fmt::Result as FmtResult;
+use std::fmt::Result;
 use super::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use super::core::invalid_argument_error::InvalidArgumentError;
 use super::core::logic_error::LogicError;
@@ -17,8 +17,8 @@ pub enum MainErrorKind {
 }
 
 impl Display for MainErrorKind {
-    fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
-        return Ok(());  // TODO 
+    fn fmt(&self, _: &mut Formatter<'_>) -> Result {
+        return Ok(());
     }
 }
 

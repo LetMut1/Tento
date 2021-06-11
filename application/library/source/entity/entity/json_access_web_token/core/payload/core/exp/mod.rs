@@ -29,7 +29,7 @@ impl Exp {
     }
 
     pub fn to_string<'this>(&'this self) -> String {
-        return self.value.get_value().to_rfc3339();
+        return self.value.to_string();
     }
     
     pub fn get_value<'this>(&'this self) -> &'this DateTime {

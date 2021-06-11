@@ -9,6 +9,7 @@ extern crate futures;
 extern crate hex;
 extern crate lettre_email;
 extern crate lettre;
+extern crate log;
 extern crate log4rs;
 extern crate r2d2_redis;
 extern crate r2d2;

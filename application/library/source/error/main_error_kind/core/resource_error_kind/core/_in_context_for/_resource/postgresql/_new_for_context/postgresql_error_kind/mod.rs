@@ -3,7 +3,7 @@ use diesel::result::Error as DieselError;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
-use std::fmt::Result as FmtResult;
+use std::fmt::Result;
 
 #[derive(Debug)]
 pub enum PostgresqlErrorKind {
@@ -12,8 +12,8 @@ pub enum PostgresqlErrorKind {
 }
 
 impl Display for PostgresqlErrorKind {
-    fn fmt(&self, _formatter: &mut Formatter<'_>) -> FmtResult {
-        return Ok(());  // TODO 
+    fn fmt(&self, _: &mut Formatter<'_>) -> Result {
+        return Ok(());
     }
 }
 

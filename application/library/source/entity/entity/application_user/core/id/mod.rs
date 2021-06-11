@@ -30,7 +30,7 @@ impl Id {
     }
 
     pub fn to_string<'this>(&'this self) -> String {
-        return self.value.get_value().to_string();
+        return self.value.to_string();
     }
 
     pub fn get_value<'this>(&'this self) -> &'this UuidV4 {
