@@ -59,9 +59,13 @@ impl Authorization {
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    MainErrorKind::ResourceErrorKind(_) | MainErrorKind::LogicError(_) => {
+                        log::error!("{}", main_error_kind);
+
                         return StandardResponseCreator::create_internal_server_error();
+                    },
+                    _ => {
+                        unreachable!("{}", main_error_kind);
                     }
                 }
             }
@@ -78,9 +82,13 @@ impl Authorization {
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    MainErrorKind::LogicError(_) | MainErrorKind::ResourceErrorKind(_) => {
+                        log::error!("{}", main_error_kind);
+
                         return StandardResponseCreator::create_internal_server_error();
+                    },
+                    _ => {
+                        unreachable!("{}", main_error_kind);
                     }
                 }
             }
@@ -90,7 +98,7 @@ impl Authorization {
     pub async fn pre_register(form: Form<PreRegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = PreRegisterHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                     match entity_error_kind {
                         EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                             match application_user_error_kind {
@@ -105,8 +113,7 @@ impl Authorization {
                                     ));
                                 }
                                 _ => {
-                                    // TODO написать в лог !!! Сюда вообще попадать не должны
-                                    return StandardResponseCreator::create_internal_server_error();
+                                    unreachable!("{}", main_error_kind);
                                 }
                             }
                         },
@@ -118,37 +125,36 @@ impl Authorization {
                                     ));
                                 },
                                 _ => {
-                                    // TODO написать в лог !!! Сюда вообще попадать не должны
-                                    return StandardResponseCreator::create_internal_server_error();
+                                    unreachable!("{}", main_error_kind);
                                 }
                             }
                         }
                         _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
-                        }
-                    }
-                },
-                MainErrorKind::ResourceErrorKind(resource_error_kind) => {
-                    match resource_error_kind {
-                        ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
-                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                            ));
-                        },
-                        _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
+                            unreachable!("{}", main_error_kind);
                         }
                     }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                MainErrorKind::LogicError(_) => {
+                    log::error!("{}", main_error_kind);
+
                     return StandardResponseCreator::create_internal_server_error();
+                }
+                MainErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                    log::error!("{}", main_error_kind);
+
+                    match resource_error_kind {
+                        ResourceErrorKind::EmailServerErrorKind(_) => {
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                            ));
+                        },
+                        _ => {
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
                 }
             }
         }
@@ -163,7 +169,7 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                         match entity_error_kind {
                             EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                                 match application_user_error_kind {
@@ -173,8 +179,7 @@ impl Authorization {
                                         ));
                                     },
                                     _ => {
-                                        // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandardResponseCreator::create_internal_server_error();
+                                        unreachable!("{}", main_error_kind);
                                     }
                                 }
                             },
@@ -191,8 +196,7 @@ impl Authorization {
                                         ));
                                     },
                                     _ => {
-                                        // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                        return StandardResponseCreator::create_internal_server_error();
+                                        unreachable!("{}", main_error_kind);
                                     }
                                 }
                             },
@@ -211,16 +215,16 @@ impl Authorization {
                                 }
                             },
                             _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_internal_server_error();
+                                unreachable!("{}", main_error_kind);
                             }
                         }
                     },
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    MainErrorKind::LogicError(_) | MainErrorKind::ResourceErrorKind(_) => {
+                        log::error!("{}", main_error_kind);
+
                         return StandardResponseCreator::create_internal_server_error();
                     }
                 }
@@ -231,7 +235,7 @@ impl Authorization {
     pub async fn resend_email_for_register(form: Form<ResendEmailForRegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = ResendEmailForRegisterHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                     match entity_error_kind {
                         EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
                             match pre_confirmed_application_user_error_kind {
@@ -241,38 +245,37 @@ impl Authorization {
                                     ));
                                 },
                                 _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                    return StandardResponseCreator::create_internal_server_error();
+                                    unreachable!("{}", main_error_kind);
                                 }
 
                             }
                         },
                         _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
-                        }
-                    }
-                },
-                MainErrorKind::ResourceErrorKind(resource_error_kind) => {
-                    match resource_error_kind {
-                        ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
-                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                            ));
-                        },
-                        _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
+                            unreachable!("{}", main_error_kind);
                         }
                     }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                MainErrorKind::LogicError(_) => {
+                    log::error!("{}", main_error_kind);
+
                     return StandardResponseCreator::create_internal_server_error();
+                },
+                MainErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                    log::error!("{}", main_error_kind);
+
+                    match resource_error_kind {
+                        ResourceErrorKind::EmailServerErrorKind(_) => {
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                            ));
+                        },
+                        _ => {
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
                 }
             }
         }
@@ -287,7 +290,7 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                         match entity_error_kind {
                             EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                                 match application_user_error_kind {
@@ -302,37 +305,36 @@ impl Authorization {
                                         ));
                                     },
                                     _ => {
-                                        // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandardResponseCreator::create_internal_server_error();
+                                        unreachable!("{}", main_error_kind);
                                     }
                                 }
                             },
                             _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    },
-                    MainErrorKind::ResourceErrorKind(resource_error_kind) => {
-                        match resource_error_kind {
-                            ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
-                                    CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                                ));
-                            },
-                            _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_internal_server_error();
+                                unreachable!("{}", main_error_kind);
                             }
                         }
                     },
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    MainErrorKind::LogicError(_) => {
+                        log::error!("{}", main_error_kind);
+
                         return StandardResponseCreator::create_internal_server_error();
+                    },
+                    MainErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                        log::error!("{}", main_error_kind);
+
+                        match resource_error_kind {
+                            ResourceErrorKind::EmailServerErrorKind(_) => {
+                                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                                ));
+                            },
+                            _ => {
+                                return StandardResponseCreator::create_internal_server_error();
+                            }
+                        }
                     }
                 }
             }
@@ -346,7 +348,7 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                         match entity_error_kind {
                             EntityErrorKind::ApplicationUserLogInTokenErrorKind(application_user_log_in_token_error_kind) => {
                                 match application_user_log_in_token_error_kind {
@@ -363,16 +365,16 @@ impl Authorization {
                                 }
                             },
                             _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_internal_server_error();
+                                unreachable!("{}", main_error_kind);
                             }
                         }
                     },
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    MainErrorKind::LogicError(_) | MainErrorKind::ResourceErrorKind(_) => {
+                        log::error!("{}", main_error_kind);
+
                         return StandardResponseCreator::create_internal_server_error();
                     }
                 }
@@ -383,7 +385,7 @@ impl Authorization {
     pub async fn resend_email_for_log_in(form: Form<ResendEmailForLogInRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = ResendEmailForLogInHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                     match entity_error_kind {
                         EntityErrorKind::ApplicationUserLogInTokenErrorKind(application_user_log_in_token_error_kind) => {
                             match application_user_log_in_token_error_kind {
@@ -393,37 +395,36 @@ impl Authorization {
                                     ));
                                 },
                                 _ => {
-                                    // TODO написать в лог !!! Сюда вообще попадать не должны
-                                    return StandardResponseCreator::create_internal_server_error();
+                                    unreachable!("{}", main_error_kind);
                                 }
                             }
                         },
                         _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
-                        }
-                    }
-                },
-                MainErrorKind::ResourceErrorKind(resource_error_kind) => {
-                    match resource_error_kind {
-                        ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
-                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                            ));
-                        },
-                        _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
+                            unreachable!("{}", main_error_kind);
                         }
                     }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                MainErrorKind::LogicError(_) => {
+                    log::error!("{}", main_error_kind);
+
                     return StandardResponseCreator::create_internal_server_error();
+                },
+                MainErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                    log::error!("{}", main_error_kind);
+
+                    match resource_error_kind {
+                        ResourceErrorKind::EmailServerErrorKind(_) => { // TODO нужны ли эти сообщения на фронт?
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                            ));
+                        },
+                        _ => {
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
                 }
             }
         }
@@ -438,7 +439,7 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                         match entity_error_kind {
                             EntityErrorKind::JsonAccessWebTokenErrorKind(json_access_web_token_error_kind) => {
                                 match json_access_web_token_error_kind {
@@ -448,8 +449,7 @@ impl Authorization {
                                         ));
                                     },
                                     _ => {
-                                        // TODO написать в лог !!! Сюда вообще попадать не должны
-                                        return StandardResponseCreator::create_internal_server_error();
+                                        unreachable!("{}", main_error_kind);
                                     }
                                 }
                             },
@@ -463,16 +463,16 @@ impl Authorization {
                                 }
                             },
                             _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_internal_server_error();
+                                unreachable!("{}", main_error_kind);
                             }
                         }
                     },
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    MainErrorKind::LogicError(_) | MainErrorKind::ResourceErrorKind(_) => {
+                        log::error!("{}", main_error_kind);
+
                         return StandardResponseCreator::create_internal_server_error();
                     }
                 }
@@ -483,7 +483,7 @@ impl Authorization {
     pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = LogOutHandler::handle(data.into_inner(), &req_data.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                     match entity_error_kind {
                         EntityErrorKind::JsonRefreshWebTokenErrorKind(json_refresh_web_token_error_kind) => {
                             match json_refresh_web_token_error_kind {
@@ -495,16 +495,16 @@ impl Authorization {
                             }
                         },
                         _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
+                            unreachable!("{}", main_error_kind);
                         }
                     }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                MainErrorKind::LogicError(_) | MainErrorKind::ResourceErrorKind(_) => {
+                    log::error!("{}", main_error_kind);
+
                     return StandardResponseCreator::create_internal_server_error();
                 }
             }
@@ -516,7 +516,7 @@ impl Authorization {
     pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = LogOutFromAllDevicesHandler::handle(data.into_inner(), &req_data.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                     match entity_error_kind {
                         EntityErrorKind::JsonRefreshWebTokenErrorKind(json_refresh_web_token_error_kind) => {
                             match json_refresh_web_token_error_kind {
@@ -528,16 +528,16 @@ impl Authorization {
                             }
                         },
                         _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
+                            unreachable!("{}", main_error_kind);
                         }
                     }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                MainErrorKind::LogicError(_) | MainErrorKind::ResourceErrorKind(_) => {
+                    log::error!("{}", main_error_kind);
+
                     return StandardResponseCreator::create_internal_server_error();
                 }
             }
@@ -553,7 +553,7 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                         match entity_error_kind {
                             EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                                 match application_user_error_kind {
@@ -563,38 +563,37 @@ impl Authorization {
                                         ));
                                     },
                                     _ => {
-                                        // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                        return StandardResponseCreator::create_internal_server_error();
+                                        unreachable!("{}", main_error_kind);
                                     }
 
                                 }
                             },
                             _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    },
-                    MainErrorKind::ResourceErrorKind(resource_error_kind) => {
-                        match resource_error_kind {
-                            ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
-                                    CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                                ));
-                            },
-                            _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                return StandardResponseCreator::create_internal_server_error();
+                                unreachable!("{}", main_error_kind);
                             }
                         }
                     },
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                    MainErrorKind::LogicError(_) => {
+                        log::error!("{}", main_error_kind);
+
                         return StandardResponseCreator::create_internal_server_error();
+                    }
+                    MainErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                        log::error!("{}", main_error_kind);
+
+                        match resource_error_kind {
+                            ResourceErrorKind::EmailServerErrorKind(_) => {
+                                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                                ));
+                            },
+                            _ => {
+                                return StandardResponseCreator::create_internal_server_error();
+                            }
+                        }
                     }
                 }
             }
@@ -604,7 +603,7 @@ impl Authorization {
     pub async fn reset_password(form: Form<ResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = ResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                     match entity_error_kind {
                         EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
                             match application_user_error_kind {
@@ -614,37 +613,36 @@ impl Authorization {
                                     ));  // TODO код правильный?
                                 },
                                 _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                    return StandardResponseCreator::create_internal_server_error();
+                                    unreachable!("{}", main_error_kind);
                                 }
 
                             }
                         },
                         EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(application_user_reset_password_token_error_kind) => {
                             match application_user_reset_password_token_error_kind {
-                                ApplicationUserResetPasswordTokenErrorKind::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
-                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
-                                    ));
-                                },
                                 ApplicationUserResetPasswordTokenErrorKind::InvalidValue => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
+                                    ));
+                                },
+                                ApplicationUserResetPasswordTokenErrorKind::NotFound => {
+                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
                                     ));
                                 }
                             }
                         },
                         _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
+                            unreachable!("{}", main_error_kind);
                         }
                     }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                MainErrorKind::LogicError(_) | MainErrorKind::ResourceErrorKind(_) => {
+                    log::error!("{}", main_error_kind);
+
                     return StandardResponseCreator::create_internal_server_error();
                 }
             }
@@ -656,7 +654,7 @@ impl Authorization {
     pub async fn resend_email_for_reset_password(form: Form<ResendEmailForResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = ResendEmailForResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(entity_error_kind) => {
+                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
                     match entity_error_kind {
                         EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(application_user_reset_password_token_error_kind) => {
                             match application_user_reset_password_token_error_kind {
@@ -666,37 +664,36 @@ impl Authorization {
                                     ));
                                 },
                                 _ => {
-                                    // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                                    return StandardResponseCreator::create_internal_server_error();
+                                    unreachable!("{}", main_error_kind);
                                 }
                             }
                         },
                         _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
-                        }
-                    }
-                },
-                MainErrorKind::ResourceErrorKind(resource_error_kind) => {
-                    match resource_error_kind {
-                        ResourceErrorKind::EmailServerErrorKind(email_server_error_kind) => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
-                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                            ));
-                        },
-                        _ => {
-                            // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
-                            return StandardResponseCreator::create_internal_server_error();
+                            unreachable!("{}", main_error_kind);
                         }
                     }
                 },
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                _ => {
-                                // TODO написать в лог !!!!!!!!!!!!!!!!!!!!!!!!!!
+                MainErrorKind::LogicError(_) => {
+                    log::error!("{}", main_error_kind);
+
                     return StandardResponseCreator::create_internal_server_error();
+                }
+                MainErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                    log::error!("{}", main_error_kind);
+
+                    match resource_error_kind {
+                        ResourceErrorKind::EmailServerErrorKind(_) => {
+                            return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                            ));
+                        },
+                        _ => {
+                            return StandardResponseCreator::create_internal_server_error();
+                        }
+                    }
                 }
             }
         }

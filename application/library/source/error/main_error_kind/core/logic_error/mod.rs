@@ -14,6 +14,10 @@ impl LogicError {
             message
         };
     }
+
+    pub fn get_message<'this>(&'this self) -> &'static str {
+        return self.message;
+    }
 }
 
 impl Display for LogicError {
@@ -23,4 +27,3 @@ impl Display for LogicError {
 }
 
 impl Error for LogicError {}
-

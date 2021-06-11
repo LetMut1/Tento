@@ -72,7 +72,7 @@ impl Handler {
                 return Ok(aggregate_connection_pool);
             },
             Err(resource_error_kind) => {
-                return Err(Error::new::<String>(ErrorKind::Other, format!("{:?}", resource_error_kind)));
+                return Err(Error::new::<String>(ErrorKind::Other, format!("{}", resource_error_kind)));
             }
         }
     }
