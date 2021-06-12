@@ -416,7 +416,7 @@ impl Authorization {
                     log::error!("{}", main_error_kind);
 
                     match resource_error_kind {
-                        ResourceErrorKind::EmailServerErrorKind(_) => { // TODO нужны ли эти сообщения на фронт?
+                        ResourceErrorKind::EmailServerErrorKind(_) => {
                             return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                 CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
                             ));
@@ -610,7 +610,7 @@ impl Authorization {
                                 ApplicationUserErrorKind::NotFound => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
-                                    ));  // TODO код правильный?
+                                    ));
                                 },
                                 _ => {
                                     unreachable!("{}", main_error_kind);
