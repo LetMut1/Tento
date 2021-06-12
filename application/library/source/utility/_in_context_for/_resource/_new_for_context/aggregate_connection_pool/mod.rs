@@ -4,6 +4,7 @@ use diesel::r2d2::ConnectionManager as PostgresqlConnectionManager;
 use r2d2_redis::RedisConnectionManager;
 use r2d2::Pool;
 use std::clone::Clone;
+use std::env;
 
 #[derive(Clone)]
 pub struct AggregateConnectionPool {
@@ -23,13 +24,13 @@ impl AggregateConnectionPool {
 
     fn establish_postgresql_connection_pool() -> Result<Pool<PostgresqlConnectionManager<PostgresqlConnection>>, ResourceErrorKind> {
         return Ok(
-            Pool::new(PostgresqlConnectionManager::<PostgresqlConnection>::new("postgres://root:password@postgresql/mem_is"))?       // TODO from .env;
+            Pool::new(PostgresqlConnectionManager::<PostgresqlConnection>::new(env::var("RESOURCE_POSTGRESQL_URL").unwrap()))?
         );   // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix
     }
 
     fn establish_redis_connection_pool() -> Result<Pool<RedisConnectionManager>, ResourceErrorKind> {
         return Ok(
-            Pool::new(RedisConnectionManager::new("redis://redis")?)?       // TODO from .env;
+            Pool::new(RedisConnectionManager::new(env::var("RESOURCE_REDIS_URL").unwrap())?)?
         );   // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix
     }
 

@@ -5,6 +5,7 @@ extern crate argon2;
 extern crate base64;
 extern crate chrono;
 extern crate crypto;
+extern crate dotenv;
 extern crate futures;
 extern crate hex;
 extern crate lettre_email;

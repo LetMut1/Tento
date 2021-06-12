@@ -4,12 +4,11 @@ use crypto::hmac::Hmac;
 use crypto::mac::Mac;
 use crypto::sha2::Sha512;
 use serde_json;
+use std::env;
 
 pub struct Encoder;
 
 impl Encoder {
-    const PRIVATE_KEY: &'static str = "kC2a1mXFi3sc9gE2udB0qL02gzJd2asu4S1ksMsJp12v8cs5fFm6dV2wq";  // TODO где должен быть ключ ( в енв)
-
     pub fn encode<'outer_a>(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>) -> String {
         let mut hmac: Hmac<Sha512> = Self::get_configured_hmac();
         
@@ -23,6 +22,6 @@ impl Encoder {
     }
 
     fn get_configured_hmac() -> Hmac<Sha512> {
-        return Hmac::new(Sha512::new(), Self::PRIVATE_KEY.as_bytes());
+        return Hmac::new(Sha512::new(), env::var("SECURITY_JRWT_ENCODING_PRIVATE_KEY").unwrap().as_bytes());
     }
 }

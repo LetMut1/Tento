@@ -50,9 +50,9 @@ impl BaseRepository {
         return Ok(());
     }
 
-    pub fn get_by_application_user_id_and_device_id<'outer_a, 'outer_b>(    // TODO еще раз проверить лайфтаймы вл всех методах
+    pub fn get_by_application_user_id_and_device_id<'outer_a, 'outer_b>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_b ApplicationUserId, device_id: &'outer_b ApplicationUserLogInTokenDeviceId,
-    ) -> Result<Option<ApplicationUserLogInToken<'outer_b>>, ResourceErrorKind> { // TODO проверить, каклй здесь лайфтайм должен быть
+    ) -> Result<Option<ApplicationUserLogInToken<'outer_b>>, ResourceErrorKind> {
         match connection.get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(application_user_id, device_id)
         )?

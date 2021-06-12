@@ -37,7 +37,7 @@ impl BaseRepository {
 
     pub fn is_exist_by_application_user_email<'outer_a>(
         connection: &'outer_a Connection, application_user_email: &'outer_a Email
-    ) -> Result<bool, ResourceErrorKind> { // TODO сделать возможномть устанавливать фильтр ? 
+    ) -> Result<bool, ResourceErrorKind> {
         return Ok(
             diesel::select(dsl::exists(pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::email.eq(application_user_email.get_value()))))
             .get_result::<bool>(connection)?
