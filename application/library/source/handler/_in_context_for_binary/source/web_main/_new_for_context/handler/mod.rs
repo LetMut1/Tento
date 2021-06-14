@@ -134,7 +134,7 @@ impl Handler {
                     }
                 }
             },
-            Err(error) => { // TODO понять, включен ли бэктрейс. Если включен, отключить.
+            Err(error) => {
                 return Err(Error::new(ErrorKind::Other, error));
             }
         }

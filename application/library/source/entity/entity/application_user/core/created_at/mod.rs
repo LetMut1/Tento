@@ -19,12 +19,6 @@ impl CreatedAt {
         };
     }
 
-    pub fn new_from_str<'outer_a>(date_time: &'outer_a str) -> Self {
-        return Self {
-            value: DateTime::new_from_str(date_time)
-        }
-    }
-
     pub fn to_string<'this>(&'this self) -> String {
         return self.value.to_string();
     }

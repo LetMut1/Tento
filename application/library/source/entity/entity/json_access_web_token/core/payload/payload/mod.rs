@@ -32,7 +32,7 @@ impl<'outer_a> Payload<'outer_a> {
                 id: Cow::Owned(Id::new_from_string(common.json_access_web_token_id)?),
                 application_user_id: Cow::Owned(ApplicationUserId::new_from_string(common.application_user_id)?),
                 application_user_log_in_token_device_id: Cow::Owned(ApplicationUserLogInTokenDeviceId::new_from_string(common.application_user_log_in_token_device_id)?),
-                exp: Exp::new_from_str(common.exp.as_str())
+                exp: Exp::new_from_str(common.exp.as_str())?
             }
         );
     }

@@ -1,6 +1,7 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use crate::entity::core::date_time::DateTime;
+use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use std::clone::Clone;
 
@@ -22,10 +23,12 @@ impl Exp {
         };
     }
 
-    pub fn new_from_str<'outer_a>(date_time: &'outer_a str) -> Self {
-        return Self {
-            value: DateTime::new_from_str(date_time)
-        }
+    pub fn new_from_str<'outer_a>(date_time: &'outer_a str) -> Result<Self, InvalidArgumentError> {
+        return Ok(
+            Self {
+                value: DateTime::new_from_str(date_time)?
+            }
+        );
     }
 
     pub fn to_string<'this>(&'this self) -> String {
