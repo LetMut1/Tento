@@ -2,19 +2,15 @@ extern crate actix_web;
 extern crate library;
 
 use library::handler::_in_context_for_binary::source::web_main::_new_for_context::handler::Handler;
-use std::io::Result;
 
 #[actix_web::main]
-async fn main() -> Result<()>
+async fn main() -> ()   // TODO перед релизом понять, имеет ли значение, что именно возвращать в main. Err(...) для Result. Или просто void. (Как понять при деплое, что бинарник верну ошибку)
 {
     if let Err(error) = Handler::handle().await {
-        panic!("{}", error); 
-        // TODO спросить, правильное ли это завершение команды, или нужны отдавать ок для перезапуска. 
-        // TODO спросить, изменилось ли что-то после переноса в хендлер относиельно того, что было, когда реализация была здесь. То есть
-        // TODO не привнесло ли перенос в хендлер какого-то нового Ненужного эффекта.
+        println!("{}", error);
     }
 
-    return Ok(());
+    return ();
 }
 
 // TODO Do not remove this block until the problems have been fixed {

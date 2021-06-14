@@ -1,7 +1,7 @@
+use crate::utility::environment_variable_resolver::EnvironmentVariableResolver;
 use crypto::hmac::Hmac;
 use crypto::mac::Mac;
 use crypto::sha2::Sha512;
-use std::env;
 
 pub struct SignatureCreator;
 
@@ -18,6 +18,6 @@ impl SignatureCreator {
     }
 
     fn get_configured_hmac() -> Hmac<Sha512> {
-        return Hmac::new(Sha512::new(), env::var("SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY").unwrap().as_bytes());
+        return Hmac::new(Sha512::new(), EnvironmentVariableResolver::get_security_jawt_signature_encoding_private_key().as_bytes());
     }
 }

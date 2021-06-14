@@ -23,7 +23,7 @@ impl Handler {
                                 &mut *ConnectionExtractor::get_redis_connection(&data.clone().into_inner())?, json_access_web_token.get_id()
                             )? 
                             {
-                                service_request.extensions_mut().insert(json_access_web_token);
+                                service_request.extensions_mut().insert(json_access_web_token);     // TODO В такой реализации При инъекции в РекуестХэндлер этот объкт будет склонирован. А нужно передать его самого. Актикс сейчас не позволякет это сделать. Проверить позже
     
                                 return Ok(());
                             }

@@ -45,11 +45,11 @@ where
     type Error = Error;
     type Future = Either<S::Future, Ready<Result<Self::Response, Self::Error>>>;
 
-    fn poll_ready(&mut self, context: &mut Context) -> Poll<Result<(), Self::Error>> {
+    fn poll_ready<'this, 'outer_a>(&'this mut self, context: &'outer_a mut Context) -> Poll<Result<(), Self::Error>> {
         return self.service.poll_ready(context);
     }
 
-    fn call(&mut self, service_request: ServiceRequest) -> Self::Future {
+    fn call<'this>(&'this mut self, service_request: ServiceRequest) -> Self::Future {
         if let Err(main_error_kind) = CallHandler::handle(&service_request) {
             match main_error_kind {
                 MainErrorKind::EntityErrorKind(entity_error_kind) => {
