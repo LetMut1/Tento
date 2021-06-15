@@ -1,7 +1,7 @@
 use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::common::Common;
 use crate::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
-use crate::entity::entity::pre_confirmed_application_user::core::id::Id as PreConfirmedApplicationUserId;
-use crate::error::main_error::core::run_time_error::run_time_error::RunTimeError;
+use crate::entity::entity::pre_confirmed_application_user::_core::id::Id as PreConfirmedApplicationUserId;
+use crate::error::main_error::_core::run_time_error::run_time_error::RunTimeError;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use redis::Commands;

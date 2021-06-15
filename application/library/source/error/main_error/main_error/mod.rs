@@ -3,15 +3,15 @@ use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
-use super::core::entity_error::entity_error::EntityError;
-use super::core::invalid_argument_error::InvalidArgumentError;
-use super::core::logic_error::LogicError;
-use super::core::run_time_error::core::resource_error::core::_in_context_for::_resource::_new_for_context::connection_pool_error::ConnectionPoolError;
-use super::core::run_time_error::core::resource_error::core::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
-use super::core::run_time_error::core::resource_error::core::_in_context_for::_resource::postgresql::_new_for_context::postgresql_error::PostgresqlError;
-use super::core::run_time_error::core::resource_error::core::_in_context_for::_resource::redis::_new_for_context::redis_error::RedisError;
-use super::core::run_time_error::core::resource_error::resource_error::ResourceError;
-use super::core::run_time_error::run_time_error::RunTimeError;
+use super::_core::entity_error::entity_error::EntityError;
+use super::_core::invalid_argument_error::InvalidArgumentError;
+use super::_core::logic_error::LogicError;
+use super::_core::run_time_error::_core::resource_error::_core::_in_context_for::_resource::_new_for_context::connection_pool_error::ConnectionPoolError;
+use super::_core::run_time_error::_core::resource_error::_core::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
+use super::_core::run_time_error::_core::resource_error::_core::_in_context_for::_resource::postgresql::_new_for_context::postgresql_error::PostgresqlError;
+use super::_core::run_time_error::_core::resource_error::_core::_in_context_for::_resource::redis::_new_for_context::redis_error::RedisError;
+use super::_core::run_time_error::_core::resource_error::resource_error::ResourceError;
+use super::_core::run_time_error::run_time_error::RunTimeError;
 
 #[derive(Debug)]
 pub enum MainError {

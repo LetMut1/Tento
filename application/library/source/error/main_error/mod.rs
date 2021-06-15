@@ -1,2 +1,2 @@
 pub mod main_error;
-pub mod core;
+pub mod _core;

@@ -1,5 +1,5 @@
-use crate::entity::core::date_time::DateTime;
-use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
+use crate::entity::_core::date_time::DateTime;
+use crate::utility::_in_context_for::entity::_core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 
 pub struct DateTimeExpirationResolver;
 

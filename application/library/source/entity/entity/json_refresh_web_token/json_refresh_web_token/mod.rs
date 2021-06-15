@@ -1,11 +1,11 @@
 use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::common::Common;
-use crate::entity::core::uuid_v4::UuidV4;
-use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
-use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
-use crate::entity::entity::json_access_web_token::core::payload::core::id::Id as JsonAccessWebTokenId;
-use crate::error::main_error::core::invalid_argument_error::InvalidArgumentError;
+use crate::entity::_core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
+use crate::entity::entity::application_user::_core::id::Id as ApplicationUserId;
+use crate::entity::entity::json_access_web_token::_core::payload::_core::id::Id as JsonAccessWebTokenId;
+use crate::error::main_error::_core::invalid_argument_error::InvalidArgumentError;
 use std::borrow::Cow;
-use super::core::obfuscation_value::ObfuscationValue;
+use super::_core::obfuscation_value::ObfuscationValue;
 
 pub struct JsonRefreshWebToken<'outer_a> {
     json_access_web_token_id: JsonAccessWebTokenId,

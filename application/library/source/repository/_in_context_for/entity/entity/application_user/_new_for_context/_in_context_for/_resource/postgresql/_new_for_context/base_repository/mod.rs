@@ -3,10 +3,10 @@ use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_
 use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::application_user::_new_for_context::update::Update;
 use crate::diesel_component::schema::public::application_user as application_user_schema;
 use crate::entity::entity::application_user::application_user::ApplicationUser;
-use crate::entity::entity::application_user::core::email::Email;
-use crate::entity::entity::application_user::core::id::Id;
-use crate::entity::entity::application_user::core::nickname::Nickname;
-use crate::error::main_error::core::run_time_error::run_time_error::RunTimeError;
+use crate::entity::entity::application_user::_core::email::Email;
+use crate::entity::entity::application_user::_core::id::Id;
+use crate::entity::entity::application_user::_core::nickname::Nickname;
+use crate::error::main_error::_core::run_time_error::run_time_error::RunTimeError;
 use crate::utility::_in_context_for::data_transfer_object::resource_model::_new_for_context::update_resolver::_in_context_for::_in_context_for::entity::entity::application_user::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;
 use diesel::dsl;
 use diesel::ExpressionMethods;

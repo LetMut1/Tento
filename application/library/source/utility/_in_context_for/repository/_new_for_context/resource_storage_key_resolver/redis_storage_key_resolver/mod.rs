@@ -1,7 +1,7 @@
-use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
-use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
-use crate::entity::entity::json_access_web_token::core::payload::core::id::Id as JsonAccessWebTokenId;
-use crate::entity::entity::pre_confirmed_application_user::core::id::Id as PreConfirmedApplicationUserId;
+use crate::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
+use crate::entity::entity::application_user::_core::id::Id as ApplicationUserId;
+use crate::entity::entity::json_access_web_token::_core::payload::_core::id::Id as JsonAccessWebTokenId;
+use crate::entity::entity::pre_confirmed_application_user::_core::id::Id as PreConfirmedApplicationUserId;
 
 pub struct RedisStorageKeyResolver;
 

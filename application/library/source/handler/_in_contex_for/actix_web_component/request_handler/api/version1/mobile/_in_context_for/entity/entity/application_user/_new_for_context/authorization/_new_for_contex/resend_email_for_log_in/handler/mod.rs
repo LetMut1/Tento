@@ -1,8 +1,8 @@
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_log_in::request::Request;
-use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
-use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
-use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
-use crate::error::main_error::core::entity_error::entity_error::EntityError;
+use crate::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
+use crate::entity::entity::application_user::_core::id::Id as ApplicationUserId;
+use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
+use crate::error::main_error::_core::entity_error::entity_error::EntityError;
 use crate::error::main_error::main_error::MainError;
 use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;

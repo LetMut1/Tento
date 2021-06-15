@@ -1,2 +1,2 @@
 pub mod entity;
-pub mod core;
+pub mod _core;

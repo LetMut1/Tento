@@ -1,11 +1,11 @@
 use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::common::Common;
-use crate::entity::core::uuid_v4::UuidV4;
-use crate::entity::entity::application_user::core::email::Email;
-use crate::entity::entity::pre_confirmed_application_user::core::id::Id as PreConfirmedApplicationUserId;
+use crate::entity::_core::uuid_v4::UuidV4;
+use crate::entity::entity::application_user::_core::email::Email;
+use crate::entity::entity::pre_confirmed_application_user::_core::id::Id as PreConfirmedApplicationUserId;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use std::borrow::Cow;
-use super::core::value::Value;
-use super::core::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
+use super::_core::value::Value;
+use super::_core::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
 
 
 pub struct ApplicationUserRegistrationConfirmationToken<'outer_a> {

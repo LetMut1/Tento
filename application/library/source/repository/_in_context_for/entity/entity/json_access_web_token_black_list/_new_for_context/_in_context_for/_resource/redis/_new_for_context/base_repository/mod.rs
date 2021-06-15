@@ -1,6 +1,6 @@
 use crate::entity::entity::json_access_web_token_black_list::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
-use crate::entity::entity::json_access_web_token::core::payload::core::id::Id as JsonAccessWebTokenId;
-use crate::error::main_error::core::run_time_error::run_time_error::RunTimeError;
+use crate::entity::entity::json_access_web_token::_core::payload::_core::id::Id as JsonAccessWebTokenId;
+use crate::error::main_error::_core::run_time_error::run_time_error::RunTimeError;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use redis::Commands;
