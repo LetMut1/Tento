@@ -1,7 +1,7 @@
 use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::common::Common;
 use crate::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::entity::entity::pre_confirmed_application_user::core::id::Id as PreConfirmedApplicationUserId;
-use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
+use crate::error::main_error_kind::core::run_time_error::run_time_error::RunTimeError;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use redis::Commands;
@@ -13,7 +13,7 @@ impl BaseRepository {
     pub fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
-    ) -> Result<(), ResourceErrorKind> {
+    ) -> Result<(), RunTimeError> {
         connection.set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                 application_user_registration_confirmation_token.get_pre_confirmed_application_user_id()
@@ -28,7 +28,7 @@ impl BaseRepository {
     pub fn delete<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
-    ) -> Result<(), ResourceErrorKind> {
+    ) -> Result<(), RunTimeError> {
         connection.del::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                 application_user_registration_confirmation_token.get_pre_confirmed_application_user_id()
@@ -41,7 +41,7 @@ impl BaseRepository {
     pub fn update_expiration_time<'outer_a>(
         connection: &'outer_a mut Connection,
         application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
-    ) -> Result<(), ResourceErrorKind> {
+    ) -> Result<(), RunTimeError> {
         connection.expire::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                 application_user_registration_confirmation_token.get_pre_confirmed_application_user_id()
@@ -54,7 +54,7 @@ impl BaseRepository {
 
     pub fn get_by_pre_confirmed_application_user_id<'outer_a, 'outer_b>(
         connection: &'outer_a mut Connection, pre_confirmed_application_user_id: &'outer_b PreConfirmedApplicationUserId
-    ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'outer_b>>, ResourceErrorKind> {
+    ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'outer_b>>, RunTimeError> {
         match connection.get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(pre_confirmed_application_user_id)
         )?

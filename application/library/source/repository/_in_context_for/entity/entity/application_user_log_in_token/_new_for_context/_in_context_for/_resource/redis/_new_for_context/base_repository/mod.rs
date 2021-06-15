@@ -2,7 +2,7 @@ use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_
 use crate::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
-use crate::error::main_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
+use crate::error::main_error_kind::core::run_time_error::run_time_error::RunTimeError;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use redis::Commands;
@@ -13,7 +13,7 @@ pub struct BaseRepository;
 impl BaseRepository {
     pub fn create<'outer_a>(
         connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
-    ) -> Result<(), ResourceErrorKind> {
+    ) -> Result<(), RunTimeError> {
         connection.set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
                 application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
@@ -27,7 +27,7 @@ impl BaseRepository {
 
     pub fn delete<'outer_a>(
         connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
-    ) -> Result<(), ResourceErrorKind> {
+    ) -> Result<(), RunTimeError> {
         connection.del::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
                 application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
@@ -39,7 +39,7 @@ impl BaseRepository {
 
     pub fn update_expiration_time<'outer_a>(
         connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
-    ) -> Result<(), ResourceErrorKind> {
+    ) -> Result<(), RunTimeError> {
         connection.expire::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
                 application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
@@ -52,7 +52,7 @@ impl BaseRepository {
 
     pub fn get_by_application_user_id_and_device_id<'outer_a, 'outer_b>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_b ApplicationUserId, device_id: &'outer_b ApplicationUserLogInTokenDeviceId,
-    ) -> Result<Option<ApplicationUserLogInToken<'outer_b>>, ResourceErrorKind> {
+    ) -> Result<Option<ApplicationUserLogInToken<'outer_b>>, RunTimeError> {
         match connection.get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(application_user_id, device_id)
         )?
