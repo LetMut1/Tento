@@ -76,7 +76,7 @@ impl Handler {
 
     fn simple_check_environment_variables() -> Result<(), Error> {
         Self::simple_check_environment_variable(EnvironmentVariableResolver::IS_PRODUCTION_KEY)?;
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::SERVER_SOCKET_BINDING_ADDRESS_KEY)?;
+        Self::simple_check_environment_variable(EnvironmentVariableResolver::SERVER_SOCKET_ADDRESS_KEY)?;
         Self::simple_check_environment_variable(EnvironmentVariableResolver::LOGGER_ROLLER_LOG_FILE_NAME_KEY)?;
         Self::simple_check_environment_variable(EnvironmentVariableResolver::LOGGER_LOG_FILE_NAME_KEY)?;
         Self::simple_check_environment_variable(EnvironmentVariableResolver::LOGGER_ENCODER_PATTERN_KEY)?;
@@ -84,7 +84,8 @@ impl Handler {
         Self::simple_check_environment_variable(EnvironmentVariableResolver::SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY)?;
         Self::simple_check_environment_variable(EnvironmentVariableResolver::RESOURCE_POSTGRESQL_URL_KEY)?;
         Self::simple_check_environment_variable(EnvironmentVariableResolver::RESOURCE_REDIS_URL_KEY)?;
-        
+        Self::simple_check_environment_variable(EnvironmentVariableResolver::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY)?;
+
         return Ok(());
     }
 
@@ -148,7 +149,7 @@ impl Handler {
             .data::<AggregateConnectionPool>(aggregate_connection_pool.clone())
             .configure(Self::configure_http_server);
         })
-        .bind(EnvironmentVariableResolver::get_server_socket_binding_address())?
+        .bind(EnvironmentVariableResolver::get_server_socket_address())?
         .run()
         .await?;
 
