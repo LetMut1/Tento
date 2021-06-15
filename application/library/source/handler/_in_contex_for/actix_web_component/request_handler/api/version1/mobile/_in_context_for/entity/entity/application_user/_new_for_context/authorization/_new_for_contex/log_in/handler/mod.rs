@@ -6,9 +6,9 @@ use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_access_web_token_black_list::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
-use crate::error::main_error_kind::main_error_kind::MainErrorKind;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
+use crate::error::main_error::core::entity_error::entity_error::EntityError;
+use crate::error::main_error::main_error::MainError;
 use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as JsonAccessWebTokenBlackListRepository;
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
@@ -22,7 +22,7 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, MainErrorKind> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, MainError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
 
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = 
@@ -67,9 +67,9 @@ impl Handler {
                 ApplicationUserLogInTokenBaseRepository::delete(connection, &application_user_log_in_token)?;
             }
             
-            return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::InvalidValue)));
+            return Err(MainError::EntityError(EntityError::ApplicationUserLogInTokenError(ApplicationUserLogInTokenError::InvalidValue)));
         }
 
-        return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserLogInTokenErrorKind(ApplicationUserLogInTokenErrorKind::NotFound)));
+        return Err(MainError::EntityError(EntityError::ApplicationUserLogInTokenError(ApplicationUserLogInTokenError::NotFound)));
     }
 }

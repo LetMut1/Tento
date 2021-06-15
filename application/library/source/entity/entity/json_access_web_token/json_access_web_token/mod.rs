@@ -6,7 +6,7 @@ use crate::entity::entity::json_access_web_token::core::payload::core::exp::Exp;
 use crate::entity::entity::json_access_web_token::core::payload::core::id::Id;
 use crate::entity::entity::json_access_web_token::core::payload::payload::Payload;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::core::invalid_argument_error::InvalidArgumentError;
 use crate::utility::_in_context_for::entity::core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use std::clone::Clone;
 use super::core::header::core::alg::Alg;

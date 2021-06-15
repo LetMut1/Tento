@@ -1,4 +1,4 @@
-use crate::error::main_error_kind::core::run_time_error_kind::run_time_error_kind::RunTimeErrorKind;
+use crate::error::main_error::core::run_time_error::run_time_error::RunTimeError;
 use crate::utility::environment_variable_resolver::EnvironmentVariableResolver;
 use diesel::pg::PgConnection as PostgresqlConnection;
 use diesel::r2d2::ConnectionManager as PostgresqlConnectionManager;
@@ -13,7 +13,7 @@ pub struct AggregateConnectionPool {
 }
 
 impl AggregateConnectionPool {
-    pub fn new() -> Result<Self, RunTimeErrorKind> {
+    pub fn new() -> Result<Self, RunTimeError> {
         return Ok (
             Self {
                 postgresql_connection_pool: Self::establish_postgresql_connection_pool()?,
@@ -22,13 +22,13 @@ impl AggregateConnectionPool {
         );
     }
 
-    fn establish_postgresql_connection_pool() -> Result<Pool<PostgresqlConnectionManager<PostgresqlConnection>>, RunTimeErrorKind> {
+    fn establish_postgresql_connection_pool() -> Result<Pool<PostgresqlConnectionManager<PostgresqlConnection>>, RunTimeError> {
         return Ok(
             Pool::new(PostgresqlConnectionManager::<PostgresqlConnection>::new(EnvironmentVariableResolver::get_resource_postgresql_url()))?
         );   // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix
     }
 
-    fn establish_redis_connection_pool() -> Result<Pool<RedisConnectionManager>, RunTimeErrorKind> {
+    fn establish_redis_connection_pool() -> Result<Pool<RedisConnectionManager>, RunTimeError> {
         return Ok(
             Pool::new(RedisConnectionManager::new(EnvironmentVariableResolver::get_resource_redis_url())?)?
         );   // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix

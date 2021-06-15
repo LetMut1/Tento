@@ -1,7 +1,7 @@
 use crate::data_transfer_object::_in_context_for::entity::entity::json_access_web_token::core::header::header::_new_for_context::common::Common as HeaderCommon;
 use crate::data_transfer_object::_in_context_for::entity::entity::json_access_web_token::core::payload::_new_fro_context::common::Common as PayloadCommon;
 use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
-use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::core::invalid_argument_error::InvalidArgumentError;
 use crate::utility::_in_context_for::entity::entity::json_access_web_token::core::_new_for_context::signature_creator::SignatureCreator;
 use serde_json;
 

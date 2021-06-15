@@ -1,4 +1,4 @@
-use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::core::invalid_argument_error::InvalidArgumentError;
 use uuid::Uuid;
 use std::clone::Clone;
 

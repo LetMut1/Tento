@@ -3,7 +3,7 @@ use crate::entity::core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_access_web_token::core::payload::core::id::Id as JsonAccessWebTokenId;
-use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::core::invalid_argument_error::InvalidArgumentError;
 use std::borrow::Cow;
 use super::core::obfuscation_value::ObfuscationValue;
 

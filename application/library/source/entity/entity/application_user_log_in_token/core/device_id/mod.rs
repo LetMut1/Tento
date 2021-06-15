@@ -1,5 +1,5 @@
 use crate::entity::core::uuid_v4::UuidV4;
-use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::core::invalid_argument_error::InvalidArgumentError;
 
 use std::clone::Clone;
 

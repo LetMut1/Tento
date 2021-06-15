@@ -1,6 +1,6 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
-use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::core::invalid_argument_error::InvalidArgumentError;
 use std::clone::Clone;
 
 #[derive(Clone)]

@@ -1,7 +1,7 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use crate::entity::core::date_time::DateTime;
-use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::core::invalid_argument_error::InvalidArgumentError;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use std::clone::Clone;
 

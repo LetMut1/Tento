@@ -1,0 +1,1 @@
+pub mod application_user_registration_confirmation_token_error;

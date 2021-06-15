@@ -8,11 +8,11 @@ use crate::entity::entity::application_user::core::nickname::Nickname;
 use crate::entity::entity::application_user::core::password::Password;
 use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error_kind::ApplicationUserRegistrationConfirmationTokenErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
-use crate::error::main_error_kind::main_error_kind::MainErrorKind;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error::PreConfirmedApplicationUserError;
+use crate::error::main_error::core::entity_error::entity_error::EntityError;
+use crate::error::main_error::main_error::MainError;
 use crate::repository::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
@@ -29,7 +29,7 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, MainErrorKind> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, MainError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let application_user_nickname: Nickname = Nickname::new(request.application_user_nickname);
 
         let application_user_email: Email = Email::new(request.application_user_email);
@@ -57,13 +57,13 @@ impl Handler {
                         if let Err(run_time_error_kind) = ApplicationUserBaseRepository::create(postgresql_connection, &application_user) {
                             TransactionManager::rollback_transaction(postgresql_connection)?;
 
-                            return Err(MainErrorKind::RunTimeErrorKind(run_time_error_kind));
+                            return Err(MainError::RunTimeError(run_time_error_kind));
                         }
 
                         if let Err(run_time_error_kind) = PreConfirmedApplicationUserBaseRepository::delete(postgresql_connection, &pre_confirmed_application_user) {
                             TransactionManager::rollback_transaction(postgresql_connection)?;
 
-                            return Err(MainErrorKind::RunTimeErrorKind(run_time_error_kind));
+                            return Err(MainError::RunTimeError(run_time_error_kind));
                         }
                         
                         TransactionManager::commit_transaction(postgresql_connection)?;
@@ -86,19 +86,19 @@ impl Handler {
                         ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(redis_connection, &application_user_registration_confirmation_token)?;
                     }
                     
-                    return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue)));
+                    return Err(MainError::EntityError(EntityError::ApplicationUserRegistrationConfirmationTokenError(ApplicationUserRegistrationConfirmationTokenError::InvalidValue)));
                 }
 
-                return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound)));
+                return Err(MainError::EntityError(EntityError::ApplicationUserRegistrationConfirmationTokenError(ApplicationUserRegistrationConfirmationTokenError::NotFound)));
             }
 
             if ApplicationUserBaseRepository::is_exist_by_email(postgresql_connection, &application_user_email)? {
-                return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::AlreadyConfirmed)));
+                return Err(MainError::EntityError(EntityError::PreConfirmedApplicationUserError(PreConfirmedApplicationUserError::AlreadyConfirmed)));
             }
             
-            return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::PreConfirmedApplicationUserErrorKind(PreConfirmedApplicationUserErrorKind::NotFound)));
+            return Err(MainError::EntityError(EntityError::PreConfirmedApplicationUserError(PreConfirmedApplicationUserError::NotFound)));
         }
         
-        return Err(MainErrorKind::EntityErrorKind(EntityErrorKind::ApplicationUserErrorKind(ApplicationUserErrorKind::AlreadyExist)));
+        return Err(MainError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::AlreadyExist)));
     }
 }

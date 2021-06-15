@@ -2,7 +2,7 @@ use crate::data_transfer_object::_in_context_for::entity::entity::json_access_we
 use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::error::main_error_kind::core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::core::invalid_argument_error::InvalidArgumentError;
 use std::borrow::Cow;
 use std::clone::Clone;
 use super::core::exp::Exp;

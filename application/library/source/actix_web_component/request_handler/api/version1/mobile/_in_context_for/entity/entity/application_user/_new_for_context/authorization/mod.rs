@@ -17,17 +17,17 @@ use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_reset_password::request::Request as ResendEmailForResetPasswordRequest;
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password::request::Request as ResetPasswordRequest;
 use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token::ApplicationUserLogInTokenErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error_kind::ApplicationUserRegistrationConfirmationTokenErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error_kind::ApplicationUserResetPasswordTokenErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error_kind::ApplicationUserErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error_kind::JsonAccessWebTokenErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error_kind::JsonRefreshWebTokenErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
-use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
-use crate::error::main_error_kind::core::run_time_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use crate::error::main_error_kind::core::run_time_error_kind::run_time_error_kind::RunTimeErrorKind;
-use crate::error::main_error_kind::main_error_kind::MainErrorKind;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
+use crate::error::main_error::core::entity_error::core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error::PreConfirmedApplicationUserError;
+use crate::error::main_error::core::entity_error::entity_error::EntityError;
+use crate::error::main_error::core::run_time_error::core::resource_error::resource_error::ResourceError;
+use crate::error::main_error::core::run_time_error::run_time_error::RunTimeError;
+use crate::error::main_error::main_error::MainError;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in::handler::Handler as LogInHandler;
@@ -57,10 +57,10 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::InvalidArgumentError => {
+                    MainError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
+                    MainError::LogicError(_) | MainError::RunTimeError(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -80,10 +80,10 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::InvalidArgumentError => {
+                    MainError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
+                    MainError::LogicError(_) | MainError::RunTimeError(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -99,16 +99,16 @@ impl Authorization {
     pub async fn pre_register(form: Form<PreRegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = PreRegisterHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                MainError::EntityError(ref entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
+                        EntityError::ApplicationUserError(application_user_error_kind) => {
                             match application_user_error_kind {
-                                ApplicationUserErrorKind::AlreadyExist => {
+                                ApplicationUserError::AlreadyExist => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_ALREADY_EXIST
                                     ));
                                 },
-                                ApplicationUserErrorKind::InvalidEmail => {
+                                ApplicationUserError::InvalidEmail => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
                                     ));
@@ -118,9 +118,9 @@ impl Authorization {
                                 }
                             }
                         },
-                        EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
+                        EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error_kind) => {
                             match pre_confirmed_application_user_error_kind {
-                                PreConfirmedApplicationUserErrorKind::AlreadyExist => {
+                                PreConfirmedApplicationUserError::AlreadyExist => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_ALREADY_EXIST
                                     ));
@@ -135,21 +135,21 @@ impl Authorization {
                         }
                     }
                 },
-                MainErrorKind::InvalidArgumentError => {
+                MainError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainErrorKind::LogicError(_) => {
+                MainError::LogicError(_) => {
                     log::error!("{}", main_error_kind);
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
-                MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
+                MainError::RunTimeError(ref run_time_error_kind) => {
                     log::error!("{}", main_error_kind);
 
                     match run_time_error_kind {
-                        RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                        RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
                             match resource_error_kind {
-                                ResourceErrorKind::EmailServerErrorKind(_) => {
+                                ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
                                     ));
@@ -174,11 +174,11 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                    MainError::EntityError(ref entity_error_kind) => {
                         match entity_error_kind {
-                            EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
+                            EntityError::ApplicationUserError(application_user_error_kind) => {
                                 match application_user_error_kind {
-                                    ApplicationUserErrorKind::AlreadyExist => {
+                                    ApplicationUserError::AlreadyExist => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_ALREADY_EXIST
                                         ));
@@ -188,14 +188,14 @@ impl Authorization {
                                     }
                                 }
                             },
-                            EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
+                            EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error_kind) => {
                                 match pre_confirmed_application_user_error_kind {
-                                    PreConfirmedApplicationUserErrorKind::AlreadyConfirmed => {
+                                    PreConfirmedApplicationUserError::AlreadyConfirmed => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_ALREADY_CONFIRMED
                                         ));
                                     },
-                                    PreConfirmedApplicationUserErrorKind::NotFound => {
+                                    PreConfirmedApplicationUserError::NotFound => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_NOT_FOUND
                                         ));
@@ -205,14 +205,14 @@ impl Authorization {
                                     }
                                 }
                             },
-                            EntityErrorKind::ApplicationUserRegistrationConfirmationTokenErrorKind(application_user_registration_confirmation_error_kind) => {
+                            EntityError::ApplicationUserRegistrationConfirmationTokenError(application_user_registration_confirmation_error_kind) => {
                                 match application_user_registration_confirmation_error_kind {
-                                    ApplicationUserRegistrationConfirmationTokenErrorKind::NotFound => {
+                                    ApplicationUserRegistrationConfirmationTokenError::NotFound => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
                                         ));
                                     },
-                                    ApplicationUserRegistrationConfirmationTokenErrorKind::InvalidValue => {
+                                    ApplicationUserRegistrationConfirmationTokenError::InvalidValue => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE
                                         ));
@@ -224,10 +224,10 @@ impl Authorization {
                             }
                         }
                     },
-                    MainErrorKind::InvalidArgumentError => {
+                    MainError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
+                    MainError::LogicError(_) | MainError::RunTimeError(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -240,11 +240,11 @@ impl Authorization {
     pub async fn resend_email_for_register(form: Form<ResendEmailForRegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = ResendEmailForRegisterHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                MainError::EntityError(ref entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::PreConfirmedApplicationUserErrorKind(pre_confirmed_application_user_error_kind) => {
+                        EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error_kind) => {
                             match pre_confirmed_application_user_error_kind {
-                                PreConfirmedApplicationUserErrorKind::NotFound => {
+                                PreConfirmedApplicationUserError::NotFound => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_NOT_FOUND
                                     ));
@@ -260,21 +260,21 @@ impl Authorization {
                         }
                     }
                 },
-                MainErrorKind::InvalidArgumentError => {
+                MainError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainErrorKind::LogicError(_) => {
+                MainError::LogicError(_) => {
                     log::error!("{}", main_error_kind);
 
                     return StandardResponseCreator::create_internal_server_error();
                 },
-                MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
+                MainError::RunTimeError(ref run_time_error_kind) => {
                     log::error!("{}", main_error_kind);
 
                     match run_time_error_kind {
-                        RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                        RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
                             match resource_error_kind {
-                                ResourceErrorKind::EmailServerErrorKind(_) => {
+                                ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
                                     ));
@@ -299,16 +299,16 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                    MainError::EntityError(ref entity_error_kind) => {
                         match entity_error_kind {
-                            EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
+                            EntityError::ApplicationUserError(application_user_error_kind) => {
                                 match application_user_error_kind {
-                                    ApplicationUserErrorKind::NotFound => {
+                                    ApplicationUserError::NotFound => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
                                         ));
                                     },
-                                    ApplicationUserErrorKind::WrongPassword => {
+                                    ApplicationUserError::WrongPassword => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_PASSWORD
                                         ));
@@ -323,21 +323,21 @@ impl Authorization {
                             }
                         }
                     },
-                    MainErrorKind::InvalidArgumentError => {
+                    MainError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) => {
+                    MainError::LogicError(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
                     },
-                    MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
+                    MainError::RunTimeError(ref run_time_error_kind) => {
                         log::error!("{}", main_error_kind);
 
                         match run_time_error_kind {
-                            RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                            RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
                                 match resource_error_kind {
-                                    ResourceErrorKind::EmailServerErrorKind(_) => {
+                                    ResourceError::EmailServerError(_) => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
                                         ));
@@ -361,16 +361,16 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                    MainError::EntityError(ref entity_error_kind) => {
                         match entity_error_kind {
-                            EntityErrorKind::ApplicationUserLogInTokenErrorKind(application_user_log_in_token_error_kind) => {
+                            EntityError::ApplicationUserLogInTokenError(application_user_log_in_token_error_kind) => {
                                 match application_user_log_in_token_error_kind {
-                                    ApplicationUserLogInTokenErrorKind::NotFound => {
+                                    ApplicationUserLogInTokenError::NotFound => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
                                         ));
                                     },
-                                    ApplicationUserLogInTokenErrorKind::InvalidValue => {
+                                    ApplicationUserLogInTokenError::InvalidValue => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE
                                         ));
@@ -382,10 +382,10 @@ impl Authorization {
                             }
                         }
                     },
-                    MainErrorKind::InvalidArgumentError => {
+                    MainError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
+                    MainError::LogicError(_) | MainError::RunTimeError(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -398,11 +398,11 @@ impl Authorization {
     pub async fn resend_email_for_log_in(form: Form<ResendEmailForLogInRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = ResendEmailForLogInHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                MainError::EntityError(ref entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::ApplicationUserLogInTokenErrorKind(application_user_log_in_token_error_kind) => {
+                        EntityError::ApplicationUserLogInTokenError(application_user_log_in_token_error_kind) => {
                             match application_user_log_in_token_error_kind {
-                                ApplicationUserLogInTokenErrorKind::NotFound => {
+                                ApplicationUserLogInTokenError::NotFound => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
                                     ));
@@ -417,21 +417,21 @@ impl Authorization {
                         }
                     }
                 },
-                MainErrorKind::InvalidArgumentError => {
+                MainError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainErrorKind::LogicError(_) => {
+                MainError::LogicError(_) => {
                     log::error!("{}", main_error_kind);
 
                     return StandardResponseCreator::create_internal_server_error();
                 },
-                MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
+                MainError::RunTimeError(ref run_time_error_kind) => {
                     log::error!("{}", main_error_kind);
 
                     match run_time_error_kind {
-                        RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                        RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
                             match resource_error_kind {
-                                ResourceErrorKind::EmailServerErrorKind(_) => {
+                                ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
                                     ));
@@ -456,11 +456,11 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                    MainError::EntityError(ref entity_error_kind) => {
                         match entity_error_kind {
-                            EntityErrorKind::JsonAccessWebTokenErrorKind(json_access_web_token_error_kind) => {
+                            EntityError::JsonAccessWebTokenError(json_access_web_token_error_kind) => {
                                 match json_access_web_token_error_kind {
-                                    JsonAccessWebTokenErrorKind::NotExpired => {
+                                    JsonAccessWebTokenError::NotExpired => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED
                                         ));
@@ -470,9 +470,9 @@ impl Authorization {
                                     }
                                 }
                             },
-                            EntityErrorKind::JsonRefreshWebTokenErrorKind(json_refresh_web_token_error_kind) => {
+                            EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error_kind) => {
                                 match json_refresh_web_token_error_kind {
-                                    JsonRefreshWebTokenErrorKind::NotFound => {
+                                    JsonRefreshWebTokenError::NotFound => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
                                         ));
@@ -484,10 +484,10 @@ impl Authorization {
                             }
                         }
                     },
-                    MainErrorKind::InvalidArgumentError => {
+                    MainError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
+                    MainError::LogicError(_) | MainError::RunTimeError(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -500,11 +500,11 @@ impl Authorization {
     pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = LogOutHandler::handle(data.into_inner(), &req_data.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                MainError::EntityError(ref entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::JsonRefreshWebTokenErrorKind(json_refresh_web_token_error_kind) => {
+                        EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error_kind) => {
                             match json_refresh_web_token_error_kind {
-                                JsonRefreshWebTokenErrorKind::NotFound => {
+                                JsonRefreshWebTokenError::NotFound => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
                                     ));
@@ -516,10 +516,10 @@ impl Authorization {
                         }
                     }
                 },
-                MainErrorKind::InvalidArgumentError => {
+                MainError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
+                MainError::LogicError(_) | MainError::RunTimeError(_) => {
                     log::error!("{}", main_error_kind);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -533,11 +533,11 @@ impl Authorization {
     pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = LogOutFromAllDevicesHandler::handle(data.into_inner(), &req_data.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                MainError::EntityError(ref entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::JsonRefreshWebTokenErrorKind(json_refresh_web_token_error_kind) => {
+                        EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error_kind) => {
                             match json_refresh_web_token_error_kind {
-                                JsonRefreshWebTokenErrorKind::NotFound => {
+                                JsonRefreshWebTokenError::NotFound => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
                                     ));
@@ -549,10 +549,10 @@ impl Authorization {
                         }
                     }
                 },
-                MainErrorKind::InvalidArgumentError => {
+                MainError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
+                MainError::LogicError(_) | MainError::RunTimeError(_) => {
                     log::error!("{}", main_error_kind);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -570,11 +570,11 @@ impl Authorization {
             },
             Err(main_error_kind) => {
                 match main_error_kind {
-                    MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                    MainError::EntityError(ref entity_error_kind) => {
                         match entity_error_kind {
-                            EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
+                            EntityError::ApplicationUserError(application_user_error_kind) => {
                                 match application_user_error_kind {
-                                    ApplicationUserErrorKind::NotFound => {
+                                    ApplicationUserError::NotFound => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
                                         ));
@@ -590,21 +590,21 @@ impl Authorization {
                             }
                         }
                     },
-                    MainErrorKind::InvalidArgumentError => {
+                    MainError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) => {
+                    MainError::LogicError(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                    MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
+                    MainError::RunTimeError(ref run_time_error_kind) => {
                         log::error!("{}", main_error_kind);
 
                         match run_time_error_kind {
-                            RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                            RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
                                 match resource_error_kind {
-                                    ResourceErrorKind::EmailServerErrorKind(_) => {
+                                    ResourceError::EmailServerError(_) => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                             CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
                                         ));
@@ -624,11 +624,11 @@ impl Authorization {
     pub async fn reset_password(form: Form<ResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = ResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                MainError::EntityError(ref entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::ApplicationUserErrorKind(application_user_error_kind) => {
+                        EntityError::ApplicationUserError(application_user_error_kind) => {
                             match application_user_error_kind {
-                                ApplicationUserErrorKind::NotFound => {
+                                ApplicationUserError::NotFound => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
                                     ));
@@ -639,14 +639,14 @@ impl Authorization {
 
                             }
                         },
-                        EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(application_user_reset_password_token_error_kind) => {
+                        EntityError::ApplicationUserResetPasswordTokenError(application_user_reset_password_token_error_kind) => {
                             match application_user_reset_password_token_error_kind {
-                                ApplicationUserResetPasswordTokenErrorKind::InvalidValue => {
+                                ApplicationUserResetPasswordTokenError::InvalidValue => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
                                     ));
                                 },
-                                ApplicationUserResetPasswordTokenErrorKind::NotFound => {
+                                ApplicationUserResetPasswordTokenError::NotFound => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
                                     ));
@@ -658,10 +658,10 @@ impl Authorization {
                         }
                     }
                 },
-                MainErrorKind::InvalidArgumentError => {
+                MainError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
+                MainError::LogicError(_) | MainError::RunTimeError(_) => {
                     log::error!("{}", main_error_kind);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -675,11 +675,11 @@ impl Authorization {
     pub async fn resend_email_for_reset_password(form: Form<ResendEmailForResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         if let Err(main_error_kind) = ResendEmailForResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error_kind {
-                MainErrorKind::EntityErrorKind(ref entity_error_kind) => {
+                MainError::EntityError(ref entity_error_kind) => {
                     match entity_error_kind {
-                        EntityErrorKind::ApplicationUserResetPasswordTokenErrorKind(application_user_reset_password_token_error_kind) => {
+                        EntityError::ApplicationUserResetPasswordTokenError(application_user_reset_password_token_error_kind) => {
                             match application_user_reset_password_token_error_kind {
-                                ApplicationUserResetPasswordTokenErrorKind::NotFound => {
+                                ApplicationUserResetPasswordTokenError::NotFound => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
                                     ));
@@ -694,21 +694,21 @@ impl Authorization {
                         }
                     }
                 },
-                MainErrorKind::InvalidArgumentError => {
+                MainError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainErrorKind::LogicError(_) => {
+                MainError::LogicError(_) => {
                     log::error!("{}", main_error_kind);
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
-                MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
+                MainError::RunTimeError(ref run_time_error_kind) => {
                     log::error!("{}", main_error_kind);
 
                     match run_time_error_kind {
-                        RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
+                        RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
                             match resource_error_kind {
-                                ResourceErrorKind::EmailServerErrorKind(_) => {
+                                ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
                                         CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
                                     ));

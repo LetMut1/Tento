@@ -1,6 +1,6 @@
-use crate::error::main_error_kind::core::run_time_error_kind::core::resource_error_kind::core::_in_context_for::_resource::email_server::_new_for_context::email_server_error_kind::EmailServerErrorKind;
-use crate::error::main_error_kind::core::run_time_error_kind::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use crate::error::main_error_kind::core::run_time_error_kind::run_time_error_kind::RunTimeErrorKind;
+use crate::error::main_error::core::run_time_error::core::resource_error::core::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
+use crate::error::main_error::core::run_time_error::core::resource_error::resource_error::ResourceError;
+use crate::error::main_error::core::run_time_error::run_time_error::RunTimeError;
 use crate::utility::environment_variable_resolver::EnvironmentVariableResolver;
 use lettre_email::Email;
 use lettre_email::EmailBuilder;
@@ -17,12 +17,12 @@ use std::convert::Into;
 pub struct EmailSender;
 
 impl EmailSender {   // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
-    pub fn send<'outer_a>(subject: &'outer_a str, body: String, to: &'outer_a str) -> Result<(), RunTimeErrorKind> {
+    pub fn send<'outer_a>(subject: &'outer_a str, body: String, to: &'outer_a str) -> Result<(), RunTimeError> {
         let email: Email = match EmailBuilder::new().subject(subject).text(body).from("from_changethis@yandex.ru".to_string()).to(to).build() //TODO
         {
             Ok(email) => email,
             Err(email_error) => { 
-                return Err(RunTimeErrorKind::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::EmailError(email_error))));
+                return Err(RunTimeError::ResourceErrorKind(ResourceError::EmailServerError(EmailServerError::EmailError(email_error))));
             }
         };
 
@@ -30,7 +30,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             let smtp_client: SmtpClient = match SmtpClient::new_simple("TODO") { // TODO
                 Ok(smtp_client) => smtp_client,
                 Err(smtp_error) => { 
-                    return Err(RunTimeErrorKind::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(smtp_error))));
+                    return Err(RunTimeError::ResourceErrorKind(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error))));
                 }
             };
 
@@ -43,7 +43,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                 .transport();
 
             if let Err(smtp_error) = smtp_transport.send(email.into()) { 
-                return Err(RunTimeErrorKind::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(smtp_error))));
+                return Err(RunTimeError::ResourceErrorKind(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error))));
             }  
         } else {
             let mut smtp_transport: SmtpTransport = match SmtpClient::new(
@@ -52,12 +52,12 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             {
                 Ok(smtp_client) => smtp_client.transport(),
                 Err(smtp_error) => { 
-                    return Err(RunTimeErrorKind::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(smtp_error)))); 
+                    return Err(RunTimeError::ResourceErrorKind(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error)))); 
                 }
             };
     
             if let Err(smtp_error) = smtp_transport.send(email.into()) {
-                return Err(RunTimeErrorKind::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(smtp_error)))); 
+                return Err(RunTimeError::ResourceErrorKind(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error)))); 
             }
         }
 
