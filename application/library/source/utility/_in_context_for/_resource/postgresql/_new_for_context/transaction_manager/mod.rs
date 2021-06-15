@@ -1,4 +1,4 @@
-use crate::error::main_error_kind::core::run_time_error::run_time_error_kind::RunTimeErrorKind;
+use crate::error::main_error_kind::core::run_time_error_kind::run_time_error_kind::RunTimeErrorKind;
 use diesel::Connection as DieselConnection;
 use diesel::connection::TransactionManager as DieselTransactionManager;
 use diesel::PgConnection as Connection;

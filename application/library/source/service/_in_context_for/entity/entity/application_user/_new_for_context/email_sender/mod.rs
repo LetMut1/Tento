@@ -1,7 +1,7 @@
 use crate::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::error::main_error_kind::core::run_time_error::run_time_error_kind::RunTimeErrorKind;
+use crate::error::main_error_kind::core::run_time_error_kind::run_time_error_kind::RunTimeErrorKind;
 use crate::utility::email_sender::EmailSender as BaseEmailSender;
 
 pub struct EmailSender;

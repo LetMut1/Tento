@@ -3,7 +3,7 @@ use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_
 use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::insert::Insert;
 use crate::entity::entity::application_user::core::email::Email;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
-use crate::error::main_error_kind::core::run_time_error::run_time_error_kind::RunTimeErrorKind;
+use crate::error::main_error_kind::core::run_time_error_kind::run_time_error_kind::RunTimeErrorKind;
 use diesel::dsl;
 use diesel::ExpressionMethods;
 use diesel::OptionalExtension;

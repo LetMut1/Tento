@@ -1,4 +1,4 @@
-use crate::error::main_error_kind::core::run_time_error::run_time_error_kind::RunTimeErrorKind;
+use crate::error::main_error_kind::core::run_time_error_kind::run_time_error_kind::RunTimeErrorKind;
 use diesel::pg::PgConnection as PostgresqlConnection;
 use diesel::r2d2::ConnectionManager as PostgresqlConnectionManager;
 use r2d2_redis::RedisConnectionManager;
