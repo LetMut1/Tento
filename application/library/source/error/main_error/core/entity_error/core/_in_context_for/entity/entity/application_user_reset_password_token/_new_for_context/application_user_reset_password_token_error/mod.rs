@@ -10,7 +10,7 @@ pub enum ApplicationUserResetPasswordTokenError {
 }
 
 impl Display for ApplicationUserResetPasswordTokenError {
-    fn fmt(&self, _: &mut Formatter<'_>) -> Result {
+    fn fmt<'this, 'outer_a>(&'this self, _: &'outer_a mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }

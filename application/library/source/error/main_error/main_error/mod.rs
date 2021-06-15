@@ -22,7 +22,7 @@ pub enum MainError {
 }
 
 impl Display for MainError {
-    fn fmt(&self, formatter: &mut Formatter<'_>) -> Result {
+    fn fmt<'this, 'outer_a>(&'this self, formatter: &'outer_a mut Formatter<'_>) -> Result {
         match self {
             Self::LogicError(logic_error) => {
                 write!(formatter, "MainError-LogicError: {}", logic_error.get_message())?;

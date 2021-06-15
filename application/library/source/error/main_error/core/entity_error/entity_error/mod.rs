@@ -22,7 +22,7 @@ pub enum EntityError {
 }
 
 impl Display for EntityError {
-    fn fmt(&self, _: &mut Formatter<'_>) -> Result {
+    fn fmt<'this, 'outer_a>(&'this self, _: &'outer_a mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }
