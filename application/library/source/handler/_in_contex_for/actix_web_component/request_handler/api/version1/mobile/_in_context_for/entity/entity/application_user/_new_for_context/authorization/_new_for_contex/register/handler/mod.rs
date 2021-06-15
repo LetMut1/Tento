@@ -54,16 +54,16 @@ impl Handler {
 
                         TransactionManager::begin_transaction(postgresql_connection)?;
                         
-                        if let Err(run_time_error_kind) = ApplicationUserBaseRepository::create(postgresql_connection, &application_user) {
+                        if let Err(run_time_error) = ApplicationUserBaseRepository::create(postgresql_connection, &application_user) {
                             TransactionManager::rollback_transaction(postgresql_connection)?;
 
-                            return Err(MainError::RunTimeError(run_time_error_kind));
+                            return Err(MainError::RunTimeError(run_time_error));
                         }
 
-                        if let Err(run_time_error_kind) = PreConfirmedApplicationUserBaseRepository::delete(postgresql_connection, &pre_confirmed_application_user) {
+                        if let Err(run_time_error) = PreConfirmedApplicationUserBaseRepository::delete(postgresql_connection, &pre_confirmed_application_user) {
                             TransactionManager::rollback_transaction(postgresql_connection)?;
 
-                            return Err(MainError::RunTimeError(run_time_error_kind));
+                            return Err(MainError::RunTimeError(run_time_error));
                         }
                         
                         TransactionManager::commit_transaction(postgresql_connection)?;

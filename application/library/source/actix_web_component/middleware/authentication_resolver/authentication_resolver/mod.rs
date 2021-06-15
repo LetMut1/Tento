@@ -50,12 +50,12 @@ where
     }
 
     fn call<'this>(&'this mut self, service_request: ServiceRequest) -> Self::Future {
-        if let Err(main_error_kind) = CallHandler::handle(&service_request) {
-            match main_error_kind {
-                MainError::EntityError(entity_error_kind) => {
-                    match entity_error_kind {
-                        EntityError::JsonAccessWebTokenError(json_access_web_token_error_kind) => {
-                            match json_access_web_token_error_kind {
+        if let Err(main_error) = CallHandler::handle(&service_request) {
+            match main_error {
+                MainError::EntityError(entity_error) => {
+                    match entity_error {
+                        EntityError::JsonAccessWebTokenError(json_access_web_token_error) => {
+                            match json_access_web_token_error {
                                 JsonAccessWebTokenError::AlreadyExpired => {
                                     return Either::Right(FutureOk(service_request.into_response(
                                         StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(

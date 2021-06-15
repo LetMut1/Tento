@@ -27,19 +27,19 @@ impl Display for MainError {
             Self::LogicError(logic_error) => {
                 write!(formatter, "MainError-LogicError: {}", logic_error.get_message())?;
             },
-            Self::RunTimeError(run_time_error_kind) => {
-                match run_time_error_kind {
-                    RunTimeError::ResourceErrorKind(resource_error_kind) => {
-                        match resource_error_kind {
-                            ResourceError::ConnectionPoolError(connection_pool_error_kind) => {
-                                match connection_pool_error_kind {
+            Self::RunTimeError(run_time_error) => {
+                match run_time_error {
+                    RunTimeError::ResourceError(resource_error) => {
+                        match resource_error {
+                            ResourceError::ConnectionPoolError(connection_pool_error) => {
+                                match connection_pool_error {
                                     ConnectionPoolError::CommonError(r2d2_error) => {
                                         write!(formatter, "MainError-RunTimeError-ResourceError-ConnectionPoolError-CommonError: {}", r2d2_error)?;
                                     }
                                 }
                             },
-                            ResourceError::EmailServerError(email_server_error_kind) => {
-                                match email_server_error_kind {
+                            ResourceError::EmailServerError(email_server_error) => {
+                                match email_server_error {
                                     EmailServerError::EmailError(email_error) => {
                                         write!(formatter, "MainError-RunTimeError-ResourceError-EmailServerError-EmailError: {}", email_error)?;
                                     },
@@ -48,8 +48,8 @@ impl Display for MainError {
                                     }
                                 }
                             },
-                            ResourceError::PostgresqlError(postgresql_error_kind) => {
-                                match postgresql_error_kind {
+                            ResourceError::PostgresqlError(postgresql_error) => {
+                                match postgresql_error {
                                     PostgresqlError::ConnectionError(connection_error) => {
                                         write!(formatter, "MainError-RunTimeError-ResourceError-PostgresqlError-ConnectionError: {}", connection_error)?;
                                     },
@@ -58,8 +58,8 @@ impl Display for MainError {
                                     }
                                 }
                             },
-                            ResourceError::RedisError(redis_error_kind) => {
-                                match redis_error_kind {
+                            ResourceError::RedisError(redis_error) => {
+                                match redis_error {
                                     RedisError::ConnectionError(connection_error) => {
                                         write!(formatter, "MainError-RunTimeError-ResourceError-RedisError-ConnectionError: {}", connection_error)?;
                                     },
@@ -82,8 +82,8 @@ impl Display for MainError {
 impl Error for MainError {}
 
 impl From<EntityError> for MainError {
-    fn from(entity_error_kind: EntityError) -> Self {
-        return Self::EntityError(entity_error_kind);
+    fn from(entity_error: EntityError) -> Self {
+        return Self::EntityError(entity_error);
     }
 }
 

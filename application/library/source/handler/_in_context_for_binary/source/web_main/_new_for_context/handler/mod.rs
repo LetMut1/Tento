@@ -161,8 +161,8 @@ impl Handler {
             Ok(aggregate_connection_pool) => {
                 return Ok(aggregate_connection_pool);
             },
-            Err(resource_error_kind) => {
-                return Err(Error::new(ErrorKind::Other, resource_error_kind));
+            Err(resource_error) => {
+                return Err(Error::new(ErrorKind::Other, resource_error));
             }
         }
     }
@@ -176,7 +176,7 @@ impl Handler {
                 .service(
                     web::scope("/m")
                     .service(
-                        web::scope("/na")    // TODO NotAuthorized  // TODO можно ли объединить в Скопе без роута. ( Если есть Скоуп с пустым Роуом, то другие Скоцпы не воспринимаютмя)
+                        web::scope("/na")
                         .service( 
                             web::scope("/au")
                             .route("/pr", web::post().to(Authorization::pre_register))
@@ -194,7 +194,7 @@ impl Handler {
                         )
                     )
                     .service(
-                        web::scope("/a")     // TODO Authorized
+                        web::scope("/a")
                         .wrap(AuthenticationResolverFactory)
                         .service( 
                             web::scope("/au")

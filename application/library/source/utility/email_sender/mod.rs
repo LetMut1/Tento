@@ -22,7 +22,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
         {
             Ok(email) => email,
             Err(email_error) => { 
-                return Err(RunTimeError::ResourceErrorKind(ResourceError::EmailServerError(EmailServerError::EmailError(email_error))));
+                return Err(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::EmailError(email_error))));
             }
         };
 
@@ -30,7 +30,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             let smtp_client: SmtpClient = match SmtpClient::new_simple("TODO") { // TODO
                 Ok(smtp_client) => smtp_client,
                 Err(smtp_error) => { 
-                    return Err(RunTimeError::ResourceErrorKind(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error))));
+                    return Err(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error))));
                 }
             };
 
@@ -43,7 +43,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                 .transport();
 
             if let Err(smtp_error) = smtp_transport.send(email.into()) { 
-                return Err(RunTimeError::ResourceErrorKind(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error))));
+                return Err(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error))));
             }  
         } else {
             let mut smtp_transport: SmtpTransport = match SmtpClient::new(
@@ -52,12 +52,12 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             {
                 Ok(smtp_client) => smtp_client.transport(),
                 Err(smtp_error) => { 
-                    return Err(RunTimeError::ResourceErrorKind(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error)))); 
+                    return Err(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error)))); 
                 }
             };
     
             if let Err(smtp_error) = smtp_transport.send(email.into()) {
-                return Err(RunTimeError::ResourceErrorKind(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error)))); 
+                return Err(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::SmtpError(smtp_error)))); 
             }
         }
 
