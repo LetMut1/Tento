@@ -11,14 +11,14 @@ use super::core::run_time_error::core::resource_error_kind::core::_in_context_fo
 use super::core::run_time_error::core::resource_error_kind::core::_in_context_for::_resource::postgresql::_new_for_context::postgresql_error_kind::PostgresqlErrorKind;
 use super::core::run_time_error::core::resource_error_kind::core::_in_context_for::_resource::redis::_new_for_context::redis_error_kind::RedisErrorKind;
 use super::core::run_time_error::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use super::core::run_time_error::run_time_error::RunTimeError;
+use super::core::run_time_error::run_time_error_kind::RunTimeErrorKind;
 
 #[derive(Debug)]
 pub enum MainErrorKind {
     EntityErrorKind(EntityErrorKind),
     InvalidArgumentError,
     LogicError(LogicError),
-    RunTimeError(RunTimeError)
+    RunTimeErrorKind(RunTimeErrorKind)
 }
 
 impl Display for MainErrorKind {
@@ -27,9 +27,9 @@ impl Display for MainErrorKind {
             Self::LogicError(logic_error) => {
                 write!(formatter, "MainErrorKind-LogicError: {}", logic_error.get_message())?;
             },
-            Self::RunTimeError(run_time_error) => {
-                match run_time_error {
-                    RunTimeError::ResourceErrorKind(resource_error_kind) => {
+            Self::RunTimeErrorKind(run_time_error_kind) => {
+                match run_time_error_kind {
+                    RunTimeErrorKind::ResourceErrorKind(resource_error_kind) => {
                         match resource_error_kind {
                             ResourceErrorKind::ConnectionPoolErrorKind(connection_pool_error_kind) => {
                                 match connection_pool_error_kind {
@@ -53,8 +53,8 @@ impl Display for MainErrorKind {
                                     PostgresqlErrorKind::ConnectionError(connection_error) => {
                                         write!(formatter, "MainErrorKind-RunTimeError-ResourceErrorKind-PostgresqlErrorKind-ConnectionError: {}", connection_error)?;
                                     },
-                                    PostgresqlErrorKind::RuntimeError(runtime_error) => {
-                                        write!(formatter, "MainErrorKind-RunTimeError-ResourceErrorKind-PostgresqlErrorKind-RuntimeError: {}", runtime_error)?;
+                                    PostgresqlErrorKind::RuntimeError(run_time_error) => {
+                                        write!(formatter, "MainErrorKind-RunTimeError-ResourceErrorKind-PostgresqlErrorKind-RuntimeError: {}", run_time_error)?;
                                     }
                                 }
                             },
@@ -63,8 +63,8 @@ impl Display for MainErrorKind {
                                     RedisErrorKind::ConnectionError(connection_error) => {
                                         write!(formatter, "MainErrorKind-RunTimeError-ResourceErrorKind-RedisErrorKind-ConnectionError: {}", connection_error)?;
                                     },
-                                    RedisErrorKind::RuntimeError(runtime_error) => {
-                                        write!(formatter, "MainErrorKind-RunTimeError-ResourceErrorKind-RedisErrorKind-RuntimeError: {}", runtime_error)?;
+                                    RedisErrorKind::RuntimeError(run_time_error) => {
+                                        write!(formatter, "MainErrorKind-RunTimeError-ResourceErrorKind-RedisErrorKind-RuntimeError: {}", run_time_error)?;
                                     }
                                 }
                             }
@@ -99,8 +99,8 @@ impl From<LogicError> for MainErrorKind {
     }
 }
 
-impl From<RunTimeError> for MainErrorKind {
-    fn from(runt_time_error: RunTimeError) -> Self {
-        return Self::RunTimeError(runt_time_error);
+impl From<RunTimeErrorKind> for MainErrorKind {
+    fn from(runt_time_error: RunTimeErrorKind) -> Self {
+        return Self::RunTimeErrorKind(runt_time_error);
     }
 }

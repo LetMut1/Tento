@@ -26,7 +26,7 @@ use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_fo
 use crate::error::main_error_kind::core::entity_error_kind::core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error_kind::PreConfirmedApplicationUserErrorKind;
 use crate::error::main_error_kind::core::entity_error_kind::entity_error_kind::EntityErrorKind;
 use crate::error::main_error_kind::core::run_time_error::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use crate::error::main_error_kind::core::run_time_error::run_time_error::RunTimeError;
+use crate::error::main_error_kind::core::run_time_error::run_time_error_kind::RunTimeErrorKind;
 use crate::error::main_error_kind::main_error_kind::MainErrorKind;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
@@ -60,7 +60,7 @@ impl Authorization {
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeError(_) => {
+                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -83,7 +83,7 @@ impl Authorization {
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeError(_) => {
+                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -143,11 +143,11 @@ impl Authorization {
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
-                MainErrorKind::RunTimeError(ref run_time_error) => {
+                MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
                     log::error!("{}", main_error_kind);
 
-                    match run_time_error {
-                        RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
+                    match run_time_error_kind {
+                        RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
                             match resource_error_kind {
                                 ResourceErrorKind::EmailServerErrorKind(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
@@ -227,7 +227,7 @@ impl Authorization {
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeError(_) => {
+                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -268,11 +268,11 @@ impl Authorization {
 
                     return StandardResponseCreator::create_internal_server_error();
                 },
-                MainErrorKind::RunTimeError(ref run_time_error) => {
+                MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
                     log::error!("{}", main_error_kind);
 
-                    match run_time_error {
-                        RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
+                    match run_time_error_kind {
+                        RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
                             match resource_error_kind {
                                 ResourceErrorKind::EmailServerErrorKind(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
@@ -331,11 +331,11 @@ impl Authorization {
 
                         return StandardResponseCreator::create_internal_server_error();
                     },
-                    MainErrorKind::RunTimeError(ref run_time_error) => {
+                    MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
                         log::error!("{}", main_error_kind);
 
-                        match run_time_error {
-                            RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
+                        match run_time_error_kind {
+                            RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
                                 match resource_error_kind {
                                     ResourceErrorKind::EmailServerErrorKind(_) => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
@@ -385,7 +385,7 @@ impl Authorization {
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeError(_) => {
+                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -425,11 +425,11 @@ impl Authorization {
 
                     return StandardResponseCreator::create_internal_server_error();
                 },
-                MainErrorKind::RunTimeError(ref run_time_error) => {
+                MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
                     log::error!("{}", main_error_kind);
 
-                    match run_time_error {
-                        RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
+                    match run_time_error_kind {
+                        RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
                             match resource_error_kind {
                                 ResourceErrorKind::EmailServerErrorKind(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
@@ -487,7 +487,7 @@ impl Authorization {
                     MainErrorKind::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeError(_) => {
+                    MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
                         log::error!("{}", main_error_kind);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -519,7 +519,7 @@ impl Authorization {
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainErrorKind::LogicError(_) | MainErrorKind::RunTimeError(_) => {
+                MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
                     log::error!("{}", main_error_kind);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -552,7 +552,7 @@ impl Authorization {
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainErrorKind::LogicError(_) | MainErrorKind::RunTimeError(_) => {
+                MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
                     log::error!("{}", main_error_kind);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -598,11 +598,11 @@ impl Authorization {
 
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                    MainErrorKind::RunTimeError(ref run_time_error) => {
+                    MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
                         log::error!("{}", main_error_kind);
 
-                        match run_time_error {
-                            RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
+                        match run_time_error_kind {
+                            RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
                                 match resource_error_kind {
                                     ResourceErrorKind::EmailServerErrorKind(_) => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
@@ -661,7 +661,7 @@ impl Authorization {
                 MainErrorKind::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainErrorKind::LogicError(_) | MainErrorKind::RunTimeError(_) => {
+                MainErrorKind::LogicError(_) | MainErrorKind::RunTimeErrorKind(_) => {
                     log::error!("{}", main_error_kind);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -702,11 +702,11 @@ impl Authorization {
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
-                MainErrorKind::RunTimeError(ref run_time_error) => {
+                MainErrorKind::RunTimeErrorKind(ref run_time_error_kind) => {
                     log::error!("{}", main_error_kind);
 
-                    match run_time_error {
-                        RunTimeError::ResourceErrorKind(ref resource_error_kind) => {
+                    match run_time_error_kind {
+                        RunTimeErrorKind::ResourceErrorKind(ref resource_error_kind) => {
                             match resource_error_kind {
                                 ResourceErrorKind::EmailServerErrorKind(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(

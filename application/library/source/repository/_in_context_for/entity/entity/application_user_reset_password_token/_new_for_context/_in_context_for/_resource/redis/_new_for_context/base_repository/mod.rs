@@ -1,7 +1,7 @@
 use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::common::Common;
 use crate::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
-use crate::error::main_error_kind::core::run_time_error::run_time_error::RunTimeError;
+use crate::error::main_error_kind::core::run_time_error::run_time_error_kind::RunTimeErrorKind;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use redis::Commands;
@@ -13,7 +13,7 @@ impl BaseRepository {
     pub fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
-    ) -> Result<(), RunTimeError> {
+    ) -> Result<(), RunTimeErrorKind> {
         connection.set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
                 application_user_reset_password_token.get_application_user_id()
@@ -28,7 +28,7 @@ impl BaseRepository {
     pub fn delete<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
-    ) -> Result<(), RunTimeError> {
+    ) -> Result<(), RunTimeErrorKind> {
         connection.del::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
                 application_user_reset_password_token.get_application_user_id()
@@ -41,7 +41,7 @@ impl BaseRepository {
     pub fn update_expiration_time<'outer_a>(
         connection: &'outer_a mut Connection,
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
-    ) -> Result<(), RunTimeError> {
+    ) -> Result<(), RunTimeErrorKind> {
         connection.expire::<String, ()>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
                 application_user_reset_password_token.get_application_user_id()
@@ -54,7 +54,7 @@ impl BaseRepository {
 
     pub fn get_by_application_user_id<'outer_a, 'outer_b>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_b ApplicationUserId
-    ) -> Result<Option<ApplicationUserResetPasswordToken<'outer_b>>, RunTimeError> {
+    ) -> Result<Option<ApplicationUserResetPasswordToken<'outer_b>>, RunTimeErrorKind> {
         match connection.get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(application_user_id)
         )?

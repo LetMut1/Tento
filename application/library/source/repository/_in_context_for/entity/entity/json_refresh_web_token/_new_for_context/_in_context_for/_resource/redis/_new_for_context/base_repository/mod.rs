@@ -2,7 +2,7 @@ use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_
 use crate::entity::entity::application_user_log_in_token::core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::error::main_error_kind::core::run_time_error::run_time_error::RunTimeError;
+use crate::error::main_error_kind::core::run_time_error::run_time_error_kind::RunTimeErrorKind;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use redis::Commands;
@@ -13,7 +13,7 @@ pub struct BaseRepository;
 impl BaseRepository {
     pub fn create<'outer_a>(
         connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<(), RunTimeError> {
+    ) -> Result<(), RunTimeErrorKind> {
         connection.set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
@@ -27,7 +27,7 @@ impl BaseRepository {
 
     pub fn update<'outer_a>(
         connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<(), RunTimeError> {
+    ) -> Result<(), RunTimeErrorKind> {
         Self::create(connection, json_refresh_web_token)?;
 
         return Ok(());
@@ -36,7 +36,7 @@ impl BaseRepository {
 
     pub fn delete<'outer_a>(
         connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<(), RunTimeError> {
+    ) -> Result<(), RunTimeErrorKind> {
         connection.del::<String, ()>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
@@ -50,7 +50,7 @@ impl BaseRepository {
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a ApplicationUserId, 
         application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId,
-    ) -> Result<Option<JsonRefreshWebToken<'vague>>, RunTimeError> {
+    ) -> Result<Option<JsonRefreshWebToken<'vague>>, RunTimeErrorKind> {
         match connection.get::<String, Option<String>>(
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(application_user_id, application_user_log_in_token_device_id)
         )?
@@ -70,7 +70,7 @@ impl BaseRepository {
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a ApplicationUserId, 
         application_user_log_in_token_device_id_registry: Vec<String>
-    ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, RunTimeError> {
+    ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, RunTimeErrorKind> {
         let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = Vec::new();
 
         for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {

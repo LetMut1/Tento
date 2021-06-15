@@ -15,67 +15,67 @@ use super::core::resource_error_kind::core::_in_context_for::_resource::redis::_
 use super::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
 
 #[derive(Debug)]
-pub enum RunTimeError {
+pub enum RunTimeErrorKind {
     ResourceErrorKind(ResourceErrorKind)
 }
 
-impl Display for RunTimeError {
+impl Display for RunTimeErrorKind {
     fn fmt(&self, _: &mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }
 
-impl Error for RunTimeError {}
+impl Error for RunTimeErrorKind {}
 
-impl From<ConnectionPoolErrorKind> for RunTimeError {
+impl From<ConnectionPoolErrorKind> for RunTimeErrorKind {
     fn from(connection_pool_error_kind: ConnectionPoolErrorKind) -> Self {
         return Self::ResourceErrorKind(ResourceErrorKind::ConnectionPoolErrorKind(connection_pool_error_kind));
     }
 }
 
-impl From<R2d2Error> for RunTimeError {
+impl From<R2d2Error> for RunTimeErrorKind {
     fn from(r2d2_error: R2d2Error) -> Self {
         return Self::ResourceErrorKind(ResourceErrorKind::ConnectionPoolErrorKind(ConnectionPoolErrorKind::CommonError(r2d2_error)));
     }
 }
 
-impl From<EmailServerErrorKind> for RunTimeError {
+impl From<EmailServerErrorKind> for RunTimeErrorKind {
     fn from(email_server_error_kind: EmailServerErrorKind) -> Self {
         return Self::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(email_server_error_kind));
     }
 }
 
-impl From<PostgresqlErrorKind> for RunTimeError {
+impl From<PostgresqlErrorKind> for RunTimeErrorKind {
     fn from(postgresql_error_kind: PostgresqlErrorKind) -> Self {
         return Self::ResourceErrorKind(ResourceErrorKind::PostgresqlErrorKind(postgresql_error_kind));
     }
 }
 
-impl From<RedisErrorKind> for RunTimeError {
+impl From<RedisErrorKind> for RunTimeErrorKind {
     fn from(redis_error_kind: RedisErrorKind) -> Self {
         return Self::ResourceErrorKind(ResourceErrorKind::RedisErrorKind(redis_error_kind));
     }
 }
 
-impl From<DieselError> for RunTimeError {
+impl From<DieselError> for RunTimeErrorKind {
     fn from(diesel_error: DieselError) -> Self {
         return Self::ResourceErrorKind(ResourceErrorKind::PostgresqlErrorKind(PostgresqlErrorKind::RuntimeError(diesel_error)));
     }
 }
 
-impl From<RedisError> for RunTimeError {
+impl From<RedisError> for RunTimeErrorKind {
     fn from(redis_error: RedisError) -> Self {
         return Self::ResourceErrorKind(ResourceErrorKind::RedisErrorKind(RedisErrorKind::RuntimeError(redis_error)));
     }
 }
 
-impl From<LettreEmailError> for RunTimeError {
+impl From<LettreEmailError> for RunTimeErrorKind {
     fn from(lettre_email_error: LettreEmailError) -> Self {
         return Self::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::EmailError(lettre_email_error)));
     }
 }
 
-impl From<LettreSmtpError> for RunTimeError {
+impl From<LettreSmtpError> for RunTimeErrorKind {
     fn from(lettre_smtp_error: LettreSmtpError) -> Self {
         return Self::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(lettre_smtp_error)));
     }

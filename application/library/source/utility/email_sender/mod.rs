@@ -1,6 +1,6 @@
 use crate::error::main_error_kind::core::run_time_error::core::resource_error_kind::core::_in_context_for::_resource::email_server::_new_for_context::email_server_error_kind::EmailServerErrorKind;
 use crate::error::main_error_kind::core::run_time_error::core::resource_error_kind::resource_error_kind::ResourceErrorKind;
-use crate::error::main_error_kind::core::run_time_error::run_time_error::RunTimeError;
+use crate::error::main_error_kind::core::run_time_error::run_time_error_kind::RunTimeErrorKind;
 use lettre_email::Email;
 use lettre_email::EmailBuilder;
 use lettre::ClientSecurity;
@@ -16,7 +16,7 @@ use std::convert::Into;
 pub struct EmailSender;
 
 impl EmailSender {
-    pub fn send<'outer_a>(subject: &'outer_a str, body: String, to: &'outer_a str) -> Result<(), RunTimeError> {
+    pub fn send<'outer_a>(subject: &'outer_a str, body: String, to: &'outer_a str) -> Result<(), RunTimeErrorKind> {
         let email: Email = match EmailBuilder::new()
             .subject(subject)
             .text(body)
@@ -26,7 +26,7 @@ impl EmailSender {
         {
             Ok(email) => email,
             Err(email_error) => { 
-                return Err(RunTimeError::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::EmailError(email_error))));
+                return Err(RunTimeErrorKind::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::EmailError(email_error))));
             }
         };
 
@@ -62,12 +62,12 @@ impl EmailSender {
         let mut smtp_transport: SmtpTransport = match SmtpClient::new(("mailhog", 1025), ClientSecurity::None) {    // TODO env
             Ok(smtp_client) => smtp_client.transport(),
             Err(smtp_error) => { 
-                return Err(RunTimeError::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(smtp_error)))); 
+                return Err(RunTimeErrorKind::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(smtp_error)))); 
             }
         };
 
         if let Err(smtp_error) = smtp_transport.send(email.into()) {
-            return Err(RunTimeError::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(smtp_error)))); 
+            return Err(RunTimeErrorKind::ResourceErrorKind(ResourceErrorKind::EmailServerErrorKind(EmailServerErrorKind::SmtpError(smtp_error)))); 
         }
 
         return Ok(()); 
