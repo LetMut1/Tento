@@ -50,7 +50,7 @@ where
     }
 
     fn call<'this>(&'this mut self, service_request: ServiceRequest) -> Self::Future {
-        if let Err(main_error) = CallHandler::handle(&service_request) {
+        if let Err(ref main_error) = CallHandler::handle(&service_request) {
             match main_error {
                 MainError::EntityError(entity_error) => {
                     match entity_error {
@@ -79,7 +79,9 @@ where
                 MainError::InvalidArgumentError => {
                     return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_bad_request().into_body())));
                 },
-                _ => {
+                MainError::LogicError(_) | MainError::RunTimeError(_) => {
+                    log::error!("{}", main_error);
+
                     return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_internal_server_error().into_body())));
                 }
             }

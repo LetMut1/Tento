@@ -97,9 +97,9 @@ impl Authorization {
     }
 
     pub async fn pre_register(form: Form<PreRegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(main_error) = PreRegisterHandler::handle(data.into_inner(), form.into_inner()) {
+        if let Err(ref main_error) = PreRegisterHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error {
-                MainError::EntityError(ref entity_error) => {
+                MainError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::ApplicationUserError(application_user_error) => {
                             match application_user_error {
@@ -143,11 +143,11 @@ impl Authorization {
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
-                MainError::RunTimeError(ref run_time_error) => {
+                MainError::RunTimeError(run_time_error) => {
                     log::error!("{}", main_error);
 
                     match run_time_error {
-                        RunTimeError::ResourceError(ref resource_error) => {
+                        RunTimeError::ResourceError(resource_error) => {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
@@ -172,9 +172,9 @@ impl Authorization {
             Ok(result) => { 
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
             },
-            Err(main_error) => {
+            Err(ref main_error) => {
                 match main_error {
-                    MainError::EntityError(ref entity_error) => {
+                    MainError::EntityError(entity_error) => {
                         match entity_error {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
@@ -238,9 +238,9 @@ impl Authorization {
     }
 
     pub async fn resend_email_for_register(form: Form<ResendEmailForRegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(main_error) = ResendEmailForRegisterHandler::handle(data.into_inner(), form.into_inner()) {
+        if let Err(ref main_error) = ResendEmailForRegisterHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error {
-                MainError::EntityError(ref entity_error) => {
+                MainError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error) => {
                             match pre_confirmed_application_user_error {
@@ -268,11 +268,11 @@ impl Authorization {
 
                     return StandardResponseCreator::create_internal_server_error();
                 },
-                MainError::RunTimeError(ref run_time_error) => {
+                MainError::RunTimeError(run_time_error) => {
                     log::error!("{}", main_error);
 
                     match run_time_error {
-                        RunTimeError::ResourceError(ref resource_error) => {
+                        RunTimeError::ResourceError(resource_error) => {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
@@ -297,9 +297,9 @@ impl Authorization {
             Ok(result) => { 
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
             },
-            Err(main_error) => {
+            Err(ref main_error) => {
                 match main_error {
-                    MainError::EntityError(ref entity_error) => {
+                    MainError::EntityError(entity_error) => {
                         match entity_error {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
@@ -331,11 +331,11 @@ impl Authorization {
 
                         return StandardResponseCreator::create_internal_server_error();
                     },
-                    MainError::RunTimeError(ref run_time_error) => {
+                    MainError::RunTimeError(run_time_error) => {
                         log::error!("{}", main_error);
 
                         match run_time_error {
-                            RunTimeError::ResourceError(ref resource_error) => {
+                            RunTimeError::ResourceError(resource_error) => {
                                 match resource_error {
                                     ResourceError::EmailServerError(_) => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
@@ -359,9 +359,9 @@ impl Authorization {
             Ok(result) => { 
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
             },
-            Err(main_error) => {
+            Err(ref main_error) => {
                 match main_error {
-                    MainError::EntityError(ref entity_error) => {
+                    MainError::EntityError(entity_error) => {
                         match entity_error {
                             EntityError::ApplicationUserLogInTokenError(application_user_log_in_token_error) => {
                                 match application_user_log_in_token_error {
@@ -396,9 +396,9 @@ impl Authorization {
     }
 
     pub async fn resend_email_for_log_in(form: Form<ResendEmailForLogInRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(main_error) = ResendEmailForLogInHandler::handle(data.into_inner(), form.into_inner()) {
+        if let Err(ref main_error) = ResendEmailForLogInHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error {
-                MainError::EntityError(ref entity_error) => {
+                MainError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::ApplicationUserLogInTokenError(application_user_log_in_token_error) => {
                             match application_user_log_in_token_error {
@@ -425,11 +425,11 @@ impl Authorization {
 
                     return StandardResponseCreator::create_internal_server_error();
                 },
-                MainError::RunTimeError(ref run_time_error) => {
+                MainError::RunTimeError(run_time_error) => {
                     log::error!("{}", main_error);
 
                     match run_time_error {
-                        RunTimeError::ResourceError(ref resource_error) => {
+                        RunTimeError::ResourceError(resource_error) => {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
@@ -454,9 +454,9 @@ impl Authorization {
             Ok(result) => {
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
             },
-            Err(main_error) => {
+            Err(ref main_error) => {
                 match main_error {
-                    MainError::EntityError(ref entity_error) => {
+                    MainError::EntityError(entity_error) => {
                         match entity_error {
                             EntityError::JsonAccessWebTokenError(json_access_web_token_error) => {
                                 match json_access_web_token_error {
@@ -498,9 +498,9 @@ impl Authorization {
     }
 
     pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(main_error) = LogOutHandler::handle(data.into_inner(), &req_data.into_inner()) {
+        if let Err(ref main_error) = LogOutHandler::handle(data.into_inner(), &req_data.into_inner()) {
             match main_error {
-                MainError::EntityError(ref entity_error) => {
+                MainError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error) => {
                             match json_refresh_web_token_error {
@@ -531,9 +531,9 @@ impl Authorization {
     }
 
     pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(main_error) = LogOutFromAllDevicesHandler::handle(data.into_inner(), &req_data.into_inner()) {
+        if let Err(ref main_error) = LogOutFromAllDevicesHandler::handle(data.into_inner(), &req_data.into_inner()) {
             match main_error {
-                MainError::EntityError(ref entity_error) => {
+                MainError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error) => {
                             match json_refresh_web_token_error {
@@ -568,9 +568,9 @@ impl Authorization {
             Ok(result) => {
                 return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
             },
-            Err(main_error) => {
+            Err(ref main_error) => {
                 match main_error {
-                    MainError::EntityError(ref entity_error) => {
+                    MainError::EntityError(entity_error) => {
                         match entity_error {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
@@ -598,11 +598,11 @@ impl Authorization {
 
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                    MainError::RunTimeError(ref run_time_error) => {
+                    MainError::RunTimeError(run_time_error) => {
                         log::error!("{}", main_error);
 
                         match run_time_error {
-                            RunTimeError::ResourceError(ref resource_error) => {
+                            RunTimeError::ResourceError(resource_error) => {
                                 match resource_error {
                                     ResourceError::EmailServerError(_) => {
                                         return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
@@ -622,9 +622,9 @@ impl Authorization {
     }
 
     pub async fn reset_password(form: Form<ResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(main_error) = ResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
+        if let Err(ref main_error) = ResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error {
-                MainError::EntityError(ref entity_error) => {
+                MainError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::ApplicationUserError(application_user_error) => {
                             match application_user_error {
@@ -673,9 +673,9 @@ impl Authorization {
     }
 
     pub async fn resend_email_for_reset_password(form: Form<ResendEmailForResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(main_error) = ResendEmailForResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
+        if let Err(ref main_error) = ResendEmailForResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
             match main_error {
-                MainError::EntityError(ref entity_error) => {
+                MainError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::ApplicationUserResetPasswordTokenError(application_user_reset_password_token_error) => {
                             match application_user_reset_password_token_error {
@@ -702,11 +702,11 @@ impl Authorization {
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
-                MainError::RunTimeError(ref run_time_error) => {
+                MainError::RunTimeError(run_time_error) => {
                     log::error!("{}", main_error);
 
                     match run_time_error {
-                        RunTimeError::ResourceError(ref resource_error) => {
+                        RunTimeError::ResourceError(resource_error) => {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(

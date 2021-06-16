@@ -1,5 +1,5 @@
 use crate::entity::_core::uuid_v4::UuidV4;
-use crate::error::main_error::_core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::main_error::MainError;
 
 use std::clone::Clone;
 
@@ -15,7 +15,7 @@ impl DeviceId {
         };
     }
 
-    pub fn new_from_string(uuid: String) -> Result<Self, InvalidArgumentError> {
+    pub fn new_from_string(uuid: String) -> Result<Self, MainError> {
         return Ok(
             Self {
                 value: UuidV4::new_from_string(uuid)?

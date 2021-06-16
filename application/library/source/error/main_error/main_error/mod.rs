@@ -1,42 +1,39 @@
+use diesel::result::Error as DieselError;
+use lettre_email::error::Error as LettreEmailError;
+use lettre::smtp::error::Error as LettreSmtpError;
+use r2d2::Error as R2d2Error;
+use redis::RedisError;
 use std::convert::From;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
 use super::_core::entity_error::entity_error::EntityError;
-use super::_core::invalid_argument_error::InvalidArgumentError;
-use super::_core::logic_error::LogicError;
-use super::_core::run_time_error::_core::resource_error::_core::_in_context_for::_resource::_new_for_context::connection_pool_error::ConnectionPoolError;
 use super::_core::run_time_error::_core::resource_error::_core::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
-use super::_core::run_time_error::_core::resource_error::_core::_in_context_for::_resource::postgresql::_new_for_context::postgresql_error::PostgresqlError;
-use super::_core::run_time_error::_core::resource_error::_core::_in_context_for::_resource::redis::_new_for_context::redis_error::RedisError;
 use super::_core::run_time_error::_core::resource_error::resource_error::ResourceError;
 use super::_core::run_time_error::run_time_error::RunTimeError;
+
 
 #[derive(Debug)]
 pub enum MainError {
     EntityError(EntityError),
     InvalidArgumentError,
-    LogicError(LogicError),
+    LogicError(&'static str),
     RunTimeError(RunTimeError)
 }
 
 impl Display for MainError {
     fn fmt<'this, 'outer_a>(&'this self, formatter: &'outer_a mut Formatter<'_>) -> Result {
         match self {
-            Self::LogicError(logic_error) => {
-                write!(formatter, "MainError-LogicError: {}", logic_error.get_message())?;
+            Self::LogicError(message) => {
+                write!(formatter, "MainError-LogicError: {}", message)?;
             },
             Self::RunTimeError(run_time_error) => {
                 match run_time_error {
                     RunTimeError::ResourceError(resource_error) => {
                         match resource_error {
-                            ResourceError::ConnectionPoolError(connection_pool_error) => {
-                                match connection_pool_error {
-                                    ConnectionPoolError::CommonError(r2d2_error) => {
-                                        write!(formatter, "MainError-RunTimeError-ResourceError-ConnectionPoolError-CommonError: {}", r2d2_error)?;
-                                    }
-                                }
+                            ResourceError::ConnectionPoolError(r2d2_error) => {
+                                write!(formatter, "MainError-RunTimeError-ResourceError-ConnectionPoolError: {}", r2d2_error)?;
                             },
                             ResourceError::EmailServerError(email_server_error) => {
                                 match email_server_error {
@@ -48,25 +45,11 @@ impl Display for MainError {
                                     }
                                 }
                             },
-                            ResourceError::PostgresqlError(postgresql_error) => {
-                                match postgresql_error {
-                                    PostgresqlError::ConnectionError(connection_error) => {
-                                        write!(formatter, "MainError-RunTimeError-ResourceError-PostgresqlError-ConnectionError: {}", connection_error)?;
-                                    },
-                                    PostgresqlError::RuntimeError(run_time_error) => {
-                                        write!(formatter, "MainError-RunTimeError-ResourceError-PostgresqlError-RuntimeError: {}", run_time_error)?;
-                                    }
-                                }
+                            ResourceError::PostgresqlError(diesel_error) => {
+                                write!(formatter, "MainError-RunTimeError-ResourceError-PostgresqlError: {}", diesel_error)?;
                             },
                             ResourceError::RedisError(redis_error) => {
-                                match redis_error {
-                                    RedisError::ConnectionError(connection_error) => {
-                                        write!(formatter, "MainError-RunTimeError-ResourceError-RedisError-ConnectionError: {}", connection_error)?;
-                                    },
-                                    RedisError::RuntimeError(run_time_error) => {
-                                        write!(formatter, "MainError-RunTimeError-ResourceError-RedisError-RuntimeError: {}", run_time_error)?;
-                                    }
-                                }
+                                write!(formatter, "MainError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
                             }
                         }
                     }
@@ -81,26 +64,32 @@ impl Display for MainError {
 
 impl Error for MainError {}
 
-impl From<EntityError> for MainError {
-    fn from(entity_error: EntityError) -> Self {
-        return Self::EntityError(entity_error);
+impl From<R2d2Error> for MainError {
+    fn from(r2d2_error: R2d2Error) -> Self {
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::ConnectionPoolError(r2d2_error)));
     }
 }
 
-impl From<InvalidArgumentError> for MainError {
-    fn from(_: InvalidArgumentError) -> Self {
-        return Self::InvalidArgumentError;
+impl From<DieselError> for MainError {
+    fn from(diesel_error: DieselError) -> Self {
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlError(diesel_error)));
     }
 }
 
-impl From<LogicError> for MainError {
-    fn from(logic_error: LogicError) -> Self {
-        return Self::LogicError(logic_error);
+impl From<RedisError> for MainError {
+    fn from(redis_error: RedisError) -> Self {
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::RedisError(redis_error)));
     }
 }
 
-impl From<RunTimeError> for MainError {
-    fn from(runt_time_error: RunTimeError) -> Self {
-        return Self::RunTimeError(runt_time_error);
+impl From<LettreEmailError> for MainError {
+    fn from(lettre_email_error: LettreEmailError) -> Self {
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::EmailError(lettre_email_error))));
+    }
+}
+
+impl From<LettreSmtpError> for MainError {
+    fn from(lettre_smtp_error: LettreSmtpError) -> Self {
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::SmtpError(lettre_smtp_error))));
     }
 }

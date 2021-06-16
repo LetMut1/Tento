@@ -3,7 +3,7 @@ use crate::entity::_core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::_core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_access_web_token::_core::payload::_core::id::Id as JsonAccessWebTokenId;
-use crate::error::main_error::_core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::main_error::MainError;
 use std::borrow::Cow;
 use super::_core::obfuscation_value::ObfuscationValue;
 
@@ -26,7 +26,7 @@ impl<'outer_a> JsonRefreshWebToken<'outer_a> {
         };
     }
 
-    pub fn new_from_model(common: Common<'_>) -> Result<Self, InvalidArgumentError> {
+    pub fn new_from_model(common: Common<'_>) -> Result<Self, MainError> {
         return Ok(
             Self {
                 json_access_web_token_id: JsonAccessWebTokenId::new_from_string(common.json_access_web_token_id)?,

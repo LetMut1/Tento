@@ -23,7 +23,10 @@ impl Handler {
 
         let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-        if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(redis_connection, &application_user_id)? {
+        if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(
+            redis_connection, &application_user_id
+        )? 
+        {
             if application_user_reset_password_token.get_value().get_value() == request.application_user_reset_password_token_value.as_str() {
                 let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 

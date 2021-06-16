@@ -1,17 +1,17 @@
+use diesel::result::Error as DieselError;
+use r2d2::Error as R2d2Error;
+use redis::RedisError;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
-use super::_core::_in_context_for::_resource::_new_for_context::connection_pool_error::ConnectionPoolError;
 use super::_core::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
-use super::_core::_in_context_for::_resource::postgresql::_new_for_context::postgresql_error::PostgresqlError;
-use super::_core::_in_context_for::_resource::redis::_new_for_context::redis_error::RedisError;
 
 #[derive(Debug)]
 pub enum ResourceError {
-    ConnectionPoolError(ConnectionPoolError),
+    ConnectionPoolError(R2d2Error),
     EmailServerError(EmailServerError),
-    PostgresqlError(PostgresqlError),
+    PostgresqlError(DieselError),
     RedisError(RedisError)
 }
 

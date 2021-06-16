@@ -16,11 +16,11 @@ impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), MainError> { // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
 
-        let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId =
-        ApplicationUserLogInTokenDeviceId::new_from_string(request.application_user_log_in_token_device_id)?;
+        let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
+            request.application_user_log_in_token_device_id
+        )?;
 
-        if let Some(application_user_log_in_token) = 
-        ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
+        if let Some(application_user_log_in_token) = ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
             &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_id, &application_user_log_in_token_device_id
         )? 
         {

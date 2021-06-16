@@ -1,4 +1,4 @@
-use crate::error::main_error::_core::invalid_argument_error::InvalidArgumentError;
+use crate::error::main_error::main_error::MainError;
 use uuid::Uuid;
 use std::clone::Clone;
 
@@ -20,7 +20,7 @@ impl UuidV4 {
         };
     }
 
-    pub fn new_from_string(uuid: String) -> Result<Self, InvalidArgumentError> {
+    pub fn new_from_string(uuid: String) -> Result<Self, MainError> {
         if let Ok(uuid) = Uuid::parse_str(uuid.as_str()) {
             return Ok(
                 Self { 
@@ -29,7 +29,7 @@ impl UuidV4 {
             );
         }
 
-        return Err(InvalidArgumentError);
+        return Err(MainError::InvalidArgumentError);
     }
 
     pub fn to_string<'this>(&'this self) -> String {

@@ -1,4 +1,4 @@
-use crate::error::main_error::_core::run_time_error::run_time_error::RunTimeError;
+use crate::error::main_error::main_error::MainError;
 use diesel::pg::PgConnection as PostgresqlConnection;
 use diesel::r2d2::ConnectionManager as PostgresqlConnectionManager;
 use r2d2_redis::RedisConnectionManager;
@@ -11,13 +11,13 @@ pub struct ConnectionExtractor;
 impl ConnectionExtractor {
     pub fn get_postgresql_connection<'outer_a>(
         aggregate_connection_pool: &'outer_a Arc<AggregateConnectionPool>
-    ) -> Result<PooledConnection<PostgresqlConnectionManager<PostgresqlConnection>>, RunTimeError> {
+    ) -> Result<PooledConnection<PostgresqlConnectionManager<PostgresqlConnection>>, MainError> {
         return Ok(aggregate_connection_pool.get_postgresql_connection_pool().get()?);
     }
 
     pub fn get_redis_connection<'outer_a>(
         aggregate_connection_pool: &'outer_a Arc<AggregateConnectionPool>
-    ) -> Result<PooledConnection<RedisConnectionManager>, RunTimeError> {
+    ) -> Result<PooledConnection<RedisConnectionManager>, MainError> {
         return Ok(aggregate_connection_pool.get_redis_connection_pool().get()?);
     }
 }

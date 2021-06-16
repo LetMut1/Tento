@@ -20,8 +20,9 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, MainError> {
-        let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId =
-        ApplicationUserLogInTokenDeviceId::new_from_string(request.application_user_log_in_token_device_id)?;
+        let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
+            request.application_user_log_in_token_device_id
+        )?;
 
         if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(
             &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(request.application_user_email)

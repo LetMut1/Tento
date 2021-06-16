@@ -18,7 +18,10 @@ impl Handler {
 
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-        if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(connection, &application_user_id)? {
+        if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(
+            connection, &application_user_id
+        )? 
+        {
 
             EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;
     

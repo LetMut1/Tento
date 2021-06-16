@@ -1,7 +1,7 @@
 use crate::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::_core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::error::main_error::_core::run_time_error::run_time_error::RunTimeError;
+use crate::error::main_error::main_error::MainError;
 use crate::repository::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository;
 use crate::utility::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::processing_device_id_storage::ProcessingDeviceIdStorage;
 use redis::Connection;
@@ -11,7 +11,7 @@ pub struct BaseRepositoryProxy;
 impl BaseRepositoryProxy {
     pub fn create<'outer_a>(
         connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<(), RunTimeError> {
+    ) -> Result<(), MainError> {
         let application_user_log_in_token_device_id: String = 
         json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
@@ -44,7 +44,7 @@ impl BaseRepositoryProxy {
 
     pub fn update<'outer_a>(
         connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<(), RunTimeError> {
+    ) -> Result<(), MainError> {
         ProcessingDeviceIdStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
 
         BaseRepository::update(connection, json_refresh_web_token)?;
@@ -54,7 +54,7 @@ impl BaseRepositoryProxy {
 
     pub fn delete<'outer_a>(
         connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<(), RunTimeError> {
+    ) -> Result<(), MainError> {
         BaseRepository::delete(connection, json_refresh_web_token)?;
 
         if let Some(mut application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection, json_refresh_web_token.get_application_user_id())? 
@@ -91,7 +91,7 @@ impl BaseRepositoryProxy {
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a ApplicationUserId, 
         application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
-    ) -> Result<Option<JsonRefreshWebToken<'vague>>, RunTimeError> {
+    ) -> Result<Option<JsonRefreshWebToken<'vague>>, MainError> {
         return BaseRepository::get_by_application_user_id_and_application_user_log_in_token_device_id(
             connection, application_user_id, application_user_log_in_token_device_id
         );
@@ -99,7 +99,7 @@ impl BaseRepositoryProxy {
 
     pub fn get_by_application_user_id<'outer_a, 'vague>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_a ApplicationUserId
-    ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, RunTimeError> {
+    ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, MainError> {
         if let Some(application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection, application_user_id)? {
             return BaseRepository::get_by_application_user_id(connection, application_user_id, application_user_log_in_token_device_id_registry);
         }
