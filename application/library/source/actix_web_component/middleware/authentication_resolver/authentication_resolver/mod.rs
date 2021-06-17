@@ -6,7 +6,6 @@ use crate::error::main_error::_core::entity_error::_core::_in_context_for::entit
 use crate::error::main_error::_core::entity_error::entity_error::EntityError;
 use crate::error::main_error::main_error::MainError;
 use crate::handler::_in_contex_for::actix_web_component::middleware::authentication_resolver::authentication_resolver::_new_for_contex::call::handler::Handler as CallHandler;
-use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_json_response_body_wrapper::StandardJsonResponseBodyWrapper;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_response_creator::StandardResponseCreator;
 use crate::utility::_in_context_for::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use futures::future::Either;
@@ -58,21 +57,25 @@ where
                             match json_access_web_token_error {
                                 JsonAccessWebTokenError::AlreadyExpired => {
                                     return Either::Right(FutureOk(service_request.into_response(
-                                        StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
-                                        )).into_body()
+                                        ).into_body()
                                     )));
                                 },
                                 JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                    return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_unauthorized().into_body())));
+                                    return Either::Right(FutureOk(service_request.into_response(
+                                        StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
+                                            CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_BLACK_LIST
+                                        ).into_body()
+                                    )));
                                 },
                                 _ => {
-                                    return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_internal_server_error().into_body())));
+                                    unreachable!("{}", main_error);
                                 }
                             }
                         },
                         _ => {
-                            return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_internal_server_error().into_body())));
+                            unreachable!("{}", main_error);
                         }
                     }
                 },

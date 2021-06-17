@@ -18,7 +18,7 @@ impl BaseRepository {
             RedisStorageKeyResolver::get_repository_application_user_log_in_token_first(
                 application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
             ), 
-            serde_json::to_string(&Common::new(application_user_log_in_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк (да ИнвалидАргумент)
+            serde_json::to_string(&Common::new(application_user_log_in_token))?,
             (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_APPLICATION_USER_LOG_IN_TOKEN_FIRST * 60) as usize
         )?;
         
@@ -60,7 +60,7 @@ impl BaseRepository {
             Some(json_encoded_common) => {
                 return Ok(Some(
                     ApplicationUserLogInToken::new_from_model(
-                        serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap(), application_user_id, device_id       // TODO error 
+                        serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?, application_user_id, device_id
                     )
                 ));
             },

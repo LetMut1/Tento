@@ -18,7 +18,7 @@ impl BaseRepository {
             RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                 application_user_registration_confirmation_token.get_pre_confirmed_application_user_id()
             ), 
-            serde_json::to_string(&Common::new(application_user_registration_confirmation_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
+            serde_json::to_string(&Common::new(application_user_registration_confirmation_token))?,
             (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST * 60) as usize
         )?;
         
@@ -62,7 +62,7 @@ impl BaseRepository {
             Some(json_encoded_common) => {
                 return Ok(Some(
                     ApplicationUserRegistrationConfirmationToken::new_from_model(
-                        serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap(), pre_confirmed_application_user_id  // TODO error 
+                        serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?, pre_confirmed_application_user_id
                     )
                 ));
             },

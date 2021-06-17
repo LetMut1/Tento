@@ -18,7 +18,7 @@ impl BaseRepository {
             RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
             ), 
-            serde_json::to_string(&Common::new(json_refresh_web_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
+            serde_json::to_string(&Common::new(json_refresh_web_token))?,
             (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
         )?;
 
@@ -56,9 +56,7 @@ impl BaseRepository {
         )?
         {
             Some(json_encoded_common) => {
-                return Ok(Some(JsonRefreshWebToken::new_from_model(
-                    serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap()   // TODO error 
-                ).unwrap()));    // TODO error 
+                return Ok(Some(JsonRefreshWebToken::new_from_model(serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?)?));
             },
             None => {
                 return Ok(None);
@@ -75,7 +73,7 @@ impl BaseRepository {
 
         for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
             if let Some(json_refresh_web_token) = Self::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                connection, application_user_id, &ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id).unwrap()  // TODO err
+                connection, application_user_id, &ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id)?
             )?
             {
                 json_refresh_web_token_registry.push(json_refresh_web_token);

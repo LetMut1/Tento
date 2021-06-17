@@ -3,11 +3,11 @@ use serde::Serialize;
 #[derive(Serialize)]
 pub struct SuccessResult {
     #[serde(rename = "s")]
-    success: bool,
+    success: bool
 }
 
 impl SuccessResult {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         return Self {
             success: true
         };

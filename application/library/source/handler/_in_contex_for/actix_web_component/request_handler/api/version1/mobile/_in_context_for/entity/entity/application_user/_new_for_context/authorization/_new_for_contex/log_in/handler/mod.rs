@@ -56,8 +56,8 @@ impl Handler {
 
                 return Ok(
                     HandlerResult::new(
-                        SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)),
-                        Encoder::encode(&json_refresh_web_token)
+                        SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token))?,
+                        Encoder::encode(&json_refresh_web_token)?
                     )
                 );
             }

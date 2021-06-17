@@ -7,13 +7,13 @@ pub struct DateTimeManipulator;
 
 impl DateTimeManipulator {
     // pub fn add_interval<'outer_a>(date_time: &'outer_a DateTime, quantity_of_minutes: i64) -> () {              // TODO написать тесты. проверить, создатся ли интервал. Сделегировать на utility_chrono_date_ime_manipulator?
-    //     date_time.get_value().checked_add_signed(Duration::minutes(quantity_of_minutes)).unwrap();  // TODO unwrap
+    //     date_time.get_value().checked_add_signed(Duration::minutes(quantity_of_minutes)).unwrap();
 
     //     return ();
     // }
 
     pub fn add_interval_from_now(quantity_of_minutes: i64) -> DateTime {
-        return DateTime::new_from_date_time(Utc::now().checked_add_signed(Duration::minutes(quantity_of_minutes)).unwrap());    // TODO unwrap
+        return DateTime::new_from_date_time(Utc::now().checked_add_signed(Duration::minutes(quantity_of_minutes)).unwrap());
     }
 
     pub fn is_greater_or_equal_than_now<'outer_a>(subject_date_time: &'outer_a DateTime) -> bool

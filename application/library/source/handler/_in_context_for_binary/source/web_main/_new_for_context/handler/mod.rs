@@ -68,79 +68,93 @@ impl Handler {
             env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_FALSE);
         }
 
-        Self::simple_check_environment_variables()?;
-
-        return Ok(());
-    }
-
-    fn simple_check_environment_variables() -> Result<(), Error> {
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::IS_PRODUCTION_KEY)?;
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::SERVER_SOCKET_ADDRESS_KEY)?;
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::LOGGER_ROLLER_LOG_FILE_NAME_KEY)?;
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::LOGGER_LOG_FILE_NAME_KEY)?;
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::LOGGER_ENCODER_PATTERN_KEY)?;
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY)?;
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY)?;
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::RESOURCE_POSTGRESQL_URL_KEY)?;
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::RESOURCE_REDIS_URL_KEY)?;
-        Self::simple_check_environment_variable(EnvironmentVariableResolver::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY)?;
-
-        return Ok(());
-    }
-
-
-    fn simple_check_environment_variable<'outer_a>(environment_variable_key: &'outer_a str) -> Result<(), Error> {
-        match env::var(environment_variable_key) {
-            Ok(value) => {
-                if value.is_empty() {
-                    return Err(Error::new(ErrorKind::Other, (environment_variable_key.to_string() + " can not be empty").as_str()));
-                }
-            },
-            Err(var_error) => {
-                return Err(Error::new(ErrorKind::Other, format!("{}: {}", environment_variable_key, var_error)));
-            }
+        if let Err(main_error) = Self::simple_check_environment_variables() {
+            return Err(Error::new(ErrorKind::Other, main_error));
         }
+
+        return Ok(());
+    }
+
+    fn simple_check_environment_variables() -> Result<(), MainError> {
+        EnvironmentVariableResolver::is_production()?;
+        EnvironmentVariableResolver::get_server_socket_address()?;
+        EnvironmentVariableResolver::get_logger_roller_log_file_name()?;
+        EnvironmentVariableResolver::get_logger_log_file_name()?;
+        EnvironmentVariableResolver::get_logger_encoder_pattern()?;
+        EnvironmentVariableResolver::get_security_jrwt_encoding_private_key()?;
+        EnvironmentVariableResolver::get_security_jawt_signature_encoding_private_key()?;
+        EnvironmentVariableResolver::get_resource_postgresql_url()?;
+        EnvironmentVariableResolver::get_resource_redis_url()?;
+        EnvironmentVariableResolver::get_resource_email_server_socket_address()?;
 
         return Ok(());
     }
 
     fn configure_log() -> Result<(), Error> {
-        match FixedWindowRoller::builder().base(1).build(EnvironmentVariableResolver::get_logger_roller_log_file_name().as_str(), 10) {
-            Ok(fixed_window_roller) => {
-                let rolling_file_appender: RollingFileAppender = RollingFileAppender::builder()
-                    .append(true)
-                    .encoder(Box::new(PatternEncoder::new(EnvironmentVariableResolver::get_logger_encoder_pattern().as_str())))
-                    .build(
-                        EnvironmentVariableResolver::get_logger_log_file_name(),
-                        Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
-                    )?;
+        let logger_encoder_pattern: String = match EnvironmentVariableResolver::get_logger_encoder_pattern() {
+            Ok(logger_encoder_pattern) => logger_encoder_pattern,
+            Err(main_error) => {
+                return Err(Error::new(ErrorKind::Other, main_error));
+            }
+        };
 
-                let rolling_file_appender_name: &'static str = "rfa";
+        let logger_log_file_name: String = match EnvironmentVariableResolver::get_logger_log_file_name() {
+            Ok(logger_log_file_name) => logger_log_file_name,
+            Err(main_error) => {
+                return Err(Error::new(ErrorKind::Other, main_error));
+            }
+        };
 
-                let appender: Appender = Appender::builder().build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
+        let logger_roller_log_file_name: String = match EnvironmentVariableResolver::get_logger_roller_log_file_name() {
+            Ok(logger_roller_log_file_name) => logger_roller_log_file_name,
+            Err(main_error) => {
+                return Err(Error::new(ErrorKind::Other, main_error));
+            }
+        };
 
-                let root: Root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);
-
-                match Config::builder().appender(appender).build(root) {
-                    Ok(config) => {
-                        if let Err(set_logger_error) = log4rs::init_config(config) {
-                            return Err(Error::new(ErrorKind::Other, set_logger_error));
-                        }
-
-                        return Ok(());
-                    },
-                    Err(config_errors) => {
-                        return Err(Error::new(ErrorKind::Other, config_errors));
-                    }
-                }
-            },
+        let fixed_window_roller: FixedWindowRoller = match FixedWindowRoller::builder().base(1).build(logger_roller_log_file_name.as_str(), 10) {
+            Ok(fixed_window_roller) => fixed_window_roller,
             Err(error) => {
                 return Err(Error::new(ErrorKind::Other, error));
             }
+        };
+
+        let rolling_file_appender: RollingFileAppender = RollingFileAppender::builder()
+        .append(true)
+        .encoder(Box::new(PatternEncoder::new(logger_encoder_pattern.as_str())))
+        .build(
+            logger_log_file_name,
+            Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
+        )?;
+
+        let rolling_file_appender_name: &'static str = "rfa";
+
+        let appender: Appender = Appender::builder().build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
+
+        let root: Root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);
+
+        let config: Config = match Config::builder().appender(appender).build(root) {
+            Ok(config) => config,
+            Err(config_errors) => {
+                return Err(Error::new(ErrorKind::Other, config_errors));
+            }
+        };
+
+        if let Err(set_logger_error) = log4rs::init_config(config) {
+            return Err(Error::new(ErrorKind::Other, set_logger_error));
         }
+
+        return Ok(());
     }
 
     async fn run_http_server() -> Result<(), Error> {
+        let server_socket_address: String = match EnvironmentVariableResolver::get_server_socket_address() {
+            Ok(server_socket_address) => server_socket_address,
+            Err(main_error) => {
+                return Err(Error::new(ErrorKind::Other, main_error));
+            }
+        };
+
         let aggregate_connection_pool: AggregateConnectionPool = Self::create_aggregate_connection_pool()?;
 
         HttpServer::new(move || {
@@ -148,7 +162,7 @@ impl Handler {
             .data::<AggregateConnectionPool>(aggregate_connection_pool.clone())
             .configure(Self::configure_http_server);
         })
-        .bind(EnvironmentVariableResolver::get_server_socket_address())?
+        .bind(server_socket_address)?
         .run()
         .await?;
 

@@ -10,15 +10,15 @@ pub struct SerializationFormResolver;
 impl SerializationFormResolver {
     const SEPARATOR: &'static str = ".";
 
-    pub fn serialize<'outer_a>(json_access_web_token: &'outer_a JsonAccessWebToken<'_>) -> String {
+    pub fn serialize<'outer_a>(json_access_web_token: &'outer_a JsonAccessWebToken<'_>) -> Result<String, MainError> {
         let header_and_payload: String = 
-        base64::encode(serde_json::to_string(&HeaderCommon::new(json_access_web_token)).unwrap().as_bytes()) 
+        base64::encode(serde_json::to_string(&HeaderCommon::new(json_access_web_token))?.as_bytes()) 
         + Self::SEPARATOR 
-        + base64::encode(serde_json::to_string(&PayloadCommon::new(json_access_web_token)).unwrap().as_bytes()).as_str();
+        + base64::encode(serde_json::to_string(&PayloadCommon::new(json_access_web_token))?.as_bytes()).as_str();
         
-        let signature: String = SignatureCreator::create(&header_and_payload);
+        let signature: String = SignatureCreator::create(&header_and_payload)?;
 
-        return header_and_payload + Self::SEPARATOR + signature.as_str();
+        return Ok(header_and_payload + Self::SEPARATOR + signature.as_str());
     }
 
     pub fn deserialize<'outer_a, 'vague>(classic_form: &'outer_a str) -> Result<JsonAccessWebToken<'vague>, MainError> {
@@ -27,11 +27,11 @@ impl SerializationFormResolver {
         if classic_form_parts.len() == 3 {
             if SignatureCreator::is_valid(
                 (String::new() + classic_form_parts[0] + Self::SEPARATOR + classic_form_parts[1]).as_str(), classic_form_parts[2]
-            ) 
+            )?
             {
                 return Ok(
                     JsonAccessWebToken::new_from_payload_common(
-                        serde_json::from_slice::<'_, PayloadCommon>(&base64::decode(classic_form_parts[1].as_bytes()).unwrap()).unwrap()  // TODO По сути, обработать ошвозможную ошибку нужно, но ее не будет по факту
+                        serde_json::from_slice::<'_, PayloadCommon>(&base64::decode(classic_form_parts[1].as_bytes()).unwrap())?
                     )?
                 );
             }

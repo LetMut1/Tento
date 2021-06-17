@@ -27,7 +27,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             }
         };
 
-        if EnvironmentVariableResolver::is_production() {
+        if EnvironmentVariableResolver::is_production()? {
             let smtp_client: SmtpClient = match SmtpClient::new_simple("TODO") { // TODO
                 Ok(smtp_client) => smtp_client,
                 Err(smtp_error) => { 
@@ -48,7 +48,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             }  
         } else {
             let mut smtp_transport: SmtpTransport = match SmtpClient::new(
-                EnvironmentVariableResolver::get_resource_email_server_socket_address().as_str(), ClientSecurity::None
+                EnvironmentVariableResolver::get_resource_email_server_socket_address()?.as_str(), ClientSecurity::None
             ) 
             {
                 Ok(smtp_client) => smtp_client.transport(),

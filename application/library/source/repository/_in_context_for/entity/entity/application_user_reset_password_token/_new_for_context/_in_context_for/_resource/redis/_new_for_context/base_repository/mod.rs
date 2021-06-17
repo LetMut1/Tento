@@ -18,7 +18,7 @@ impl BaseRepository {
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
                 application_user_reset_password_token.get_application_user_id()
             ), 
-            serde_json::to_string(&Common::new(application_user_reset_password_token)).unwrap(),  // TODO нужно ли обрабатывать ошибк
+            serde_json::to_string(&Common::new(application_user_reset_password_token))?,
             (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST * 60) as usize
         )?;
         
@@ -62,7 +62,7 @@ impl BaseRepository {
             Some(json_encoded_common) => {
                 return Ok(Some(
                     ApplicationUserResetPasswordToken::new_from_model(
-                        serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str()).unwrap(), application_user_id   // TODO error 
+                        serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?, application_user_id
                     )
                 ));
             },

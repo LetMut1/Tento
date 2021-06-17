@@ -3,7 +3,9 @@ use lettre_email::error::Error as LettreEmailError;
 use lettre::smtp::error::Error as LettreSmtpError;
 use r2d2::Error as R2d2Error;
 use redis::RedisError;
+use serde_json::Error as SerdeJsonError;
 use std::convert::From;
+use std::env::VarError;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
@@ -30,6 +32,9 @@ impl Display for MainError {
             },
             Self::RunTimeError(run_time_error) => {
                 match run_time_error {
+                    RunTimeError::EnvironmentVariableError(var_error) => {
+                        write!(formatter, "MainError-RunTimeError-EnvironmentVariableError: {}", var_error)?;
+                    },
                     RunTimeError::ResourceError(resource_error) => {
                         match resource_error {
                             ResourceError::ConnectionPoolError(r2d2_error) => {
@@ -52,6 +57,9 @@ impl Display for MainError {
                                 write!(formatter, "MainError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
                             }
                         }
+                    },
+                    RunTimeError::SerializationDeserializationError(serde_json_error) => {
+                        write!(formatter, "MainError-RunTimeError-SerializationDeserializationError: {}", serde_json_error)?;
                     }
                 }
             },
@@ -63,6 +71,12 @@ impl Display for MainError {
 }
 
 impl Error for MainError {}
+
+impl From<VarError> for MainError {
+    fn from(var_error: VarError) -> Self {
+        return Self::RunTimeError(RunTimeError::EnvironmentVariableError(var_error));
+    }
+}
 
 impl From<R2d2Error> for MainError {
     fn from(r2d2_error: R2d2Error) -> Self {
@@ -91,5 +105,11 @@ impl From<LettreEmailError> for MainError {
 impl From<LettreSmtpError> for MainError {
     fn from(lettre_smtp_error: LettreSmtpError) -> Self {
         return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::SmtpError(lettre_smtp_error))));
+    }
+}
+
+impl From<SerdeJsonError> for MainError {
+    fn from(serde_json_error: SerdeJsonError) -> Self {
+        return Self::RunTimeError(RunTimeError::SerializationDeserializationError(serde_json_error));
     }
 }

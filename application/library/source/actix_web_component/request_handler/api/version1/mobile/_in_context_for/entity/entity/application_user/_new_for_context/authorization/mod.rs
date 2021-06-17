@@ -43,7 +43,6 @@ use crate::handler::_in_contex_for::actix_web_component::request_handler::api::v
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_reset_password::handler::Handler as ResendEmailForResetPasswordHandler;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password::handler::Handler as ResetPasswordHandler;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
-use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_json_response_body_wrapper::StandardJsonResponseBodyWrapper;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_response_creator::StandardResponseCreator;
 use crate::utility::_in_context_for::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 
@@ -53,7 +52,7 @@ impl Authorization {
     pub async fn check_email_for_existing(query: Query<CheckEmailForExistingQuery>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         match CheckEmailForExistingHanlder::handle(data.into_inner(), query.into_inner()) {
             Ok(result) => {
-                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result);
             },
             Err(main_error) => {
                 match main_error {
@@ -76,7 +75,7 @@ impl Authorization {
     pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         match CheckNicknameForExistingHanlder::handle(data.into_inner(), query.into_inner()) {
             Ok(result) => {
-                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result);
             },
             Err(main_error) => {
                 match main_error {
@@ -104,14 +103,14 @@ impl Authorization {
                         EntityError::ApplicationUserError(application_user_error) => {
                             match application_user_error {
                                 ApplicationUserError::AlreadyExist => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_ALREADY_EXIST
-                                    ));
+                                    );
                                 },
                                 ApplicationUserError::InvalidEmail => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
-                                    ));
+                                    );
                                 }
                                 _ => {
                                     unreachable!("{}", main_error);
@@ -121,9 +120,9 @@ impl Authorization {
                         EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error) => {
                             match pre_confirmed_application_user_error {
                                 PreConfirmedApplicationUserError::AlreadyExist => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_ALREADY_EXIST
-                                    ));
+                                    );
                                 },
                                 _ => {
                                     unreachable!("{}", main_error);
@@ -150,27 +149,30 @@ impl Authorization {
                         RunTimeError::ResourceError(resource_error) => {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                                    ));
+                                    );
                                 },
                                 _ => {
                                     return StandardResponseCreator::create_internal_server_error();
                                 }
                             }
+                        },
+                        _ => {
+                            return StandardResponseCreator::create_internal_server_error();
                         }
                     }
                 }
             }
         }
 
-        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
+        return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
     pub async fn register(form: Form<RegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         match RegisterHandler::handle(data.into_inner(), form.into_inner()) {
             Ok(result) => { 
-                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result);
             },
             Err(ref main_error) => {
                 match main_error {
@@ -179,9 +181,9 @@ impl Authorization {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
                                     ApplicationUserError::AlreadyExist => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_ALREADY_EXIST
-                                        ));
+                                        );
                                     },
                                     _ => {
                                         unreachable!("{}", main_error);
@@ -191,14 +193,14 @@ impl Authorization {
                             EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error) => {
                                 match pre_confirmed_application_user_error {
                                     PreConfirmedApplicationUserError::AlreadyConfirmed => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_ALREADY_CONFIRMED
-                                        ));
+                                        );
                                     },
                                     PreConfirmedApplicationUserError::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_NOT_FOUND
-                                        ));
+                                        );
                                     },
                                     _ => {
                                         unreachable!("{}", main_error);
@@ -208,14 +210,14 @@ impl Authorization {
                             EntityError::ApplicationUserRegistrationConfirmationTokenError(application_user_registration_confirmation_error) => {
                                 match application_user_registration_confirmation_error {
                                     ApplicationUserRegistrationConfirmationTokenError::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
-                                        ));
+                                        );
                                     },
                                     ApplicationUserRegistrationConfirmationTokenError::InvalidValue => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE
-                                        ));
+                                        );
                                     }
                                 }
                             },
@@ -245,9 +247,9 @@ impl Authorization {
                         EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error) => {
                             match pre_confirmed_application_user_error {
                                 PreConfirmedApplicationUserError::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_NOT_FOUND
-                                    ));
+                                    );
                                 },
                                 _ => {
                                     unreachable!("{}", main_error);
@@ -275,27 +277,30 @@ impl Authorization {
                         RunTimeError::ResourceError(resource_error) => {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                                    ));
+                                    );
                                 },
                                 _ => {
                                     return StandardResponseCreator::create_internal_server_error();
                                 }
                             }
+                        },
+                        _ => {
+                            return StandardResponseCreator::create_internal_server_error();
                         }
                     }
                 }
             }
         }
 
-        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
+        return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
     pub async fn pre_log_in(form: Form<PreLogInRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         match PreLogInHandler::handle(data.into_inner(), form.into_inner()) {
             Ok(result) => { 
-                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result); 
             },
             Err(ref main_error) => {
                 match main_error {
@@ -304,14 +309,14 @@ impl Authorization {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
                                     ApplicationUserError::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
-                                        ));
+                                        );
                                     },
                                     ApplicationUserError::WrongPassword => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_PASSWORD
-                                        ));
+                                        );
                                     },
                                     _ => {
                                         unreachable!("{}", main_error);
@@ -338,14 +343,17 @@ impl Authorization {
                             RunTimeError::ResourceError(resource_error) => {
                                 match resource_error {
                                     ResourceError::EmailServerError(_) => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                                        ));
+                                        );
                                     },
                                     _ => {
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
                                 }
+                            },
+                            _ => {
+                                return StandardResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -357,7 +365,7 @@ impl Authorization {
     pub async fn log_in(form: Form<LogInRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         match LogInHandler::handle(data.into_inner(), form.into_inner()) {
             Ok(result) => { 
-                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result)); 
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result); 
             },
             Err(ref main_error) => {
                 match main_error {
@@ -366,14 +374,14 @@ impl Authorization {
                             EntityError::ApplicationUserLogInTokenError(application_user_log_in_token_error) => {
                                 match application_user_log_in_token_error {
                                     ApplicationUserLogInTokenError::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
-                                        ));
+                                        );
                                     },
                                     ApplicationUserLogInTokenError::InvalidValue => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE
-                                        ));
+                                        );
                                     }
                                 }
                             },
@@ -403,9 +411,9 @@ impl Authorization {
                         EntityError::ApplicationUserLogInTokenError(application_user_log_in_token_error) => {
                             match application_user_log_in_token_error {
                                 ApplicationUserLogInTokenError::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
-                                    ));
+                                    );
                                 },
                                 _ => {
                                     unreachable!("{}", main_error);
@@ -432,27 +440,30 @@ impl Authorization {
                         RunTimeError::ResourceError(resource_error) => {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                                    ));
+                                    );
                                 },
                                 _ => {
                                     return StandardResponseCreator::create_internal_server_error();
                                 }
                             }
+                        },
+                        _ => {
+                            return StandardResponseCreator::create_internal_server_error();
                         }
                     }
                 }
             }
         }
 
-        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
+        return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
     pub async fn refresh_json_access_web_token(form: Form<RefreshJsonAccessWebTokenRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         match RefreshJsonAccessWebTokenHandler::handle(data.into_inner(), form.into_inner()) {
             Ok(result) => {
-                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result);
             },
             Err(ref main_error) => {
                 match main_error {
@@ -461,9 +472,9 @@ impl Authorization {
                             EntityError::JsonAccessWebTokenError(json_access_web_token_error) => {
                                 match json_access_web_token_error {
                                     JsonAccessWebTokenError::NotExpired => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED
-                                        ));
+                                        );
                                     },
                                     _ => {
                                         unreachable!("{}", main_error);
@@ -473,9 +484,9 @@ impl Authorization {
                             EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error) => {
                                 match json_refresh_web_token_error {
                                     JsonRefreshWebTokenError::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
-                                        ));
+                                        );
                                     }
                                 }
                             },
@@ -505,9 +516,9 @@ impl Authorization {
                         EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error) => {
                             match json_refresh_web_token_error {
                                 JsonRefreshWebTokenError::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
-                                    ));
+                                    );
                                 }
                             }
                         },
@@ -527,7 +538,7 @@ impl Authorization {
             }
         }
         
-        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success());
+        return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
     pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
@@ -538,9 +549,9 @@ impl Authorization {
                         EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error) => {
                             match json_refresh_web_token_error {
                                 JsonRefreshWebTokenError::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
-                                    ));
+                                    );
                                 }
                             }
                         },
@@ -560,13 +571,13 @@ impl Authorization {
             }
         }
         
-        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success());
+        return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
     pub async fn pre_reset_password(form: Form<PreResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         match PreResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
             Ok(result) => {
-                return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success_with_body(&result));
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result);
             },
             Err(ref main_error) => {
                 match main_error {
@@ -575,9 +586,9 @@ impl Authorization {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
                                     ApplicationUserError::NotFound => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
-                                        ));
+                                        );
                                     },
                                     _ => {
                                         unreachable!("{}", main_error);
@@ -605,14 +616,17 @@ impl Authorization {
                             RunTimeError::ResourceError(resource_error) => {
                                 match resource_error {
                                     ResourceError::EmailServerError(_) => {
-                                        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                                        ));
+                                        );
                                     },
                                     _ => {
                                         return StandardResponseCreator::create_internal_server_error();
                                     }
                                 }
+                            },
+                            _ => {
+                                return StandardResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -629,9 +643,9 @@ impl Authorization {
                         EntityError::ApplicationUserError(application_user_error) => {
                             match application_user_error {
                                 ApplicationUserError::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
-                                    ));
+                                    );
                                 },
                                 _ => {
                                     unreachable!("{}", main_error);
@@ -642,14 +656,14 @@ impl Authorization {
                         EntityError::ApplicationUserResetPasswordTokenError(application_user_reset_password_token_error) => {
                             match application_user_reset_password_token_error {
                                 ApplicationUserResetPasswordTokenError::InvalidValue => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
-                                    ));
+                                    );
                                 },
                                 ApplicationUserResetPasswordTokenError::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
-                                    ));
+                                    );
                                 }
                             }
                         },
@@ -669,7 +683,7 @@ impl Authorization {
             }
         }
 
-        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success());         
+        return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
     pub async fn resend_email_for_reset_password(form: Form<ResendEmailForResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
@@ -680,9 +694,9 @@ impl Authorization {
                         EntityError::ApplicationUserResetPasswordTokenError(application_user_reset_password_token_error) => {
                             match application_user_reset_password_token_error {
                                 ApplicationUserResetPasswordTokenError::NotFound => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
-                                    ));
+                                    );
                                 },
                                 _ => {
                                     unreachable!("{}", main_error);
@@ -709,20 +723,23 @@ impl Authorization {
                         RunTimeError::ResourceError(resource_error) => {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
-                                    return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
-                                    ));
+                                    );
                                 },
                                 _ => {
                                     return StandardResponseCreator::create_internal_server_error();
                                 }
                             }
+                        },
+                        _ => {
+                            return StandardResponseCreator::create_internal_server_error();
                         }
                     }
                 }
             }
         }
 
-        return StandardResponseCreator::create_ok(StandardJsonResponseBodyWrapper::wrap_for_success()); 
+        return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 }
