@@ -3,7 +3,7 @@ use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_
 use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::insert::Insert;
 use crate::entity::entity::application_user::_core::email::Email;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
-use crate::error::main_error::main_error::MainError;
+use crate::error::base_error::base_error::BaseError;
 use diesel::dsl;
 use diesel::ExpressionMethods;
 use diesel::OptionalExtension;
@@ -16,7 +16,7 @@ pub struct BaseRepository;
 impl BaseRepository {
     pub fn create<'outer_a>(
         connection: &'outer_a Connection, pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser
-    ) -> Result<(), MainError> {
+    ) -> Result<(), BaseError> {
         diesel::insert_into(pre_confirmed_application_user_schema::table).values(Insert::new(pre_confirmed_application_user))
         .execute(connection)?;   // TODO нужно ли обработать количество вернувшихся строк
 
@@ -25,7 +25,7 @@ impl BaseRepository {
 
     pub fn delete<'outer_a>(
         connection: &'outer_a Connection, pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser
-    ) -> Result<(), MainError> {
+    ) -> Result<(), BaseError> {
         diesel::delete(
             pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::id.eq(
                 pre_confirmed_application_user.get_id().get_value().get_value()
@@ -37,7 +37,7 @@ impl BaseRepository {
 
     pub fn is_exist_by_application_user_email<'outer_a>(
         connection: &'outer_a Connection, application_user_email: &'outer_a Email
-    ) -> Result<bool, MainError> {
+    ) -> Result<bool, BaseError> {
         return Ok(
             diesel::select(dsl::exists(pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::email.eq(application_user_email.get_value()))))
             .get_result::<bool>(connection)?
@@ -46,7 +46,7 @@ impl BaseRepository {
 
     pub fn get_by_application_user_email<'outer_a>(
         connection: &'outer_a Connection, application_user_email: &'outer_a Email
-    ) -> Result<Option<PreConfirmedApplicationUser>, MainError> {
+    ) -> Result<Option<PreConfirmedApplicationUser>, BaseError> {
         if let Some(select) = pre_confirmed_application_user_schema::table.filter(
             pre_confirmed_application_user_schema::email.eq(application_user_email.get_value())
         ).get_result::<Select>(connection).optional()? 

@@ -2,10 +2,10 @@ use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_
 use crate::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::entity::entity::application_user::_core::id::Id as ApplicationUserId;
 use crate::entity::entity::application_user::_core::password::Password;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
-use crate::error::main_error::_core::entity_error::entity_error::EntityError;
-use crate::error::main_error::main_error::MainError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
+use crate::error::base_error::_core::entity_error::entity_error::EntityError;
+use crate::error::base_error::base_error::BaseError;
 use crate::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
@@ -18,7 +18,7 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), MainError> {
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {
         let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
 
         let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
@@ -40,7 +40,7 @@ impl Handler {
                     return Ok(());
                 }
 
-                return Err(MainError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::NotFound)));
+                return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::NotFound)));
             }
 
             application_user_reset_password_token.increment_wrong_enter_tries_quantity();
@@ -50,9 +50,9 @@ impl Handler {
             }
 
 
-            return Err(MainError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::InvalidValue)));
+            return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::InvalidValue)));
         }
 
-        return Err(MainError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::NotFound)));
+        return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::NotFound)));
     }
 }

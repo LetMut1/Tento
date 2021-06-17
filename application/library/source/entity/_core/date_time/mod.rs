@@ -1,6 +1,6 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
-use crate::error::main_error::main_error::MainError;
+use crate::error::base_error::base_error::BaseError;
 use std::clone::Clone;
 
 #[derive(Clone)]
@@ -21,11 +21,11 @@ impl DateTime {
         };
     }
 
-    pub fn new_from_str<'outer_a>(date_time: &'outer_a str) -> Result<Self, MainError> {
+    pub fn new_from_str<'outer_a>(date_time: &'outer_a str) -> Result<Self, BaseError> {
         let chrono_date_time: ChronoDateTime<Utc> = match ChronoDateTime::parse_from_rfc3339(date_time) {
             Ok(chrono_date_time) => chrono_date_time.with_timezone(&Utc),
             Err(_) => {
-                return Err(MainError::InvalidArgumentError);
+                return Err(BaseError::InvalidArgumentError);
             }
         };
 

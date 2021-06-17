@@ -17,17 +17,17 @@ use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_reset_password::request::Request as ResendEmailForResetPasswordRequest;
 use crate::data_transfer_object::request_parameters::_in_context_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password::request::Request as ResetPasswordRequest;
 use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error::PreConfirmedApplicationUserError;
-use crate::error::main_error::_core::entity_error::entity_error::EntityError;
-use crate::error::main_error::_core::run_time_error::_core::resource_error::resource_error::ResourceError;
-use crate::error::main_error::_core::run_time_error::run_time_error::RunTimeError;
-use crate::error::main_error::main_error::MainError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error::PreConfirmedApplicationUserError;
+use crate::error::base_error::_core::entity_error::entity_error::EntityError;
+use crate::error::base_error::_core::run_time_error::_core::resource_error::resource_error::ResourceError;
+use crate::error::base_error::_core::run_time_error::run_time_error::RunTimeError;
+use crate::error::base_error::base_error::BaseError;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::handler::_in_contex_for::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in::handler::Handler as LogInHandler;
@@ -54,18 +54,18 @@ impl Authorization {
             Ok(result) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result);
             },
-            Err(main_error) => {
-                match main_error {
-                    MainError::InvalidArgumentError => {
+            Err(base_error) => {
+                match base_error {
+                    BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainError::LogicError(_) | MainError::RunTimeError(_) => {
-                        log::error!("{}", main_error);
+                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                        log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
                     },
                     _ => {
-                        unreachable!("{}", main_error);
+                        unreachable!("{}", base_error);
                     }
                 }
             }
@@ -77,18 +77,18 @@ impl Authorization {
             Ok(result) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result);
             },
-            Err(main_error) => {
-                match main_error {
-                    MainError::InvalidArgumentError => {
+            Err(base_error) => {
+                match base_error {
+                    BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainError::LogicError(_) | MainError::RunTimeError(_) => {
-                        log::error!("{}", main_error);
+                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                        log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
                     },
                     _ => {
-                        unreachable!("{}", main_error);
+                        unreachable!("{}", base_error);
                     }
                 }
             }
@@ -96,9 +96,9 @@ impl Authorization {
     }
 
     pub async fn pre_register(form: Form<PreRegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref main_error) = PreRegisterHandler::handle(data.into_inner(), form.into_inner()) {
-            match main_error {
-                MainError::EntityError(entity_error) => {
+        if let Err(ref base_error) = PreRegisterHandler::handle(data.into_inner(), form.into_inner()) {
+            match base_error {
+                BaseError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::ApplicationUserError(application_user_error) => {
                             match application_user_error {
@@ -113,7 +113,7 @@ impl Authorization {
                                     );
                                 }
                                 _ => {
-                                    unreachable!("{}", main_error);
+                                    unreachable!("{}", base_error);
                                 }
                             }
                         },
@@ -125,25 +125,25 @@ impl Authorization {
                                     );
                                 },
                                 _ => {
-                                    unreachable!("{}", main_error);
+                                    unreachable!("{}", base_error);
                                 }
                             }
                         }
                         _ => {
-                            unreachable!("{}", main_error);
+                            unreachable!("{}", base_error);
                         }
                     }
                 },
-                MainError::InvalidArgumentError => {
+                BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainError::LogicError(_) => {
-                    log::error!("{}", main_error);
+                BaseError::LogicError(_) => {
+                    log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
-                MainError::RunTimeError(run_time_error) => {
-                    log::error!("{}", main_error);
+                BaseError::RunTimeError(run_time_error) => {
+                    log::error!("{}", base_error);
 
                     match run_time_error {
                         RunTimeError::ResourceError(resource_error) => {
@@ -174,9 +174,9 @@ impl Authorization {
             Ok(result) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result);
             },
-            Err(ref main_error) => {
-                match main_error {
-                    MainError::EntityError(entity_error) => {
+            Err(ref base_error) => {
+                match base_error {
+                    BaseError::EntityError(entity_error) => {
                         match entity_error {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
@@ -186,7 +186,7 @@ impl Authorization {
                                         );
                                     },
                                     _ => {
-                                        unreachable!("{}", main_error);
+                                        unreachable!("{}", base_error);
                                     }
                                 }
                             },
@@ -203,7 +203,7 @@ impl Authorization {
                                         );
                                     },
                                     _ => {
-                                        unreachable!("{}", main_error);
+                                        unreachable!("{}", base_error);
                                     }
                                 }
                             },
@@ -222,15 +222,15 @@ impl Authorization {
                                 }
                             },
                             _ => {
-                                unreachable!("{}", main_error);
+                                unreachable!("{}", base_error);
                             }
                         }
                     },
-                    MainError::InvalidArgumentError => {
+                    BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainError::LogicError(_) | MainError::RunTimeError(_) => {
-                        log::error!("{}", main_error);
+                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                        log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
                     }
@@ -240,9 +240,9 @@ impl Authorization {
     }
 
     pub async fn resend_email_for_register(form: Form<ResendEmailForRegisterRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref main_error) = ResendEmailForRegisterHandler::handle(data.into_inner(), form.into_inner()) {
-            match main_error {
-                MainError::EntityError(entity_error) => {
+        if let Err(ref base_error) = ResendEmailForRegisterHandler::handle(data.into_inner(), form.into_inner()) {
+            match base_error {
+                BaseError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error) => {
                             match pre_confirmed_application_user_error {
@@ -252,26 +252,26 @@ impl Authorization {
                                     );
                                 },
                                 _ => {
-                                    unreachable!("{}", main_error);
+                                    unreachable!("{}", base_error);
                                 }
 
                             }
                         },
                         _ => {
-                            unreachable!("{}", main_error);
+                            unreachable!("{}", base_error);
                         }
                     }
                 },
-                MainError::InvalidArgumentError => {
+                BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainError::LogicError(_) => {
-                    log::error!("{}", main_error);
+                BaseError::LogicError(_) => {
+                    log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 },
-                MainError::RunTimeError(run_time_error) => {
-                    log::error!("{}", main_error);
+                BaseError::RunTimeError(run_time_error) => {
+                    log::error!("{}", base_error);
 
                     match run_time_error {
                         RunTimeError::ResourceError(resource_error) => {
@@ -302,9 +302,9 @@ impl Authorization {
             Ok(result) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result); 
             },
-            Err(ref main_error) => {
-                match main_error {
-                    MainError::EntityError(entity_error) => {
+            Err(ref base_error) => {
+                match base_error {
+                    BaseError::EntityError(entity_error) => {
                         match entity_error {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
@@ -319,25 +319,25 @@ impl Authorization {
                                         );
                                     },
                                     _ => {
-                                        unreachable!("{}", main_error);
+                                        unreachable!("{}", base_error);
                                     }
                                 }
                             },
                             _ => {
-                                unreachable!("{}", main_error);
+                                unreachable!("{}", base_error);
                             }
                         }
                     },
-                    MainError::InvalidArgumentError => {
+                    BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainError::LogicError(_) => {
-                        log::error!("{}", main_error);
+                    BaseError::LogicError(_) => {
+                        log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
                     },
-                    MainError::RunTimeError(run_time_error) => {
-                        log::error!("{}", main_error);
+                    BaseError::RunTimeError(run_time_error) => {
+                        log::error!("{}", base_error);
 
                         match run_time_error {
                             RunTimeError::ResourceError(resource_error) => {
@@ -367,9 +367,9 @@ impl Authorization {
             Ok(result) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result); 
             },
-            Err(ref main_error) => {
-                match main_error {
-                    MainError::EntityError(entity_error) => {
+            Err(ref base_error) => {
+                match base_error {
+                    BaseError::EntityError(entity_error) => {
                         match entity_error {
                             EntityError::ApplicationUserLogInTokenError(application_user_log_in_token_error) => {
                                 match application_user_log_in_token_error {
@@ -386,15 +386,15 @@ impl Authorization {
                                 }
                             },
                             _ => {
-                                unreachable!("{}", main_error);
+                                unreachable!("{}", base_error);
                             }
                         }
                     },
-                    MainError::InvalidArgumentError => {
+                    BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainError::LogicError(_) | MainError::RunTimeError(_) => {
-                        log::error!("{}", main_error);
+                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                        log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
                     }
@@ -404,9 +404,9 @@ impl Authorization {
     }
 
     pub async fn resend_email_for_log_in(form: Form<ResendEmailForLogInRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref main_error) = ResendEmailForLogInHandler::handle(data.into_inner(), form.into_inner()) {
-            match main_error {
-                MainError::EntityError(entity_error) => {
+        if let Err(ref base_error) = ResendEmailForLogInHandler::handle(data.into_inner(), form.into_inner()) {
+            match base_error {
+                BaseError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::ApplicationUserLogInTokenError(application_user_log_in_token_error) => {
                             match application_user_log_in_token_error {
@@ -416,25 +416,25 @@ impl Authorization {
                                     );
                                 },
                                 _ => {
-                                    unreachable!("{}", main_error);
+                                    unreachable!("{}", base_error);
                                 }
                             }
                         },
                         _ => {
-                            unreachable!("{}", main_error);
+                            unreachable!("{}", base_error);
                         }
                     }
                 },
-                MainError::InvalidArgumentError => {
+                BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainError::LogicError(_) => {
-                    log::error!("{}", main_error);
+                BaseError::LogicError(_) => {
+                    log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 },
-                MainError::RunTimeError(run_time_error) => {
-                    log::error!("{}", main_error);
+                BaseError::RunTimeError(run_time_error) => {
+                    log::error!("{}", base_error);
 
                     match run_time_error {
                         RunTimeError::ResourceError(resource_error) => {
@@ -465,9 +465,9 @@ impl Authorization {
             Ok(result) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result);
             },
-            Err(ref main_error) => {
-                match main_error {
-                    MainError::EntityError(entity_error) => {
+            Err(ref base_error) => {
+                match base_error {
+                    BaseError::EntityError(entity_error) => {
                         match entity_error {
                             EntityError::JsonAccessWebTokenError(json_access_web_token_error) => {
                                 match json_access_web_token_error {
@@ -477,7 +477,7 @@ impl Authorization {
                                         );
                                     },
                                     _ => {
-                                        unreachable!("{}", main_error);
+                                        unreachable!("{}", base_error);
                                     }
                                 }
                             },
@@ -491,15 +491,15 @@ impl Authorization {
                                 }
                             },
                             _ => {
-                                unreachable!("{}", main_error);
+                                unreachable!("{}", base_error);
                             }
                         }
                     },
-                    MainError::InvalidArgumentError => {
+                    BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainError::LogicError(_) | MainError::RunTimeError(_) => {
-                        log::error!("{}", main_error);
+                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                        log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
                     }
@@ -509,9 +509,9 @@ impl Authorization {
     }
 
     pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref main_error) = LogOutHandler::handle(data.into_inner(), &req_data.into_inner()) {
-            match main_error {
-                MainError::EntityError(entity_error) => {
+        if let Err(ref base_error) = LogOutHandler::handle(data.into_inner(), &req_data.into_inner()) {
+            match base_error {
+                BaseError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error) => {
                             match json_refresh_web_token_error {
@@ -523,15 +523,15 @@ impl Authorization {
                             }
                         },
                         _ => {
-                            unreachable!("{}", main_error);
+                            unreachable!("{}", base_error);
                         }
                     }
                 },
-                MainError::InvalidArgumentError => {
+                BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainError::LogicError(_) | MainError::RunTimeError(_) => {
-                    log::error!("{}", main_error);
+                BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                    log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
@@ -542,9 +542,9 @@ impl Authorization {
     }
 
     pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref main_error) = LogOutFromAllDevicesHandler::handle(data.into_inner(), &req_data.into_inner()) {
-            match main_error {
-                MainError::EntityError(entity_error) => {
+        if let Err(ref base_error) = LogOutFromAllDevicesHandler::handle(data.into_inner(), &req_data.into_inner()) {
+            match base_error {
+                BaseError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error) => {
                             match json_refresh_web_token_error {
@@ -556,15 +556,15 @@ impl Authorization {
                             }
                         },
                         _ => {
-                            unreachable!("{}", main_error);
+                            unreachable!("{}", base_error);
                         }
                     }
                 },
-                MainError::InvalidArgumentError => {
+                BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainError::LogicError(_) | MainError::RunTimeError(_) => {
-                    log::error!("{}", main_error);
+                BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                    log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
@@ -579,9 +579,9 @@ impl Authorization {
             Ok(result) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&result);
             },
-            Err(ref main_error) => {
-                match main_error {
-                    MainError::EntityError(entity_error) => {
+            Err(ref base_error) => {
+                match base_error {
+                    BaseError::EntityError(entity_error) => {
                         match entity_error {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
@@ -591,26 +591,26 @@ impl Authorization {
                                         );
                                     },
                                     _ => {
-                                        unreachable!("{}", main_error);
+                                        unreachable!("{}", base_error);
                                     }
 
                                 }
                             },
                             _ => {
-                                unreachable!("{}", main_error);
+                                unreachable!("{}", base_error);
                             }
                         }
                     },
-                    MainError::InvalidArgumentError => {
+                    BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    MainError::LogicError(_) => {
-                        log::error!("{}", main_error);
+                    BaseError::LogicError(_) => {
+                        log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                    MainError::RunTimeError(run_time_error) => {
-                        log::error!("{}", main_error);
+                    BaseError::RunTimeError(run_time_error) => {
+                        log::error!("{}", base_error);
 
                         match run_time_error {
                             RunTimeError::ResourceError(resource_error) => {
@@ -636,9 +636,9 @@ impl Authorization {
     }
 
     pub async fn reset_password(form: Form<ResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref main_error) = ResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
-            match main_error {
-                MainError::EntityError(entity_error) => {
+        if let Err(ref base_error) = ResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
+            match base_error {
+                BaseError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::ApplicationUserError(application_user_error) => {
                             match application_user_error {
@@ -648,7 +648,7 @@ impl Authorization {
                                     );
                                 },
                                 _ => {
-                                    unreachable!("{}", main_error);
+                                    unreachable!("{}", base_error);
                                 }
 
                             }
@@ -668,15 +668,15 @@ impl Authorization {
                             }
                         },
                         _ => {
-                            unreachable!("{}", main_error);
+                            unreachable!("{}", base_error);
                         }
                     }
                 },
-                MainError::InvalidArgumentError => {
+                BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainError::LogicError(_) | MainError::RunTimeError(_) => {
-                    log::error!("{}", main_error);
+                BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                    log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
@@ -687,9 +687,9 @@ impl Authorization {
     }
 
     pub async fn resend_email_for_reset_password(form: Form<ResendEmailForResetPasswordRequest>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref main_error) = ResendEmailForResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
-            match main_error {
-                MainError::EntityError(entity_error) => {
+        if let Err(ref base_error) = ResendEmailForResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
+            match base_error {
+                BaseError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::ApplicationUserResetPasswordTokenError(application_user_reset_password_token_error) => {
                             match application_user_reset_password_token_error {
@@ -699,25 +699,25 @@ impl Authorization {
                                     );
                                 },
                                 _ => {
-                                    unreachable!("{}", main_error);
+                                    unreachable!("{}", base_error);
                                 }
                             }
                         },
                         _ => {
-                            unreachable!("{}", main_error);
+                            unreachable!("{}", base_error);
                         }
                     }
                 },
-                MainError::InvalidArgumentError => {
+                BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                MainError::LogicError(_) => {
-                    log::error!("{}", main_error);
+                BaseError::LogicError(_) => {
+                    log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
-                MainError::RunTimeError(run_time_error) => {
-                    log::error!("{}", main_error);
+                BaseError::RunTimeError(run_time_error) => {
+                    log::error!("{}", base_error);
 
                     match run_time_error {
                         RunTimeError::ResourceError(resource_error) => {

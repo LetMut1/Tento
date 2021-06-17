@@ -4,9 +4,9 @@ use crate::entity::entity::application_user_log_in_token::application_user_log_i
 use crate::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::_core::email::Email;
 use crate::entity::entity::application_user::_core::password::Password;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
-use crate::error::main_error::_core::entity_error::entity_error::EntityError;
-use crate::error::main_error::main_error::MainError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
+use crate::error::base_error::_core::entity_error::entity_error::EntityError;
+use crate::error::base_error::base_error::BaseError;
 use crate::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
 use crate::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
@@ -19,7 +19,7 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, MainError> {
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, BaseError> {
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
             request.application_user_log_in_token_device_id
         )?;
@@ -55,9 +55,9 @@ impl Handler {
                 return Ok(HandlerResult::new(application_user.get_id().to_string()));
             }
             
-            return Err(MainError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::WrongPassword)));
+            return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::WrongPassword)));
         }
 
-        return Err(MainError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::NotFound)));
+        return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::NotFound)));
     }
 }

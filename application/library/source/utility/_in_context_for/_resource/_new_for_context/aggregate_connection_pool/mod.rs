@@ -1,4 +1,4 @@
-use crate::error::main_error::main_error::MainError;
+use crate::error::base_error::base_error::BaseError;
 use crate::utility::environment_variable_resolver::EnvironmentVariableResolver;
 use diesel::pg::PgConnection as PostgresqlConnection;
 use diesel::r2d2::ConnectionManager as PostgresqlConnectionManager;
@@ -13,7 +13,7 @@ pub struct AggregateConnectionPool {
 }
 
 impl AggregateConnectionPool {
-    pub fn new() -> Result<Self, MainError> {
+    pub fn new() -> Result<Self, BaseError> {
         return Ok (
             Self {
                 postgresql_connection_pool: Self::establish_postgresql_connection_pool()?,
@@ -22,11 +22,11 @@ impl AggregateConnectionPool {
         );
     }
 
-    fn establish_postgresql_connection_pool() -> Result<Pool<PostgresqlConnectionManager<PostgresqlConnection>>, MainError> {
+    fn establish_postgresql_connection_pool() -> Result<Pool<PostgresqlConnectionManager<PostgresqlConnection>>, BaseError> {
         return Ok(Pool::new(PostgresqlConnectionManager::<PostgresqlConnection>::new(EnvironmentVariableResolver::get_resource_postgresql_url()?))?);   // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix
     }
 
-    fn establish_redis_connection_pool() -> Result<Pool<RedisConnectionManager>, MainError> {
+    fn establish_redis_connection_pool() -> Result<Pool<RedisConnectionManager>, BaseError> {
         return Ok(Pool::new(RedisConnectionManager::new(EnvironmentVariableResolver::get_resource_redis_url()?)?)?);   // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix
     }
 

@@ -2,9 +2,9 @@ use actix_service::Service;
 use actix_web::dev::ServiceRequest;
 use actix_web::dev::ServiceResponse;
 use actix_web::Error;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
-use crate::error::main_error::_core::entity_error::entity_error::EntityError;
-use crate::error::main_error::main_error::MainError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
+use crate::error::base_error::_core::entity_error::entity_error::EntityError;
+use crate::error::base_error::base_error::BaseError;
 use crate::handler::_in_contex_for::actix_web_component::middleware::authentication_resolver::authentication_resolver::_new_for_contex::call::handler::Handler as CallHandler;
 use crate::utility::_in_context_for::actix_web_component::_new_for_context::standard_response_creator::StandardResponseCreator;
 use crate::utility::_in_context_for::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
@@ -49,9 +49,9 @@ where
     }
 
     fn call<'this>(&'this mut self, service_request: ServiceRequest) -> Self::Future {
-        if let Err(ref main_error) = CallHandler::handle(&service_request) {
-            match main_error {
-                MainError::EntityError(entity_error) => {
+        if let Err(ref base_error) = CallHandler::handle(&service_request) {
+            match base_error {
+                BaseError::EntityError(entity_error) => {
                     match entity_error {
                         EntityError::JsonAccessWebTokenError(json_access_web_token_error) => {
                             match json_access_web_token_error {
@@ -70,20 +70,20 @@ where
                                     )));
                                 },
                                 _ => {
-                                    unreachable!("{}", main_error);
+                                    unreachable!("{}", base_error);
                                 }
                             }
                         },
                         _ => {
-                            unreachable!("{}", main_error);
+                            unreachable!("{}", base_error);
                         }
                     }
                 },
-                MainError::InvalidArgumentError => {
+                BaseError::InvalidArgumentError => {
                     return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_bad_request().into_body())));
                 },
-                MainError::LogicError(_) | MainError::RunTimeError(_) => {
-                    log::error!("{}", main_error);
+                BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                    log::error!("{}", base_error);
 
                     return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_internal_server_error().into_body())));
                 }

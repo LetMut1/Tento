@@ -4,7 +4,7 @@ use actix_web::web;
 use actix_web::web::ServiceConfig;
 use crate::actix_web_component::middleware::authentication_resolver::authentication_resolver_factory::AuthenticationResolverFactory;
 use crate::actix_web_component::request_handler::api::version1::mobile::_in_context_for::entity::entity::application_user::_new_for_context::authorization::Authorization;
-use crate::error::main_error::main_error::MainError;
+use crate::error::base_error::base_error::BaseError;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::environment_variable_resolver::EnvironmentVariableResolver;
 use dotenv;
@@ -61,21 +61,21 @@ impl Handler {
                         return Err(Error::new(ErrorKind::Other, error));
                     }
                 } else {
-                    return Err(Error::new(ErrorKind::Other, MainError::LogicError("Any ....env file must exist")));
+                    return Err(Error::new(ErrorKind::Other, BaseError::LogicError("Any ....env file must exist")));
                 }
             }
 
             env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_FALSE);
         }
 
-        if let Err(main_error) = Self::simple_check_environment_variables() {
-            return Err(Error::new(ErrorKind::Other, main_error));
+        if let Err(base_error) = Self::simple_check_environment_variables() {
+            return Err(Error::new(ErrorKind::Other, base_error));
         }
 
         return Ok(());
     }
 
-    fn simple_check_environment_variables() -> Result<(), MainError> {
+    fn simple_check_environment_variables() -> Result<(), BaseError> {
         EnvironmentVariableResolver::is_production()?;
         EnvironmentVariableResolver::get_server_socket_address()?;
         EnvironmentVariableResolver::get_logger_roller_log_file_name()?;
@@ -93,22 +93,22 @@ impl Handler {
     fn configure_log() -> Result<(), Error> {
         let logger_encoder_pattern: String = match EnvironmentVariableResolver::get_logger_encoder_pattern() {
             Ok(logger_encoder_pattern) => logger_encoder_pattern,
-            Err(main_error) => {
-                return Err(Error::new(ErrorKind::Other, main_error));
+            Err(base_error) => {
+                return Err(Error::new(ErrorKind::Other, base_error));
             }
         };
 
         let logger_log_file_name: String = match EnvironmentVariableResolver::get_logger_log_file_name() {
             Ok(logger_log_file_name) => logger_log_file_name,
-            Err(main_error) => {
-                return Err(Error::new(ErrorKind::Other, main_error));
+            Err(base_error) => {
+                return Err(Error::new(ErrorKind::Other, base_error));
             }
         };
 
         let logger_roller_log_file_name: String = match EnvironmentVariableResolver::get_logger_roller_log_file_name() {
             Ok(logger_roller_log_file_name) => logger_roller_log_file_name,
-            Err(main_error) => {
-                return Err(Error::new(ErrorKind::Other, main_error));
+            Err(base_error) => {
+                return Err(Error::new(ErrorKind::Other, base_error));
             }
         };
 
@@ -150,8 +150,8 @@ impl Handler {
     async fn run_http_server() -> Result<(), Error> {
         let server_socket_address: String = match EnvironmentVariableResolver::get_server_socket_address() {
             Ok(server_socket_address) => server_socket_address,
-            Err(main_error) => {
-                return Err(Error::new(ErrorKind::Other, main_error));
+            Err(base_error) => {
+                return Err(Error::new(ErrorKind::Other, base_error));
             }
         };
 

@@ -1,5 +1,5 @@
 use crate::entity::entity::application_user::_core::id::Id;
-use crate::error::main_error::main_error::MainError;
+use crate::error::base_error::base_error::BaseError;
 use crate::utility::_in_context_for::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use redis::Commands;
@@ -14,7 +14,7 @@ impl ProcessingDeviceIdStorage {
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a Id,
         application_user_log_in_token_device_id_registry: Vec<String>
-    ) -> Result<(), MainError> {
+    ) -> Result<(), BaseError> {
         connection.set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id), 
             application_user_log_in_token_device_id_registry.join(Self::SEPARATOR),
@@ -28,7 +28,7 @@ impl ProcessingDeviceIdStorage {
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a Id,
         application_user_log_in_token_device_id_registry: Vec<String>
-    ) -> Result<(), MainError> {
+    ) -> Result<(), BaseError> {
         Self::create(connection, application_user_id, application_user_log_in_token_device_id_registry)?;
 
         return Ok(());
@@ -36,7 +36,7 @@ impl ProcessingDeviceIdStorage {
 
     pub fn delete<'outer_a>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_a Id,
-    ) -> Result<(), MainError> {
+    ) -> Result<(), BaseError> {
         connection.del::<String, ()>(
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id)
         )?;
@@ -46,7 +46,7 @@ impl ProcessingDeviceIdStorage {
 
     pub fn update_expiration_time<'outer_a>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_a Id
-    ) -> Result<(), MainError> {
+    ) -> Result<(), BaseError> {
         connection.expire::<String, ()>(
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id),
             (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
@@ -57,7 +57,7 @@ impl ProcessingDeviceIdStorage {
 
     pub fn get<'outer_a>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_a Id
-    ) -> Result<Option<Vec<String>>, MainError> {
+    ) -> Result<Option<Vec<String>>, BaseError> {
         if let Some(application_user_log_in_token_device_id_sequence) = connection.get::<String, Option<String>>(
             RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id)
         )?

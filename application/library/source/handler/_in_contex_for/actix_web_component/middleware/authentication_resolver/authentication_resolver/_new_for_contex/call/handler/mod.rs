@@ -2,9 +2,9 @@ use actix_web::dev::ServiceRequest;
 use actix_web::HttpMessage;
 use actix_web::web::Data;
 use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
-use crate::error::main_error::_core::entity_error::_core::_in_context_for::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
-use crate::error::main_error::_core::entity_error::entity_error::EntityError;
-use crate::error::main_error::main_error::MainError;
+use crate::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
+use crate::error::base_error::_core::entity_error::entity_error::EntityError;
+use crate::error::base_error::base_error::BaseError;
 use crate::repository::_in_context_for::entity::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as JsonAccessWebTokenBlackListBaseRepository;
 use crate::service::_in_context_for::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
@@ -13,7 +13,7 @@ use crate::utility::_in_context_for::_resource::_new_for_context::connection_ext
 pub struct Handler;
 
 impl Handler {
-    pub fn handle<'outer_a>(service_request: &'outer_a ServiceRequest) -> Result<(), MainError> {
+    pub fn handle<'outer_a>(service_request: &'outer_a ServiceRequest) -> Result<(), BaseError> {
         if let Some(data) = service_request.app_data::<Data<AggregateConnectionPool>>() {
             if let Some(header_value) = service_request.headers().get("X-Auth-Token") {
                 if let Ok(header_value) = header_value.to_str() {
@@ -28,16 +28,16 @@ impl Handler {
                             return Ok(());
                         }
 
-                        return Err(MainError::EntityError(EntityError::JsonAccessWebTokenError(JsonAccessWebTokenError::InJsonAccessWebTokenBlackList)));
+                        return Err(BaseError::EntityError(EntityError::JsonAccessWebTokenError(JsonAccessWebTokenError::InJsonAccessWebTokenBlackList)));
                     }
 
-                    return Err(MainError::EntityError(EntityError::JsonAccessWebTokenError(JsonAccessWebTokenError::AlreadyExpired)));
+                    return Err(BaseError::EntityError(EntityError::JsonAccessWebTokenError(JsonAccessWebTokenError::AlreadyExpired)));
                 }
             }
     
-            return Err(MainError::InvalidArgumentError);
+            return Err(BaseError::InvalidArgumentError);
         }
 
-        return Err(MainError::LogicError("'AggregateConnectionPool' must exist in application state"));
+        return Err(BaseError::LogicError("'AggregateConnectionPool' must exist in application state"));
     }
 }
