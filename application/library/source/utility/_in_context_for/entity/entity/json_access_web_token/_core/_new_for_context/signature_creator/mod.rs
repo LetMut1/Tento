@@ -11,7 +11,7 @@ impl SignatureCreator {
         let mut hmac: Hmac<Sha512> = Self::get_configured_hmac()?;
         hmac.input(header_and_payload.as_bytes());
 
-        return Ok(hex::encode(hmac.result().code()));
+        return Ok(hex::encode(hmac.result().code()));   // TODO TIme attac
     }
 
     pub fn is_valid<'outer_a>(header_and_payload: &'outer_a str, signature: &'outer_a str) -> Result<bool, BaseError> {

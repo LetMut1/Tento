@@ -39,7 +39,12 @@ impl Handler {
         // TODO Ближе к релизу разобраться, как лучше работать с файлами. (То есть, как использовать относительный(relative) пути.)
         // TODO !!!!!!!!!!! Разобраться с путями для ЛООГГЕРА  !!!!!!!!!!!!!!!!
         // TODO Переписать содержимое метода в контексте нахождения директории для .env --------------------------------------------- 
-        let file_path_buffer: PathBuf = env::current_exe()?.parent().unwrap().join(&Path::new("../../library")); // TODO не нравится способ взятия и нахождения директории
+        let file_path_buffer: PathBuf = match env::current_exe()?.parent() {    // TODO не нравится способ взятия и нахождения директории
+            Some(file_path) => file_path.join(&Path::new("../../library")),
+            None => {
+                return Err(Error::new(ErrorKind::Other, BaseError::LogicError("Directory must exist")));
+            }
+        };
 
         let production_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("prod.env"));
         if production_environment_file_path_buffer.exists() {

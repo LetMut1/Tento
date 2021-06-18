@@ -1,5 +1,3 @@
-use chrono::DateTime as ChronoDateTime;
-use chrono::offset::Utc;
 use crate::entity::_core::date_time::DateTime;
 use crate::error::base_error::base_error::BaseError;
 use crate::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
@@ -11,16 +9,12 @@ pub struct Exp {
 }
 
 impl Exp {
-    pub fn new() -> Self {
-        return Self {
-            value: DateTimeExpirationResolver::create_json_access_web_token_first()
-        };
-    }
-
-    pub fn new_from_date_time(chrono_date_time: ChronoDateTime<Utc>) -> Self {
-        return Self {
-            value: DateTime::new_from_date_time(chrono_date_time)
-        };
+    pub fn new() -> Result<Self, BaseError> {
+        return Ok(
+            Self {
+                value: DateTimeExpirationResolver::create_json_access_web_token_first()?
+            }
+        );
     }
 
     pub fn new_from_str<'outer_a>(date_time: &'outer_a str) -> Result<Self, BaseError> {

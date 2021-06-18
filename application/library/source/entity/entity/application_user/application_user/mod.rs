@@ -1,5 +1,6 @@
 use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::application_user::_new_for_context::select::Select;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
+use crate::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
 use super::_core::created_at::CreatedAt;
 use super::_core::email::Email;
@@ -19,14 +20,16 @@ pub struct ApplicationUser<'outer_a> {
 impl<'outer_a> ApplicationUser<'outer_a> {
     pub fn new_from_pre_confirmed_application_user(
         pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser, nickname: Nickname, password: Password
-    ) -> Self {
-        return Self {
-            id: Id::new(),
-            email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
-            nickname,
-            password_hash: PasswordHash::new_from_password(password),
-            created_at: CreatedAt::new()
-        };
+    ) -> Result<Self, BaseError> {
+        return Ok(
+            Self {
+                id: Id::new(),
+                email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
+                nickname,
+                password_hash: PasswordHash::new_from_password(password)?,
+                created_at: CreatedAt::new()
+            }
+        );
     }
 
     pub fn new_from_resource_model(select: Select) -> Self {
@@ -51,10 +54,10 @@ impl<'outer_a> ApplicationUser<'outer_a> {
         return self;
     }
 
-    pub fn set_password<'this>(&'this mut self, password: Password) -> &'this mut Self {
-        self.password_hash = PasswordHash::new_from_password(password);
+    pub fn set_password<'this>(&'this mut self, password: Password) -> Result<&'this mut Self, BaseError> {
+        self.password_hash = PasswordHash::new_from_password(password)?;
 
-        return self;
+        return Ok(self);
     }
 
     pub fn get_id<'this>(&'this self) -> &'this Id {

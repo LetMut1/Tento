@@ -51,7 +51,7 @@ impl Handler {
                     if request.application_user_registration_confirmation_token_value.as_str() == application_user_registration_confirmation_token.get_value().get_value() {
                         let application_user: ApplicationUser<'_> = ApplicationUser::new_from_pre_confirmed_application_user(
                             &pre_confirmed_application_user, application_user_nickname, Password::new(request.application_user_password)
-                        );
+                        )?;
 
                         ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(redis_connection, &application_user_registration_confirmation_token)?;
 
@@ -77,7 +77,7 @@ impl Handler {
 
                         return Ok(
                             HandlerResult::new(
-                                SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token))?,
+                                SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
                                 Encoder::encode(&json_refresh_web_token)?
                             )
                         );

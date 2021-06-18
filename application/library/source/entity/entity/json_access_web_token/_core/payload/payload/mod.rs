@@ -17,13 +17,15 @@ pub struct Payload<'outer_a> {
 }
 
 impl<'outer_a> Payload<'outer_a> {
-    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>) -> Self {
-        return Self {
-            id: Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
-            application_user_id: Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
-            application_user_log_in_token_device_id: Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
-            exp: Exp::new()
-        };
+    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>) -> Result<Self, BaseError> {
+        return Ok(
+            Self {
+                id: Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
+                application_user_id: Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
+                application_user_log_in_token_device_id: Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
+                exp: Exp::new()?
+            }
+        );
     }
 
     pub fn new_from_common(common: Common) -> Result<Self, BaseError> {

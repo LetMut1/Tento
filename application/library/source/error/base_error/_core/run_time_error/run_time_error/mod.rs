@@ -1,16 +1,14 @@
-use serde_json::Error as SerdeJsonError;
-use std::env::VarError;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
+use super::_core::other::Other;
 use super::_core::resource_error::resource_error::ResourceError;
 
 #[derive(Debug)]
 pub enum RunTimeError {
-    EnvironmentVariableError(VarError),
-    ResourceError(ResourceError),
-    SerializationDeserializationError(SerdeJsonError)
+    Other(Other),
+    ResourceError(ResourceError)
 }
 
 impl Display for RunTimeError {

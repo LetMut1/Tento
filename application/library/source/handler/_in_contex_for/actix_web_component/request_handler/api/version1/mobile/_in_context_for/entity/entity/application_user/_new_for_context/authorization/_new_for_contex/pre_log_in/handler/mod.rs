@@ -28,7 +28,7 @@ impl Handler {
             &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(request.application_user_email)
         )? 
         {
-            if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash()) {
+            if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash())? {
                 let application_user_log_in_token: ApplicationUserLogInToken<'_>;
 
                 let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;

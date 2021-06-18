@@ -31,7 +31,7 @@ impl Handler {
                 let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
                 if let Some(mut application_user) = ApplicationUserBaseRepository::get_by_id(postgresql_connection, &application_user_id)? {
-                    application_user.set_password(Password::new(request.application_user_password));
+                    application_user.set_password(Password::new(request.application_user_password))?;
 
                     ApplicationUserBaseRepository::update(postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?; // TODO Загуглить, чтл можно сделать для обеспечения транзакции на две системы (зкроме, запоминания состояния через третью ссистпму)
 

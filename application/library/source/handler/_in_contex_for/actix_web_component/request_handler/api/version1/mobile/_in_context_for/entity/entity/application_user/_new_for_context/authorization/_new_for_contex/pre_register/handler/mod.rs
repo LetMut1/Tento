@@ -22,7 +22,7 @@ impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {
         let application_user_email: Email = Email::new(request.application_user_email);
 
-        if EmailSimpleValidator::is_valid(&application_user_email) {
+        if EmailSimpleValidator::is_valid(&application_user_email)? {
             let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
             if !PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(postgresql_connection, &application_user_email)? {

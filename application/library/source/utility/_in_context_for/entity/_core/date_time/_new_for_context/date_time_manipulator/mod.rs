@@ -1,19 +1,28 @@
+use chrono::DateTime as ChronoDateTime;
 use chrono::Duration;
 use chrono::offset::Utc;
 use crate::entity::_core::date_time::DateTime;
+use crate::error::base_error::base_error::BaseError;
 use crate::utility::chrono_date_time_manipulator::ChronoDateTimeManipulator;
 
 pub struct DateTimeManipulator;
 
 impl DateTimeManipulator {
     // pub fn add_interval<'outer_a>(date_time: &'outer_a DateTime, quantity_of_minutes: i64) -> () {              // TODO написать тесты. проверить, создатся ли интервал. Сделегировать на utility_chrono_date_ime_manipulator?
-    //     date_time.get_value().checked_add_signed(Duration::minutes(quantity_of_minutes)).unwrap();
+    //     date_time.get_value().checked_add_signed(Duration::minutes(quantity_of_minutes)).unwrp();
 
     //     return ();
     // }
 
-    pub fn add_interval_from_now(quantity_of_minutes: i64) -> DateTime {
-        return DateTime::new_from_date_time(Utc::now().checked_add_signed(Duration::minutes(quantity_of_minutes)).unwrap());
+    pub fn add_interval_from_now(quantity_of_minutes: i64) -> Result<DateTime, BaseError> {
+        let chrono_date_time: ChronoDateTime<Utc> = match Utc::now().checked_add_signed(Duration::minutes(quantity_of_minutes)) {
+            Some(chrono_date_time) => chrono_date_time,
+            None => {
+                return Err(BaseError::LogicError("Too big date must not be added"));
+            }
+        };
+        
+        return Ok(DateTime::new_from_date_time(chrono_date_time));
     }
 
     pub fn is_greater_or_equal_than_now<'outer_a>(subject_date_time: &'outer_a DateTime) -> bool

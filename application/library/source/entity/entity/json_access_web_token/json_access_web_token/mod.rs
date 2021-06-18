@@ -20,10 +20,12 @@ pub struct JsonAccessWebToken<'outer_a> {
 impl<'outer_a> JsonAccessWebToken<'outer_a> {
     const HEADER: Header = Header::new();
 
-    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>) -> Self {
-        return Self {
-            payload: Payload::new(json_refresh_web_token)
-        };
+    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>) -> Result<Self, BaseError> {
+        return Ok(
+            Self {
+                payload: Payload::new(json_refresh_web_token)?
+            }
+        );
     }
 
     pub fn new_from_payload_common(common: Common) -> Result<Self, BaseError> {

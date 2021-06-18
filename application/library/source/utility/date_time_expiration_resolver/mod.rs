@@ -1,4 +1,5 @@
 use crate::entity::_core::date_time::DateTime;
+use crate::error::base_error::base_error::BaseError;
 use crate::utility::_in_context_for::entity::_core::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 
 pub struct DateTimeExpirationResolver;
@@ -10,7 +11,7 @@ impl DateTimeExpirationResolver {
     pub const QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST: i64 = 30;
     pub const QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST: i64 = 60 * 24 * 21;
 
-    pub fn create_json_access_web_token_first() -> DateTime {
-        return DateTimeManipulator::add_interval_from_now(Self::QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST);
+    pub fn create_json_access_web_token_first() -> Result<DateTime, BaseError> {
+        return Ok(DateTimeManipulator::add_interval_from_now(Self::QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST)?);
     }
 }

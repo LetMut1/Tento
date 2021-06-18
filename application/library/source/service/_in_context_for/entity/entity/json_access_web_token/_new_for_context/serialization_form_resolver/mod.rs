@@ -31,7 +31,7 @@ impl SerializationFormResolver {
             {
                 return Ok(
                     JsonAccessWebToken::new_from_payload_common(
-                        serde_json::from_slice::<'_, PayloadCommon>(&base64::decode(classic_form_parts[1].as_bytes()).unwrap())?
+                        serde_json::from_slice::<'_, PayloadCommon>(&base64::decode(classic_form_parts[1].as_bytes())?)?
                     )?
                 );
             }
