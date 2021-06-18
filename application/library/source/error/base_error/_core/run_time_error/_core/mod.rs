@@ -1,2 +1,2 @@
-pub mod other;
+pub mod other_error;
 pub mod resource_error;

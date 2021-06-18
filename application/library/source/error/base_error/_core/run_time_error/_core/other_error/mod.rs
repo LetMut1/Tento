@@ -4,12 +4,12 @@ use std::fmt::Formatter;
 use std::fmt::Result;
 
 #[derive(Debug)]
-pub struct Other {
+pub struct OtherError {
     description: &'static str,
     displaying: String
 }
 
-impl Other {
+impl OtherError {
     pub fn new<E>(description: &'static str, error: E) -> Self
     where
         E: Error
@@ -29,10 +29,10 @@ impl Other {
     }
 }
 
-impl Display for Other {
+impl Display for OtherError {
     fn fmt<'this, 'outer_a>(&'this self, _: &'outer_a mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }
 
-impl Error for Other {}
+impl Error for OtherError {}

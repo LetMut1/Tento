@@ -2,12 +2,12 @@ use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
-use super::_core::other::Other;
+use super::_core::other_error::OtherError;
 use super::_core::resource_error::resource_error::ResourceError;
 
 #[derive(Debug)]
 pub enum RunTimeError {
-    Other(Other),
+    OtherError(OtherError),
     ResourceError(ResourceError)
 }
 
