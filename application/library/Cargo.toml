@@ -11,6 +11,7 @@ path = "./source/mod.rs"
 [dependencies]
 actix-service = {version = "1.0.6"}
 actix-web = {version = "3.3.2"}
+anyhow = {version = "1.0.41"}
 base64 = {version = "0.13.0"}
 chrono = {version = "0.4.19"}
 diesel = {version = "1.4.4", features = ["postgres", "uuidv07", "chrono", "r2d2"]}
