@@ -39,45 +39,47 @@ impl Handler {
         // TODO Ближе к релизу разобраться, как лучше работать с файлами. (То есть, как использовать относительный(relative) пути.)
         // TODO !!!!!!!!!!! Разобраться с путями для ЛООГГЕРА  !!!!!!!!!!!!!!!!
         // TODO Переписать содержимое метода в контексте нахождения директории для .env --------------------------------------------- 
-        let file_path_buffer: PathBuf = match env::current_exe()?.parent() {    // TODO не нравится способ взятия и нахождения директории
-            Some(file_path) => file_path.join(&Path::new("../../library")),
+        match env::current_exe()?.parent() {    // TODO не нравится способ взятия и нахождения директории
+            Some(file_path) => {
+                let file_path_buffer: PathBuf = file_path.join(&Path::new("../../library"));
+
+                let production_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("prod.env"));
+                if production_environment_file_path_buffer.exists() {
+                    if let Err(error) = dotenv::from_path(production_environment_file_path_buffer.as_path()) {
+                        return Err(Error::new(ErrorKind::Other, error));
+                    }
+
+                    env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_TRUE)
+                } else {
+                    let development_local_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("dev.local.env"));
+                    if development_local_environment_file_path_buffer.exists() {
+                        if let Err(error) = dotenv::from_path(development_local_environment_file_path_buffer.as_path()) {
+                            return Err(Error::new(ErrorKind::Other, error));
+                        }
+                    } else {
+                        let development_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("dev.env"));
+                        if development_environment_file_path_buffer.exists() {
+                            if let Err(error) = dotenv::from_path(development_environment_file_path_buffer.as_path()) {
+                                return Err(Error::new(ErrorKind::Other, error));
+                            }
+                        } else {
+                            return Err(Error::new(ErrorKind::Other, BaseError::LogicError("Any ....env file must exist")));
+                        }
+                    }
+
+                    env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_FALSE);
+                }
+
+                if let Err(base_error) = Self::simple_check_environment_variables() {
+                    return Err(Error::new(ErrorKind::Other, base_error));
+                }
+
+                return Ok(());
+            },
             None => {
                 return Err(Error::new(ErrorKind::Other, BaseError::LogicError("Directory must exist")));
             }
-        };
-
-        let production_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("prod.env"));
-        if production_environment_file_path_buffer.exists() {
-            if let Err(error) = dotenv::from_path(production_environment_file_path_buffer.as_path()) {
-                return Err(Error::new(ErrorKind::Other, error));
-            }
-
-            env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_TRUE)
-        } else {
-            let development_local_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("dev.local.env"));
-            if development_local_environment_file_path_buffer.exists() {
-                if let Err(error) = dotenv::from_path(development_local_environment_file_path_buffer.as_path()) {
-                    return Err(Error::new(ErrorKind::Other, error));
-                }
-            } else {
-                let development_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("dev.env"));
-                if development_environment_file_path_buffer.exists() {
-                    if let Err(error) = dotenv::from_path(development_environment_file_path_buffer.as_path()) {
-                        return Err(Error::new(ErrorKind::Other, error));
-                    }
-                } else {
-                    return Err(Error::new(ErrorKind::Other, BaseError::LogicError("Any ....env file must exist")));
-                }
-            }
-
-            env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_FALSE);
         }
-
-        if let Err(base_error) = Self::simple_check_environment_variables() {
-            return Err(Error::new(ErrorKind::Other, base_error));
-        }
-
-        return Ok(());
     }
 
     fn simple_check_environment_variables() -> Result<(), BaseError> {
@@ -96,91 +98,87 @@ impl Handler {
     }
 
     fn configure_log() -> Result<(), Error> {
-        let logger_encoder_pattern: String = match EnvironmentVariableResolver::get_logger_encoder_pattern() {
-            Ok(logger_encoder_pattern) => logger_encoder_pattern,
+        match EnvironmentVariableResolver::get_logger_encoder_pattern() {
+            Ok(logger_encoder_pattern) => {
+                match EnvironmentVariableResolver::get_logger_log_file_name() {
+                    Ok(logger_log_file_name) => {
+                        match EnvironmentVariableResolver::get_logger_roller_log_file_name() {
+                            Ok(logger_roller_log_file_name) => {
+                                match FixedWindowRoller::builder().base(1).build(logger_roller_log_file_name.as_str(), 10) {
+                                    Ok(fixed_window_roller) => {
+                                        let rolling_file_appender: RollingFileAppender = RollingFileAppender::builder()
+                                        .append(true)
+                                        .encoder(Box::new(PatternEncoder::new(logger_encoder_pattern.as_str())))
+                                        .build(
+                                            logger_log_file_name,
+                                            Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
+                                        )?;
+                                
+                                        let rolling_file_appender_name: &'static str = "rfa";
+                                
+                                        let appender: Appender = Appender::builder().build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
+                                
+                                        let root: Root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);
+                                
+                                        match Config::builder().appender(appender).build(root) {
+                                            Ok(config) => {
+                                                if let Err(set_logger_error) = log4rs::init_config(config) {
+                                                    return Err(Error::new(ErrorKind::Other, set_logger_error));
+                                                }
+                                        
+                                                return Ok(());
+                                            },
+                                            Err(config_errors) => {
+                                                return Err(Error::new(ErrorKind::Other, config_errors));
+                                            }
+                                        }
+                                    },
+                                    Err(error) => {
+                                        return Err(Error::new(ErrorKind::Other, error));
+                                    }
+                                }
+                            },
+                            Err(base_error) => {
+                                return Err(Error::new(ErrorKind::Other, base_error));
+                            }
+                        }
+                    },
+                    Err(base_error) => {
+                        return Err(Error::new(ErrorKind::Other, base_error));
+                    }
+                }
+            },
             Err(base_error) => {
                 return Err(Error::new(ErrorKind::Other, base_error));
             }
-        };
-
-        let logger_log_file_name: String = match EnvironmentVariableResolver::get_logger_log_file_name() {
-            Ok(logger_log_file_name) => logger_log_file_name,
-            Err(base_error) => {
-                return Err(Error::new(ErrorKind::Other, base_error));
-            }
-        };
-
-        let logger_roller_log_file_name: String = match EnvironmentVariableResolver::get_logger_roller_log_file_name() {
-            Ok(logger_roller_log_file_name) => logger_roller_log_file_name,
-            Err(base_error) => {
-                return Err(Error::new(ErrorKind::Other, base_error));
-            }
-        };
-
-        let fixed_window_roller: FixedWindowRoller = match FixedWindowRoller::builder().base(1).build(logger_roller_log_file_name.as_str(), 10) {
-            Ok(fixed_window_roller) => fixed_window_roller,
-            Err(error) => {
-                return Err(Error::new(ErrorKind::Other, error));
-            }
-        };
-
-        let rolling_file_appender: RollingFileAppender = RollingFileAppender::builder()
-        .append(true)
-        .encoder(Box::new(PatternEncoder::new(logger_encoder_pattern.as_str())))
-        .build(
-            logger_log_file_name,
-            Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
-        )?;
-
-        let rolling_file_appender_name: &'static str = "rfa";
-
-        let appender: Appender = Appender::builder().build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
-
-        let root: Root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);
-
-        let config: Config = match Config::builder().appender(appender).build(root) {
-            Ok(config) => config,
-            Err(config_errors) => {
-                return Err(Error::new(ErrorKind::Other, config_errors));
-            }
-        };
-
-        if let Err(set_logger_error) = log4rs::init_config(config) {
-            return Err(Error::new(ErrorKind::Other, set_logger_error));
         }
-
-        return Ok(());
     }
 
     async fn run_http_server() -> Result<(), Error> {
-        let server_socket_address: String = match EnvironmentVariableResolver::get_server_socket_address() {
-            Ok(server_socket_address) => server_socket_address,
+        match EnvironmentVariableResolver::get_server_socket_address() {
+            Ok(server_socket_address) => {
+                match AggregateConnectionPool::new() {
+                    Ok(aggregate_connection_pool) => {
+                        HttpServer::new(
+                            move || {
+                                return App::new()
+                                .data::<AggregateConnectionPool>(aggregate_connection_pool.clone())
+                                .configure(Self::configure_http_server);
+                            }
+                        )
+                        .bind(server_socket_address)?
+                        .run()
+                        .await?;
+        
+                        return Ok(());
+                    },
+                    Err(base_error) => {
+                        return Err(Error::new(ErrorKind::Other, base_error));
+                    }
+                }
+            },
             Err(base_error) => {
                 return Err(Error::new(ErrorKind::Other, base_error));
-            }
-        };
-
-        let aggregate_connection_pool: AggregateConnectionPool = Self::create_aggregate_connection_pool()?;
-
-        HttpServer::new(move || {
-            return App::new()
-            .data::<AggregateConnectionPool>(aggregate_connection_pool.clone())
-            .configure(Self::configure_http_server);
-        })
-        .bind(server_socket_address)?
-        .run()
-        .await?;
-
-        return Ok(());
-    }
-
-    fn create_aggregate_connection_pool() -> Result<AggregateConnectionPool, Error> {
-        match AggregateConnectionPool::new() {
-            Ok(aggregate_connection_pool) => {
-                return Ok(aggregate_connection_pool);
-            },
-            Err(resource_error) => {
-                return Err(Error::new(ErrorKind::Other, resource_error));
             }
         }
     }

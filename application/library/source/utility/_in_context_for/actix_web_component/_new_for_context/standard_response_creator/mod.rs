@@ -9,8 +9,10 @@ pub struct StandardResponseCreator;
 
 impl StandardResponseCreator {
     pub fn wrap_for_success_and_create_ok() -> HttpResponse<Body> {
-        let success_response_body: String = match StandardJsonResponseBodyWrapper::wrap_for_success() {
-            Ok(success_response_body) => success_response_body,
+        match StandardJsonResponseBodyWrapper::wrap_for_success() {
+            Ok(success_response_body) => {
+                return Self::create_ok(success_response_body);
+            },
             Err(ref base_error) => {
                 match base_error {
                     BaseError::RunTimeError(_) => {
@@ -24,17 +26,17 @@ impl StandardResponseCreator {
                 }
 
             }
-        };
-
-        return Self::create_ok(success_response_body);
+        }
     }
 
     pub fn wrap_for_success_with_body_and_create_ok<'outer_a, S>(body: &'outer_a S) -> HttpResponse<Body>
     where 
         S: Serialize
     {
-        let success_with_body_response_body: String = match StandardJsonResponseBodyWrapper::wrap_for_success_with_body(body) {
-            Ok(success_with_body_response_body) => success_with_body_response_body,
+        match StandardJsonResponseBodyWrapper::wrap_for_success_with_body(body) {
+            Ok(success_with_body_response_body) => {
+                return Self::create_ok(success_with_body_response_body);
+            },
             Err(ref base_error) => {
                 match base_error {
                     BaseError::RunTimeError(_) => {
@@ -48,14 +50,14 @@ impl StandardResponseCreator {
                 }
 
             }
-        };
-
-        return Self::create_ok(success_with_body_response_body);
+        }
     }
 
     pub fn wrap_for_fail_with_code_and_create_ok(code: &'static str) -> HttpResponse<Body> {
-        let fail_with_code_response_body: String = match StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(code) {
-            Ok(fail_with_code_response_body) => fail_with_code_response_body,
+        match StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(code) {
+            Ok(fail_with_code_response_body) => {
+                return Self::create_ok(fail_with_code_response_body);
+            },
             Err(ref base_error) => {
                 match base_error {
                     BaseError::RunTimeError(_) => {
@@ -69,9 +71,7 @@ impl StandardResponseCreator {
                 }
 
             }
-        };
-
-        return Self::create_ok(fail_with_code_response_body);
+        }
     }
 
     pub fn create_bad_request() -> HttpResponse<Body> {

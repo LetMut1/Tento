@@ -1,4 +1,3 @@
-use chrono::DateTime as ChronoDateTime;
 use chrono::Duration;
 use chrono::offset::Utc;
 use crate::entity::_core::date_time::DateTime;
@@ -15,14 +14,14 @@ impl DateTimeManipulator {
     // }
 
     pub fn add_interval_from_now(quantity_of_minutes: i64) -> Result<DateTime, BaseError> {
-        let chrono_date_time: ChronoDateTime<Utc> = match Utc::now().checked_add_signed(Duration::minutes(quantity_of_minutes)) {
-            Some(chrono_date_time) => chrono_date_time,
+        match Utc::now().checked_add_signed(Duration::minutes(quantity_of_minutes)) {
+            Some(chrono_date_time) => {
+                return Ok(DateTime::new_from_date_time(chrono_date_time));
+            },
             None => {
                 return Err(BaseError::LogicError("Too big date must not be added"));
             }
         };
-        
-        return Ok(DateTime::new_from_date_time(chrono_date_time));
     }
 
     pub fn is_greater_or_equal_than_now<'outer_a>(subject_date_time: &'outer_a DateTime) -> bool
