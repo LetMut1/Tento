@@ -14,7 +14,7 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {
-        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
+        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.get_application_user_id())?;
 
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 

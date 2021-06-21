@@ -3,5 +3,11 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 pub struct Request {
     #[serde(rename = "e")]
-    pub application_user_email: String
+    application_user_email: String
+}
+
+impl Request {
+    pub fn get_application_user_email(self) -> String {
+        return self.application_user_email;
+    }
 }

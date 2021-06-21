@@ -23,10 +23,16 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
+        let (
+            application_user_log_in_token_device_id, 
+            application_user_id, 
+            application_user_log_in_token_value
+        ) = request.into_inner();
+
+        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(application_user_id)?;
 
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
-            request.application_user_log_in_token_device_id
+            application_user_log_in_token_device_id
         )?;
 
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
@@ -35,7 +41,7 @@ impl Handler {
             connection, &application_user_id, &application_user_log_in_token_device_id
         )?
         {
-            if application_user_log_in_token.get_value().get_value() == request.application_user_log_in_token_value.as_str() {
+            if application_user_log_in_token.get_value().get_value() == application_user_log_in_token_value.as_str() {
                 if let Some(existing_json_refresh_web_token) = BaseRepositoryProxy::get_by_application_user_id_and_application_user_log_in_token_device_id(
                     connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 )? 

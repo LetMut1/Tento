@@ -14,7 +14,7 @@ impl Handler {
         return Ok(
             HandlerResult::new(
                 ApplicationUserBaseRepository::is_exist_by_nickanme(
-                    &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Nickname::new(query.application_user_nickname)
+                    &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Nickname::new(query.get_application_user_nickname())
                 )?
             )
         );

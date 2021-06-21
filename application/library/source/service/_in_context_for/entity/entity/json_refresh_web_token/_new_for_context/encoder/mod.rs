@@ -15,7 +15,7 @@ impl Encoder {
         
         hmac.input(serde_json::to_string(&Common::new(json_refresh_web_token))?.as_bytes());
 
-        return Ok(hex::encode(hmac.result().code()));
+        return Ok(hex::encode(hmac.result().code()));   // TODO time attac
     }
 
     pub fn is_valid<'outer_a>(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>, json_refresh_web_token_hash: &'outer_a str) -> Result<bool, BaseError> {

@@ -17,7 +17,12 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, BaseError> {
-        let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(request.json_access_web_token.as_str())?;
+        let (
+            json_access_web_token, 
+            json_refresh_web_token_serialized
+        ) = request.into_inner();
+
+        let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(json_access_web_token.as_str())?;
 
         if json_access_web_token.is_expired() {
             let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
@@ -27,7 +32,7 @@ impl Handler {
             )?
             {
                 if &(json_access_web_token.get_id().get_value().get_value().as_bytes())[..] == &(json_refresh_web_token.get_json_access_web_token_id().get_value().get_value().as_bytes())[..] {
-                    if Encoder::is_valid(&json_refresh_web_token, request.json_refresh_web_token.as_str())? {
+                    if Encoder::is_valid(&json_refresh_web_token, json_refresh_web_token_serialized.as_str())? {
                         json_refresh_web_token.refresh();
 
                         BaseRepositoryProxy::update(connection, &json_refresh_web_token)?;

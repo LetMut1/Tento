@@ -20,15 +20,21 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, BaseError> {
+        let (
+            application_user_log_in_token_device_id, 
+            application_user_email, 
+            application_user_password
+        ) = request.into_inner();
+
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
-            request.application_user_log_in_token_device_id
+            application_user_log_in_token_device_id
         )?;
 
         if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(
-            &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(request.application_user_email)
+            &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(application_user_email)
         )? 
         {
-            if PasswordEncoder::is_valid(&Password::new(request.application_user_password), application_user.get_passord_hash())? {
+            if PasswordEncoder::is_valid(&Password::new(application_user_password), application_user.get_passord_hash())? {
                 let application_user_log_in_token: ApplicationUserLogInToken<'_>;
 
                 let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;

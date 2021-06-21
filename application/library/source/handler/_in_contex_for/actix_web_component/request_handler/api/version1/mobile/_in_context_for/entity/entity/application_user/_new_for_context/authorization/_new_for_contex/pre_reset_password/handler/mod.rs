@@ -18,7 +18,7 @@ pub struct Handler;
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, BaseError> {
         if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(
-            &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(request.application_user_email)
+            &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(request.get_application_user_email())
         )? 
         {
             let application_user_reset_password_token: ApplicationUserResetPasswordToken<'_>;

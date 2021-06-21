@@ -19,7 +19,13 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {
-        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.application_user_id)?;
+        let (
+            application_user_id, 
+            application_user_password,
+            application_user_reset_password_token_value
+        ) = request.into_inner();
+
+        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(application_user_id)?;
 
         let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
@@ -27,11 +33,11 @@ impl Handler {
             redis_connection, &application_user_id
         )? 
         {
-            if application_user_reset_password_token.get_value().get_value() == request.application_user_reset_password_token_value.as_str() {
+            if application_user_reset_password_token.get_value().get_value() == application_user_reset_password_token_value.as_str() {
                 let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
                 if let Some(mut application_user) = ApplicationUserBaseRepository::get_by_id(postgresql_connection, &application_user_id)? {
-                    application_user.set_password(Password::new(request.application_user_password))?;
+                    application_user.set_password(Password::new(application_user_password))?;
 
                     ApplicationUserBaseRepository::update(postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?; // TODO Загуглить, чтл можно сделать для обеспечения транзакции на две системы (зкроме, запоминания состояния через третью ссистпму)
 
