@@ -30,7 +30,7 @@ impl<'outer_a> Update<'outer_a> {
         }
 
         if update_resolver.is_change_password_hash() {
-            password_hash = Some(application_user.get_passord_hash().get_value());
+            password_hash = Some(application_user.get_password_hash().get_value());
         }
 
         if update_resolver.is_change_created_at() {

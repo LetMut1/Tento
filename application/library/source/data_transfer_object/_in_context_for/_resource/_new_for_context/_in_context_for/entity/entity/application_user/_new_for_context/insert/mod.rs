@@ -21,7 +21,7 @@ impl<'outer_a> Insert<'outer_a> {
             id: application_user.get_id().get_value().get_value(),
             email: application_user.get_email().get_value(),
             nickname: application_user.get_nickname().get_value(),
-            password_hash: application_user.get_passord_hash().get_value(),
+            password_hash: application_user.get_password_hash().get_value(),
             created_at: application_user.get_created_at().get_value().get_value()
         };
     }

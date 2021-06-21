@@ -18,7 +18,7 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> { // TODO  !!!!! Это ресет для пользователя, забывшего пароль. НО также нужно сделать АККУРАТНО ресетпассворд для залогиневшегося пользователя с повторной отправкой старого пароля !!!!!!!!!
         let (
             application_user_id, 
             application_user_password,
@@ -27,38 +27,43 @@ impl Handler {
 
         let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(application_user_id)?;
 
-        let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+        let application_user_password: Password = Password::new(application_user_password);
+        if application_user_password.is_valid() {
+            let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-        if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(
-            redis_connection, &application_user_id
-        )? 
-        {
-            if application_user_reset_password_token.get_value().get_value() == application_user_reset_password_token_value.as_str() {
-                let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
+            if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(
+                redis_connection, &application_user_id
+            )? 
+            {
+                if application_user_reset_password_token.get_value().get_value() == application_user_reset_password_token_value.as_str() {
+                    let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
-                if let Some(mut application_user) = ApplicationUserBaseRepository::get_by_id(postgresql_connection, &application_user_id)? {
-                    application_user.set_password(Password::new(application_user_password))?;
+                    if let Some(mut application_user) = ApplicationUserBaseRepository::get_by_id(postgresql_connection, &application_user_id)? {
+                        application_user.set_password(application_user_password)?;
 
-                    ApplicationUserBaseRepository::update(postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?; // TODO Загуглить, чтл можно сделать для обеспечения транзакции на две системы (зкроме, запоминания состояния через третью ссистпму)
+                        ApplicationUserBaseRepository::update(postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?; // TODO Загуглить, чтл можно сделать для обеспечения транзакции на две системы (зкроме, запоминания состояния через третью ссистпму)
 
-                    ApplicationUserResetPasswordTokenBaseRepository::delete(redis_connection, &application_user_reset_password_token)?;
+                        ApplicationUserResetPasswordTokenBaseRepository::delete(redis_connection, &application_user_reset_password_token)?;
 
-                    return Ok(());
+                        return Ok(());
+                    }
+
+                    return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::NotFound)));
                 }
 
-                return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::NotFound)));
+                application_user_reset_password_token.increment_wrong_enter_tries_quantity();
+
+                if application_user_reset_password_token.get_wrong_enter_tries_quantity().get_value() >= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                    ApplicationUserResetPasswordTokenBaseRepository::delete(redis_connection, &application_user_reset_password_token)?;
+                }
+
+
+                return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::InvalidValue)));
             }
 
-            application_user_reset_password_token.increment_wrong_enter_tries_quantity();
-
-            if application_user_reset_password_token.get_wrong_enter_tries_quantity().get_value() >= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                ApplicationUserResetPasswordTokenBaseRepository::delete(redis_connection, &application_user_reset_password_token)?;
-            }
-
-
-            return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::InvalidValue)));
+            return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::NotFound)));
         }
 
-        return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::NotFound)));
+        return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::InvalidPassword)));
     }
 }

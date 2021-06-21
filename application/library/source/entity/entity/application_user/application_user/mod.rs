@@ -80,7 +80,7 @@ impl<'outer_a> ApplicationUser<'outer_a> {
         return &self.nickname;
     }
 
-    pub fn get_passord_hash<'this>(&'this self) -> &'this PasswordHash {
+    pub fn get_password_hash<'this>(&'this self) -> &'this PasswordHash {
         return &self.password_hash;
     }
 

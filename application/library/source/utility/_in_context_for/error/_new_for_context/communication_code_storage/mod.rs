@@ -5,6 +5,7 @@ impl CommunicationCodeStorage {
     pub const ENTITY_APPLICATION_USER_NOT_FOUND: &'static str = "enapus02";
     pub const ENTITY_APPLICATION_USER_WRONG_PASSWORD: &'static str = "enapus03";
     pub const ENTITY_APPLICATION_USER_INVALID_EMAIL: &'static str = "enapus04";
+    pub const ENTITY_APPLICATION_USER_INVALID_PASSWORD: &'static str = "enapus05";
 
     pub const ENTITY_PRE_CONFIRMED_APPLICATION_USER_ALREADY_EXIST: &'static str = "enprcoapus01";
     pub const ENTITY_PRE_CONFIRMED_APPLICATION_USER_NOT_FOUND: &'static str = "enprcoapus02";

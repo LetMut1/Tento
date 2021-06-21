@@ -46,70 +46,75 @@ impl Handler {
 
         let application_user_email: Email = Email::new(application_user_email);
 
-        let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
+        let application_user_password: Password = Password::new(application_user_password);
+        if application_user_password.is_valid() {
+            let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
-        if !ApplicationUserBaseRepository::is_exist_by_nickanme(postgresql_connection, &application_user_nickname)? {
-            if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_application_user_email(postgresql_connection, &application_user_email)? {
-                let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+            if !ApplicationUserBaseRepository::is_exist_by_nickanme(postgresql_connection, &application_user_nickname)? {
+                if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_application_user_email(postgresql_connection, &application_user_email)? {
+                    let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-                if let Some(mut application_user_registration_confirmation_token) = ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(
-                    redis_connection, pre_confirmed_application_user.get_id()
-                )? 
-                {
-                    if application_user_registration_confirmation_token.get_value().get_value() == application_user_registration_confirmation_token_value.as_str() {
-                        let application_user: ApplicationUser<'_> = ApplicationUser::new_from_pre_confirmed_application_user(
-                            &pre_confirmed_application_user, application_user_nickname, Password::new(application_user_password)
-                        )?;
+                    if let Some(mut application_user_registration_confirmation_token) = ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(
+                        redis_connection, pre_confirmed_application_user.get_id()
+                    )? 
+                    {
+                        if application_user_registration_confirmation_token.get_value().get_value() == application_user_registration_confirmation_token_value.as_str() {
+                            let application_user: ApplicationUser<'_> = ApplicationUser::new_from_pre_confirmed_application_user(
+                                &pre_confirmed_application_user, application_user_nickname, application_user_password
+                            )?;
 
-                        ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(redis_connection, &application_user_registration_confirmation_token)?;
+                            ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(redis_connection, &application_user_registration_confirmation_token)?;
 
-                        TransactionManager::begin_transaction(postgresql_connection)?;
-                        
-                        if let Err(base_error) = ApplicationUserBaseRepository::create(postgresql_connection, &application_user) {
-                            TransactionManager::rollback_transaction(postgresql_connection)?;
+                            TransactionManager::begin_transaction(postgresql_connection)?;
+                            
+                            if let Err(base_error) = ApplicationUserBaseRepository::create(postgresql_connection, &application_user) {
+                                TransactionManager::rollback_transaction(postgresql_connection)?;
 
-                            return Err(base_error);
+                                return Err(base_error);
+                            }
+
+                            if let Err(base_error) = PreConfirmedApplicationUserBaseRepository::delete(postgresql_connection, &pre_confirmed_application_user) {
+                                TransactionManager::rollback_transaction(postgresql_connection)?;
+
+                                return Err(base_error);
+                            }
+                            
+                            TransactionManager::commit_transaction(postgresql_connection)?;
+
+                            let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id(), &application_user_log_in_token_device_id);
+
+                            BaseRepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
+
+                            return Ok(
+                                HandlerResult::new(
+                                    SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
+                                    Encoder::encode(&json_refresh_web_token)?
+                                )
+                            );
                         }
 
-                        if let Err(base_error) = PreConfirmedApplicationUserBaseRepository::delete(postgresql_connection, &pre_confirmed_application_user) {
-                            TransactionManager::rollback_transaction(postgresql_connection)?;
+                        application_user_registration_confirmation_token.increment_wrong_enter_tries_quantity();
 
-                            return Err(base_error);
+                        if application_user_registration_confirmation_token.get_wrong_enter_tries_quantity().get_value() >= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                            ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(redis_connection, &application_user_registration_confirmation_token)?;
                         }
                         
-                        TransactionManager::commit_transaction(postgresql_connection)?;
-
-                        let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id(), &application_user_log_in_token_device_id);
-
-                        BaseRepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
-
-                        return Ok(
-                            HandlerResult::new(
-                                SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
-                                Encoder::encode(&json_refresh_web_token)?
-                            )
-                        );
+                        return Err(BaseError::EntityError(EntityError::ApplicationUserRegistrationConfirmationTokenError(ApplicationUserRegistrationConfirmationTokenError::InvalidValue)));
                     }
 
-                    application_user_registration_confirmation_token.increment_wrong_enter_tries_quantity();
-
-                    if application_user_registration_confirmation_token.get_wrong_enter_tries_quantity().get_value() >= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                        ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(redis_connection, &application_user_registration_confirmation_token)?;
-                    }
-                    
-                    return Err(BaseError::EntityError(EntityError::ApplicationUserRegistrationConfirmationTokenError(ApplicationUserRegistrationConfirmationTokenError::InvalidValue)));
+                    return Err(BaseError::EntityError(EntityError::ApplicationUserRegistrationConfirmationTokenError(ApplicationUserRegistrationConfirmationTokenError::NotFound)));
                 }
 
-                return Err(BaseError::EntityError(EntityError::ApplicationUserRegistrationConfirmationTokenError(ApplicationUserRegistrationConfirmationTokenError::NotFound)));
-            }
-
-            if ApplicationUserBaseRepository::is_exist_by_email(postgresql_connection, &application_user_email)? {
-                return Err(BaseError::EntityError(EntityError::PreConfirmedApplicationUserError(PreConfirmedApplicationUserError::AlreadyConfirmed)));
+                if ApplicationUserBaseRepository::is_exist_by_email(postgresql_connection, &application_user_email)? {
+                    return Err(BaseError::EntityError(EntityError::PreConfirmedApplicationUserError(PreConfirmedApplicationUserError::AlreadyConfirmed)));
+                }
+                
+                return Err(BaseError::EntityError(EntityError::PreConfirmedApplicationUserError(PreConfirmedApplicationUserError::NotFound)));
             }
             
-            return Err(BaseError::EntityError(EntityError::PreConfirmedApplicationUserError(PreConfirmedApplicationUserError::NotFound)));
+            return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::AlreadyExist)));
         }
-        
-        return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::AlreadyExist)));
+
+        return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::InvalidPassword)));
     }
 }

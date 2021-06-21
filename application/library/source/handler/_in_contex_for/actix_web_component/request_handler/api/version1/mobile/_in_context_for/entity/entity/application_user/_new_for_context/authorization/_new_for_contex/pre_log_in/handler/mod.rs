@@ -12,7 +12,6 @@ use crate::repository::_in_context_for::entity::entity::application_user::_new_f
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
-use crate::utility::_in_context_for::entity::entity::application_user::_core::password::_new_for_context::password_encoder::PasswordEncoder;
 use redis::Connection;
 use std::sync::Arc;
 
@@ -34,7 +33,7 @@ impl Handler {
             &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(application_user_email)
         )? 
         {
-            if PasswordEncoder::is_valid(&Password::new(application_user_password), application_user.get_passord_hash())? {
+            if application_user.get_password_hash().is_valid_for(&Password::new(application_user_password))? {
                 let application_user_log_in_token: ApplicationUserLogInToken<'_>;
 
                 let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;

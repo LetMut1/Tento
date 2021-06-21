@@ -4,9 +4,9 @@ use crate::entity::entity::application_user::_core::password::Password;
 use crate::error::base_error::base_error::BaseError;
 use uuid::Uuid;
 
-pub struct PasswordEncoder;
+pub struct Encoder;
 
-impl PasswordEncoder {      // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090  // TODO CREATE CUSTOM CONFIG ?
+impl Encoder {      // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090  // TODO CREATE CUSTOM CONFIG ?
     pub fn encode<'outer_a>(password: &'outer_a Password) -> Result<String, BaseError> {
         let config: Config = Config::default(); 
 

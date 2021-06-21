@@ -1,1 +1,2 @@
-pub mod password_encoder;
+pub mod encoder;
+pub mod validator;

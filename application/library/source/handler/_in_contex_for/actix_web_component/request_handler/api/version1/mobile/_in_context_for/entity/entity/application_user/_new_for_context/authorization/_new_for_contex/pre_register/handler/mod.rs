@@ -12,7 +12,6 @@ use crate::repository::_in_context_for::entity::entity::pre_confirmed_applicatio
 use crate::service::_in_context_for::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
-use crate::utility::_in_context_for::entity::entity::application_user::_core::email::_new_for_context::email_simple_validator::EmailSimpleValidator;
 use diesel::PgConnection as PostgresqlConnection;
 use std::sync::Arc;
 
@@ -21,8 +20,7 @@ pub struct Handler;
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {
         let application_user_email: Email = Email::new(request.get_application_user_email());
-
-        if EmailSimpleValidator::is_valid(&application_user_email)? {
+        if application_user_email.is_valid()? {
             let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
             if !PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(postgresql_connection, &application_user_email)? {

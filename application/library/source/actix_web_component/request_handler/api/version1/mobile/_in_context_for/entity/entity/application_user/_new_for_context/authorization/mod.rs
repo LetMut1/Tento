@@ -185,6 +185,11 @@ impl Authorization {
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_ALREADY_EXIST
                                         );
                                     },
+                                    ApplicationUserError::InvalidPassword => {
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
+                                        );
+                                    },
                                     _ => {
                                         unreachable!("{}", base_error);
                                     }
@@ -645,6 +650,11 @@ impl Authorization {
                                 ApplicationUserError::NotFound => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                         CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
+                                    );
+                                },
+                                ApplicationUserError::InvalidPassword => {
+                                    return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
                                     );
                                 },
                                 _ => {
