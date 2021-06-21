@@ -7,7 +7,6 @@ use crate::actix_web_component::request_handler::api::version1::mobile::_in_cont
 use crate::error::base_error::base_error::BaseError;
 use crate::utility::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::utility::environment_variable_resolver::EnvironmentVariableResolver;
-use dotenv;
 use log::LevelFilter;
 use log4rs::append::rolling_file::policy::compound::CompoundPolicy;
 use log4rs::append::rolling_file::policy::compound::roll::fixed_window::FixedWindowRoller;

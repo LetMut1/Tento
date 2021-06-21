@@ -3,7 +3,6 @@ use crate::data_transfer_object::_in_context_for::entity::entity::json_access_we
 use crate::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::error::base_error::base_error::BaseError;
 use crate::utility::_in_context_for::entity::entity::json_access_web_token::_core::_new_for_context::signature_creator::SignatureCreator;
-use serde_json;
 
 pub struct SerializationFormResolver;
 
@@ -24,17 +23,16 @@ impl SerializationFormResolver {
     pub fn deserialize<'outer_a, 'vague>(classic_form: &'outer_a str) -> Result<JsonAccessWebToken<'vague>, BaseError> {
         let classic_form_parts: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::SEPARATOR).collect::<Vec<&'_ str>>();
 
-        if classic_form_parts.len() == 3 {
-            if SignatureCreator::is_valid(
-                (String::new() + classic_form_parts[0] + Self::SEPARATOR + classic_form_parts[1]).as_str(), classic_form_parts[2]
-            )?
-            {
-                return Ok(
-                    JsonAccessWebToken::new_from_payload_common(
-                        serde_json::from_slice::<'_, PayloadCommon>(&base64::decode(classic_form_parts[1].as_bytes())?)?
-                    )?
-                );
-            }
+        if classic_form_parts.len() == 3 
+        && SignatureCreator::is_valid(
+            (String::new() + classic_form_parts[0] + Self::SEPARATOR + classic_form_parts[1]).as_str(), classic_form_parts[2]
+        )?
+        {
+            return Ok(
+                JsonAccessWebToken::new_from_payload_common(
+                    serde_json::from_slice::<'_, PayloadCommon>(&base64::decode(classic_form_parts[1].as_bytes())?)?
+                )?
+            );
         }
 
         return Err(BaseError::InvalidArgumentError);

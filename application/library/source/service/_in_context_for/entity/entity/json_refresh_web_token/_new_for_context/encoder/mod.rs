@@ -5,7 +5,6 @@ use crate::utility::environment_variable_resolver::EnvironmentVariableResolver;
 use crypto::hmac::Hmac;
 use crypto::mac::Mac;
 use crypto::sha2::Sha512;
-use serde_json;
 
 pub struct Encoder;
 
