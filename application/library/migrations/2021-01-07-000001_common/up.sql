@@ -5,6 +5,7 @@ CREATE TABLE pre_confirmed_application_user (       -- // TODO изучить п
         -- // TODO удалять висящие кортежи (написать функцию либо через крон по бинарнику)
             -- // TODO Каскадное уделаение
     email VARCHAR NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL, 
     PRIMARY KEY (id)
 );
 

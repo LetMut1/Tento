@@ -17,6 +17,7 @@ pub mod public {
         pre_confirmed_application_user (id) {
             id -> Uuid,
             email -> Varchar,
+            created_at -> Timestamptz,
         }
     }
 
