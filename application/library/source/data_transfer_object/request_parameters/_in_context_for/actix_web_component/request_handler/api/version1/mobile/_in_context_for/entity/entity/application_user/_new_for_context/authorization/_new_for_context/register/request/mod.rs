@@ -3,13 +3,25 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 pub struct Request {
     #[serde(rename = "i")]
-    pub application_user_log_in_token_device_id: String,
+    application_user_log_in_token_device_id: String,
     #[serde(rename = "n")]
-    pub application_user_nickname: String,
+    application_user_nickname: String,
     #[serde(rename = "p")]
-    pub application_user_password: String,
+    application_user_password: String,
     #[serde(rename = "e")]
-    pub application_user_email: String,
+    application_user_email: String,
     #[serde(rename = "v")]
-    pub application_user_registration_confirmation_token_value: String
+    application_user_registration_confirmation_token_value: String
+}
+
+impl Request {
+    pub fn into_inner(self) -> (String, String, String, String, String) {
+        return (
+            self.application_user_log_in_token_device_id, 
+            self.application_user_nickname,
+            self.application_user_password,
+            self.application_user_email,
+            self.application_user_registration_confirmation_token_value
+        );
+    }
 }

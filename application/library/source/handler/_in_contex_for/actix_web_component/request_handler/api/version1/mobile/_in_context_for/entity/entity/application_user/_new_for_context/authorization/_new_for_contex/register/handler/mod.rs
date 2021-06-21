@@ -30,13 +30,21 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        let application_user_nickname: Nickname = Nickname::new(request.application_user_nickname);
-
-        let application_user_email: Email = Email::new(request.application_user_email);
+        let (
+            application_user_log_in_token_device_id, 
+            application_user_nickname,
+            application_user_password,
+            application_user_email,
+            application_user_registration_confirmation_token_value
+        ) = request.into_inner();
 
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
-            request.application_user_log_in_token_device_id
+            application_user_log_in_token_device_id
         )?;
+
+        let application_user_nickname: Nickname = Nickname::new(application_user_nickname);
+
+        let application_user_email: Email = Email::new(application_user_email);
 
         let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
@@ -48,9 +56,9 @@ impl Handler {
                     redis_connection, pre_confirmed_application_user.get_id()
                 )? 
                 {
-                    if request.application_user_registration_confirmation_token_value.as_str() == application_user_registration_confirmation_token.get_value().get_value() {
+                    if application_user_registration_confirmation_token.get_value().get_value() == application_user_registration_confirmation_token_value.as_str() {
                         let application_user: ApplicationUser<'_> = ApplicationUser::new_from_pre_confirmed_application_user(
-                            &pre_confirmed_application_user, application_user_nickname, Password::new(request.application_user_password)
+                            &pre_confirmed_application_user, application_user_nickname, Password::new(application_user_password)
                         )?;
 
                         ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(redis_connection, &application_user_registration_confirmation_token)?;
