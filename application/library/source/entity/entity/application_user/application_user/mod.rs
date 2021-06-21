@@ -33,12 +33,20 @@ impl<'outer_a> ApplicationUser<'outer_a> {
     }
 
     pub fn new_from_resource_model(select: Select) -> Self {
+        let (
+            id,
+            email,
+            nickname,
+            password_hash,
+            created_at
+        ) = select.into_inner();
+
         return Self {
-            id: Id::new_from_uuid(select.id),
-            email: Cow::Owned(Email::new(select.email)),
-            nickname: Nickname::new(select.nickname),
-            password_hash: PasswordHash::new(select.password_hash),
-            created_at: CreatedAt::new_from_date_time(select.created_at)
+            id: Id::new_from_uuid(id),
+            email: Cow::Owned(Email::new(email)),
+            nickname: Nickname::new(nickname),
+            password_hash: PasswordHash::new(password_hash),
+            created_at: CreatedAt::new_from_date_time(created_at)
         };
     }
 

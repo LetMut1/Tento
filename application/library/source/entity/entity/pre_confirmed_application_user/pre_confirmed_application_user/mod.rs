@@ -19,10 +19,16 @@ impl PreConfirmedApplicationUser {
     }
 
     pub fn new_from_model(select: Select) -> Self {
+        let (
+            id,
+            application_user_email,
+            created_at
+        ) = select.into_inner();
+
         return Self {
-            id: Id::new_from_uuid(select.id),
-            application_user_email: Email::new(select.application_user_email),
-            created_at: CreatedAt::new_from_date_time(select.created_at)
+            id: Id::new_from_uuid(id),
+            application_user_email: Email::new(application_user_email),
+            created_at: CreatedAt::new_from_date_time(created_at)
         };
     }
 

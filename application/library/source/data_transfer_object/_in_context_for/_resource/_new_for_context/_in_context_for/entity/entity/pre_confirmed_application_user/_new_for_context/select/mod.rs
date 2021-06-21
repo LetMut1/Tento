@@ -5,7 +5,17 @@ use uuid::Uuid;
 
 #[derive(Queryable)]
 pub struct Select {
-    pub id: Uuid,
-    pub application_user_email: String,
-    pub created_at: ChronoDateTime<Utc>
+    id: Uuid,
+    application_user_email: String,
+    created_at: ChronoDateTime<Utc>
+}
+
+impl Select {
+    pub fn into_inner(self) -> (Uuid, String, ChronoDateTime<Utc>) {
+        return (
+            self.id,
+            self.application_user_email,
+            self.created_at
+        );
+    }
 }

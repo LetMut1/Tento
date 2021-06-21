@@ -6,13 +6,13 @@ use std::borrow::Cow;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Common<'outer_a> {
     #[serde(rename = "ti")]
-    pub json_access_web_token_id: String,
+    json_access_web_token_id: String,
     #[serde(rename = "ui")]
-    pub application_user_id: String,
+    application_user_id: String,
     #[serde(rename = "di")]
-    pub application_user_log_in_token_device_id: String,
+    application_user_log_in_token_device_id: String,
     #[serde(rename = "v")]
-    pub obfuscation_value: Cow<'outer_a, str>
+    obfuscation_value: Cow<'outer_a, str>
 }
 
 impl<'outer_a> Common<'outer_a> {
@@ -23,5 +23,14 @@ impl<'outer_a> Common<'outer_a> {
             application_user_log_in_token_device_id: json_refresh_web_token.get_application_user_log_in_token_device_id().to_string(),
             obfuscation_value: Cow::Borrowed(json_refresh_web_token.get_obfuscation_value().get_value())
         }
+    }
+
+    pub fn into_inner(self) -> (String, String, String, Cow<'outer_a, str>) {
+        return (
+            self.json_access_web_token_id,
+            self.application_user_id,
+            self.application_user_log_in_token_device_id,
+            self.obfuscation_value
+        );
     }
 }

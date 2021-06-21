@@ -6,11 +6,11 @@ use std::borrow::Cow;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Common<'outer_a> {
     #[serde(rename = "ue")]
-    pub application_user_email: Cow<'outer_a, str>,
+    application_user_email: Cow<'outer_a, str>,
     #[serde(rename = "v")]
-    pub value: Cow<'outer_a, str>,
+    value: Cow<'outer_a, str>,
     #[serde(rename = "q")]
-    pub wrong_enter_tries_quantity: u8
+    wrong_enter_tries_quantity: u8
 }
 
 impl<'outer_a> Common<'outer_a> {
@@ -20,5 +20,13 @@ impl<'outer_a> Common<'outer_a> {
             value: Cow::Borrowed(application_user_reset_password_token.get_value().get_value()),
             wrong_enter_tries_quantity: application_user_reset_password_token.get_wrong_enter_tries_quantity().get_value()
         };
+    }
+
+    pub fn into_inner(self) -> (Cow<'outer_a, str>, Cow<'outer_a, str>, u8) {
+        return (
+            self.application_user_email,
+            self.value,
+            self.wrong_enter_tries_quantity
+        );
     }
 }

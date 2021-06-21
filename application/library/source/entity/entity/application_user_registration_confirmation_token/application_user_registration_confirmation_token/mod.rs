@@ -28,11 +28,17 @@ impl<'outer_a> ApplicationUserRegistrationConfirmationToken<'outer_a> {
     }
 
     pub fn new_from_model(common: Common<'_>, pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId) -> Self{
+        let (
+            application_user_email,
+            value,
+            wrong_enter_tries_quantity
+        ) = common.into_inner();
+
         return Self {
             pre_confirmed_application_user_id,
-            application_user_email: Cow::Owned(Email::new(common.application_user_email.into_owned())),
-            value: Value::new(common.value.into_owned()),
-            wrong_enter_tries_quantity: WrongEnterTriesQuanity::new(common.wrong_enter_tries_quantity)
+            application_user_email: Cow::Owned(Email::new(application_user_email.into_owned())),
+            value: Value::new(value.into_owned()),
+            wrong_enter_tries_quantity: WrongEnterTriesQuanity::new(wrong_enter_tries_quantity)
         };
     }
 

@@ -27,12 +27,19 @@ impl<'outer_a> JsonRefreshWebToken<'outer_a> {
     }
 
     pub fn new_from_model(common: Common<'_>) -> Result<Self, BaseError> {
+        let (
+            json_access_web_token_id,
+            application_user_id,
+            application_user_log_in_token_device_id,
+            obfuscation_value
+        ) = common.into_inner();
+
         return Ok(
             Self {
-                json_access_web_token_id: JsonAccessWebTokenId::new_from_string(common.json_access_web_token_id)?,
-                application_user_id: Cow::Owned(ApplicationUserId::new_from_string(common.application_user_id)?),
-                application_user_log_in_token_device_id: Cow::Owned(ApplicationUserLogInTokenDeviceId::new_from_string(common.application_user_log_in_token_device_id)?),
-                obfuscation_value: ObfuscationValue::new(common.obfuscation_value.into_owned())
+                json_access_web_token_id: JsonAccessWebTokenId::new_from_string(json_access_web_token_id)?,
+                application_user_id: Cow::Owned(ApplicationUserId::new_from_string(application_user_id)?),
+                application_user_log_in_token_device_id: Cow::Owned(ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id)?),
+                obfuscation_value: ObfuscationValue::new(obfuscation_value.into_owned())
             }
         );
     }

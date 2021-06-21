@@ -5,13 +5,13 @@ use serde::Serialize;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Common {
     #[serde(rename = "ti")]
-    pub json_access_web_token_id: String,
+    json_access_web_token_id: String,
     #[serde(rename = "ui")]
-    pub application_user_id: String,
+    application_user_id: String,
     #[serde(rename = "di")]
-    pub application_user_log_in_token_device_id: String,
+    application_user_log_in_token_device_id: String,
     #[serde(rename = "p")]
-    pub exp: String
+    exp: String
 }
 
 impl Common {
@@ -22,5 +22,14 @@ impl Common {
             application_user_log_in_token_device_id: json_access_web_token.get_application_user_log_in_token_device_id().to_string(),
             exp: json_access_web_token.get_exp().to_string()
         };
+    }
+
+    pub fn into_inner(self) -> (String, String, String, String) {
+        return (
+            self.json_access_web_token_id,
+            self.application_user_id,
+            self.application_user_log_in_token_device_id,
+            self.exp
+        );
     }
 }
