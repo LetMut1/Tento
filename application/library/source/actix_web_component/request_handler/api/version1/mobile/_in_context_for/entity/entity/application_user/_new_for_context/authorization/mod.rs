@@ -313,14 +313,9 @@ impl Authorization {
                         match entity_error {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
-                                    ApplicationUserError::NotFound => {
+                                    ApplicationUserError::NotFound | ApplicationUserError::WrongPassword => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
-                                        );
-                                    },
-                                    ApplicationUserError::WrongPassword => {
-                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_PASSWORD
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_PASSWORD
                                         );
                                     },
                                     _ => {
