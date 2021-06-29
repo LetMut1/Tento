@@ -1,14 +1,3 @@
-                                        -- // TODO // TODO // TODO // TODO // TODOделать все Ограничения (даже FK) (кроме PK) через Alter Table !!!!!!
-CREATE TABLE pre_confirmed_application_user (       -- // TODO изучить полный синтаксис создания таблиц
-    id UUID NOT NULL,
-    -- // email value - уникальное
-        -- // TODO удалять висящие кортежи (написать функцию либо через крон по бинарнику)
-            -- // TODO Каскадное уделаение
-    email VARCHAR NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL, 
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE application_user ( 
     id UUID NOT NULL,
     -- // TODO email - уникальное
@@ -20,6 +9,9 @@ CREATE TABLE application_user (
     PRIMARY KEY (id)
 );
 ALTER TABLE application_user ADD CONSTRAINT email_1 UNIQUE (email);
+
+-- // TODO нужно ли ДатаПоследнегоВхода-Выхода. По идее, да. Но это нагруза на Бд. С другой стороны, видимость пользтвателелй и активноти. Подумать, что нужно еще
+
 
 -- // TODO On delete cascade (при удалении юзра должны удалятьсявсе зависимые таблицы)
 -- // TODO Create Constraints (Внешние ключи обязательно ставить все. Если уникальное поле из 3 значений, то ставить внешний ключ на каждое, если эо поле по факту внешний ключ)
