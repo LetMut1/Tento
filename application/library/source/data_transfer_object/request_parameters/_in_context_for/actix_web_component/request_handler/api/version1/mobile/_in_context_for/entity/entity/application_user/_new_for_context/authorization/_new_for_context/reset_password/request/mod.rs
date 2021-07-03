@@ -3,7 +3,7 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 pub struct Request {
     #[serde(rename = "i")]
-    application_user_id: String,
+    application_user_id: i64,
     #[serde(rename = "p")]
     application_user_password: String,
     #[serde(rename = "v")]
@@ -11,7 +11,7 @@ pub struct Request {
 }
 
 impl Request {
-    pub fn into_inner(self) -> (String, String, String) {
+    pub fn into_inner(self) -> (i64, String, String) {
         return (
             self.application_user_id, 
             self.application_user_password,

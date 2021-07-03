@@ -1,13 +1,16 @@
-                                        -- // TODO // TODO // TODO // TODO // TODOделать все Ограничения (даже FK) (кроме PK) через Alter Table !!!!!!
-CREATE TABLE pre_confirmed_application_user (       -- // TODO изучить полный синтаксис создания таблиц
-    id UUID NOT NULL,
-    -- // email value - уникальное
-        -- // TODO удалять висящие кортежи (написать функцию либо через крон по бинарнику)
-            -- // TODO Каскадное уделаение
+CREATE TABLE pre_confirmed_application_user (
+    id BIGSERIAL NOT NULL,
     email VARCHAR NOT NULL,
     created_at TIMESTAMPTZ NOT NULL, 
     PRIMARY KEY (id)
 );
+    -- // TODO // TODO // TODO // TODO // TODOделать все Ограничения (даже FK) (кроме PK) через Alter Table !!!!!!
+         -- // TODO изучить полный синтаксис создания таблиц
+
+    -- // email value - уникальное
+        -- // TODO удалять висящие кортежи (написать функцию либо через крон по бинарнику)
+            -- // TODO Каскадное уделаение
+
 
 -- // TODO On delete cascade (при удалении юзра должны удалятьсявсе зависимые таблицы)
 -- // TODO Create Constraints (Внешние ключи обязательно ставить все. Если уникальное поле из 3 значений, то ставить внешний ключ на каждое, если эо поле по факту внешний ключ)

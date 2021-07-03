@@ -25,9 +25,6 @@ async fn main() -> ()   // TODO перед релизом понять, имее
     // TODO  Спрятать Апи (Сделать непонятным)
     // TODO  Attack types (DDOS, for example)
     // TODO  Header Connection: Keep-alive - disable https://developer.mozilla.org/ru/docs/Web/HTTP/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BA%D0%B8/Connection
-    // TODO  Diesel do not works with Uuid 0.8.* :
-    // https://github.com/diesel-rs/diesel/issues/2348
-    // https://github.com/kbknapp/cargo-outdated/issues/216
     // TODO  Work with TimeZone;
     // TODO  Update ActixWeb
     // TODO  Изучить конфигурации Рсурсов( Postgresql, Redis, ...)

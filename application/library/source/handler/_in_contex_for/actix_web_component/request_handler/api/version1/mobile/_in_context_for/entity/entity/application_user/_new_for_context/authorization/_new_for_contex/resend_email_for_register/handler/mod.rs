@@ -24,14 +24,14 @@ impl Handler {
 
             let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(connection, pre_confirmed_application_user.get_id())? {
+            match ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(connection, pre_confirmed_application_user.get_id()?)? {
                 Some(existing_application_user_registration_confirmation_token) => {
                     application_user_registration_confirmation_token = existing_application_user_registration_confirmation_token;
 
                     ApplicationUserRegistrationConfirmationTokenBaseRepository::update_expiration_time(connection, &application_user_registration_confirmation_token)?;
                 },
                 None => {
-                    application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user);
+                    application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user)?;
 
                     ApplicationUserRegistrationConfirmationTokenBaseRepository::create(connection, &application_user_registration_confirmation_token)?;
                 }

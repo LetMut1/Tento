@@ -25,14 +25,14 @@ impl Handler {
 
             let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            match ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(redis_connection, application_user.get_id())? {
+            match ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(redis_connection, application_user.get_id()?)? {
                 Some(existing_application_user_reset_password_token) => {
                     application_user_reset_password_token = existing_application_user_reset_password_token;
 
                     ApplicationUserResetPasswordTokenBaseRepository::update_expiration_time(redis_connection, &application_user_reset_password_token)?;
                 },
                 None => {
-                    application_user_reset_password_token = ApplicationUserResetPasswordToken::new(&application_user);
+                    application_user_reset_password_token = ApplicationUserResetPasswordToken::new(&application_user)?;
 
                     ApplicationUserResetPasswordTokenBaseRepository::create(redis_connection, &application_user_reset_password_token)?;
                 }
@@ -40,7 +40,7 @@ impl Handler {
 
             EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;
 
-            return Ok(HandlerResult::new(application_user.get_id().to_string()));
+            return Ok(HandlerResult::new(application_user.get_id()?.get_value()));
         }
 
         return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::NotFound)));

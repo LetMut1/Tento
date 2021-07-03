@@ -13,13 +13,11 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {
-        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(request.get_application_user_id())?;
-
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {     // TODO Защита от частого посыла емэй
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
         if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(
-            connection, &application_user_id
+            connection, &ApplicationUserId::new(request.get_application_user_id())
         )? 
         {
 

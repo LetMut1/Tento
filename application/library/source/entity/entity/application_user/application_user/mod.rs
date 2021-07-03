@@ -10,7 +10,7 @@ use super::_core::password_hash::PasswordHash;
 use super::_core::password::Password;
 
 pub struct ApplicationUser<'outer_a> {
-    id: Id,
+    id: Option<Id>,
     email: Cow<'outer_a, Email>,
     nickname: Nickname,
     password_hash: PasswordHash,
@@ -23,7 +23,7 @@ impl<'outer_a> ApplicationUser<'outer_a> {
     ) -> Result<Self, BaseError> {
         return Ok(
             Self {
-                id: Id::new(),
+                id: None,
                 email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
                 nickname,
                 password_hash: PasswordHash::new_from_password(password)?,
@@ -32,7 +32,7 @@ impl<'outer_a> ApplicationUser<'outer_a> {
         );
     }
 
-    pub fn new_from_resource_model(select: Select) -> Self {
+    pub fn new_from_select(select: Select) -> Self {
         let (
             id,
             email,
@@ -42,7 +42,7 @@ impl<'outer_a> ApplicationUser<'outer_a> {
         ) = select.into_inner();
 
         return Self {
-            id: Id::new_from_uuid(id),
+            id: Some(Id::new(id)),
             email: Cow::Owned(Email::new(email)),
             nickname: Nickname::new(nickname),
             password_hash: PasswordHash::new(password_hash),
@@ -68,8 +68,15 @@ impl<'outer_a> ApplicationUser<'outer_a> {
         return Ok(self);
     }
 
-    pub fn get_id<'this>(&'this self) -> &'this Id {
-        return &self.id;
+    pub fn get_id<'this>(&'this self) -> Result<&'this Id, BaseError> {
+        match self.id {
+            Some(ref id) => {
+                return Ok(id);
+            }
+            None => {
+                return Err(BaseError::LogicError("Id does not exist yet."))
+            }
+        }
     }
 
     pub fn get_email<'this>(&'this self) -> &'this Email {

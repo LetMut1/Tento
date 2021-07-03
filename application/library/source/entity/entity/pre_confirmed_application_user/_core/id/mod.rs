@@ -1,37 +1,19 @@
-use crate::entity::_core::uuid_v4::UuidV4;
-use crate::error::base_error::base_error::BaseError;
-use uuid::Uuid;
-
 pub struct Id {
-    value: UuidV4
+    value: i64
 }
 
 impl Id {
-    pub fn new() -> Self {
+    pub fn new(value: i64) -> Self {
         return Self {
-            value: UuidV4::new()
+            value
         };
-    }
-
-    pub fn new_from_uuid(uuid: Uuid) -> Self {
-        return Self {
-            value: UuidV4::new_from_uuid(uuid)
-        };
-    }
-
-    pub fn new_from_string(uuid: String) -> Result<Self, BaseError> {
-        return Ok(
-            Self {
-                value: UuidV4::new_from_string(uuid)?
-            }
-        );
     }
 
     pub fn to_string<'this>(&'this self) -> String {
         return self.value.to_string();
     }
 
-    pub fn get_value<'this>(&'this self) -> &'this UuidV4 {
-        return &self.value;
+    pub fn get_value<'this>(&'this self) -> i64 {
+        return self.value;
     }
 }

@@ -39,7 +39,7 @@ impl Handler {
                 let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
                 match ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
-                    connection, application_user.get_id(), &application_user_log_in_token_device_id
+                    connection, application_user.get_id()?, &application_user_log_in_token_device_id
                 )? 
                 {
                     Some(existing_application_user_log_in_token) => {
@@ -48,7 +48,7 @@ impl Handler {
                         ApplicationUserLogInTokenBaseRepository::update_expiration_time(connection, &application_user_log_in_token)?;
                     },
                     None => {
-                        application_user_log_in_token = ApplicationUserLogInToken::new(&application_user, &application_user_log_in_token_device_id);
+                        application_user_log_in_token = ApplicationUserLogInToken::new(&application_user, &application_user_log_in_token_device_id)?;
 
                         ApplicationUserLogInTokenBaseRepository::create(connection, &application_user_log_in_token)?;
                     }
@@ -57,7 +57,7 @@ impl Handler {
 
                 EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
 
-                return Ok(HandlerResult::new(application_user.get_id().to_string()));
+                return Ok(HandlerResult::new(application_user.get_id()?.get_value()));
             }
             
             return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::WrongPassword)));

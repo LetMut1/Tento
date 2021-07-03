@@ -28,7 +28,7 @@ impl BaseRepository {
     ) -> Result<(), BaseError> {
         diesel::delete(
             pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::id.eq(
-                pre_confirmed_application_user.get_id().get_value().get_value()
+                pre_confirmed_application_user.get_id()?.get_value()
             ))
         ).execute(connection)?;
 
@@ -51,7 +51,7 @@ impl BaseRepository {
             pre_confirmed_application_user_schema::email.eq(application_user_email.get_value())
         ).get_result::<Select>(connection).optional()? 
         {
-            return Ok(Some(PreConfirmedApplicationUser::new_from_model(select))); 
+            return Ok(Some(PreConfirmedApplicationUser::new_from_select(select))); 
         }
 
         return Ok(None); 

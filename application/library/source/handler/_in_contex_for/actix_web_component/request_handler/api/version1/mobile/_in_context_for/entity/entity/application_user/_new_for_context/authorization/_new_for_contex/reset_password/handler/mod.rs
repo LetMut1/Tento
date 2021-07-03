@@ -25,10 +25,10 @@ impl Handler {
             application_user_reset_password_token_value
         ) = request.into_inner();
 
-        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(application_user_id)?;
-
         let application_user_password: Password = Password::new(application_user_password);
         if application_user_password.is_valid() {
+            let application_user_id: ApplicationUserId = ApplicationUserId::new(application_user_id);
+            
             let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
             if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(

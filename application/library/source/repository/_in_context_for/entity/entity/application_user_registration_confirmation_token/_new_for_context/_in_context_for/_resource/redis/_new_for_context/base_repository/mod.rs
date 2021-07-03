@@ -61,7 +61,7 @@ impl BaseRepository {
         {
             Some(json_encoded_common) => {
                 return Ok(Some(
-                    ApplicationUserRegistrationConfirmationToken::new_from_model(
+                    ApplicationUserRegistrationConfirmationToken::new_from_common(
                         serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?, pre_confirmed_application_user_id
                     )
                 ));

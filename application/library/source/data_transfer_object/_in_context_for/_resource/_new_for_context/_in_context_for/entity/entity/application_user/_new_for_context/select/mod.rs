@@ -1,11 +1,10 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use diesel::Queryable;
-use uuid::Uuid;
 
 #[derive(Queryable)]
 pub struct Select {
-    id: Uuid,
+    id: i64,
     email: String,
     nickname: String,
     password_hash: String,
@@ -13,7 +12,7 @@ pub struct Select {
 }
 
 impl Select {
-    pub fn into_inner(self) -> (Uuid, String, String, String, ChronoDateTime<Utc>) {
+    pub fn into_inner(self) -> (i64, String, String, String, ChronoDateTime<Utc>) {
         return (
             self.id,
             self.email,

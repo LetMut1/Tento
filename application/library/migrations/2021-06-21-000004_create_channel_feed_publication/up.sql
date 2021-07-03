@@ -1,6 +1,6 @@
 CREATE TABLE channel_feed_publicaion ( 
-    id UUID NOT NULL,
-    channel_id UUID NOT NULL,
+    id BIGSERIAL NOT NULL,
+    channel_id BIGSERIAL NOT NULL,
     is_entertaining BOOLEAN NOT NULL,
     small_description TEXT DEFAULT NULL,
     large_description TEXT DEFAULT NULL,

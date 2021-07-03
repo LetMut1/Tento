@@ -29,8 +29,6 @@ impl Handler {
             application_user_log_in_token_value
         ) = request.into_inner();
 
-        let application_user_id: ApplicationUserId = ApplicationUserId::new_from_string(application_user_id)?;
-
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
             application_user_log_in_token_device_id
         )?;
@@ -38,7 +36,7 @@ impl Handler {
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
         if let Some(mut application_user_log_in_token) = ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
-            connection, &application_user_id, &application_user_log_in_token_device_id
+            connection, &ApplicationUserId::new(application_user_id), &application_user_log_in_token_device_id
         )?
         {
             if application_user_log_in_token.get_value().get_value() == application_user_log_in_token_value.as_str() {

@@ -19,7 +19,7 @@ impl DateTimeManipulator {
                 return Ok(DateTime::new_from_date_time(chrono_date_time));
             },
             None => {
-                return Err(BaseError::LogicError("Too big date must not be added"));
+                return Err(BaseError::LogicError("Too big date must not be added."));
             }
         };
     }

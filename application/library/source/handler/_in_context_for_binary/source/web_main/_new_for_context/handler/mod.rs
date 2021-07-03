@@ -53,7 +53,7 @@ impl Handler {
                         if development_environment_file_path_buffer.exists() {
                             dotenv::from_path(development_environment_file_path_buffer.as_path())?;
                         } else {
-                            return Err(BaseError::LogicError("Any ....env file must exist"));
+                            return Err(BaseError::LogicError("Any ....env files does not exist."));
                         }
                     }
 
@@ -65,7 +65,7 @@ impl Handler {
                 return Ok(());
             },
             None => {
-                return Err(BaseError::LogicError("Directory must exist"));
+                return Err(BaseError::LogicError("The directory does not exist."));
             }
         }
     }

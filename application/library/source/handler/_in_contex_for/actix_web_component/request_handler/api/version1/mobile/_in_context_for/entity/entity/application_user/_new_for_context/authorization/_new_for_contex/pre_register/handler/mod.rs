@@ -28,7 +28,7 @@ impl Handler {
                     let pre_confirmed_application_user: PreConfirmedApplicationUser = PreConfirmedApplicationUser::new(application_user_email);  
 
                     let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> =
-                    ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user);
+                    ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user)?;
                     
                     ApplicationUserRegistrationConfirmationTokenBaseRepository::create(
                         &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_registration_confirmation_token

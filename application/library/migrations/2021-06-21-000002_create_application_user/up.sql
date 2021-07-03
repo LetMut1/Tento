@@ -1,7 +1,5 @@
 CREATE TABLE application_user ( 
-    id UUID NOT NULL,
-    -- // TODO email - уникальное
-    -- // TODO nickanme - уникальное
+    id BIGSERIAL NOT NULL,
     email VARCHAR NOT NULL,
     nickname VARCHAR NOT NULL,
     password_hash VARCHAR NOT NULL,
@@ -10,6 +8,9 @@ CREATE TABLE application_user (
 );
 ALTER TABLE application_user ADD CONSTRAINT email_1 UNIQUE (email);
 
+    -- // TODO email - уникальное
+    -- // TODO nickanme - уникальное
+    
 -- // TODO нужно ли ДатаПоследнегоВхода-Выхода. По идее, да. Но это нагруза на Бд. С другой стороны, видимость пользтвателелй и активноти. Подумать, что нужно еще
 
 

@@ -55,7 +55,7 @@ impl Handler {
                     let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
                     if let Some(mut application_user_registration_confirmation_token) = ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(
-                        redis_connection, pre_confirmed_application_user.get_id()
+                        redis_connection, pre_confirmed_application_user.get_id()?
                     )? 
                     {
                         if application_user_registration_confirmation_token.get_value().get_value() == application_user_registration_confirmation_token_value.as_str() {
@@ -81,7 +81,7 @@ impl Handler {
                             
                             TransactionManager::commit_transaction(postgresql_connection)?;
 
-                            let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id(), &application_user_log_in_token_device_id);
+                            let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id()?, &application_user_log_in_token_device_id);
 
                             BaseRepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
 

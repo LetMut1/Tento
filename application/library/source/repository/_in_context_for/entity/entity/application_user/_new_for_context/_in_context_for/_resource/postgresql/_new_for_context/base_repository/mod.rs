@@ -30,7 +30,7 @@ impl BaseRepository {
     pub fn update<'outer_a>(
         connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'_>, update_resolver: UpdateResolver
     ) -> Result<(), BaseError> {
-        diesel::update(application_user_schema::table.filter(application_user_schema::id.eq(application_user.get_id().get_value().get_value())))
+        diesel::update(application_user_schema::table.filter(application_user_schema::id.eq(application_user.get_id()?.get_value())))
         .set(&Update::new(application_user, update_resolver)).execute(connection)?;
 
         return Ok(());
@@ -54,17 +54,17 @@ impl BaseRepository {
         if let Some(select) = application_user_schema::table.filter(application_user_schema::email.eq(email.get_value()))
         .get_result::<Select>(connection).optional()? 
         {
-            return Ok(Some(ApplicationUser::new_from_resource_model(select))); 
+            return Ok(Some(ApplicationUser::new_from_select(select))); 
         }
 
         return Ok(None); 
     }
 
     pub fn get_by_id<'outer_a, 'vague>(connection: &'outer_a Connection, id: &'outer_a Id) -> Result<Option<ApplicationUser<'vague>>, BaseError> {
-        if let Some(select) = application_user_schema::table.filter(application_user_schema::id.eq(id.get_value().get_value()))
+        if let Some(select) = application_user_schema::table.filter(application_user_schema::id.eq(id.get_value()))
         .get_result::<Select>(connection).optional()? 
         {
-            return Ok(Some(ApplicationUser::new_from_resource_model(select))); 
+            return Ok(Some(ApplicationUser::new_from_select(select))); 
         }
 
         return Ok(None); 

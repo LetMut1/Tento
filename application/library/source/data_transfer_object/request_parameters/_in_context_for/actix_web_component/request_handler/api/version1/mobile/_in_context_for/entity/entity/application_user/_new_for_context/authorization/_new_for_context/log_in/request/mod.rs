@@ -5,13 +5,13 @@ pub struct Request {
     #[serde(rename = "di")]
     application_user_log_in_token_device_id: String,
     #[serde(rename = "ui")]
-    application_user_id: String,
+    application_user_id: i64,
     #[serde(rename = "v")]
     application_user_log_in_token_value: String
 }
 
 impl Request {
-    pub fn into_inner(self) -> (String, String, String) {
+    pub fn into_inner(self) -> (String, i64, String) {
         return (
             self.application_user_log_in_token_device_id, 
             self.application_user_id, 

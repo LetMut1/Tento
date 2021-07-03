@@ -3,6 +3,7 @@ use crate::entity::_core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user::_core::email::Email;
 use crate::entity::entity::pre_confirmed_application_user::_core::id::Id as PreConfirmedApplicationUserId;
 use crate::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
+use crate::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
 use super::_core::value::Value;
 use super::_core::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
@@ -18,16 +19,18 @@ pub struct ApplicationUserRegistrationConfirmationToken<'outer_a> {
 impl<'outer_a> ApplicationUserRegistrationConfirmationToken<'outer_a> {
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: u8 = 5;
 
-    pub fn new(pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser) -> Self {
-        return Self {
-            pre_confirmed_application_user_id: pre_confirmed_application_user.get_id(),
-            application_user_email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
-            value: Value::new(UuidV4::new().get_value().to_string()),       // TODO создать генератор значения + метода Рефреш ниже
-            wrong_enter_tries_quantity: WrongEnterTriesQuanity::new(0)
-        };
+    pub fn new(pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser) -> Result<Self, BaseError> {
+        return Ok(
+            Self {
+                pre_confirmed_application_user_id: pre_confirmed_application_user.get_id()?,
+                application_user_email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
+                value: Value::new(UuidV4::new().get_value().to_string()),       // TODO создать генератор значения + метода Рефреш ниже
+                wrong_enter_tries_quantity: WrongEnterTriesQuanity::new(0)
+            }
+        );
     }
 
-    pub fn new_from_model(common: Common<'_>, pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId) -> Self{
+    pub fn new_from_common(common: Common<'_>, pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId) -> Self{
         let (
             application_user_email,
             value,

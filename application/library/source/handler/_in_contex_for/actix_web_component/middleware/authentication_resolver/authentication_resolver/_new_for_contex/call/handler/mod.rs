@@ -38,6 +38,6 @@ impl Handler {
             return Err(BaseError::InvalidArgumentError);
         }
 
-        return Err(BaseError::LogicError("'AggregateConnectionPool' must exist in application state"));
+        return Err(BaseError::LogicError("'AggregateConnectionPool' must exist in application state."));
     }
 }

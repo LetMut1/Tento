@@ -1,11 +1,11 @@
 use crate::data_transfer_object::_in_context_for::_resource::_new_for_context::_in_context_for::entity::entity::json_refresh_web_token::_new_for_context::common::Common;
-use crate::entity::_core::uuid_v4::UuidV4;
 use crate::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::entity::entity::application_user::_core::id::Id as ApplicationUserId;
 use crate::entity::entity::json_access_web_token::_core::payload::_core::id::Id as JsonAccessWebTokenId;
 use crate::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
 use super::_core::obfuscation_value::ObfuscationValue;
+use uuid::Uuid;
 
 pub struct JsonRefreshWebToken<'outer_a> {
     json_access_web_token_id: JsonAccessWebTokenId,
@@ -22,7 +22,7 @@ impl<'outer_a> JsonRefreshWebToken<'outer_a> {
             json_access_web_token_id: JsonAccessWebTokenId::new(),
             application_user_id: Cow::Borrowed(application_user_id),
             application_user_log_in_token_device_id: Cow::Borrowed(application_user_log_in_token_device_id),
-            obfuscation_value: ObfuscationValue::new(UuidV4::new().get_value().to_string())
+            obfuscation_value: ObfuscationValue::new(Uuid::new_v4().to_string())
         };
     }
 
@@ -37,7 +37,7 @@ impl<'outer_a> JsonRefreshWebToken<'outer_a> {
         return Ok(
             Self {
                 json_access_web_token_id: JsonAccessWebTokenId::new_from_string(json_access_web_token_id)?,
-                application_user_id: Cow::Owned(ApplicationUserId::new_from_string(application_user_id)?),
+                application_user_id: Cow::Owned(ApplicationUserId::new(application_user_id)),
                 application_user_log_in_token_device_id: Cow::Owned(ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id)?),
                 obfuscation_value: ObfuscationValue::new(obfuscation_value.into_owned())
             }
@@ -45,7 +45,7 @@ impl<'outer_a> JsonRefreshWebToken<'outer_a> {
     }
 
     pub fn refresh<'this>(&'this mut self) -> &'this mut Self {
-        self.obfuscation_value = ObfuscationValue::new(UuidV4::new().get_value().to_string());
+        self.obfuscation_value = ObfuscationValue::new(Uuid::new_v4().to_string());
 
         return self;
     }

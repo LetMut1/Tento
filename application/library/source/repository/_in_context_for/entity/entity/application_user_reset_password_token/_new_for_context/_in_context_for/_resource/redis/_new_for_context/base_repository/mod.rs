@@ -61,7 +61,7 @@ impl BaseRepository {
         {
             Some(json_encoded_common) => {
                 return Ok(Some(
-                    ApplicationUserResetPasswordToken::new_from_model(
+                    ApplicationUserResetPasswordToken::new_from_common(
                         serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?, application_user_id
                     )
                 ));

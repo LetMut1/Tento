@@ -28,7 +28,7 @@ impl<'outer_a> JsonAccessWebToken<'outer_a> {
         );
     }
 
-    pub fn new_from_payload_common(common: Common) -> Result<Self, BaseError> {
+    pub fn new_from_common(common: Common) -> Result<Self, BaseError> {
         return Ok(
             Self {
                 payload: Payload::new_from_common(common)?
