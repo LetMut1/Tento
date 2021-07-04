@@ -21,13 +21,7 @@ extern crate serde_json;
 extern crate serde;
 extern crate uuid;
 
-mod _resource;
-pub mod actix_web_component;
-pub mod data_transfer_object;
-pub mod diesel_component;
-pub mod entity;
-pub mod error;
-pub mod handler;
-pub mod repository;
-pub mod service;
-pub mod utility;
+pub mod presentation_layer;
+pub mod application_layer;
+pub mod domain_layer;
+pub mod infrastructure_layer;
