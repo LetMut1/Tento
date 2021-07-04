@@ -21,7 +21,8 @@ extern crate serde_json;
 extern crate serde;
 extern crate uuid;
 
-pub mod presentation_layer;
+pub mod _resource;
 pub mod application_layer;
 pub mod domain_layer;
 pub mod infrastructure_layer;
+pub mod presentation_layer;
