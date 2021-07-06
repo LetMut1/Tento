@@ -10,15 +10,15 @@ use crate::domain_layer::utility::_in_context_for::_resource::_new_for_context::
 use crate::domain_layer::utility::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::infrastructure_layer::repository::_in_context_for::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
 use crate::infrastructure_layer::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
-use crate::presentation_layer::data_transfer_object::request_parameters::_in_context_for::presentation_layer::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::request::Request;
-use crate::presentation_layer::data_transfer_object::response_parameters::_in_context_for::presentation_layer::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::result::Result as HandlerResult;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::request::Request;
+use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::response::Response;
 use redis::Connection;
 use std::sync::Arc;
 
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, BaseError> {
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> {
         let (
             application_user_log_in_token_device_id, 
             application_user_email, 
@@ -57,7 +57,7 @@ impl Handler {
 
                 EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
 
-                return Ok(HandlerResult::new(application_user.get_id()?.get_value()));
+                return Ok(Response::new(application_user.get_id()?.get_value()));
             }
             
             return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::WrongPassword)));

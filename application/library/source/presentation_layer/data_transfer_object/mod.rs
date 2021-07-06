@@ -1,2 +1,2 @@
-pub mod response_parameters;
-pub mod request_parameters;
+pub mod response;
+pub mod request;

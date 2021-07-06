@@ -20,8 +20,8 @@ use crate::domain_layer::utility::_in_context_for::_resource::postgresql::_new_f
 use crate::infrastructure_layer::repository::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::infrastructure_layer::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::infrastructure_layer::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
-use crate::presentation_layer::data_transfer_object::request_parameters::_in_context_for::presentation_layer::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::register::request::Request;
-use crate::presentation_layer::data_transfer_object::response_parameters::_in_context_for::presentation_layer::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::register::result::Result as HandlerResult;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::register::request::Request;
+use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::register::response::Response;
 use diesel::PgConnection as PostgresqlConnection;
 use redis::Connection as RedisConnection;
 use std::sync::Arc;
@@ -29,7 +29,7 @@ use std::sync::Arc;
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<HandlerResult, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let (
             application_user_log_in_token_device_id, 
             application_user_nickname,
@@ -86,7 +86,7 @@ impl Handler {
                             BaseRepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
 
                             return Ok(
-                                HandlerResult::new(
+                                Response::new(
                                     SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
                                     Encoder::encode(&json_refresh_web_token)?
                                 )
