@@ -1,2 +1,2 @@
 pub mod entity;
-pub mod _core;
+pub mod proxed_type;

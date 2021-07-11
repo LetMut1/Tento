@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::_core::uuid_v4::UuidV4;
+use crate::domain_layer::entity::proxed_type::uuid_v4::UuidV4;
 use crate::domain_layer::error::base_error::base_error::BaseError;
 
 use std::clone::Clone;

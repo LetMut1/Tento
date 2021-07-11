@@ -1,6 +1,6 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
-use crate::domain_layer::entity::_core::date_time::DateTime;
+use crate::domain_layer::entity::proxed_type::date_time::DateTime;
 
 pub struct CreatedAt {
     value: DateTime

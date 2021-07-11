@@ -1,6 +1,6 @@
 use chrono::Duration;
 use chrono::offset::Utc;
-use crate::domain_layer::entity::_core::date_time::DateTime;
+use crate::domain_layer::entity::proxed_type::date_time::DateTime;
 use crate::domain_layer::error::base_error::base_error::BaseError;
 use crate::domain_layer::utility::chrono_date_time_manipulator::ChronoDateTimeManipulator;
 

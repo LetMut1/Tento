@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::_core::date_time::DateTime;
+use crate::domain_layer::entity::proxed_type::date_time::DateTime;
 use crate::domain_layer::error::base_error::base_error::BaseError;
 use crate::domain_layer::utility::date_time_expiration_resolver::DateTimeExpirationResolver;
 use std::clone::Clone;
