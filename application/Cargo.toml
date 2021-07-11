@@ -1,2 +1,2 @@
 [workspace]
-members = ["./binary/", "./library/"]
+members = ["./source/", "./source/source/presentation_layer/command/"]

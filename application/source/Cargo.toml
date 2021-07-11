@@ -1,11 +1,11 @@
 [package]
-name = "library"
+name = "application"
 version = "0.1.0"
 authors = ["zda"]
 edition = "2018"
 
 [lib]
-name = "library"
+name = "application"
 path = "./source/mod.rs"
 
 [dependencies]
