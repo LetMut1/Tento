@@ -1,7 +1,7 @@
 extern crate actix_web;
 extern crate application;
 
-use application::infrastructure_layer::service::handler::_in_context_for_binary::source::presentation_layer::web_main::_new_for_context::handler::Handler;
+use application::application_layer::service::handler::_in_contex_for::presentation_layer::command::run_server::_new_for_context::handler::Handler;
 
 #[actix_web::main]
 async fn main() -> ()   // TODO перед релизом понять, имеет ли значение, что именно возвращать в main. Err(...) для Result. Или просто void. (Как понять при деплое, что бинарник верну ошибку)
