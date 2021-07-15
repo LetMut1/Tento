@@ -6,6 +6,7 @@ use crate::domain_layer::error::base_error::_core::entity_error::_core::_in_cont
 use crate::domain_layer::error::base_error::_core::entity_error::entity_error::EntityError;
 use crate::domain_layer::error::base_error::base_error::BaseError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::validator::Validator;
 use crate::infrastructure_layer::repository::_in_context_for::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::infrastructure_layer::repository::_in_context_for::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
 use crate::infrastructure_layer::repository::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
@@ -21,7 +22,7 @@ pub struct Handler;
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {
         let application_user_email: Email = Email::new(request.get_application_user_email());
-        if application_user_email.is_valid()? {
+        if Validator::is_valid_email(&application_user_email)? {
             let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
             if !PreConfirmedApplicationUserBaseRepository::is_exist_by_application_user_email(postgresql_connection, &application_user_email)? {

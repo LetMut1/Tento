@@ -1,9 +1,10 @@
 use crate::domain_layer::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_core::_new_for_context::signature_creator_trait::SignatureCreatorTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
-use crate::domain_layer::utility::_in_context_for::entity::entity::json_access_web_token::_core::_new_for_context::signature_creator::SignatureCreator;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::entity::entity::json_access_web_token::_core::header::header::_new_for_context::common::Common as HeaderCommon;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::entity::entity::json_access_web_token::_core::payload::payload::_new_fro_context::common::Common as PayloadCommon;
+use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_core::_new_for_context::signature_creator::SignatureCreator;
 
 pub struct SerializationFormResolver;
 
@@ -14,7 +15,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
         + Self::TOKEN_PARTS_SEPARATOR 
         + base64::encode(serde_json::to_string(&PayloadCommon::new(json_access_web_token))?.as_bytes()).as_str();
         
-        let signature: String = SignatureCreator::create(&header_and_payload)?;
+        let signature: String = <SignatureCreator as SignatureCreatorTrait>::create(&header_and_payload)?;
 
         return Ok(header_and_payload + Self::TOKEN_PARTS_SEPARATOR + signature.as_str());
     }
@@ -23,7 +24,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
         let classic_form_parts: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
 
         if classic_form_parts.len() == 3 
-        && SignatureCreator::is_valid(
+        && <SignatureCreator as SignatureCreatorTrait>::is_valid(
             (String::new() + classic_form_parts[0] + Self::TOKEN_PARTS_SEPARATOR + classic_form_parts[1]).as_str(), classic_form_parts[2]
         )?
         {

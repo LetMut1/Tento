@@ -11,6 +11,8 @@ use crate::domain_layer::error::base_error::_core::entity_error::_core::_in_cont
 use crate::domain_layer::error::base_error::_core::entity_error::_core::_in_context_for::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error::PreConfirmedApplicationUserError;
 use crate::domain_layer::error::base_error::_core::entity_error::entity_error::EntityError;
 use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::validator::Validator;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy_trait::BaseRepositoryProxyTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::encoder_trait::EncoderTrait;
@@ -50,7 +52,7 @@ impl Handler {
         let application_user_email: Email = Email::new(application_user_email);
 
         let application_user_password: Password = Password::new(application_user_password);
-        if application_user_password.is_valid() {
+        if Validator::is_valid_password(&application_user_password) {
             let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
             if !ApplicationUserBaseRepository::is_exist_by_nickanme(postgresql_connection, &application_user_nickname)? {
@@ -63,8 +65,8 @@ impl Handler {
                     {
                         if application_user_registration_confirmation_token.get_value().get_value() == application_user_registration_confirmation_token_value.as_str() {
                             let application_user: ApplicationUser<'_> = ApplicationUser::new_from_pre_confirmed_application_user(
-                                &pre_confirmed_application_user, application_user_nickname, application_user_password
-                            )?;
+                                &pre_confirmed_application_user, application_user_nickname, PasswordHashResolver::create(&application_user_password)?
+                            );
 
                             ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(redis_connection, &application_user_registration_confirmation_token)?;
 

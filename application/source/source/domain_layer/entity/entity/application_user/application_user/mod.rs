@@ -7,7 +7,6 @@ use super::_core::email::Email;
 use super::_core::id::Id;
 use super::_core::nickname::Nickname;
 use super::_core::password_hash::PasswordHash;
-use super::_core::password::Password;
 
 pub struct ApplicationUser<'outer_a> {
     id: Option<Id>,
@@ -19,17 +18,15 @@ pub struct ApplicationUser<'outer_a> {
 
 impl<'outer_a> ApplicationUser<'outer_a> {
     pub fn new_from_pre_confirmed_application_user(
-        pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser, nickname: Nickname, password: Password
-    ) -> Result<Self, BaseError> {
-        return Ok(
-            Self {
-                id: None,
-                email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
-                nickname,
-                password_hash: PasswordHash::new_from_password(password)?,
-                created_at: CreatedAt::new()
-            }
-        );
+        pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser, nickname: Nickname, password_hash: PasswordHash
+    ) -> Self {
+        return Self {
+            id: None,
+            email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
+            nickname,
+            password_hash,
+            created_at: CreatedAt::new()
+        };
     }
 
     pub fn new_from_select(select: Select) -> Self {
@@ -62,10 +59,10 @@ impl<'outer_a> ApplicationUser<'outer_a> {
         return self;
     }
 
-    pub fn set_password<'this>(&'this mut self, password: Password) -> Result<&'this mut Self, BaseError> {
-        self.password_hash = PasswordHash::new_from_password(password)?;
+    pub fn set_password_hash<'this>(&'this mut self, password_hash: PasswordHash) -> &'this mut Self {
+        self.password_hash = password_hash;
 
-        return Ok(self);
+        return self;
     }
 
     pub fn get_id<'this>(&'this self) -> Result<&'this Id, BaseError> {
