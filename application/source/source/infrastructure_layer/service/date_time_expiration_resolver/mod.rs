@@ -4,7 +4,7 @@ use crate::domain_layer::utility::_in_context_for::domain_layer::entity::proxed_
 
 pub struct DateTimeExpirationResolver;
 
-impl DateTimeExpirationResolver {
+impl DateTimeExpirationResolver {   // TODO подумать, правильны ли названия. и что делает этот метод. То есть, зачем леоегировать. Посмотреть, где использутся.(можно ли использовать его в тех слоях, где он сейчас используется)
     pub const QUANTITY_OF_MINUTES_APPLICATION_USER_LOG_IN_TOKEN_FIRST: i64 = 10;
     pub const QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST: i64 = 60 * 24;
     pub const QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST: i64 = 10;

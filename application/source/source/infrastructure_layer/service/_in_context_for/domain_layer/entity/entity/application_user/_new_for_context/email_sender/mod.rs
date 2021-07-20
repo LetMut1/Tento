@@ -3,7 +3,7 @@ use crate::domain_layer::entity::entity::application_user_registration_confirmat
 use crate::domain_layer::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::error::base_error::base_error::BaseError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
-use crate::domain_layer::utility::email_sender::EmailSender as BaseEmailSender;
+use crate::infrastructure_layer::service::email_sender::EmailSender as BaseEmailSender;
 
 pub struct EmailSender;
 

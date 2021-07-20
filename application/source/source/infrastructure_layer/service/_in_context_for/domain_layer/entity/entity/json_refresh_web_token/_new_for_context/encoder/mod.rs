@@ -1,8 +1,8 @@
 use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::error::base_error::base_error::BaseError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::encoder_trait::EncoderTrait;
-use crate::domain_layer::utility::environment_variable_resolver::EnvironmentVariableResolver;
-use crate::infrastructure_layer::data_transfer_object::_in_context_for::entity::entity::json_refresh_web_token::_new_fro_context::common::Common;
+use crate::infrastructure_layer::data_transfer_object::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_fro_context::common::Common;
+use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crypto::hmac::Hmac;
 use crypto::mac::Mac;
 use crypto::sha2::Sha512;

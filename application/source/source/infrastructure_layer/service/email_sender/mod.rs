@@ -1,5 +1,5 @@
 use crate::domain_layer::error::base_error::base_error::BaseError;
-use crate::domain_layer::utility::environment_variable_resolver::EnvironmentVariableResolver;
+use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use lettre_email::Email;
 use lettre_email::EmailBuilder;
 use lettre::ClientSecurity;
