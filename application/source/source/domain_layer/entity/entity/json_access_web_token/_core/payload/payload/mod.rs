@@ -1,8 +1,8 @@
-use crate::infrastructure_layer::data_transfer_object::_in_context_for::domain_layer::entity::entity::json_access_web_token::_core::payload::payload::_new_fro_context::common::Common;
 use crate::domain_layer::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::_new_for_context::payload_common::PayloadCommon;
 use std::borrow::Cow;
 use std::clone::Clone;
 use super::_core::exp::Exp;
@@ -28,13 +28,13 @@ impl<'outer_a> Payload<'outer_a> {
         );
     }
 
-    pub fn new_from_common(common: Common) -> Result<Self, BaseError> {
+    pub fn new_from_common(payload_common: PayloadCommon) -> Result<Self, BaseError> {
         let (
             json_access_web_token_id,
             application_user_id,
             application_user_log_in_token_device_id,
             exp
-        ) = common.into_inner();
+        ) = payload_common.into_inner();
 
         return Ok (
             Self {

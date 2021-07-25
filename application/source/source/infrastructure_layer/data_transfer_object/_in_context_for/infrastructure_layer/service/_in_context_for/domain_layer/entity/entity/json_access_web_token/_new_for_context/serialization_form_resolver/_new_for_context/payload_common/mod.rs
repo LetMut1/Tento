@@ -3,7 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Common {
+pub struct PayloadCommon {
     #[serde(rename = "ti")]
     json_access_web_token_id: String,
     #[serde(rename = "ui")]
@@ -14,7 +14,7 @@ pub struct Common {
     exp: String
 }
 
-impl Common {
+impl PayloadCommon {
     pub fn new<'outer_a>(json_access_web_token: &'outer_a JsonAccessWebToken<'_>) -> Self {
         return Self {
             json_access_web_token_id: json_access_web_token.get_id().to_string(),
