@@ -2,7 +2,7 @@ use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastr
 use crate::domain_layer::entity::entity::application_user::_core::email::Email;
 use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::application_user::application_user::ApplicationUser;
-use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
 use super::_core::value::Value;
 use super::_core::wrong_enter_tries_quantity::WrongEnterTriesQuanity;

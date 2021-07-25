@@ -3,7 +3,7 @@ use crate::domain_layer::entity::proxed_type::uuid_v4::UuidV4;
 use crate::domain_layer::entity::entity::application_user::_core::email::Email;
 use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::application_user::application_user::ApplicationUser;
-use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
 use super::_core::device_id::DeviceId;
 use super::_core::value::Value;

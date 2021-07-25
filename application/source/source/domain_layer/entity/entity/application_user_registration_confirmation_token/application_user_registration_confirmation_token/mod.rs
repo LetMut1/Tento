@@ -3,7 +3,7 @@ use crate::domain_layer::entity::proxed_type::uuid_v4::UuidV4;
 use crate::domain_layer::entity::entity::application_user::_core::email::Email;
 use crate::domain_layer::entity::entity::pre_confirmed_application_user::_core::id::Id as PreConfirmedApplicationUserId;
 use crate::domain_layer::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
-use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
 use super::_core::value::Value;
 use super::_core::wrong_enter_tries_quantity::WrongEnterTriesQuanity;

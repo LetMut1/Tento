@@ -1,7 +1,7 @@
 use actix_web::dev::Body;
 use actix_web::http::header;
 use actix_web::HttpResponse;
-use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use serde::Serialize;
 use super::standard_json_response_body_wrapper::StandardJsonResponseBodyWrapper;
 

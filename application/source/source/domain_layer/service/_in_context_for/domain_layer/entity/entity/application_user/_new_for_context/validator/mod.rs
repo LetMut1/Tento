@@ -1,6 +1,6 @@
 use crate::domain_layer::entity::entity::application_user::_core::email::Email;
 use crate::domain_layer::entity::entity::application_user::_core::password::Password;
-use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use regex::Regex;
 
 pub struct Validator;

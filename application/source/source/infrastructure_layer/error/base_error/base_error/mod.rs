@@ -1,6 +1,7 @@
 use anyhow::Error as AnyhowError;
 use argon2::Error as Argon2Error;
 use base64::DecodeError as Base64DecodeError;
+use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use diesel::result::Error as DieselError;
 use dotenv::Error as DotenvError;
 use lettre_email::error::Error as LettreEmailError;
@@ -19,7 +20,6 @@ use std::fmt::Formatter;
 use std::fmt::Result;
 use std::io::Error as IOError;
 use std::io::ErrorKind as IOErrorKind;
-use super::_core::entity_error::entity_error::EntityError;
 use super::_core::run_time_error::_core::other_error::OtherError;
 use super::_core::run_time_error::_core::resource_error::_core::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
 use super::_core::run_time_error::_core::resource_error::resource_error::ResourceError;

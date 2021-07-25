@@ -1,1 +1,1 @@
-pub mod base_error;
+pub mod entity_error;

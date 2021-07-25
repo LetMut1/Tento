@@ -1,4 +1,4 @@
-use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_core::_new_for_context::signature_creator_trait::SignatureCreatorTrait;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crypto::hmac::Hmac;

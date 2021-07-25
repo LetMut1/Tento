@@ -2,7 +2,7 @@ use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastr
 use crate::domain_layer::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::_core::id::Id as JsonAccessWebTokenId;
-use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
 use super::_core::obfuscation_value::ObfuscationValue;
 use uuid::Uuid;

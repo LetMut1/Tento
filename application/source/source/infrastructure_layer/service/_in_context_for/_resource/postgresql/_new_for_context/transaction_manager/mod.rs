@@ -1,4 +1,4 @@
-use crate::domain_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use diesel::Connection as DieselConnection;
 use diesel::connection::TransactionManager as DieselTransactionManager;
 use diesel::PgConnection as Connection;
