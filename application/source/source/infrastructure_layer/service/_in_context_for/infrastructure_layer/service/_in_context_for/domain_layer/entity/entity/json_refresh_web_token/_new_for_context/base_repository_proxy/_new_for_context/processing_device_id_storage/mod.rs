@@ -16,7 +16,7 @@ impl ProcessingDeviceIdStorage {
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), BaseError> {
         connection.set_ex::<String, String, ()>(
-            RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id), 
+            RedisStorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id), 
             application_user_log_in_token_device_id_registry.join(Self::SEPARATOR),
             (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
         )?;
@@ -38,7 +38,7 @@ impl ProcessingDeviceIdStorage {
         connection: &'outer_a mut Connection, application_user_id: &'outer_a Id,
     ) -> Result<(), BaseError> {
         connection.del::<String, ()>(
-            RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id)
+            RedisStorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id)
         )?;
         
         return Ok(());
@@ -48,7 +48,7 @@ impl ProcessingDeviceIdStorage {
         connection: &'outer_a mut Connection, application_user_id: &'outer_a Id
     ) -> Result<(), BaseError> {
         connection.expire::<String, ()>(
-            RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id),
+            RedisStorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id),
             (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
         )?;
 
@@ -59,7 +59,7 @@ impl ProcessingDeviceIdStorage {
         connection: &'outer_a mut Connection, application_user_id: &'outer_a Id
     ) -> Result<Option<Vec<String>>, BaseError> {
         if let Some(application_user_log_in_token_device_id_sequence) = connection.get::<String, Option<String>>(
-            RedisStorageKeyResolver::get_utility_json_refresh_web_token_first(application_user_id)
+            RedisStorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id)
         )?
         {
             let mut application_user_log_in_token_device_id_registry: Vec<String> = Vec::new();

@@ -11,8 +11,8 @@ impl RedisStorageKeyResolver {
     const PREFIX_REPOSITORY_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST: &'static str = "r:apusrepato:1:";
     const PREFIX_REPOSITORY_JSON_ACCESS_WEB_TOKEN_BLACK_LIST_FIRST: &'static str = "r:jsacwetoblli:1:";
     const PREFIX_REPOSITORY_JSON_REFRESH_WEB_TOKEN_FIRST: &'static str = "r:jsreweto:1:";
-    const PREFIX_UTILITY_JSON_REFRESH_WEB_TOKEN_FIRST: &'static str = "u:jsreweto:1:";
-    
+    const PREFIX_SERVICE_JSON_REFRESH_WEB_TOKEN_FIRST: &'static str = "u:jsreweto:1:";
+
     pub fn get_repository_application_user_log_in_token_first<'outer_a>(
         application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
     ) -> String {
@@ -50,8 +50,8 @@ impl RedisStorageKeyResolver {
         + application_user_log_in_token_device_id.to_string().as_str();
     }
 
-    pub fn get_utility_json_refresh_web_token_first<'outer_a>(application_user_id: &'outer_a ApplicationUserId) -> String {
-        return Self::PREFIX_UTILITY_JSON_REFRESH_WEB_TOKEN_FIRST.to_string()
+    pub fn get_service_json_refresh_web_token_first<'outer_a>(application_user_id: &'outer_a ApplicationUserId) -> String {
+        return Self::PREFIX_SERVICE_JSON_REFRESH_WEB_TOKEN_FIRST.to_string()
         + application_user_id.to_string().as_str();
     }
 }

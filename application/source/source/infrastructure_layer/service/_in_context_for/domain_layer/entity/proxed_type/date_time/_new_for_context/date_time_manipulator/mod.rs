@@ -7,7 +7,7 @@ use crate::infrastructure_layer::service::chrono_date_time_manipulator::ChronoDa
 pub struct DateTimeManipulator;
 
 impl DateTimeManipulator {
-    // pub fn add_interval<'outer_a>(date_time: &'outer_a DateTime, quantity_of_minutes: i64) -> () {              // TODO написать тесты. проверить, создатся ли интервал. Сделегировать на utility_chrono_date_ime_manipulator?
+    // pub fn add_interval<'outer_a>(date_time: &'outer_a DateTime, quantity_of_minutes: i64) -> () {              // TODO написать тесты. проверить, создатся ли интервал.
     //     date_time.get_value().checked_add_signed(Duration::minutes(quantity_of_minutes)).unwrp();
 
     //     return ();
