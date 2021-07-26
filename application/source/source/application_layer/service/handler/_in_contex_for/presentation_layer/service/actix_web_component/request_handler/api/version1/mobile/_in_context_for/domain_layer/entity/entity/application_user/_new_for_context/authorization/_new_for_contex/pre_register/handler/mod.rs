@@ -41,7 +41,7 @@ impl Handler {
 
                     PreConfirmedApplicationUserBaseRepository::create(postgresql_connection, &pre_confirmed_application_user)?;
 
-                    <EmailSender as EmailSenderTrait>::send_application_user_registration_confirmation_token(&application_user_registration_confirmation_token)?;
+                    EmailSender::send_application_user_registration_confirmation_token(&application_user_registration_confirmation_token)?;
 
                     return Ok(());
                 }

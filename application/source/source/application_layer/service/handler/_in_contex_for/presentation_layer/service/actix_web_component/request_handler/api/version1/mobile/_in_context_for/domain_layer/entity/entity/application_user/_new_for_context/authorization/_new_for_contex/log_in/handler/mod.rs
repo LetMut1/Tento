@@ -45,7 +45,7 @@ impl Handler {
         )?
         {
             if application_user_log_in_token.get_value().get_value() == application_user_log_in_token_value.as_str() {
-                if let Some(existing_json_refresh_web_token) = <BaseRepositoryProxy as BaseRepositoryProxyTrait>::get_by_application_user_id_and_application_user_log_in_token_device_id(
+                if let Some(existing_json_refresh_web_token) = BaseRepositoryProxy::get_by_application_user_id_and_application_user_log_in_token_device_id(
                     connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 )? 
                 {
@@ -53,7 +53,7 @@ impl Handler {
                         connection, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
                     )?;
 
-                    <BaseRepositoryProxy as BaseRepositoryProxyTrait>::delete(connection, &existing_json_refresh_web_token)?;
+                    BaseRepositoryProxy::delete(connection, &existing_json_refresh_web_token)?;
                 }
 
                 let json_refresh_web_token: JsonRefreshWebToken<'_> =
@@ -61,12 +61,12 @@ impl Handler {
                 
                 ApplicationUserLogInTokenBaseRepository::delete(connection, &application_user_log_in_token)?;
 
-                <BaseRepositoryProxy as BaseRepositoryProxyTrait>::create(connection, &json_refresh_web_token)?;
+                BaseRepositoryProxy::create(connection, &json_refresh_web_token)?;
 
                 return Ok(
                     Response::new(
-                        <SerializationFormResolver as SerializationFormResolverTrait>::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
-                        <Encoder as EncoderTrait>::encode(&json_refresh_web_token)?
+                        SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
+                        Encoder::encode(&json_refresh_web_token)?
                     )
                 );
             }

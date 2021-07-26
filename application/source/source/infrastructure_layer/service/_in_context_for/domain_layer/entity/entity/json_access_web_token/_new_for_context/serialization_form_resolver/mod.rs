@@ -15,7 +15,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
         + Self::TOKEN_PARTS_SEPARATOR 
         + base64::encode(serde_json::to_string(&PayloadCommon::new(json_access_web_token))?.as_bytes()).as_str();
         
-        let signature: String = <SignatureCreator as SignatureCreatorTrait>::create(&header_and_payload)?;
+        let signature: String = SignatureCreator::create(&header_and_payload)?;
 
         return Ok(header_and_payload + Self::TOKEN_PARTS_SEPARATOR + signature.as_str());
     }
@@ -24,7 +24,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
         let classic_form_parts: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
 
         if classic_form_parts.len() == 3 
-        && <SignatureCreator as SignatureCreatorTrait>::is_valid(
+        && SignatureCreator::is_valid(
             (String::new() + classic_form_parts[0] + Self::TOKEN_PARTS_SEPARATOR + classic_form_parts[1]).as_str(), classic_form_parts[2]
         )?
         {

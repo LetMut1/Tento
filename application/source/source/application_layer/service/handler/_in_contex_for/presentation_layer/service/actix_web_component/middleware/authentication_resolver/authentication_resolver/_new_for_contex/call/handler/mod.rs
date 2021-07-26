@@ -19,7 +19,7 @@ impl Handler {
         if let Some(data) = service_request.app_data::<Data<AggregateConnectionPool>>() {
             if let Some(header_value) = service_request.headers().get("X-Auth-Token") {
                 if let Ok(header_value) = header_value.to_str() {
-                    let json_access_web_token: JsonAccessWebToken<'_> = <SerializationFormResolver as SerializationFormResolverTrait>::deserialize(header_value)?;
+                    let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(header_value)?;
                     if !json_access_web_token.is_expired() {
                         if !JsonAccessWebTokenBlackListBaseRepository::is_exist_by_json_access_token_id(
                             &mut *ConnectionExtractor::get_redis_connection(&data.clone().into_inner())?, json_access_web_token.get_id()

@@ -58,7 +58,7 @@ impl Handler {
                     }
                 }
 
-                <EmailSender as EmailSenderTrait>::send_application_user_log_in_token(&application_user_log_in_token)?;
+                EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
 
                 return Ok(Response::new(application_user.get_id()?.get_value()));
             }

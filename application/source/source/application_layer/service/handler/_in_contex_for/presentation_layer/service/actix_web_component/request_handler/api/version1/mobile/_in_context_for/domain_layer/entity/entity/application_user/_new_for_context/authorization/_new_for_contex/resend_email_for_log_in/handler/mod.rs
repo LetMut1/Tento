@@ -29,7 +29,7 @@ impl Handler {
             &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &ApplicationUserId::new(application_user_id), &application_user_log_in_token_device_id
         )? 
         {
-            <EmailSender as EmailSenderTrait>::send_application_user_log_in_token(&application_user_log_in_token)?;
+            EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
 
             return Ok(());
         }

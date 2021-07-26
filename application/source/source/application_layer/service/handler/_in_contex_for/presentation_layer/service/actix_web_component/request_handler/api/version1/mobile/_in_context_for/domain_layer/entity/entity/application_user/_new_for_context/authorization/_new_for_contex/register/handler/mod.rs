@@ -91,12 +91,12 @@ impl Handler {
 
                             let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id()?, &application_user_log_in_token_device_id);
 
-                            <BaseRepositoryProxy as BaseRepositoryProxyTrait>::create(redis_connection, &json_refresh_web_token)?;
+                            BaseRepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
 
                             return Ok(
                                 Response::new(
-                                    <SerializationFormResolver as SerializationFormResolverTrait>::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
-                                    <Encoder as EncoderTrait>::encode(&json_refresh_web_token)?
+                                    SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
+                                    Encoder::encode(&json_refresh_web_token)?
                                 )
                             );
                         }
@@ -113,7 +113,7 @@ impl Handler {
                     return Err(BaseError::EntityError(EntityError::ApplicationUserRegistrationConfirmationTokenError(ApplicationUserRegistrationConfirmationTokenError::NotFound)));
                 }
 
-                if <ApplicationUserBaseRepository as ApplicationUserBaseRepositoryTrait>::is_exist_by_email(postgresql_connection, &application_user_email)? {
+                if ApplicationUserBaseRepository::is_exist_by_email(postgresql_connection, &application_user_email)? {
                     return Err(BaseError::EntityError(EntityError::PreConfirmedApplicationUserError(PreConfirmedApplicationUserError::AlreadyConfirmed)));
                 }
                 

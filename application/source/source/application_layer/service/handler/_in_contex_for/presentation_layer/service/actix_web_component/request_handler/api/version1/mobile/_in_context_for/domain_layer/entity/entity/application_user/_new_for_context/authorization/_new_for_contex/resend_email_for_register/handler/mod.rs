@@ -40,7 +40,7 @@ impl Handler {
                 }
             }
             
-            <EmailSender as EmailSenderTrait>::send_application_user_registration_confirmation_token(&application_user_registration_confirmation_token)?;
+            EmailSender::send_application_user_registration_confirmation_token(&application_user_registration_confirmation_token)?;
 
             return Ok(());
         }

@@ -23,7 +23,7 @@ impl Handler {
         )? 
         {
 
-            <EmailSender as EmailSenderTrait>::send_application_user_reset_password_token(&application_user_reset_password_token)?;
+            EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;
     
             return Ok(());
         }

@@ -42,10 +42,10 @@ impl Handler {
                 if application_user_reset_password_token.get_value().get_value() == application_user_reset_password_token_value.as_str() {
                     let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
-                    if let Some(mut application_user) = <ApplicationUserBaseRepository as ApplicationUserBaseRepositoryTrait>::get_by_id(postgresql_connection, &application_user_id)? {
+                    if let Some(mut application_user) = ApplicationUserBaseRepository::get_by_id(postgresql_connection, &application_user_id)? {
                         application_user.set_password_hash(PasswordHashResolver::create(&application_user_password)?);
 
-                        <ApplicationUserBaseRepository as ApplicationUserBaseRepositoryTrait>::update(postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?; // TODO Загуглить, чтл можно сделать для обеспечения транзакции на две системы (зкроме, запоминания состояния через третью ссистпму)
+                        ApplicationUserBaseRepository::update(postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?; // TODO Загуглить, чтл можно сделать для обеспечения транзакции на две системы (зкроме, запоминания состояния через третью ссистпму)
 
                         ApplicationUserResetPasswordTokenBaseRepository::delete(redis_connection, &application_user_reset_password_token)?;
 

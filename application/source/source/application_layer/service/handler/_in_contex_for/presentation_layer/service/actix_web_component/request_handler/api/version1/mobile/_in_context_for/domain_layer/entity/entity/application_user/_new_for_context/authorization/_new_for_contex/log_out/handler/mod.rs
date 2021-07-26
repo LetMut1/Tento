@@ -20,11 +20,11 @@ impl Handler {
     ) -> Result<(), BaseError> {
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-        if let Some(json_refresh_web_token) = <BaseRepositoryProxy as BaseRepositoryProxyTrait>::get_by_application_user_id_and_application_user_log_in_token_device_id(
+        if let Some(json_refresh_web_token) = BaseRepositoryProxy::get_by_application_user_id_and_application_user_log_in_token_device_id(
             connection, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
         )?
         {
-            <BaseRepositoryProxy as BaseRepositoryProxyTrait>::delete(connection, &json_refresh_web_token)?;
+            BaseRepositoryProxy::delete(connection, &json_refresh_web_token)?;
 
             JsonAccessWebTokenBlackListBaseRepository::create(connection, &JsonAccessWebTokenBlackList::new(json_access_web_token.get_id()))?;
 

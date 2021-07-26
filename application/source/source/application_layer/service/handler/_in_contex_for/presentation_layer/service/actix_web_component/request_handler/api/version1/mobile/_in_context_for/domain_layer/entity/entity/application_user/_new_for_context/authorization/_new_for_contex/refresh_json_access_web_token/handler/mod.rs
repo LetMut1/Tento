@@ -25,26 +25,26 @@ impl Handler {
             json_refresh_web_token_serialized
         ) = request.into_inner();
 
-        let json_access_web_token: JsonAccessWebToken<'_> = <SerializationFormResolver as SerializationFormResolverTrait>::deserialize(json_access_web_token.as_str())?;
+        let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(json_access_web_token.as_str())?;
 
         if json_access_web_token.is_expired() {
             let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            if let Some(mut json_refresh_web_token) = <BaseRepositoryProxy as BaseRepositoryProxyTrait>::get_by_application_user_id_and_application_user_log_in_token_device_id(
+            if let Some(mut json_refresh_web_token) = BaseRepositoryProxy::get_by_application_user_id_and_application_user_log_in_token_device_id(
                 connection, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
             )?
             {
                 if &(json_access_web_token.get_id().get_value().get_value().as_bytes())[..] == &(json_refresh_web_token.get_json_access_web_token_id().get_value().get_value().as_bytes())[..] 
-                && <Encoder as EncoderTrait>::is_valid(&json_refresh_web_token, json_refresh_web_token_serialized.as_str())? 
+                && Encoder::is_valid(&json_refresh_web_token, json_refresh_web_token_serialized.as_str())? 
                 {
                     json_refresh_web_token.refresh();
 
-                    <BaseRepositoryProxy as BaseRepositoryProxyTrait>::update(connection, &json_refresh_web_token)?;
+                    BaseRepositoryProxy::update(connection, &json_refresh_web_token)?;
 
                     return Ok(
                         Response::new(
-                            <SerializationFormResolver as SerializationFormResolverTrait>::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
-                            <Encoder as EncoderTrait>::encode(&json_refresh_web_token)?
+                            SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
+                            Encoder::encode(&json_refresh_web_token)?
                         )
                     );
                 }
