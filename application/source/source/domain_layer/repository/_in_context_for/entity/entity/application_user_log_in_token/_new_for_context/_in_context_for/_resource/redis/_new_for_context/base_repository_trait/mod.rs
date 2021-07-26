@@ -1,0 +1,23 @@
+use crate::domain_layer::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
+use crate::domain_layer::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
+use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use redis::Connection;
+
+pub trait BaseRepositoryTrait {
+    fn create<'outer_a>(
+        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
+    ) -> Result<(), BaseError>;
+
+    fn delete<'outer_a>(
+        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
+    ) -> Result<(), BaseError>;
+
+    fn update_expiration_time<'outer_a>(
+        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
+    ) -> Result<(), BaseError>;
+
+    fn get_by_application_user_id_and_device_id<'outer_a, 'outer_b>(
+        connection: &'outer_a mut Connection, application_user_id: &'outer_b ApplicationUserId, device_id: &'outer_b ApplicationUserLogInTokenDeviceId,
+    ) -> Result<Option<ApplicationUserLogInToken<'outer_b>>, BaseError>;
+}

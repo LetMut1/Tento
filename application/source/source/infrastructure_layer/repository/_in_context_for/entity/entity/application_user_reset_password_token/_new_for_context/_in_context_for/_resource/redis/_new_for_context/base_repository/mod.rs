@@ -1,7 +1,8 @@
 use crate::domain_layer::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::domain_layer::repository::_in_context_for::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository_trait::BaseRepositoryTrait;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::_new_for_context::common::Common;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
 use crate::infrastructure_layer::service::date_time_expiration_resolver::DateTimeExpirationResolver;
 use redis::Commands;
@@ -9,8 +10,8 @@ use redis::Connection;
 
 pub struct BaseRepository;
 
-impl BaseRepository {
-    pub fn create<'outer_a>(
+impl BaseRepositoryTrait for BaseRepository {
+    fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), BaseError> {
@@ -25,7 +26,7 @@ impl BaseRepository {
         return Ok(());
     }
 
-    pub fn delete<'outer_a>(
+    fn delete<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), BaseError> {
@@ -38,7 +39,7 @@ impl BaseRepository {
         return Ok(());
     }
 
-    pub fn update_expiration_time<'outer_a>(
+    fn update_expiration_time<'outer_a>(
         connection: &'outer_a mut Connection,
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), BaseError> {
@@ -52,7 +53,7 @@ impl BaseRepository {
         return Ok(());
     }
 
-    pub fn get_by_application_user_id<'outer_a, 'outer_b>(
+    fn get_by_application_user_id<'outer_a, 'outer_b>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_b ApplicationUserId
     ) -> Result<Option<ApplicationUserResetPasswordToken<'outer_b>>, BaseError> {
         match connection.get::<String, Option<String>>(
