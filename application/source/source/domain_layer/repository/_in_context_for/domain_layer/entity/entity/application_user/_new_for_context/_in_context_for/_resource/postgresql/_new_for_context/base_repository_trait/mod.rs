@@ -19,7 +19,7 @@ pub trait BaseRepositoryTrait {
 
     fn is_exist_by_email<'outer_a>(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<bool, BaseError>;
 
-    fn get_by_email<'outer_a, 'vague>(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<Option<ApplicationUser<'vague>>, BaseError>;
+    fn get_by_email<'outer_a>(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<Option<ApplicationUser<'static>>, BaseError>;
 
-    fn get_by_id<'outer_a, 'vague>(connection: &'outer_a Connection, id: &'outer_a Id) -> Result<Option<ApplicationUser<'vague>>, BaseError>;
+    fn get_by_id<'outer_a>(connection: &'outer_a Connection, id: &'outer_a Id) -> Result<Option<ApplicationUser<'static>>, BaseError>;
 }

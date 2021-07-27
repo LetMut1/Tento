@@ -20,7 +20,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
         return Ok(header_and_payload + Self::TOKEN_PARTS_SEPARATOR + signature.as_str());
     }
 
-    fn deserialize<'outer_a, 'vague>(classic_form: &'outer_a str) -> Result<JsonAccessWebToken<'vague>, BaseError> {
+    fn deserialize<'outer_a>(classic_form: &'outer_a str) -> Result<JsonAccessWebToken<'static>, BaseError> {
         let classic_form_parts: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
 
         if classic_form_parts.len() == 3 

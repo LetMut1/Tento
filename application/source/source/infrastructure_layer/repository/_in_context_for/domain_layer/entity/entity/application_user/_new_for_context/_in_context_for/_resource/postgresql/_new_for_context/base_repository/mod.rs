@@ -52,7 +52,7 @@ impl BaseRepositoryTrait for BaseRepository {
         );      // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    fn get_by_email<'outer_a, 'vague>(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<Option<ApplicationUser<'vague>>, BaseError> {
+    fn get_by_email<'outer_a>(connection: &'outer_a Connection, email: &'outer_a Email) -> Result<Option<ApplicationUser<'static>>, BaseError> {
         if let Some(select) = application_user_schema::table.filter(application_user_schema::email.eq(email.get_value()))
         .get_result::<Select>(connection).optional()? 
         {
@@ -62,7 +62,7 @@ impl BaseRepositoryTrait for BaseRepository {
         return Ok(None); 
     }
 
-    fn get_by_id<'outer_a, 'vague>(connection: &'outer_a Connection, id: &'outer_a Id) -> Result<Option<ApplicationUser<'vague>>, BaseError> {
+    fn get_by_id<'outer_a>(connection: &'outer_a Connection, id: &'outer_a Id) -> Result<Option<ApplicationUser<'static>>, BaseError> {
         if let Some(select) = application_user_schema::table.filter(application_user_schema::id.eq(id.get_value()))
         .get_result::<Select>(connection).optional()? 
         {
@@ -77,7 +77,7 @@ impl BaseRepositoryTrait for BaseRepository {
 // delete this after writing same query for another entity (Exampe of multyrow Select)
 // pub fn get_by_application_user_id<'outer_a>(
 //     connection_manager: &'outer_a mut ConnectionManager, application_user_id: &'outer_a UuidV4
-// ) -> Result<Option<Vec<JsonRefreshWebToken<'vague>>>, BaseError> {
+// ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, BaseError> {
 //     let existing_registry = json_refresh_web_token_schema::table
 //     .filter(json_refresh_web_token_schema::application_user_id.eq(application_user_id.get_value()))
 //     .get_results::<Existing>(connection_manager.get_connection())?;
@@ -86,10 +86,10 @@ impl BaseRepositoryTrait for BaseRepository {
 //         return Ok(
 //             Some(
 //                 existing_registry.into_iter().map(
-//                     |existing: Existing| -> JsonRefreshWebToken<'vague> { 
+//                     |existing: Existing| -> JsonRefreshWebToken<'_> { 
 //                         return JsonRefreshWebToken::new_from_model(existing); 
 //                     }
-//                 ).collect::<Vec<JsonRefreshWebToken<'vague>>>()
+//                 ).collect::<Vec<JsonRefreshWebToken<'_>>>()
 //             )
 //         ); 
 //     }
