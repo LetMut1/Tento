@@ -1,5 +1,3 @@
-use crate::domain_layer::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
-use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::_new_for_context::select::Select;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
 use super::_core::created_at::CreatedAt;
@@ -17,33 +15,11 @@ pub struct ApplicationUser<'outer_a> {
 }
 
 impl<'outer_a> ApplicationUser<'outer_a> {
-    pub fn new_from_pre_confirmed_application_user(
-        pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser, nickname: Nickname, password_hash: PasswordHash
+    pub fn new(
+        id: Option<Id>, email: Cow<'outer_a, Email>, nickname: Nickname, password_hash: PasswordHash, created_at: CreatedAt
     ) -> Self {
         return Self {
-            id: None,
-            email: Cow::Borrowed(pre_confirmed_application_user.get_email()),
-            nickname,
-            password_hash,
-            created_at: CreatedAt::new()
-        };
-    }
-
-    pub fn new_from_select(select: Select) -> Self {
-        let (
-            id,
-            email,
-            nickname,
-            password_hash,
-            created_at
-        ) = select.into_inner();
-
-        return Self {
-            id: Some(Id::new(id)),
-            email: Cow::Owned(Email::new(email)),
-            nickname: Nickname::new(nickname),
-            password_hash: PasswordHash::new(password_hash),
-            created_at: CreatedAt::new_from_date_time(created_at)
+            id, email, nickname, password_hash, created_at 
         };
     }
 

@@ -1,6 +1,7 @@
 use crate::domain_layer::entity::entity::application_user::_core::email::Email;
 use crate::domain_layer::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository_trait::BaseRepositoryTrait;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::pre_confirmed_application_user::_new_for_context::factory::Factory as PreConfirmedApplicationUserFactory;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::_new_for_context::insert::Insert;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::_new_for_context::select::Select;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
@@ -52,7 +53,7 @@ impl BaseRepositoryTrait for BaseRepository {
             pre_confirmed_application_user_schema::email.eq(application_user_email.get_value())
         ).get_result::<Select>(connection).optional()? 
         {
-            return Ok(Some(PreConfirmedApplicationUser::new_from_select(select))); 
+            return Ok(Some(PreConfirmedApplicationUserFactory::new_from_select(select))); 
         }
 
         return Ok(None); 

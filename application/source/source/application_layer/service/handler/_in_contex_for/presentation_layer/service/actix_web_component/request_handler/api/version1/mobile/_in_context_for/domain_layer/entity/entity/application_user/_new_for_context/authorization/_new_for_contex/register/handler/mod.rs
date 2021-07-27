@@ -4,7 +4,6 @@ use crate::domain_layer::entity::entity::application_user::_core::email::Email;
 use crate::domain_layer::entity::entity::application_user::_core::nickname::Nickname;
 use crate::domain_layer::entity::entity::application_user::_core::password::Password;
 use crate::domain_layer::entity::entity::application_user::application_user::ApplicationUser;
-use crate::domain_layer::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::error::entity_error::_core::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
 use crate::domain_layer::error::entity_error::_core::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
@@ -13,11 +12,14 @@ use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository_trait::BaseRepositoryTrait as ApplicationUserRegistrationConfirmationTokenBaseRepositoryTrait;
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository_trait::BaseRepositoryTrait as ApplicationUserBaseRepositoryTrait;
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository_trait::BaseRepositoryTrait as PreConfirmedApplicationUserBaseRepositoryTrait;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::factory::Factory as ApplicationUserFactory;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::password_hash_resolver_trait::PasswordHashResolverTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::validator::Validator;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::factory::Factory as JsonAccessWebTokenFactory;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy_trait::BaseRepositoryProxyTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::encoder_trait::EncoderTrait;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::factory::Factory as JsonRefreshWebTokenFactory;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
@@ -68,7 +70,7 @@ impl Handler {
                     )? 
                     {
                         if application_user_registration_confirmation_token.get_value().get_value() == application_user_registration_confirmation_token_value.as_str() {
-                            let application_user: ApplicationUser<'_> = ApplicationUser::new_from_pre_confirmed_application_user(
+                            let application_user: ApplicationUser<'_> = ApplicationUserFactory::new_from_pre_confirmed_application_user(
                                 &pre_confirmed_application_user, application_user_nickname, PasswordHashResolver::create(&application_user_password)?
                             );
 
@@ -90,13 +92,13 @@ impl Handler {
                             
                             TransactionManager::commit_transaction(postgresql_connection)?;
 
-                            let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebToken::new(application_user.get_id()?, &application_user_log_in_token_device_id);
+                            let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::new_from_id_registry(application_user.get_id()?, &application_user_log_in_token_device_id);
 
                             BaseRepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
 
                             return Ok(
                                 Response::new(
-                                    SerializationFormResolver::serialize(&JsonAccessWebToken::new(&json_refresh_web_token)?)?,
+                                    SerializationFormResolver::serialize(&JsonAccessWebTokenFactory::new_from_json_refresh_web_token(&json_refresh_web_token)?)?,
                                     Encoder::encode(&json_refresh_web_token)?
                                 )
                             );

@@ -1,8 +1,6 @@
 use crate::domain_layer::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::_core::id::Id as JsonAccessWebTokenId;
-use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::_new_for_context::common::Common;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
 use super::_core::obfuscation_value::ObfuscationValue;
 use uuid::Uuid;
@@ -16,32 +14,14 @@ pub struct JsonRefreshWebToken<'outer_a> {
 
 impl<'outer_a> JsonRefreshWebToken<'outer_a> {
     pub fn new(
-        application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
+        json_access_web_token_id: JsonAccessWebTokenId,
+        application_user_id: Cow<'outer_a, ApplicationUserId>,
+        application_user_log_in_token_device_id: Cow<'outer_a, ApplicationUserLogInTokenDeviceId>,
+        obfuscation_value: ObfuscationValue
     ) -> Self {
         return Self {
-            json_access_web_token_id: JsonAccessWebTokenId::new(),
-            application_user_id: Cow::Borrowed(application_user_id),
-            application_user_log_in_token_device_id: Cow::Borrowed(application_user_log_in_token_device_id),
-            obfuscation_value: ObfuscationValue::new(Uuid::new_v4().to_string())
+            json_access_web_token_id, application_user_id, application_user_log_in_token_device_id, obfuscation_value
         };
-    }
-
-    pub fn new_from_model(common: Common<'_>) -> Result<Self, BaseError> {
-        let (
-            json_access_web_token_id,
-            application_user_id,
-            application_user_log_in_token_device_id,
-            obfuscation_value
-        ) = common.into_inner();
-
-        return Ok(
-            Self {
-                json_access_web_token_id: JsonAccessWebTokenId::new_from_string(json_access_web_token_id)?,
-                application_user_id: Cow::Owned(ApplicationUserId::new(application_user_id)),
-                application_user_log_in_token_device_id: Cow::Owned(ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id)?),
-                obfuscation_value: ObfuscationValue::new(obfuscation_value.into_owned())
-            }
-        );
     }
 
     pub fn refresh<'this>(&'this mut self) -> &'this mut Self {

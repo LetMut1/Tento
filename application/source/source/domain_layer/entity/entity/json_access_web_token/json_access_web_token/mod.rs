@@ -4,9 +4,6 @@ use crate::domain_layer::entity::entity::json_access_web_token::_core::header::h
 use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::_core::exp::Exp;
 use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::_core::id::Id;
 use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::payload::Payload;
-use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
-use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::_new_for_context::payload_common::PayloadCommon;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::proxed_type::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use std::clone::Clone;
 use super::_core::header::_core::alg::Alg;
@@ -20,20 +17,10 @@ pub struct JsonAccessWebToken<'outer_a> {
 impl<'outer_a> JsonAccessWebToken<'outer_a> {
     const HEADER: Header = Header::new();
 
-    pub fn new(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>) -> Result<Self, BaseError> {
-        return Ok(
-            Self {
-                payload: Payload::new(json_refresh_web_token)?
-            }
-        );
-    }
-
-    pub fn new_from_common(payload_common: PayloadCommon) -> Result<Self, BaseError> {
-        return Ok(
-            Self {
-                payload: Payload::new_from_common(payload_common)?
-            }
-        );
+    pub fn new(payload: Payload<'outer_a>) -> Self {
+        return Self {
+            payload
+        };
     }
 
     pub fn is_expired<'this>(&'this self) -> bool {

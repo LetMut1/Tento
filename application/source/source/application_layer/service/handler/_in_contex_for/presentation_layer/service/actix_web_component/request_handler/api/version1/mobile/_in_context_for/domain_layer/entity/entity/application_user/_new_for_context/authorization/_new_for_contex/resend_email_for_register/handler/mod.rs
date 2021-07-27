@@ -4,6 +4,7 @@ use crate::domain_layer::error::entity_error::_core::_in_context_for::domain_lay
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository_trait::BaseRepositoryTrait as ApplicationUserRegistrationConfirmationTokenBaseRepositoryTrait;
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository_trait::BaseRepositoryTrait as PreConfirmedApplicationUserBaseRepositoryTrait;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::factory::Factory as ApplicationUserRegistrationConfirmationTokenFactory;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
@@ -34,7 +35,7 @@ impl Handler {
                     ApplicationUserRegistrationConfirmationTokenBaseRepository::update_expiration_time(connection, &application_user_registration_confirmation_token)?;
                 },
                 None => {
-                    application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationToken::new(&pre_confirmed_application_user)?;
+                    application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationTokenFactory::new_from_pre_confirmed_application_user(&pre_confirmed_application_user)?;
 
                     ApplicationUserRegistrationConfirmationTokenBaseRepository::create(connection, &application_user_registration_confirmation_token)?;
                 }

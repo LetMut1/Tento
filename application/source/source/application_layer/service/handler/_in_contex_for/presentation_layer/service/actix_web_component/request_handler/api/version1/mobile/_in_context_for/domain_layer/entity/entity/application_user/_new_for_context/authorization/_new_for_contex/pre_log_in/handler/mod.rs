@@ -6,6 +6,7 @@ use crate::domain_layer::error::entity_error::_core::_in_context_for::domain_lay
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository_trait::BaseRepositoryTrait as ApplicationUserLogInTokenBaseRepositoryTrait;
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository_trait::BaseRepositoryTrait as ApplicationUserBaseRepositoryTrait;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::factory::Factory as ApplicationUserLogInTokenFactory;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::password_hash_resolver_trait::PasswordHashResolverTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
@@ -53,7 +54,9 @@ impl Handler {
                         ApplicationUserLogInTokenBaseRepository::update_expiration_time(connection, &application_user_log_in_token)?;
                     },
                     None => {
-                        application_user_log_in_token = ApplicationUserLogInToken::new(&application_user, &application_user_log_in_token_device_id)?;
+                        application_user_log_in_token = ApplicationUserLogInTokenFactory::new_from_application_user(
+                            &application_user, &application_user_log_in_token_device_id
+                        )?;
 
                         ApplicationUserLogInTokenBaseRepository::create(connection, &application_user_log_in_token)?;
                     }
