@@ -1,5 +1,5 @@
 use crate::domain_layer::entity::entity::json_access_web_token_black_list::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
-use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::_core::id::Id as JsonAccessWebTokenId;
+use crate::domain_layer::entity::entity::json_access_web_token::_component::payload::_component::id::Id as JsonAccessWebTokenId;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use redis::Connection;
 

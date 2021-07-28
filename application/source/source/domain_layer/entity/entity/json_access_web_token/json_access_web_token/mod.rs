@@ -1,13 +1,13 @@
-use crate::domain_layer::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
-use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
-use crate::domain_layer::entity::entity::json_access_web_token::_core::header::header::Header;
-use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::_core::exp::Exp;
-use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::_core::id::Id;
-use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::payload::Payload;
+use crate::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
+use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
+use crate::domain_layer::entity::entity::json_access_web_token::_component::header::header::Header;
+use crate::domain_layer::entity::entity::json_access_web_token::_component::payload::_component::exp::Exp;
+use crate::domain_layer::entity::entity::json_access_web_token::_component::payload::_component::id::Id;
+use crate::domain_layer::entity::entity::json_access_web_token::_component::payload::payload::Payload;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::proxed_type::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
 use std::clone::Clone;
-use super::_core::header::_core::alg::Alg;
-use super::_core::header::_core::typ::Typ;
+use super::_component::header::_component::alg::Alg;
+use super::_component::header::_component::typ::Typ;
 
 #[derive(Clone)]
 pub struct JsonAccessWebToken<'outer_a> {

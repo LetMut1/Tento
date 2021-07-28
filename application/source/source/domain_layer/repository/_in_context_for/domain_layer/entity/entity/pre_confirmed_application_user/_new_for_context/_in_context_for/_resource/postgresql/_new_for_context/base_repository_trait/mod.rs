@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::entity::application_user::_core::email::Email;
+use crate::domain_layer::entity::entity::application_user::_component::email::Email;
 use crate::domain_layer::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use diesel::PgConnection as Connection;

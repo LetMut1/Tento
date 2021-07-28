@@ -1,14 +1,13 @@
 CREATE TABLE channel_feed_publicaion ( 
     id BIGSERIAL NOT NULL,
     channel_id BIGSERIAL NOT NULL,
+    application_user_administrator_id BIGSERIAL NOT NULL, -- // TODO Админ с правами выкладывани мема в ленту.
     is_entertaining BOOLEAN NOT NULL,
     small_description TEXT DEFAULT NULL,
     large_description TEXT DEFAULT NULL,
-    seeable_file_path TEXT NOT NULL,
-    hearable_file_path TEXT DEFAULT NULL,
-    quantity_of_normal_likes BIGINT NOT NULL,
-    quantity_of_hidden_likes BIGINT NOT NULL,
-    quantity_of_reactions BIGINT NOT NULL,
+    type SMALLINT NOT NULL,
+    type_component TEXT NOT NULL,
+    delete_on TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ NOT NULL,    
     PRIMARY KEY (id)
 );

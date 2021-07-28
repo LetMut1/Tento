@@ -1,5 +1,5 @@
 use crate::domain_layer::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
+use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use redis::Connection;
 

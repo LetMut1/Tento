@@ -1,1 +1,0 @@
-DROP TABLE channel_message_publicaion;

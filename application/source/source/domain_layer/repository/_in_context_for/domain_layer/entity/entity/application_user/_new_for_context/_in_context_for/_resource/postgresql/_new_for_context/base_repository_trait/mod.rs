@@ -1,6 +1,6 @@
-use crate::domain_layer::entity::entity::application_user::_core::email::Email;
-use crate::domain_layer::entity::entity::application_user::_core::id::Id;
-use crate::domain_layer::entity::entity::application_user::_core::nickname::Nickname;
+use crate::domain_layer::entity::entity::application_user::_component::email::Email;
+use crate::domain_layer::entity::entity::application_user::_component::id::Id;
+use crate::domain_layer::entity::entity::application_user::_component::nickname::Nickname;
 use crate::domain_layer::entity::entity::application_user::application_user::ApplicationUser;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;

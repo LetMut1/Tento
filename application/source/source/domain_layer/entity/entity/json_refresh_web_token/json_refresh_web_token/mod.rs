@@ -1,8 +1,8 @@
-use crate::domain_layer::entity::entity::application_user_log_in_token::_core::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
-use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
-use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::_core::id::Id as JsonAccessWebTokenId;
+use crate::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
+use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
+use crate::domain_layer::entity::entity::json_access_web_token::_component::payload::_component::id::Id as JsonAccessWebTokenId;
 use std::borrow::Cow;
-use super::_core::obfuscation_value::ObfuscationValue;
+use super::_component::obfuscation_value::ObfuscationValue;
 use uuid::Uuid;
 
 pub struct JsonRefreshWebToken<'outer_a> {

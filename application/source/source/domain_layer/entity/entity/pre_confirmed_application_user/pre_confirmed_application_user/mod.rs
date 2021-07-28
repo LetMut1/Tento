@@ -1,7 +1,7 @@
-use crate::domain_layer::entity::entity::application_user::_core::email::Email;
+use crate::domain_layer::entity::entity::application_user::_component::email::Email;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use super::_core::created_at::CreatedAt;
-use super::_core::id::Id;
+use super::_component::created_at::CreatedAt;
+use super::_component::id::Id;
 
 pub struct PreConfirmedApplicationUser {
     id: Option<Id>,

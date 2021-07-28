@@ -1,10 +1,10 @@
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
-use super::_core::created_at::CreatedAt;
-use super::_core::email::Email;
-use super::_core::id::Id;
-use super::_core::nickname::Nickname;
-use super::_core::password_hash::PasswordHash;
+use super::_component::created_at::CreatedAt;
+use super::_component::email::Email;
+use super::_component::id::Id;
+use super::_component::nickname::Nickname;
+use super::_component::password_hash::PasswordHash;
 
 pub struct ApplicationUser<'outer_a> {
     id: Option<Id>,

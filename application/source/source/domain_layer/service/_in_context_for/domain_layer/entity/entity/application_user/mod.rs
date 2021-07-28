@@ -1,2 +1,2 @@
 pub mod _new_for_context;
-pub mod _core;
+pub mod _component;

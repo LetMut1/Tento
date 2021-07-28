@@ -20,10 +20,10 @@ use std::fmt::Formatter;
 use std::fmt::Result;
 use std::io::Error as IOError;
 use std::io::ErrorKind as IOErrorKind;
-use super::_core::run_time_error::_core::other_error::OtherError;
-use super::_core::run_time_error::_core::resource_error::_core::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
-use super::_core::run_time_error::_core::resource_error::resource_error::ResourceError;
-use super::_core::run_time_error::run_time_error::RunTimeError;
+use super::_component::run_time_error::_component::other_error::OtherError;
+use super::_component::run_time_error::_component::resource_error::_component::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
+use super::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use super::_component::run_time_error::run_time_error::RunTimeError;
 
 #[derive(Debug)]
 pub enum BaseError {

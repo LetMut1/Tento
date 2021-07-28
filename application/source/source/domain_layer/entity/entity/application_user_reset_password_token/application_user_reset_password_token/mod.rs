@@ -1,8 +1,8 @@
-use crate::domain_layer::entity::entity::application_user::_core::email::Email;
-use crate::domain_layer::entity::entity::application_user::_core::id::Id as ApplicationUserId;
+use crate::domain_layer::entity::entity::application_user::_component::email::Email;
+use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use std::borrow::Cow;
-use super::_core::value::Value;
-use super::_core::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
+use super::_component::value::Value;
+use super::_component::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
 
 pub struct ApplicationUserResetPasswordToken<'outer_a> {
     application_user_id: &'outer_a ApplicationUserId,

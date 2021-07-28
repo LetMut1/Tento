@@ -1,2 +1,2 @@
-pub mod _core;
+pub mod _component;
 pub mod application_user_registration_confirmation_token;
