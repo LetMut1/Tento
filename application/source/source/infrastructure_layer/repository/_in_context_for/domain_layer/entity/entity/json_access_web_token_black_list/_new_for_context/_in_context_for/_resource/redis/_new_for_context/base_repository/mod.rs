@@ -3,7 +3,7 @@ use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository_trait::BaseRepositoryTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
-use crate::infrastructure_layer::service::date_time_expiration_resolver::DateTimeExpirationResolver;
+use crate::infrastructure_layer::service::date_time_expiration_storage::DateTimeExpirationStorage;
 use redis::Commands;
 use redis::Connection;
 
@@ -18,7 +18,7 @@ impl BaseRepositoryTrait for BaseRepository {
                 json_access_web_token_black_list.get_json_access_web_token_id()
             ), 
             1,
-            (DateTimeExpirationResolver::QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST * 60) as usize
         )?;
 
         return Ok(());

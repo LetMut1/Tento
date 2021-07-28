@@ -6,6 +6,8 @@ use crate::domain_layer::entity::entity::json_access_web_token::_core::payload::
 use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::_new_for_context::payload_common::PayloadCommon;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::proxed_type::date_time::_new_for_context::date_time_manipulator::DateTimeManipulator;
+use crate::infrastructure_layer::service::date_time_expiration_storage::DateTimeExpirationStorage;
 use std::borrow::Cow;
 
 pub struct Factory;
@@ -17,7 +19,7 @@ impl Factory {
                 Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
                 Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
                 Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
-                Exp::new()?
+                Exp::new(DateTimeManipulator::add_interval_from_now(DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST)?)
             )
         );
     }

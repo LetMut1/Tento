@@ -1,6 +1,5 @@
 use crate::domain_layer::entity::proxed_type::date_time::DateTime;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::service::date_time_expiration_resolver::DateTimeExpirationResolver;
 use std::clone::Clone;
 
 #[derive(Clone)]
@@ -9,12 +8,10 @@ pub struct Exp {
 }
 
 impl Exp {
-    pub fn new() -> Result<Self, BaseError> {
-        return Ok(
-            Self {
-                value: DateTimeExpirationResolver::create_json_access_web_token_first()?
-            }
-        );
+    pub fn new(value: DateTime) -> Self {
+        return Self {
+            value
+        };
     }
 
     pub fn new_from_str<'outer_a>(date_time: &'outer_a str) -> Result<Self, BaseError> {
