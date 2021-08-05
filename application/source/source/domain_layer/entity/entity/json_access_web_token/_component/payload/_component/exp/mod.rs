@@ -21,10 +21,6 @@ impl Exp {
             }
         );
     }
-
-    pub fn to_string<'this>(&'this self) -> String {
-        return self.value.to_string();
-    }
     
     pub fn get_value<'this>(&'this self) -> &'this DateTime {
         return &self.value;

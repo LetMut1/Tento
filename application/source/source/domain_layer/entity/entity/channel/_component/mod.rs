@@ -1,0 +1,10 @@
+pub mod created_at;
+pub mod description;
+pub mod hidden_marks_quantity;
+pub mod id;
+pub mod is_private;
+pub mod name;
+pub mod owner_application_user_administrator_id;
+pub mod public_marks_quantity;
+pub mod reactions_quantity;
+pub mod subscribers_quantity;

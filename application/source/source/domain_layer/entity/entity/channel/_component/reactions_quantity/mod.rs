@@ -1,11 +1,8 @@
-use std::clone::Clone;
-
-#[derive(Clone)]
-pub struct Id {
+pub struct ReactionsQuantity {
     value: i64
 }
 
-impl Id {
+impl ReactionsQuantity {
     pub fn new(value: i64) -> Self {
         return Self {
             value
