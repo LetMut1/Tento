@@ -185,6 +185,11 @@ impl Authorization {
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_ALREADY_EXIST
                                         );
                                     },
+                                    ApplicationUserError::InvalidNickname => {
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
+                                        );
+                                    },
                                     ApplicationUserError::InvalidPassword => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
