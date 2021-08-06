@@ -6,7 +6,7 @@ use regex::Regex;
 pub struct Validator;
 
 impl Validator {
-    const EMAIL_MAXIMUM_LENGTH: u8 = 320;
+    const EMAIL_MAXIMUM_LENGTH: u16 = 320;
     const PASSWORD_MAXIMUM_LENGTH: u8 = 7;
 
     pub fn is_valid_email<'outer_a>(email: &'outer_a Email) -> Result<bool, BaseError> {

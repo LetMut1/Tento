@@ -19,7 +19,7 @@ impl Factory {
                 Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
                 Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
                 Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
-                Exp::new(DateTimeManipulator::add_interval_from_now(DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST)?)
+                Exp::new(DateTimeManipulator::add_interval_from_now(DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST as i64)?)
             )
         );
     }
