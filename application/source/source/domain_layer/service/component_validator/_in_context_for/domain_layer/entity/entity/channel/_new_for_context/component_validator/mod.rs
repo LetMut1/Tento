@@ -1,9 +1,9 @@
 use crate::domain_layer::entity::entity::channel::_component::description::Description;
 use crate::domain_layer::entity::entity::channel::_component::name::Name;
 
-pub struct Validator;
+pub struct ComponentValidator;
 
-impl Validator {
+impl ComponentValidator {
     const NAME_MAXIMUM_LENGTH: u8 = 75;
     const DESCRIPTION_MAXIMUM_LENGTH: u8 = 75;
 

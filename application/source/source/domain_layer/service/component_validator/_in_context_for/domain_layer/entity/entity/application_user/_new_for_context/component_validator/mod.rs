@@ -4,9 +4,9 @@ use crate::domain_layer::entity::entity::application_user::_component::password:
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use regex::Regex;
 
-pub struct Validator;
+pub struct ComponentValidator;
 
-impl Validator {
+impl ComponentValidator {
     const EMAIL_MAXIMUM_LENGTH: u16 = 320;
     const NICKNAME_MAXIMUM_LENGTH: u8 = 55;
     const PASSWORD_MAXIMUM_LENGTH: u8 = 7;

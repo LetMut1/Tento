@@ -3,10 +3,8 @@ CREATE TABLE channel_feed_publicaion (
     channel_id BIGINT NOT NULL,
     author_application_user_administrator_id BIGINT NOT NULL,
     is_entertaining BOOLEAN NOT NULL,
-    small_description TEXT,
-    large_description TEXT,
-    type SMALLINT NOT NULL,
-    type_component TEXT NOT NULL,
+    content_type SMALLINT NOT NULL,
+    content_type_component TEXT NOT NULL,  -- // TODO small_description CHARACTER VARYING(100), large_description CHARACTER VARYING(500), путь до картинки, путь до музыки
     public_marks_quantity BIGINT NOT NULL,
     hidden_marks_quantity BIGINT NOT NULL,
     reactions_quantity BIGINT NOT NULL,
@@ -16,7 +14,7 @@ CREATE TABLE channel_feed_publicaion (
     PRIMARY KEY (id)
 );
 
--- // TODO // TODO // TODO !!!!! Описать в докблоках. Здесь пока что тип поста один и тот же, поэтому здесь обыкновенное описание.
+-- // TODO // TODO // TODO !!!!! Описать в докблоках
 -- // TODO // TODO // TODO !!!!! Принцип описания Поста: Декомпозиция ( с точки зрения НормальныхФорм БАйса-Кода) в одну широкую таблицу, объединяющую все разновидности контента внутри Поста:
 -- // TODO // TODO // TODO !!!!! Есть "Тип поста" и необходимые поля для "Тип поста". ВСе поля для "Тип поста" необязательны (!НЕ! NOT NULL). В коде проверяем заполненность полей для соответстующего типа
 -- // TODO // TODO // TODO !!!!! и ставим Триггер или Ограничение в БД с той же логикой. Пишем исчерпывающие интеграционные тесты.

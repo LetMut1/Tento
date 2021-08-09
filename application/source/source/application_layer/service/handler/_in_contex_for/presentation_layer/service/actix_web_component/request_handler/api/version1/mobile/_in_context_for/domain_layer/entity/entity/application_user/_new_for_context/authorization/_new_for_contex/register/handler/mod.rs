@@ -19,7 +19,7 @@ use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity:
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::factory::Factory as ApplicationUserFactory;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::factory::Factory as JsonAccessWebTokenFactory;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::factory::Factory as JsonRefreshWebTokenFactory;
-use crate::domain_layer::service::validator::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::validator::Validator;
+use crate::domain_layer::service::component_validator::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::component_validator::ComponentValidator;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
@@ -58,8 +58,8 @@ impl Handler {
         let application_user_email: Email = Email::new(application_user_email);
 
         let application_user_password: Password = Password::new(application_user_password);
-        if Validator::is_valid_password(&application_user_password) {
-            if Validator::is_valid_nickname(&application_user_nickname) {
+        if ComponentValidator::is_valid_password(&application_user_password) {
+            if ComponentValidator::is_valid_nickname(&application_user_nickname) {
                 let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
                 if !ApplicationUserBaseRepository::is_exist_by_nickanme(postgresql_connection, &application_user_nickname)? {

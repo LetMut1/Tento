@@ -1,5 +1,4 @@
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use std::borrow::Cow;
 use super::_component::created_at::CreatedAt;
 use super::_component::description::Description;
 use super::_component::hidden_marks_quantity::HiddenMarksQuantity;
@@ -11,11 +10,11 @@ use super::_component::public_marks_quantity::PublicMarksQuantity;
 use super::_component::reactions_quantity::ReactionsQuantity;
 use super::_component::subscribers_quantity::SubscribersQuantity;
 
-pub struct ApplicationUser<'outer_a> {
+pub struct Channel {
     id: Option<Id>,
-    owner_application_user_administrator_id: Cow<'outer_a, OwnerApplicationUserAdministratorId>,
+    owner_application_user_administrator_id: OwnerApplicationUserAdministratorId,
     name: Name,
-    description: Description,
+    description: Option<Description>,
     is_private: IsPrivate,
     subscribers_quantity: SubscribersQuantity,
     public_marks_quantity: PublicMarksQuantity,
@@ -24,12 +23,12 @@ pub struct ApplicationUser<'outer_a> {
     created_at: CreatedAt
 }
 
-impl<'outer_a> ApplicationUser<'outer_a> {
+impl Channel {
     pub fn new(
         id: Option<Id>,
-        owner_application_user_administrator_id: Cow<'outer_a, OwnerApplicationUserAdministratorId>,
+        owner_application_user_administrator_id: OwnerApplicationUserAdministratorId,
         name: Name,
-        description: Description,
+        description: Option<Description>,
         is_private: IsPrivate,
         subscribers_quantity: SubscribersQuantity,
         public_marks_quantity: PublicMarksQuantity,
@@ -51,12 +50,6 @@ impl<'outer_a> ApplicationUser<'outer_a> {
         };
     }
 
-    // pub fn set_email<'this>(&'this mut self, email: Email) -> &'this mut Self {
-    //     self.email = Cow::Owned(email);
-
-    //     return self;
-    // }
-
     pub fn get_id<'this>(&'this self) -> Result<&'this Id, BaseError> {
         match self.id {
             Some(ref id) => {
@@ -68,7 +61,39 @@ impl<'outer_a> ApplicationUser<'outer_a> {
         }
     }
 
-    // pub fn get_email<'this>(&'this self) -> &'this Email {
-    //     return self.email.as_ref();
-    // }
+    pub fn get_owner_application_user_administrator_id<'this>(&'this self) -> &'this OwnerApplicationUserAdministratorId {
+        return &self.owner_application_user_administrator_id;
+    }
+
+    pub fn get_name<'this>(&'this self) -> &'this Name {
+        return &self.name;
+    }
+
+    pub fn get_description<'this>(&'this self) -> &'this Option<Description> {
+        return &self.description;
+    }
+
+    pub fn get_is_private<'this>(&'this self) -> &'this IsPrivate {
+        return &self.is_private;
+    }
+
+    pub fn get_subscribers_quantity<'this>(&'this self) -> &'this SubscribersQuantity {
+        return &self.subscribers_quantity;
+    }
+    
+    pub fn get_public_marks_quantoty<'this>(&'this self) -> &'this PublicMarksQuantity {
+        return &self.public_marks_quantity;
+    }
+
+    pub fn get_hidden_marks_quantity<'this>(&'this self) -> &'this HiddenMarksQuantity {
+        return &self.hidden_marks_quantity;
+    }
+
+    pub fn get_reactions_quantity<'this>(&'this self) -> &'this ReactionsQuantity {
+        return &self.reactions_quantity;
+    }
+
+    pub fn get_created_at<'this>(&'this self) -> &'this CreatedAt {
+        return &self.created_at;
+    }
 }
