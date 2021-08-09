@@ -1,8 +1,8 @@
 CREATE TABLE application_user ( 
     id BIGSERIAL NOT NULL,
-    email VARCHAR(320) NOT NULL,
-    nickname VARCHAR(55) NOT NULL,
-    password_hash VARCHAR NOT NULL,
+    email CHARACTER VARYING(320) NOT NULL,
+    nickname CHARACTER VARYING(55) NOT NULL,
+    password_hash TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL,    
     PRIMARY KEY (id)
 );

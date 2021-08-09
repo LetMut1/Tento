@@ -1,6 +1,6 @@
 CREATE TABLE pre_confirmed_application_user (
     id BIGSERIAL NOT NULL,
-    email VARCHAR(320) NOT NULL,
+    email CHARACTER VARYING(320) NOT NULL,
     created_at TIMESTAMPTZ NOT NULL, 
     PRIMARY KEY (id)
 );

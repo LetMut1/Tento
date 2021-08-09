@@ -54,8 +54,27 @@ impl Authorization {
             Ok(response) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
             },
-            Err(base_error) => {
+            Err(ref base_error) => {
                 match base_error {
+                    BaseError::EntityError(entity_error) => {
+                        match entity_error {
+                            EntityError::ApplicationUserError(application_user_error) => {
+                                match application_user_error {
+                                    ApplicationUserError::InvalidNickname => {
+                                        return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
+                                        );
+                                    },
+                                    _ => {
+                                        unreachable!("{}", base_error);
+                                    }
+                                }
+                            },
+                            _ => {
+                                unreachable!("{}", base_error);
+                            }
+                        }
+                    },
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
@@ -63,14 +82,14 @@ impl Authorization {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
-                    },
-                    _ => {
-                        unreachable!("{}", base_error);
                     }
                 }
             }
         }
     }
+
+
+
 
     pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingQuery>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         match CheckNicknameForExistingHanlder::handle(data.into_inner(), query.into_inner()) {
