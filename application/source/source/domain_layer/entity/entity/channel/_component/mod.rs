@@ -1,9 +1,13 @@
 pub mod created_at;
 pub mod description;
+pub mod entertaining_seeable_and_hearable_content_quantity;
+pub mod entertaining_seeable_only_content_quantity;
 pub mod hidden_marks_quantity;
 pub mod id;
 pub mod is_private;
 pub mod name;
+pub mod non_entertaining_seeable_and_hearable_content_quantity;
+pub mod non_entertaining_seeable_only_content_quantity;
 pub mod owner_application_user_administrator_id;
 pub mod public_marks_quantity;
 pub mod reactions_quantity;

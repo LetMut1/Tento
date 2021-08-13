@@ -9,6 +9,10 @@ CREATE TABLE channel (
     hidden_marks_quantity BIGINT NOT NULL,
     reactions_quantity BIGINT NOT NULL,
     viewing_quantity BIGINT NOT NULL,
+    entertaining_seeable_only_content_quantity BIGINT NOT NULL,
+    entertaining_seeable_and_hearable_content_quantity BIGINT NOT NULL,
+    non_entertaining_seeable_only_content_quantity BIGINT NOT NULL,
+    non_entertaining_seeable_and_hearable_content_quantity BIGINT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL,    
     PRIMARY KEY (id)
 );
