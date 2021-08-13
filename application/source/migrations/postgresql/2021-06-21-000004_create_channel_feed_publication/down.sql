@@ -1,1 +1,1 @@
-DROP TABLE channel_feed_publicaion;
+DROP TABLE channel_feed_publication;

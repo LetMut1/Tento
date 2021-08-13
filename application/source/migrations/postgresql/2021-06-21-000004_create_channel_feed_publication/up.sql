@@ -1,10 +1,11 @@
-CREATE TABLE channel_feed_publicaion ( 
+CREATE TABLE channel_feed_publication ( 
     id BIGSERIAL NOT NULL,
     channel_id BIGINT NOT NULL,
     author_application_user_administrator_id BIGINT NOT NULL,
     is_entertaining BOOLEAN NOT NULL,
     content_type SMALLINT NOT NULL,
     content_type_component TEXT NOT NULL,  -- // TODO small_description CHARACTER VARYING(100), large_description CHARACTER VARYING(500), путь до картинки, путь до музыки
+    content_type_component_preview TEXT,  -- // TODO Превью для обширных типов, чтобы первично передавать меньше информации. Если обычный мем с музыкой, то Нулл. В запросе делать условие на тип.
     public_marks_quantity BIGINT NOT NULL,
     hidden_marks_quantity BIGINT NOT NULL,
     reactions_quantity BIGINT NOT NULL,

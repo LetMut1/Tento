@@ -1,4 +1,4 @@
-CREATE TABLE channel_direct_message_publicaion ( 
+CREATE TABLE channel_direct_message_publication ( 
     id BIGSERIAL NOT NULL,
     channel_id BIGINT NOT NULL,
     author_application_user_administrator_id BIGINT NOT NULL,
