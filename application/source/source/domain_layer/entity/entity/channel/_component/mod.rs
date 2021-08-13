@@ -8,3 +8,4 @@ pub mod owner_application_user_administrator_id;
 pub mod public_marks_quantity;
 pub mod reactions_quantity;
 pub mod subscribers_quantity;
+pub mod viewing_quantity;

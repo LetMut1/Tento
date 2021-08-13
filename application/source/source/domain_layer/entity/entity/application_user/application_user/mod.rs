@@ -23,18 +23,6 @@ impl<'outer_a> ApplicationUser<'outer_a> {
         };
     }
 
-    pub fn set_email<'this>(&'this mut self, email: Email) -> &'this mut Self {
-        self.email = Cow::Owned(email);
-
-        return self;
-    }
-
-    pub fn set_nickname<'this>(&'this mut self, nickname: Nickname) -> &'this mut Self {
-        self.nickname = nickname;
-
-        return self;
-    }
-
     pub fn set_password_hash<'this>(&'this mut self, password_hash: PasswordHash) -> &'this mut Self {
         self.password_hash = password_hash;
 

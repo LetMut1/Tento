@@ -8,6 +8,7 @@ CREATE TABLE channel_feed_publicaion (
     public_marks_quantity BIGINT NOT NULL,
     hidden_marks_quantity BIGINT NOT NULL,
     reactions_quantity BIGINT NOT NULL,
+    viewing_quantity BIGINT NOT NULL,
     visible_from TIMESTAMPTZ NOT NULL,
     delete_on TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL,    

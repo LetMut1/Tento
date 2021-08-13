@@ -9,6 +9,7 @@ use super::_component::owner_application_user_administrator_id::OwnerApplication
 use super::_component::public_marks_quantity::PublicMarksQuantity;
 use super::_component::reactions_quantity::ReactionsQuantity;
 use super::_component::subscribers_quantity::SubscribersQuantity;
+use super::_component::viewing_quantity::ViewingQuantity;
 
 pub struct Channel {
     id: Option<Id>,
@@ -20,6 +21,7 @@ pub struct Channel {
     public_marks_quantity: PublicMarksQuantity,
     hidden_marks_quantity: HiddenMarksQuantity,
     reactions_quantity: ReactionsQuantity,
+    viewing_quantity: ViewingQuantity,
     created_at: CreatedAt
 }
 
@@ -34,6 +36,7 @@ impl Channel {
         public_marks_quantity: PublicMarksQuantity,
         hidden_marks_quantity: HiddenMarksQuantity,
         reactions_quantity: ReactionsQuantity,
+        viewing_quantity: ViewingQuantity,
         created_at: CreatedAt
     ) -> Self {
         return Self {
@@ -46,6 +49,7 @@ impl Channel {
             public_marks_quantity,
             hidden_marks_quantity,
             reactions_quantity,
+            viewing_quantity,
             created_at
         };
     }
@@ -91,6 +95,10 @@ impl Channel {
 
     pub fn get_reactions_quantity<'this>(&'this self) -> &'this ReactionsQuantity {
         return &self.reactions_quantity;
+    }
+
+    pub fn get_viewing_quantity<'this>(&'this self) -> &'this ViewingQuantity {
+        return &self.viewing_quantity;
     }
 
     pub fn get_created_at<'this>(&'this self) -> &'this CreatedAt {

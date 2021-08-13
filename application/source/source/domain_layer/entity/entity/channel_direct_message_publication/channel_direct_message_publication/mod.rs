@@ -5,57 +5,40 @@ use super::_component::content_type_component::ContentTypeComponent;
 use super::_component::content_type::ContentType;
 use super::_component::created_at::CreatedAt;
 use super::_component::delete_on::DeleteOn;
-use super::_component::hidden_marks_quantity::HiddenMarksQuantity;
 use super::_component::id::Id;
-use super::_component::is_entertaining::IsEntertaining;
-use super::_component::public_marks_quantity::PublicMarksQuantity;
-use super::_component::reactions_quantity::ReactionsQuantity;
 use super::_component::viewing_quantity::ViewingQuantity;
 use super::_component::visible_from::VisibleFrom;
 
-pub struct ChannelFeedPublication {
+pub struct ChannelDirectMessagePublication {
     id: Option<Id>,
     channel_id: ChannelId,
     author_application_user_administrator_id: AuthorApplicationUserAdministratorId,
-    is_entertaining: IsEntertaining,
     content_type: ContentType,
     content_type_component: ContentTypeComponent,
-    public_marks_quantity: PublicMarksQuantity,
-    hidden_marks_quantity: HiddenMarksQuantity,
-    reactions_quantity: ReactionsQuantity,
     viewing_quantity: ViewingQuantity,
     visible_from: VisibleFrom,
-    delete_on: Option<DeleteOn>,
+    delete_on: DeleteOn,
     created_at: CreatedAt
-
 }
 
-impl ChannelFeedPublication {
+impl ChannelDirectMessagePublication {
     pub fn new(
         id: Option<Id>,
         channel_id: ChannelId,
         author_application_user_administrator_id: AuthorApplicationUserAdministratorId,
-        is_entertaining: IsEntertaining,
         content_type: ContentType,
         content_type_component: ContentTypeComponent,
-        public_marks_quantity: PublicMarksQuantity,
-        hidden_marks_quantity: HiddenMarksQuantity,
-        reactions_quantity: ReactionsQuantity,
         viewing_quantity: ViewingQuantity,
         visible_from: VisibleFrom,
-        delete_on: Option<DeleteOn>,
+        delete_on: DeleteOn,
         created_at: CreatedAt
     ) -> Self {
         return Self {
             id,
             channel_id,
             author_application_user_administrator_id,
-            is_entertaining,
             content_type,
             content_type_component,
-            public_marks_quantity,
-            hidden_marks_quantity,
-            reactions_quantity,
             viewing_quantity,
             visible_from,
             delete_on,
@@ -82,28 +65,12 @@ impl ChannelFeedPublication {
         return &self.author_application_user_administrator_id;
     }
 
-    pub fn get_is_entertaining<'this>(&'this self) -> &'this IsEntertaining {
-        return &self.is_entertaining;
-    }
-
     pub fn get_content_type<'this>(&'this self) -> &'this ContentType {
         return &self.content_type;
     }
 
     pub fn get_content_type_component<'this>(&'this self) -> &'this ContentTypeComponent {
         return &self.content_type_component;
-    }
-
-    pub fn get_public_marks_quantoty<'this>(&'this self) -> &'this PublicMarksQuantity {
-        return &self.public_marks_quantity;
-    }
-
-    pub fn get_hidden_marks_quantity<'this>(&'this self) -> &'this HiddenMarksQuantity {
-        return &self.hidden_marks_quantity;
-    }
-
-    pub fn get_reactions_quantity<'this>(&'this self) -> &'this ReactionsQuantity {
-        return &self.reactions_quantity;
     }
 
     pub fn get_viewing_quantity<'this>(&'this self) -> &'this ViewingQuantity {
@@ -114,7 +81,7 @@ impl ChannelFeedPublication {
         return &self.visible_from;
     }
 
-    pub fn get_delete_on<'this>(&'this self) -> &'this Option<DeleteOn> {
+    pub fn get_delete_on<'this>(&'this self) -> &'this DeleteOn {
         return &self.delete_on;
     }
 

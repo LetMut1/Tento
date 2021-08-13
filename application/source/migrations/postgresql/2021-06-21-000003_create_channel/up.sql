@@ -8,6 +8,7 @@ CREATE TABLE channel (
     public_marks_quantity BIGINT NOT NULL,
     hidden_marks_quantity BIGINT NOT NULL,
     reactions_quantity BIGINT NOT NULL,
+    viewing_quantity BIGINT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL,    
     PRIMARY KEY (id)
 );
