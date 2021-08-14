@@ -1,6 +1,7 @@
 use crate::domain_layer::entity::entity::channel::_component::id::Id as ChannelId;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use super::_component::author_application_user_administrator_id::AuthorApplicationUserAdministratorId;
+use super::_component::content_type_component_preview::ContentTypeComponentPreview;
 use super::_component::content_type_component::ContentTypeComponent;
 use super::_component::content_type::ContentType;
 use super::_component::created_at::CreatedAt;
@@ -20,6 +21,7 @@ pub struct ChannelFeedPublication {
     is_entertaining: IsEntertaining,
     content_type: ContentType,
     content_type_component: ContentTypeComponent,
+    content_type_component_preview: ContentTypeComponentPreview,
     public_marks_quantity: PublicMarksQuantity,
     hidden_marks_quantity: HiddenMarksQuantity,
     reactions_quantity: ReactionsQuantity,
@@ -38,6 +40,7 @@ impl ChannelFeedPublication {
         is_entertaining: IsEntertaining,
         content_type: ContentType,
         content_type_component: ContentTypeComponent,
+        content_type_component_preview: ContentTypeComponentPreview,
         public_marks_quantity: PublicMarksQuantity,
         hidden_marks_quantity: HiddenMarksQuantity,
         reactions_quantity: ReactionsQuantity,
@@ -53,6 +56,7 @@ impl ChannelFeedPublication {
             is_entertaining,
             content_type,
             content_type_component,
+            content_type_component_preview,
             public_marks_quantity,
             hidden_marks_quantity,
             reactions_quantity,
@@ -92,6 +96,10 @@ impl ChannelFeedPublication {
 
     pub fn get_content_type_component<'this>(&'this self) -> &'this ContentTypeComponent {
         return &self.content_type_component;
+    }
+
+    pub fn get_content_type_component_preview<'this>(&'this self) -> &'this ContentTypeComponentPreview {
+        return &self.content_type_component_preview;
     }
 
     pub fn get_public_marks_quantoty<'this>(&'this self) -> &'this PublicMarksQuantity {
