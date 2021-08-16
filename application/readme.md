@@ -1,1 +1,2 @@
-Initialize Postgresql structure from migration: diesel database reset --database-url=postgres://root:password@postgresql/mem_is --migration-dir=./migrations/postgresql/
+Initialize Postgresql structure from migration:
+    diesel database reset --database-url=postgres://root:password@postgresql/mem_is --migration-dir=/usr/local/MemIs/application/source/migration/postgresql/
