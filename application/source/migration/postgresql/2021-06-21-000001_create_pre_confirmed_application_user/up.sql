@@ -1,12 +1,11 @@
 CREATE TABLE public.pre_confirmed_application_user (
     id BIGINT,
     email CHARACTER VARYING(320),
-    created_at TIMESTAMPTZ, 
-    PRIMARY KEY (id)
+    created_at TIMESTAMPTZ
 );
 
-CREATE SEQUENCE public.pre_confirmed_application_user__id_sequence INCREMENT BY 1 NO MINVALUE NO MAXVALUE
-START WITH 1 CACHE 1 NO CYCLE OWNED BY public.pre_confirmed_application_user.id
+CREATE SEQUENCE public.pre_confirmed_application_user__id__sequence INCREMENT BY 1 NO MINVALUE NO MAXVALUE
+START WITH 1 CACHE 1 NO CYCLE OWNED BY public.pre_confirmed_application_user.id;
 
 ALTER TABLE ONLY public.pre_confirmed_application_user
     ALTER COLUMN id SET NOT NULL DEFAULT nextval('public.pre_confirmed_application_user__id_sequence'),
