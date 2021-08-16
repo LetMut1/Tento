@@ -1,11 +1,34 @@
-CREATE TABLE pre_confirmed_application_user (
-    id BIGSERIAL NOT NULL,
-    email CHARACTER VARYING(320) NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL, 
+CREATE TABLE public.pre_confirmed_application_user (
+    id BIGINT,
+    email CHARACTER VARYING(320),
+    created_at TIMESTAMPTZ, 
     PRIMARY KEY (id)
 );
-    -- // TODO // TODO // TODO // TODO // TODOделать все Ограничения (даже FK) (кроме PK) через Alter Table !!!!!!
-         -- // TODO изучить полный синтаксис создания таблиц
+
+CREATE SEQUENCE public.pre_confirmed_application_user__id_sequence INCREMENT BY 1 NO MINVALUE NO MAXVALUE
+START WITH 1 CACHE 1 NO CYCLE OWNED BY public.pre_confirmed_application_user.id
+
+ALTER TABLE ONLY public.pre_confirmed_application_user
+    ALTER COLUMN id SET NOT NULL DEFAULT nextval('public.pre_confirmed_application_user__id_sequence'),
+    ALTER COLUMN email SET NOT NULL,
+    ALTER COLUMN created_at SET NOT NULL,
+    ADD CONSTRAINT pre_confirmed_application_user__id__primary_key PRIMARY KEY (id);
+
+-- // TODO // TODO // TODO // TODO  Индексы изучить CREATE INDEX CONCURRENTLY !!!!!!!1.
+
+-- https://www.postgresql.org/docs/8.3/sql-createindex.html
+
+
+-- Чувствительны ли индексы к Регистру. (Нужно ли делать так для Емэйла или Никнейма)
+-- To create an index on the expression lower(title), allowing efficient case-insensitive searches:
+-- CREATE INDEX lower_title_idx ON films ((lower(title)));
+
+
+--  Пройтись по Филфактору для B-tree в контексте постоянно обновляющихся данных.
+
+
+-- TODO https://postgrespro.ru/docs/postgresql/9.6/datatype-numeric#datatype-serial    !!!! УДАЛИТь ВЕзДе SERIAL, заменить на рукописное написпние Secu
+
 
     -- // email value - уникальное
         -- // TODO удалять висящие кортежи (написать функцию либо через крон по бинарнику)

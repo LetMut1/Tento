@@ -1,5 +1,5 @@
 CREATE TABLE channel ( 
-    id BIGSERIAL NOT NULL,
+    id BIGSERIAL NOT NULL,  -- // TODO Оффет делаем как (where id < ... ORDER BY DESC) !!
     owner_application_user_administrator_id BIGINT NOT NULL,
     name CHARACTER VARYING(75) NOT NULL,
     description CHARACTER VARYING(500),
@@ -13,6 +13,6 @@ CREATE TABLE channel (
     entertaining_seeable_and_hearable_content_quantity BIGINT NOT NULL,
     non_entertaining_seeable_only_content_quantity BIGINT NOT NULL,
     non_entertaining_seeable_and_hearable_content_quantity BIGINT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL,    
+    created_at TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (id)
 );

@@ -3,7 +3,7 @@ use actix_web::HttpResponse;
 use actix_web::web::Data;
 use actix_web::web::Form;
 use actix_web::web::Query;
-use actix_web::web::ReqData;
+use actix_web::web::ReqData as RequestData;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in::handler::Handler as LogInHandler;
@@ -532,8 +532,8 @@ impl Authorization {
         }
     }
 
-    pub async fn log_out(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref base_error) = LogOutHandler::handle(data.into_inner(), &req_data.into_inner()) {
+    pub async fn log_out(request_data: RequestData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(ref base_error) = LogOutHandler::handle(data.into_inner(), &request_data.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
@@ -565,8 +565,8 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn log_out_from_all_devices(req_data: ReqData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref base_error) = LogOutFromAllDevicesHandler::handle(data.into_inner(), &req_data.into_inner()) {
+    pub async fn log_out_from_all_devices(request_data: RequestData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(ref base_error) = LogOutFromAllDevicesHandler::handle(data.into_inner(), &request_data.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
