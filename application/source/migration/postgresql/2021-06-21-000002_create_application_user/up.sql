@@ -1,21 +1,35 @@
 CREATE TABLE application_user ( 
-    id BIGSERIAL NOT NULL,
-    email CHARACTER VARYING(320) NOT NULL,
-    nickname CHARACTER VARYING(55) NOT NULL,
-    password_hash TEXT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL,    
-    PRIMARY KEY (id)
+    id BIGINT,
+    email CHARACTER VARYING(320),
+    nickname CHARACTER VARYING(55),
+    password_hash TEXT,
+    created_at TIMESTAMPTZ
 );
-ALTER TABLE application_user ADD CONSTRAINT email_1 UNIQUE (email);
 
-    -- // TODO email - уникальное
-    -- // TODO nickanme - уникальное
+CREATE SEQUENCE public.application_user__id__sequence INCREMENT BY 1 NO MINVALUE NO MAXVALUE
+START WITH 1 CACHE 1 NO CYCLE OWNED BY public.application_user.id;
+
+CREATE UNIQUE INDEX application_user__id__unique_index ON public.application_user
+USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
+
+CREATE UNIQUE INDEX application_user__email__unique_index ON public.application_user
+USING btree (email ASC NULLS LAST) WITH (FILLFACTOR = 90);
+
+CREATE UNIQUE INDEX application_user__nickname__unique_index ON public.application_user
+USING btree (nickname ASC NULLS LAST) WITH (FILLFACTOR = 90);
+
+ALTER TABLE ONLY public.application_user
+ALTER COLUMN id SET NOT NULL,
+ALTER COLUMN id SET DEFAULT nextval('public.application_user__id__sequence'),
+ALTER COLUMN email SET NOT NULL,
+ALTER COLUMN nickname SET NOT NULL,
+ALTER COLUMN password_hash SET NOT NULL,
+ALTER COLUMN created_at SET NOT NULL,
+ADD CONSTRAINT application_user__id__primary_key PRIMARY KEY USING INDEX application_user__id__unique_index,
+ADD CONSTRAINT application_user__email__unique_constraint UNIQUE USING INDEX application_user__email__unique_index,
+ADD CONSTRAINT application_user__nickname__unique_constraint UNIQUE USING INDEX application_user__nickname__unique_index;
+    
+
+
     
 -- // TODO нужно ли ДатаПоследнегоВхода-Выхода. По идее, да. Но это нагруза на Бд. С другой стороны, видимость пользтвателелй и активноти. Подумать, что нужно еще
-
-
--- // TODO On delete cascade (при удалении юзра должны удалятьсявсе зависимые таблицы)
--- // TODO Create Constraints (Внешние ключи обязательно ставить все. Если уникальное поле из 3 значений, то ставить внешний ключ на каждое, если эо поле по факту внешний ключ)
--- // TODO Сделать индексы на внешние ключи ( посмотреть, где это нужно)
--- // TODO все, где есть дата експирации, удалять по крону бинарнику (или из-под бд сразу)
--- // TODO проврить down
