@@ -1,4 +1,5 @@
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::domain_layer::entity::entity::application_user_channel_administrator::_component::id::Id as ApplicationUserChannelAdministratorId;
 use super::_component::created_at::CreatedAt;
 use super::_component::description::Description;
 use super::_component::entertaining_seeable_and_hearable_content_quantity::EntertainingSeeableAndHearableContentQuantity;
@@ -9,7 +10,6 @@ use super::_component::is_private::IsPrivate;
 use super::_component::name::Name;
 use super::_component::non_entertaining_seeable_and_hearable_content_quantity::NonEntertainingSeeableAndHearableContentQuantity;
 use super::_component::non_entertaining_seeable_only_content_quantity::NonEntertainingSeeableOnlyContentQuantity;
-use super::_component::owner_application_user_administrator_id::OwnerApplicationUserAdministratorId;
 use super::_component::public_marks_quantity::PublicMarksQuantity;
 use super::_component::reactions_quantity::ReactionsQuantity;
 use super::_component::subscribers_quantity::SubscribersQuantity;
@@ -17,7 +17,7 @@ use super::_component::viewing_quantity::ViewingQuantity;
 
 pub struct Channel {
     id: Option<Id>,
-    owner_application_user_administrator_id: OwnerApplicationUserAdministratorId,
+    owner_application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
     name: Name,
     description: Option<Description>,
     is_private: IsPrivate,
@@ -36,7 +36,7 @@ pub struct Channel {
 impl Channel {
     pub fn new(
         id: Option<Id>,
-        owner_application_user_administrator_id: OwnerApplicationUserAdministratorId,
+        owner_application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
         name: Name,
         description: Option<Description>,
         is_private: IsPrivate,
@@ -53,7 +53,7 @@ impl Channel {
     ) -> Self {
         return Self {
             id,
-            owner_application_user_administrator_id,
+            owner_application_user_channel_administrator_id,
             name,
             description,
             is_private,
@@ -81,8 +81,8 @@ impl Channel {
         }
     }
 
-    pub fn get_owner_application_user_administrator_id<'this>(&'this self) -> &'this OwnerApplicationUserAdministratorId {
-        return &self.owner_application_user_administrator_id;
+    pub fn get_owner_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {
+        return &self.owner_application_user_channel_administrator_id;
     }
 
     pub fn get_name<'this>(&'this self) -> &'this Name {

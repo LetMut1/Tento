@@ -1,6 +1,6 @@
+use crate::domain_layer::entity::entity::application_user_channel_administrator::_component::id::Id as ApplicationUserChannelAdministratorId;
 use crate::domain_layer::entity::entity::channel::_component::id::Id as ChannelId;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use super::_component::author_application_user_administrator_id::AuthorApplicationUserAdministratorId;
 use super::_component::content_type_component::ContentTypeComponent;
 use super::_component::content_type::ContentType;
 use super::_component::created_at::CreatedAt;
@@ -12,7 +12,7 @@ use super::_component::visible_from::VisibleFrom;
 pub struct ChannelDirectMessagePublication {
     id: Option<Id>,
     channel_id: ChannelId,
-    author_application_user_administrator_id: AuthorApplicationUserAdministratorId,
+    author_application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
     content_type: ContentType,
     content_type_component: ContentTypeComponent,
     viewing_quantity: ViewingQuantity,
@@ -25,7 +25,7 @@ impl ChannelDirectMessagePublication {
     pub fn new(
         id: Option<Id>,
         channel_id: ChannelId,
-        author_application_user_administrator_id: AuthorApplicationUserAdministratorId,
+        author_application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
         content_type: ContentType,
         content_type_component: ContentTypeComponent,
         viewing_quantity: ViewingQuantity,
@@ -36,7 +36,7 @@ impl ChannelDirectMessagePublication {
         return Self {
             id,
             channel_id,
-            author_application_user_administrator_id,
+            author_application_user_channel_administrator_id,
             content_type,
             content_type_component,
             viewing_quantity,
@@ -61,8 +61,8 @@ impl ChannelDirectMessagePublication {
         return &self.channel_id;
     }
 
-    pub fn get_author_application_user_administrator_id<'this>(&'this self) -> &'this AuthorApplicationUserAdministratorId {
-        return &self.author_application_user_administrator_id;
+    pub fn get_author_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {
+        return &self.author_application_user_channel_administrator_id;
     }
 
     pub fn get_content_type<'this>(&'this self) -> &'this ContentType {

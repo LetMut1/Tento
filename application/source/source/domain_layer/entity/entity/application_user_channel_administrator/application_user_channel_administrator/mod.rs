@@ -1,0 +1,58 @@
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use std::borrow::Cow;
+use super::_component::created_at::CreatedAt;
+use super::_component::email::Email;
+use super::_component::id::Id;
+use super::_component::nickname::Nickname;
+use super::_component::password_hash::PasswordHash; // TODO Тот Нужно ли вынести Пассворд хеш в Общий тип.
+
+pub struct ApplicationUserChannelAdministrator<'outer_a> {
+    id: Option<Id>,
+    email: Cow<'outer_a, Email>,
+    nickname: Nickname,
+    password_hash: PasswordHash,
+    created_at: CreatedAt
+}
+
+impl<'outer_a> ApplicationUserChannelAdministrator<'outer_a> {
+    pub fn new(
+        id: Option<Id>, email: Cow<'outer_a, Email>, nickname: Nickname, password_hash: PasswordHash, created_at: CreatedAt
+    ) -> Self {
+        return Self {
+            id, email, nickname, password_hash, created_at 
+        };
+    }
+
+    pub fn set_password_hash<'this>(&'this mut self, password_hash: PasswordHash) -> &'this mut Self {
+        self.password_hash = password_hash;
+
+        return self;
+    }
+
+    pub fn get_id<'this>(&'this self) -> Result<&'this Id, BaseError> {
+        match self.id {
+            Some(ref id) => {
+                return Ok(id);
+            }
+            None => {
+                return Err(BaseError::LogicError("Id does not exist yet."))
+            }
+        }
+    }
+
+    pub fn get_email<'this>(&'this self) -> &'this Email {
+        return self.email.as_ref();
+    }
+
+    pub fn get_nickname<'this>(&'this self) -> &'this Nickname {
+        return &self.nickname;
+    }
+
+    pub fn get_password_hash<'this>(&'this self) -> &'this PasswordHash {
+        return &self.password_hash;
+    }
+
+    pub fn get_created_at<'this>(&'this self) -> &'this CreatedAt {
+        return &self.created_at;
+    }
+}

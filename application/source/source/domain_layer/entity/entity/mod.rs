@@ -1,3 +1,4 @@
+pub mod application_user_channel_administrator;
 pub mod application_user_log_in_token;
 pub mod application_user_mark;
 pub mod application_user_registration_confirmation_token;
