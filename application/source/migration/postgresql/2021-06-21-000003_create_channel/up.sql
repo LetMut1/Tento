@@ -1,5 +1,5 @@
 CREATE TABLE channel ( 
-    id BIGSERIAL NOT NULL,  -- // TODO Оффет делаем как (where id < ... ORDER BY DESC) !!
+    id BIGSERIAL NOT NULL,
     owner_application_user_administrator_id BIGINT NOT NULL,
     name CHARACTER VARYING(75) NOT NULL,
     description CHARACTER VARYING(500),
@@ -16,3 +16,6 @@ CREATE TABLE channel (
     created_at TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (id)
 );
+
+
+  -- // TODO Оффет делаем как (where id < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод)
