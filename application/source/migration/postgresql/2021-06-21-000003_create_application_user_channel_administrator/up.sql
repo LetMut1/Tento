@@ -28,8 +28,3 @@ ALTER COLUMN id SET DEFAULT nextval('public.application_user_channel_administrat
 ADD CONSTRAINT application_user_channel_administrator__id__primary_key PRIMARY KEY USING INDEX application_user_channel_administrator__id__unique_index;
 -- ADD CONSTRAINT application_user_channel_administrator__email__unique_constraint UNIQUE USING INDEX application_user_channel_administrator__email__unique_index,
 -- ADD CONSTRAINT application_user_channel_administrator__nickname__unique_constraint UNIQUE USING INDEX application_user_channel_administrator__nickname__unique_index;
-    
-
-
-    
--- // TODO нужно ли ДатаПоследнегоВхода-Выхода. По идее, да. Но это нагруза на Бд. С другой стороны, видимость пользтвателелй и активноти. Подумать, что нужно еще

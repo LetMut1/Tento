@@ -6,6 +6,7 @@ use super::_component::content_type::ContentType;
 use super::_component::created_at::CreatedAt;
 use super::_component::delete_on::DeleteOn;
 use super::_component::id::Id;
+use super::_component::status::Status;
 use super::_component::viewing_quantity::ViewingQuantity;
 use super::_component::visible_from::VisibleFrom;
 
@@ -16,6 +17,7 @@ pub struct ChannelDirectMessagePublication {
     content_type: ContentType,
     content_type_component: ContentTypeComponent,
     viewing_quantity: ViewingQuantity,
+    status: Status,
     visible_from: VisibleFrom,
     delete_on: DeleteOn,
     created_at: CreatedAt
@@ -29,6 +31,7 @@ impl ChannelDirectMessagePublication {
         content_type: ContentType,
         content_type_component: ContentTypeComponent,
         viewing_quantity: ViewingQuantity,
+        status: Status,
         visible_from: VisibleFrom,
         delete_on: DeleteOn,
         created_at: CreatedAt
@@ -40,6 +43,7 @@ impl ChannelDirectMessagePublication {
             content_type,
             content_type_component,
             viewing_quantity,
+            status,
             visible_from,
             delete_on,
             created_at
@@ -75,6 +79,10 @@ impl ChannelDirectMessagePublication {
 
     pub fn get_viewing_quantity<'this>(&'this self) -> &'this ViewingQuantity {
         return &self.viewing_quantity;
+    }
+
+    pub fn get_status<'this>(&'this self) -> &'this Status {
+        return &self.status;
     }
 
     pub fn get_visible_from<'this>(&'this self) -> &'this VisibleFrom {

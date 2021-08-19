@@ -1,8 +1,8 @@
-pub struct Value {
+pub struct ContentTypeComponent {
     value: String
 }
 
-impl Value {
+impl ContentTypeComponent { // TODO Разбить на части для сериализации десиарлизации
     pub fn new(value: String) -> Self {
         return Self {
             value

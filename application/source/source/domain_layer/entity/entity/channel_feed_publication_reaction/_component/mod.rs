@@ -1,8 +1,5 @@
 pub mod content_type_component;
 pub mod content_type;
 pub mod created_at;
-pub mod delete_on;
 pub mod id;
-pub mod status;
-pub mod viewing_quantity;
-pub mod visible_from;
+pub mod public_marks_quantity;

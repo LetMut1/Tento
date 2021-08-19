@@ -1,22 +1,60 @@
 CREATE TABLE channel_feed_publication ( 
-    id BIGSERIAL NOT NULL,
-    channel_id BIGINT NOT NULL,
-    author_application_user_administrator_id BIGINT NOT NULL,
-    is_entertaining BOOLEAN NOT NULL,
-    content_type SMALLINT NOT NULL,
-    content_type_component TEXT NOT NULL,  -- // TODO small_description CHARACTER VARYING(100), large_description CHARACTER VARYING(500), путь до картинки, путь до музыки
+    id BIGINT,
+    channel_id BIGINT,
+    author_application_user_channel_administrator_id BIGINT,
+    is_entertaining BOOLEAN,
+    content_type SMALLINT,
+    content_type_component TEXT,  -- // TODO small_description large_description путь до картинки, путь до музыки
     content_type_component_preview TEXT,  -- // TODO Превью для обширных типов, чтобы первично передавать меньше информации. Если обычный мем с музыкой, то Нулл. В запросе делать условие на тип.
-    public_marks_quantity BIGINT NOT NULL,
-    hidden_marks_quantity BIGINT NOT NULL,
-    reactions_quantity BIGINT NOT NULL,
-    viewing_quantity BIGINT NOT NULL,
-    visible_from TIMESTAMPTZ NOT NULL,
-    delete_on TIMESTAMPTZ,
-    created_at TIMESTAMPTZ NOT NULL,    
-    PRIMARY KEY (id)
+    public_marks_quantity BIGINT,
+    hidden_marks_quantity BIGINT,
+    reactions_quantity BIGINT,
+    viewing_quantity BIGINT,
+    status SMALLINT,            -- // TODO  Создан, удален (добавятся, возможно, еще). СДелано, чтобы можно было удалять с S3 через команду на кроне
+    visible_from TIMESTAMPTZ,
+    delete_on TIMESTAMPTZ,      -- // TODO Написать команду для удаления 
+    created_at TIMESTAMPTZ
 );
 
--- // TODO // TODO // TODO !!!!! Описать в докблоках
--- // TODO // TODO // TODO !!!!! Принцип описания Поста: Декомпозиция ( с точки зрения НормальныхФорм БАйса-Кода) в одну широкую таблицу, объединяющую все разновидности контента внутри Поста:
--- // TODO // TODO // TODO !!!!! Есть "Тип поста" и необходимые поля для "Тип поста". ВСе поля для "Тип поста" необязательны (!НЕ! NOT NULL). В коде проверяем заполненность полей для соответстующего типа
--- // TODO // TODO // TODO !!!!! и ставим Триггер или Ограничение в БД с той же логикой. Пишем исчерпывающие интеграционные тесты.
+CREATE SEQUENCE public.channel_feed_publication__id__sequence INCREMENT BY 1 NO MINVALUE NO MAXVALUE
+START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel_feed_publication.id;
+
+CREATE UNIQUE INDEX channel_feed_publication__id__unique_index ON public.channel_feed_publication
+USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
+
+CREATE UNIQUE INDEX channel_feed_publication__channel_id__visible_from__unique_index ON public.channel_feed_publication
+USING btree (channel_id, visible_from ASC NULLS LAST) WITH (FILLFACTOR = 65);
+
+CREATE INDEX channel_feed_publication__delete_on__index ON public.channel_feed_publication
+USING btree (delete_on ASC NULLS LAST) WITH (FILLFACTOR = 90) WHERE delete_on IS NOT NULL;
+
+ALTER TABLE ONLY public.channel_feed_publication
+ALTER COLUMN id SET NOT NULL,
+ALTER COLUMN id SET DEFAULT nextval('public.channel_feed_publication__id__sequence'),
+ALTER COLUMN channel_id SET NOT NULL,
+ALTER COLUMN author_application_user_channel_administrator_id SET NOT NULL,
+ALTER COLUMN is_entertaining SET NOT NULL,
+ALTER COLUMN content_type SET NOT NULL,
+ALTER COLUMN content_type_component SET NOT NULL,
+ALTER COLUMN public_marks_quantity SET NOT NULL,
+ALTER COLUMN hidden_marks_quantity SET NOT NULL,
+ALTER COLUMN reactions_quantity SET NOT NULL,
+ALTER COLUMN viewing_quantity SET NOT NULL,
+ALTER COLUMN status SET NOT NULL,
+ALTER COLUMN visible_from SET NOT NULL,
+ALTER COLUMN created_at SET NOT NULL,
+ADD CONSTRAINT channel_feed_publication__id__primary_key PRIMARY KEY USING INDEX channel_feed_publication__id__unique_index,
+ADD CONSTRAINT channel_feed_publication__channel_id__foreign_key FOREIGN KEY (channel_id)
+REFERENCES public.channel(id) ON DELETE RESTRICT,
+ADD CONSTRAINT channel_feed_publication__author_application_user_channel_administrator_id__foreign_key FOREIGN KEY (author_application_user_channel_administrator_id)
+REFERENCES public.application_user_channel_administrator(id) ON DELETE RESTRICT;
+
+-- // TODO Удаление публикации - это status (deleted). То есть, если удаяелтся паблик, все публикации должны перейти в статус (делетед). (как быть при удалении  channel? )
+-- // TODO НАПИСАТЬ команду, которая на кроне проходит по Стутус=делетед и удаляет с S3 и из бд данные.
+
+-- // TODO При Зпросе из приватных каналов, нужно проверять, подписан ли пользователь на этот канал. !!!!!!!!!!!!!!!!!
+-- нужны ли Open/close каналы (Закрытый - не видишь контент, пока не подпишешься)
+
+-- // TODO TODO TODO !!!! (channel_id,visible_from)- уникальное. visible_from всегда кратно N минутам. То есть, за час можно выложить 60/N постов. ПРОВЕРЯТЬ ЭТО НА БЭке
+--  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (строчка выше). НА Фронте у админов можно отображать календарь.
+-- // TODO Оффет делаем как (where channel_id = ... and visible_from < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод).

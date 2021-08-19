@@ -11,6 +11,7 @@ use super::_component::id::Id;
 use super::_component::is_entertaining::IsEntertaining;
 use super::_component::public_marks_quantity::PublicMarksQuantity;
 use super::_component::reactions_quantity::ReactionsQuantity;
+use super::_component::status::Status;
 use super::_component::viewing_quantity::ViewingQuantity;
 use super::_component::visible_from::VisibleFrom;
 
@@ -26,6 +27,7 @@ pub struct ChannelFeedPublication {
     hidden_marks_quantity: HiddenMarksQuantity,
     reactions_quantity: ReactionsQuantity,
     viewing_quantity: ViewingQuantity,
+    status: Status,
     visible_from: VisibleFrom,
     delete_on: Option<DeleteOn>,
     created_at: CreatedAt
@@ -45,6 +47,7 @@ impl ChannelFeedPublication {
         hidden_marks_quantity: HiddenMarksQuantity,
         reactions_quantity: ReactionsQuantity,
         viewing_quantity: ViewingQuantity,
+        status: Status,
         visible_from: VisibleFrom,
         delete_on: Option<DeleteOn>,
         created_at: CreatedAt
@@ -61,6 +64,7 @@ impl ChannelFeedPublication {
             hidden_marks_quantity,
             reactions_quantity,
             viewing_quantity,
+            status,
             visible_from,
             delete_on,
             created_at
@@ -116,6 +120,10 @@ impl ChannelFeedPublication {
 
     pub fn get_viewing_quantity<'this>(&'this self) -> &'this ViewingQuantity {
         return &self.viewing_quantity;
+    }
+
+    pub fn get_status<'this>(&'this self) -> &'this Status {
+        return &self.status;
     }
 
     pub fn get_visible_from<'this>(&'this self) -> &'this VisibleFrom {

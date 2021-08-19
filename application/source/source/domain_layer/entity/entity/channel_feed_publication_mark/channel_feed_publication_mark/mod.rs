@@ -4,14 +4,14 @@ use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use super::_component::id::Id;
 use super::_component::r#type::Type;
 
-pub struct ApplicationUserMark {
+pub struct ChannelFeedPublicationMark {
     id: Option<Id>,
     application_user_id: ApplicationUserId,
     channel_feed_publication_id: ChannelFeedPublicationId,
     r#type: Type
 }
 
-impl ApplicationUserMark {
+impl ChannelFeedPublicationMark {
     pub fn new(
         id: Option<Id>,
         application_user_id: ApplicationUserId,

@@ -1,13 +1,13 @@
 pub mod application_user_channel_administrator;
 pub mod application_user_log_in_token;
-pub mod application_user_mark;
+pub mod channel_feed_publication_mark;
 pub mod application_user_registration_confirmation_token;
 pub mod application_user_reset_password_token;
 pub mod application_user_subscription;
 pub mod application_user;
 pub mod channel_direct_message_publication;
 pub mod channel_feed_publication;
-pub mod channel_feed_reaction;
+pub mod channel_feed_publication_reaction;
 pub mod channel_subscription;
 pub mod channel;
 pub mod json_access_web_token_black_list;

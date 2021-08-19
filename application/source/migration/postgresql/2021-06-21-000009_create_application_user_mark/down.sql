@@ -1,1 +1,1 @@
-DROP TABLE application_user_mark;
+DROP TABLE channel_feed_publication_mark;

@@ -8,5 +8,6 @@ pub mod id;
 pub mod is_entertaining;
 pub mod public_marks_quantity;
 pub mod reactions_quantity;
+pub mod status;
 pub mod viewing_quantity;
 pub mod visible_from;
