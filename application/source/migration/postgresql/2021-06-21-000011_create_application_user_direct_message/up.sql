@@ -6,7 +6,7 @@
 
 
 
-
+SELECT 'This is a stub';
 
 
 -- CREATE SEQUENCE public.application_user_subscription__id__sequence INCREMENT BY 1 NO MINVALUE NO MAXVALUE
