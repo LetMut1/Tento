@@ -16,21 +16,21 @@ CREATE TABLE channel_feed_publication (
     created_at TIMESTAMPTZ
 );
 
-CREATE SEQUENCE public.channel_feed_publication__id__sequence INCREMENT BY 1 NO MINVALUE NO MAXVALUE
+CREATE SEQUENCE public.channel_feed_publication1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel_feed_publication.id;
 
-CREATE UNIQUE INDEX channel_feed_publication__id__unique_index ON public.channel_feed_publication
+CREATE UNIQUE INDEX channel_feed_publication2 ON public.channel_feed_publication
 USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
 
-CREATE UNIQUE INDEX channel_feed_publication__channel_id__visible_from__unique_index ON public.channel_feed_publication
+CREATE UNIQUE INDEX channel_feed_publication3 ON public.channel_feed_publication
 USING btree (channel_id, visible_from ASC NULLS LAST) WITH (FILLFACTOR = 65);
 
-CREATE INDEX channel_feed_publication__delete_on__index ON public.channel_feed_publication
+CREATE INDEX channel_feed_publication4 ON public.channel_feed_publication
 USING btree (delete_on ASC NULLS LAST) WITH (FILLFACTOR = 90) WHERE delete_on IS NOT NULL;
 
 ALTER TABLE ONLY public.channel_feed_publication
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.channel_feed_publication__id__sequence'),
+ALTER COLUMN id SET DEFAULT nextval('public.channel_feed_publication1'),
 ALTER COLUMN channel_id SET NOT NULL,
 ALTER COLUMN author_application_user_channel_administrator_id SET NOT NULL,
 ALTER COLUMN is_entertaining SET NOT NULL,
@@ -43,11 +43,12 @@ ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN status SET NOT NULL,
 ALTER COLUMN visible_from SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ADD CONSTRAINT channel_feed_publication__id__primary_key PRIMARY KEY USING INDEX channel_feed_publication__id__unique_index,
-ADD CONSTRAINT channel_feed_publication__channel_id__foreign_key FOREIGN KEY (channel_id)
+ADD CONSTRAINT channel_feed_publication5 PRIMARY KEY USING INDEX channel_feed_publication2,
+ADD CONSTRAINT channel_feed_publication6 FOREIGN KEY (channel_id)
 REFERENCES public.channel(id) ON DELETE RESTRICT,
-ADD CONSTRAINT channel_feed_publication__author_application_user_channel_administrator_id__foreign_key FOREIGN KEY (author_application_user_channel_administrator_id)
-REFERENCES public.application_user_channel_administrator(id) ON DELETE RESTRICT;
+ADD CONSTRAINT channel_feed_publication7 FOREIGN KEY (author_application_user_channel_administrator_id)
+REFERENCES public.application_user_channel_administrator(id) ON DELETE RESTRICT,
+ADD CONSTRAINT channel_feed_publication8 UNIQUE USING INDEX channel_feed_publication3;
 
 -- // TODO Удаление публикации - это status (deleted). То есть, если удаяелтся паблик, все публикации должны перейти в статус (делетед). (как быть при удалении  channel? )
 -- // TODO НАПИСАТЬ команду, которая на кроне проходит по Стутус=делетед и удаляет с S3 и из бд данные.

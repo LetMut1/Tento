@@ -4,22 +4,22 @@ CREATE TABLE public.pre_confirmed_application_user (
     created_at TIMESTAMPTZ
 );
 
-CREATE SEQUENCE public.pre_confirmed_application_user__id__sequence INCREMENT BY 1 NO MINVALUE NO MAXVALUE
+CREATE SEQUENCE public.pre_confirmed_application_user1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.pre_confirmed_application_user.id;
 
-CREATE UNIQUE INDEX pre_confirmed_application_user__id__unique_index ON public.pre_confirmed_application_user
+CREATE UNIQUE INDEX pre_confirmed_application_user2 ON public.pre_confirmed_application_user
 USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
 
-CREATE UNIQUE INDEX pre_confirmed_application_user__email__unique_index ON public.pre_confirmed_application_user
+CREATE UNIQUE INDEX pre_confirmed_application_user3 ON public.pre_confirmed_application_user
 USING btree (email ASC NULLS LAST) WITH (FILLFACTOR = 90);
 
 ALTER TABLE ONLY public.pre_confirmed_application_user
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.pre_confirmed_application_user__id__sequence'),
+ALTER COLUMN id SET DEFAULT nextval('public.pre_confirmed_application_user1'),
 ALTER COLUMN email SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ADD CONSTRAINT pre_confirmed_application_user__id__primary_key PRIMARY KEY USING INDEX pre_confirmed_application_user__id__unique_index,
-ADD CONSTRAINT pre_confirmed_application_user__email__unique_constraint UNIQUE USING INDEX pre_confirmed_application_user__email__unique_index;
+ADD CONSTRAINT pre_confirmed_application_user4 PRIMARY KEY USING INDEX pre_confirmed_application_user2,
+ADD CONSTRAINT pre_confirmed_application_user5 UNIQUE USING INDEX pre_confirmed_application_user3;
 
 
 

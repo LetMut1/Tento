@@ -16,21 +16,21 @@ CREATE TABLE channel (
     created_at TIMESTAMPTZ
 );
 
-CREATE SEQUENCE public.channel__id__sequence INCREMENT BY 1 NO MINVALUE NO MAXVALUE
+CREATE SEQUENCE public.channel1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel.id;
 
-CREATE UNIQUE INDEX channel__id__unique_index ON public.channel
+CREATE UNIQUE INDEX channel2 ON public.channel
 USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
 
-CREATE UNIQUE INDEX channel__name__unique_index ON public.channel
+CREATE UNIQUE INDEX channel3 ON public.channel
 USING btree (name ASC NULLS LAST) WITH (FILLFACTOR = 90);
 
-CREATE INDEX channel__created_at__index ON public.channel
+CREATE INDEX channel4 ON public.channel
 USING btree (created_at ASC NULLS LAST) WITH (FILLFACTOR = 90);
 
 ALTER TABLE ONLY public.channel
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.channel__id__sequence'),
+ALTER COLUMN id SET DEFAULT nextval('public.channel1'),
 ALTER COLUMN owner_application_user_channel_administrator_id SET NOT NULL,
 ALTER COLUMN name SET NOT NULL,
 ALTER COLUMN is_private SET NOT NULL,
@@ -44,10 +44,10 @@ ALTER COLUMN entertaining_seeable_and_hearable_content_quantity SET NOT NULL,
 ALTER COLUMN non_entertaining_seeable_only_content_quantity SET NOT NULL,
 ALTER COLUMN non_entertaining_seeable_and_hearable_content_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ADD CONSTRAINT channel__id__primary_key PRIMARY KEY USING INDEX channel__id__unique_index,
-ADD CONSTRAINT channel__owner_application_user_channel_administrator_id__foreign_key FOREIGN KEY (owner_application_user_channel_administrator_id)
+ADD CONSTRAINT channel5 PRIMARY KEY USING INDEX channel2,
+ADD CONSTRAINT channel6 FOREIGN KEY (owner_application_user_channel_administrator_id)
 REFERENCES public.application_user_channel_administrator(id) ON DELETE RESTRICT,
-ADD CONSTRAINT channel__name__unique UNIQUE USING INDEX channel__name__unique_index;
+ADD CONSTRAINT channel7 UNIQUE USING INDEX channel3;
 
 --  // TODO Аккаунт public.application_user_channel_administrator(id) не удалять, пока есть channel__owner_application_user_channel_administrator_id__foreign_key.
 --  либо заставлять сначала удалить все паблики вручную. 
