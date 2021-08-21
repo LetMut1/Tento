@@ -4,13 +4,13 @@ CREATE TABLE application_user_channel_administrator (
     -- nickname CHARACTER VARYING(55),
     -- password_hash TEXT,
     -- created_at TIMESTAMPTZ
-);
+) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.application_user_channel_administrator1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.application_user_channel_administrator.id;
 
 CREATE UNIQUE INDEX application_user_channel_administrator2 ON public.application_user_channel_administrator
-USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 
 ALTER TABLE ONLY public.application_user_channel_administrator

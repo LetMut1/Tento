@@ -2,16 +2,16 @@ CREATE TABLE public.pre_confirmed_application_user (
     id BIGINT,
     email CHARACTER VARYING(320),
     created_at TIMESTAMPTZ
-);
+) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.pre_confirmed_application_user1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.pre_confirmed_application_user.id;
 
 CREATE UNIQUE INDEX pre_confirmed_application_user2 ON public.pre_confirmed_application_user
-USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX pre_confirmed_application_user3 ON public.pre_confirmed_application_user
-USING btree (email ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (email ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.pre_confirmed_application_user
 ALTER COLUMN id SET NOT NULL,

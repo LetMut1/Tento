@@ -3,19 +3,19 @@ CREATE TABLE channel_feed_publication_mark (
     channel_feed_publication_id BIGINT,
     application_user_id BIGINT,
     type SMALLINT
-);
+) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel_feed_publication_mark1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel_feed_publication_mark.id;
 
 CREATE UNIQUE INDEX channel_feed_publication_mark2 ON public.channel_feed_publication_mark
-USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE INDEX channel_feed_publication_mark3 ON public.channel_feed_publication_mark
-USING btree (channel_feed_publication_id ASC NULLS LAST) WITH (FILLFACTOR = 65);
+USING btree (channel_feed_publication_id ASC NULLS LAST) WITH (fillfactor = 65);
 
 CREATE INDEX channel_feed_publication_mark4 ON public.channel_feed_publication_mark
-USING btree (application_user_id ASC NULLS LAST) WITH (FILLFACTOR = 65);
+USING btree (application_user_id ASC NULLS LAST) WITH (fillfactor = 65);
 
 ALTER TABLE ONLY public.channel_feed_publication_mark
 ALTER COLUMN id SET NOT NULL,

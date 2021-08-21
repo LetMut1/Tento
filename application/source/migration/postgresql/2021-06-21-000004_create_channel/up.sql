@@ -14,19 +14,19 @@ CREATE TABLE channel (
     non_entertaining_seeable_only_content_quantity BIGINT,
     non_entertaining_seeable_and_hearable_content_quantity BIGINT,
     created_at TIMESTAMPTZ
-);
+) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel.id;
 
 CREATE UNIQUE INDEX channel2 ON public.channel
-USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX channel3 ON public.channel
-USING btree (name ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (name ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE INDEX channel4 ON public.channel
-USING btree (created_at ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.channel
 ALTER COLUMN id SET NOT NULL,

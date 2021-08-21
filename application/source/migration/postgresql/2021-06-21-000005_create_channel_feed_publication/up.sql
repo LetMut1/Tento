@@ -14,19 +14,19 @@ CREATE TABLE channel_feed_publication (
     visible_from TIMESTAMPTZ,
     delete_on TIMESTAMPTZ,      -- // TODO Написать команду для удаления 
     created_at TIMESTAMPTZ
-);
+) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel_feed_publication1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel_feed_publication.id;
 
 CREATE UNIQUE INDEX channel_feed_publication2 ON public.channel_feed_publication
-USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX channel_feed_publication3 ON public.channel_feed_publication
-USING btree (channel_id, visible_from ASC NULLS LAST) WITH (FILLFACTOR = 65);
+USING btree (channel_id, visible_from ASC NULLS LAST) WITH (fillfactor = 65);
 
 CREATE INDEX channel_feed_publication4 ON public.channel_feed_publication
-USING btree (delete_on ASC NULLS LAST) WITH (FILLFACTOR = 90) WHERE delete_on IS NOT NULL;
+USING btree (delete_on ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on) WHERE delete_on IS NOT NULL;
 
 ALTER TABLE ONLY public.channel_feed_publication
 ALTER COLUMN id SET NOT NULL,

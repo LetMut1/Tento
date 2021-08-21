@@ -4,19 +4,19 @@ CREATE TABLE application_user (
     nickname CHARACTER VARYING(55),
     password_hash TEXT,
     created_at TIMESTAMPTZ
-);
+) WITH (oids = false, fillfactor = 95, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.application_user1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.application_user.id;
 
 CREATE UNIQUE INDEX application_user2 ON public.application_user
-USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX application_user3 ON public.application_user
-USING btree (email ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (email ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX application_user4 ON public.application_user
-USING btree (nickname ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (nickname ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.application_user
 ALTER COLUMN id SET NOT NULL,

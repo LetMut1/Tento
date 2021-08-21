@@ -9,19 +9,19 @@ CREATE TABLE channel_direct_message_publication (
     visible_from TIMESTAMPTZ,
     delete_on TIMESTAMPTZ,
     created_at TIMESTAMPTZ
-);
+) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel_direct_message_publication1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel_direct_message_publication.id;
 
 CREATE UNIQUE INDEX channel_direct_message_publication2 ON public.channel_direct_message_publication
-USING btree (id ASC NULLS LAST) WITH (FILLFACTOR = 90);
+USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX channel_direct_message_publication3 ON public.channel_direct_message_publication
-USING btree (channel_id, visible_from ASC NULLS LAST) WITH (FILLFACTOR = 65);
+USING btree (channel_id, visible_from ASC NULLS LAST) WITH (fillfactor = 65);
 
 CREATE INDEX channel_direct_message_publication4 ON public.channel_direct_message_publication
-USING btree (delete_on ASC NULLS LAST) WITH (FILLFACTOR = 65);
+USING btree (delete_on ASC NULLS LAST) WITH (fillfactor = 65);
 
 ALTER TABLE ONLY public.channel_direct_message_publication
 ALTER COLUMN id SET NOT NULL,
