@@ -17,7 +17,7 @@ use super::_component::viewing_quantity::ViewingQuantity;
 
 pub struct Channel {
     id: Option<Id>,
-    owner_application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
+    application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
     name: Name,
     description: Option<Description>,
     is_private: IsPrivate,
@@ -36,7 +36,7 @@ pub struct Channel {
 impl Channel {
     pub fn new(
         id: Option<Id>,
-        owner_application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
+        application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
         name: Name,
         description: Option<Description>,
         is_private: IsPrivate,
@@ -53,7 +53,7 @@ impl Channel {
     ) -> Self {
         return Self {
             id,
-            owner_application_user_channel_administrator_id,
+            application_user_channel_administrator_id,
             name,
             description,
             is_private,
@@ -81,8 +81,8 @@ impl Channel {
         }
     }
 
-    pub fn get_owner_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {
-        return &self.owner_application_user_channel_administrator_id;
+    pub fn get_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {
+        return &self.application_user_channel_administrator_id;
     }
 
     pub fn get_name<'this>(&'this self) -> &'this Name {

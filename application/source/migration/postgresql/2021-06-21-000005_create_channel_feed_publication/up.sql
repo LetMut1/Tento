@@ -1,7 +1,7 @@
 CREATE TABLE channel_feed_publication ( 
     id BIGINT,
     channel_id BIGINT,
-    author_application_user_channel_administrator_id BIGINT,
+    application_user_channel_administrator_id BIGINT,
     is_entertaining BOOLEAN,
     content_type SMALLINT,
     content_type_component TEXT,  -- // TODO small_description large_description путь до картинки, путь до музыки
@@ -33,7 +33,7 @@ ALTER TABLE ONLY public.channel_feed_publication
 ALTER COLUMN id SET NOT NULL,
 ALTER COLUMN id SET DEFAULT nextval('public.channel_feed_publication1'),
 ALTER COLUMN channel_id SET NOT NULL,
-ALTER COLUMN author_application_user_channel_administrator_id SET NOT NULL,
+ALTER COLUMN application_user_channel_administrator_id SET NOT NULL,
 ALTER COLUMN is_entertaining SET NOT NULL,
 ALTER COLUMN content_type SET NOT NULL,
 ALTER COLUMN content_type_component SET NOT NULL,
@@ -47,7 +47,7 @@ ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel_feed_publication5 PRIMARY KEY USING INDEX channel_feed_publication2,
 ADD CONSTRAINT channel_feed_publication6 FOREIGN KEY (channel_id)
 REFERENCES public.channel(id) ON DELETE RESTRICT,
-ADD CONSTRAINT channel_feed_publication7 FOREIGN KEY (author_application_user_channel_administrator_id)
+ADD CONSTRAINT channel_feed_publication7 FOREIGN KEY (application_user_channel_administrator_id)
 REFERENCES public.application_user_channel_administrator(id) ON DELETE RESTRICT,
 ADD CONSTRAINT channel_feed_publication8 UNIQUE USING INDEX channel_feed_publication3;
 

@@ -13,7 +13,7 @@ use super::_component::visible_from::VisibleFrom;
 pub struct ChannelDirectMessagePublication {
     id: Option<Id>,
     channel_id: ChannelId,
-    author_application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
+    application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
     content_type: ContentType,
     content_type_component: ContentTypeComponent,
     viewing_quantity: ViewingQuantity,
@@ -27,7 +27,7 @@ impl ChannelDirectMessagePublication {
     pub fn new(
         id: Option<Id>,
         channel_id: ChannelId,
-        author_application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
+        application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
         content_type: ContentType,
         content_type_component: ContentTypeComponent,
         viewing_quantity: ViewingQuantity,
@@ -39,7 +39,7 @@ impl ChannelDirectMessagePublication {
         return Self {
             id,
             channel_id,
-            author_application_user_channel_administrator_id,
+            application_user_channel_administrator_id,
             content_type,
             content_type_component,
             viewing_quantity,
@@ -65,8 +65,8 @@ impl ChannelDirectMessagePublication {
         return &self.channel_id;
     }
 
-    pub fn get_author_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {
-        return &self.author_application_user_channel_administrator_id;
+    pub fn get_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {
+        return &self.application_user_channel_administrator_id;
     }
 
     pub fn get_content_type<'this>(&'this self) -> &'this ContentType {

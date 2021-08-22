@@ -18,7 +18,7 @@ use super::_component::visible_from::VisibleFrom;
 pub struct ChannelFeedPublication {
     id: Option<Id>,
     channel_id: ChannelId,
-    author_application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
+    application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
     is_entertaining: IsEntertaining,
     content_type: ContentType,
     content_type_component: ContentTypeComponent,
@@ -38,7 +38,7 @@ impl ChannelFeedPublication {
     pub fn new(
         id: Option<Id>,
         channel_id: ChannelId,
-        author_application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
+        application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
         is_entertaining: IsEntertaining,
         content_type: ContentType,
         content_type_component: ContentTypeComponent,
@@ -55,7 +55,7 @@ impl ChannelFeedPublication {
         return Self {
             id,
             channel_id,
-            author_application_user_channel_administrator_id,
+            application_user_channel_administrator_id,
             is_entertaining,
             content_type,
             content_type_component,
@@ -86,8 +86,8 @@ impl ChannelFeedPublication {
         return &self.channel_id;
     }
 
-    pub fn get_author_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {
-        return &self.author_application_user_channel_administrator_id;
+    pub fn get_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {
+        return &self.application_user_channel_administrator_id;
     }
 
     pub fn get_is_entertaining<'this>(&'this self) -> &'this IsEntertaining {
