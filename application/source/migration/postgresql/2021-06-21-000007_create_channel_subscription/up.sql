@@ -12,10 +12,10 @@ CREATE UNIQUE INDEX channel_subscription2 ON public.channel_subscription
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE INDEX channel_subscription3 ON public.channel_subscription
-USING btree (application_user_id ASC NULLS LAST) WITH (fillfactor = 65);
+USING btree (application_user_id ASC NULLS LAST) WITH (fillfactor = 70);
 
 CREATE INDEX channel_subscription4 ON public.channel_subscription
-USING btree (channel_id ASC NULLS LAST) WITH (fillfactor = 65);
+USING btree (channel_id ASC NULLS LAST) WITH (fillfactor = 70);
 
 CREATE INDEX channel_subscription5 ON public.channel_subscription
 USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);

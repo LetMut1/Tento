@@ -18,10 +18,10 @@ CREATE UNIQUE INDEX channel_direct_message_publication2 ON public.channel_direct
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX channel_direct_message_publication3 ON public.channel_direct_message_publication
-USING btree (channel_id, visible_from ASC NULLS LAST) WITH (fillfactor = 65);
+USING btree (channel_id, visible_from ASC NULLS LAST) WITH (fillfactor = 70);
 
 CREATE INDEX channel_direct_message_publication4 ON public.channel_direct_message_publication
-USING btree (delete_on ASC NULLS LAST) WITH (fillfactor = 65);
+USING btree (delete_on ASC NULLS LAST) WITH (fillfactor = 70);
 
 ALTER TABLE ONLY public.channel_direct_message_publication
 ALTER COLUMN id SET NOT NULL,

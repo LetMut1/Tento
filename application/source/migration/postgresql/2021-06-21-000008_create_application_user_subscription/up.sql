@@ -11,10 +11,10 @@ CREATE UNIQUE INDEX application_user_subscription2 ON public.application_user_su
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE INDEX application_user_subscription3 ON public.application_user_subscription
-USING btree (publisher_application_user_id ASC NULLS LAST) WITH (fillfactor = 65);
+USING btree (publisher_application_user_id ASC NULLS LAST) WITH (fillfactor = 70);
 
 CREATE INDEX application_user_subscription4 ON public.application_user_subscription
-USING btree (subscriber_application_user_id ASC NULLS LAST) WITH (fillfactor = 65);
+USING btree (subscriber_application_user_id ASC NULLS LAST) WITH (fillfactor = 70);
 
 ALTER TABLE ONLY public.application_user_subscription
 ALTER COLUMN id SET NOT NULL,

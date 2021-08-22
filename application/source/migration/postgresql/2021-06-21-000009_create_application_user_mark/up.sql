@@ -12,10 +12,10 @@ CREATE UNIQUE INDEX channel_feed_publication_mark2 ON public.channel_feed_public
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE INDEX channel_feed_publication_mark3 ON public.channel_feed_publication_mark
-USING btree (channel_feed_publication_id ASC NULLS LAST) WITH (fillfactor = 65);
+USING btree (channel_feed_publication_id ASC NULLS LAST) WITH (fillfactor = 70);
 
 CREATE INDEX channel_feed_publication_mark4 ON public.channel_feed_publication_mark
-USING btree (application_user_id ASC NULLS LAST) WITH (fillfactor = 65);
+USING btree (application_user_id ASC NULLS LAST) WITH (fillfactor = 70);
 
 ALTER TABLE ONLY public.channel_feed_publication_mark
 ALTER COLUMN id SET NOT NULL,
