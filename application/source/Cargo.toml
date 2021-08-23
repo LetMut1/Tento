@@ -22,7 +22,9 @@ lettre = {version = "0.9"}
 lettre_email = {version = "0.9"}
 log = {version = "0.4.14"}
 log4rs = {version = "1.0.0", features = ["all_components"]}
+postgres = {version = "0.19.1"}  # features = ["with-chrono-0_4", "with-uuid-0_8"]
 r2d2 = {version = "0.8.9"}
+r2d2_postgres = {version = "0.18.1"}
 r2d2_redis = {version = "0.14.0"}
 redis = {version = "0.20.0", features = ["r2d2"]}
 regex = {version = "1.4.3"}
@@ -30,7 +32,7 @@ rust-argon2 = {version = "0.8"}
 rust-crypto = {version = "0.2.36"}
 serde = {version = "1.0.123", features = ["derive"]}
 serde_json = {version = "1.0"}
-uuid = {version = "0.8.1", features = ["v4", "v1"]}
+uuid = {version = "0.8.1", features = ["v4"]}
 
 [profile.dev]
 opt-level = 0
