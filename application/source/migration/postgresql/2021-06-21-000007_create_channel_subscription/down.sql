@@ -1,1 +1,1 @@
-DROP TABLE channel_subscription;
+DROP TABLE public.channel_subscription;

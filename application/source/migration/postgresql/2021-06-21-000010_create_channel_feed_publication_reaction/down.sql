@@ -1,1 +1,1 @@
-DROP TABLE channel_feed_publication_reaction;
+DROP TABLE public.channel_feed_publication_reaction;

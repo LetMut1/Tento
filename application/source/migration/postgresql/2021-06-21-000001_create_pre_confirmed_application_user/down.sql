@@ -1,1 +1,0 @@
-DROP TABLE pre_confirmed_application_user;

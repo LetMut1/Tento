@@ -1,4 +1,4 @@
-CREATE TABLE channel_feed_publication ( 
+CREATE TABLE public.channel_feed_publication ( 
     id BIGINT,
     channel_id BIGINT,
     application_user_channel_administrator_id BIGINT,

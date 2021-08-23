@@ -1,4 +1,4 @@
-CREATE TABLE application_user ( 
+CREATE TABLE public.application_user ( 
     id BIGINT,
     email CHARACTER VARYING(320),
     nickname CHARACTER VARYING(55),

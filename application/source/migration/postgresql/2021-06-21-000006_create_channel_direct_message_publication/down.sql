@@ -1,1 +1,1 @@
-DROP TABLE channel_direct_message_publication;
+DROP TABLE public.channel_direct_message_publication;

@@ -5,7 +5,7 @@
 
 -- TODO ПОКА ЧТО ЭТО ПРОСТО СТАБ РАДИ СУЩЕСТВОВАНИЯ СУЩНОСТИ, чтобы можно сделать FK на id.
 
-CREATE TABLE application_user_channel_administrator ( 
+CREATE TABLE public.application_user_channel_administrator ( 
     id BIGINT
     -- email CHARACTER VARYING(320),
     -- nickname CHARACTER VARYING(55),

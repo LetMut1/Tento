@@ -1,12 +1,12 @@
+use crate::domain_layer::entity::entity::application_user_pre_confirmed::_component::id::Id as ApplicationUserPreConfirmedId;
 use crate::domain_layer::entity::entity::application_user::_component::email::Email;
-use crate::domain_layer::entity::entity::pre_confirmed_application_user::_component::id::Id as PreConfirmedApplicationUserId;
 use std::borrow::Cow;
 use super::_component::value::Value;
 use super::_component::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
 
 
 pub struct ApplicationUserRegistrationConfirmationToken<'outer_a> {
-    pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId,
+    application_user_pre_confirmed_id: &'outer_a ApplicationUserPreConfirmedId,
     application_user_email: Cow<'outer_a, Email>,
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuanity
@@ -16,13 +16,13 @@ impl<'outer_a> ApplicationUserRegistrationConfirmationToken<'outer_a> {
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: u8 = 5;
 
     pub fn new(
-        pre_confirmed_application_user_id: &'outer_a PreConfirmedApplicationUserId,
+        application_user_pre_confirmed_id: &'outer_a ApplicationUserPreConfirmedId,
         application_user_email: Cow<'outer_a, Email>,
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuanity
     ) -> Self {
         return Self {
-            pre_confirmed_application_user_id, application_user_email, value, wrong_enter_tries_quantity
+            application_user_pre_confirmed_id, application_user_email, value, wrong_enter_tries_quantity
         };
     }
 
@@ -32,8 +32,8 @@ impl<'outer_a> ApplicationUserRegistrationConfirmationToken<'outer_a> {
         return self;
     }
     
-    pub fn get_pre_confirmed_application_user_id<'this>(&'this self) -> &'this PreConfirmedApplicationUserId {
-        return self.pre_confirmed_application_user_id;
+    pub fn get_application_user_pre_confirmed_id<'this>(&'this self) -> &'this ApplicationUserPreConfirmedId {
+        return self.application_user_pre_confirmed_id;
     }
 
     pub fn get_application_user_email<'this>(&'this self) -> &'this Email {

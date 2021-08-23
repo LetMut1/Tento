@@ -5,25 +5,25 @@ use crate::domain_layer::entity::entity::application_user::_component::nickname:
 use crate::domain_layer::entity::entity::application_user::_component::password::Password;
 use crate::domain_layer::entity::entity::application_user::application_user::ApplicationUser;
 use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
+use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_pre_confirmed::_new_for_context::application_user_pre_confirmed_error::ApplicationUserPreConfirmedError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error::PreConfirmedApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
+use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository_trait::BaseRepositoryTrait as ApplicationUserPreConfirmedBaseRepositoryTrait;
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository_trait::BaseRepositoryTrait as ApplicationUserRegistrationConfirmationTokenBaseRepositoryTrait;
 use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository_trait::BaseRepositoryTrait as ApplicationUserBaseRepositoryTrait;
-use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository_trait::BaseRepositoryTrait as PreConfirmedApplicationUserBaseRepositoryTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::password_hash_resolver_trait::PasswordHashResolverTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy_trait::BaseRepositoryProxyTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::encoder_trait::EncoderTrait;
+use crate::domain_layer::service::component_validator::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::component_validator::ComponentValidator;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::factory::Factory as ApplicationUserFactory;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::factory::Factory as JsonAccessWebTokenFactory;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::factory::Factory as JsonRefreshWebTokenFactory;
-use crate::domain_layer::service::component_validator::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::component_validator::ComponentValidator;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserPreConfirmedBaseRepository;
 use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserRegistrationConfirmationTokenBaseRepository;
 use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
-use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::pre_confirmed_application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as PreConfirmedApplicationUserBaseRepository;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::infrastructure_layer::service::_in_context_for::_resource::postgresql::_new_for_context::transaction_manager::TransactionManager;
@@ -63,16 +63,16 @@ impl Handler {
                 let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
                 if !ApplicationUserBaseRepository::is_exist_by_nickanme(postgresql_connection, &application_user_nickname)? {
-                    if let Some(pre_confirmed_application_user) = PreConfirmedApplicationUserBaseRepository::get_by_application_user_email(postgresql_connection, &application_user_email)? {
+                    if let Some(application_user_pre_confirmed) = ApplicationUserPreConfirmedBaseRepository::get_by_application_user_email(postgresql_connection, &application_user_email)? {
                         let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-                        if let Some(mut application_user_registration_confirmation_token) = ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_pre_confirmed_application_user_id(
-                            redis_connection, pre_confirmed_application_user.get_id()?
+                        if let Some(mut application_user_registration_confirmation_token) = ApplicationUserRegistrationConfirmationTokenBaseRepository::get_by_application_user_pre_confirmed_id(
+                            redis_connection, application_user_pre_confirmed.get_id()?
                         )? 
                         {
                             if application_user_registration_confirmation_token.get_value().get_value() == application_user_registration_confirmation_token_value.as_str() {
-                                let application_user: ApplicationUser<'_> = ApplicationUserFactory::new_from_pre_confirmed_application_user(
-                                    &pre_confirmed_application_user, application_user_nickname, PasswordHashResolver::create(&application_user_password)?
+                                let application_user: ApplicationUser<'_> = ApplicationUserFactory::new_from_application_user_pre_confirmed(
+                                    &application_user_pre_confirmed, application_user_nickname, PasswordHashResolver::create(&application_user_password)?
                                 );
 
                                 ApplicationUserRegistrationConfirmationTokenBaseRepository::delete(redis_connection, &application_user_registration_confirmation_token)?;
@@ -85,7 +85,7 @@ impl Handler {
                                     return Err(base_error);
                                 }
 
-                                if let Err(base_error) = PreConfirmedApplicationUserBaseRepository::delete(postgresql_connection, &pre_confirmed_application_user) {
+                                if let Err(base_error) = ApplicationUserPreConfirmedBaseRepository::delete(postgresql_connection, &application_user_pre_confirmed) {
                                     TransactionManager::rollback_transaction(postgresql_connection)?;
 
                                     return Err(base_error);
@@ -118,10 +118,10 @@ impl Handler {
                     }
 
                     if ApplicationUserBaseRepository::is_exist_by_email(postgresql_connection, &application_user_email)? {
-                        return Err(BaseError::EntityError(EntityError::PreConfirmedApplicationUserError(PreConfirmedApplicationUserError::AlreadyConfirmed)));
+                        return Err(BaseError::EntityError(EntityError::ApplicationUserPreConfirmedError(ApplicationUserPreConfirmedError::AlreadyConfirmed)));
                     }
                     
-                    return Err(BaseError::EntityError(EntityError::PreConfirmedApplicationUserError(PreConfirmedApplicationUserError::NotFound)));
+                    return Err(BaseError::EntityError(EntityError::ApplicationUserPreConfirmedError(ApplicationUserPreConfirmedError::NotFound)));
                 }
                 
                 return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::AlreadyExist)));

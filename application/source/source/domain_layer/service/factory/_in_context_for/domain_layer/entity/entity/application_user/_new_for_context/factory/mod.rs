@@ -1,22 +1,22 @@
+use crate::domain_layer::entity::entity::application_user_pre_confirmed::application_user_pre_confirmed::ApplicationUserPreConfirmed;
 use crate::domain_layer::entity::entity::application_user::_component::created_at::CreatedAt;
 use crate::domain_layer::entity::entity::application_user::_component::email::Email;
 use crate::domain_layer::entity::entity::application_user::_component::id::Id;
 use crate::domain_layer::entity::entity::application_user::_component::nickname::Nickname;
 use crate::domain_layer::entity::entity::application_user::_component::password_hash::PasswordHash;
 use crate::domain_layer::entity::entity::application_user::application_user::ApplicationUser;
-use crate::domain_layer::entity::entity::pre_confirmed_application_user::pre_confirmed_application_user::PreConfirmedApplicationUser;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::_new_for_context::select::Select;
 use std::borrow::Cow;
 
 pub struct Factory;
 
 impl Factory {
-    pub fn new_from_pre_confirmed_application_user<'outer_a>(
-        pre_confirmed_application_user: &'outer_a PreConfirmedApplicationUser, nickname: Nickname, password_hash: PasswordHash
+    pub fn new_from_application_user_pre_confirmed<'outer_a>(
+        application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed, nickname: Nickname, password_hash: PasswordHash
     ) -> ApplicationUser<'_> {
         return ApplicationUser::new(
             None,
-            Cow::Borrowed(pre_confirmed_application_user.get_email()),
+            Cow::Borrowed(application_user_pre_confirmed.get_email()),
             nickname,
             password_hash,
             CreatedAt::new()

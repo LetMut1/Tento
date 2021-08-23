@@ -1,1 +1,1 @@
-DROP TABLE application_user_subscription;
+DROP TABLE public.application_user_subscription;

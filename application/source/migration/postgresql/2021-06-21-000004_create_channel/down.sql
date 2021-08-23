@@ -1,1 +1,1 @@
-DROP TABLE channel;
+DROP TABLE public.channel;

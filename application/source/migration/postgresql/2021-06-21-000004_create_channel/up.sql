@@ -1,4 +1,4 @@
-CREATE TABLE channel ( 
+CREATE TABLE public.channel ( 
     id BIGINT,
     application_user_channel_administrator_id BIGINT,
     name CHARACTER VARYING(75),

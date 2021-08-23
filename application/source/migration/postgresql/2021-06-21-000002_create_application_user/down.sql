@@ -1,1 +1,1 @@
-DROP TABLE application_user;
+DROP TABLE public.application_user;

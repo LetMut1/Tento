@@ -1,4 +1,4 @@
-CREATE TABLE channel_subscription ( 
+CREATE TABLE public.channel_subscription ( 
     id BIGINT,
     channel_id BIGINT,
     application_user_id BIGINT,

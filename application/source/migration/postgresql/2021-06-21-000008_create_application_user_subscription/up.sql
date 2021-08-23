@@ -1,4 +1,4 @@
-CREATE TABLE application_user_subscription ( 
+CREATE TABLE public.application_user_subscription ( 
     id BIGINT,
     publisher_application_user_id BIGINT,
     subscriber_application_user_id BIGINT

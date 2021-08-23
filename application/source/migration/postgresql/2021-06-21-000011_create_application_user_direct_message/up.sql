@@ -1,4 +1,4 @@
-CREATE TABLE application_user_direct_message ( 
+CREATE TABLE public.application_user_direct_message ( 
     id BIGINT,
     list_of_members JSONB
 ) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);

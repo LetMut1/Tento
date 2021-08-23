@@ -1,4 +1,4 @@
-CREATE TABLE application_user_direct_message_publication ( 
+CREATE TABLE public.application_user_direct_message_publication ( 
     id BIGINT,
     application_user_direct_message_id BIGINT,
     application_user_id BIGINT,

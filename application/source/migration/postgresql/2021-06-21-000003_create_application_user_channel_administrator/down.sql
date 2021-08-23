@@ -1,1 +1,1 @@
-DROP TABLE application_user_channel_administrator;
+DROP TABLE public.application_user_channel_administrator;

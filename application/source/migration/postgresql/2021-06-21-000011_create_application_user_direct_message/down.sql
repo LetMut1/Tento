@@ -1,1 +1,1 @@
-DROP TABLE application_user_direct_message;
+DROP TABLE public.application_user_direct_message;

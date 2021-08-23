@@ -20,17 +20,17 @@ use crate::application_layer::service::handler::_in_contex_for::presentation_lay
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password::handler::Handler as ResetPasswordHandler;
 use crate::domain_layer::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
+use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_pre_confirmed::_new_for_context::application_user_pre_confirmed_error::ApplicationUserPreConfirmedError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::pre_confirmed_application_user::_new_for_context::pre_confirmed_application_user_error::PreConfirmedApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
+use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use crate::infrastructure_layer::error::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::error::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::query::Query as CheckEmailForExistingQuery;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::api::version1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::query::Query as CheckNicknameForExistingQuery;
@@ -136,11 +136,11 @@ impl Authorization {
                                 }
                             }
                         },
-                        EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error) => {
-                            match pre_confirmed_application_user_error {
-                                PreConfirmedApplicationUserError::AlreadyExist => {
+                        EntityError::ApplicationUserPreConfirmedError(application_user_pre_confirmed_error) => {
+                            match application_user_pre_confirmed_error {
+                                ApplicationUserPreConfirmedError::AlreadyExist => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                        CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_ALREADY_EXIST
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_PRE_CONFIRMED_ALREADY_EXIST
                                     );
                                 },
                                 _ => {
@@ -219,16 +219,16 @@ impl Authorization {
                                     }
                                 }
                             },
-                            EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error) => {
-                                match pre_confirmed_application_user_error {
-                                    PreConfirmedApplicationUserError::AlreadyConfirmed => {
+                            EntityError::ApplicationUserPreConfirmedError(application_user_pre_confirmed_error) => {
+                                match application_user_pre_confirmed_error {
+                                    ApplicationUserPreConfirmedError::AlreadyConfirmed => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                            CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_ALREADY_CONFIRMED
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_PRE_CONFIRMED_ALREADY_CONFIRMED
                                         );
                                     },
-                                    PreConfirmedApplicationUserError::NotFound => {
+                                    ApplicationUserPreConfirmedError::NotFound => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                            CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_NOT_FOUND
+                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_PRE_CONFIRMED_NOT_FOUND
                                         );
                                     },
                                     _ => {
@@ -273,11 +273,11 @@ impl Authorization {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
-                        EntityError::PreConfirmedApplicationUserError(pre_confirmed_application_user_error) => {
-                            match pre_confirmed_application_user_error {
-                                PreConfirmedApplicationUserError::NotFound => {
+                        EntityError::ApplicationUserPreConfirmedError(application_user_pre_confirmed_error) => {
+                            match application_user_pre_confirmed_error {
+                                ApplicationUserPreConfirmedError::NotFound => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                        CommunicationCodeStorage::ENTITY_PRE_CONFIRMED_APPLICATION_USER_NOT_FOUND
+                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_PRE_CONFIRMED_NOT_FOUND
                                     );
                                 },
                                 _ => {
