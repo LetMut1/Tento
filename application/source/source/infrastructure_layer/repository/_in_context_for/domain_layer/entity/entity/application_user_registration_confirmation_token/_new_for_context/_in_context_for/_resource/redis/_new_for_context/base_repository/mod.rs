@@ -21,7 +21,7 @@ impl BaseRepositoryTrait for BaseRepository {
                 application_user_registration_confirmation_token.get_application_user_pre_confirmed_id()
             ), 
             serde_json::to_string(&Common::new(application_user_registration_confirmation_token))?,
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST as usize) * (60 as usize)
         )?;
         
         return Ok(());
@@ -48,7 +48,7 @@ impl BaseRepositoryTrait for BaseRepository {
             RedisStorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                 application_user_registration_confirmation_token.get_application_user_pre_confirmed_id()
             ),
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST as usize) * (60 as usize)
         )?;
 
         return Ok(());

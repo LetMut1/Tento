@@ -37,7 +37,7 @@ impl Handler {
         // TODO Переписать содержимое метода в контексте нахождения директории для .env --------------------------------------------- 
         match env::current_exe()?.parent() {    // TODO не нравится способ взятия и нахождения директории
             Some(file_path) => {
-                let file_path_buffer: PathBuf = file_path.join(&Path::new("../../library"));
+                let file_path_buffer: PathBuf = file_path.join(&Path::new("../../source"));
 
                 let production_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("prod.env"));
                 if production_environment_file_path_buffer.exists() {

@@ -21,7 +21,7 @@ impl BaseRepositoryTrait for BaseRepository {
                 application_user_reset_password_token.get_application_user_id()
             ), 
             serde_json::to_string(&Common::new(application_user_reset_password_token))?,
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST as usize) * (60 as usize)
         )?;
         
         return Ok(());
@@ -48,7 +48,7 @@ impl BaseRepositoryTrait for BaseRepository {
             RedisStorageKeyResolver::get_repository_application_user_reset_password_token_first(
                 application_user_reset_password_token.get_application_user_id()
             ),
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST as usize) * (60 as usize)
         )?;
 
         return Ok(());

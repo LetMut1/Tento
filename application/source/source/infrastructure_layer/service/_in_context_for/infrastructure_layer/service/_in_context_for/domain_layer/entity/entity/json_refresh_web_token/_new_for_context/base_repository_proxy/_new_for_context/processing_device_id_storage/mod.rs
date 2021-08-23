@@ -18,7 +18,7 @@ impl ProcessingDeviceIdStorage {
         connection.set_ex::<String, String, ()>(
             RedisStorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id), 
             application_user_log_in_token_device_id_registry.join(Self::SEPARATOR),
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST as usize) * (60 as usize)
         )?;
 
         return Ok(());
@@ -49,7 +49,7 @@ impl ProcessingDeviceIdStorage {
     ) -> Result<(), BaseError> {
         connection.expire::<String, ()>(
             RedisStorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id),
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST as usize) * (60 as usize)
         )?;
 
         return Ok(());

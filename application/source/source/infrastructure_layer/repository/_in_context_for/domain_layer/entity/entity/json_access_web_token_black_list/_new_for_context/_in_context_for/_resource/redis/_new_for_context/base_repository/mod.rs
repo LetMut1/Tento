@@ -18,7 +18,7 @@ impl BaseRepositoryTrait for BaseRepository {
                 json_access_web_token_black_list.get_json_access_web_token_id()
             ), 
             1,
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_ACCESS_WEB_TOKEN_FIRST as usize) * (60 as usize)
         )?;
 
         return Ok(());

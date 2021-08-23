@@ -21,7 +21,7 @@ impl BaseRepositoryTrait for BaseRepository {
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
             ), 
             serde_json::to_string(&Common::new(json_refresh_web_token))?,
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST * 60) as usize
+            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST as usize) * (60 as usize)
         )?;
 
         return Ok(());
