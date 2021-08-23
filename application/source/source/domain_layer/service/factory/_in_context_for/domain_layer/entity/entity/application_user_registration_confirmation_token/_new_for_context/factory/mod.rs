@@ -18,7 +18,7 @@ impl Factory {
         return Ok(
             ApplicationUserRegistrationConfirmationToken::new(
                 application_user_pre_confirmed.get_id()?,
-                Cow::Borrowed(application_user_pre_confirmed.get_email()),
+                Cow::Borrowed(application_user_pre_confirmed.get_application_user_email()),
                 Value::new(Uuid::new_v4().to_string()),       // TODO создать генератор значения + метода Рефреш ниже
                 WrongEnterTriesQuanity::new(0)
             )

@@ -14,7 +14,7 @@ pub struct Insert<'outer_a> {
 impl<'outer_a> Insert<'outer_a> {
     pub fn new(application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed) -> Self {
         return Self {
-            email: application_user_pre_confirmed.get_email().get_value(),
+            email: application_user_pre_confirmed.get_application_user_email().get_value(),
             created_at: application_user_pre_confirmed.get_created_at().get_value().get_value()
         };
     }

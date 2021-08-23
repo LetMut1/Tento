@@ -1,6 +1,6 @@
 CREATE TABLE public.application_user_pre_confirmed (
     id BIGINT,
-    email CHARACTER VARYING(320),
+    application_user_email CHARACTER VARYING(320),
     created_at TIMESTAMPTZ
 ) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
 
@@ -11,12 +11,12 @@ CREATE UNIQUE INDEX application_user_pre_confirmed2 ON public.application_user_p
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX application_user_pre_confirmed3 ON public.application_user_pre_confirmed
-USING btree (email ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
+USING btree (application_user_email ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.application_user_pre_confirmed
 ALTER COLUMN id SET NOT NULL,
 ALTER COLUMN id SET DEFAULT nextval('public.application_user_pre_confirmed1'),
-ALTER COLUMN email SET NOT NULL,
+ALTER COLUMN application_user_email SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT application_user_pre_confirmed4 PRIMARY KEY USING INDEX application_user_pre_confirmed2,
 ADD CONSTRAINT application_user_pre_confirmed5 UNIQUE USING INDEX application_user_pre_confirmed3;

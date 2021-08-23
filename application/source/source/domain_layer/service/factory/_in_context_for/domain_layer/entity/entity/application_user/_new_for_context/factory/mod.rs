@@ -16,7 +16,7 @@ impl Factory {
     ) -> ApplicationUser<'_> {
         return ApplicationUser::new(
             None,
-            Cow::Borrowed(application_user_pre_confirmed.get_email()),
+            Cow::Borrowed(application_user_pre_confirmed.get_application_user_email()),
             nickname,
             password_hash,
             CreatedAt::new()
