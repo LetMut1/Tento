@@ -60,7 +60,7 @@ impl Handler {
                     env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_FALSE);
                 }
 
-                Self::simple_check_environment_variables()?;
+                Self::check_environment_variables()?;
 
                 return Ok(());
             },
@@ -70,7 +70,7 @@ impl Handler {
         }
     }
 
-    fn simple_check_environment_variables() -> Result<(), BaseError> {
+    fn check_environment_variables() -> Result<(), BaseError> {
         EnvironmentVariableResolver::is_production()?;
         EnvironmentVariableResolver::get_server_socket_address()?;
         EnvironmentVariableResolver::get_logger_roller_log_file_name()?;
