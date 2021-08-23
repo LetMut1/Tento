@@ -21,16 +21,16 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
     }
 
     fn deserialize<'outer_a>(classic_form: &'outer_a str) -> Result<JsonAccessWebToken<'static>, BaseError> {
-        let classic_form_parts: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
+        let classic_form_part_registry: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
 
-        if classic_form_parts.len() == 3 
+        if classic_form_part_registry.len() == 3 
         && SignatureCreator::is_valid(
-            (String::new() + classic_form_parts[0] + Self::TOKEN_PARTS_SEPARATOR + classic_form_parts[1]).as_str(), classic_form_parts[2]
+            (String::new() + classic_form_part_registry[0] + Self::TOKEN_PARTS_SEPARATOR + classic_form_part_registry[1]).as_str(), classic_form_part_registry[2]
         )?
         {
             return Ok(
                 JsonAccessWebTokenFactory::new_from_payload_common(
-                    serde_json::from_slice::<'_, PayloadCommon>(&base64::decode(classic_form_parts[1].as_bytes())?)?
+                    serde_json::from_slice::<'_, PayloadCommon>(&base64::decode(classic_form_part_registry[1].as_bytes())?)?
                 )?
             );
         }
