@@ -13,6 +13,7 @@ extern crate lettre_email;
 extern crate lettre;
 extern crate log;
 extern crate log4rs;
+extern crate postgres;
 extern crate r2d2_redis;
 extern crate r2d2;
 extern crate redis;

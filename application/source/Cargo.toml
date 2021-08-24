@@ -22,7 +22,7 @@ lettre = {version = "0.9"}
 lettre_email = {version = "0.9"}
 log = {version = "0.4.14"}
 log4rs = {version = "1.0.0", features = ["all_components"]}
-postgres = {version = "0.19.1"}  # features = ["with-chrono-0_4", "with-uuid-0_8"]
+postgres = {version = "0.19.1"}
 r2d2 = {version = "0.8.9"}
 r2d2_postgres = {version = "0.18.1"}
 r2d2_redis = {version = "0.14.0"}
