@@ -1,4 +1,5 @@
 use diesel::result::Error as DieselError;
+use postgres::Error as PostgresError;
 use r2d2::Error as R2d2Error;
 use redis::RedisError;
 use std::error::Error;
@@ -11,7 +12,8 @@ use super::_component::_in_context_for::_resource::email_server::_new_for_contex
 pub enum ResourceError {
     ConnectionPoolError(R2d2Error),
     EmailServerError(EmailServerError),
-    PostgresqlError(DieselError),
+    PostgresqlError(PostgresError),
+    PostgresqlXXXDELETEError(DieselError),
     RedisError(RedisError)
 }
 

@@ -169,7 +169,7 @@ impl Authorization {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                        CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                                        CommunicationCodeStorage::COMMON_EMAIL_SENDING_PROBLEM
                                     );
                                 },
                                 _ => {
@@ -307,7 +307,7 @@ impl Authorization {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                        CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                                        CommunicationCodeStorage::COMMON_EMAIL_SENDING_PROBLEM
                                     );
                                 },
                                 _ => {
@@ -368,7 +368,7 @@ impl Authorization {
                                 match resource_error {
                                     ResourceError::EmailServerError(_) => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                            CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                                            CommunicationCodeStorage::COMMON_EMAIL_SENDING_PROBLEM
                                         );
                                     },
                                     _ => {
@@ -465,7 +465,7 @@ impl Authorization {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                        CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                                        CommunicationCodeStorage::COMMON_EMAIL_SENDING_PROBLEM
                                     );
                                 },
                                 _ => {
@@ -641,7 +641,7 @@ impl Authorization {
                                 match resource_error {
                                     ResourceError::EmailServerError(_) => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                            CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                                            CommunicationCodeStorage::COMMON_EMAIL_SENDING_PROBLEM
                                         );
                                     },
                                     _ => {
@@ -753,7 +753,7 @@ impl Authorization {
                             match resource_error {
                                 ResourceError::EmailServerError(_) => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                        CommunicationCodeStorage::_COMMON_EMAIL_SENDING_PROBLEM
+                                        CommunicationCodeStorage::COMMON_EMAIL_SENDING_PROBLEM
                                     );
                                 },
                                 _ => {

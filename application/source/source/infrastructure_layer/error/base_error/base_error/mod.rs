@@ -8,6 +8,7 @@ use lettre_email::error::Error as LettreEmailError;
 use lettre::smtp::error::Error as LettreSmtpError;
 use log::SetLoggerError;
 use log4rs::config::runtime::ConfigErrors as Log4rsConfigErrors;
+use postgres::Error as PostgresError;
 use r2d2::Error as R2d2Error;
 use redis::RedisError;
 use regex::Error as RegexError;
@@ -59,7 +60,10 @@ impl Display for BaseError {
                                     }
                                 }
                             },
-                            ResourceError::PostgresqlError(diesel_error) => {
+                            ResourceError::PostgresqlError(postgres_error) => {
+                                write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", postgres_error)?;
+                            },
+                            ResourceError::PostgresqlXXXDELETEError(diesel_error) => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", diesel_error)?;
                             },
                             ResourceError::RedisError(redis_error) => {
@@ -144,9 +148,15 @@ impl From<R2d2Error> for BaseError {
     }
 }
 
+impl From<PostgresError> for BaseError {
+    fn from(postgres_error: PostgresError) -> Self {
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlError(postgres_error)));
+    }
+}
+
 impl From<DieselError> for BaseError {
     fn from(diesel_error: DieselError) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlError(diesel_error)));
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlXXXDELETEError(diesel_error)));
     }
 }
 

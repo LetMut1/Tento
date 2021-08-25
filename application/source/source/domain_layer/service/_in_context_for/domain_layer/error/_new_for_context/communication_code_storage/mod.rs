@@ -27,5 +27,5 @@ impl CommunicationCodeStorage {
 
     pub const ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND: &'static str = "enjsreweto02";
 
-    pub const _COMMON_EMAIL_SENDING_PROBLEM: &'static str = "emse01";
+    pub const COMMON_EMAIL_SENDING_PROBLEM: &'static str = "emse01";
 }
