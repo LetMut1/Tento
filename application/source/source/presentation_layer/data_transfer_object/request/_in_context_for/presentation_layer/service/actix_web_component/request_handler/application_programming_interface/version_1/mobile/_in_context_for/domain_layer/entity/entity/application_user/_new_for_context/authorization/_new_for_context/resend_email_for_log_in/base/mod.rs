@@ -1,14 +1,14 @@
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-pub struct Request {
+pub struct Base {
     #[serde(rename = "aulitdi")]
     application_user_log_in_token_device_id: String,
     #[serde(rename = "aui")]
     application_user_id: i64
 }
 
-impl Request {
+impl Base {
     pub fn into_inner(self) -> (String, i64) {
         return (
             self.application_user_log_in_token_device_id, 
