@@ -4,20 +4,20 @@ use actix_web::web::Data;
 use actix_web::web::Form;
 use actix_web::web::Query;
 use actix_web::web::ReqData as RequestData;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::handler::Handler as CheckEmailForExistingHanlder;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::handler::Handler as CheckNicknameForExistingHanlder;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in::handler::Handler as LogInHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices::handler::Handler as LogOutFromAllDevicesHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out::handler::Handler as LogOutHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::pre_log_in::handler::Handler as PreLogInHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::pre_register::handler::Handler as PreRegisterHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::pre_reset_password::handler::Handler as PreResetPasswordHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token::handler::Handler as RefreshJsonAccessWebTokenHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::register::handler::Handler as RegisterHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_log_in::handler::Handler as ResendEmailForLogInHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_register::handler::Handler as ResendEmailForRegisterHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_reset_password::handler::Handler as ResendEmailForResetPasswordHandler;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password::handler::Handler as ResetPasswordHandler;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Base as HandlerCheckEmailForExistingBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::base::Base as HandlerCheckNicknameForExistingBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in::base::Base as HandlerLogInBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices::base::Base as HandlerLogOutFromAllDevicesBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out::base::Base as HandlerLogOutBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::pre_log_in::base::Base as HandlerPreLogInBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::pre_register::base::Base as HandlerPreRegisterBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::pre_reset_password::base::Base as HandlerPreResetPasswordBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token::base::Base as HandlerRefreshJsonAccessWebTokenBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::register::base::Base as HandlerRegisterBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_log_in::base::Base as HandlerResendEmailForLogInBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_register::base::Base as HandlerResendEmailForRegisterBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_reset_password::base::Base as HandlerResendEmailForResetPasswordBase;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password::base::Base as HandlerResetPasswordBase;
 use crate::domain_layer::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_pre_confirmed::_new_for_context::application_user_pre_confirmed_error::ApplicationUserPreConfirmedError;
@@ -32,25 +32,25 @@ use crate::infrastructure_layer::error::base_error::_component::run_time_error::
 use crate::infrastructure_layer::error::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::Base as CheckEmailForExistingBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::Base as CheckNicknameForExistingBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::log_in::base::Base as LogInBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::base::Base as PreLogInBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::pre_register::base::Base as PreRegisterBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::pre_reset_password::base::Base as PreResetPasswordBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as RefreshJsonAccessWebTokenBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::register::base::Base as RegisterBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_log_in::base::Base as ResendEmailForLogInBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_register::base::Base as ResendEmailForRegisterBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_reset_password::base::Base as ResendEmailForResetPasswordBase;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password::base::Base as ResetPasswordBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::Base as RequestCheckEmailForExistingBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::Base as RequestCheckNicknameForExistingBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::log_in::base::Base as RequestLogInBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::base::Base as RequestPreLogInBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::pre_register::base::Base as RequestPreRegisterBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::pre_reset_password::base::Base as RequestPreResetPasswordBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as RequestRefreshJsonAccessWebTokenBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::register::base::Base as RequestRegisterBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_log_in::base::Base as RequestResendEmailForLogInBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_register::base::Base as RequestResendEmailForRegisterBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_reset_password::base::Base as RequestResendEmailForResetPasswordBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password::base::Base as RequestResetPasswordBase;
 use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web_component::_new_for_context::standard_response_creator::StandardResponseCreator;
 
 pub struct Authorization;
 
 impl Authorization {
-    pub async fn check_email_for_existing(query: Query<CheckEmailForExistingBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        match CheckEmailForExistingHanlder::handle(data.into_inner(), query.into_inner()) {
+    pub async fn check_email_for_existing(query: Query<RequestCheckEmailForExistingBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match HandlerCheckEmailForExistingBase::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
             },
@@ -91,8 +91,8 @@ impl Authorization {
 
 
 
-    pub async fn check_nickname_for_existing(query: Query<CheckNicknameForExistingBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        match CheckNicknameForExistingHanlder::handle(data.into_inner(), query.into_inner()) {
+    pub async fn check_nickname_for_existing(query: Query<RequestCheckNicknameForExistingBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match HandlerCheckNicknameForExistingBase::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
             },
@@ -114,8 +114,8 @@ impl Authorization {
         }
     }
 
-    pub async fn pre_register(form: Form<PreRegisterBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref base_error) = PreRegisterHandler::handle(data.into_inner(), form.into_inner()) {
+    pub async fn pre_register(form: Form<RequestPreRegisterBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(ref base_error) = HandlerPreRegisterBase::handle(data.into_inner(), form.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
@@ -188,8 +188,8 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn register(form: Form<RegisterBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        match RegisterHandler::handle(data.into_inner(), form.into_inner()) {
+    pub async fn register(form: Form<RequestRegisterBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match HandlerRegisterBase::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
             },
@@ -268,8 +268,8 @@ impl Authorization {
         }
     }
 
-    pub async fn resend_email_for_register(form: Form<ResendEmailForRegisterBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref base_error) = ResendEmailForRegisterHandler::handle(data.into_inner(), form.into_inner()) {
+    pub async fn resend_email_for_register(form: Form<RequestResendEmailForRegisterBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(ref base_error) = HandlerResendEmailForRegisterBase::handle(data.into_inner(), form.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
@@ -326,8 +326,8 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn pre_log_in(form: Form<PreLogInBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        match PreLogInHandler::handle(data.into_inner(), form.into_inner()) {
+    pub async fn pre_log_in(form: Form<RequestPreLogInBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match HandlerPreLogInBase::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
             },
@@ -386,8 +386,8 @@ impl Authorization {
         }
     }
 
-    pub async fn log_in(form: Form<LogInBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        match LogInHandler::handle(data.into_inner(), form.into_inner()) {
+    pub async fn log_in(form: Form<RequestLogInBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match HandlerLogInBase::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
             },
@@ -427,8 +427,8 @@ impl Authorization {
         }
     }
 
-    pub async fn resend_email_for_log_in(form: Form<ResendEmailForLogInBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref base_error) = ResendEmailForLogInHandler::handle(data.into_inner(), form.into_inner()) {
+    pub async fn resend_email_for_log_in(form: Form<RequestResendEmailForLogInBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(ref base_error) = HandlerResendEmailForLogInBase::handle(data.into_inner(), form.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
@@ -484,8 +484,8 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn refresh_json_access_web_token(form: Form<RefreshJsonAccessWebTokenBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        match RefreshJsonAccessWebTokenHandler::handle(data.into_inner(), form.into_inner()) {
+    pub async fn refresh_json_access_web_token(form: Form<RequestRefreshJsonAccessWebTokenBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match HandlerRefreshJsonAccessWebTokenBase::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
             },
@@ -533,7 +533,7 @@ impl Authorization {
     }
 
     pub async fn log_out(request_data: RequestData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref base_error) = LogOutHandler::handle(data.into_inner(), &request_data.into_inner()) {
+        if let Err(ref base_error) = HandlerLogOutBase::handle(data.into_inner(), &request_data.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
@@ -566,7 +566,7 @@ impl Authorization {
     }
 
     pub async fn log_out_from_all_devices(request_data: RequestData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref base_error) = LogOutFromAllDevicesHandler::handle(data.into_inner(), &request_data.into_inner()) {
+        if let Err(ref base_error) = HandlerLogOutFromAllDevicesBase::handle(data.into_inner(), &request_data.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
@@ -598,8 +598,8 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn pre_reset_password(form: Form<PreResetPasswordBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        match PreResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
+    pub async fn pre_reset_password(form: Form<RequestPreResetPasswordBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        match HandlerPreResetPasswordBase::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
             },
@@ -659,8 +659,8 @@ impl Authorization {
         }
     }
 
-    pub async fn reset_password(form: Form<ResetPasswordBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref base_error) = ResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
+    pub async fn reset_password(form: Form<RequestResetPasswordBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(ref base_error) = HandlerResetPasswordBase::handle(data.into_inner(), form.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
@@ -715,8 +715,8 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn resend_email_for_reset_password(form: Form<ResendEmailForResetPasswordBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
-        if let Err(ref base_error) = ResendEmailForResetPasswordHandler::handle(data.into_inner(), form.into_inner()) {
+    pub async fn resend_email_for_reset_password(form: Form<RequestResendEmailForResetPasswordBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+        if let Err(ref base_error) = HandlerResendEmailForResetPasswordBase::handle(data.into_inner(), form.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {

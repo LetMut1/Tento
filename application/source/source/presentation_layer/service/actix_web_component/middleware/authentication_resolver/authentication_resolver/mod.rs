@@ -2,7 +2,7 @@ use actix_service::Service;
 use actix_web::dev::ServiceRequest;
 use actix_web::dev::ServiceResponse;
 use actix_web::Error;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::middleware::authentication_resolver::authentication_resolver::_new_for_contex::call::handler::Handler as CallHandler;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::middleware::authentication_resolver::authentication_resolver::_new_for_contex::call::base::Base as HandlerBase;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
@@ -49,7 +49,7 @@ where
     }
 
     fn call<'this>(&'this mut self, service_request: ServiceRequest) -> Self::Future {
-        if let Err(ref base_error) = CallHandler::handle(&service_request) {
+        if let Err(ref base_error) = HandlerBase::handle(&service_request) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {

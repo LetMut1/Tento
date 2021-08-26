@@ -1,12 +1,12 @@
 extern crate actix_web;
 extern crate application;
 
-use application::application_layer::service::handler::_in_contex_for::presentation_layer::command::run_server::_new_for_context::handler::Handler;
+use application::application_layer::service::handler::_in_contex_for::presentation_layer::command::run_server::_new_for_context::base::Base;
 
 #[actix_web::main]
 async fn main() -> ()   // TODO перед релизом понять, имеет ли значение, что именно возвращать в main. Err(...) для Result. Или просто void. (Как понять при деплое, что бинарник верну ошибку)
 {
-    if let Err(error) = Handler::handle().await {
+    if let Err(error) = Base::handle().await {
         println!("{}", error);
     }
 
