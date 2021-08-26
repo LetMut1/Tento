@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-pub struct Query {
+pub struct Base {
     #[serde(rename = "l")]
     limit: u8,
     #[serde(rename = "ci")]
@@ -10,7 +10,7 @@ pub struct Query {
     order: u8
 }
 
-impl Query {
+impl Base {
     pub fn into_inner(self) -> (u8, String, u8) {
         return (
             self.limit,

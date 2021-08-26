@@ -1,12 +1,12 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct Response {
+pub struct Base {
     #[serde(rename = "r")]
     result: bool
 }
 
-impl Response {
+impl Base {
     pub fn new(result: bool) -> Self {
         return Self {
             result

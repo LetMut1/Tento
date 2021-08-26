@@ -13,14 +13,14 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::BaseRepositoryProxy;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as RequestBase;
-use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::response::Response;
+use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as ResponseBase;
 use redis::Connection;
 use std::sync::Arc;
 
 pub struct Handler;
 
 impl Handler {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request_base: RequestBase) -> Result<Response, BaseError> {
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request_base: RequestBase) -> Result<ResponseBase, BaseError> {
         let (
             json_access_web_token, 
             json_refresh_web_token_serialized
@@ -43,7 +43,7 @@ impl Handler {
                     BaseRepositoryProxy::update(connection, &json_refresh_web_token)?;
 
                     return Ok(
-                        Response::new(
+                        ResponseBase::new(
                             SerializationFormResolver::serialize(&JsonAccessWebTokenFactory::new_from_json_refresh_web_token(&json_refresh_web_token)?)?,
                             Encoder::encode(&json_refresh_web_token)?
                         )

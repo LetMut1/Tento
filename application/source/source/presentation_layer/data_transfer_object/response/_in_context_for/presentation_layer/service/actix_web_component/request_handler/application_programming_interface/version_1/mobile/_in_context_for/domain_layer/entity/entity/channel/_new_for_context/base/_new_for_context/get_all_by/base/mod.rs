@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct Response {
+pub struct Base {
     #[serde(rename = "ci")]
     channel_id: i64,
     #[serde(rename = "cn")]
@@ -32,7 +32,7 @@ pub struct Response {
     channel_created_at: String
 }
 
-impl Response {
+impl Base {
     pub fn new(
         channel_id: i64,
         channel_name: String,
