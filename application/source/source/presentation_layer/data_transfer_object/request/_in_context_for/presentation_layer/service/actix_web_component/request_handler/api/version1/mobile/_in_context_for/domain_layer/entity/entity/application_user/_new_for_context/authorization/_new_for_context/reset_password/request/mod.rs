@@ -2,11 +2,11 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Request {
-    #[serde(rename = "i")]
+    #[serde(rename = "aui")]
     application_user_id: i64,
-    #[serde(rename = "p")]
+    #[serde(rename = "aup")]
     application_user_password: String,
-    #[serde(rename = "v")]
+    #[serde(rename = "aurptv")]
     application_user_reset_password_token_value: String
 }
 

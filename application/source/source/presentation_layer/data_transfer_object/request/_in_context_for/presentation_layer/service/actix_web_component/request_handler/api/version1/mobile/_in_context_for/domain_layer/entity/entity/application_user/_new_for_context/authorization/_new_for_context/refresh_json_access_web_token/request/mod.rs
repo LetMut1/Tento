@@ -2,9 +2,9 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Request {
-    #[serde(rename = "awt")]
+    #[serde(rename = "jawt")]
     json_access_web_token: String,
-    #[serde(rename = "rwt")]
+    #[serde(rename = "jrwt")]
     json_refresh_web_token: String
 }
 

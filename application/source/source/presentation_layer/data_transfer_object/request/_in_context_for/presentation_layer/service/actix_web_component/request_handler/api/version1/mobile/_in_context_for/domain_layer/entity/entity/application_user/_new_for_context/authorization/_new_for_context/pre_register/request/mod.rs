@@ -2,7 +2,7 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Request {
-    #[serde(rename = "e")]
+    #[serde(rename = "aue")]
     application_user_email: String
 }
 

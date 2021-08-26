@@ -2,7 +2,7 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Response {
-    #[serde(rename = "i")]
+    #[serde(rename = "aui")]
     application_user_id: i64
 }
 

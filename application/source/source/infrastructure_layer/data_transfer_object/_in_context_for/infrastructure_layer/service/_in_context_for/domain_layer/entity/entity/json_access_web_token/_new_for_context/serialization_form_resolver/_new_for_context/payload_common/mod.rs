@@ -4,13 +4,13 @@ use serde::Serialize;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PayloadCommon {
-    #[serde(rename = "ti")]
+    #[serde(rename = "jawti")]
     json_access_web_token_id: String,
-    #[serde(rename = "ui")]
+    #[serde(rename = "aui")]
     application_user_id: i64,
-    #[serde(rename = "di")]
+    #[serde(rename = "aulitdi")]
     application_user_log_in_token_device_id: String,
-    #[serde(rename = "p")]
+    #[serde(rename = "e")]
     exp: String
 }
 

@@ -5,11 +5,11 @@ use std::borrow::Cow;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Common<'outer_a> {
-    #[serde(rename = "ue")]
+    #[serde(rename = "aue")]
     application_user_email: Cow<'outer_a, str>,
     #[serde(rename = "v")]
     value: Cow<'outer_a, str>,
-    #[serde(rename = "q")]
+    #[serde(rename = "wetq")]
     wrong_enter_tries_quantity: u8
 }
 

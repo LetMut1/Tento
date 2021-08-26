@@ -5,13 +5,13 @@ use std::borrow::Cow;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Common<'outer_a> {
-    #[serde(rename = "ti")]
+    #[serde(rename = "jawt")]
     json_access_web_token_id: String,
-    #[serde(rename = "ui")]
+    #[serde(rename = "aui")]
     application_user_id: i64,
-    #[serde(rename = "di")]
+    #[serde(rename = "aulitdi")]
     application_user_log_in_token_device_id: String,
-    #[serde(rename = "v")]
+    #[serde(rename = "ov")]
     obfuscation_value: Cow<'outer_a, str>
 }
 

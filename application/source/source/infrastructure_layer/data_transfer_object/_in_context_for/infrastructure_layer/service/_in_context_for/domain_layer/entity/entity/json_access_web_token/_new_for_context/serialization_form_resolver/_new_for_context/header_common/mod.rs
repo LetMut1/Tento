@@ -3,9 +3,9 @@ use serde::Serialize;
 
 #[derive(Serialize, Debug)]
 pub struct HeaderCommon<'outer_a> {
-    #[serde(rename = "alg")]
+    #[serde(rename = "jawtpa")]
     json_access_web_token_payload_alg: &'outer_a str,
-    #[serde(rename = "typ")]
+    #[serde(rename = "jawtpt")]
     json_access_web_token_payload_typ: &'outer_a str,
 }
 
