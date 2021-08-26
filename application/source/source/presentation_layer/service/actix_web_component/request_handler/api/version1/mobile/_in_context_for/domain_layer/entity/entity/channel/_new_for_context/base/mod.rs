@@ -13,9 +13,9 @@ use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web_component::_new_for_context::standard_response_creator::StandardResponseCreator;
 
-pub struct Common;
+pub struct Base;
 
-// impl Common {
+// impl Base {
 //     pub async fn get_all_by(request_data: RequestData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
 //     }
 // }
