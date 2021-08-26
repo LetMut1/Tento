@@ -88,9 +88,6 @@ impl Authorization {
         }
     }
 
-
-
-
     pub async fn check_nickname_for_existing(query: Query<RequestCheckNicknameForExistingBase>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
         match HandlerCheckNicknameForExistingBase::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => {
