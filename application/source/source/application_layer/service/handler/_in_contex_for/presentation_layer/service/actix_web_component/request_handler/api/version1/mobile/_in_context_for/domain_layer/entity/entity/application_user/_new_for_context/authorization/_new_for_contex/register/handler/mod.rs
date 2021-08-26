@@ -60,7 +60,7 @@ impl Handler {
         let application_user_password: Password = Password::new(application_user_password);
         if ComponentValidator::is_valid_password(&application_user_password) {
             if ComponentValidator::is_valid_nickname(&application_user_nickname) {
-                let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
+                let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
 
                 if !ApplicationUserBaseRepository::is_exist_by_nickanme(postgresql_connection, &application_user_nickname)? {
                     if let Some(application_user_pre_confirmed) = ApplicationUserPreConfirmedBaseRepository::get_by_application_user_email(postgresql_connection, &application_user_email)? {

@@ -21,7 +21,7 @@ pub struct Handler;
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> { // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         if let Some(application_user_pre_confirmed) = ApplicationUserPreConfirmedBaseRepository::get_by_application_user_email(
-            &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(request.get_application_user_email())
+            &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?, &Email::new(request.get_application_user_email())
         )? 
         {
             let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;

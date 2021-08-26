@@ -15,7 +15,7 @@ pub struct Handler;
 
 impl Handler {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, query: Query) -> Result<Response, BaseError> {
-        let connection: &'_ Connection = &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
+        let connection: &'_ Connection = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
 
         let application_user_email: Email = Email::new(query.get_application_user_email());
 

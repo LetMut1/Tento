@@ -36,7 +36,7 @@ impl Handler {
         )?;
 
         if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(
-            &*ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &Email::new(application_user_email)
+            &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?, &Email::new(application_user_email)
         )? 
         {
             if PasswordHashResolver::is_valid(&Password::new(application_user_password), application_user.get_password_hash())? {
