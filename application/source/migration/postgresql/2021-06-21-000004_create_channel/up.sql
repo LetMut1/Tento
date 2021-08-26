@@ -24,9 +24,12 @@ CREATE UNIQUE INDEX channel2 ON public.channel
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX channel3 ON public.channel
-USING btree (name ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
+USING btree (name ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
 
 CREATE INDEX channel4 ON public.channel
+USING btree (subscribers_quantity ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
+
+CREATE INDEX channel5 ON public.channel
 USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.channel
@@ -46,10 +49,10 @@ ALTER COLUMN entertaining_seeable_and_hearable_content_quantity SET NOT NULL,
 ALTER COLUMN non_entertaining_seeable_only_content_quantity SET NOT NULL,
 ALTER COLUMN non_entertaining_seeable_and_hearable_content_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ADD CONSTRAINT channel5 PRIMARY KEY USING INDEX channel2,
-ADD CONSTRAINT channel6 FOREIGN KEY (application_user_channel_administrator_id)
+ADD CONSTRAINT channel6 PRIMARY KEY USING INDEX channel2,
+ADD CONSTRAINT channel7 FOREIGN KEY (application_user_channel_administrator_id)
 REFERENCES public.application_user_channel_administrator(id) ON DELETE RESTRICT,
-ADD CONSTRAINT channel7 UNIQUE USING INDEX channel3;
+ADD CONSTRAINT channel8 UNIQUE USING INDEX channel3;
 
 --  // TODO Аккаунт public.application_user_channel_administrator(id) не удалять, пока есть channel__owner_application_user_channel_administrator_id__foreign_key.
 --  либо заставлять сначала удалить все паблики вручную. 
