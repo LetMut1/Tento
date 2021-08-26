@@ -14,7 +14,7 @@ impl StandardJsonResponseBodyWrapper {
     }
 
     pub fn wrap_for_success_with_body<'outer_a, S>(body: &'outer_a S) -> Result<String, BaseError>
-    where 
+    where
         S: Serialize
     {
         return Ok(serde_json::to_string(&SuccessResultWithBody::new(body))?);

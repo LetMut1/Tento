@@ -12,7 +12,7 @@ where
 }
 
 impl<'outer_a, S> SuccessResultWithBody<'outer_a, S>
-where 
+where
     S: Serialize
 {
     pub fn new(body: &'outer_a S) -> Self {

@@ -10,6 +10,7 @@ use super::_component::is_private::IsPrivate;
 use super::_component::name::Name;
 use super::_component::non_entertaining_seeable_and_hearable_content_quantity::NonEntertainingSeeableAndHearableContentQuantity;
 use super::_component::non_entertaining_seeable_only_content_quantity::NonEntertainingSeeableOnlyContentQuantity;
+use super::_component::personalization_image_path::PersonalizationImagePath;
 use super::_component::public_marks_quantity::PublicMarksQuantity;
 use super::_component::reactions_quantity::ReactionsQuantity;
 use super::_component::subscribers_quantity::SubscribersQuantity;
@@ -19,6 +20,7 @@ pub struct Channel {
     id: Option<Id>,
     application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
     name: Name,
+    personalization_image_path: PersonalizationImagePath,
     description: Option<Description>,
     is_private: IsPrivate,
     subscribers_quantity: SubscribersQuantity,
@@ -38,6 +40,7 @@ impl Channel {
         id: Option<Id>,
         application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
         name: Name,
+        personalization_image_path: PersonalizationImagePath,
         description: Option<Description>,
         is_private: IsPrivate,
         subscribers_quantity: SubscribersQuantity,
@@ -55,6 +58,7 @@ impl Channel {
             id,
             application_user_channel_administrator_id,
             name,
+            personalization_image_path,
             description,
             is_private,
             subscribers_quantity,
@@ -87,6 +91,10 @@ impl Channel {
 
     pub fn get_name<'this>(&'this self) -> &'this Name {
         return &self.name;
+    }
+
+    pub fn get_personalization_image_path<'this>(&'this self) -> &'this PersonalizationImagePath {
+        return &self.personalization_image_path;
     }
 
     pub fn get_description<'this>(&'this self) -> &'this Option<Description> {

@@ -30,7 +30,7 @@ impl StandardResponseCreator {
     }
 
     pub fn wrap_for_success_with_body_and_create_ok<'outer_a, S>(body: &'outer_a S) -> HttpResponse<Body>
-    where 
+    where
         S: Serialize
     {
         match StandardJsonResponseBodyWrapper::wrap_for_success_with_body(body) {
