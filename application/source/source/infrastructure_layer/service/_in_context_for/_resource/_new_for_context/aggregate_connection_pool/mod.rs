@@ -14,7 +14,7 @@ use std::str::FromStr;
 #[derive(Clone)]
 pub struct AggregateConnectionPool {
     postgresqlxxxxxdelete_connection_pool: Pool<PostgresqlDELETEXXXConnectionManager<PostgresqlXXXDELETEConnection>>,
-    postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>, // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature?
+    postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>, // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature? Probably having NoTls be the feature, since it makes more sense to have TLS by default
     redis_connection_pool: Pool<RedisConnectionManager>
 }
 
