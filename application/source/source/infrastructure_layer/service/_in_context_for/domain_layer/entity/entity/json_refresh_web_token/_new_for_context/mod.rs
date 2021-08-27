@@ -1,2 +1,2 @@
-pub mod base_repository_proxy;
+pub mod repository_proxy;
 pub mod encoder;

@@ -2,8 +2,8 @@ use crate::domain_layer::entity::entity::application_user::_component::email::Em
 use crate::domain_layer::entity::entity::application_user::_component::id::Id;
 use crate::domain_layer::entity::entity::application_user::_component::nickname::Nickname;
 use crate::domain_layer::entity::entity::application_user::application_user::ApplicationUser;
-use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository_trait::BaseRepositoryTrait;
-use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::factory::Factory as ApplicationUserFactory;
+use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserPostgresqlTrait;
+use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::base::Base as ApplicationUserFactory;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::_new_for_context::insert::Insert;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::_new_for_context::select::Select;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::_new_for_context::update::Update;
@@ -19,7 +19,7 @@ use diesel::RunQueryDsl;
 
 pub struct BaseRepository;
 
-impl BaseRepositoryTrait for BaseRepository {
+impl ApplicationUserPostgresqlTrait for BaseRepository {
     fn create<'outer_a>(
         connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'_>
     ) -> Result<(), BaseError> {
