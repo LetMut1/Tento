@@ -10,8 +10,8 @@ use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity:
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::password_hash_resolver_trait::PasswordHashResolverTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::base::Base as ApplicationUserLogInTokenFactory;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
-use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
+use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserLogInTokenRedis;
+use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserPostgresql;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
@@ -35,7 +35,7 @@ impl Base {
             application_user_log_in_token_device_id
         )?;
 
-        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(
+        if let Some(application_user) = ApplicationUserPostgresql::get_by_email(
             &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?, &Email::new(application_user_email)
         )? 
         {
@@ -44,21 +44,21 @@ impl Base {
 
                 let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-                match ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
+                match ApplicationUserLogInTokenRedis::get_by_application_user_id_and_device_id(
                     connection, application_user.get_id()?, &application_user_log_in_token_device_id
                 )? 
                 {
                     Some(existing_application_user_log_in_token) => {
                         application_user_log_in_token = existing_application_user_log_in_token;
 
-                        ApplicationUserLogInTokenBaseRepository::update_expiration_time(connection, &application_user_log_in_token)?;
+                        ApplicationUserLogInTokenRedis::update_expiration_time(connection, &application_user_log_in_token)?;
                     },
                     None => {
                         application_user_log_in_token = ApplicationUserLogInTokenFactory::new_from_application_user(
                             &application_user, &application_user_log_in_token_device_id
                         )?;
 
-                        ApplicationUserLogInTokenBaseRepository::create(connection, &application_user_log_in_token)?;
+                        ApplicationUserLogInTokenRedis::create(connection, &application_user_log_in_token)?;
                     }
                 }
 

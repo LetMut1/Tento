@@ -13,9 +13,9 @@ use diesel::PgConnection as Connection;
 use diesel::QueryDsl;
 use diesel::RunQueryDsl;
 
-pub struct BaseRepository;
+pub struct Base;
 
-impl ApplicationUserPreConfirmedPostgesqlTrait for BaseRepository {
+impl ApplicationUserPreConfirmedPostgesqlTrait for Base {
     fn create<'outer_a>(
         connection: &'outer_a Connection, application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
     ) -> Result<(), BaseError> {

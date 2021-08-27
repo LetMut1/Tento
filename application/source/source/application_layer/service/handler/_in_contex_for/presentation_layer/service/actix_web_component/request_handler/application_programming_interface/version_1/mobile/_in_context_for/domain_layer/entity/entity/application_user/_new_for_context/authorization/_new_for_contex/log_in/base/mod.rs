@@ -13,8 +13,8 @@ use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity:
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserLogInTokenBaseRepository;
-use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as JsonAccessWebTokenBlackListBaseRepository;
+use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserLogInTokenRedis;
+use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonAccessWebTokenBlackListRedis;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
@@ -41,7 +41,7 @@ impl Base {
 
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-        if let Some(mut application_user_log_in_token) = ApplicationUserLogInTokenBaseRepository::get_by_application_user_id_and_device_id(
+        if let Some(mut application_user_log_in_token) = ApplicationUserLogInTokenRedis::get_by_application_user_id_and_device_id(
             connection, &ApplicationUserId::new(application_user_id), &application_user_log_in_token_device_id
         )?
         {
@@ -50,7 +50,7 @@ impl Base {
                     connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 )? 
                 {
-                    JsonAccessWebTokenBlackListBaseRepository::create(
+                    JsonAccessWebTokenBlackListRedis::create(
                         connection, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
                     )?;
 
@@ -60,7 +60,7 @@ impl Base {
                 let json_refresh_web_token: JsonRefreshWebToken<'_> =
                 JsonRefreshWebTokenFactory::new_from_id_registry(application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id());
                 
-                ApplicationUserLogInTokenBaseRepository::delete(connection, &application_user_log_in_token)?;
+                ApplicationUserLogInTokenRedis::delete(connection, &application_user_log_in_token)?;
 
                 RepositoryProxy::create(connection, &json_refresh_web_token)?;
 
@@ -75,7 +75,7 @@ impl Base {
             application_user_log_in_token.increment_wrong_enter_tries_quantity();
 
             if application_user_log_in_token.get_wrong_enter_tries_quantity().get_value() >= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                ApplicationUserLogInTokenBaseRepository::delete(connection, &application_user_log_in_token)?;
+                ApplicationUserLogInTokenRedis::delete(connection, &application_user_log_in_token)?;
             }
             
             return Err(BaseError::EntityError(EntityError::ApplicationUserLogInTokenError(ApplicationUserLogInTokenError::InvalidValue)));

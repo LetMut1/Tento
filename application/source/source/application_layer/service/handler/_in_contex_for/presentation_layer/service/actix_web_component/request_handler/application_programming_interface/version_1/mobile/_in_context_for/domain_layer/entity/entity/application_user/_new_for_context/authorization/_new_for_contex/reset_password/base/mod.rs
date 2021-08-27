@@ -9,8 +9,8 @@ use crate::domain_layer::repository::_in_context_for::domain_layer::entity::enti
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::password_hash_resolver_trait::PasswordHashResolverTrait;
 use crate::domain_layer::service::component_validator::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::base::Base as ApplicationUserComponentValidator;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
-use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
+use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserResetPasswordTokenRedis;
+use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserPostgresql;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
@@ -36,19 +36,19 @@ impl Base {
             
             let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(
+            if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenRedis::get_by_application_user_id(
                 redis_connection, &application_user_id
             )? 
             {
                 if application_user_reset_password_token.get_value().get_value() == application_user_reset_password_token_value.as_str() {
                     let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
 
-                    if let Some(mut application_user) = ApplicationUserBaseRepository::get_by_id(postgresql_connection, &application_user_id)? {
+                    if let Some(mut application_user) = ApplicationUserPostgresql::get_by_id(postgresql_connection, &application_user_id)? {
                         application_user.set_password_hash(PasswordHashResolver::create(&application_user_password)?);
 
-                        ApplicationUserBaseRepository::update(postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?; // TODO Загуглить, чтл можно сделать для обеспечения транзакции на две системы (зкроме, запоминания состояния через третью ссистпму)
+                        ApplicationUserPostgresql::update(postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?; // TODO Загуглить, чтл можно сделать для обеспечения транзакции на две системы (зкроме, запоминания состояния через третью ссистпму)
 
-                        ApplicationUserResetPasswordTokenBaseRepository::delete(redis_connection, &application_user_reset_password_token)?;
+                        ApplicationUserResetPasswordTokenRedis::delete(redis_connection, &application_user_reset_password_token)?;
 
                         return Ok(());
                     }
@@ -59,7 +59,7 @@ impl Base {
                 application_user_reset_password_token.increment_wrong_enter_tries_quantity();
 
                 if application_user_reset_password_token.get_wrong_enter_tries_quantity().get_value() >= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                    ApplicationUserResetPasswordTokenBaseRepository::delete(redis_connection, &application_user_reset_password_token)?;
+                    ApplicationUserResetPasswordTokenRedis::delete(redis_connection, &application_user_reset_password_token)?;
                 }
 
 

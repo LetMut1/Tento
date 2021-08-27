@@ -7,8 +7,8 @@ use crate::domain_layer::repository::_in_context_for::domain_layer::entity::enti
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::base::Base as ApplicationUserResetPasswordTokenFactory;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::BaseRepository as ApplicationUserResetPasswordTokenBaseRepository;
-use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_repository::BaseRepository as ApplicationUserBaseRepository;
+use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserResetPasswordTokenRedis;
+use crate::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserPostgresql;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::email_sender::EmailSender;
@@ -21,7 +21,7 @@ pub struct Base;
 
 impl Base {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request_base: RequestBase) -> Result<ResponseBase, BaseError> {
-        if let Some(application_user) = ApplicationUserBaseRepository::get_by_email(
+        if let Some(application_user) = ApplicationUserPostgresql::get_by_email(
             &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?, &Email::new(request_base.get_application_user_email())
         )? 
         {
@@ -29,16 +29,16 @@ impl Base {
 
             let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            match ApplicationUserResetPasswordTokenBaseRepository::get_by_application_user_id(redis_connection, application_user.get_id()?)? {
+            match ApplicationUserResetPasswordTokenRedis::get_by_application_user_id(redis_connection, application_user.get_id()?)? {
                 Some(existing_application_user_reset_password_token) => {
                     application_user_reset_password_token = existing_application_user_reset_password_token;
 
-                    ApplicationUserResetPasswordTokenBaseRepository::update_expiration_time(redis_connection, &application_user_reset_password_token)?;
+                    ApplicationUserResetPasswordTokenRedis::update_expiration_time(redis_connection, &application_user_reset_password_token)?;
                 },
                 None => {
                     application_user_reset_password_token = ApplicationUserResetPasswordTokenFactory::new_from_application_user(&application_user)?;
 
-                    ApplicationUserResetPasswordTokenBaseRepository::create(redis_connection, &application_user_reset_password_token)?;
+                    ApplicationUserResetPasswordTokenRedis::create(redis_connection, &application_user_reset_password_token)?;
                 }
             }
 

@@ -7,9 +7,9 @@ use crate::infrastructure_layer::service::date_time_expiration_storage::DateTime
 use redis::Commands;
 use redis::Connection;
 
-pub struct BaseRepository;
+pub struct Base;
 
-impl JsonAccessWebTokenBlackListRedisTrait for BaseRepository {
+impl JsonAccessWebTokenBlackListRedisTrait for Base {
     fn create<'outer_a>(
         connection: &'outer_a mut Connection, json_access_web_token_black_list: &'outer_a JsonAccessWebTokenBlackList<'_>
     ) -> Result<(), BaseError> {

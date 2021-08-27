@@ -17,9 +17,9 @@ use diesel::PgConnection as Connection;
 use diesel::QueryDsl;
 use diesel::RunQueryDsl;
 
-pub struct BaseRepository;
+pub struct Base;
 
-impl ApplicationUserPostgresqlTrait for BaseRepository {
+impl ApplicationUserPostgresqlTrait for Base {
     fn create<'outer_a>(
         connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'_>
     ) -> Result<(), BaseError> {

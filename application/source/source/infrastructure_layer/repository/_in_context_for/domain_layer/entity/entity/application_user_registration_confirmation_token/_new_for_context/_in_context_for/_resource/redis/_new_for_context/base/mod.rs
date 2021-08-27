@@ -9,9 +9,9 @@ use crate::infrastructure_layer::service::date_time_expiration_storage::DateTime
 use redis::Commands;
 use redis::Connection;
 
-pub struct BaseRepository;
+pub struct Base;
 
-impl ApplicationUserRegistrationConfirmationTokenRedisTrait for BaseRepository {
+impl ApplicationUserRegistrationConfirmationTokenRedisTrait for Base {
     fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>

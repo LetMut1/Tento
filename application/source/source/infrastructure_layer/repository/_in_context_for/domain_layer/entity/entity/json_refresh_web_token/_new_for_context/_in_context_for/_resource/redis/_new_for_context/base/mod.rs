@@ -11,9 +11,9 @@ use redis::Commands;
 use redis::Connection;
 
 #[doc = "Should only be used in use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy."]
-pub struct BaseRepository;
+pub struct Base;
 
-impl JsonRefreshWebTokenRedisTrait for BaseRepository {
+impl JsonRefreshWebTokenRedisTrait for Base {
     fn create<'outer_a>(
         connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
     ) -> Result<(), BaseError> {

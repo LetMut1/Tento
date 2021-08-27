@@ -9,9 +9,9 @@ use crate::infrastructure_layer::service::date_time_expiration_storage::DateTime
 use redis::Commands;
 use redis::Connection;
 
-pub struct BaseRepository;
+pub struct Base;
 
-impl ApplicationUserResetPasswordTokenRedisTrait for BaseRepository {
+impl ApplicationUserResetPasswordTokenRedisTrait for Base {
     fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
