@@ -3,7 +3,7 @@ use crate::domain_layer::entity::entity::json_access_web_token::_component::payl
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use redis::Connection;
 
-pub trait BaseRepositoryTrait {
+pub trait BaseTrait {
     fn create<'outer_a>(
         connection: &'outer_a mut Connection, json_access_web_token_black_list: &'outer_a JsonAccessWebTokenBlackList<'_>
     ) -> Result<(), BaseError>;

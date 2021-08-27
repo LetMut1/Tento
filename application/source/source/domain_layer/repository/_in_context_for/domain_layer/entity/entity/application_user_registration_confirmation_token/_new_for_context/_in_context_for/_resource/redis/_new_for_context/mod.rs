@@ -1,1 +1,1 @@
-pub mod base_repository_trait;
+pub mod base_trait;

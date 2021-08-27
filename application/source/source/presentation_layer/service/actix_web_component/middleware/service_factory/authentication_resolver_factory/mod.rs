@@ -3,13 +3,13 @@ use actix_service::Transform;
 use actix_web::dev::ServiceRequest;
 use actix_web::dev::ServiceResponse;
 use actix_web::Error;
-use crate::presentation_layer::service::actix_web_component::middleware::authentication_resolver::AuthenticationResolver;
+use crate::presentation_layer::service::actix_web_component::middleware::service::authentication_resolver::AuthenticationResolver;
 use futures::future::ok as FutureOk; 
 use futures::future::Ready; 
 
-pub struct Factory;
+pub struct AuthenticationResolverFactory;
 
-impl<S, B> Transform<S> for Factory
+impl<S, B> Transform<S> for AuthenticationResolverFactory
 where
     S: Service<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static
@@ -21,7 +21,7 @@ where
     type Transform = AuthenticationResolver<S, B>;
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
-    fn new_transform(&self, service: S) -> Self::Future {
+    fn new_transform<'this>(&'this self, service: S) -> Self::Future {
         return FutureOk(AuthenticationResolver::new(service));
     }
 }

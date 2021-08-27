@@ -1,6 +1,6 @@
 use crate::domain_layer::entity::entity::application_user_pre_confirmed::_component::id::Id as ApplicationUserPreConfirmedId;
 use crate::domain_layer::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
-use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository_trait::BaseRepositoryTrait;
+use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserRegistrationConfirmationTokenRedisTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenFactory;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::_new_for_context::common::Common;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
@@ -11,7 +11,7 @@ use redis::Connection;
 
 pub struct BaseRepository;
 
-impl BaseRepositoryTrait for BaseRepository {
+impl ApplicationUserRegistrationConfirmationTokenRedisTrait for BaseRepository {
     fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>

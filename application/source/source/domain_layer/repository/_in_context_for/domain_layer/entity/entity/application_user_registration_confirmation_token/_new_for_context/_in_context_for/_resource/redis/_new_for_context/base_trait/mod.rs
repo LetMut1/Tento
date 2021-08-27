@@ -3,7 +3,7 @@ use crate::domain_layer::entity::entity::application_user_registration_confirmat
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use redis::Connection;
 
-pub trait BaseRepositoryTrait {
+pub trait BaseTrait {
     fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
