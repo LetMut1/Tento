@@ -1,6 +1,6 @@
 use crate::domain_layer::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
-use crate::domain_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserResetPasswordTokenRedisTrait;
+use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserResetPasswordTokenRedisTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::base::Base as ApplicationUserResetPasswordTokenFactory;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_repository::_new_for_context::common::Common;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
@@ -11,7 +11,7 @@ use redis::Connection;
 
 pub struct Base;
 
-impl ApplicationUserResetPasswordTokenRedisTrait for Base {
+impl StateManagerApplicationUserResetPasswordTokenRedisTrait for Base {
     fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
