@@ -6,7 +6,7 @@ use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity:
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as DataProviderJsonRefreshWebTokenRedis;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as StateManagerJsonRefreshWebTokenRedis;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::_new_for_context::processing_device_id_storage::ProcessingDeviceIdStorage;
+use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::_new_for_context::processing_device_id_storage::ProcessingDeviceIdStorage;
 use redis::Connection;
 
 pub struct RepositoryProxy;
