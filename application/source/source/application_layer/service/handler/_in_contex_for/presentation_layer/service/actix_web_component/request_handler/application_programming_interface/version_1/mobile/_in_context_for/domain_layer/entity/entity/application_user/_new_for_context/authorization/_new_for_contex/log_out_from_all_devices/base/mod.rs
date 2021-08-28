@@ -15,9 +15,7 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
-    pub fn handle<'outer_a>(
-        aggregate_connection_pool: Arc<AggregateConnectionPool>, json_access_web_token: &'outer_a JsonAccessWebToken<'_>
-    ) -> Result<(), BaseError> {
+    pub fn handle<'outer_a>(aggregate_connection_pool: Arc<AggregateConnectionPool>, json_access_web_token: &'outer_a JsonAccessWebToken<'_>) -> Result<(), BaseError> {
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
         if let Some(json_refresh_web_token_registry) = RepositoryProxy::get_by_application_user_id(

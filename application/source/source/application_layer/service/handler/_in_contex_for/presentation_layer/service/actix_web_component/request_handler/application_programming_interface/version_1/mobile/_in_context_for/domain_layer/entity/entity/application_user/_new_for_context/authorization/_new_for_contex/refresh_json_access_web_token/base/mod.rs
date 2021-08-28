@@ -14,19 +14,19 @@ use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_c
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as RequestBase;
-use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as ResponseBase;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as Request;
+use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as Response;
 use redis::Connection;
 use std::sync::Arc;
 
 pub struct Base;
 
 impl Base {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request_base: RequestBase) -> Result<ResponseBase, BaseError> {
+    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> {
         let (
             json_access_web_token, 
             json_refresh_web_token_serialized
-        ) = request_base.into_inner();
+        ) = request.into_inner();
 
         let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(json_access_web_token.as_str())?;
 
@@ -38,18 +38,17 @@ impl Base {
             )?
             {
                 if &(json_access_web_token.get_id().get_value().get_value().as_bytes())[..] == &(json_refresh_web_token.get_json_access_web_token_id().get_value().get_value().as_bytes())[..] 
-                && Encoder::is_valid(&json_refresh_web_token, json_refresh_web_token_serialized.as_str())? 
+                    && Encoder::is_valid(&json_refresh_web_token, json_refresh_web_token_serialized.as_str())? 
                 {
                     json_refresh_web_token.refresh();
 
                     RepositoryProxy::update(connection, &json_refresh_web_token)?;
 
-                    return Ok(
-                        ResponseBase::new(
-                            SerializationFormResolver::serialize(&JsonAccessWebTokenFactory::new_from_json_refresh_web_token(&json_refresh_web_token)?)?,
-                            Encoder::encode(&json_refresh_web_token)?
-                        )
-                    );
+                    let json_access_web_token: String = SerializationFormResolver::serialize(&JsonAccessWebTokenFactory::new_from_json_refresh_web_token(&json_refresh_web_token)?)?;
+
+                    let json_refresh_web_token: String = Encoder::encode(&json_refresh_web_token)?;
+
+                    return Ok(Response::new(json_access_web_token, json_refresh_web_token));
                 }
 
                 return Err(BaseError::InvalidArgumentError);

@@ -20,7 +20,7 @@ impl Base {
         let application_user_email: Email = Email::new(request.get_application_user_email());
 
         let resut: bool = DataProviderApplicationUserPostgresql::is_exist_by_email(connection, &application_user_email)?
-        || DataProviderApplicationUserPreConfirmedPostgesql::is_exist_by_application_user_email(connection, &application_user_email)?;
+            || DataProviderApplicationUserPreConfirmedPostgesql::is_exist_by_application_user_email(connection, &application_user_email)?;
 
         return Ok(Response::new(resut));
     }
