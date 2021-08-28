@@ -16,6 +16,6 @@
 pub struct Base;
 
 // impl Base {
-//     pub async fn get_all_by(request_data: RequestData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
+//     pub async fn get_many_by_name(request_data: RequestData<JsonAccessWebToken<'_>>, data: Data<AggregateConnectionPool>) -> HttpResponse<Body> {
 //     }
 // }

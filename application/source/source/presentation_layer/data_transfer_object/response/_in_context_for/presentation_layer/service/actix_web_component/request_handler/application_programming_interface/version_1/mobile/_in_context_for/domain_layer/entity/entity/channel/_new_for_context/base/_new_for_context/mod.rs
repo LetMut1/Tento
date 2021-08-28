@@ -1,1 +1,1 @@
-pub mod get_all_by;
+pub mod get_many_by_name;
