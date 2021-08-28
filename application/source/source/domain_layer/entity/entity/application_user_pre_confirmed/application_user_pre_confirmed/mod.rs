@@ -1,18 +1,18 @@
-use crate::domain_layer::entity::entity::application_user::_component::email::Email as ApplicationUserEmail;
+use crate::domain_layer::entity::entity::application_user::_component::email::Email;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use super::_component::created_at::CreatedAt;
 use super::_component::id::Id;
 
 pub struct ApplicationUserPreConfirmed {
     id: Option<Id>,
-    application_user_email: ApplicationUserEmail,
+    application_user_email: Email,
     created_at: CreatedAt
 }
 
 impl ApplicationUserPreConfirmed {
     pub fn new(
         id: Option<Id>,
-        application_user_email: ApplicationUserEmail,
+        application_user_email: Email,
         created_at: CreatedAt
     ) -> Self {
         return Self {id, application_user_email, created_at};
@@ -29,7 +29,7 @@ impl ApplicationUserPreConfirmed {
         }
     }
 
-    pub fn get_application_user_email<'this>(&'this self) -> &'this ApplicationUserEmail {
+    pub fn get_application_user_email<'this>(&'this self) -> &'this Email {
         return &self.application_user_email;
     }
 

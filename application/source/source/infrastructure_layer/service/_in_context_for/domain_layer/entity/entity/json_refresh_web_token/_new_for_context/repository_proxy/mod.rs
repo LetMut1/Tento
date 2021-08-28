@@ -1,9 +1,10 @@
-use crate::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderJsonRefreshWebTokenRedisTrait;
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerJsonRefreshWebTokenRedisTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::repository_proxy_trait::RepositoryProxyTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as DataProviderJsonRefreshWebTokenRedis;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as StateManagerJsonRefreshWebTokenRedis;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::base_repository_proxy::_new_for_context::processing_device_id_storage::ProcessingDeviceIdStorage;
 use redis::Connection;
@@ -89,21 +90,13 @@ impl RepositoryProxyTrait for RepositoryProxy {
         return Ok(());
     }
 
-    fn get_by_application_user_id_and_application_user_log_in_token_device_id<'outer_a>(
-        connection: &'outer_a mut Connection, 
-        application_user_id: &'outer_a ApplicationUserId, 
-        application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
-    ) -> Result<Option<JsonRefreshWebToken<'static>>, BaseError> {
-        return StateManagerJsonRefreshWebTokenRedis::get_by_application_user_id_and_application_user_log_in_token_device_id(
-            connection, application_user_id, application_user_log_in_token_device_id
-        );
-    }
-
     fn get_by_application_user_id<'outer_a>(
         connection: &'outer_a mut Connection, application_user_id: &'outer_a ApplicationUserId
     ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, BaseError> {
         if let Some(application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection, application_user_id)? {
-            return StateManagerJsonRefreshWebTokenRedis::get_by_application_user_id(connection, application_user_id, application_user_log_in_token_device_id_registry);
+            return DataProviderJsonRefreshWebTokenRedis::get_by_application_user_id_and_application_user_log_in_token_device_id_registry(
+                connection, application_user_id, application_user_log_in_token_device_id_registry
+            );
         }
 
         return Ok(None);

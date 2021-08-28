@@ -4,11 +4,15 @@ use crate::domain_layer::entity::entity::application_user::_component::password:
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserResetPasswordTokenRedisTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserPostgresqlTrait;
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserResetPasswordTokenRedisTrait;
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserPostgresqlTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::password_hash_resolver_trait::PasswordHashResolverTrait;
 use crate::domain_layer::service::component_validator::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::base::Base as ApplicationUserComponentValidator;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as DataProviderApplicationUserResetPasswordTokenRedis;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as DataProviderApplicationUserPostgresql;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as StateManagerApplicationUserResetPasswordTokenRedis;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as StateManagerApplicationUserPostgresql;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
@@ -36,14 +40,14 @@ impl Base {
             
             let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            if let Some(mut application_user_reset_password_token) = StateManagerApplicationUserResetPasswordTokenRedis::get_by_application_user_id(
+            if let Some(mut application_user_reset_password_token) = DataProviderApplicationUserResetPasswordTokenRedis::get_by_application_user_id(
                 redis_connection, &application_user_id
             )? 
             {
                 if application_user_reset_password_token.get_value().get_value() == application_user_reset_password_token_value.as_str() {
                     let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
 
-                    if let Some(mut application_user) = StateManagerApplicationUserPostgresql::get_by_id(postgresql_connection, &application_user_id)? {
+                    if let Some(mut application_user) = DataProviderApplicationUserPostgresql::get_by_id(postgresql_connection, &application_user_id)? {
                         application_user.set_password_hash(PasswordHashResolver::create(&application_user_password)?);
 
                         StateManagerApplicationUserPostgresql::update(postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?; // TODO Загуглить, чтл можно сделать для обеспечения транзакции на две системы (зкроме, запоминания состояния через третью ссистпму)
