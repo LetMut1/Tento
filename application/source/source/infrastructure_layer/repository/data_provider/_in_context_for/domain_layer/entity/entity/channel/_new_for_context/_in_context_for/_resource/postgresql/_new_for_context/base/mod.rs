@@ -1,5 +1,6 @@
 use crate::domain_layer::entity::entity::channel::_component::name::Name;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::prepared_statemant_parameter_counter::PreparedStatementParameterCounter;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_component::channel::Channel;
 use postgres::Client as Connection;
 use postgres::fallible_iterator::FallibleIterator;
@@ -13,6 +14,8 @@ impl Base {
     pub fn get_many_by_name<'outer_a>(
         connection: &'outer_a mut Connection, name: &'outer_a Name, requery_name: &'outer_a Option<Name>, limit: u8
     ) -> Result<Option<Vec<Channel>>, BaseError> {
+        let mut prepared_statemant_parameter_counter: PreparedStatementParameterCounter = PreparedStatementParameterCounter::new();
+
         let mut query_parameter_type_registry: Vec<Type> = Vec::new();
 
         let mut query_parameter_registry: Vec<String> = Vec::new();
@@ -29,22 +32,23 @@ impl Base {
                 c.viewing_quantity as vq, \
                 c.created_at::TEXT as ca \
             FROM public.channel c \
-            WHERE c.is_private = FALSE AND c.name LIKE $1 "
+            WHERE c.is_private = FALSE AND c.name LIKE $"
             .to_string();
+            query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
 
         query_parameter_type_registry.push(Type::TEXT);
 
         query_parameter_registry.push(name.get_value().to_string() + "%");
 
         if let Some(requery_name) = requery_name {
-            query = query + "AND c.name > $2 ";
+            query = query + " AND c.name > $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
 
             query_parameter_type_registry.push(Type::TEXT);
 
             query_parameter_registry.push(requery_name.get_value().to_string());
         }
 
-        query = query + "ORDER BY c.name ASC LIMIT $3;";
+        query = query + " ORDER BY c.name ASC LIMIT $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
 
         query_parameter_type_registry.push(Type::INT2);
 
