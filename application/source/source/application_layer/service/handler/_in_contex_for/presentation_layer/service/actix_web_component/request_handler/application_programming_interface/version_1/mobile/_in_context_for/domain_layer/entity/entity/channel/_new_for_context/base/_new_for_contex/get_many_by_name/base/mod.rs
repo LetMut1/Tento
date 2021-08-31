@@ -31,7 +31,7 @@ impl Base {
         }
 
         let channel_name: Name = Name::new(String::from_utf8(base64::decode_config(channel_name, base64::URL_SAFE)?)?);
-        println!("{}", channel_name.get_value());
+
         if ChannelComponentValidator::is_valid_name(&channel_name) {
             let requery_channel_name_: Option<Name>;
 
