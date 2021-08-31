@@ -7,11 +7,11 @@ use postgres::RowIter;
 use postgres::Statement;
 use postgres::types::Type;
 
-pub struct Base;    // TODO Имена ПрепСТейтентов, их отмена - нужно ли это все?
+pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO 
 
 impl Base {
     pub fn get_many_by_name<'outer_a>(
-        connection: &'outer_a mut Connection, name: &'outer_a Name, requery_channel_name: &'outer_a Option<Name>, limit: u8
+        connection: &'outer_a mut Connection, name: &'outer_a Name, requery_name: &'outer_a Option<Name>, limit: u8
     ) -> Result<Option<Vec<Channel>>, BaseError> {
         let mut query_parameter_type_registry: Vec<Type> = Vec::new();
 
@@ -36,15 +36,15 @@ impl Base {
 
         query_parameter_registry.push(name.get_value().to_string() + "%");
 
-        if let Some(subquery_channel_name) = requery_channel_name {
-            query.push_str("AND c.name > $2 ");
+        if let Some(requery_name) = requery_name {
+            query = query + "AND c.name > $2 ";
 
             query_parameter_type_registry.push(Type::TEXT);
 
-            query_parameter_registry.push(subquery_channel_name.get_value().to_string());
+            query_parameter_registry.push(requery_name.get_value().to_string());
         }
 
-        query.push_str("ORDER BY c.name ASC LIMIT $3;");
+        query = query + "ORDER BY c.name ASC LIMIT $3;";
 
         query_parameter_type_registry.push(Type::INT2);
 
