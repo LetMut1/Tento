@@ -7,10 +7,10 @@ use serde::Serialize;
 pub struct StandardJsonResponseBodyWrapper;
 
 impl StandardJsonResponseBodyWrapper {
-    const SUCCESS_RESULT: &'static SuccessResult = &SuccessResult::new();
+    const SUCCESS_RESULT: SuccessResult = SuccessResult::new();
 
     pub fn wrap_for_success() -> Result<String, BaseError> {
-        return Ok(serde_json::to_string(Self::SUCCESS_RESULT)?);
+        return Ok(serde_json::to_string(&Self::SUCCESS_RESULT)?);
     }
 
     pub fn wrap_for_success_with_body<'outer_a, S>(body: &'outer_a S) -> Result<String, BaseError>

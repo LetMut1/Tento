@@ -1,4 +1,4 @@
-pub struct SerializationFormResolver;
+
 use crate::domain_layer::entity::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_component::_new_for_context::signature_creator_trait::SignatureCreatorTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
@@ -8,12 +8,14 @@ use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastr
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::json_access_web_token::_component::_new_for_context::signature_creator::SignatureCreator;
 
+pub struct SerializationFormResolver;
+
 impl SerializationFormResolverTrait for SerializationFormResolver {
     fn serialize<'outer_a>(json_access_web_token: &'outer_a JsonAccessWebToken<'_>) -> Result<String, BaseError> {
         let header_and_payload: String = 
-        base64::encode(serde_json::to_string(&HeaderCommon::new(json_access_web_token))?.as_bytes()) 
+        base64::encode_config(serde_json::to_string(&HeaderCommon::new(json_access_web_token))?.as_bytes(), base64::STANDARD) 
         + Self::TOKEN_PARTS_SEPARATOR 
-        + base64::encode(serde_json::to_string(&PayloadCommon::new(json_access_web_token))?.as_bytes()).as_str();
+        + base64::encode_config(serde_json::to_string(&PayloadCommon::new(json_access_web_token))?.as_bytes(), base64::STANDARD).as_str();
         
         let signature: String = SignatureCreator::create(&header_and_payload)?;
 
@@ -30,7 +32,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
         {
             return Ok(
                 JsonAccessWebTokenFactory::new_from_payload_common(
-                    serde_json::from_slice::<'_, PayloadCommon>(&base64::decode(classic_form_part_registry[1].as_bytes())?)?
+                    serde_json::from_slice::<'_, PayloadCommon>(&base64::decode_config(classic_form_part_registry[1].as_bytes(), base64::STANDARD)?)?
                 )?
             );
         }

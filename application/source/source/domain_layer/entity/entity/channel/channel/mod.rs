@@ -2,14 +2,10 @@ use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::domain_layer::entity::entity::application_user_channel_administrator::_component::id::Id as ApplicationUserChannelAdministratorId;
 use super::_component::created_at::CreatedAt;
 use super::_component::description::Description;
-use super::_component::entertaining_seeable_and_hearable_content_quantity::EntertainingSeeableAndHearableContentQuantity;
-use super::_component::entertaining_seeable_only_content_quantity::EntertainingSeeableOnlyContentQuantity;
 use super::_component::hidden_marks_quantity::HiddenMarksQuantity;
 use super::_component::id::Id;
 use super::_component::is_private::IsPrivate;
 use super::_component::name::Name;
-use super::_component::non_entertaining_seeable_and_hearable_content_quantity::NonEntertainingSeeableAndHearableContentQuantity;
-use super::_component::non_entertaining_seeable_only_content_quantity::NonEntertainingSeeableOnlyContentQuantity;
 use super::_component::personalization_image_path::PersonalizationImagePath;
 use super::_component::public_marks_quantity::PublicMarksQuantity;
 use super::_component::reactions_quantity::ReactionsQuantity;
@@ -28,10 +24,6 @@ pub struct Channel {
     hidden_marks_quantity: HiddenMarksQuantity,
     reactions_quantity: ReactionsQuantity,
     viewing_quantity: ViewingQuantity,
-    entertaining_seeable_only_content_quantity: EntertainingSeeableOnlyContentQuantity,
-    entertaining_seeable_and_hearable_content_quantity: EntertainingSeeableAndHearableContentQuantity,
-    non_entertaining_seeable_only_content_quantity: NonEntertainingSeeableOnlyContentQuantity,
-    non_entertaining_seeable_and_hearable_content_quantity: NonEntertainingSeeableAndHearableContentQuantity,
     created_at: CreatedAt
 }
 
@@ -48,10 +40,6 @@ impl Channel {
         hidden_marks_quantity: HiddenMarksQuantity,
         reactions_quantity: ReactionsQuantity,
         viewing_quantity: ViewingQuantity,
-        entertaining_seeable_only_content_quantity: EntertainingSeeableOnlyContentQuantity,
-        entertaining_seeable_and_hearable_content_quantity: EntertainingSeeableAndHearableContentQuantity,
-        non_entertaining_seeable_only_content_quantity: NonEntertainingSeeableOnlyContentQuantity,
-        non_entertaining_seeable_and_hearable_content_quantity: NonEntertainingSeeableAndHearableContentQuantity,
         created_at: CreatedAt
     ) -> Self {
         return Self {
@@ -66,10 +54,6 @@ impl Channel {
             hidden_marks_quantity,
             reactions_quantity,
             viewing_quantity,
-            entertaining_seeable_only_content_quantity,
-            entertaining_seeable_and_hearable_content_quantity,
-            non_entertaining_seeable_only_content_quantity,
-            non_entertaining_seeable_and_hearable_content_quantity,
             created_at
         };
     }
@@ -123,22 +107,6 @@ impl Channel {
 
     pub fn get_viewing_quantity<'this>(&'this self) -> &'this ViewingQuantity {
         return &self.viewing_quantity;
-    }
-
-    pub fn get_entertaining_seeable_only_content_quantity<'this>(&'this self) -> &'this EntertainingSeeableOnlyContentQuantity {
-        return &self.entertaining_seeable_only_content_quantity;
-    }
-
-    pub fn get_entertaining_seeable_and_hearable_content_quantity<'this>(&'this self) -> &'this EntertainingSeeableAndHearableContentQuantity {
-        return &self.entertaining_seeable_and_hearable_content_quantity;
-    }
-
-    pub fn get_non_entertaining_seeable_only_content_quantity<'this>(&'this self) -> &'this NonEntertainingSeeableOnlyContentQuantity {
-        return &self.non_entertaining_seeable_only_content_quantity;
-    }
-
-    pub fn get_non_entertaining_seeable_and_hearable_content_quantity<'this>(&'this self) -> &'this NonEntertainingSeeableAndHearableContentQuantity {
-        return &self.non_entertaining_seeable_and_hearable_content_quantity;
     }
 
     pub fn get_created_at<'this>(&'this self) -> &'this CreatedAt {

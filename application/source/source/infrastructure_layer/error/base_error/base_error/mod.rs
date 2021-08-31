@@ -21,6 +21,7 @@ use std::fmt::Formatter;
 use std::fmt::Result;
 use std::io::Error as IOError;
 use std::io::ErrorKind as IOErrorKind;
+use std::string::FromUtf8Error;
 use super::_component::run_time_error::_component::other_error::OtherError;
 use super::_component::run_time_error::_component::resource_error::_component::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
 use super::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
@@ -139,6 +140,12 @@ impl From<Log4rsConfigErrors> for BaseError {
 impl From<SetLoggerError> for BaseError {
     fn from(set_logger_error: SetLoggerError) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("SetLoggerError", set_logger_error)));
+    }
+}
+
+impl From<FromUtf8Error> for BaseError {
+    fn from(from_utf8_error: FromUtf8Error) -> Self {
+        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("FromUtf8Error", from_utf8_error)));
     }
 }
 

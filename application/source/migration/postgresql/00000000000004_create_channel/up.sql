@@ -10,10 +10,6 @@ CREATE TABLE public.channel (
     hidden_marks_quantity BIGINT,
     reactions_quantity BIGINT,
     viewing_quantity BIGINT,
-    entertaining_seeable_only_content_quantity BIGINT,
-    entertaining_seeable_and_hearable_content_quantity BIGINT,
-    non_entertaining_seeable_only_content_quantity BIGINT,
-    non_entertaining_seeable_and_hearable_content_quantity BIGINT,
     created_at TIMESTAMPTZ
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
@@ -24,7 +20,7 @@ CREATE UNIQUE INDEX channel2 ON public.channel
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX channel3 ON public.channel
-USING btree (name ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
+USING btree (name COLLATE "C" ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
 
 CREATE UNIQUE INDEX channel4 ON public.channel
 USING btree (is_private ASC NULLS LAST) WITH (fillfactor = 85, deduplicate_items = on);
@@ -39,6 +35,7 @@ ALTER TABLE ONLY public.channel
 ALTER COLUMN id SET NOT NULL,
 ALTER COLUMN id SET DEFAULT nextval('public.channel1'),
 ALTER COLUMN application_user_channel_administrator_id SET NOT NULL,
+ALTER COLUMN name SET DATA TYPE CHARACTER VARYING(75) COLLATE "C",
 ALTER COLUMN name SET NOT NULL,
 ALTER COLUMN personalization_image_path SET NOT NULL,
 ALTER COLUMN is_private SET NOT NULL,
@@ -47,10 +44,6 @@ ALTER COLUMN public_marks_quantity SET NOT NULL,
 ALTER COLUMN hidden_marks_quantity SET NOT NULL,
 ALTER COLUMN reactions_quantity SET NOT NULL,
 ALTER COLUMN viewing_quantity SET NOT NULL,
-ALTER COLUMN entertaining_seeable_only_content_quantity SET NOT NULL,
-ALTER COLUMN entertaining_seeable_and_hearable_content_quantity SET NOT NULL,
-ALTER COLUMN non_entertaining_seeable_only_content_quantity SET NOT NULL,
-ALTER COLUMN non_entertaining_seeable_and_hearable_content_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel7 PRIMARY KEY USING INDEX channel2,
 ADD CONSTRAINT channel8 FOREIGN KEY (application_user_channel_administrator_id)

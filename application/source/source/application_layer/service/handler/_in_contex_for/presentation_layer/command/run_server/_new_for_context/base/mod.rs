@@ -6,7 +6,8 @@ use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::service::actix_web_component::middleware::service_factory::authentication_resolver_factory::AuthenticationResolverFactory;
-use crate::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::Authorization;
+use crate::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::Authorization as RequestHandlerApplicationUserAuthorization;
+use crate::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::channel::_new_for_context::base::Base as RequestHandlerChannelBase;
 use log::LevelFilter;
 use log4rs::append::rolling_file::policy::compound::CompoundPolicy;
 use log4rs::append::rolling_file::policy::compound::roll::fixed_window::FixedWindowRoller;
@@ -140,18 +141,18 @@ impl Base {
                         web::scope("/na")
                         .service( 
                             web::scope("/au")
-                            .route("/pr", web::post().to(Authorization::pre_register))
-                            .route("/r", web::post().to(Authorization::register))
-                            .route("/refr", web::post().to(Authorization::resend_email_for_register))
-                            .route("/pli", web::post().to(Authorization::pre_log_in))
-                            .route("/refl", web::post().to(Authorization::resend_email_for_log_in))
-                            .route("/li", web::post().to(Authorization::log_in))
-                            .route("/cnfe", web::get().to(Authorization::check_nickname_for_existing))
-                            .route("/cefe", web::get().to(Authorization::check_email_for_existing))
-                            .route("/rjawt", web::post().to(Authorization::refresh_json_access_web_token))
-                            .route("/prp", web::post().to(Authorization::pre_reset_password))
-                            .route("/rp", web::post().to(Authorization::reset_password))
-                            .route("/refrp", web::post().to(Authorization::resend_email_for_reset_password))
+                            .route("/pr", web::post().to(RequestHandlerApplicationUserAuthorization::pre_register))
+                            .route("/r", web::post().to(RequestHandlerApplicationUserAuthorization::register))
+                            .route("/refr", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_register))
+                            .route("/pli", web::post().to(RequestHandlerApplicationUserAuthorization::pre_log_in))
+                            .route("/refl", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_log_in))
+                            .route("/li", web::post().to(RequestHandlerApplicationUserAuthorization::log_in))
+                            .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing))
+                            .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existing))
+                            .route("/rjawt", web::post().to(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token))
+                            .route("/prp", web::post().to(RequestHandlerApplicationUserAuthorization::pre_reset_password))
+                            .route("/rp", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password))
+                            .route("/refrp", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_reset_password))
                         )
                     )
                     .service(
@@ -159,8 +160,12 @@ impl Base {
                         .wrap(AuthenticationResolverFactory)
                         .service( 
                             web::scope("/au")
-                            .route("/lo", web::post().to(Authorization::log_out))
-                            .route("/lofad", web::post().to(Authorization::log_out_from_all_devices))
+                            .route("/lo", web::post().to(RequestHandlerApplicationUserAuthorization::log_out))
+                            .route("/lofad", web::post().to(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices))
+                        )
+                        .service( 
+                            web::scope("/c")
+                            .route("/gmbn", web::post().to(RequestHandlerChannelBase::get_many_by_name))
                         )
                     )
                 )
