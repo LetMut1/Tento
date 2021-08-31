@@ -132,41 +132,38 @@ impl Base {
     fn configure_http_server<'outer_a>(service_config: &'outer_a mut ServiceConfig) -> () {
         service_config     // TODO default_service 
         .service(
-            web::scope("/api")
+            web::scope("/v1")
             .service(
-                web::scope("/v1")
+                web::scope("/m")
                 .service(
-                    web::scope("/m")
-                    .service(
-                        web::scope("/na")
-                        .service( 
-                            web::scope("/au")
-                            .route("/pr", web::post().to(RequestHandlerApplicationUserAuthorization::pre_register))
-                            .route("/r", web::post().to(RequestHandlerApplicationUserAuthorization::register))
-                            .route("/refr", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_register))
-                            .route("/pli", web::post().to(RequestHandlerApplicationUserAuthorization::pre_log_in))
-                            .route("/refl", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_log_in))
-                            .route("/li", web::post().to(RequestHandlerApplicationUserAuthorization::log_in))
-                            .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing))
-                            .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existing))
-                            .route("/rjawt", web::post().to(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token))
-                            .route("/prp", web::post().to(RequestHandlerApplicationUserAuthorization::pre_reset_password))
-                            .route("/rp", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password))
-                            .route("/refrp", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_reset_password))
-                        )
+                    web::scope("/na")   // TODO NotAuthorized. Можно ли в новой версии АкстикаВеба убрать этоу чать пути 
+                    .service( 
+                        web::scope("/au")
+                        .route("/pr", web::post().to(RequestHandlerApplicationUserAuthorization::pre_register))
+                        .route("/r", web::post().to(RequestHandlerApplicationUserAuthorization::register))
+                        .route("/refr", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_register))
+                        .route("/pli", web::post().to(RequestHandlerApplicationUserAuthorization::pre_log_in))
+                        .route("/refl", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_log_in))
+                        .route("/li", web::post().to(RequestHandlerApplicationUserAuthorization::log_in))
+                        .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing))
+                        .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existing))
+                        .route("/rjawt", web::post().to(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token))
+                        .route("/prp", web::post().to(RequestHandlerApplicationUserAuthorization::pre_reset_password))
+                        .route("/rp", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password))
+                        .route("/refrp", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_reset_password))
                     )
-                    .service(
-                        web::scope("/a")
-                        .wrap(AuthenticationResolverFactory)
-                        .service( 
-                            web::scope("/au")
-                            .route("/lo", web::post().to(RequestHandlerApplicationUserAuthorization::log_out))
-                            .route("/lofad", web::post().to(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices))
-                        )
-                        .service( 
-                            web::scope("/c")
-                            .route("/gmbn", web::post().to(RequestHandlerChannelBase::get_many_by_name))
-                        )
+                )
+                .service(
+                    web::scope("/a")
+                    .wrap(AuthenticationResolverFactory)
+                    .service( 
+                        web::scope("/au")
+                        .route("/lo", web::post().to(RequestHandlerApplicationUserAuthorization::log_out))
+                        .route("/lofad", web::post().to(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices))
+                    )
+                    .service( 
+                        web::scope("/c")
+                        .route("/gmbn", web::get().to(RequestHandlerChannelBase::get_many_by_name))
                     )
                 )
             )
