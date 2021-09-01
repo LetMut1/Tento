@@ -1,5 +1,4 @@
 use crate::domain_layer::entity::entity::application_user_channel_administrator::_component::id::Id as ApplicationUserChannelAdministratorId;
-use crate::domain_layer::entity::entity::channel::_component::id::Id as ChannelId;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use super::_component::content_type_component_preview::ContentTypeComponentPreview;
 use super::_component::content_type_component::ContentTypeComponent;
@@ -17,7 +16,7 @@ use super::_component::visible_from::VisibleFrom;
 
 pub struct ChannelFeedPublication {
     id: Option<Id>,
-    channel_id: ChannelId,
+    channel_id: i64,
     application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
     is_entertaining: IsEntertaining,
     content_type: ContentType,
@@ -37,7 +36,7 @@ pub struct ChannelFeedPublication {
 impl ChannelFeedPublication {
     pub fn new(
         id: Option<Id>,
-        channel_id: ChannelId,
+        channel_id: i64,
         application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
         is_entertaining: IsEntertaining,
         content_type: ContentType,
@@ -82,8 +81,8 @@ impl ChannelFeedPublication {
         }
     }
 
-    pub fn get_channel_id<'this>(&'this self) -> &'this ChannelId {
-        return &self.channel_id;
+    pub fn get_channel_id<'this>(&'this self) -> i64 {
+        return self.channel_id;
     }
 
     pub fn get_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {

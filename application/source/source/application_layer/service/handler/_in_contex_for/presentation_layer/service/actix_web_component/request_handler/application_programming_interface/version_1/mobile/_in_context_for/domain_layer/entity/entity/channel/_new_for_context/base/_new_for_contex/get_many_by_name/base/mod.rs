@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::entity::channel::_component::name::Name;
+
 use crate::domain_layer::service::component_validator::_in_context_for::domain_layer::entity::entity::channel::_new_for_context::base::Base as ChannelComponentValidator;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::channel::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as DataProviderChannelPostgresql;
@@ -12,45 +12,43 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
-    const LIMIT: u8 = 30;
+    const LIMIT: i8 = 30;
 
     pub fn handle<'outer_a>(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> 
     {
         let (
-            channel_name,
-            requery_channel_name,
+            mut channel_name,
+            mut requery_channel_name,
             mut limit
         ): (
             String,
             Option<String>,
-            u8
+            i8
         ) = request.into_inner();       // TODO ЗАМеНИТЬ ВЕЗДЕ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
         if limit == 0 || limit > Self::LIMIT {
             limit = Self::LIMIT;
         }
 
-        let channel_name: Name = Name::new(String::from_utf8(base64::decode_config(channel_name, base64::URL_SAFE)?)?);
+        channel_name = String::from_utf8(base64::decode_config(channel_name, base64::URL_SAFE)?)?;
 
-        if ChannelComponentValidator::is_valid_name(&channel_name) {
-            let requery_channel_name_: Option<Name>;
-
+        if ChannelComponentValidator::is_valid_name(channel_name.as_str()) {
             match requery_channel_name {
-                Some(requery_channel_name) => {
-                    let requery_channel_name: Name = Name::new(String::from_utf8(base64::decode_config(requery_channel_name, base64::URL_SAFE)?)?);
-                    if ChannelComponentValidator::is_valid_name(&requery_channel_name) {
-                        requery_channel_name_= Some(requery_channel_name);
+                Some(mut requery_channel_name_) => {
+                    requery_channel_name_ = String::from_utf8(base64::decode_config(requery_channel_name_, base64::URL_SAFE)?)?;
+                    if ChannelComponentValidator::is_valid_name(requery_channel_name_.as_str()) {
+                        requery_channel_name = Some(requery_channel_name_);
                     } else {
                         return Err(BaseError::InvalidArgumentError);
                     }
                 },
                 None => {
-                    requery_channel_name_ = None;
+                    requery_channel_name = None;
                 }
             }
 
             let channel_registry: Option<Vec<Channel>> = DataProviderChannelPostgresql::get_many_by_name(
-                &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_name, &requery_channel_name_, limit
+                &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_name, &requery_channel_name, limit
             )?;
     
             return Ok(Response::new(channel_registry));

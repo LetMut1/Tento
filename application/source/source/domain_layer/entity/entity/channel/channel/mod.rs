@@ -1,46 +1,34 @@
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::domain_layer::entity::entity::application_user_channel_administrator::_component::id::Id as ApplicationUserChannelAdministratorId;
-use super::_component::created_at::CreatedAt;
-use super::_component::description::Description;
-use super::_component::hidden_marks_quantity::HiddenMarksQuantity;
-use super::_component::id::Id;
-use super::_component::is_private::IsPrivate;
-use super::_component::name::Name;
-use super::_component::personalization_image_path::PersonalizationImagePath;
-use super::_component::public_marks_quantity::PublicMarksQuantity;
-use super::_component::reactions_quantity::ReactionsQuantity;
-use super::_component::subscribers_quantity::SubscribersQuantity;
-use super::_component::viewing_quantity::ViewingQuantity;
 
 pub struct Channel {
-    id: Option<Id>,
-    application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
-    name: Name,
-    personalization_image_path: PersonalizationImagePath,
-    description: Option<Description>,
-    is_private: IsPrivate,
-    subscribers_quantity: SubscribersQuantity,
-    public_marks_quantity: PublicMarksQuantity,
-    hidden_marks_quantity: HiddenMarksQuantity,
-    reactions_quantity: ReactionsQuantity,
-    viewing_quantity: ViewingQuantity,
-    created_at: CreatedAt
+    id: Option<i64>,
+    application_user_channel_administrator_id: i64,
+    name: String,
+    personalization_image_path: String,
+    description: Option<String>,
+    is_private: bool,
+    subscribers_quantity: i64,
+    public_marks_quantity: i64,
+    hidden_marks_quantity: i64,
+    reactions_quantity: i64,
+    viewing_quantity: i64,
+    created_at: String
 }
 
 impl Channel {
     pub fn new(
-        id: Option<Id>,
-        application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
-        name: Name,
-        personalization_image_path: PersonalizationImagePath,
-        description: Option<Description>,
-        is_private: IsPrivate,
-        subscribers_quantity: SubscribersQuantity,
-        public_marks_quantity: PublicMarksQuantity,
-        hidden_marks_quantity: HiddenMarksQuantity,
-        reactions_quantity: ReactionsQuantity,
-        viewing_quantity: ViewingQuantity,
-        created_at: CreatedAt
+        id: Option<i64>,
+        application_user_channel_administrator_id: i64,
+        name: String,
+        personalization_image_path: String,
+        description: Option<String>,
+        is_private: bool,
+        subscribers_quantity: i64,
+        public_marks_quantity: i64,
+        hidden_marks_quantity: i64,
+        reactions_quantity: i64,
+        viewing_quantity: i64,
+        created_at: String
     ) -> Self {
         return Self {
             id,
@@ -58,9 +46,9 @@ impl Channel {
         };
     }
 
-    pub fn get_id<'this>(&'this self) -> Result<&'this Id, BaseError> {
+    pub fn get_id<'this>(&'this self) -> Result<i64, BaseError> {
         match self.id {
-            Some(ref id) => {
+            Some(id) => {
                 return Ok(id);
             }
             None => {
@@ -69,47 +57,47 @@ impl Channel {
         }
     }
 
-    pub fn get_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {
-        return &self.application_user_channel_administrator_id;
+    pub fn get_application_user_channel_administrator_id<'this>(&'this self) -> i64 {
+        return self.application_user_channel_administrator_id;
     }
 
-    pub fn get_name<'this>(&'this self) -> &'this Name {
-        return &self.name;
+    pub fn get_name<'this>(&'this self) -> &'this str {
+        return self.name.as_str();
     }
 
-    pub fn get_personalization_image_path<'this>(&'this self) -> &'this PersonalizationImagePath {
-        return &self.personalization_image_path;
+    pub fn get_personalization_image_path<'this>(&'this self) -> &'this str {
+        return self.personalization_image_path.as_str();
     }
 
-    pub fn get_description<'this>(&'this self) -> &'this Option<Description> {
+    pub fn get_description<'this>(&'this self) -> &'this Option<String> {
         return &self.description;
     }
 
-    pub fn get_is_private<'this>(&'this self) -> &'this IsPrivate {
-        return &self.is_private;
+    pub fn get_is_private<'this>(&'this self) -> bool {
+        return self.is_private;
     }
 
-    pub fn get_subscribers_quantity<'this>(&'this self) -> &'this SubscribersQuantity {
-        return &self.subscribers_quantity;
+    pub fn get_subscribers_quantity<'this>(&'this self) -> i64 {
+        return self.subscribers_quantity;
     }
     
-    pub fn get_public_marks_quantoty<'this>(&'this self) -> &'this PublicMarksQuantity {
-        return &self.public_marks_quantity;
+    pub fn get_public_marks_quantoty<'this>(&'this self) -> i64 {
+        return self.public_marks_quantity;
     }
 
-    pub fn get_hidden_marks_quantity<'this>(&'this self) -> &'this HiddenMarksQuantity {
-        return &self.hidden_marks_quantity;
+    pub fn get_hidden_marks_quantity<'this>(&'this self) -> i64 {
+        return self.hidden_marks_quantity;
     }
 
-    pub fn get_reactions_quantity<'this>(&'this self) -> &'this ReactionsQuantity {
-        return &self.reactions_quantity;
+    pub fn get_reactions_quantity<'this>(&'this self) -> i64 {
+        return self.reactions_quantity;
     }
 
-    pub fn get_viewing_quantity<'this>(&'this self) -> &'this ViewingQuantity {
-        return &self.viewing_quantity;
+    pub fn get_viewing_quantity<'this>(&'this self) -> i64 {
+        return self.viewing_quantity;
     }
 
-    pub fn get_created_at<'this>(&'this self) -> &'this CreatedAt {
-        return &self.created_at;
+    pub fn get_created_at<'this>(&'this self) -> &'this str {
+        return self.created_at.as_str();
     }
 }
