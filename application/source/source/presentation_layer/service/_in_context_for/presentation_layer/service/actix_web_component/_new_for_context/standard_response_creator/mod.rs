@@ -78,6 +78,10 @@ impl StandardResponseCreator {
         return HttpResponse::BadRequest().finish();
     }
 
+    pub fn create_unauthorized() -> HttpResponse<Body> {
+        return HttpResponse::Unauthorized().finish();
+    }
+
     pub fn create_internal_server_error() -> HttpResponse<Body> {
         return HttpResponse::InternalServerError().finish();
     }

@@ -78,7 +78,8 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                    BaseError::LogicError(_) |
+                    BaseError::RunTimeError(_) => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -98,7 +99,8 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                    BaseError::LogicError(_) |
+                    BaseError::RunTimeError(_) => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -255,7 +257,8 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                    BaseError::LogicError(_) |
+                    BaseError::RunTimeError(_) => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -334,7 +337,8 @@ impl Authorization {
                         match entity_error {
                             EntityError::ApplicationUserError(application_user_error) => {
                                 match application_user_error {
-                                    ApplicationUserError::NotFound | ApplicationUserError::WrongPassword => {
+                                    ApplicationUserError::NotFound |
+                                    ApplicationUserError::WrongPassword => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_PASSWORD
                                         );
@@ -414,7 +418,8 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                    BaseError::LogicError(_) |
+                    BaseError::RunTimeError(_) => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -519,7 +524,8 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                    BaseError::LogicError(_) |
+                    BaseError::RunTimeError(_) => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -551,7 +557,8 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                BaseError::LogicError(_) |
+                BaseError::RunTimeError(_) => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -584,7 +591,8 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                BaseError::LogicError(_) |
+                BaseError::RunTimeError(_) => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -701,7 +709,8 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                BaseError::LogicError(_) |
+                BaseError::RunTimeError(_) => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();

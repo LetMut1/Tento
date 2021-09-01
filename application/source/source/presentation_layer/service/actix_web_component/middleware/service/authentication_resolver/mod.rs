@@ -62,12 +62,9 @@ where
                                         ).into_body()
                                     )));
                                 },
-                                JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                    return Either::Right(FutureOk(service_request.into_response(
-                                        StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                            CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_BLACK_LIST
-                                        ).into_body()
-                                    )));
+                                JsonAccessWebTokenError::InJsonAccessWebTokenBlackList |
+                                JsonAccessWebTokenError::NotFound => {
+                                    return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_unauthorized().into_body())));
                                 },
                                 _ => {
                                     unreachable!("{}", base_error);

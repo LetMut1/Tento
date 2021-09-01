@@ -23,7 +23,6 @@ impl CommunicationCodeStorage {
 
     pub const ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED: &'static str = "enjsacweto03";
     pub const ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED: &'static str = "enjsacweto04";
-    pub const ENTITY_JSON_ACCESS_WEB_TOKEN_IN_BLACK_LIST: &'static str = "enjsacweto05";
 
     pub const ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND: &'static str = "enjsreweto02";
 

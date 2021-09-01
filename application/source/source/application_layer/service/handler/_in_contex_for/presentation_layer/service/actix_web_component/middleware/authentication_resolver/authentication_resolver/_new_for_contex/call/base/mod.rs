@@ -17,8 +17,8 @@ pub struct Base;
 impl Base {
     pub fn handle<'outer_a>(service_request: &'outer_a ServiceRequest) -> Result<(), BaseError> {
         if let Some(data) = service_request.app_data::<Data<AggregateConnectionPool>>() {
-            if let Some(header_value) = service_request.headers().get("X-Auth-Token") {
-                if let Ok(header_value) = header_value.to_str() {
+            if let Some(x_auth_token_header_value) = service_request.headers().get("X-Auth-Token") {
+                if let Ok(header_value) = x_auth_token_header_value.to_str() {
                     let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(header_value)?;
                     if !json_access_web_token.is_expired() {
                         if !DataProviderJsonAccessWebTokenBlackListRedis::is_exist_by_json_access_token_id(
@@ -37,7 +37,7 @@ impl Base {
                 }
             }
     
-            return Err(BaseError::InvalidArgumentError);
+            return Err(BaseError::EntityError(EntityError::JsonAccessWebTokenError(JsonAccessWebTokenError::NotFound)));
         }
 
         return Err(BaseError::LogicError("'AggregateConnectionPool' must exist in application state."));

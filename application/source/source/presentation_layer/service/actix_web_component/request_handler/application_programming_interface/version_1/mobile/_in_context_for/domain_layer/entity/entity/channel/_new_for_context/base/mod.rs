@@ -24,7 +24,8 @@ impl Base {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                    BaseError::LogicError(_) |
+                    BaseError::RunTimeError(_) => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
