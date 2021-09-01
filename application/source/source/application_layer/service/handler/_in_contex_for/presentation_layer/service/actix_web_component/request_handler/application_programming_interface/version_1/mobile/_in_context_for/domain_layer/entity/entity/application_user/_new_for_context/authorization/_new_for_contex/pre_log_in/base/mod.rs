@@ -31,6 +31,10 @@ impl Base {
             application_user_log_in_token_device_id, 
             application_user_email, 
             application_user_password
+        ) : (
+            String,
+            String,
+            String
         ) = request.into_inner();
 
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(

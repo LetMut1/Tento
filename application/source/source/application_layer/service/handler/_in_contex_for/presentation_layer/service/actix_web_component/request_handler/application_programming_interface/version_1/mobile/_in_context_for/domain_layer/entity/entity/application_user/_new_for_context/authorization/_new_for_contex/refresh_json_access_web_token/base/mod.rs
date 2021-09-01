@@ -26,6 +26,9 @@ impl Base {
         let (
             json_access_web_token, 
             json_refresh_web_token_serialized
+        ) : (
+            String,
+            String
         ) = request.into_inner();
 
         let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(json_access_web_token.as_str())?;

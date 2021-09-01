@@ -37,6 +37,10 @@ impl Base {
             application_user_log_in_token_device_id, 
             application_user_id, 
             application_user_log_in_token_value
+        ) : (
+            String,
+            i64,
+            String
         ) = request.into_inner();
 
         let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(

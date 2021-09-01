@@ -13,6 +13,8 @@ impl Base {
     pub fn get_many_by_name<'outer_a>(
         connection: &'outer_a mut Connection, name: &'outer_a str, requery_name: &'outer_a Option<String>, limit: i8
     ) -> Result<Option<Vec<Channel>>, BaseError> {
+        let limit: i16 = limit as i16;
+        
         let mut prepared_statemant_parameter_counter: PreparedStatementParameterCounter = PreparedStatementParameterCounter::new();
 
         let mut query_parameter_type_registry: Vec<Type> = Vec::new();

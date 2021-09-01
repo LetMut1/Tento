@@ -24,7 +24,7 @@ impl Base {
             String,
             Option<String>,
             i8
-        ) = request.into_inner();       // TODO ЗАМеНИТЬ ВЕЗДЕ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        ) = request.into_inner();
         
         if limit == 0 || limit > Self::LIMIT {
             limit = Self::LIMIT;
