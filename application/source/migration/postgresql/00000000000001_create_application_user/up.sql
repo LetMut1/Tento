@@ -3,7 +3,7 @@ CREATE TABLE public.application_user (
     email CHARACTER VARYING(320),
     nickname CHARACTER VARYING(55),
     password_hash TEXT,
-    created_at TIMESTAMPTZ
+    created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 95, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.application_user1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE

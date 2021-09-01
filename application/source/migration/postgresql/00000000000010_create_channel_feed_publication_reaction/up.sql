@@ -5,7 +5,7 @@ CREATE TABLE public.channel_feed_publication_reaction (
     content_type SMALLINT,  -- // TODO  Просто текст (больше количества текста), Текст и имеющиаяся у человека публикация.
     content_type_component TEXT,
     public_marks_quantity BIGINT,
-    created_at TIMESTAMPTZ
+    created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel_feed_publication_reaction1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE

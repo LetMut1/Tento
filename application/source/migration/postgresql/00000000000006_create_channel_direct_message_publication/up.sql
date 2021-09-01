@@ -6,9 +6,9 @@ CREATE TABLE public.channel_direct_message_publication (
     content_type_component TEXT,
     viewing_quantity BIGINT,
     status SMALLINT,
-    visible_from TIMESTAMPTZ,
-    delete_on TIMESTAMPTZ,
-    created_at TIMESTAMPTZ
+    visible_from TIMESTAMP(0) WITH TIME ZONE,
+    delete_on TIMESTAMP(0) WITH TIME ZONE,
+    created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel_direct_message_publication1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE

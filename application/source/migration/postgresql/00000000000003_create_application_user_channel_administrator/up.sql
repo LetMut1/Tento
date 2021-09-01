@@ -10,7 +10,7 @@ CREATE TABLE public.application_user_channel_administrator (
     -- email CHARACTER VARYING(320),
     -- nickname CHARACTER VARYING(55),
     -- password_hash TEXT,
-    -- created_at TIMESTAMPTZ
+    -- created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.application_user_channel_administrator1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE

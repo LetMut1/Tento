@@ -1,7 +1,7 @@
 CREATE TABLE public.application_user_pre_confirmed (
     id BIGINT,
     application_user_email CHARACTER VARYING(320),
-    created_at TIMESTAMPTZ
+    created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.application_user_pre_confirmed1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE

@@ -10,7 +10,7 @@ CREATE TABLE public.channel (
     hidden_marks_quantity BIGINT,
     reactions_quantity BIGINT,
     viewing_quantity BIGINT,
-    created_at TIMESTAMPTZ
+    created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
@@ -22,7 +22,7 @@ USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 CREATE UNIQUE INDEX channel3 ON public.channel
 USING btree (name COLLATE "C" ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
 
-CREATE UNIQUE INDEX channel4 ON public.channel
+CREATE INDEX channel4 ON public.channel
 USING btree (is_private ASC NULLS LAST) WITH (fillfactor = 85, deduplicate_items = on);
 
 CREATE INDEX channel5 ON public.channel
