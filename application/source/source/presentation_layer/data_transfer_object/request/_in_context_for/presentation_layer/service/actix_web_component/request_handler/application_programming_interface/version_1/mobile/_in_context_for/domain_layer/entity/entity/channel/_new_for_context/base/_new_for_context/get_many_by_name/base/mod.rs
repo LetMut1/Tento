@@ -7,11 +7,11 @@ pub struct Base {
     #[serde(rename = "rcn")]
     requery_channel_name: Option<String>,
     #[serde(rename = "l")]
-    limit: i8
+    limit: u8
 }
 
 impl Base {
-    pub fn into_inner(self) -> (String, Option<String>, i8) {
+    pub fn into_inner(self) -> (String, Option<String>, u8) {
         return (
             self.channel_name,
             self.requery_channel_name,

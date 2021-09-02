@@ -3,7 +3,7 @@ use actix_web::HttpServer;
 use actix_web::web;
 use actix_web::web::ServiceConfig;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::service::_in_context_for::_resource::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::service::actix_web_component::middleware::service_factory::authentication_resolver_factory::AuthenticationResolverFactory;
 use crate::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::authorization::Authorization as RequestHandlerApplicationUserAuthorization;

@@ -12,7 +12,7 @@ pub struct Channel {
     hidden_marks_quantity: i64,
     reactions_quantity: i64,
     viewing_quantity: i64,
-    created_at: String
+    created_at: Option<String>
 }
 
 impl Channel {
@@ -28,7 +28,7 @@ impl Channel {
         hidden_marks_quantity: i64,
         reactions_quantity: i64,
         viewing_quantity: i64,
-        created_at: String
+        created_at: Option<String>
     ) -> Self {
         return Self {
             id,
@@ -97,7 +97,14 @@ impl Channel {
         return self.viewing_quantity;
     }
 
-    pub fn get_created_at<'this>(&'this self) -> &'this str {
-        return self.created_at.as_str();
+    pub fn get_created_at<'this>(&'this self) -> Result<&'this str, BaseError> {
+        match self.created_at {
+            Some(ref created_at) => {
+                return Ok(created_at.as_str());
+            }
+            None => {
+                return Err(BaseError::LogicError("Created_at does not exist yet."))
+            }
+        }
     }
 }

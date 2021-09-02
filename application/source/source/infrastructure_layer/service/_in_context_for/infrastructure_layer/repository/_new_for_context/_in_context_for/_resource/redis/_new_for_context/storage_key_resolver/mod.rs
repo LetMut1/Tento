@@ -3,9 +3,9 @@ use crate::domain_layer::entity::entity::application_user_pre_confirmed::_compon
 use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::json_access_web_token::_component::payload::_component::id::Id as JsonAccessWebTokenId;
 
-pub struct RedisStorageKeyResolver;
+pub struct StorageKeyResolver;
 
-impl RedisStorageKeyResolver {
+impl StorageKeyResolver {
     const PREFIX_REPOSITORY_APPLICATION_USER_LOG_IN_TOKEN_FIRST: &'static str = "r:apuslointo:1:"; 
     const PREFIX_REPOSITORY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST: &'static str = "r:apusrecoto:1:";
     const PREFIX_REPOSITORY_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST: &'static str = "r:apusrepato:1:";

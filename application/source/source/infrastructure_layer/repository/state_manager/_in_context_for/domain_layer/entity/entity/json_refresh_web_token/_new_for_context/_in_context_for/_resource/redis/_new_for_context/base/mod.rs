@@ -2,7 +2,7 @@ use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_we
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerJsonRefreshWebTokenRedisTrait;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::_new_for_context::common::Common;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::resource_storage_key_resolver::redis_storage_key_resolver::RedisStorageKeyResolver;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::redis::_new_for_context::storage_key_resolver::StorageKeyResolver;
 use crate::infrastructure_layer::service::date_time_expiration_storage::DateTimeExpirationStorage;
 use redis::Commands;
 use redis::Connection;
@@ -15,7 +15,7 @@ impl StateManagerJsonRefreshWebTokenRedisTrait for Base {
         connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
     ) -> Result<(), BaseError> {
         connection.set_ex::<String, String, ()>(
-            RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
+            StorageKeyResolver::get_repository_json_refresh_web_token_first(
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
             ), 
             serde_json::to_string(&Common::new(json_refresh_web_token))?,
@@ -38,7 +38,7 @@ impl StateManagerJsonRefreshWebTokenRedisTrait for Base {
         connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
     ) -> Result<(), BaseError> {
         connection.del::<String, ()>(
-            RedisStorageKeyResolver::get_repository_json_refresh_web_token_first(
+            StorageKeyResolver::get_repository_json_refresh_web_token_first(
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
             )
         )?;
