@@ -1,6 +1,5 @@
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 
-#[derive(Debug)]
 pub struct PreparedStatementParameterCounter {
     counter: u8
 }
