@@ -2,7 +2,7 @@ use chrono::Duration;
 use chrono::offset::Utc;
 use crate::domain_layer::entity::proxed_type::date_time::DateTime;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::service::chrono_date_time_manipulator::ChronoDateTimeManipulator;
+use crate::infrastructure_layer::service::date_time_resolver::DateTimeResolver;
 
 pub struct DateTimeManipulator;
 
@@ -26,6 +26,6 @@ impl DateTimeManipulator {
 
     pub fn is_greater_or_equal_than_now<'outer_a>(subject_date_time: &'outer_a DateTime) -> bool
     {
-        return ChronoDateTimeManipulator::is_greater_or_equal_than(subject_date_time.get_value(), &Utc::now());
+        return DateTimeResolver::is_greater_or_equal_than(subject_date_time.get_value(), &Utc::now());
     }
 }

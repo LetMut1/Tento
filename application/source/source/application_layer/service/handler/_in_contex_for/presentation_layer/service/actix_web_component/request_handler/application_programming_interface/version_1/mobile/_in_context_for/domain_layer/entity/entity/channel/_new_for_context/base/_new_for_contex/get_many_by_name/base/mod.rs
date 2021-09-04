@@ -31,29 +31,27 @@ impl Base {
         }
 
         channel_name = String::from_utf8(base64::decode_config(channel_name, base64::URL_SAFE)?)?;
-
-        if ChannelComponentValidator::is_valid_name(channel_name.as_str()) {
-            match requery_channel_name {
-                Some(mut requery_channel_name_) => {
-                    requery_channel_name_ = String::from_utf8(base64::decode_config(requery_channel_name_, base64::URL_SAFE)?)?;
-                    if ChannelComponentValidator::is_valid_name(requery_channel_name_.as_str()) {
-                        requery_channel_name = Some(requery_channel_name_);
-                    } else {
-                        return Err(BaseError::InvalidArgumentError);
-                    }
-                },
-                None => {
-                    requery_channel_name = None;
+        if !ChannelComponentValidator::is_valid_name(channel_name.as_str()) {
+            return Err(BaseError::InvalidArgumentError);
+        }
+        match requery_channel_name {
+            Some(mut requery_channel_name_) => {
+                requery_channel_name_ = String::from_utf8(base64::decode_config(requery_channel_name_, base64::URL_SAFE)?)?;
+                if ChannelComponentValidator::is_valid_name(requery_channel_name_.as_str()) {
+                    requery_channel_name = Some(requery_channel_name_);
+                } else {
+                    return Err(BaseError::InvalidArgumentError);
                 }
+            },
+            None => {
+                requery_channel_name = None;
             }
-
-            let channel_registry: Option<Vec<Channel>> = DataProviderChannelPostgresql::get_many_by_name(
-                &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_name, &requery_channel_name, limit
-            )?;
-    
-            return Ok(Response::new(channel_registry));
         }
 
-        return Err(BaseError::InvalidArgumentError);
+        let channel_registry: Option<Vec<Channel>> = DataProviderChannelPostgresql::get_many_by_name(
+            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, channel_name.as_str(), &requery_channel_name, limit
+        )?;
+
+        return Ok(Response::new(channel_registry));
     }
 }
