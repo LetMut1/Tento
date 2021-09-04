@@ -164,9 +164,6 @@ impl Base {
                     .service( 
                         web::scope("/c")
                         .route("/gmbn", web::get().to(RequestHandlerChannelBase::get_many_by_name))
-                    )
-                    .service( 
-                        web::scope("/c")
                         .route("/gmbca", web::get().to(RequestHandlerChannelBase::get_many_by_created_at))
                     )
                 )
