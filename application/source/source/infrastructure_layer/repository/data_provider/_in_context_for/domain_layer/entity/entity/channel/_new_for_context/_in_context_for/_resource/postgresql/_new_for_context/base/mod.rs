@@ -117,7 +117,7 @@ impl Base {
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_created_at, Type::TEXT);
         }
 
-        query = query + " ORDER BY c.created_at" + OrderConventionResolver::convert(order)? +
+        query = query + " ORDER BY c.created_at " + OrderConventionResolver::convert(order)? +
         " LIMIT $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
