@@ -19,11 +19,9 @@ impl Base {
     {
         let (
             mut channel_created_at,
-            mut requery_channel_created_at,
             order,
             mut limit
         ): (
-            String,
             Option<String>,
             u8,
             u8
@@ -37,22 +35,17 @@ impl Base {
             return Err(BaseError::InvalidArgumentError);
         }
 
-        channel_created_at = String::from_utf8(base64::decode_config(channel_created_at, base64::URL_SAFE)?)?;
-        if !DateTimeResolver::is_valid_timestamp(&channel_created_at) {
-            return Err(BaseError::InvalidArgumentError);
-        }
-
-        if let Some(mut requery_channel_created_at_) = requery_channel_created_at {
-            requery_channel_created_at_ = String::from_utf8(base64::decode_config(requery_channel_created_at_, base64::URL_SAFE)?)?;
-            if !DateTimeResolver::is_valid_timestamp(requery_channel_created_at_.as_str()) {
+        if let Some(mut channel_created_at_) = channel_created_at {
+            channel_created_at_ = String::from_utf8(base64::decode_config(channel_created_at_, base64::URL_SAFE)?)?;
+            if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
                 return Err(BaseError::InvalidArgumentError);
             }
 
-            requery_channel_created_at = Some(requery_channel_created_at_);
+            channel_created_at = Some(channel_created_at_);
         }
 
         let channel_registry: Option<Vec<Channel>> = DataProviderChannelPostgresql::get_many_by_created_at(
-            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, channel_created_at.as_str(), &requery_channel_created_at, order, limit
+            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_created_at, order, limit
         )?;
 
         return Ok(Response::new(channel_registry));

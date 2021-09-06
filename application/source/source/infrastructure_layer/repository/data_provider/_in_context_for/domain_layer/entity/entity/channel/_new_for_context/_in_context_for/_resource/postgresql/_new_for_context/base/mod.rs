@@ -79,7 +79,7 @@ impl Base {
     }
 
     pub fn get_many_by_created_at<'outer_a>(
-        connection: &'outer_a mut Connection, created_at: &'outer_a str, requery_created_at: &'outer_a Option<String>, order: u8, limit: u8
+        connection: &'outer_a mut Connection, created_at: &'outer_a Option<String>, order: u8, limit: u8
     ) -> Result<Option<Vec<ResponseGetManyByCreatedAtChannel>>, BaseError> {
         let limit: i16 = limit as i16;
 
@@ -99,13 +99,10 @@ impl Base {
                 c.viewing_quantity as vq, \
                 c.created_at::TEXT as ca \
             FROM public.channel c \
-            WHERE c.is_private = FALSE AND c.created_at < $"
+            WHERE c.is_private = FALSE AND c.created_at <= current_timestamp(6)"
             .to_string();
-        query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&created_at, Type::TEXT);
-
-        if let Some(requery_created_at) = requery_created_at {
+        if let Some(created_at) = created_at {
             if OrderConventionResolver::is_asc(order) {
                 query = query + " AND c.created_at > $";
             }
@@ -114,7 +111,7 @@ impl Base {
             }
             query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(requery_created_at, Type::TEXT);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(created_at, Type::TEXT);
         }
 
         query = query + " ORDER BY c.created_at " + OrderConventionResolver::convert(order)? +
