@@ -6,8 +6,8 @@ CREATE TABLE public.channel_direct_message_publication (
     content_type_component TEXT,
     viewing_quantity BIGINT,
     status SMALLINT,
-    visible_from TIMESTAMP(0) WITH TIME ZONE,
-    delete_on TIMESTAMP(0) WITH TIME ZONE,
+    visible_from TIMESTAMP(6) WITH TIME ZONE,
+    delete_on TIMESTAMP(6) WITH TIME ZONE,
     created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 

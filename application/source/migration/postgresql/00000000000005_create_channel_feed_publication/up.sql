@@ -10,8 +10,8 @@ CREATE TABLE public.channel_feed_publication (
     reactions_quantity BIGINT,
     viewing_quantity BIGINT,
     status SMALLINT,            -- // TODO  Создан, удален (добавятся, возможно, еще). СДелано, чтобы можно было удалять с S3 через команду на кроне
-    visible_from TIMESTAMP(0) WITH TIME ZONE,
-    delete_on TIMESTAMP(0) WITH TIME ZONE,      -- // TODO Написать команду для удаления 
+    visible_from TIMESTAMP(6) WITH TIME ZONE,
+    delete_on TIMESTAMP(6) WITH TIME ZONE,      -- // TODO Написать команду для удаления 
     created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
