@@ -5,7 +5,6 @@ pub mod created_at;
 pub mod delete_on;
 pub mod hidden_marks_quantity;
 pub mod id;
-pub mod is_entertaining;
 pub mod public_marks_quantity;
 pub mod reactions_quantity;
 pub mod status;

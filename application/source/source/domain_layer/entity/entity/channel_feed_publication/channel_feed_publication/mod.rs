@@ -7,7 +7,6 @@ use super::_component::created_at::CreatedAt;
 use super::_component::delete_on::DeleteOn;
 use super::_component::hidden_marks_quantity::HiddenMarksQuantity;
 use super::_component::id::Id;
-use super::_component::is_entertaining::IsEntertaining;
 use super::_component::public_marks_quantity::PublicMarksQuantity;
 use super::_component::reactions_quantity::ReactionsQuantity;
 use super::_component::status::Status;
@@ -18,7 +17,6 @@ pub struct ChannelFeedPublication {
     id: Option<Id>,
     channel_id: i64,
     application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
-    is_entertaining: IsEntertaining,
     content_type: ContentType,
     content_type_component: ContentTypeComponent,
     content_type_component_preview: ContentTypeComponentPreview,
@@ -38,7 +36,6 @@ impl ChannelFeedPublication {
         id: Option<Id>,
         channel_id: i64,
         application_user_channel_administrator_id: ApplicationUserChannelAdministratorId,
-        is_entertaining: IsEntertaining,
         content_type: ContentType,
         content_type_component: ContentTypeComponent,
         content_type_component_preview: ContentTypeComponentPreview,
@@ -55,7 +52,6 @@ impl ChannelFeedPublication {
             id,
             channel_id,
             application_user_channel_administrator_id,
-            is_entertaining,
             content_type,
             content_type_component,
             content_type_component_preview,
@@ -87,10 +83,6 @@ impl ChannelFeedPublication {
 
     pub fn get_application_user_channel_administrator_id<'this>(&'this self) -> &'this ApplicationUserChannelAdministratorId {
         return &self.application_user_channel_administrator_id;
-    }
-
-    pub fn get_is_entertaining<'this>(&'this self) -> &'this IsEntertaining {
-        return &self.is_entertaining;
     }
 
     pub fn get_content_type<'this>(&'this self) -> &'this ContentType {

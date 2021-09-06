@@ -37,11 +37,11 @@ impl Base {
         match requery_channel_name {
             Some(mut requery_channel_name_) => {
                 requery_channel_name_ = String::from_utf8(base64::decode_config(requery_channel_name_, base64::URL_SAFE)?)?;
-                if ChannelComponentValidator::is_valid_name(requery_channel_name_.as_str()) {
-                    requery_channel_name = Some(requery_channel_name_);
-                } else {
+                if !ChannelComponentValidator::is_valid_name(requery_channel_name_.as_str()) {
                     return Err(BaseError::InvalidArgumentError);
                 }
+                
+                requery_channel_name = Some(requery_channel_name_);
             },
             None => {
                 requery_channel_name = None;

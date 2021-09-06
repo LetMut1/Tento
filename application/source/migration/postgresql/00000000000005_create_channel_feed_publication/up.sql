@@ -2,7 +2,6 @@ CREATE TABLE public.channel_feed_publication (
     id BIGINT,
     channel_id BIGINT,
     application_user_channel_administrator_id BIGINT,
-    is_entertaining BOOLEAN,
     content_type SMALLINT,
     content_type_component TEXT,  -- // TODO small_description large_description путь до картинки, путь до музыки
     content_type_component_preview TEXT,  -- // TODO Превью для обширных типов, чтобы первично передавать меньше информации. Если обычный мем с музыкой, то Нулл. В запросе делать условие на тип.
@@ -34,7 +33,6 @@ ALTER COLUMN id SET NOT NULL,
 ALTER COLUMN id SET DEFAULT nextval('public.channel_feed_publication1'),
 ALTER COLUMN channel_id SET NOT NULL,
 ALTER COLUMN application_user_channel_administrator_id SET NOT NULL,
-ALTER COLUMN is_entertaining SET NOT NULL,
 ALTER COLUMN content_type SET NOT NULL,
 ALTER COLUMN content_type_component SET NOT NULL,
 ALTER COLUMN public_marks_quantity SET NOT NULL,

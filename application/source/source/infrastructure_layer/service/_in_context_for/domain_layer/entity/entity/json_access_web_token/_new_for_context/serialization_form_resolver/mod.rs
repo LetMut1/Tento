@@ -13,9 +13,9 @@ pub struct SerializationFormResolver;
 impl SerializationFormResolverTrait for SerializationFormResolver {
     fn serialize<'outer_a>(json_access_web_token: &'outer_a JsonAccessWebToken<'_>) -> Result<String, BaseError> {
         let header_and_payload: String = 
-        base64::encode_config(serde_json::to_string(&HeaderCommon::new(json_access_web_token))?.as_bytes(), base64::STANDARD) 
+        base64::encode_config(serde_json::to_string(&HeaderCommon::new(json_access_web_token))?.as_bytes(), base64::URL_SAFE) 
         + Self::TOKEN_PARTS_SEPARATOR 
-        + base64::encode_config(serde_json::to_string(&PayloadCommon::new(json_access_web_token))?.as_bytes(), base64::STANDARD).as_str();
+        + base64::encode_config(serde_json::to_string(&PayloadCommon::new(json_access_web_token))?.as_bytes(), base64::URL_SAFE).as_str();
         
         let signature: String = SignatureCreator::create(&header_and_payload)?;
 
@@ -32,7 +32,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
         {
             return Ok(
                 JsonAccessWebTokenFactory::new_from_payload_common(
-                    serde_json::from_slice::<'_, PayloadCommon>(&base64::decode_config(classic_form_part_registry[1].as_bytes(), base64::STANDARD)?)?
+                    serde_json::from_slice::<'_, PayloadCommon>(&base64::decode_config(classic_form_part_registry[1].as_bytes(), base64::URL_SAFE)?)?
                 )?
             );
         }

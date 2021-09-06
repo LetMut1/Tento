@@ -18,8 +18,8 @@ impl Base {
     pub fn handle<'outer_a>(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> 
     {
         let (
-            channel_created_at,
-            requery_channel_created_at,
+            mut channel_created_at,
+            mut requery_channel_created_at,
             order,
             mut limit
         ): (
@@ -33,13 +33,22 @@ impl Base {
             limit = Self::LIMIT;
         }
 
-        if !OrderConventionResolver::can_convert(order) || !DateTimeResolver::is_valid_timestamp(&channel_created_at) {
+        if !OrderConventionResolver::can_convert(order) {
             return Err(BaseError::InvalidArgumentError);
         }
-        if let Some(ref requery_channel_created_at_) = requery_channel_created_at {
+
+        channel_created_at = String::from_utf8(base64::decode_config(channel_created_at, base64::URL_SAFE)?)?;
+        if !DateTimeResolver::is_valid_timestamp(&channel_created_at) {
+            return Err(BaseError::InvalidArgumentError);
+        }
+
+        if let Some(mut requery_channel_created_at_) = requery_channel_created_at {
+            requery_channel_created_at_ = String::from_utf8(base64::decode_config(requery_channel_created_at_, base64::URL_SAFE)?)?;
             if !DateTimeResolver::is_valid_timestamp(requery_channel_created_at_.as_str()) {
                 return Err(BaseError::InvalidArgumentError);
             }
+
+            requery_channel_created_at = Some(requery_channel_created_at_);
         }
 
         let channel_registry: Option<Vec<Channel>> = DataProviderChannelPostgresql::get_many_by_created_at(
