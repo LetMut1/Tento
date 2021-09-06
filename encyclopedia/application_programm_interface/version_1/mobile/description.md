@@ -49,7 +49,7 @@ Every endpoint at this area requires an existing of JsonAccessWebToken, wich sho
 of HTTP/S Request Header. Response of every endpoint can contain -ERROR_CODE- equals ``'enjsacweto03'``
 ## /v1/m/a/c/gmbn GET
 Returns Channel registry by Channel Name.
-### Request parameters:
+### Request Query parameters:
 ```
 'cn': string; - 'channel_name'
 
@@ -108,7 +108,7 @@ is absent.
 ```
 ## /v1/m/a/c/gmbca GET
 Returns Channel registry by Channel Created_at.
-### Request parameters:
+### Request Quey parameters:
 ```
 'cca': string; - 'channel_created_at', optional
 
