@@ -49,7 +49,7 @@ impl Base {
         }
 
         let channel_registry: Option<Vec<Channel>> = DataProviderChannelPostgresql::get_many_by_name(
-            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, channel_name.as_str(), &requery_channel_name, limit
+            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, channel_name.as_str(), &requery_channel_name, limit as i16
         )?;
 
         return Ok(Response::new(channel_registry));
