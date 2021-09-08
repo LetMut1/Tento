@@ -2,20 +2,12 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Base {
-    #[serde(rename = "csq")]
-    channel_subscribers_quantity: Option<u64>,
-    #[serde(rename = "o")]
-    order: u8,
-    #[serde(rename = "l")]
-    limit: u8
+    #[serde(rename = "cir")]
+    channel_id_registry: String,
 }
 
 impl Base {
-    pub fn into_inner(self) -> (Option<u64>, u8, u8) {
-        return (
-            self.channel_subscribers_quantity,
-            self.order,
-            self.limit
-        );
+    pub fn get_channel_id_registry(self) -> String {
+        return self.channel_id_registry;
     }
 }

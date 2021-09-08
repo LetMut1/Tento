@@ -200,13 +200,15 @@ impl Base {
     }
 
     pub fn get_many_by_id_registry<'outer_a>(
-        connection: &'outer_a mut Connection, subscribers_quantity: &'outer_a Option<i64>, order: i8, limit: i16
+        connection: &'outer_a mut Connection, id_registry: &'outer_a Vec<i64>
     ) -> Result<Option<Vec<ResponseGetManyByIdRegistryChannel>>, BaseError> {
+        if id_registry.is_empty() {
+            return Ok(None)
+        }
+
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut prepared_statemant_parameter_counter: PreparedStatementParameterCounter = PreparedStatementParameterCounter::new();
-
-        let mut query: String = 
+        let query: String = 
             "SELECT \
                 c.id as i, \
                 c.name as n, \
@@ -218,26 +220,10 @@ impl Base {
                 c.viewing_quantity as vq, \
                 c.created_at::TEXT as ca \
             FROM public.channel c \
-            WHERE c.is_private = FALSE"
+            WHERE c.is_private = FALSE AND c.id = ANY($1);"
             .to_string();
 
-        if let Some(subscribers_quantity) = subscribers_quantity {
-            if OrderConventionResolver::is_asc(order) {
-                query = query + " AND c.subscribers_quantity > $";
-            }
-            if OrderConventionResolver::is_desc(order) {
-                query = query + " AND c.subscribers_quantity < $";
-            }
-
-            query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
-
-            prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity, Type::INT8);
-        }
-
-        query = query + " ORDER BY c.subscribers_quantity " + OrderConventionResolver::convert(order)? +
-        " LIMIT $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&id_registry, Type::INT8_ARRAY);
 
         let mut channel_registry: Vec<ResponseGetManyByIdRegistryChannel> = Vec::new();
 

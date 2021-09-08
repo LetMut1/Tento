@@ -166,6 +166,7 @@ impl Base {
                         .route("/gmbn", web::get().to(RequestHandlerChannelBase::get_many_by_name))
                         .route("/gmbca", web::get().to(RequestHandlerChannelBase::get_many_by_created_at))
                         .route("/gmbsq", web::get().to(RequestHandlerChannelBase::get_many_by_subscribers_quantity))
+                        .route("/gmbir", web::get().to(RequestHandlerChannelBase::get_many_by_id_registry))
                     )
                 )
             )
