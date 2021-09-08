@@ -162,13 +162,13 @@ impl Base {
 
         if let Some(subscribers_quantity) = subscribers_quantity {
             if OrderConventionResolver::is_asc(order) {
-                query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($)";
+                query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($";
             }
             if OrderConventionResolver::is_desc(order) {
-                query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) < public.limit_channel_subscribers_quantity($)";
+                query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) < public.limit_channel_subscribers_quantity($";
             }
 
-            query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
+            query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ")";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity, Type::INT8);
         }
