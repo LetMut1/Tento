@@ -12,7 +12,7 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
-    const LIMIT: u8 = 30;
+    const LIMIT: i8 = 30;
 
     pub fn handle<'outer_a>(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> 
     {
@@ -23,10 +23,10 @@ impl Base {
         ): (
             String,
             Option<String>,
-            u8
+            i8
         ) = request.into_inner();
         
-        if limit == 0 || limit > Self::LIMIT {
+        if limit <= 0 || limit > Self::LIMIT {
             limit = Self::LIMIT;
         }
 
