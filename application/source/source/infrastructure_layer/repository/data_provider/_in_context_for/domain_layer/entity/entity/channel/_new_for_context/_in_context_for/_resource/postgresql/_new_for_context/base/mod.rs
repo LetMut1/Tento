@@ -155,7 +155,7 @@ impl Base {
         let mut query: String = 
             "SELECT \
                 c.id as i, \
-                c.subscribers_quantity as sq, \
+                c.subscribers_quantity as sq \
             FROM public.channel c \
             WHERE c.is_private = FALSE"
             .to_string();
