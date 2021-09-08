@@ -1,3 +1,12 @@
+CREATE FUNCTION public.limit_channel_subscribers_quantity(IN channel_subscribers_quantity BIGINT) RETURNS BIGINT AS
+$$
+  BEGIN
+    RETURN channel_subscribers_quantity / 50;
+  END
+$$
+LANGUAGE plpgsql
+IMMUTABLE;
+
 CREATE TABLE public.channel ( 
     id BIGINT,
     application_user_channel_administrator_id BIGINT,
@@ -26,7 +35,7 @@ CREATE INDEX channel4 ON public.channel
 USING btree (is_private ASC NULLS LAST) WITH (fillfactor = 85, deduplicate_items = on);
 
 CREATE INDEX channel5 ON public.channel
-USING btree (subscribers_quantity ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
+USING btree (public.limit_channel_subscribers_quantity(subscribers_quantity) ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
 
 CREATE UNIQUE INDEX channel6 ON public.channel
 USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
