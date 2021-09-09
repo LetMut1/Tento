@@ -11,11 +11,16 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
+    const CHANNEL_ID_REGISTRY_LENGTH_LIMIT: usize = 30;
+
     pub fn handle<'outer_a>(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> 
     {
         let channel_id_registry: String = request.get_channel_id_registry();
         
         let channel_id_registry_: Vec<i64> = serde_json::from_str::<Vec<i64>>(channel_id_registry.as_str())?;
+        if channel_id_registry_.len() == 0 || channel_id_registry_.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
+            return Err(BaseError::InvalidArgumentError);
+        }
 
         let channel_registry: Option<Vec<Channel>> = DataProviderChannelPostgresql::get_many_by_id_registry(
             &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_id_registry_
