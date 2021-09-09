@@ -14,7 +14,7 @@ use postgres::types::Type;
 pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO 
 
 impl Base {
-    pub fn get_many_by_name<'outer_a>(
+    pub fn find_many_by_name<'outer_a>(
         connection: &'outer_a mut Connection, name: &'outer_a str, requery_name: &'outer_a Option<String>, limit: i16
     ) -> Result<Option<Vec<ResponseGetManyByNameChannel>>, BaseError> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
@@ -78,7 +78,7 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn get_many_by_created_at<'outer_a>(
+    pub fn find_many_by_created_at<'outer_a>(
         connection: &'outer_a mut Connection, created_at: &'outer_a Option<String>, order: i8, limit: i16
     ) -> Result<Option<Vec<ResponseGetManyByCreatedAtChannel>>, BaseError> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
@@ -145,7 +145,7 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn get_many_by_subscribers_quantity<'outer_a>(
+    pub fn find_many_by_subscribers_quantity<'outer_a>(
         connection: &'outer_a mut Connection, subscribers_quantity: &'outer_a Option<i64>, order: i8, limit: i16
     ) -> Result<Option<Vec<ResponseGetManyBySubscribersQuantityChannel>>, BaseError> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
@@ -199,7 +199,7 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn get_many_by_id_registry<'outer_a>(
+    pub fn find_many_by_id_registry<'outer_a>(
         connection: &'outer_a mut Connection, id_registry: &'outer_a Vec<i64>
     ) -> Result<Option<Vec<ResponseGetManyByIdRegistryChannel>>, BaseError> {
         if id_registry.is_empty() {
