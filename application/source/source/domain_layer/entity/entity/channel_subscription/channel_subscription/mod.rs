@@ -1,25 +1,28 @@
-use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use super::_component::created_at::CreatedAt;
-use super::_component::id::Id;
 
 pub struct ChannelSubscription {
-    id: Option<Id>,
+    id: Option<i64>,
     channel_id: i64,
-    application_user_id: ApplicationUserId,
-    created_at: CreatedAt
+    application_user_id: i64,
+    created_at: String
 }
 
 impl ChannelSubscription {
     pub fn new(
-        id: Option<Id>, channel_id: i64, application_user_id: ApplicationUserId, created_at: CreatedAt
+        id: Option<i64>,
+        channel_id: i64,
+        application_user_id: i64,
+        created_at: String
     ) -> Self {
         return Self {
-            id, channel_id, application_user_id, created_at
+            id,
+            channel_id,
+            application_user_id,
+            created_at
         };
     }
 
-    pub fn get_id<'this>(&'this self) -> Result<&'this Id, BaseError> {
+    pub fn get_id<'this>(&'this self) -> Result<&'this i64, BaseError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
@@ -30,15 +33,15 @@ impl ChannelSubscription {
         }
     }
 
-    pub fn get_application_user_id<'this>(&'this self) -> &'this ApplicationUserId {
+    pub fn get_application_user_id<'this>(&'this self) -> &'this i64 {
         return &self.application_user_id;
     }
 
-    pub fn get_channel_id<'this>(&'this self) -> i64 {
-        return self.channel_id;
+    pub fn get_channel_id<'this>(&'this self) -> &'this i64 {
+        return &self.channel_id;
     }
 
-    pub fn get_created_at<'this>(&'this self) -> &'this CreatedAt {
-        return &self.created_at;
+    pub fn get_created_at<'this>(&'this self) -> &'this str {
+        return self.created_at.as_str();
     }
 }

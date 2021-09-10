@@ -1,23 +1,25 @@
-use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use super::_component::id::Id;
 
 pub struct ApplicationUserSubscription {
-    id: Option<Id>,
-    publisher_application_user_id: ApplicationUserId,
-    subscriber_application_user_id: ApplicationUserId
+    id: Option<i64>,
+    publisher_application_user_id: i64,
+    subscriber_application_user_id: i64
 }
 
 impl ApplicationUserSubscription {
     pub fn new(
-        id: Option<Id>, publisher_application_user_id: ApplicationUserId, subscriber_application_user_id: ApplicationUserId
+        id: Option<i64>,
+        publisher_application_user_id: i64,
+        subscriber_application_user_id: i64
     ) -> Self {
         return Self {
-            id, publisher_application_user_id, subscriber_application_user_id
+            id,
+            publisher_application_user_id,
+            subscriber_application_user_id
         };
     }
 
-    pub fn get_id<'this>(&'this self) -> Result<&'this Id, BaseError> {
+    pub fn get_id<'this>(&'this self) -> Result<&'this i64, BaseError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
@@ -28,11 +30,11 @@ impl ApplicationUserSubscription {
         }
     }
 
-    pub fn get_publisher_application_user_id<'this>(&'this self) -> &'this ApplicationUserId {
+    pub fn get_publisher_application_user_id<'this>(&'this self) -> &'this i64 {
         return &self.publisher_application_user_id;
     }
 
-    pub fn get_subscriber_application_user_id<'this>(&'this self) -> &'this ApplicationUserId {
+    pub fn get_subscriber_application_user_id<'this>(&'this self) -> &'this i64 {
         return &self.subscriber_application_user_id;
     }
 }

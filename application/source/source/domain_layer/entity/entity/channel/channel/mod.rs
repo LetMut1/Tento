@@ -46,9 +46,9 @@ impl Channel {
         };
     }
 
-    pub fn get_id<'this>(&'this self) -> Result<i64, BaseError> {
+    pub fn get_id<'this>(&'this self) -> Result<&'this i64, BaseError> {
         match self.id {
-            Some(id) => {
+            Some(ref id) => {
                 return Ok(id);
             }
             None => {
@@ -57,8 +57,8 @@ impl Channel {
         }
     }
 
-    pub fn get_application_user_channel_administrator_id<'this>(&'this self) -> i64 {
-        return self.application_user_channel_administrator_id;
+    pub fn get_application_user_channel_administrator_id<'this>(&'this self) -> &'this i64 {
+        return &self.application_user_channel_administrator_id;
     }
 
     pub fn get_name<'this>(&'this self) -> &'this str {
@@ -73,28 +73,28 @@ impl Channel {
         return &self.description;
     }
 
-    pub fn get_is_private<'this>(&'this self) -> bool {
-        return self.is_private;
+    pub fn get_is_private<'this>(&'this self) -> &'this bool {
+        return &self.is_private;
     }
 
-    pub fn get_subscribers_quantity<'this>(&'this self) -> i64 {
-        return self.subscribers_quantity;
+    pub fn get_subscribers_quantity<'this>(&'this self) -> &'this i64 {
+        return &self.subscribers_quantity;
     }
     
-    pub fn get_public_marks_quantoty<'this>(&'this self) -> i64 {
-        return self.public_marks_quantity;
+    pub fn get_public_marks_quantoty<'this>(&'this self) -> &'this i64 {
+        return &self.public_marks_quantity;
     }
 
-    pub fn get_hidden_marks_quantity<'this>(&'this self) -> i64 {
-        return self.hidden_marks_quantity;
+    pub fn get_hidden_marks_quantity<'this>(&'this self) -> &'this i64 {
+        return &self.hidden_marks_quantity;
     }
 
-    pub fn get_reactions_quantity<'this>(&'this self) -> i64 {
-        return self.reactions_quantity;
+    pub fn get_reactions_quantity<'this>(&'this self) -> &'this i64 {
+        return &self.reactions_quantity;
     }
 
-    pub fn get_viewing_quantity<'this>(&'this self) -> i64 {
-        return self.viewing_quantity;
+    pub fn get_viewing_quantity<'this>(&'this self) -> &'this i64 {
+        return &self.viewing_quantity;
     }
 
     pub fn get_created_at<'this>(&'this self) -> Result<&'this str, BaseError> {

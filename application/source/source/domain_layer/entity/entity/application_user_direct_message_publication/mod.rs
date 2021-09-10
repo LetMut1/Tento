@@ -1,2 +1,1 @@
 pub mod application_user_direct_message_publication;
-pub mod _component;

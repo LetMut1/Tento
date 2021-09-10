@@ -1,24 +1,19 @@
-use super::_component::alg::Alg;
-use super::_component::typ::Typ;
-
-pub struct Header {
-    alg: Alg,
-    typ: Typ
-}
+#[derive(Clone)]
+pub struct Header;
 
 impl Header {
+    const ALG: &'static str = "HS512";
+    const TYP: &'static str = "JWT";
+
     pub const fn new() -> Self {
-        return Self {
-            alg: Alg::new(),
-            typ: Typ::new()
-        };
+        return Self {};
     }
 
-    pub fn get_alg<'this>(&'this self) -> &'this Alg {
-        return &self.alg;
+    pub fn get_alg<'this>(&'this self) -> &'static str  {
+        return Self::ALG;
     }
 
-    pub fn get_typ<'this>(&'this self) -> &'this Typ {
-        return &self.typ;
+    pub fn get_typ<'this>(&'this self) -> &'static str {
+        return Self::TYP;
     }
 }

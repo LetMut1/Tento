@@ -1,22 +1,22 @@
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use super::_component::id::Id;
-use super::_component::list_of_members::ListOfMembers;
 
 pub struct ApplicationUserDirectMessage {
-    id: Option<Id>,
-    list_of_members: ListOfMembers
+    id: Option<i64>,
+    list_of_members: String
 }
 
 impl ApplicationUserDirectMessage {
     pub fn new(
-        id: Option<Id>, list_of_members: ListOfMembers
+        id: Option<i64>,
+        list_of_members: String
     ) -> Self {
         return Self {
-            id, list_of_members
+            id,
+            list_of_members
         };
     }
 
-    pub fn get_id<'this>(&'this self) -> Result<&'this Id, BaseError> {
+    pub fn get_id<'this>(&'this self) -> Result<&'this i64, BaseError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
@@ -27,7 +27,7 @@ impl ApplicationUserDirectMessage {
         }
     }
 
-    pub fn get_list_of_members<'this>(&'this self) -> &'this ListOfMembers {
-        return &self.list_of_members;
+    pub fn get_list_of_members<'this>(&'this self) -> &'this str {
+        return self.list_of_members.as_str();
     }
 }

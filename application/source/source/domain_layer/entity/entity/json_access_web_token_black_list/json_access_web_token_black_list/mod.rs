@@ -1,17 +1,15 @@
-use crate::domain_layer::entity::entity::json_access_web_token::_component::payload::_component::id::Id as JsonAccessWebTokenId;
-
 pub struct JsonAccessWebTokenBlackList<'outer_a> {
-    json_access_web_token_id: &'outer_a JsonAccessWebTokenId
+    json_access_web_token_id: &'outer_a str
 }
 
 impl<'outer_a> JsonAccessWebTokenBlackList<'outer_a> {
-    pub fn new(json_access_web_token_id: &'outer_a JsonAccessWebTokenId) -> Self {
+    pub fn new(json_access_web_token_id: &'outer_a str) -> Self {
         return Self {
             json_access_web_token_id
         };
     }
 
-    pub fn get_json_access_web_token_id<'this>(&'this self) -> &'this JsonAccessWebTokenId {
-        return &self.json_access_web_token_id;
+    pub fn get_json_access_web_token_id<'this>(&'this self) -> &'this str {
+        return self.json_access_web_token_id;
     }
 }
