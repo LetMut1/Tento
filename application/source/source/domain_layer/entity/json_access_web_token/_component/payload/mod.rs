@@ -6,7 +6,7 @@ pub struct Payload<'outer_a> {
     id: Cow<'outer_a, str>,
     application_user_id: Cow<'outer_a, i64>,
     application_user_log_in_token_device_id: Cow<'outer_a, str>,
-    exp: String
+    expiration_time: String
 }
 
 impl<'outer_a> Payload<'outer_a> {
@@ -20,7 +20,7 @@ impl<'outer_a> Payload<'outer_a> {
             id,
             application_user_id,
             application_user_log_in_token_device_id,
-            exp
+            expiration_time: exp
         };
     }
 
@@ -42,9 +42,9 @@ impl<'outer_a> Payload<'outer_a> {
         return self.application_user_log_in_token_device_id.as_ref();
     }
 
-    pub fn get_exp<'this>(
+    pub fn get_expiration_time<'this>(
         &'this self
     ) -> &'this str {
-        return self.exp.as_str();
+        return self.expiration_time.as_str();
     }
 }

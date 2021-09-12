@@ -11,8 +11,8 @@ pub struct PayloadCommon<'outer_a> {
     application_user_id: Cow<'outer_a, i64>,
     #[serde(rename = "aulitdi")]
     application_user_log_in_token_device_id: Cow<'outer_a, str>,
-    #[serde(rename = "e")]
-    exp: Cow<'outer_a, str>
+    #[serde(rename = "et")]
+    expiration_time: Cow<'outer_a, str>
 }
 
 impl<'outer_a> PayloadCommon<'outer_a> {
@@ -23,7 +23,7 @@ impl<'outer_a> PayloadCommon<'outer_a> {
             json_access_web_token_id: Cow::Borrowed(json_access_web_token.get_id()),
             application_user_id: Cow::Borrowed(json_access_web_token.get_application_user_id()),
             application_user_log_in_token_device_id: Cow::Borrowed(json_access_web_token.get_application_user_log_in_token_device_id()),
-            exp: Cow::Borrowed(json_access_web_token.get_exp())
+            expiration_time: Cow::Borrowed(json_access_web_token.get_expiration_time())
         };
     }
 
@@ -34,7 +34,7 @@ impl<'outer_a> PayloadCommon<'outer_a> {
             self.json_access_web_token_id,
             self.application_user_id,
             self.application_user_log_in_token_device_id,
-            self.exp
+            self.expiration_time
         );
     }
 }

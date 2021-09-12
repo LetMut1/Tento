@@ -2,23 +2,16 @@
 pub struct Header;
 
 impl Header {
-    const ALG: &'static str = "HS512";
-    const TYP: &'static str = "JWT";
+    const TYPE: &'static str = "JWT";
 
     pub const fn new(
     ) -> Self {
         return Self {};
     }
 
-    pub fn get_alg<'this>(
-        &'this self
-    ) -> &'static str  {
-        return Self::ALG;
-    }
-
-    pub fn get_typ<'this>(
+    pub fn get_type<'this>(
         &'this self
     ) -> &'static str {
-        return Self::TYP;
+        return Self::TYPE;
     }
 }

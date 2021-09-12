@@ -1,6 +1,7 @@
 use anyhow::Error as AnyhowError;
 use argon2::Error as Argon2Error;
 use base64::DecodeError as Base64DecodeError;
+use chrono::ParseError as ChronoParseError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use diesel::result::Error as DieselError;
 use dotenv::Error as DotenvError;
@@ -171,6 +172,14 @@ impl From<FromUtf8Error> for BaseError {
         from_utf8_error: FromUtf8Error
     ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("FromUtf8Error", from_utf8_error)));
+    }
+}
+
+impl From<ChronoParseError> for BaseError {
+    fn from(
+        chrono_parse_error: ChronoParseError
+    ) -> Self {
+        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("ChronoParseError", chrono_parse_error)));
     }
 }
 

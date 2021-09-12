@@ -3,7 +3,7 @@ use crate::domain_layer::entity::json_access_web_token::_component::payload::Pay
 use std::clone::Clone;
 
 #[derive(Clone)]
-pub struct JsonAccessWebToken<'outer_a> {       // TODO добавть Сигнатуру поле. Создавать его при создании токена в Фактори, отсюда брать три куска и клеить их в сервисе в base64
+pub struct JsonAccessWebToken<'outer_a> {
     header: Header,
     payload: Payload<'outer_a>,
 }
@@ -18,25 +18,10 @@ impl<'outer_a> JsonAccessWebToken<'outer_a> {
         };
     }
 
-    pub fn is_expired<'this>(
-        &'this self
-    ) -> bool {
-        return true;
-        return false;
-
-        // return !DateTimeManipulator::is_greater_or_equal_than_now(&self.payload.get_exp().get_value());
-    }
-
-    pub fn get_alg<'this>(
+    pub fn get_type<'this>(
         &'this self
     ) -> &'this str {
-        return self.header.get_alg();
-    }
-
-    pub fn get_typ<'this>(
-        &'this self
-    ) -> &'this str {
-        return self.header.get_typ();
+        return self.header.get_type();
     }
 
     pub fn get_id<'this>(
@@ -57,9 +42,9 @@ impl<'outer_a> JsonAccessWebToken<'outer_a> {
         return self.payload.get_application_user_log_in_token_device_id();
     }
 
-    pub fn get_exp<'this>(
+    pub fn get_expiration_time<'this>(
         &'this self
     ) -> &'this str {
-        return self.payload.get_exp();
+        return self.payload.get_expiration_time();
     }
 }

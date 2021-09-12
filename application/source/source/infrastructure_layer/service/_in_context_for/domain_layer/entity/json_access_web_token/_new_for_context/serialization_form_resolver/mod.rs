@@ -16,29 +16,24 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
     fn serialize<'outer_a>(
         json_access_web_token: &'outer_a JsonAccessWebToken<'_>
     ) -> Result<String, Self::Error> {
-        let header_and_payload: String = 
-            base64::encode_config(serde_json::to_string(&HeaderCommon::new(json_access_web_token))?.as_bytes(), base64::URL_SAFE) 
-            + Self::TOKEN_PARTS_SEPARATOR 
-            + base64::encode_config(serde_json::to_string(&PayloadCommon::new(json_access_web_token))?.as_bytes(), base64::URL_SAFE).as_str();
-        
-        let signature: String = SignatureCreator::create(&header_and_payload)?;
+        let header: String = base64::encode_config(serde_json::to_vec(&HeaderCommon::new(json_access_web_token))?, base64::URL_SAFE);
 
-        return Ok(header_and_payload + Self::TOKEN_PARTS_SEPARATOR + signature.as_str());
+        let payload: String = base64::encode_config(serde_json::to_vec(&PayloadCommon::new(json_access_web_token))?, base64::URL_SAFE);
+        
+        let signature: String = SignatureCreator::create(header.as_str(), payload.as_str())?;
+
+        return Ok(header + Self::TOKEN_PARTS_SEPARATOR + payload.as_str() + Self::TOKEN_PARTS_SEPARATOR + signature.as_str());
     }
 
     fn deserialize<'outer_a>(
         classic_form: &'outer_a str
     ) -> Result<JsonAccessWebToken<'static>, Self::Error> {
-        let classic_form_part_registry: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
+        let token_part_registry: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
 
-        if classic_form_part_registry.len() == 3 
-        && SignatureCreator::is_valid(
-            (String::new() + classic_form_part_registry[0] + Self::TOKEN_PARTS_SEPARATOR + classic_form_part_registry[1]).as_str(), classic_form_part_registry[2]
-        )?
-        {
+        if token_part_registry.len() == 3 && SignatureCreator::is_valid(token_part_registry[0], token_part_registry[1], token_part_registry[2])? {
             return Ok(
                 JsonAccessWebTokenFactory::new_from_payload_common(
-                    serde_json::from_slice::<'_, PayloadCommon>(&base64::decode_config(classic_form_part_registry[1].as_bytes(), base64::URL_SAFE)?)?
+                    serde_json::from_slice::<'_, PayloadCommon>(&base64::decode_config(token_part_registry[1].as_bytes(), base64::URL_SAFE)?)?
                 )
             );
         }
