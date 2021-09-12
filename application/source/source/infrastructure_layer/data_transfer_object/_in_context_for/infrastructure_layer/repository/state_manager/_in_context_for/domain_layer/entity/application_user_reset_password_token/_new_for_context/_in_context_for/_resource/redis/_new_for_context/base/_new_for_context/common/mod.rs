@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
+use crate::domain_layer::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::Cow;

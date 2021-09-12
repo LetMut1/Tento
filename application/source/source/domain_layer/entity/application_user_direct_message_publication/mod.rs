@@ -1,1 +1,73 @@
-pub mod application_user_direct_message_publication;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+
+pub struct ApplicationUserDirectMessagePublication {
+    id: Option<i64>,
+    application_user_direct_message_id: i64,
+    application_user_id: i64,
+    channel_feed_publication_id: i64,
+    channel_feed_publication_reaction_id: i64,
+    created_at: String
+}
+
+impl ApplicationUserDirectMessagePublication {
+    pub fn new(
+        id: Option<i64>,
+        application_user_direct_message_id: i64,
+        application_user_id: i64,
+        channel_feed_publication_id: i64,
+        channel_feed_publication_reaction_id: i64,
+        created_at: String
+    ) -> Self {
+        return Self {
+            id,
+            application_user_direct_message_id,
+            application_user_id,
+            channel_feed_publication_id,
+            channel_feed_publication_reaction_id,
+            created_at
+        };
+    }
+
+    pub fn get_id<'this>(
+        &'this self
+    ) -> Result<&'this i64, BaseError> {
+        match self.id {
+            Some(ref id) => {
+                return Ok(id);
+            }
+            None => {
+                return Err(BaseError::LogicError("Id does not exist yet."))
+            }
+        }
+    }
+
+    pub fn get_application_user_direct_message_id<'this>(
+        &'this self
+    ) -> &'this i64 {
+        return &self.application_user_direct_message_id;
+    }
+
+    pub fn get_application_user_id<'this>(
+        &'this self
+    ) -> &'this i64 {
+        return &self.application_user_id;
+    }
+
+    pub fn get_channel_feed_publication_id<'this>(
+        &'this self
+    ) -> &'this i64 {
+        return &self.channel_feed_publication_id;
+    }
+
+    pub fn get_channel_feed_publication_reaction_id<'this>(
+        &'this self
+    ) -> &'this i64 {
+        return &self.channel_feed_publication_reaction_id;
+    }
+
+    pub fn get_created_at<'this>(
+        &'this self
+    ) -> &'this str {
+        return self.created_at.as_str();
+    }
+}

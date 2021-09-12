@@ -1,6 +1,6 @@
-use crate::domain_layer::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::domain_layer::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
-use crate::domain_layer::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
+use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
+use crate::domain_layer::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
+use crate::domain_layer::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::email_sender::EmailSender as BaseEmailSender;

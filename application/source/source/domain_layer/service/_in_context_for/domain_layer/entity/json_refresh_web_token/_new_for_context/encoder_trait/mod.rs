@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
+use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
 use std::error::Error;
 
 pub trait EncoderTrait {

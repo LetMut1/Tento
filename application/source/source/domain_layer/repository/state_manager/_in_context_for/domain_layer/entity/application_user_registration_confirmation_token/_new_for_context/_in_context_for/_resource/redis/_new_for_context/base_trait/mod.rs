@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
+use crate::domain_layer::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use redis::Connection;
 use std::error::Error;
 

@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::application_user_pre_confirmed::application_user_pre_confirmed::ApplicationUserPreConfirmed;
+use crate::domain_layer::entity::application_user_pre_confirmed::ApplicationUserPreConfirmed;
 use diesel::PgConnection as Connection;
 use std::error::Error;
 

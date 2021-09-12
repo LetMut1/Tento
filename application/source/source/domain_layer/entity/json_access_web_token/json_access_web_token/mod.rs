@@ -1,5 +1,5 @@
-use crate::domain_layer::entity::json_access_web_token::_component::header::header::Header;
-use crate::domain_layer::entity::json_access_web_token::_component::payload::payload::Payload;
+use crate::domain_layer::entity::json_access_web_token::_component::header::Header;
+use crate::domain_layer::entity::json_access_web_token::_component::payload::Payload;
 use std::clone::Clone;
 
 #[derive(Clone)]

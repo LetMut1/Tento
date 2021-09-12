@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::json_access_web_token_black_list::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
+use crate::domain_layer::entity::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use redis::Connection;
 use std::error::Error;
 

@@ -1,6 +1,6 @@
-use crate::domain_layer::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::domain_layer::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
-use crate::domain_layer::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
+use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
+use crate::domain_layer::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
+use crate::domain_layer::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use std::error::Error;
 
 pub trait EmailSenderTrait {

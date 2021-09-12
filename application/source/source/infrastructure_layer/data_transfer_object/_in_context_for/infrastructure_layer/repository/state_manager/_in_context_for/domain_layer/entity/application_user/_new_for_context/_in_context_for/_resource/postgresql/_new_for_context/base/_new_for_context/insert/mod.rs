@@ -1,7 +1,7 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
 use crate::infrastructure_layer::service::diesel_component::schema_describer::public::application_user;
-use crate::domain_layer::entity::application_user::application_user::ApplicationUser;
+use crate::domain_layer::entity::application_user::ApplicationUser;
 use diesel::Insertable;
 
 #[derive(Insertable)]

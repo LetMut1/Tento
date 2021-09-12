@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
+use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use redis::Connection;
 use std::error::Error;
 

@@ -1,6 +1,6 @@
 use chrono::DateTime as ChronoDateTime;
 use chrono::offset::Utc;
-use crate::domain_layer::entity::application_user_pre_confirmed::application_user_pre_confirmed::ApplicationUserPreConfirmed;
+use crate::domain_layer::entity::application_user_pre_confirmed::ApplicationUserPreConfirmed;
 use crate::infrastructure_layer::service::diesel_component::schema_describer::public::pre_confirmed_application_user;
 use diesel::Insertable;
 

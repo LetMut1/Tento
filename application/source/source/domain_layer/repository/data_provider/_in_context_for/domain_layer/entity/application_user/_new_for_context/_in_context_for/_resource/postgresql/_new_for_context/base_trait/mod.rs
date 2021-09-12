@@ -1,4 +1,4 @@
-use crate::domain_layer::entity::application_user::application_user::ApplicationUser;
+use crate::domain_layer::entity::application_user::ApplicationUser;
 use diesel::PgConnection as Connection;
 use std::error::Error;
 
