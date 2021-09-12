@@ -27,6 +27,11 @@ impl Base {
             application_user_id,
             application_user_log_in_token_device_id,
             obfuscation_value
+        ) : (
+            Cow<'_, str>,
+            Cow<'_, i64>,
+            Cow<'_, str>,
+            Cow<'_, str>
         ) = common.into_inner();
 
         return JsonRefreshWebToken::new(

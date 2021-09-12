@@ -29,6 +29,10 @@ impl Base {
             application_user_email,
             value,
             wrong_enter_tries_quantity
+        ) : (
+            Cow<'_, str>,
+            Cow<'_, str>,
+            Cow<'_, u8>
         ) = common.into_inner();
 
         return ApplicationUserRegistrationConfirmationToken::new(

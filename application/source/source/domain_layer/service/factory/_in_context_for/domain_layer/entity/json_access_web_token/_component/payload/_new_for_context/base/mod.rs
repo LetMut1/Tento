@@ -30,6 +30,11 @@ impl Base {
             application_user_id,
             application_user_log_in_token_device_id,
             exp
+        ) : (
+            Cow<'_, str>,
+            Cow<'_, i64>,
+            Cow<'_, str>,
+            Cow<'_, str>
         ) = payload_common.into_inner();
 
         return Payload::new(
