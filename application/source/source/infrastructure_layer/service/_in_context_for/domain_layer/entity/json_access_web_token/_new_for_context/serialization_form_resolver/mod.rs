@@ -1,0 +1,48 @@
+
+use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::signature_creator_trait::SignatureCreatorTrait;
+use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
+use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::_new_for_context::header_common::HeaderCommon;
+use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::_new_for_context::payload_common::PayloadCommon;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::signature_creator::SignatureCreator;
+
+pub struct SerializationFormResolver;
+
+impl SerializationFormResolverTrait for SerializationFormResolver {
+    type Error = BaseError;
+
+    fn serialize<'outer_a>(
+        json_access_web_token: &'outer_a JsonAccessWebToken<'_>
+    ) -> Result<String, Self::Error> {
+        let header_and_payload: String = 
+            base64::encode_config(serde_json::to_string(&HeaderCommon::new(json_access_web_token))?.as_bytes(), base64::URL_SAFE) 
+            + Self::TOKEN_PARTS_SEPARATOR 
+            + base64::encode_config(serde_json::to_string(&PayloadCommon::new(json_access_web_token))?.as_bytes(), base64::URL_SAFE).as_str();
+        
+        let signature: String = SignatureCreator::create(&header_and_payload)?;
+
+        return Ok(header_and_payload + Self::TOKEN_PARTS_SEPARATOR + signature.as_str());
+    }
+
+    fn deserialize<'outer_a>(
+        classic_form: &'outer_a str
+    ) -> Result<JsonAccessWebToken<'static>, Self::Error> {
+        let classic_form_part_registry: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
+
+        if classic_form_part_registry.len() == 3 
+        && SignatureCreator::is_valid(
+            (String::new() + classic_form_part_registry[0] + Self::TOKEN_PARTS_SEPARATOR + classic_form_part_registry[1]).as_str(), classic_form_part_registry[2]
+        )?
+        {
+            return Ok(
+                JsonAccessWebTokenFactory::new_from_payload_common(
+                    serde_json::from_slice::<'_, PayloadCommon>(&base64::decode_config(classic_form_part_registry[1].as_bytes(), base64::URL_SAFE)?)?
+                )
+            );
+        }
+
+        return Err(BaseError::InvalidArgumentError);
+    }
+} 

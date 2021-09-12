@@ -3,7 +3,7 @@ use actix_web::dev::ServiceRequest;
 use actix_web::dev::ServiceResponse;
 use actix_web::Error;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::middleware::authentication_resolver::authentication_resolver::_new_for_contex::call::base::Base as HandlerBase;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
+use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
