@@ -25,7 +25,10 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> { // TODO  !!!!! Это ресет для пользователя, забывшего пароль. НО также нужно сделать АККУРАТНО ресетпассворд для залогиневшегося пользователя с повторной отправкой старого пароля !!!!!!!!!
+    pub fn handle(
+        aggregate_connection_pool: Arc<AggregateConnectionPool>,
+        request: Request
+    ) -> Result<(), BaseError> { // TODO  !!!!! Это ресет для пользователя, забывшего пароль. НО также нужно сделать АККУРАТНО ресетпассворд для залогиневшегося пользователя с повторной отправкой старого пароля !!!!!!!!!
         let (
             application_user_id, 
             application_user_password,

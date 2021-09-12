@@ -23,7 +23,10 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> {
+    pub fn handle(
+        aggregate_connection_pool: Arc<AggregateConnectionPool>,
+        request: Request
+    ) -> Result<Response, BaseError> {
         let (
             application_user_log_in_token_device_id, 
             application_user_email, 

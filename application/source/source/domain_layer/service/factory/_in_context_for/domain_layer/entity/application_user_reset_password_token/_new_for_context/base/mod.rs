@@ -8,7 +8,9 @@ use uuid::Uuid;
 pub struct Base;
 
 impl Base {
-    pub fn new_from_application_user<'outer_a>(application_user: &'outer_a ApplicationUser<'_>) -> Result<ApplicationUserResetPasswordToken<'outer_a>, BaseError> {
+    pub fn new_from_application_user<'outer_a>(
+        application_user: &'outer_a ApplicationUser<'_>
+    ) -> Result<ApplicationUserResetPasswordToken<'outer_a>, BaseError> {
         return Ok(
             ApplicationUserResetPasswordToken::new(
                 application_user.get_id()?,
@@ -19,7 +21,10 @@ impl Base {
         );
     }
 
-    pub fn new_from_common<'outer_a>(common: Common<'_>, application_user_id: &'outer_a i64) -> ApplicationUserResetPasswordToken<'outer_a> {
+    pub fn new_from_common<'outer_a>(
+        common: Common<'_>,
+        application_user_id: &'outer_a i64
+    ) -> ApplicationUserResetPasswordToken<'outer_a> {
         let (
             application_user_email,
             value,

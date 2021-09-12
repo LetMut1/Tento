@@ -7,7 +7,9 @@ pub struct Base;
 
 impl Base {
     pub fn new_from_application_user_pre_confirmed<'outer_a>(
-        application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed, nickname: String, password_hash: String
+        application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed,
+        nickname: String,
+        password_hash: String
     ) -> ApplicationUser<'_> {
         return ApplicationUser::new(
             None,
@@ -18,7 +20,9 @@ impl Base {
         );
     }
 
-    pub fn new_from_select(select: Select) -> ApplicationUser<'static> {
+    pub fn new_from_select(
+        select: Select
+    ) -> ApplicationUser<'static> {
         let (
             id,
             email,

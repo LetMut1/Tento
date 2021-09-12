@@ -9,7 +9,10 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn new(json_access_web_token: String, json_refresh_web_token: String) -> Self {
+    pub fn new(
+        json_access_web_token: String,
+        json_refresh_web_token: String
+    ) -> Self {
         return Self {
             json_access_web_token,
             json_refresh_web_token

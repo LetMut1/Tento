@@ -7,7 +7,8 @@ pub struct SuccessResult {
 }
 
 impl SuccessResult {
-    pub const fn new() -> Self {
+    pub const fn new(
+    ) -> Self {
         return Self {
             success: true
         };

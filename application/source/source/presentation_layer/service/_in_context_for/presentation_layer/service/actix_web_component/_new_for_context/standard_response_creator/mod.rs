@@ -8,7 +8,8 @@ use super::standard_json_response_body_wrapper::StandardJsonResponseBodyWrapper;
 pub struct StandardResponseCreator;
 
 impl StandardResponseCreator {
-    pub fn wrap_for_success_and_create_ok() -> HttpResponse<Body> {
+    pub fn wrap_for_success_and_create_ok(
+    ) -> HttpResponse<Body> {
         match StandardJsonResponseBodyWrapper::wrap_for_success() {
             Ok(success_response_body) => {
                 return Self::create_ok(success_response_body);
@@ -29,7 +30,9 @@ impl StandardResponseCreator {
         }
     }
 
-    pub fn wrap_for_success_with_body_and_create_ok<'outer_a, S>(body: &'outer_a S) -> HttpResponse<Body>
+    pub fn wrap_for_success_with_body_and_create_ok<'outer_a, S>(
+        body: &'outer_a S
+    ) -> HttpResponse<Body>
     where
         S: Serialize
     {
@@ -53,7 +56,9 @@ impl StandardResponseCreator {
         }
     }
 
-    pub fn wrap_for_fail_with_code_and_create_ok(code: &'static str) -> HttpResponse<Body> {
+    pub fn wrap_for_fail_with_code_and_create_ok(
+        code: &'static str
+    ) -> HttpResponse<Body> {
         match StandardJsonResponseBodyWrapper::wrap_for_fail_with_code(code) {
             Ok(fail_with_code_response_body) => {
                 return Self::create_ok(fail_with_code_response_body);
@@ -74,19 +79,24 @@ impl StandardResponseCreator {
         }
     }
 
-    pub fn create_bad_request() -> HttpResponse<Body> {
+    pub fn create_bad_request(
+    ) -> HttpResponse<Body> {
         return HttpResponse::BadRequest().finish();
     }
 
-    pub fn create_unauthorized() -> HttpResponse<Body> {
+    pub fn create_unauthorized(
+    ) -> HttpResponse<Body> {
         return HttpResponse::Unauthorized().finish();
     }
 
-    pub fn create_internal_server_error() -> HttpResponse<Body> {
+    pub fn create_internal_server_error(
+    ) -> HttpResponse<Body> {
         return HttpResponse::InternalServerError().finish();
     }
 
-    fn create_ok(body: String) -> HttpResponse<Body> {
+    fn create_ok(
+        body: String
+    ) -> HttpResponse<Body> {
         return HttpResponse::Ok()
         .set_header(header::CONTENT_TYPE, "application/json")
         .body(body);

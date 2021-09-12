@@ -49,7 +49,10 @@ use crate::presentation_layer::service::_in_context_for::presentation_layer::ser
 pub struct Authorization;
 
 impl Authorization {
-    pub async fn check_email_for_existing(data: Data<AggregateConnectionPool>, query: Query<RequestCheckEmailForExisting>) -> HttpResponse<Body> {
+    pub async fn check_email_for_existing(
+        data: Data<AggregateConnectionPool>,
+        query: Query<RequestCheckEmailForExisting>
+    ) -> HttpResponse<Body> {
         match HandlerCheckEmailForExisting::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
@@ -89,7 +92,10 @@ impl Authorization {
         }
     }
 
-    pub async fn check_nickname_for_existing(data: Data<AggregateConnectionPool>, query: Query<RequestCheckNicknameForExisting>) -> HttpResponse<Body> {
+    pub async fn check_nickname_for_existing(
+        data: Data<AggregateConnectionPool>,
+        query: Query<RequestCheckNicknameForExisting>
+    ) -> HttpResponse<Body> {
         match HandlerCheckNicknameForExisting::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
@@ -113,7 +119,10 @@ impl Authorization {
         }
     }
 
-    pub async fn pre_register(data: Data<AggregateConnectionPool>, form: Form<RequestPreRegister>) -> HttpResponse<Body> {
+    pub async fn pre_register(
+        data: Data<AggregateConnectionPool>,
+        form: Form<RequestPreRegister>
+    ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerPreRegister::handle(data.into_inner(), form.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
@@ -187,7 +196,10 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn register(data: Data<AggregateConnectionPool>, form: Form<RequestRegister>) -> HttpResponse<Body> {
+    pub async fn register(
+        data: Data<AggregateConnectionPool>,
+        form: Form<RequestRegister>
+    ) -> HttpResponse<Body> {
         match HandlerRegister::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
@@ -268,7 +280,10 @@ impl Authorization {
         }
     }
 
-    pub async fn resend_email_for_register(data: Data<AggregateConnectionPool>, form: Form<RequestResendEmailForRegister>) -> HttpResponse<Body> {
+    pub async fn resend_email_for_register(
+        data: Data<AggregateConnectionPool>,
+        form: Form<RequestResendEmailForRegister>
+    ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerResendEmailForRegister::handle(data.into_inner(), form.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
@@ -326,7 +341,10 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn pre_log_in(data: Data<AggregateConnectionPool>, form: Form<RequestPreLogIn>) -> HttpResponse<Body> {
+    pub async fn pre_log_in(
+        data: Data<AggregateConnectionPool>,
+        form: Form<RequestPreLogIn>
+    ) -> HttpResponse<Body> {
         match HandlerPreLogIn::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
@@ -387,7 +405,10 @@ impl Authorization {
         }
     }
 
-    pub async fn log_in(data: Data<AggregateConnectionPool>, form: Form<RequestLogIn>) -> HttpResponse<Body> {
+    pub async fn log_in(
+        data: Data<AggregateConnectionPool>,
+        form: Form<RequestLogIn>
+    ) -> HttpResponse<Body> {
         match HandlerLogIn::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
@@ -429,7 +450,10 @@ impl Authorization {
         }
     }
 
-    pub async fn resend_email_for_log_in(data: Data<AggregateConnectionPool>, form: Form<RequestResendEmailForLogIn>) -> HttpResponse<Body> {
+    pub async fn resend_email_for_log_in(
+        data: Data<AggregateConnectionPool>,
+        form: Form<RequestResendEmailForLogIn>
+    ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerResendEmailForLogIn::handle(data.into_inner(), form.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
@@ -486,7 +510,10 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn refresh_json_access_web_token(data: Data<AggregateConnectionPool>, form: Form<RequestRefreshJsonAccessWebToken>) -> HttpResponse<Body> {
+    pub async fn refresh_json_access_web_token(
+        data: Data<AggregateConnectionPool>,
+        form: Form<RequestRefreshJsonAccessWebToken>
+    ) -> HttpResponse<Body> {
         match HandlerRefreshJsonAccessWebToken::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
@@ -535,7 +562,10 @@ impl Authorization {
         }
     }
 
-    pub async fn log_out(data: Data<AggregateConnectionPool>, request_data: RequestData<JsonAccessWebToken<'_>>) -> HttpResponse<Body> {
+    pub async fn log_out(
+        data: Data<AggregateConnectionPool>,
+        request_data: RequestData<JsonAccessWebToken<'_>>
+    ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerLogOut::handle(data.into_inner(), &request_data.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
@@ -569,7 +599,10 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn log_out_from_all_devices(data: Data<AggregateConnectionPool>, request_data: RequestData<JsonAccessWebToken<'_>>) -> HttpResponse<Body> {
+    pub async fn log_out_from_all_devices(
+        data: Data<AggregateConnectionPool>,
+        request_data: RequestData<JsonAccessWebToken<'_>>
+    ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerLogOutFromAllDevices::handle(data.into_inner(), &request_data.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
@@ -603,7 +636,10 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn pre_reset_password(data: Data<AggregateConnectionPool>, form: Form<RequestPreResetPassword>) -> HttpResponse<Body> {
+    pub async fn pre_reset_password(
+        data: Data<AggregateConnectionPool>,
+        form: Form<RequestPreResetPassword>
+    ) -> HttpResponse<Body> {
         match HandlerPreResetPassword::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => {
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
@@ -664,7 +700,10 @@ impl Authorization {
         }
     }
 
-    pub async fn reset_password(data: Data<AggregateConnectionPool>, form: Form<RequestResetPassword>) -> HttpResponse<Body> {
+    pub async fn reset_password(
+        data: Data<AggregateConnectionPool>,
+        form: Form<RequestResetPassword>
+    ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerResetPassword::handle(data.into_inner(), form.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {
@@ -721,7 +760,10 @@ impl Authorization {
         return StandardResponseCreator::wrap_for_success_and_create_ok();
     }
 
-    pub async fn resend_email_for_reset_password(data: Data<AggregateConnectionPool>, form: Form<RequestResendEmailForResetPassword>) -> HttpResponse<Body> {
+    pub async fn resend_email_for_reset_password(
+        data: Data<AggregateConnectionPool>,
+        form: Form<RequestResendEmailForResetPassword>
+    ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerResendEmailForResetPassword::handle(data.into_inner(), form.into_inner()) {
             match base_error {
                 BaseError::EntityError(entity_error) => {

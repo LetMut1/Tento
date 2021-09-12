@@ -7,7 +7,9 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn new(result: bool) -> Self {
+    pub fn new(
+        result: bool
+    ) -> Self {
         return Self {
             result
         };

@@ -26,13 +26,18 @@ impl<'outer_a> ApplicationUserChannelAdministrator<'outer_a> {
         };
     }
 
-    pub fn set_password_hash<'this>(&'this mut self, password_hash: String) -> &'this mut Self {
+    pub fn set_password_hash<'this>(
+        &'this mut self,
+        password_hash: String
+    ) -> &'this mut Self {
         self.password_hash = password_hash;
 
         return self;
     }
 
-    pub fn get_id<'this>(&'this self) -> Result<&'this i64, BaseError> {
+    pub fn get_id<'this>(
+        &'this self
+    ) -> Result<&'this i64, BaseError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
@@ -43,19 +48,27 @@ impl<'outer_a> ApplicationUserChannelAdministrator<'outer_a> {
         }
     }
 
-    pub fn get_email<'this>(&'this self) -> &'this str {
+    pub fn get_email<'this>(
+        &'this self
+    ) -> &'this str {
         return self.email.as_ref();
     }
 
-    pub fn get_nickname<'this>(&'this self) -> &'this str {
+    pub fn get_nickname<'this>(
+        &'this self
+    ) -> &'this str {
         return self.nickname.as_str();
     }
 
-    pub fn get_password_hash<'this>(&'this self) -> &'this str {
+    pub fn get_password_hash<'this>(
+        &'this self
+    ) -> &'this str {
         return self.password_hash.as_str();
     }
 
-    pub fn get_created_at<'this>(&'this self) -> &'this str {
+    pub fn get_created_at<'this>(
+        &'this self
+    ) -> &'this str {
         return self.created_at.as_str();
     }
 }

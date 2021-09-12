@@ -15,7 +15,10 @@ impl Base {
     const LIMIT_MINIMUM_VALUE: i16 = 300;
     const LIMIT_MAXIMUM_VALUE: i16 = 500;
 
-    pub fn handle<'outer_a>(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> 
+    pub fn handle(
+        aggregate_connection_pool: Arc<AggregateConnectionPool>,
+        request: Request
+    ) -> Result<Response, BaseError> 
     {
         let (
             channel_subscribers_quantity,
@@ -31,12 +34,12 @@ impl Base {
             limit = Self::LIMIT_MINIMUM_VALUE;
         }
 
-        if !OrderConventionResolver::can_convert(order) {
+        if !OrderConventionResolver::can_convert(&order) {
             return Err(BaseError::InvalidArgumentError);
         }
 
         let channel_registry: Option<Vec<Channel>> = DataProviderChannelPostgresql::find_many_by_subscribers_quantity(
-            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_subscribers_quantity, order, limit
+            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_subscribers_quantity, &order, &limit
         )?;
 
         return Ok(Response::new(channel_registry));

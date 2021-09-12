@@ -15,7 +15,10 @@ pub struct Base;
 impl Base {
     const LIMIT: i8 = 30;
 
-    pub fn handle<'outer_a>(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> 
+    pub fn handle(
+        aggregate_connection_pool: Arc<AggregateConnectionPool>,
+        request: Request
+    ) -> Result<Response, BaseError> 
     {
         let (
             mut channel_created_at,
@@ -31,7 +34,7 @@ impl Base {
             limit = Self::LIMIT;
         }
 
-        if !OrderConventionResolver::can_convert(order) {
+        if !OrderConventionResolver::can_convert(&order) {
             return Err(BaseError::InvalidArgumentError);
         }
 
@@ -45,7 +48,7 @@ impl Base {
         }
 
         let channel_registry: Option<Vec<Channel>> = DataProviderChannelPostgresql::find_many_by_created_at(
-            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_created_at, order, limit as i16
+            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_created_at, &order, &(limit as i16)
         )?;
 
         return Ok(Response::new(channel_registry));

@@ -9,7 +9,9 @@ pub struct FailResultWithCode {
 }
 
 impl FailResultWithCode {
-    pub fn new(code: &'static str) -> Self {
+    pub fn new(
+        code: &'static str
+    ) -> Self {
         return Self {
             success: false,
             code

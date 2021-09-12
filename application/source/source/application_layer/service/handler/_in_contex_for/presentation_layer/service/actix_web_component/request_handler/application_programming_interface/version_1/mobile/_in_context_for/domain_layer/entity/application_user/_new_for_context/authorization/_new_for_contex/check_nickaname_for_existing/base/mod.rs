@@ -13,7 +13,10 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> {
+    pub fn handle(
+        aggregate_connection_pool: Arc<AggregateConnectionPool>,
+        request: Request
+    ) -> Result<Response, BaseError> {
         let application_user_nickname: String = request.get_application_user_nickname();
 
         if ApplicationUserComponentValidator::is_valid_nickname(application_user_nickname.as_str()) {

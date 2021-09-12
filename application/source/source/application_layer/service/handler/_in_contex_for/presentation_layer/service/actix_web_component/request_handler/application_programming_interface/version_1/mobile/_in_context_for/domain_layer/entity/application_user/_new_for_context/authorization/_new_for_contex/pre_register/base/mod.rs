@@ -26,7 +26,10 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
-    pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {
+    pub fn handle(
+        aggregate_connection_pool: Arc<AggregateConnectionPool>,
+        request: Request
+    ) -> Result<(), BaseError> {
         let application_user_email: String = request.get_application_user_email();
         if ApplicationUserComponentValidator::is_valid_email(application_user_email.as_str())? {
             let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;

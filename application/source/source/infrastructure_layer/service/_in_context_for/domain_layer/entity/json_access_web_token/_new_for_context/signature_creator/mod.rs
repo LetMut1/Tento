@@ -8,7 +8,8 @@ use crypto::sha2::Sha512;
 pub struct SignatureCreator;
 
 impl SignatureCreator {
-    fn get_configured_hmac() -> Result<Hmac<Sha512>, BaseError> {
+    fn get_configured_hmac(
+    ) -> Result<Hmac<Sha512>, BaseError> {
         return Ok(Hmac::new(Sha512::new(), EnvironmentVariableResolver::get_security_jawt_signature_encoding_private_key()?.as_bytes()));
     }
 }

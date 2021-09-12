@@ -21,7 +21,10 @@ where
     type Transform = AuthenticationResolver<S, B>;
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
-    fn new_transform<'this>(&'this self, service: S) -> Self::Future {
+    fn new_transform<'this>(
+        &'this self,
+        service: S
+    ) -> Self::Future {
         return FutureOk(AuthenticationResolver::new(service));
     }
 }

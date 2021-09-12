@@ -17,7 +17,10 @@ use crate::presentation_layer::service::_in_context_for::presentation_layer::ser
 pub struct Base;
 
 impl Base {
-    pub async fn get_many_by_name(data: Data<AggregateConnectionPool>, query: Query<RequestGetManyByName>) -> HttpResponse<Body> {
+    pub async fn get_many_by_name(
+        data: Data<AggregateConnectionPool>,
+        query: Query<RequestGetManyByName>
+    ) -> HttpResponse<Body> {
         match HandlerGetManyByName::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
@@ -41,7 +44,10 @@ impl Base {
         }
     }
 
-    pub async fn get_many_by_created_at(data: Data<AggregateConnectionPool>, query: Query<RequestGetManyByCreatedAt>) -> HttpResponse<Body> {
+    pub async fn get_many_by_created_at(
+        data: Data<AggregateConnectionPool>,
+        query: Query<RequestGetManyByCreatedAt>
+    ) -> HttpResponse<Body> {
         match HandlerGetManyByCreatedName::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
@@ -65,7 +71,10 @@ impl Base {
         }
     }
     
-    pub async fn get_many_by_subscribers_quantity(data: Data<AggregateConnectionPool>, query: Query<RequestGetManyBySubscribersQuantity>) -> HttpResponse<Body> {
+    pub async fn get_many_by_subscribers_quantity(
+        data: Data<AggregateConnectionPool>,
+        query: Query<RequestGetManyBySubscribersQuantity>
+    ) -> HttpResponse<Body> {
         match HandlerGetManyBySubscribersQuantity::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
@@ -89,7 +98,10 @@ impl Base {
         }
     }
 
-    pub async fn get_many_by_id_registry(data: Data<AggregateConnectionPool>, query: Query<RequestGetManyByIdRegistry>) -> HttpResponse<Body> {
+    pub async fn get_many_by_id_registry(
+        data: Data<AggregateConnectionPool>,
+        query: Query<RequestGetManyByIdRegistry>
+    ) -> HttpResponse<Body> {
         match HandlerGetManyByIdRegistry::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => { 
                 return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 

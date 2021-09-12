@@ -9,7 +9,8 @@ pub struct Base;
 
 impl Base {
     pub fn new_from_application_user<'outer_a>(
-        application_user: &'outer_a ApplicationUser<'_>, device_id: &'outer_a str
+        application_user: &'outer_a ApplicationUser<'_>,
+        device_id: &'outer_a str
     ) -> Result<ApplicationUserLogInToken<'outer_a>, BaseError> {
         return Ok(
             ApplicationUserLogInToken::new(
@@ -23,7 +24,9 @@ impl Base {
     }
 
     pub fn new_from_common<'outer_a>(
-        common: Common<'_>, application_user_id: &'outer_a i64, device_id: &'outer_a str
+        common: Common<'_>,
+        application_user_id: &'outer_a i64,
+        device_id: &'outer_a str
     ) -> ApplicationUserLogInToken<'outer_a> {
         let (
             application_user_email,

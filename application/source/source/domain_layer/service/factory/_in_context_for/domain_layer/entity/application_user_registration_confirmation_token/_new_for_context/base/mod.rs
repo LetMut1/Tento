@@ -22,7 +22,8 @@ impl Base {
     }
 
     pub fn new_from_common<'outer_a>(
-        common: Common<'_>, application_user_pre_confirmed_id: &'outer_a i64
+        common: Common<'_>,
+        application_user_pre_confirmed_id: &'outer_a i64
     ) -> ApplicationUserRegistrationConfirmationToken<'outer_a> {
         let (
             application_user_email,

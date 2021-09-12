@@ -15,7 +15,9 @@ impl<'outer_a, S> SuccessResultWithBody<'outer_a, S>
 where
     S: Serialize
 {
-    pub fn new(body: &'outer_a S) -> Self {
+    pub fn new(
+        body: &'outer_a S
+    ) -> Self {
         return Self {
             success: true,
             body

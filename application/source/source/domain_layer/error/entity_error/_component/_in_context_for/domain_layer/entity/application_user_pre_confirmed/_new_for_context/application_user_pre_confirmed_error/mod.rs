@@ -11,7 +11,10 @@ pub enum ApplicationUserPreConfirmedError {
 }
 
 impl Display for ApplicationUserPreConfirmedError {
-    fn fmt<'this, 'outer_a>(&'this self, _: &'outer_a mut Formatter<'_>) -> Result {
+    fn fmt<'this, 'outer_a>(
+        &'this self,
+        _: &'outer_a mut Formatter<'_>
+    ) -> Result {
         return Ok(());
     }
 }

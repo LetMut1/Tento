@@ -11,7 +11,9 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn into_inner(self) -> (String, Option<String>, i8) {
+    pub fn into_inner(
+        self
+    ) -> (String, Option<String>, i8) {
         return (
             self.channel_name,
             self.requery_channel_name,

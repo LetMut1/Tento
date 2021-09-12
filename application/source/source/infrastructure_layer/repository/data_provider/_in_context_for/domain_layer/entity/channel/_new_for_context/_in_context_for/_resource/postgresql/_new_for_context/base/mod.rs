@@ -15,7 +15,10 @@ pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТей
 
 impl Base {
     pub fn find_many_by_name<'outer_a>(
-        connection: &'outer_a mut Connection, name: &'outer_a str, requery_name: &'outer_a Option<String>, limit: i16
+        connection: &'outer_a mut Connection,
+        name: &'outer_a str,
+        requery_name: &'outer_a Option<String>,
+        limit: &'outer_a i16
     ) -> Result<Option<Vec<ResponseGetManyByNameChannel>>, BaseError> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
         
@@ -48,7 +51,7 @@ impl Base {
 
         query = query + " ORDER BY c.name ASC LIMIT $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(limit, Type::INT2);
 
         let mut channel_registry: Vec<ResponseGetManyByNameChannel> = Vec::new();
 
@@ -79,7 +82,10 @@ impl Base {
     }
 
     pub fn find_many_by_created_at<'outer_a>(
-        connection: &'outer_a mut Connection, created_at: &'outer_a Option<String>, order: i8, limit: i16
+        connection: &'outer_a mut Connection,
+        created_at: &'outer_a Option<String>,
+        order: &'outer_a i8,
+        limit: &'outer_a i16
     ) -> Result<Option<Vec<ResponseGetManyByCreatedAtChannel>>, BaseError> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -115,7 +121,7 @@ impl Base {
         query = query + " ORDER BY c.created_at " + OrderConventionResolver::convert(order)? +
         " LIMIT $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(limit, Type::INT2);
 
         let mut channel_registry: Vec<ResponseGetManyByCreatedAtChannel> = Vec::new();
 
@@ -146,7 +152,10 @@ impl Base {
     }
 
     pub fn find_many_by_subscribers_quantity<'outer_a>(
-        connection: &'outer_a mut Connection, subscribers_quantity: &'outer_a Option<i64>, order: i8, limit: i16
+        connection: &'outer_a mut Connection,
+        subscribers_quantity: &'outer_a Option<i64>,
+        order: &'outer_a i8,
+        limit: &'outer_a i16
     ) -> Result<Option<Vec<ResponseGetManyBySubscribersQuantityChannel>>, BaseError> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -175,7 +184,7 @@ impl Base {
         query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + OrderConventionResolver::convert(order)? +
         " LIMIT $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(limit, Type::INT2);
 
         let mut channel_registry: Vec<ResponseGetManyBySubscribersQuantityChannel> = Vec::new();
 
@@ -199,7 +208,8 @@ impl Base {
     }
 
     pub fn find_many_by_id_registry<'outer_a>(
-        connection: &'outer_a mut Connection, id_registry: &'outer_a Vec<i64>
+        connection: &'outer_a mut Connection,
+        id_registry: &'outer_a Vec<i64>
     ) -> Result<Option<Vec<ResponseGetManyByIdRegistryChannel>>, BaseError> {
         if id_registry.is_empty() {
             return Ok(None)

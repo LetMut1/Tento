@@ -36,7 +36,10 @@ pub enum BaseError {
 }
 
 impl Display for BaseError {
-    fn fmt<'this, 'outer_a>(&'this self, formatter: &'outer_a mut Formatter<'_>) -> Result {
+    fn fmt<'this, 'outer_a>(
+        &'this self,
+        formatter: &'outer_a mut Formatter<'_>
+    ) -> Result {
         match self {
             Self::LogicError(message) => {
                 write!(formatter, "BaseError-LogicError: {}", message)?;
@@ -84,103 +87,137 @@ impl Display for BaseError {
 impl Error for BaseError {}
 
 impl From<IOError> for BaseError {
-    fn from(io_error: IOError) -> Self {
+    fn from(
+        io_error: IOError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("IOError", io_error)));
     }
 }
 
 impl From<AnyhowError> for BaseError {
-    fn from(anyhow_error: AnyhowError) -> Self {
+    fn from(
+        anyhow_error: AnyhowError
+    ) -> Self {
         return Self::from(IOError::new(IOErrorKind::Other, format!("{}", anyhow_error)));
     }
 }
 
 impl From<VarError> for BaseError {
-    fn from(var_error: VarError) -> Self {
+    fn from(
+        var_error: VarError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("EnvironmentVariableError", var_error)));
     }
 }
 
 impl From<SerdeJsonError> for BaseError {
-    fn from(serde_json_error: SerdeJsonError) -> Self {
+    fn from(
+        serde_json_error: SerdeJsonError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("SerdeJsonError", serde_json_error)));
     }
 }
 
 impl From<Base64DecodeError> for BaseError {
-    fn from(base64_decode_error: Base64DecodeError) -> Self {
+    fn from(
+        base64_decode_error: Base64DecodeError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("Base64DecodeError", base64_decode_error)));
     }
 }
 
 impl From<RegexError> for BaseError {
-    fn from(regex_error: RegexError) -> Self {
+    fn from(
+        regex_error: RegexError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("RegexError", regex_error)));
     }
 }
 
 impl From<Argon2Error> for BaseError {
-    fn from(argon2_error: Argon2Error) -> Self {
+    fn from(
+        argon2_error: Argon2Error
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("Argon2Error", argon2_error)));
     }
 }
 
 impl From<DotenvError> for BaseError {
-    fn from(dotenv_error: DotenvError) -> Self {
+    fn from(
+        dotenv_error: DotenvError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("DotenvError", dotenv_error)));
     }
 }
 
 impl From<Log4rsConfigErrors> for BaseError {
-    fn from(log4rs_config_errors: Log4rsConfigErrors) -> Self {
+    fn from(
+        log4rs_config_errors: Log4rsConfigErrors
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("Log4rsConfigErrors", log4rs_config_errors)));
     }
 }
 
 impl From<SetLoggerError> for BaseError {
-    fn from(set_logger_error: SetLoggerError) -> Self {
+    fn from(
+        set_logger_error: SetLoggerError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("SetLoggerError", set_logger_error)));
     }
 }
 
 impl From<FromUtf8Error> for BaseError {
-    fn from(from_utf8_error: FromUtf8Error) -> Self {
+    fn from(
+        from_utf8_error: FromUtf8Error
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("FromUtf8Error", from_utf8_error)));
     }
 }
 
 impl From<R2d2Error> for BaseError {
-    fn from(r2d2_error: R2d2Error) -> Self {
+    fn from(
+        r2d2_error: R2d2Error
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::ConnectionPoolError(r2d2_error)));
     }
 }
 
 impl From<PostgresError> for BaseError {
-    fn from(postgres_error: PostgresError) -> Self {
+    fn from(
+        postgres_error: PostgresError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlError(postgres_error)));
     }
 }
 
 impl From<DieselError> for BaseError {
-    fn from(diesel_error: DieselError) -> Self {
+    fn from(
+        diesel_error: DieselError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlXXXDELETEError(diesel_error)));
     }
 }
 
 impl From<RedisError> for BaseError {
-    fn from(redis_error: RedisError) -> Self {
+    fn from(
+        redis_error: RedisError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::RedisError(redis_error)));
     }
 }
 
 impl From<LettreEmailError> for BaseError {
-    fn from(lettre_email_error: LettreEmailError) -> Self {
+    fn from(
+        lettre_email_error: LettreEmailError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::EmailError(lettre_email_error))));
     }
 }
 
 impl From<LettreSmtpError> for BaseError {
-    fn from(lettre_smtp_error: LettreSmtpError) -> Self {
+    fn from(
+        lettre_smtp_error: LettreSmtpError
+    ) -> Self {
         return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::SmtpError(lettre_smtp_error))));
     }
 }

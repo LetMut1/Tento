@@ -7,7 +7,9 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn new(application_user_id: i64) -> Self {
+    pub fn new(
+        application_user_id: i64
+    ) -> Self {
         return Self {
             application_user_id
         };

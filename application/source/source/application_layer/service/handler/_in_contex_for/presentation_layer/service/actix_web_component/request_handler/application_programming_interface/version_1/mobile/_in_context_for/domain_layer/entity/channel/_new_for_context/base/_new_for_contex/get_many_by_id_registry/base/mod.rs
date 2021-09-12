@@ -13,7 +13,10 @@ pub struct Base;
 impl Base {
     const CHANNEL_ID_REGISTRY_LENGTH_LIMIT: usize = 30;
 
-    pub fn handle<'outer_a>(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> 
+    pub fn handle(
+        aggregate_connection_pool: Arc<AggregateConnectionPool>,
+        request: Request
+    ) -> Result<Response, BaseError> 
     {
         let channel_id_registry: String = request.get_channel_id_registry();
         

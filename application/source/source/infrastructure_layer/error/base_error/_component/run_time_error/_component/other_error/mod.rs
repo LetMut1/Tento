@@ -10,7 +10,10 @@ pub struct OtherError {
 }
 
 impl OtherError {
-    pub fn new<E>(description: &'static str, error: E) -> Self
+    pub fn new<E>(
+        description: &'static str,
+        error: E
+    ) -> Self
     where
         E: Error
     {
@@ -20,17 +23,24 @@ impl OtherError {
         };
     }
 
-    pub fn get_description<'this>(&'this self) -> &'static str {
+    pub fn get_description<'this>(
+        &'this self
+    ) -> &'static str {
         return self.description;
     }
 
-    pub fn get_displaying<'this>(&'this self) -> &'this str {
+    pub fn get_displaying<'this>(
+        &'this self
+    ) -> &'this str {
         return self.displaying.as_str();
     }
 }
 
 impl Display for OtherError {
-    fn fmt<'this, 'outer_a>(&'this self, _: &'outer_a mut Formatter<'_>) -> Result {
+    fn fmt<'this, 'outer_a>(
+        &'this self,
+        _: &'outer_a mut Formatter<'_>
+    ) -> Result {
         return Ok(());
     }
 }

@@ -19,7 +19,7 @@ where
     S: Service<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static
 {
-    service: S,
+    service: S
 }
 
 impl<S, B> AuthenticationResolver<S, B>
@@ -27,7 +27,9 @@ where
     S: Service<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static
 {
-    pub fn new(service: S) -> Self {
+    pub fn new(
+        service: S
+    ) -> Self {
         return Self {
             service
         };
@@ -44,11 +46,17 @@ where
     type Error = Error;
     type Future = Either<S::Future, Ready<Result<Self::Response, Self::Error>>>;
 
-    fn poll_ready<'this, 'outer_a>(&'this mut self, context: &'outer_a mut Context) -> Poll<Result<(), Self::Error>> {
+    fn poll_ready<'this, 'outer_a>(
+        &'this mut self,
+        context: &'outer_a mut Context
+    ) -> Poll<Result<(), Self::Error>> {
         return self.service.poll_ready(context);
     }
 
-    fn call<'this>(&'this mut self, service_request: ServiceRequest) -> Self::Future {
+    fn call<'this>(
+        &'this mut self,
+        service_request: ServiceRequest
+    ) -> Self::Future {
         if let Err(ref base_error) = HandlerBase::handle(&service_request) {
             match base_error {
                 BaseError::EntityError(entity_error) => {

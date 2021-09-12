@@ -19,7 +19,8 @@ pub struct AggregateConnectionPool {
 }
 
 impl AggregateConnectionPool {
-    pub fn new() -> Result<Self, BaseError> {
+    pub fn new(
+    ) -> Result<Self, BaseError> {
         return Ok (
             Self {
                 postgresql_connection_pool: Self::establish_postgresql_connection_pool()?,
@@ -29,23 +30,31 @@ impl AggregateConnectionPool {
         );
     }
 
-    pub fn get_postgresqlxxxxxxx_connection_pool<'this>(&'this self) -> &'this Pool<PostgresqlDELETEXXXConnectionManager<PostgresqlXXXDELETEConnection>> {
+    pub fn get_postgresqlxxxxxxx_connection_pool<'this>(
+        &'this self
+    ) -> &'this Pool<PostgresqlDELETEXXXConnectionManager<PostgresqlXXXDELETEConnection>> {
         return &self.postgresqlxxxxxdelete_connection_pool;
     }
 
-    pub fn get_postgresql_connection_pool<'this>(&'this self) -> &'this Pool<PostgresqlConnectionManager<NoTls>> {
+    pub fn get_postgresql_connection_pool<'this>(
+        &'this self
+    ) -> &'this Pool<PostgresqlConnectionManager<NoTls>> {
         return &self.postgresql_connection_pool;
     }
 
-    pub fn get_redis_connection_pool<'this>(&'this self) -> &'this Pool<RedisConnectionManager> {
+    pub fn get_redis_connection_pool<'this>(
+        &'this self
+    ) -> &'this Pool<RedisConnectionManager> {
         return &self.redis_connection_pool;
     }
 
-    fn establish_postgresqlxxxxxdelete_connection_pool() -> Result<Pool<PostgresqlDELETEXXXConnectionManager<PostgresqlXXXDELETEConnection>>, BaseError> {
+    fn establish_postgresqlxxxxxdelete_connection_pool(
+    ) -> Result<Pool<PostgresqlDELETEXXXConnectionManager<PostgresqlXXXDELETEConnection>>, BaseError> {
         return Ok(Pool::new(PostgresqlDELETEXXXConnectionManager::<PostgresqlXXXDELETEConnection>::new(EnvironmentVariableResolver::get_resource_postgresql_url()?))?);   // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix
     }
 
-    fn establish_postgresql_connection_pool() -> Result<Pool<PostgresqlConnectionManager<NoTls>>, BaseError> { // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix. Создать с tls
+    fn establish_postgresql_connection_pool(
+    ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, BaseError> { // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix. Создать с tls
         return Ok(
             Pool::new(
                 PostgresqlConnectionManager::new(
@@ -56,7 +65,8 @@ impl AggregateConnectionPool {
         );
     }
 
-    fn establish_redis_connection_pool() -> Result<Pool<RedisConnectionManager>, BaseError> { // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix
+    fn establish_redis_connection_pool(
+    ) -> Result<Pool<RedisConnectionManager>, BaseError> { // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix
         return Ok(
             Pool::new(
                 RedisConnectionManager::new(

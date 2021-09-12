@@ -31,7 +31,9 @@ impl ChannelFeedPublicationReaction {
         };
     }
 
-    pub fn get_id<'this>(&'this self) -> Result<&'this i64, BaseError> {
+    pub fn get_id<'this>(
+        &'this self
+    ) -> Result<&'this i64, BaseError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
@@ -42,27 +44,39 @@ impl ChannelFeedPublicationReaction {
         }
     }
 
-    pub fn get_channel_feed_publication_id<'this>(&'this self) -> &'this i64 {
+    pub fn get_channel_feed_publication_id<'this>(
+        &'this self
+    ) -> &'this i64 {
         return &self.channel_feed_publication_id;
     }
 
-    pub fn get_application_user_id<'this>(&'this self) -> &'this i64 {
+    pub fn get_application_user_id<'this>(
+        &'this self
+    ) -> &'this i64 {
         return &self.application_user_id;
     }
 
-    pub fn get_content_type<'this>(&'this self) -> &'this u8 {
+    pub fn get_content_type<'this>(
+        &'this self
+    ) -> &'this u8 {
         return &self.content_type;
     }
 
-    pub fn get_content_type_component<'this>(&'this self) -> &'this str {
+    pub fn get_content_type_component<'this>(
+        &'this self
+    ) -> &'this str {
         return self.content_type_component.as_str();
     }
 
-    pub fn get_public_marks_quantity<'this>(&'this self) -> &'this i64 {
+    pub fn get_public_marks_quantity<'this>(
+        &'this self
+    ) -> &'this i64 {
         return &self.public_marks_quantity;
     }
 
-    pub fn get_created_at<'this>(&'this self) -> &'this str {
+    pub fn get_created_at<'this>(
+        &'this self
+    ) -> &'this str {
         return self.created_at.as_str();
     }
 }

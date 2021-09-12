@@ -5,13 +5,16 @@ pub struct PreparedStatementParameterCounter {
 }
 
 impl PreparedStatementParameterCounter {
-    pub fn new() -> Self {
+    pub fn new(
+    ) -> Self {
         return Self {
             counter: 0
         };
     }
 
-    pub fn get_next<'this>(&'this mut self) -> Result<&'this u8, BaseError> {
+    pub fn get_next<'this>(
+        &'this mut self
+    ) -> Result<&'this u8, BaseError> {
         if self.counter == u8::max_value() {
             return Err(BaseError::LogicError("Out of range for `u8` type."));
         }

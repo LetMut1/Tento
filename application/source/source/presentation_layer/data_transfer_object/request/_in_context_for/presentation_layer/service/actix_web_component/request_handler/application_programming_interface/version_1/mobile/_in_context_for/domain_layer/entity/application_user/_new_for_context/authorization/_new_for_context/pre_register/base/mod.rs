@@ -7,7 +7,9 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn get_application_user_email(self) -> String {
+    pub fn get_application_user_email(
+        self
+    ) -> String {
         return self.application_user_email;
     }
 }

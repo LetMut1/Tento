@@ -15,7 +15,9 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 pub struct Base;
 
 impl Base {
-    pub fn handle<'outer_a>(service_request: &'outer_a ServiceRequest) -> Result<(), BaseError> {
+    pub fn handle<'outer_a>(
+        service_request: &'outer_a ServiceRequest
+    ) -> Result<(), BaseError> {
         if let Some(data) = service_request.app_data::<Data<AggregateConnectionPool>>() {
             if let Some(x_auth_token_header_value) = service_request.headers().get("X-Auth-Token") {
                 if let Ok(header_value) = x_auth_token_header_value.to_str() {

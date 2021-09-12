@@ -9,7 +9,9 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn into_inner(self) -> (String, String) {
+    pub fn into_inner(
+        self
+    ) -> (String, String) {
         return (
             self.json_access_web_token, 
             self.json_refresh_web_token

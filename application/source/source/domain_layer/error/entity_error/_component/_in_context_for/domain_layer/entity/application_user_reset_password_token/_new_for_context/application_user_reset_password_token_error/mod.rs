@@ -6,11 +6,14 @@ use std::fmt::Result;
 #[derive(Debug)]
 pub enum ApplicationUserResetPasswordTokenError {
     InvalidValue,
-    NotFound,
+    NotFound
 }
 
 impl Display for ApplicationUserResetPasswordTokenError {
-    fn fmt<'this, 'outer_a>(&'this self, _: &'outer_a mut Formatter<'_>) -> Result {
+    fn fmt<'this, 'outer_a>(
+        &'this self,
+        _: &'outer_a mut Formatter<'_>
+    ) -> Result {
         return Ok(());
     }
 }

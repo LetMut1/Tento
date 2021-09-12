@@ -19,7 +19,9 @@ impl ApplicationUserSubscription {
         };
     }
 
-    pub fn get_id<'this>(&'this self) -> Result<&'this i64, BaseError> {
+    pub fn get_id<'this>(
+        &'this self
+    ) -> Result<&'this i64, BaseError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
@@ -30,11 +32,15 @@ impl ApplicationUserSubscription {
         }
     }
 
-    pub fn get_publisher_application_user_id<'this>(&'this self) -> &'this i64 {
+    pub fn get_publisher_application_user_id<'this>(
+        &'this self
+    ) -> &'this i64 {
         return &self.publisher_application_user_id;
     }
 
-    pub fn get_subscriber_application_user_id<'this>(&'this self) -> &'this i64 {
+    pub fn get_subscriber_application_user_id<'this>(
+        &'this self
+    ) -> &'this i64 {
         return &self.subscriber_application_user_id;
     }
 }

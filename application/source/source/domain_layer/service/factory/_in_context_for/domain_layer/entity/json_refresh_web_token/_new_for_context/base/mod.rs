@@ -8,7 +8,8 @@ pub struct Base;
 
 impl Base {
     pub fn new_from_id_registry<'outer_a>(
-        application_user_id: &'outer_a i64, application_user_log_in_token_device_id: &'outer_a str
+        application_user_id: &'outer_a i64,
+        application_user_log_in_token_device_id: &'outer_a str
     ) -> JsonRefreshWebToken<'outer_a> {
         return JsonRefreshWebToken::new(
             Uuid::new_v4().to_string(),
@@ -18,7 +19,9 @@ impl Base {
         );
     }
 
-    pub fn new_from_common(common: Common<'_>) -> JsonRefreshWebToken<'_> {
+    pub fn new_from_common(
+        common: Common<'_>
+    ) -> JsonRefreshWebToken<'_> {
         let (
             json_access_web_token_id,
             application_user_id,

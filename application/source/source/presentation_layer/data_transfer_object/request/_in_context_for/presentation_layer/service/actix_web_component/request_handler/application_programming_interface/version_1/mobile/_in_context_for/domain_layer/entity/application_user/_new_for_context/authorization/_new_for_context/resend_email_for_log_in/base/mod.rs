@@ -9,7 +9,9 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn into_inner(self) -> (String, i64) {
+    pub fn into_inner(
+        self
+    ) -> (String, i64) {
         return (
             self.application_user_log_in_token_device_id, 
             self.application_user_id

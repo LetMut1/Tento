@@ -7,7 +7,9 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn get_id(self) -> i64 {
+    pub fn get_id(
+        self
+    ) -> i64 {
         return self.channel_id;
     }
 }

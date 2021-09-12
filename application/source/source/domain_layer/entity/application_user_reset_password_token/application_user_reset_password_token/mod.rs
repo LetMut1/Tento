@@ -25,7 +25,9 @@ impl<'outer_a> ApplicationUserResetPasswordToken<'outer_a> {
         };
     }
 
-    pub fn increment_wrong_enter_tries_quantity<'this>(&'this mut self) -> Result<&'this mut Self, BaseError> {
+    pub fn increment_wrong_enter_tries_quantity<'this>(
+        &'this mut self
+    ) -> Result<&'this mut Self, BaseError> {
         if self.wrong_enter_tries_quantity == u8::max_value() {
             return Err(BaseError::LogicError("Out of range for `u8` type."));
         }
@@ -35,19 +37,27 @@ impl<'outer_a> ApplicationUserResetPasswordToken<'outer_a> {
         return Ok(self);
     }
 
-    pub fn get_application_user_id<'this>(&'this self) -> &'this i64 {
+    pub fn get_application_user_id<'this>(
+        &'this self
+    ) -> &'this i64 {
         return self.application_user_id;
     }
 
-    pub fn get_application_user_email<'this>(&'this self) -> &'this str {
+    pub fn get_application_user_email<'this>(
+        &'this self
+    ) -> &'this str {
         return self.application_user_email.as_ref();
     }
 
-    pub fn get_value<'this>(&'this self) -> &'this str {
+    pub fn get_value<'this>(
+        &'this self
+    ) -> &'this str {
         return self.value.as_str();
     }
 
-    pub fn get_wrong_enter_tries_quantity<'this>(&'this self) -> &'this u8 {
+    pub fn get_wrong_enter_tries_quantity<'this>(
+        &'this self
+    ) -> &'this u8 {
         return &self.wrong_enter_tries_quantity;
     }
 }

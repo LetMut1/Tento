@@ -10,7 +10,8 @@ use crypto::sha2::Sha512;
 pub struct Encoder;
 
 impl Encoder {
-    fn get_configured_hmac() -> Result<Hmac<Sha512>, BaseError> {
+    fn get_configured_hmac(
+    ) -> Result<Hmac<Sha512>, BaseError> {
         return Ok(Hmac::new(Sha512::new(), EnvironmentVariableResolver::get_security_jrwt_encoding_private_key()?.as_bytes()));
     }
 }

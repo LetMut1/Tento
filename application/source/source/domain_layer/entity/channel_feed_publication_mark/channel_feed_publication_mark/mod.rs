@@ -22,7 +22,9 @@ impl ChannelFeedPublicationMark {
         };
     }
 
-    pub fn get_id<'this>(&'this self) -> Result<&'this i64, BaseError> {
+    pub fn get_id<'this>(
+        &'this self
+    ) -> Result<&'this i64, BaseError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
@@ -33,15 +35,21 @@ impl ChannelFeedPublicationMark {
         }
     }
 
-    pub fn get_application_user_id<'this>(&'this self) -> &'this i64 {
+    pub fn get_application_user_id<'this>(
+        &'this self
+    ) -> &'this i64 {
         return &self.application_user_id;
     }
 
-    pub fn get_channel_feed_publication_id<'this>(&'this self) -> &'this i64 {
+    pub fn get_channel_feed_publication_id<'this>(
+        &'this self
+    ) -> &'this i64 {
         return &self.channel_feed_publication_id;
     }
 
-    pub fn get_type<'this>(&'this self) -> &'this u8 {
+    pub fn get_type<'this>(
+        &'this self
+    ) -> &'this u8 {
         return &self.r#type;
     }
 }

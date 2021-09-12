@@ -11,7 +11,9 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn into_inner(self) -> (Option<String>, i8, i8) {
+    pub fn into_inner(
+        self
+    ) -> (Option<String>, i8, i8) {
         return (
             self.channel_created_at,
             self.order,

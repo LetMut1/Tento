@@ -4,7 +4,9 @@ use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastr
 pub struct Base;
 
 impl Base {
-    pub fn new_from_email(email: String) -> ApplicationUserPreConfirmed {
+    pub fn new_from_email(
+        email: String
+    ) -> ApplicationUserPreConfirmed {
         return ApplicationUserPreConfirmed::new(
             None,
             email,
@@ -12,7 +14,9 @@ impl Base {
         );
     }
 
-    pub fn new_from_select(select: Select) -> ApplicationUserPreConfirmed {
+    pub fn new_from_select(
+        select: Select
+    ) -> ApplicationUserPreConfirmed {
         let (
             id,
             application_user_email,

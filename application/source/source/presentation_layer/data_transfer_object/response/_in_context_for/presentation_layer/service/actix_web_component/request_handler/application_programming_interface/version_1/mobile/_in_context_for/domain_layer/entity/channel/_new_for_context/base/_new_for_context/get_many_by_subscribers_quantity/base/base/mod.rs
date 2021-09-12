@@ -8,7 +8,9 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn new(channel_registry: Option<Vec<Channel>>) -> Self {
+    pub fn new(
+        channel_registry: Option<Vec<Channel>>
+    ) -> Self {
         return Self {
             channel_registry
         };

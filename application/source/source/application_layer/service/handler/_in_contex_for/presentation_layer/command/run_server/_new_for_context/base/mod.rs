@@ -24,7 +24,8 @@ use std::path::PathBuf;
 pub struct Base;
 
 impl Base {
-    pub async fn handle() -> Result<(), BaseError> {
+    pub async fn handle(
+    ) -> Result<(), BaseError> {
         Self::load_and_check_environment_variables()?;
         Self::configure_log()?;
         Self::run_http_server().await?;
@@ -32,7 +33,8 @@ impl Base {
         return Ok(());
     }
 
-    fn load_and_check_environment_variables() -> Result<(), BaseError> {
+    fn load_and_check_environment_variables(
+    ) -> Result<(), BaseError> {
         // TODO Ближе к релизу разобраться, как лучше работать с файлами. (То есть, как использовать относительный(relative) пути.)
         // TODO !!!!!!!!!!! Разобраться с путями для ЛООГГЕРА  !!!!!!!!!!!!!!!!
         // TODO Переписать содержимое метода в контексте нахождения директории для .env --------------------------------------------- 
@@ -71,7 +73,8 @@ impl Base {
         }
     }
 
-    fn check_environment_variables() -> Result<(), BaseError> {
+    fn check_environment_variables(
+    ) -> Result<(), BaseError> {
         EnvironmentVariableResolver::is_production()?;
         EnvironmentVariableResolver::get_server_socket_address()?;
         EnvironmentVariableResolver::get_logger_roller_log_file_name()?;
@@ -86,7 +89,8 @@ impl Base {
         return Ok(());
     }
 
-    fn configure_log() -> Result<(), BaseError> {
+    fn configure_log(
+    ) -> Result<(), BaseError> {
         let fixed_window_roller: FixedWindowRoller = FixedWindowRoller::builder()
         .base(1)
         .build(EnvironmentVariableResolver::get_logger_roller_log_file_name()?.as_str(), 10)?;
@@ -112,7 +116,8 @@ impl Base {
         return Ok(());
     }
 
-    async fn run_http_server() -> Result<(), BaseError> {
+    async fn run_http_server(
+    ) -> Result<(), BaseError> {
         let aggregate_connection_pool: AggregateConnectionPool = AggregateConnectionPool::new()?;
 
         HttpServer::new(
@@ -129,7 +134,9 @@ impl Base {
         return Ok(());
     }
 
-    fn configure_http_server<'outer_a>(service_config: &'outer_a mut ServiceConfig) -> () {
+    fn configure_http_server<'outer_a>(
+        service_config: &'outer_a mut ServiceConfig
+    ) -> () {
         service_config     // TODO default_service 
         .service(
             web::scope("/v1")
