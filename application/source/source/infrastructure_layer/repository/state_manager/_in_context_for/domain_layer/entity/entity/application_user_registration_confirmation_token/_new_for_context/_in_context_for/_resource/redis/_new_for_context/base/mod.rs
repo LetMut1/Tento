@@ -10,10 +10,12 @@ use redis::Connection;
 pub struct Base;
 
 impl StateManagerApplicationUserRegistrationConfirmationTokenRedisTrait for Base {
+    type Error = BaseError;
+
     fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), Self::Error> {
         connection.set_ex::<String, String, ()>(
             StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                 application_user_registration_confirmation_token.get_application_user_pre_confirmed_id()
@@ -28,7 +30,7 @@ impl StateManagerApplicationUserRegistrationConfirmationTokenRedisTrait for Base
     fn delete<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
             StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                 application_user_registration_confirmation_token.get_application_user_pre_confirmed_id()
@@ -41,7 +43,7 @@ impl StateManagerApplicationUserRegistrationConfirmationTokenRedisTrait for Base
     fn update_expiration_time<'outer_a>(
         connection: &'outer_a mut Connection,
         application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), Self::Error> {
         connection.expire::<String, ()>(
             StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
                 application_user_registration_confirmation_token.get_application_user_pre_confirmed_id()

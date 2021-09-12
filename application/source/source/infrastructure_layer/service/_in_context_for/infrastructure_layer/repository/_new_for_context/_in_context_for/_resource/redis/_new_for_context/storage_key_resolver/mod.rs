@@ -1,8 +1,3 @@
-use crate::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
-use crate::domain_layer::entity::entity::application_user_pre_confirmed::_component::id::Id as ApplicationUserPreConfirmedId;
-use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
-use crate::domain_layer::entity::entity::json_access_web_token::_component::payload::_component::id::Id as JsonAccessWebTokenId;
-
 pub struct StorageKeyResolver;
 
 impl StorageKeyResolver {
@@ -14,44 +9,45 @@ impl StorageKeyResolver {
     const PREFIX_SERVICE_JSON_REFRESH_WEB_TOKEN_FIRST: &'static str = "u:jsreweto:1:";
 
     pub fn get_repository_application_user_log_in_token_first<'outer_a>(
-        application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId
+        application_user_id: &'outer_a i64,
+        application_user_log_in_token_device_id: &'outer_a str
     ) -> String {
         return Self::PREFIX_REPOSITORY_APPLICATION_USER_LOG_IN_TOKEN_FIRST.to_string()
-        + application_user_id.get_value().to_string().as_str()  + ":"
-        + application_user_log_in_token_device_id.get_value().get_value().to_string().as_str();
+        + application_user_id.to_string().as_str()  + ":" + application_user_log_in_token_device_id;
     }
     
     pub fn get_repository_application_user_registration_confirmation_token_first<'outer_a>(
-        application_user_pre_confirmed_id: &'outer_a ApplicationUserPreConfirmedId
+        application_user_pre_confirmed_id: &'outer_a i64
     ) -> String {
         return Self::PREFIX_REPOSITORY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST.to_string()
-        + application_user_pre_confirmed_id.get_value().to_string().as_str();
+        + application_user_pre_confirmed_id.to_string().as_str();
     }
 
     pub fn get_repository_application_user_reset_password_token_first<'outer_a>(
-        application_user_id: &'outer_a ApplicationUserId,
+        application_user_id: &'outer_a i64,
     ) -> String {
         return Self::PREFIX_REPOSITORY_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST.to_string()
-        + application_user_id.get_value().to_string().as_str();
+        + application_user_id.to_string().as_str();
     }
 
     pub fn get_repository_json_access_web_token_bkack_list_first<'outer_a>(
-        json_access_web_token_id: &'outer_a JsonAccessWebTokenId
+        json_access_web_token_id: &'outer_a str
     ) -> String {
-        return Self::PREFIX_REPOSITORY_JSON_ACCESS_WEB_TOKEN_BLACK_LIST_FIRST.to_string()
-        + json_access_web_token_id.get_value().get_value().to_string().as_str();
+        return Self::PREFIX_REPOSITORY_JSON_ACCESS_WEB_TOKEN_BLACK_LIST_FIRST.to_string() + json_access_web_token_id;
     }
 
     pub fn get_repository_json_refresh_web_token_first<'outer_a>(
-        application_user_id: &'outer_a ApplicationUserId, application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId,
+        application_user_id: &'outer_a i64,
+        application_user_log_in_token_device_id: &'outer_a str,
     ) -> String {
         return Self::PREFIX_REPOSITORY_JSON_REFRESH_WEB_TOKEN_FIRST.to_string()
-        + application_user_id.get_value().to_string().as_str() + ":"
-        + application_user_log_in_token_device_id.get_value().get_value().to_string().as_str();
+        + application_user_id.to_string().as_str() + ":" + application_user_log_in_token_device_id;
     }
 
-    pub fn get_service_json_refresh_web_token_first<'outer_a>(application_user_id: &'outer_a ApplicationUserId) -> String {
+    pub fn get_service_json_refresh_web_token_first<'outer_a>(
+        application_user_id: &'outer_a i64
+    ) -> String {
         return Self::PREFIX_SERVICE_JSON_REFRESH_WEB_TOKEN_FIRST.to_string()
-        + application_user_id.get_value().to_string().as_str();
+        + application_user_id.to_string().as_str();
     }
 }

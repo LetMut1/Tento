@@ -1,5 +1,3 @@
-use crate::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
-use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderJsonRefreshWebTokenRedisTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
@@ -12,17 +10,19 @@ use redis::Connection;
 pub struct Base;
 
 impl DataProviderJsonRefreshWebTokenRedisTrait for Base {
+    type Error = BaseError;
+
     fn get_by_application_user_id_and_application_user_log_in_token_device_id<'outer_a>(
         connection: &'outer_a mut Connection, 
-        application_user_id: &'outer_a ApplicationUserId, 
-        application_user_log_in_token_device_id: &'outer_a ApplicationUserLogInTokenDeviceId,
-    ) -> Result<Option<JsonRefreshWebToken<'static>>, BaseError> {
+        application_user_id: &'outer_a i64, 
+        application_user_log_in_token_device_id: &'outer_a str,
+    ) -> Result<Option<JsonRefreshWebToken<'static>>, Self::Error> {
         match connection.get::<String, Option<String>>(
             StorageKeyResolver::get_repository_json_refresh_web_token_first(application_user_id, application_user_log_in_token_device_id)
         )?
         {
             Some(json_encoded_common) => {
-                return Ok(Some(JsonRefreshWebTokenFactory::new_from_common(serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?)?));
+                return Ok(Some(JsonRefreshWebTokenFactory::new_from_common(serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?)));
             },
             None => {
                 return Ok(None);
@@ -32,14 +32,14 @@ impl DataProviderJsonRefreshWebTokenRedisTrait for Base {
 
     fn get_by_application_user_id_and_application_user_log_in_token_device_id_registry<'outer_a>(
         connection: &'outer_a mut Connection, 
-        application_user_id: &'outer_a ApplicationUserId, 
+        application_user_id: &'outer_a i64, 
         application_user_log_in_token_device_id_registry: Vec<String>
-    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, BaseError> {
+    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, Self::Error> {
         let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = Vec::new();
 
         for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
             if let Some(json_refresh_web_token) = Self::get_by_application_user_id_and_application_user_log_in_token_device_id(
-                connection, application_user_id, &ApplicationUserLogInTokenDeviceId::new_from_string(application_user_log_in_token_device_id)?
+                connection, application_user_id, application_user_log_in_token_device_id.as_str()
             )?
             {
                 json_refresh_web_token_registry.push(json_refresh_web_token);

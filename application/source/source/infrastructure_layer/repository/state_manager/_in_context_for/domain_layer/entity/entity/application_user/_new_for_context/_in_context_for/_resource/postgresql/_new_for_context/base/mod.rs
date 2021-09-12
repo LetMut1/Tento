@@ -13,9 +13,12 @@ use diesel::RunQueryDsl;
 pub struct Base;
 
 impl StateManagerApplicationUserPostgresqlTrait for Base {
+    type Error = BaseError;
+
     fn create<'outer_a>(
-        connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'_>
-    ) -> Result<(), BaseError> {
+        connection: &'outer_a Connection,
+        application_user: &'outer_a ApplicationUser<'_>
+    ) -> Result<(), Self::Error> {
         diesel::insert_into(application_user_schema::table).values(Insert::new(application_user))
         .execute(connection)?;  // TODO нужно ли обработать количество вернувшихся строк
 
@@ -23,9 +26,11 @@ impl StateManagerApplicationUserPostgresqlTrait for Base {
     }
 
     fn update<'outer_a>(
-        connection: &'outer_a Connection, application_user: &'outer_a ApplicationUser<'_>, update_resolver: UpdateResolver
-    ) -> Result<(), BaseError> {
-        diesel::update(application_user_schema::table.filter(application_user_schema::id.eq(application_user.get_id()?.get_value())))
+        connection: &'outer_a Connection,
+        application_user: &'outer_a ApplicationUser<'_>,
+        update_resolver: UpdateResolver
+    ) -> Result<(), Self::Error> {
+        diesel::update(application_user_schema::table.filter(application_user_schema::id.eq(application_user.get_id()?)))
         .set(&Update::new(application_user, update_resolver)).execute(connection)?;
 
         return Ok(());

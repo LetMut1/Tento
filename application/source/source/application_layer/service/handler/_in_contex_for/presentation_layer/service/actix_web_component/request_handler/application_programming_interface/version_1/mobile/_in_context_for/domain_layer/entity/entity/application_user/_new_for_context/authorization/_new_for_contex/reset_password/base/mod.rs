@@ -1,6 +1,4 @@
 use crate::domain_layer::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
-use crate::domain_layer::entity::entity::application_user::_component::password::Password;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
@@ -38,21 +36,18 @@ impl Base {
             String
         ) = request.into_inner();
 
-        let application_user_password: Password = Password::new(application_user_password);
-        if ApplicationUserComponentValidator::is_valid_password(&application_user_password) {
-            let application_user_id: ApplicationUserId = ApplicationUserId::new(application_user_id);
-            
+        if ApplicationUserComponentValidator::is_valid_password(application_user_password.as_str()) {
             let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
             if let Some(mut application_user_reset_password_token) = DataProviderApplicationUserResetPasswordTokenRedis::get_by_application_user_id(
                 redis_connection, &application_user_id
             )? 
             {
-                if application_user_reset_password_token.get_value().get_value() == application_user_reset_password_token_value.as_str() {
+                if application_user_reset_password_token.get_value()== application_user_reset_password_token_value.as_str() {
                     let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
 
                     if let Some(mut application_user) = DataProviderApplicationUserPostgresql::get_by_id(postgresql_connection, &application_user_id)? {
-                        application_user.set_password_hash(PasswordHashResolver::create(&application_user_password)?);
+                        application_user.set_password_hash(PasswordHashResolver::create(application_user_password.as_str())?);
 
                         StateManagerApplicationUserPostgresql::update(postgresql_connection, &application_user, UpdateResolver::new(false, false, true, false))?;
 
@@ -66,7 +61,7 @@ impl Base {
 
                 application_user_reset_password_token.increment_wrong_enter_tries_quantity();
 
-                if application_user_reset_password_token.get_wrong_enter_tries_quantity().get_value() >= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                if *application_user_reset_password_token.get_wrong_enter_tries_quantity() >= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                     StateManagerApplicationUserResetPasswordTokenRedis::delete(redis_connection, &application_user_reset_password_token)?;
                 }
 

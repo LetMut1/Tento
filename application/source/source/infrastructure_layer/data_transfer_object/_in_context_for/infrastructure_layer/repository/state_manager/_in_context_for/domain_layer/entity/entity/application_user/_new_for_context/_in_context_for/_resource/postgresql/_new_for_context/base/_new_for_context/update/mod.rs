@@ -11,30 +11,33 @@ pub struct Update<'outer_a> {
     email: Option<&'outer_a str>,
     nickname: Option<&'outer_a str>,
     password_hash: Option<&'outer_a str>,
-    created_at: Option<&'outer_a ChronoDateTime<Utc>>
+    created_at: Option<ChronoDateTime<Utc>>
 }
 
 impl<'outer_a> Update<'outer_a> {
-    pub fn new(application_user: &'outer_a ApplicationUser<'_>, update_resolver: UpdateResolver) -> Self {
+    pub fn new(
+        application_user: &'outer_a ApplicationUser<'_>,
+        update_resolver: UpdateResolver
+    ) -> Self {
         let mut email: Option<&'outer_a str> = None;
         let mut nickname: Option<&'outer_a str> = None;
         let mut password_hash: Option<&'outer_a str> = None;
-        let mut created_at: Option<&'outer_a ChronoDateTime<Utc>> = None;
+        let mut created_at: Option<ChronoDateTime<Utc>> = None;
 
         if update_resolver.is_change_email() {
-            email = Some(application_user.get_email().get_value());
+            email = Some(application_user.get_email());
         }
 
         if update_resolver.is_change_nickname() {
-            nickname = Some(application_user.get_nickname().get_value());
+            nickname = Some(application_user.get_nickname());
         }
 
         if update_resolver.is_change_password_hash() {
-            password_hash = Some(application_user.get_password_hash().get_value());
+            password_hash = Some(application_user.get_password_hash());
         }
 
         if update_resolver.is_change_created_at() {
-            created_at = Some(application_user.get_created_at().get_value().get_value());
+            created_at = Some(Utc::now());  // TODO DElete
         }
 
         return Self {

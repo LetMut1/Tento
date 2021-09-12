@@ -8,14 +8,16 @@ use diesel::Insertable;
 #[table_name = "pre_confirmed_application_user"]
 pub struct Insert<'outer_a> {
     email: &'outer_a str,
-    created_at: &'outer_a ChronoDateTime<Utc>
+    created_at: ChronoDateTime<Utc>
 }
 
 impl<'outer_a> Insert<'outer_a> {
-    pub fn new(application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed) -> Self {
+    pub fn new(
+        application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
+    ) -> Self {
         return Self {
-            email: application_user_pre_confirmed.get_application_user_email().get_value(),
-            created_at: application_user_pre_confirmed.get_created_at().get_value().get_value()
+            email: application_user_pre_confirmed.get_application_user_email(),
+            created_at: Utc::now()  // TODO DELEYE
         };
     }
 }

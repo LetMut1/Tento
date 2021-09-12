@@ -1,8 +1,4 @@
-use crate::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::domain_layer::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
-use crate::domain_layer::entity::entity::application_user::_component::email::Email;
-use crate::domain_layer::entity::entity::application_user::_component::nickname::Nickname;
-use crate::domain_layer::entity::entity::application_user::_component::password::Password;
 use crate::domain_layer::entity::entity::application_user::application_user::ApplicationUser;
 use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_pre_confirmed::_new_for_context::application_user_pre_confirmed_error::ApplicationUserPreConfirmedError;
@@ -61,30 +57,21 @@ impl Base {
             String
         ) = request.into_inner();
 
-        let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
-            application_user_log_in_token_device_id
-        )?;
-
-        let application_user_nickname: Nickname = Nickname::new(application_user_nickname);
-
-        let application_user_email: Email = Email::new(application_user_email);
-
-        let application_user_password: Password = Password::new(application_user_password);
-        if ApplicationUserComponentValidator::is_valid_password(&application_user_password) {
-            if ApplicationUserComponentValidator::is_valid_nickname(&application_user_nickname) {
+        if ApplicationUserComponentValidator::is_valid_password(application_user_password.as_str()) {
+            if ApplicationUserComponentValidator::is_valid_nickname(application_user_nickname.as_str()) {
                 let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
 
-                if !DataProviderApplicationUserPostgresql::is_exist_by_nickanme(postgresql_connection, &application_user_nickname)? {
-                    if let Some(application_user_pre_confirmed) = DataProviderApplicationUserPreConfirmedPostgesql::get_by_application_user_email(postgresql_connection, &application_user_email)? {
+                if !DataProviderApplicationUserPostgresql::is_exist_by_nickanme(postgresql_connection, application_user_nickname.as_str())? {
+                    if let Some(application_user_pre_confirmed) = DataProviderApplicationUserPreConfirmedPostgesql::get_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
                         let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
                         if let Some(mut application_user_registration_confirmation_token) = DataProviderApplicationUserRegistrationConfirmationTokenRedis::get_by_application_user_pre_confirmed_id(
                             redis_connection, application_user_pre_confirmed.get_id()?
                         )? 
                         {
-                            if application_user_registration_confirmation_token.get_value().get_value() == application_user_registration_confirmation_token_value.as_str() {
+                            if application_user_registration_confirmation_token.get_value() == application_user_registration_confirmation_token_value.as_str() {
                                 let application_user: ApplicationUser<'_> = ApplicationUserFactory::new_from_application_user_pre_confirmed(
-                                    &application_user_pre_confirmed, application_user_nickname, PasswordHashResolver::create(&application_user_password)?
+                                    &application_user_pre_confirmed, application_user_nickname, PasswordHashResolver::create(application_user_password.as_str())?
                                 );
 
                                 StateManagerApplicationUserRegistrationConfirmationTokenRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
@@ -105,7 +92,7 @@ impl Base {
                                 
                                 TransactionManager::commit_transaction(postgresql_connection)?;
 
-                                let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::new_from_id_registry(application_user.get_id()?, &application_user_log_in_token_device_id);
+                                let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::new_from_id_registry(application_user.get_id()?, application_user_log_in_token_device_id.as_str());
 
                                 RepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
 
@@ -118,7 +105,7 @@ impl Base {
 
                             application_user_registration_confirmation_token.increment_wrong_enter_tries_quantity();
 
-                            if application_user_registration_confirmation_token.get_wrong_enter_tries_quantity().get_value() >= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                            if *application_user_registration_confirmation_token.get_wrong_enter_tries_quantity() >= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                 StateManagerApplicationUserRegistrationConfirmationTokenRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
                             }
                             
@@ -128,7 +115,7 @@ impl Base {
                         return Err(BaseError::EntityError(EntityError::ApplicationUserRegistrationConfirmationTokenError(ApplicationUserRegistrationConfirmationTokenError::NotFound)));
                     }
 
-                    if DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection, &application_user_email)? {
+                    if DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
                         return Err(BaseError::EntityError(EntityError::ApplicationUserPreConfirmedError(ApplicationUserPreConfirmedError::AlreadyConfirmed)));
                     }
                     

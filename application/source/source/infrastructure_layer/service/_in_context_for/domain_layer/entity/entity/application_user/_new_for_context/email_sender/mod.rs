@@ -7,13 +7,15 @@ use crate::infrastructure_layer::service::email_sender::EmailSender as BaseEmail
 
 pub struct EmailSender;
 
-impl EmailSenderTrait for EmailSender {
+impl EmailSenderTrait for EmailSender {     // TODO все &'static str в константы? Тогда пройтись по всему приложению и проверить, везде ли так.
+    type Error = BaseError;
+
     fn send_application_user_log_in_token<'outer_a>(
         application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), Self::Error> {
         BaseEmailSender::send(
-            "Log in confirmation", "Your code: ".to_string() + application_user_log_in_token.get_value().get_value(),
-            application_user_log_in_token.get_application_user_email().get_value()
+            "Log in confirmation", "Your code: ".to_string() + application_user_log_in_token.get_value(),
+            application_user_log_in_token.get_application_user_email()
         )?;
 
         return Ok(());
@@ -21,11 +23,11 @@ impl EmailSenderTrait for EmailSender {
 
     fn send_application_user_registration_confirmation_token<'outer_a>(
         application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), Self::Error> {
         BaseEmailSender::send(
             "Registration confirmation", 
-            "Your code: ".to_string() + application_user_registration_confirmation_token.get_value().get_value(), 
-            application_user_registration_confirmation_token.get_application_user_email().get_value()
+            "Your code: ".to_string() + application_user_registration_confirmation_token.get_value(), 
+            application_user_registration_confirmation_token.get_application_user_email()
         )?;
 
         return Ok(());
@@ -33,11 +35,11 @@ impl EmailSenderTrait for EmailSender {
 
     fn send_application_user_reset_password_token<'outer_a>(
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), Self::Error> {
         BaseEmailSender::send(
             "Reset password confirmation",
-            "Your code: ".to_string() + application_user_reset_password_token.get_value().get_value(), 
-            application_user_reset_password_token.get_application_user_email().get_value()
+            "Your code: ".to_string() + application_user_reset_password_token.get_value(), 
+            application_user_reset_password_token.get_application_user_email()
         )?;
 
         return Ok(());

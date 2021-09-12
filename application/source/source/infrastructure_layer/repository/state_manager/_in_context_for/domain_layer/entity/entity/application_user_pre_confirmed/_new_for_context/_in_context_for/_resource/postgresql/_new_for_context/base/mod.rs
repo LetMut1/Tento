@@ -11,9 +11,12 @@ use diesel::RunQueryDsl;
 pub struct Base;
 
 impl StateManagerApplicationUserPreConfirmedPostgesqlTrait for Base {
+    type Error = BaseError;
+
     fn create<'outer_a>(
-        connection: &'outer_a Connection, application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
-    ) -> Result<(), BaseError> {
+        connection: &'outer_a Connection,
+        application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
+    ) -> Result<(), Self::Error> {
         diesel::insert_into(pre_confirmed_application_user_schema::table).values(Insert::new(application_user_pre_confirmed))
         .execute(connection)?;   // TODO нужно ли обработать количество вернувшихся строк
 
@@ -21,11 +24,12 @@ impl StateManagerApplicationUserPreConfirmedPostgesqlTrait for Base {
     }
 
     fn delete<'outer_a>(
-        connection: &'outer_a Connection, application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
-    ) -> Result<(), BaseError> {
+        connection: &'outer_a Connection,
+        application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
+    ) -> Result<(), Self::Error> {
         diesel::delete(
             pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::id.eq(
-                application_user_pre_confirmed.get_id()?.get_value()
+                application_user_pre_confirmed.get_id()?
             ))
         ).execute(connection)?;
 

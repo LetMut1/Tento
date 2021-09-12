@@ -16,7 +16,11 @@ impl Encoder {
 }
 
 impl EncoderTrait for Encoder {
-    fn encode<'outer_a>(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>) -> Result<String, BaseError> {
+    type Error = BaseError;
+
+    fn encode<'outer_a>(
+        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    ) -> Result<String, Self::Error> {
         let mut hmac: Hmac<Sha512> = Self::get_configured_hmac()?;
         
         hmac.input(serde_json::to_string(&Common::new(json_refresh_web_token))?.as_bytes());
@@ -24,7 +28,10 @@ impl EncoderTrait for Encoder {
         return Ok(hex::encode(hmac.result().code()));   // TODO time attac
     }
 
-    fn is_valid<'outer_a>(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>, json_refresh_web_token_hash: &'outer_a str) -> Result<bool, BaseError> {
+    fn is_valid<'outer_a>(
+        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>,
+        json_refresh_web_token_hash: &'outer_a str
+    ) -> Result<bool, Self::Error> {
         return Ok(Self::encode(json_refresh_web_token)?.as_str() == json_refresh_web_token_hash);
     }
 }

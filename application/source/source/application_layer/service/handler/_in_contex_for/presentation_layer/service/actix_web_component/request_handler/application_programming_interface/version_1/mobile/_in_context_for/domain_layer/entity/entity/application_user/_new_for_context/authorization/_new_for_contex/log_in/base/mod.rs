@@ -1,6 +1,4 @@
-use crate::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::domain_layer::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::json_access_web_token_black_list::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
@@ -34,26 +32,22 @@ pub struct Base;
 impl Base {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let (
-            application_user_log_in_token_device_id, 
-            application_user_id, 
+            application_user_id,
+            application_user_log_in_token_device_id,  
             application_user_log_in_token_value
         ) : (
-            String,
             i64,
+            String,
             String
         ) = request.into_inner();
-
-        let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
-            application_user_log_in_token_device_id
-        )?;
 
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
         if let Some(mut application_user_log_in_token) = DataProviderApplicationUserLogInTokenRedis::get_by_application_user_id_and_device_id(
-            connection, &ApplicationUserId::new(application_user_id), &application_user_log_in_token_device_id
+            connection, &application_user_id, application_user_log_in_token_device_id.as_str()
         )?
         {
-            if application_user_log_in_token.get_value().get_value() == application_user_log_in_token_value.as_str() {
+            if application_user_log_in_token.get_value() == application_user_log_in_token_value.as_str() {
                 if let Some(existing_json_refresh_web_token) = DataProviderJsonRefreshWebTokenRedis::get_by_application_user_id_and_application_user_log_in_token_device_id(
                     connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 )? 
@@ -81,7 +75,7 @@ impl Base {
 
             application_user_log_in_token.increment_wrong_enter_tries_quantity();
 
-            if application_user_log_in_token.get_wrong_enter_tries_quantity().get_value() >= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+            if *application_user_log_in_token.get_wrong_enter_tries_quantity() >= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 StateManagerApplicationUserLogInTokenRedis::delete(connection, &application_user_log_in_token)?;
             }
             

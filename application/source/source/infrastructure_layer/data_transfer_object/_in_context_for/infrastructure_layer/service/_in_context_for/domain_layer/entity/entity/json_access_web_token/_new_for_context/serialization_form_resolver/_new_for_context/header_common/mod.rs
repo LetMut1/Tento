@@ -10,10 +10,12 @@ pub struct HeaderCommon<'outer_a> {
 }
 
 impl<'outer_a> HeaderCommon<'outer_a> {
-    pub fn new(json_access_web_token: &'outer_a JsonAccessWebToken<'_>) -> Self {
+    pub fn new(
+        json_access_web_token: &'outer_a JsonAccessWebToken<'_>
+    ) -> Self {
         return Self {
-            json_access_web_token_payload_alg: json_access_web_token.get_alg().get_value(),
-            json_access_web_token_payload_typ: json_access_web_token.get_typ().get_value()
+            json_access_web_token_payload_alg: json_access_web_token.get_alg(),
+            json_access_web_token_payload_typ: json_access_web_token.get_typ()
         };
     }
 }

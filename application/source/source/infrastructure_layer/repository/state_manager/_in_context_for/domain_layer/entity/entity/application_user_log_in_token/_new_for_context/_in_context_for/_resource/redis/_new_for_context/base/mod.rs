@@ -10,9 +10,12 @@ use redis::Connection;
 pub struct Base;
 
 impl StateManagerApplicationUserLogInTokenRedisTrait for Base {
+    type Error = BaseError;
+
     fn create<'outer_a>(
-        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
-    ) -> Result<(), BaseError> {
+        connection: &'outer_a mut Connection,
+        application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
+    ) -> Result<(), Self::Error> {
         connection.set_ex::<String, String, ()>(
             StorageKeyResolver::get_repository_application_user_log_in_token_first(
                 application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
@@ -25,8 +28,9 @@ impl StateManagerApplicationUserLogInTokenRedisTrait for Base {
     }
 
     fn delete<'outer_a>(
-        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
-    ) -> Result<(), BaseError> {
+        connection: &'outer_a mut Connection,
+        application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
+    ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
             StorageKeyResolver::get_repository_application_user_log_in_token_first(
                 application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
@@ -37,8 +41,9 @@ impl StateManagerApplicationUserLogInTokenRedisTrait for Base {
     }
 
     fn update_expiration_time<'outer_a>(
-        connection: &'outer_a mut Connection, application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
-    ) -> Result<(), BaseError> {
+        connection: &'outer_a mut Connection,
+        application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
+    ) -> Result<(), Self::Error> {
         connection.expire::<String, ()>(
             StorageKeyResolver::get_repository_application_user_log_in_token_first(
                 application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()

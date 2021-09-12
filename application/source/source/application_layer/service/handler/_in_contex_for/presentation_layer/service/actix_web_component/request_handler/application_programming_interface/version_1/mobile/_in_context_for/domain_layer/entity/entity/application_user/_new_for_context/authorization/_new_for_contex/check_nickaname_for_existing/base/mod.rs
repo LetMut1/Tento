@@ -1,4 +1,3 @@
-use crate::domain_layer::entity::entity::application_user::_component::nickname::Nickname;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserPostgresqlTrait;
@@ -15,11 +14,11 @@ pub struct Base;
 
 impl Base {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> {
-        let application_user_nickname: Nickname = Nickname::new(request.get_application_user_nickname());
+        let application_user_nickname: String = request.get_application_user_nickname();
 
-        if ApplicationUserComponentValidator::is_valid_nickname(&application_user_nickname) {
+        if ApplicationUserComponentValidator::is_valid_nickname(application_user_nickname.as_str()) {
             let result: bool = DataProviderApplicationUserPostgresql::is_exist_by_nickanme(
-                &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?, &application_user_nickname
+                &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?, application_user_nickname.as_str()
             )?;
 
             return Ok(Response::new(result));

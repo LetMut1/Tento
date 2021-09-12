@@ -10,7 +10,9 @@ pub struct Select {
 }
 
 impl Select {
-    pub fn into_inner(self) -> (i64, String, ChronoDateTime<Utc>) {
+    pub fn into_inner(
+        self
+    ) -> (i64, String, ChronoDateTime<Utc>) {
         return (
             self.id,
             self.application_user_email,

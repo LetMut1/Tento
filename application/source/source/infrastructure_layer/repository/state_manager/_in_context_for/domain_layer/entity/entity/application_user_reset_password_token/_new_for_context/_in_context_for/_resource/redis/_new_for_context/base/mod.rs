@@ -10,10 +10,12 @@ use redis::Connection;
 pub struct Base;
 
 impl StateManagerApplicationUserResetPasswordTokenRedisTrait for Base {
+    type Error = BaseError;
+
     fn create<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), Self::Error> {
         connection.set_ex::<String, String, ()>(
             StorageKeyResolver::get_repository_application_user_reset_password_token_first(
                 application_user_reset_password_token.get_application_user_id()
@@ -28,7 +30,7 @@ impl StateManagerApplicationUserResetPasswordTokenRedisTrait for Base {
     fn delete<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
             StorageKeyResolver::get_repository_application_user_reset_password_token_first(
                 application_user_reset_password_token.get_application_user_id()
@@ -41,7 +43,7 @@ impl StateManagerApplicationUserResetPasswordTokenRedisTrait for Base {
     fn update_expiration_time<'outer_a>(
         connection: &'outer_a mut Connection,
         application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), Self::Error> {
         connection.expire::<String, ()>(
             StorageKeyResolver::get_repository_application_user_reset_password_token_first(
                 application_user_reset_password_token.get_application_user_id()

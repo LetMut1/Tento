@@ -1,5 +1,4 @@
 use crate::domain_layer::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserResetPasswordTokenRedisTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::base::Base as ApplicationUserResetPasswordTokenFactory;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::_new_for_context::common::Common;
@@ -11,9 +10,12 @@ use redis::Connection;
 pub struct Base;
 
 impl DataProviderApplicationUserResetPasswordTokenRedisTrait for Base {
+    type Error = BaseError;
+
     fn get_by_application_user_id<'outer_a, 'outer_b>(
-        connection: &'outer_a mut Connection, application_user_id: &'outer_b ApplicationUserId
-    ) -> Result<Option<ApplicationUserResetPasswordToken<'outer_b>>, BaseError> {
+        connection: &'outer_a mut Connection,
+        application_user_id: &'outer_b i64
+    ) -> Result<Option<ApplicationUserResetPasswordToken<'outer_b>>, Self::Error> {
         match connection.get::<String, Option<String>>(
             StorageKeyResolver::get_repository_application_user_reset_password_token_first(application_user_id)
         )?

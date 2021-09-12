@@ -1,7 +1,4 @@
-use crate::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
 use crate::domain_layer::entity::entity::application_user_log_in_token::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::domain_layer::entity::entity::application_user::_component::email::Email;
-use crate::domain_layer::entity::entity::application_user::_component::password::Password;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserLogInTokenRedisTrait;
@@ -37,21 +34,17 @@ impl Base {
             String
         ) = request.into_inner();
 
-        let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
-            application_user_log_in_token_device_id
-        )?;
-
         if let Some(application_user) = DataProviderApplicationUserPostgresql::get_by_email(
-            &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?, &Email::new(application_user_email)
+            &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?, application_user_email.as_str()
         )? 
         {
-            if PasswordHashResolver::is_valid(&Password::new(application_user_password), application_user.get_password_hash())? {
+            if PasswordHashResolver::is_valid(application_user_password.as_str(), application_user.get_password_hash())? {
                 let application_user_log_in_token: ApplicationUserLogInToken<'_>;
 
                 let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
                 match DataProviderApplicationUserLogInTokenRedis::get_by_application_user_id_and_device_id(
-                    connection, application_user.get_id()?, &application_user_log_in_token_device_id
+                    connection, application_user.get_id()?, application_user_log_in_token_device_id.as_str()
                 )? 
                 {
                     Some(existing_application_user_log_in_token) => {
@@ -61,7 +54,7 @@ impl Base {
                     },
                     None => {
                         application_user_log_in_token = ApplicationUserLogInTokenFactory::new_from_application_user(
-                            &application_user, &application_user_log_in_token_device_id
+                            &application_user, application_user_log_in_token_device_id.as_str()
                         )?;
 
                         StateManagerApplicationUserLogInTokenRedis::create(connection, &application_user_log_in_token)?;
@@ -70,7 +63,7 @@ impl Base {
 
                 EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
 
-                return Ok(Response::new(application_user.get_id()?.get_value()));
+                return Ok(Response::new(*application_user.get_id()?));
             }
             
             return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::WrongPassword)));

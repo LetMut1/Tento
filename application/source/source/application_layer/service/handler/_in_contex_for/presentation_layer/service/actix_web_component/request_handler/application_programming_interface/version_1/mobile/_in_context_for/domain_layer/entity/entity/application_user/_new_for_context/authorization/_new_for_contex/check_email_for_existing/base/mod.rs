@@ -1,4 +1,3 @@
-use crate::domain_layer::entity::entity::application_user::_component::email::Email;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserPreConfirmedPostgesqlTrait;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserPostgresqlTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
@@ -17,10 +16,10 @@ impl Base {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<Response, BaseError> {
         let connection: &'_ Connection = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
 
-        let application_user_email: Email = Email::new(request.get_application_user_email());
+        let application_user_email: String = request.get_application_user_email();
 
-        let resut: bool = DataProviderApplicationUserPostgresql::is_exist_by_email(connection, &application_user_email)?
-            || DataProviderApplicationUserPreConfirmedPostgesql::is_exist_by_application_user_email(connection, &application_user_email)?;
+        let resut: bool = DataProviderApplicationUserPostgresql::is_exist_by_email(connection, application_user_email.as_str())?
+            || DataProviderApplicationUserPreConfirmedPostgesql::is_exist_by_application_user_email(connection, application_user_email.as_str())?;
 
         return Ok(Response::new(resut));
     }

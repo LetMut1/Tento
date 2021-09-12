@@ -7,7 +7,9 @@ use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 pub struct Base;
 
 impl Base {
-    pub fn new_from_json_refresh_web_token<'outer_a>(json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>) -> Result<JsonAccessWebToken<'outer_a>, BaseError> {
+    pub fn new_from_json_refresh_web_token<'outer_a>(
+        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    ) -> Result<JsonAccessWebToken<'outer_a>, BaseError> {
         return Ok(
             JsonAccessWebToken::new(
                 JsonAccessWebTokenPayloadFactory::new_from_json_refresh_web_token(json_refresh_web_token)?
@@ -15,11 +17,11 @@ impl Base {
         );
     }
 
-    pub fn new_from_payload_common(payload_common: PayloadCommon) -> Result<JsonAccessWebToken<'static>, BaseError> {
-        return Ok(
-            JsonAccessWebToken::new(
-                JsonAccessWebTokenPayloadFactory::new_from_payload_common(payload_common)?
-            )
+    pub fn new_from_payload_common(
+        payload_common: PayloadCommon<'static>
+    ) -> JsonAccessWebToken<'static> {
+        return JsonAccessWebToken::new(
+            JsonAccessWebTokenPayloadFactory::new_from_payload_common(payload_common)
         );
     }
 }

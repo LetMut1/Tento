@@ -1,4 +1,3 @@
-use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::json_refresh_web_token::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderJsonRefreshWebTokenRedisTrait;
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerJsonRefreshWebTokenRedisTrait;
@@ -6,35 +5,38 @@ use crate::domain_layer::service::_in_context_for::domain_layer::entity::entity:
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as DataProviderJsonRefreshWebTokenRedis;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as StateManagerJsonRefreshWebTokenRedis;
-use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::_new_for_context::processing_device_id_storage::ProcessingDeviceIdStorage;
+use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::device_id_processing_storage::DeviceIdProcessingStorage;
 use redis::Connection;
 
 pub struct RepositoryProxy;
 
 impl RepositoryProxyTrait for RepositoryProxy {
-    fn create<'outer_a>(
-        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<(), BaseError> {
-        let application_user_log_in_token_device_id: String = 
-        json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().get_value().to_string();
+    type Error = BaseError;
 
-        match ProcessingDeviceIdStorage::get(connection, json_refresh_web_token.get_application_user_id())? {
+    fn create<'outer_a>(
+        connection: &'outer_a mut Connection,
+        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    ) -> Result<(), Self::Error> {
+        let application_user_log_in_token_device_id: String = 
+            json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
+
+        match DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id())? {
             Some(mut application_user_log_in_token_device_id_registry) => {
                 if !application_user_log_in_token_device_id_registry.contains(&application_user_log_in_token_device_id) {
                     application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id);
 
-                    ProcessingDeviceIdStorage::update(
+                    DeviceIdProcessingStorage::update(
                         connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
                     )?;
                 } else {
-                    ProcessingDeviceIdStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
+                    DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
                 }
             },
             None => {
                 let mut application_user_log_in_token_device_id_registry: Vec<String> = Vec::new();
                 application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id);
 
-                ProcessingDeviceIdStorage::create(
+                DeviceIdProcessingStorage::create(
                     connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
                 )?;
             }
@@ -46,9 +48,10 @@ impl RepositoryProxyTrait for RepositoryProxy {
     }
 
     fn update<'outer_a>(
-        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<(), BaseError> {
-        ProcessingDeviceIdStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
+        connection: &'outer_a mut Connection,
+        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    ) -> Result<(), Self::Error> {
+        DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
 
         StateManagerJsonRefreshWebTokenRedis::update(connection, json_refresh_web_token)?;
 
@@ -56,13 +59,14 @@ impl RepositoryProxyTrait for RepositoryProxy {
     }
 
     fn delete<'outer_a>(
-        connection: &'outer_a mut Connection, json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<(), BaseError> {
+        connection: &'outer_a mut Connection,
+        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    ) -> Result<(), Self::Error> {
         StateManagerJsonRefreshWebTokenRedis::delete(connection, json_refresh_web_token)?;
 
-        if let Some(mut application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection, json_refresh_web_token.get_application_user_id())? 
+        if let Some(mut application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id())? 
         {
-            let application_user_log_in_token_device_id: String = json_refresh_web_token.get_application_user_log_in_token_device_id().get_value().get_value().to_string();
+            let application_user_log_in_token_device_id: String = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
             let mut aplication_user_log_in_token_device_id_index_option: Option<usize> = None;
 
@@ -78,11 +82,11 @@ impl RepositoryProxyTrait for RepositoryProxy {
                 application_user_log_in_token_device_id_registry.remove(aplication_user_log_in_token_device_id_index);
 
                 if !application_user_log_in_token_device_id_registry.is_empty() {
-                    ProcessingDeviceIdStorage::update(
+                    DeviceIdProcessingStorage::update(
                         connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
                     )?;
                 } else {
-                    ProcessingDeviceIdStorage::delete(connection, json_refresh_web_token.get_application_user_id())?
+                    DeviceIdProcessingStorage::delete(connection, json_refresh_web_token.get_application_user_id())?
                 }
             }
         }
@@ -91,9 +95,10 @@ impl RepositoryProxyTrait for RepositoryProxy {
     }
 
     fn get_by_application_user_id<'outer_a>(
-        connection: &'outer_a mut Connection, application_user_id: &'outer_a ApplicationUserId
-    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, BaseError> {
-        if let Some(application_user_log_in_token_device_id_registry) = ProcessingDeviceIdStorage::get(connection, application_user_id)? {
+        connection: &'outer_a mut Connection,
+        application_user_id: &'outer_a i64
+    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, Self::Error> {
+        if let Some(application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, application_user_id)? {
             return DataProviderJsonRefreshWebTokenRedis::get_by_application_user_id_and_application_user_log_in_token_device_id_registry(
                 connection, application_user_id, application_user_log_in_token_device_id_registry
             );

@@ -1,8 +1,4 @@
-use crate::domain_layer::entity::entity::application_user_reset_password_token::_component::value::Value;
-use crate::domain_layer::entity::entity::application_user_reset_password_token::_component::wrong_enter_tries_quantity::WrongEnterTriesQuanity;
 use crate::domain_layer::entity::entity::application_user_reset_password_token::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::entity::entity::application_user::_component::email::Email;
-use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::domain_layer::entity::entity::application_user::application_user::ApplicationUser;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::_new_for_context::common::Common;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
@@ -17,13 +13,13 @@ impl Base {
             ApplicationUserResetPasswordToken::new(
                 application_user.get_id()?,
                 Cow::Borrowed(application_user.get_email()),
-                Value::new(Uuid::new_v4().to_string()),    // TODO создать генератор значения + метода Рефреш ниже
-                WrongEnterTriesQuanity::new(0)
+                Uuid::new_v4().to_string(),    // TODO создать генератор значения + метода Рефреш ниже
+                0
             )
         );
     }
 
-    pub fn new_from_common<'outer_a>(common: Common<'_>, application_user_id: &'outer_a ApplicationUserId) -> ApplicationUserResetPasswordToken<'outer_a> {
+    pub fn new_from_common<'outer_a>(common: Common<'_>, application_user_id: &'outer_a i64) -> ApplicationUserResetPasswordToken<'outer_a> {
         let (
             application_user_email,
             value,
@@ -32,9 +28,9 @@ impl Base {
 
         return ApplicationUserResetPasswordToken::new(
             application_user_id,
-            Cow::Owned(Email::new(application_user_email.into_owned())),
-            Value::new(value.into_owned()),
-            WrongEnterTriesQuanity::new(wrong_enter_tries_quantity)
+            Cow::Owned(application_user_email.into_owned()),
+            value.into_owned(),
+            wrong_enter_tries_quantity.into_owned()
         );
     }
 }

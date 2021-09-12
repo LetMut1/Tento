@@ -1,5 +1,3 @@
-use crate::domain_layer::entity::entity::application_user_log_in_token::_component::device_id::DeviceId as ApplicationUserLogInTokenDeviceId;
-use crate::domain_layer::entity::entity::application_user::_component::id::Id as ApplicationUserId;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserLogInTokenRedisTrait;
@@ -24,12 +22,8 @@ impl Base {
             i64
         ) = request.into_inner();
 
-        let application_user_log_in_token_device_id: ApplicationUserLogInTokenDeviceId = ApplicationUserLogInTokenDeviceId::new_from_string(
-            application_user_log_in_token_device_id
-        )?;
-
         if let Some(application_user_log_in_token) = DataProviderApplicationUserLogInTokenRedis::get_by_application_user_id_and_device_id(
-            &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &ApplicationUserId::new(application_user_id), &application_user_log_in_token_device_id
+            &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_id, application_user_log_in_token_device_id.as_str()
         )? 
         {
             EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;

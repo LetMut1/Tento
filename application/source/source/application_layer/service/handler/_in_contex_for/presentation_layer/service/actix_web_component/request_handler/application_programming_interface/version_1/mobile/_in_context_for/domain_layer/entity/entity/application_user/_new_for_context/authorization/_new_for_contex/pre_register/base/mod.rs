@@ -1,6 +1,5 @@
 use crate::domain_layer::entity::entity::application_user_pre_confirmed::application_user_pre_confirmed::ApplicationUserPreConfirmed;
 use crate::domain_layer::entity::entity::application_user_registration_confirmation_token::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
-use crate::domain_layer::entity::entity::application_user::_component::email::Email;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user_pre_confirmed::_new_for_context::application_user_pre_confirmed_error::ApplicationUserPreConfirmedError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
@@ -28,12 +27,12 @@ pub struct Base;
 
 impl Base {
     pub fn handle(aggregate_connection_pool: Arc<AggregateConnectionPool>, request: Request) -> Result<(), BaseError> {
-        let application_user_email: Email = Email::new(request.get_application_user_email());
-        if ApplicationUserComponentValidator::is_valid_email(&application_user_email)? {
+        let application_user_email: String = request.get_application_user_email();
+        if ApplicationUserComponentValidator::is_valid_email(application_user_email.as_str())? {
             let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
 
-            if !DataProviderApplicationUserPreConfirmedPostgesql::is_exist_by_application_user_email(postgresql_connection, &application_user_email)? {
-                if !DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection, &application_user_email)? {
+            if !DataProviderApplicationUserPreConfirmedPostgesql::is_exist_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
+                if !DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
                     let application_user_pre_confirmed: ApplicationUserPreConfirmed = ApplicationUserPreConfirmedFactory::new_from_email(application_user_email);  
 
                     let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> =
