@@ -1,3 +1,4 @@
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use std::borrow::Cow;
 
 pub struct ApplicationUserLogInToken<'outer_a> {
@@ -27,10 +28,14 @@ impl<'outer_a> ApplicationUserLogInToken<'outer_a> {
         };
     }
 
-    pub fn increment_wrong_enter_tries_quantity<'this>(&'this mut self) -> &'this mut Self {
+    pub fn increment_wrong_enter_tries_quantity<'this>(&'this mut self) -> Result<&'this mut Self, BaseError> {
+        if self.wrong_enter_tries_quantity == u8::max_value() {
+            return Err(BaseError::LogicError("Out of range for `u8` type."));
+        }
+
         self.wrong_enter_tries_quantity = self.wrong_enter_tries_quantity + 1;
 
-        return self;
+        return Ok(self);
     }
 
     pub fn get_application_user_id<'this>(&'this self) -> &'this i64 {

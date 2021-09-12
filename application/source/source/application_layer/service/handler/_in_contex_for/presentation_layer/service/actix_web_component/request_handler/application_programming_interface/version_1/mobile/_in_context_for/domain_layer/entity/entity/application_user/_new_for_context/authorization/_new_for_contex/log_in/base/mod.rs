@@ -73,7 +73,7 @@ impl Base {
                 return Ok(Response::new(json_access_web_token, json_refresh_web_token));
             }
 
-            application_user_log_in_token.increment_wrong_enter_tries_quantity();
+            application_user_log_in_token.increment_wrong_enter_tries_quantity()?;
 
             if *application_user_log_in_token.get_wrong_enter_tries_quantity() >= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 StateManagerApplicationUserLogInTokenRedis::delete(connection, &application_user_log_in_token)?;

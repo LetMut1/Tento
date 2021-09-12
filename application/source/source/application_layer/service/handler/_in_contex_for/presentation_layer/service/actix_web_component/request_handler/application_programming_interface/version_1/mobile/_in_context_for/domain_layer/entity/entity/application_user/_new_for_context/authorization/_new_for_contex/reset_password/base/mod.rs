@@ -59,7 +59,7 @@ impl Base {
                     return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::NotFound)));
                 }
 
-                application_user_reset_password_token.increment_wrong_enter_tries_quantity();
+                application_user_reset_password_token.increment_wrong_enter_tries_quantity()?;
 
                 if *application_user_reset_password_token.get_wrong_enter_tries_quantity() >= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                     StateManagerApplicationUserResetPasswordTokenRedis::delete(redis_connection, &application_user_reset_password_token)?;

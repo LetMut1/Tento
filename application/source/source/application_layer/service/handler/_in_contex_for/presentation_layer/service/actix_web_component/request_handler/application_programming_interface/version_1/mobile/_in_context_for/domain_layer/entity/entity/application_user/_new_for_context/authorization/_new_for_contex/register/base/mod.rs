@@ -103,7 +103,7 @@ impl Base {
                                 return Ok(Response::new(json_access_web_token, json_refresh_web_token));
                             }
 
-                            application_user_registration_confirmation_token.increment_wrong_enter_tries_quantity();
+                            application_user_registration_confirmation_token.increment_wrong_enter_tries_quantity()?;
 
                             if *application_user_registration_confirmation_token.get_wrong_enter_tries_quantity() >= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                 StateManagerApplicationUserRegistrationConfirmationTokenRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
