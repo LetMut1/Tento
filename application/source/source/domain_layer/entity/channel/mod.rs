@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::domain_layer::error::logic_error::LogicError;
 
 pub struct Channel {
     id: Option<i64>,
@@ -48,13 +48,13 @@ impl Channel {
 
     pub fn get_id<'this>(
         &'this self
-    ) -> Result<&'this i64, BaseError> {
+    ) -> Result<&'this i64, LogicError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
             }
             None => {
-                return Err(BaseError::LogicError("Id does not exist yet."))
+                return Err(LogicError::new("Id does not exist yet."))
             }
         }
     }
@@ -121,13 +121,13 @@ impl Channel {
 
     pub fn get_created_at<'this>(
         &'this self
-    ) -> Result<&'this str, BaseError> {
+    ) -> Result<&'this str, LogicError> {
         match self.created_at {
             Some(ref created_at) => {
                 return Ok(created_at.as_str());
             }
             None => {
-                return Err(BaseError::LogicError("Created_at does not exist yet."))
+                return Err(LogicError::new("Created_at does not exist yet."))
             }
         }
     }

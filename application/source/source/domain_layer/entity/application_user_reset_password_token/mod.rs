@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::domain_layer::error::logic_error::LogicError;
 use std::borrow::Cow;
 
 pub struct ApplicationUserResetPasswordToken<'outer_a> {
@@ -27,9 +27,9 @@ impl<'outer_a> ApplicationUserResetPasswordToken<'outer_a> {
 
     pub fn increment_wrong_enter_tries_quantity<'this>(
         &'this mut self
-    ) -> Result<&'this mut Self, BaseError> {
+    ) -> Result<&'this mut Self, LogicError> {
         if self.wrong_enter_tries_quantity == u8::max_value() {
-            return Err(BaseError::LogicError("Out of range for `u8` type."));
+            return Err(LogicError::new("Out of range for `u8` type."));
         }
 
         self.wrong_enter_tries_quantity = self.wrong_enter_tries_quantity + 1;

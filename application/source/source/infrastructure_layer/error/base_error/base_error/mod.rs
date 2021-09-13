@@ -3,6 +3,7 @@ use argon2::Error as Argon2Error;
 use base64::DecodeError as Base64DecodeError;
 use chrono::ParseError as ChronoParseError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
+use crate::domain_layer::error::logic_error::LogicError;
 use diesel::result::Error as DieselError;
 use dotenv::Error as DotenvError;
 use lettre_email::error::Error as LettreEmailError;
@@ -48,7 +49,7 @@ impl Display for BaseError {
             Self::RunTimeError(run_time_error) => {
                 match run_time_error {
                     RunTimeError::OtherError(other_error) => {
-                        write!(formatter, "BaseError-RunTimeError-OtherError-{}: {}", other_error.get_description(), other_error.get_displaying())?;
+                        write!(formatter, "BaseError-RunTimeError-OtherError-{}: {}", other_error.get_error_kind_description(), other_error.get_message())?;
                     },
                     RunTimeError::ResourceError(resource_error) => {
                         match resource_error {
@@ -86,6 +87,22 @@ impl Display for BaseError {
 }
 
 impl Error for BaseError {}
+
+impl From<EntityError> for BaseError {
+    fn from(
+        entity_error: EntityError
+    ) -> Self {
+        return Self::EntityError(entity_error);
+    }
+}
+
+impl From<LogicError> for BaseError {
+    fn from(
+        logic_error: LogicError
+    ) -> Self {
+        return Self::LogicError(logic_error.get_message());
+    }
+}
 
 impl From<IOError> for BaseError {
     fn from(
