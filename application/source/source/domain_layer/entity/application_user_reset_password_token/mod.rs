@@ -9,6 +9,7 @@ pub struct ApplicationUserResetPasswordToken<'outer_a> {
 }
 
 impl<'outer_a> ApplicationUserResetPasswordToken<'outer_a> {
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: u8 = 10;
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: u8 = 5;
 
     pub fn new(

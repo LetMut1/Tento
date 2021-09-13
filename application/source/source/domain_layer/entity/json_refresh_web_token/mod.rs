@@ -9,6 +9,8 @@ pub struct JsonRefreshWebToken<'outer_a> {
 }
 
 impl<'outer_a> JsonRefreshWebToken<'outer_a> {
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: u16 = 60 * 24 * 30;
+
     pub fn new(
         json_access_web_token_id: String,
         application_user_id: Cow<'outer_a, i64>,

@@ -9,6 +9,8 @@ pub struct JsonAccessWebToken<'outer_a> {
 }
 
 impl<'outer_a> JsonAccessWebToken<'outer_a> {
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: u8 = 30;
+
     pub fn new(
         payload: Payload<'outer_a>
     ) -> Self {

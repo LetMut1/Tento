@@ -3,7 +3,6 @@ use crate::domain_layer::repository::state_manager::_in_context_for::domain_laye
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::_new_for_context::common::Common;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::redis::_new_for_context::storage_key_resolver::StorageKeyResolver;
-use crate::infrastructure_layer::service::date_time_expiration_storage::DateTimeExpirationStorage;
 use redis::Commands;
 use redis::Connection;
 
@@ -21,7 +20,7 @@ impl StateManagerApplicationUserResetPasswordTokenRedisTrait for Base {
                 application_user_reset_password_token.get_application_user_id()
             ), 
             serde_json::to_string(&Common::new(application_user_reset_password_token))?,
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST as usize) * (60 as usize)
+            (ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
         
         return Ok(());
@@ -48,7 +47,7 @@ impl StateManagerApplicationUserResetPasswordTokenRedisTrait for Base {
             StorageKeyResolver::get_repository_application_user_reset_password_token_first(
                 application_user_reset_password_token.get_application_user_id()
             ),
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST as usize) * (60 as usize)
+            (ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
 
         return Ok(());

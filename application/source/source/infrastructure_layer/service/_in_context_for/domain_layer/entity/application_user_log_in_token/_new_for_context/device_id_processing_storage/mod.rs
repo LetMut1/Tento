@@ -1,6 +1,6 @@
+use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::redis::_new_for_context::storage_key_resolver::StorageKeyResolver;
-use crate::infrastructure_layer::service::date_time_expiration_storage::DateTimeExpirationStorage;
 use redis::Commands;
 use redis::Connection;
 
@@ -17,7 +17,7 @@ impl DeviceIdProcessingStorage {
         connection.set_ex::<String, String, ()>(
             StorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id), 
             application_user_log_in_token_device_id_registry.join(Self::SEPARATOR),
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST as usize) * (60 as usize)
+            (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
 
         return Ok(());
@@ -50,7 +50,7 @@ impl DeviceIdProcessingStorage {
     ) -> Result<(), BaseError> {
         connection.expire::<String, ()>(
             StorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id),
-            (DateTimeExpirationStorage::QUANTITY_OF_MINUTES_JSON_REFRESH_WEB_TOKEN_FIRST as usize) * (60 as usize)
+            (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
 
         return Ok(());
