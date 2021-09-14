@@ -48,10 +48,10 @@ impl Display for BaseError {
             },
             Self::RunTimeError(run_time_error) => {
                 match run_time_error {
-                    RunTimeError::OtherError(other_error) => {
+                    RunTimeError::OtherError {other_error} => {
                         write!(formatter, "BaseError-RunTimeError-OtherError-{}: {}", other_error.get_error_kind_description(), other_error.get_message())?;
                     },
-                    RunTimeError::ResourceError(resource_error) => {
+                    RunTimeError::ResourceError {resource_error} => {
                         match resource_error {
                             ResourceError::ConnectionPoolError {r2d2_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-ConnectionPoolError: {}", r2d2_error)?;
@@ -108,7 +108,7 @@ impl From<IOError> for BaseError {
     fn from(
         io_error: IOError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("IOError", io_error)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("IOError", io_error)});
     }
 }
 
@@ -124,7 +124,7 @@ impl From<VarError> for BaseError {
     fn from(
         var_error: VarError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("EnvironmentVariableError", var_error)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("EnvironmentVariableError", var_error)});
     }
 }
 
@@ -132,7 +132,7 @@ impl From<SerdeJsonError> for BaseError {
     fn from(
         serde_json_error: SerdeJsonError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("SerdeJsonError", serde_json_error)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("SerdeJsonError", serde_json_error)});
     }
 }
 
@@ -140,7 +140,7 @@ impl From<Base64DecodeError> for BaseError {
     fn from(
         base64_decode_error: Base64DecodeError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("Base64DecodeError", base64_decode_error)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("Base64DecodeError", base64_decode_error)});
     }
 }
 
@@ -148,7 +148,7 @@ impl From<RegexError> for BaseError {
     fn from(
         regex_error: RegexError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("RegexError", regex_error)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("RegexError", regex_error)});
     }
 }
 
@@ -156,7 +156,7 @@ impl From<Argon2Error> for BaseError {
     fn from(
         argon2_error: Argon2Error
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("Argon2Error", argon2_error)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("Argon2Error", argon2_error)});
     }
 }
 
@@ -164,7 +164,7 @@ impl From<DotenvError> for BaseError {
     fn from(
         dotenv_error: DotenvError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("DotenvError", dotenv_error)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("DotenvError", dotenv_error)});
     }
 }
 
@@ -172,7 +172,7 @@ impl From<Log4rsConfigErrors> for BaseError {
     fn from(
         log4rs_config_errors: Log4rsConfigErrors
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("Log4rsConfigErrors", log4rs_config_errors)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("Log4rsConfigErrors", log4rs_config_errors)});
     }
 }
 
@@ -180,7 +180,7 @@ impl From<SetLoggerError> for BaseError {
     fn from(
         set_logger_error: SetLoggerError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("SetLoggerError", set_logger_error)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("SetLoggerError", set_logger_error)});
     }
 }
 
@@ -188,7 +188,7 @@ impl From<FromUtf8Error> for BaseError {
     fn from(
         from_utf8_error: FromUtf8Error
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("FromUtf8Error", from_utf8_error)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("FromUtf8Error", from_utf8_error)});
     }
 }
 
@@ -196,7 +196,7 @@ impl From<ChronoParseError> for BaseError {
     fn from(
         chrono_parse_error: ChronoParseError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::OtherError(OtherError::new("ChronoParseError", chrono_parse_error)));
+        return Self::RunTimeError(RunTimeError::OtherError {other_error: OtherError::new("ChronoParseError", chrono_parse_error)});
     }
 }
 
@@ -204,7 +204,7 @@ impl From<R2d2Error> for BaseError {
     fn from(
         r2d2_error: R2d2Error
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::ConnectionPoolError {r2d2_error}));
+        return Self::RunTimeError(RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolError {r2d2_error}});
     }
 }
 
@@ -212,7 +212,7 @@ impl From<PostgresError> for BaseError {
     fn from(
         postgres_error: PostgresError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlError {postgres_error}));
+        return Self::RunTimeError(RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgres_error}});
     }
 }
 
@@ -220,7 +220,7 @@ impl From<DieselError> for BaseError {
     fn from(
         diesel_error: DieselError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlXXXDELETEError {diesel_error}));
+        return Self::RunTimeError(RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlXXXDELETEError {diesel_error}});
     }
 }
 
@@ -228,7 +228,7 @@ impl From<RedisError> for BaseError {
     fn from(
         redis_error: RedisError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::RedisError {redis_error}));
+        return Self::RunTimeError(RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error}});
     }
 }
 
@@ -236,7 +236,7 @@ impl From<LettreEmailError> for BaseError {
     fn from(
         lettre_email_error: LettreEmailError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError {email_server_error: EmailServerError::EmailError {email_error: lettre_email_error}}));
+        return Self::RunTimeError(RunTimeError::ResourceError {resource_error: ResourceError::EmailServerError {email_server_error: EmailServerError::EmailError {email_error: lettre_email_error}}});
     }
 }
 
@@ -244,6 +244,6 @@ impl From<LettreSmtpError> for BaseError {
     fn from(
         lettre_smtp_error: LettreSmtpError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError {email_server_error: EmailServerError::SmtpError {smtp_error: lettre_smtp_error}}));
+        return Self::RunTimeError(RunTimeError::ResourceError {resource_error: ResourceError::EmailServerError {email_server_error: EmailServerError::SmtpError {smtp_error: lettre_smtp_error}}});
     }
 }

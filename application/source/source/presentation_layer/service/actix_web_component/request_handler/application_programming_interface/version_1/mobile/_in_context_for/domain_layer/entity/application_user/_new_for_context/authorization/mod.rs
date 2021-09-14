@@ -128,7 +128,7 @@ impl Authorization {
                     log::error!("{}", base_error);
 
                     match run_time_error {
-                        RunTimeError::ResourceError(resource_error) => {
+                        RunTimeError::ResourceError {resource_error} => {
                             match resource_error {
                                 ResourceError::EmailServerError {email_server_error: _} => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -273,7 +273,7 @@ impl Authorization {
                     log::error!("{}", base_error);
 
                     match run_time_error {
-                        RunTimeError::ResourceError(resource_error) => {
+                        RunTimeError::ResourceError {resource_error} => {
                             match resource_error {
                                 ResourceError::EmailServerError {email_server_error: _} => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -338,7 +338,7 @@ impl Authorization {
                         log::error!("{}", base_error);
 
                         match run_time_error {
-                            RunTimeError::ResourceError(resource_error) => {
+                            RunTimeError::ResourceError {resource_error} => {
                                 match resource_error {
                                     ResourceError::EmailServerError {email_server_error: _} => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -442,7 +442,7 @@ impl Authorization {
                     log::error!("{}", base_error);
 
                     match run_time_error {
-                        RunTimeError::ResourceError(resource_error) => {
+                        RunTimeError::ResourceError {resource_error} => {
                             match resource_error {
                                 ResourceError::EmailServerError {email_server_error: _} => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -633,7 +633,7 @@ impl Authorization {
                         log::error!("{}", base_error);
 
                         match run_time_error {
-                            RunTimeError::ResourceError(resource_error) => {
+                            RunTimeError::ResourceError {resource_error} => {
                                 match resource_error {
                                     ResourceError::EmailServerError {email_server_error: _} => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -752,7 +752,7 @@ impl Authorization {
                     log::error!("{}", base_error);
 
                     match run_time_error {
-                        RunTimeError::ResourceError(resource_error) => {
+                        RunTimeError::ResourceError {resource_error} => {
                             match resource_error {
                                 ResourceError::EmailServerError {email_server_error: _} => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(

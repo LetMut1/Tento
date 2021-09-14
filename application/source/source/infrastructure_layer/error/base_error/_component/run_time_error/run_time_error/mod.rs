@@ -7,8 +7,12 @@ use super::_component::resource_error::resource_error::ResourceError;
 
 #[derive(Debug)]
 pub enum RunTimeError {
-    OtherError(OtherError),
-    ResourceError(ResourceError)
+    OtherError {
+        other_error: OtherError 
+    },
+    ResourceError {
+        resource_error: ResourceError
+    }
 }
 
 impl Display for RunTimeError {
