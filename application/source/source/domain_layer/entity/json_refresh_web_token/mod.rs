@@ -1,5 +1,4 @@
 use std::borrow::Cow;
-use uuid::Uuid;
 
 pub struct JsonRefreshWebToken<'outer_a> {
     json_access_web_token_id: String,
@@ -25,14 +24,6 @@ impl<'outer_a> JsonRefreshWebToken<'outer_a> {
         };
     }
 
-    pub fn refresh<'this>(
-        &'this mut self
-    ) -> &'this mut Self {
-        self.obfuscation_value = Uuid::new_v4().to_string();     // TODO Через сервис ПЕРЕДЕЛАТь
-
-        return self;
-    }
-
     pub fn get_json_access_web_token_id<'this>(
         &'this self
     ) -> &'this str {
@@ -55,5 +46,14 @@ impl<'outer_a> JsonRefreshWebToken<'outer_a> {
         &'this self
     ) -> &'this str {
         return self.obfuscation_value.as_str();
+    }
+
+    pub fn set_obfuscation_value<'this>(
+        &'this mut self,
+        obfuscation_value: String
+    ) -> &'this mut Self {
+        self.obfuscation_value = obfuscation_value;
+
+        return self;
     }
 }
