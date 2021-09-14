@@ -153,7 +153,6 @@ impl Base {
                         .route("/refl", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_log_in))
                         .route("/li", web::post().to(RequestHandlerApplicationUserAuthorization::log_in))
                         .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing))
-                        .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existing))
                         .route("/rjawt", web::post().to(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token))
                         .route("/prp", web::post().to(RequestHandlerApplicationUserAuthorization::pre_reset_password))
                         .route("/rp", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password))
