@@ -51,6 +51,6 @@ impl Base {
             return Ok(());
         }
 
-        return Err(BaseError::EntityError(EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::NotFound}));
+        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::NotFound}});
     }
 }

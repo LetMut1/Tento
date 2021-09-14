@@ -16,7 +16,7 @@ impl StandardResponseCreator {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::RunTimeError(_) => {
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -42,7 +42,7 @@ impl StandardResponseCreator {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::RunTimeError(_) => {
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -65,7 +65,7 @@ impl StandardResponseCreator {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::RunTimeError(_) => {
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();

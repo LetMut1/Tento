@@ -34,16 +34,16 @@ impl Base {
                             return Ok(());
                         }
 
-                        return Err(BaseError::EntityError(EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::InJsonAccessWebTokenBlackList}));
+                        return Err(BaseError::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::InJsonAccessWebTokenBlackList}});
                     }
 
-                    return Err(BaseError::EntityError(EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::AlreadyExpired}));
+                    return Err(BaseError::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::AlreadyExpired}});
                 }
             }
     
-            return Err(BaseError::EntityError(EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotFound}));
+            return Err(BaseError::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotFound}});
         }
 
-        return Err(BaseError::LogicError("'AggregateConnectionPool' must exist in application state."));
+        return Err(BaseError::LogicError {message: "'AggregateConnectionPool' must exist in application state."});
     }
 }

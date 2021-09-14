@@ -55,12 +55,12 @@ impl Base {
                     return Ok(());
                 }
                 
-                return Err(BaseError::EntityError(EntityError::ApplicationUserError {application_user_error: ApplicationUserError::AlreadyExist}));
+                return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::AlreadyExist}});
             }
             
-            return Err(BaseError::EntityError(EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::AlreadyExist}));
+            return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::AlreadyExist}});
         }
         
-        return Err(BaseError::EntityError(EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidEmail}));
+        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidEmail}});
     }
 }

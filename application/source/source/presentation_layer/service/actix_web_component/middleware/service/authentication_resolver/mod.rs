@@ -59,7 +59,7 @@ where
     ) -> Self::Future {
         if let Err(ref base_error) = HandlerBase::handle(&service_request) {
             match base_error {
-                BaseError::EntityError(entity_error) => {
+                BaseError::EntityError {entity_error} => {
                     match entity_error {
                         EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
                             match json_access_web_token_error {
@@ -87,7 +87,8 @@ where
                 BaseError::InvalidArgumentError => {
                     return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_bad_request().into_body())));
                 },
-                BaseError::LogicError(_) | BaseError::RunTimeError(_) => {
+                BaseError::LogicError {message: _} |
+                BaseError::RunTimeError {run_time_error: _} => {
                     log::error!("{}", base_error);
 
                     return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_internal_server_error().into_body())));

@@ -84,9 +84,9 @@ impl Base {
                 StateManagerApplicationUserLogInTokenRedis::delete(connection, &application_user_log_in_token)?;
             }
             
-            return Err(BaseError::EntityError(EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::InvalidValue}));
+            return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::InvalidValue}});
         }
 
-        return Err(BaseError::EntityError(EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound}));
+        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound}});
     }
 }

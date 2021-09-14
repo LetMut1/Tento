@@ -116,25 +116,25 @@ impl Base {
                                 StateManagerApplicationUserRegistrationConfirmationTokenRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
                             }
                             
-                            return Err(BaseError::EntityError(EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::InvalidValue}));
+                            return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::InvalidValue}});
                         }
 
-                        return Err(BaseError::EntityError(EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::NotFound}));
+                        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::NotFound}});
                     }
 
                     if DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
-                        return Err(BaseError::EntityError(EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::AlreadyConfirmed}));
+                        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::AlreadyConfirmed}});
                     }
                     
-                    return Err(BaseError::EntityError(EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::NotFound}));
+                    return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::NotFound}});
                 }
                 
-                return Err(BaseError::EntityError(EntityError::ApplicationUserError {application_user_error: ApplicationUserError::AlreadyExist}));
+                return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::AlreadyExist}});
             }
 
-            return Err(BaseError::EntityError(EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidNickname}));
+            return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidNickname}});
         }
 
-        return Err(BaseError::EntityError(EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidPassword}));
+        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidPassword}});
     }
 }

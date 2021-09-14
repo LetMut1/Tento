@@ -30,7 +30,7 @@ impl DateTimeResolver {
                 return Ok(date_time.format(Self::TIMESTAMP_FORMAT).to_string());
             },
             None => {
-                return Err(BaseError::LogicError("Too big date must not be added."));
+                return Err(BaseError::LogicError {message: "Too big date must not be added."});
             }
         };
     }

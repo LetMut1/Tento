@@ -60,8 +60,8 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) |
-                    BaseError::RunTimeError(_) => {
+                    BaseError::LogicError {message: _} |
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -80,7 +80,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerPreRegister::handle(data.into_inner(), form.into_inner()) {
             match base_error {
-                BaseError::EntityError(entity_error) => {
+                BaseError::EntityError {entity_error} => {
                     match entity_error {
                         EntityError::ApplicationUserError {application_user_error} => {
                             match application_user_error {
@@ -119,12 +119,12 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError(_) => {
+                BaseError::LogicError {message: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
-                BaseError::RunTimeError(run_time_error) => {
+                BaseError::RunTimeError {run_time_error} => {
                     log::error!("{}", base_error);
 
                     match run_time_error {
@@ -161,7 +161,7 @@ impl Authorization {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::EntityError(entity_error) => {
+                    BaseError::EntityError {entity_error} => {
                         match entity_error {
                             EntityError::ApplicationUserError {application_user_error} => {
                                 match application_user_error {
@@ -224,8 +224,8 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) |
-                    BaseError::RunTimeError(_) => {
+                    BaseError::LogicError {message: _} |
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -241,7 +241,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerResendEmailForRegister::handle(data.into_inner(), form.into_inner()) {
             match base_error {
-                BaseError::EntityError(entity_error) => {
+                BaseError::EntityError {entity_error} => {
                     match entity_error {
                         EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error} => {
                             match application_user_pre_confirmed_error {
@@ -264,12 +264,12 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError(_) => {
+                BaseError::LogicError {message: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 },
-                BaseError::RunTimeError(run_time_error) => {
+                BaseError::RunTimeError {run_time_error} => {
                     log::error!("{}", base_error);
 
                     match run_time_error {
@@ -306,7 +306,7 @@ impl Authorization {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::EntityError(entity_error) => {
+                    BaseError::EntityError {entity_error} => {
                         match entity_error {
                             EntityError::ApplicationUserError {application_user_error} => {
                                 match application_user_error {
@@ -329,12 +329,12 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) => {
+                    BaseError::LogicError {message: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
                     },
-                    BaseError::RunTimeError(run_time_error) => {
+                    BaseError::RunTimeError {run_time_error} => {
                         log::error!("{}", base_error);
 
                         match run_time_error {
@@ -370,7 +370,7 @@ impl Authorization {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::EntityError(entity_error) => {
+                    BaseError::EntityError {entity_error} => {
                         match entity_error {
                             EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
                                 match application_user_log_in_token_error {
@@ -394,8 +394,8 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) |
-                    BaseError::RunTimeError(_) => {
+                    BaseError::LogicError {message: _} |
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -411,7 +411,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerResendEmailForLogIn::handle(data.into_inner(), form.into_inner()) {
             match base_error {
-                BaseError::EntityError(entity_error) => {
+                BaseError::EntityError {entity_error} => {
                     match entity_error {
                         EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
                             match application_user_log_in_token_error {
@@ -433,12 +433,12 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError(_) => {
+                BaseError::LogicError {message: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 },
-                BaseError::RunTimeError(run_time_error) => {
+                BaseError::RunTimeError {run_time_error} => {
                     log::error!("{}", base_error);
 
                     match run_time_error {
@@ -475,7 +475,7 @@ impl Authorization {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::EntityError(entity_error) => {
+                    BaseError::EntityError {entity_error} => {
                         match entity_error {
                             EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
                                 match json_access_web_token_error {
@@ -506,8 +506,8 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) |
-                    BaseError::RunTimeError(_) => {
+                    BaseError::LogicError {message: _} |
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -523,7 +523,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerLogOut::handle(data.into_inner(), &request_data.into_inner()) {
             match base_error {
-                BaseError::EntityError(entity_error) => {
+                BaseError::EntityError {entity_error} => {
                     match entity_error {
                         EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
                             match json_refresh_web_token_error {
@@ -542,8 +542,8 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError(_) |
-                BaseError::RunTimeError(_) => {
+                BaseError::LogicError {message: _} |
+                BaseError::RunTimeError {run_time_error: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -560,7 +560,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerLogOutFromAllDevices::handle(data.into_inner(), &request_data.into_inner()) {
             match base_error {
-                BaseError::EntityError(entity_error) => {
+                BaseError::EntityError {entity_error} => {
                     match entity_error {
                         EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
                             match json_refresh_web_token_error {
@@ -579,8 +579,8 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError(_) |
-                BaseError::RunTimeError(_) => {
+                BaseError::LogicError {message: _} |
+                BaseError::RunTimeError {run_time_error: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -601,7 +601,7 @@ impl Authorization {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::EntityError(entity_error) => {
+                    BaseError::EntityError {entity_error} => {
                         match entity_error {
                             EntityError::ApplicationUserError {application_user_error} => {
                                 match application_user_error {
@@ -624,12 +624,12 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) => {
+                    BaseError::LogicError {message: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
                     }
-                    BaseError::RunTimeError(run_time_error) => {
+                    BaseError::RunTimeError {run_time_error} => {
                         log::error!("{}", base_error);
 
                         match run_time_error {
@@ -661,7 +661,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerResetPassword::handle(data.into_inner(), form.into_inner()) {
             match base_error {
-                BaseError::EntityError(entity_error) => {
+                BaseError::EntityError {entity_error} => {
                     match entity_error {
                         EntityError::ApplicationUserError {application_user_error} => {
                             match application_user_error {
@@ -703,8 +703,8 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError(_) |
-                BaseError::RunTimeError(_) => {
+                BaseError::LogicError {message: _} |
+                BaseError::RunTimeError {run_time_error: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -721,7 +721,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         if let Err(ref base_error) = HandlerResendEmailForResetPassword::handle(data.into_inner(), form.into_inner()) {
             match base_error {
-                BaseError::EntityError(entity_error) => {
+                BaseError::EntityError {entity_error} => {
                     match entity_error {
                         EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error} => {
                             match application_user_reset_password_token_error {
@@ -743,12 +743,12 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError(_) => {
+                BaseError::LogicError {message: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
                 }
-                BaseError::RunTimeError(run_time_error) => {
+                BaseError::RunTimeError {run_time_error} => {
                     log::error!("{}", base_error);
 
                     match run_time_error {

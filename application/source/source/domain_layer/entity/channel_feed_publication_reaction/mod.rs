@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::domain_layer::error::logic_error::LogicError;
 
 pub struct ChannelFeedPublicationReaction {
     id: Option<i64>,
@@ -33,13 +33,13 @@ impl ChannelFeedPublicationReaction {
 
     pub fn get_id<'this>(
         &'this self
-    ) -> Result<&'this i64, BaseError> {
+    ) -> Result<&'this i64, LogicError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
             }
             None => {
-                return Err(BaseError::LogicError("Id does not exist yet."))
+                return Err(LogicError::new("Id does not exist yet."))
             }
         }
     }

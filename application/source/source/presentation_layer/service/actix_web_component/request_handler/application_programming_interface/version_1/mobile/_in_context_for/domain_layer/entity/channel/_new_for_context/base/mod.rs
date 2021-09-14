@@ -27,14 +27,14 @@ impl Base {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::EntityError(_entity_error) => {
+                    BaseError::EntityError {entity_error: _} => {
                         unreachable!("{}", base_error);
                     },
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) |
-                    BaseError::RunTimeError(_) => {
+                    BaseError::LogicError {message: _} |
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -54,14 +54,14 @@ impl Base {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::EntityError(_entity_error) => {
+                    BaseError::EntityError {entity_error: _} => {
                         unreachable!("{}", base_error);
                     },
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) |
-                    BaseError::RunTimeError(_) => {
+                    BaseError::LogicError {message: _} |
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -81,14 +81,14 @@ impl Base {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::EntityError(_entity_error) => {
+                    BaseError::EntityError {entity_error: _} => {
                         unreachable!("{}", base_error);
                     },
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) |
-                    BaseError::RunTimeError(_) => {
+                    BaseError::LogicError {message: _} |
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -108,14 +108,14 @@ impl Base {
             },
             Err(ref base_error) => {
                 match base_error {
-                    BaseError::EntityError(_entity_error) => {
+                    BaseError::EntityError {entity_error: _} => {
                         unreachable!("{}", base_error);
                     },
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError(_) |
-                    BaseError::RunTimeError(_) => {
+                    BaseError::LogicError {message: _} |
+                    BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
