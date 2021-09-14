@@ -34,6 +34,6 @@ impl Base {
             return Ok(());
         }
 
-        return Err(BaseError::EntityError(EntityError::JsonRefreshWebTokenError(JsonRefreshWebTokenError::NotFound)));
+        return Err(BaseError::EntityError(EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}));
     }
 }

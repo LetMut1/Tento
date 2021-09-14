@@ -29,6 +29,6 @@ impl Base {
             return Ok(());
         }
 
-        return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::NotFound)));
+        return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::NotFound}));
     }
 }

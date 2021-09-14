@@ -34,6 +34,6 @@ impl Base {
             return Ok(());
         }
 
-        return Err(BaseError::EntityError(EntityError::ApplicationUserLogInTokenError(ApplicationUserLogInTokenError::NotFound)));
+        return Err(BaseError::EntityError(EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound}));
     }
 }

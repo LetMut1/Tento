@@ -70,9 +70,9 @@ impl Base {
                 return Ok(Response::new(*application_user.get_id()?));
             }
             
-            return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::WrongPassword)));
+            return Err(BaseError::EntityError(EntityError::ApplicationUserError {application_user_error: ApplicationUserError::WrongPassword}));
         }
 
-        return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::NotFound)));
+        return Err(BaseError::EntityError(EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}));
     }
 }

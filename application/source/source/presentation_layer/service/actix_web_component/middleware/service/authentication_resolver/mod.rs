@@ -61,7 +61,7 @@ where
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
-                        EntityError::JsonAccessWebTokenError(json_access_web_token_error) => {
+                        EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
                             match json_access_web_token_error {
                                 JsonAccessWebTokenError::AlreadyExpired => {
                                     return Either::Right(FutureOk(service_request.into_response(

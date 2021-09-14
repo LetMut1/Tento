@@ -67,9 +67,9 @@ impl Base {
                 return Err(BaseError::InvalidArgumentError);
             }
 
-            return Err(BaseError::EntityError(EntityError::JsonRefreshWebTokenError(JsonRefreshWebTokenError::NotFound)));
+            return Err(BaseError::EntityError(EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}));
         }
         
-        return Err(BaseError::EntityError(EntityError::JsonAccessWebTokenError(JsonAccessWebTokenError::NotExpired)));
+        return Err(BaseError::EntityError(EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotExpired}));
     }
 }

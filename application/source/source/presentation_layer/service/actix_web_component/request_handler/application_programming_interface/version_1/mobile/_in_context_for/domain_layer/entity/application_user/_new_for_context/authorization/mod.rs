@@ -82,7 +82,7 @@ impl Authorization {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
-                        EntityError::ApplicationUserError(application_user_error) => {
+                        EntityError::ApplicationUserError {application_user_error} => {
                             match application_user_error {
                                 ApplicationUserError::AlreadyExist => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -99,7 +99,7 @@ impl Authorization {
                                 }
                             }
                         },
-                        EntityError::ApplicationUserPreConfirmedError(application_user_pre_confirmed_error) => {
+                        EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error} => {
                             match application_user_pre_confirmed_error {
                                 ApplicationUserPreConfirmedError::AlreadyExist => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -163,7 +163,7 @@ impl Authorization {
                 match base_error {
                     BaseError::EntityError(entity_error) => {
                         match entity_error {
-                            EntityError::ApplicationUserError(application_user_error) => {
+                            EntityError::ApplicationUserError {application_user_error} => {
                                 match application_user_error {
                                     ApplicationUserError::AlreadyExist => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -185,7 +185,7 @@ impl Authorization {
                                     }
                                 }
                             },
-                            EntityError::ApplicationUserPreConfirmedError(application_user_pre_confirmed_error) => {
+                            EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error} => {
                                 match application_user_pre_confirmed_error {
                                     ApplicationUserPreConfirmedError::AlreadyConfirmed => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -202,8 +202,8 @@ impl Authorization {
                                     }
                                 }
                             },
-                            EntityError::ApplicationUserRegistrationConfirmationTokenError(application_user_registration_confirmation_error) => {
-                                match application_user_registration_confirmation_error {
+                            EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error} => {
+                                match application_user_registration_confirmation_token_error {
                                     ApplicationUserRegistrationConfirmationTokenError::NotFound => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
                                             CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
@@ -243,7 +243,7 @@ impl Authorization {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
-                        EntityError::ApplicationUserPreConfirmedError(application_user_pre_confirmed_error) => {
+                        EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error} => {
                             match application_user_pre_confirmed_error {
                                 ApplicationUserPreConfirmedError::NotFound => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -308,7 +308,7 @@ impl Authorization {
                 match base_error {
                     BaseError::EntityError(entity_error) => {
                         match entity_error {
-                            EntityError::ApplicationUserError(application_user_error) => {
+                            EntityError::ApplicationUserError {application_user_error} => {
                                 match application_user_error {
                                     ApplicationUserError::NotFound |
                                     ApplicationUserError::WrongPassword => {
@@ -372,7 +372,7 @@ impl Authorization {
                 match base_error {
                     BaseError::EntityError(entity_error) => {
                         match entity_error {
-                            EntityError::ApplicationUserLogInTokenError(application_user_log_in_token_error) => {
+                            EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
                                 match application_user_log_in_token_error {
                                     ApplicationUserLogInTokenError::NotFound => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -413,7 +413,7 @@ impl Authorization {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
-                        EntityError::ApplicationUserLogInTokenError(application_user_log_in_token_error) => {
+                        EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
                             match application_user_log_in_token_error {
                                 ApplicationUserLogInTokenError::NotFound => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -477,7 +477,7 @@ impl Authorization {
                 match base_error {
                     BaseError::EntityError(entity_error) => {
                         match entity_error {
-                            EntityError::JsonAccessWebTokenError(json_access_web_token_error) => {
+                            EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
                                 match json_access_web_token_error {
                                     JsonAccessWebTokenError::NotExpired => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -489,7 +489,7 @@ impl Authorization {
                                     }
                                 }
                             },
-                            EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error) => {
+                            EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
                                 match json_refresh_web_token_error {
                                     JsonRefreshWebTokenError::NotFound => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -525,7 +525,7 @@ impl Authorization {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
-                        EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error) => {
+                        EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
                             match json_refresh_web_token_error {
                                 JsonRefreshWebTokenError::NotFound => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -562,7 +562,7 @@ impl Authorization {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
-                        EntityError::JsonRefreshWebTokenError(json_refresh_web_token_error) => {
+                        EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
                             match json_refresh_web_token_error {
                                 JsonRefreshWebTokenError::NotFound => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -603,7 +603,7 @@ impl Authorization {
                 match base_error {
                     BaseError::EntityError(entity_error) => {
                         match entity_error {
-                            EntityError::ApplicationUserError(application_user_error) => {
+                            EntityError::ApplicationUserError {application_user_error} => {
                                 match application_user_error {
                                     ApplicationUserError::NotFound => {
                                         return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -663,7 +663,7 @@ impl Authorization {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
-                        EntityError::ApplicationUserError(application_user_error) => {
+                        EntityError::ApplicationUserError {application_user_error} => {
                             match application_user_error {
                                 ApplicationUserError::NotFound => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -681,7 +681,7 @@ impl Authorization {
 
                             }
                         },
-                        EntityError::ApplicationUserResetPasswordTokenError(application_user_reset_password_token_error) => {
+                        EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error} => {
                             match application_user_reset_password_token_error {
                                 ApplicationUserResetPasswordTokenError::InvalidValue => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
@@ -723,7 +723,7 @@ impl Authorization {
             match base_error {
                 BaseError::EntityError(entity_error) => {
                     match entity_error {
-                        EntityError::ApplicationUserResetPasswordTokenError(application_user_reset_password_token_error) => {
+                        EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error} => {
                             match application_user_reset_password_token_error {
                                 ApplicationUserResetPasswordTokenError::NotFound => {
                                     return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(

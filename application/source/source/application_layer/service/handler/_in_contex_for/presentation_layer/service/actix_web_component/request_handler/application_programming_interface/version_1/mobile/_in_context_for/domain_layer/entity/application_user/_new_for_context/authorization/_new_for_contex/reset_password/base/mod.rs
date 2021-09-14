@@ -60,7 +60,7 @@ impl Base {
                         return Ok(());
                     }
 
-                    return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::NotFound)));
+                    return Err(BaseError::EntityError(EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}));
                 }
 
                 application_user_reset_password_token.increment_wrong_enter_tries_quantity()?;
@@ -69,12 +69,12 @@ impl Base {
                     StateManagerApplicationUserResetPasswordTokenRedis::delete(redis_connection, &application_user_reset_password_token)?;
                 }
 
-                return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::InvalidValue)));
+                return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::InvalidValue}));
             }
 
-            return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError::NotFound)));
+            return Err(BaseError::EntityError(EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::NotFound}));
         }
 
-        return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::InvalidPassword)));
+        return Err(BaseError::EntityError(EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidPassword}));
     }
 }

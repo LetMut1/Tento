@@ -12,13 +12,27 @@ use super::_component::_in_context_for::domain_layer::entity::json_refresh_web_t
 
 #[derive(Debug)]
 pub enum EntityError {
-    ApplicationUserError(ApplicationUserError),
-    ApplicationUserLogInTokenError(ApplicationUserLogInTokenError),
-    ApplicationUserPreConfirmedError(ApplicationUserPreConfirmedError),
-    ApplicationUserRegistrationConfirmationTokenError(ApplicationUserRegistrationConfirmationTokenError),
-    ApplicationUserResetPasswordTokenError(ApplicationUserResetPasswordTokenError),
-    JsonAccessWebTokenError(JsonAccessWebTokenError),
-    JsonRefreshWebTokenError(JsonRefreshWebTokenError)
+    ApplicationUserError {
+        application_user_error: ApplicationUserError
+    },
+    ApplicationUserLogInTokenError {
+        application_user_log_in_token_error: ApplicationUserLogInTokenError
+    },
+    ApplicationUserPreConfirmedError {
+        application_user_pre_confirmed_error: ApplicationUserPreConfirmedError
+    },
+    ApplicationUserRegistrationConfirmationTokenError {
+        application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError
+    },
+    ApplicationUserResetPasswordTokenError {
+        application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError
+    },
+    JsonAccessWebTokenError {
+        json_access_web_token_error: JsonAccessWebTokenError
+    },
+    JsonRefreshWebTokenError {
+        json_refresh_web_token_error: JsonRefreshWebTokenError
+    }
 }
 
 impl Display for EntityError {

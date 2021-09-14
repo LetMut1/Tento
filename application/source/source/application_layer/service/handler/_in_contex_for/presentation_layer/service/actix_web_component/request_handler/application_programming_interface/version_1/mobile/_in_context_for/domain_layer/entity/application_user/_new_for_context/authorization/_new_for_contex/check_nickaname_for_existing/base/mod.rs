@@ -28,6 +28,6 @@ impl Base {
             return Ok(Response::new(result));
         }
 
-        return Err(BaseError::EntityError(EntityError::ApplicationUserError(ApplicationUserError::InvalidNickname)));
+        return Err(BaseError::EntityError(EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidNickname}));
     }
 }
