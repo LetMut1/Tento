@@ -1,4 +1,3 @@
-use crate::domain_layer::error::logic_error::LogicError;
 use std::borrow::Cow;
 
 pub struct ApplicationUserRegistrationConfirmationToken<'outer_a> {
@@ -25,18 +24,6 @@ impl<'outer_a> ApplicationUserRegistrationConfirmationToken<'outer_a> {
             wrong_enter_tries_quantity
         };
     }
-
-    pub fn increment_wrong_enter_tries_quantity<'this>(
-        &'this mut self
-    ) -> Result<&'this mut Self, LogicError> {
-        if self.wrong_enter_tries_quantity == u8::max_value() {
-            return Err(LogicError::new("Out of range for `u8` type."));
-        }
-
-        self.wrong_enter_tries_quantity = self.wrong_enter_tries_quantity + 1;
-
-        return Ok(self);
-    }
     
     pub fn get_application_user_pre_confirmed_id<'this>(
         &'this self
@@ -60,5 +47,15 @@ impl<'outer_a> ApplicationUserRegistrationConfirmationToken<'outer_a> {
         &'this self
     ) -> &'this u8 {
         return &self.wrong_enter_tries_quantity;
+    }
+
+    pub fn set_wrong_enter_tries_quantity<'this>(
+        &'this mut self,
+        wrong_enter_tries_quantity: u8
+    ) -> &'this mut Self {
+
+        self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
+
+        return self;
     }
 }
