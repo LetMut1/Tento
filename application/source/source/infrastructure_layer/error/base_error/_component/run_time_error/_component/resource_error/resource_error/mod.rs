@@ -10,11 +10,21 @@ use super::_component::_in_context_for::_resource::email_server::_new_for_contex
 
 #[derive(Debug)]
 pub enum ResourceError {
-    ConnectionPoolError(R2d2Error),
-    EmailServerError(EmailServerError),
-    PostgresqlError(PostgresError),
-    PostgresqlXXXDELETEError(DieselError),
-    RedisError(RedisError)
+    ConnectionPoolError {
+        r2d2_error: R2d2Error
+    },
+    EmailServerError {
+        email_server_error: EmailServerError
+    },
+    PostgresqlError {
+        postgres_error: PostgresError
+    },
+    PostgresqlXXXDELETEError {
+        diesel_error: DieselError
+    },
+    RedisError {
+        redis_error: RedisError
+    }
 }
 
 impl Display for ResourceError {

@@ -7,8 +7,12 @@ use std::fmt::Result;
 
 #[derive(Debug)]
 pub enum EmailServerError {
-    EmailError(EmailError),
-    SmtpError(SmtpError)
+    EmailError {
+        email_error: EmailError
+    },
+    SmtpError {
+        smtp_error: SmtpError
+    }
 }
 
 impl Display for EmailServerError {

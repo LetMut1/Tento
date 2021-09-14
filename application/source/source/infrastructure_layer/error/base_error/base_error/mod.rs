@@ -53,26 +53,26 @@ impl Display for BaseError {
                     },
                     RunTimeError::ResourceError(resource_error) => {
                         match resource_error {
-                            ResourceError::ConnectionPoolError(r2d2_error) => {
+                            ResourceError::ConnectionPoolError {r2d2_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-ConnectionPoolError: {}", r2d2_error)?;
                             },
-                            ResourceError::EmailServerError(email_server_error) => {
+                            ResourceError::EmailServerError {email_server_error} => {
                                 match email_server_error {
-                                    EmailServerError::EmailError(email_error) => {
+                                    EmailServerError::EmailError {email_error} => {
                                         write!(formatter, "BaseError-RunTimeError-ResourceError-EmailServerError-EmailError: {}", email_error)?;
                                     },
-                                    EmailServerError::SmtpError(smtp_error) => {
+                                    EmailServerError::SmtpError {smtp_error} => {
                                         write!(formatter, "BaseError-RunTimeError-ResourceError-EmailServerError-SmtpError: {}", smtp_error)?;
                                     }
                                 }
                             },
-                            ResourceError::PostgresqlError(postgres_error) => {
+                            ResourceError::PostgresqlError {postgres_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", postgres_error)?;
                             },
-                            ResourceError::PostgresqlXXXDELETEError(diesel_error) => {
+                            ResourceError::PostgresqlXXXDELETEError {diesel_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", diesel_error)?;
                             },
-                            ResourceError::RedisError(redis_error) => {
+                            ResourceError::RedisError {redis_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
                             }
                         }
@@ -204,7 +204,7 @@ impl From<R2d2Error> for BaseError {
     fn from(
         r2d2_error: R2d2Error
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::ConnectionPoolError(r2d2_error)));
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::ConnectionPoolError {r2d2_error}));
     }
 }
 
@@ -212,7 +212,7 @@ impl From<PostgresError> for BaseError {
     fn from(
         postgres_error: PostgresError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlError(postgres_error)));
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlError {postgres_error}));
     }
 }
 
@@ -220,7 +220,7 @@ impl From<DieselError> for BaseError {
     fn from(
         diesel_error: DieselError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlXXXDELETEError(diesel_error)));
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::PostgresqlXXXDELETEError {diesel_error}));
     }
 }
 
@@ -228,7 +228,7 @@ impl From<RedisError> for BaseError {
     fn from(
         redis_error: RedisError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::RedisError(redis_error)));
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::RedisError {redis_error}));
     }
 }
 
@@ -236,7 +236,7 @@ impl From<LettreEmailError> for BaseError {
     fn from(
         lettre_email_error: LettreEmailError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::EmailError(lettre_email_error))));
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError {email_server_error: EmailServerError::EmailError {email_error: lettre_email_error}}));
     }
 }
 
@@ -244,6 +244,6 @@ impl From<LettreSmtpError> for BaseError {
     fn from(
         lettre_smtp_error: LettreSmtpError
     ) -> Self {
-        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError(EmailServerError::SmtpError(lettre_smtp_error))));
+        return Self::RunTimeError(RunTimeError::ResourceError(ResourceError::EmailServerError {email_server_error: EmailServerError::SmtpError {smtp_error: lettre_smtp_error}}));
     }
 }
