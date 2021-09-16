@@ -41,7 +41,8 @@ use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register::base::Base as Request;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register::base::Base as Response;
-use diesel::PgConnection as PostgresqlConnection;
+use diesel::PgConnection as PostgresqlConnectionDiesel;
+use postgres::Client as PostgresqlConnection;
 use redis::Connection as RedisConnection;
 use std::sync::Arc;
 
@@ -68,10 +69,11 @@ impl Base {
 
         if ApplicationUserComponentValidator::is_valid_password(application_user_password.as_str()) {
             if ApplicationUserComponentValidator::is_valid_nickname(application_user_nickname.as_str()) {
-                let postgresql_connection: &'_ PostgresqlConnection = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
+                let postgresql_connection_DIESEL: &'_ PostgresqlConnectionDiesel = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
+                let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
-                if !DataProviderApplicationUserPostgresql::is_exist_by_nickanme(postgresql_connection, application_user_nickname.as_str())? {
-                    if let Some(application_user_pre_confirmed) = DataProviderApplicationUserPreConfirmedPostgesql::get_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
+                if !DataProviderApplicationUserPostgresql::is_exist_by_nickanme(postgresql_connection_DIESEL, application_user_nickname.as_str())? {
+                    if let Some(application_user_pre_confirmed) = DataProviderApplicationUserPreConfirmedPostgesql::find_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
                         let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
                         if let Some(mut application_user_registration_confirmation_token) = DataProviderApplicationUserRegistrationConfirmationTokenRedis::get_by_application_user_pre_confirmed_id(
@@ -85,21 +87,21 @@ impl Base {
 
                                 StateManagerApplicationUserRegistrationConfirmationTokenRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
 
-                                TransactionManager::begin_transaction(postgresql_connection)?;
+                                TransactionManager::begin_transaction(postgresql_connection_DIESEL)?;
                                 
-                                if let Err(base_error) = StateManagerApplicationUserPostgresql::create(postgresql_connection, &application_user) {
-                                    TransactionManager::rollback_transaction(postgresql_connection)?;
+                                if let Err(base_error) = StateManagerApplicationUserPostgresql::create(postgresql_connection_DIESEL, &application_user) {
+                                    TransactionManager::rollback_transaction(postgresql_connection_DIESEL)?;
 
                                     return Err(base_error);
                                 }
 
-                                if let Err(base_error) = StateManagerApplicationUserPreConfirmedPostgesql::delete(postgresql_connection, &application_user_pre_confirmed) {
-                                    TransactionManager::rollback_transaction(postgresql_connection)?;
+                                if let Err(base_error) = StateManagerApplicationUserPreConfirmedPostgesql::delete(postgresql_connection_DIESEL, &application_user_pre_confirmed) {
+                                    TransactionManager::rollback_transaction(postgresql_connection_DIESEL)?;
 
                                     return Err(base_error);
                                 }
                                 
-                                TransactionManager::commit_transaction(postgresql_connection)?;
+                                TransactionManager::commit_transaction(postgresql_connection_DIESEL)?;
 
                                 let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::new_from_id_registry(application_user.get_id()?, application_user_log_in_token_device_id.as_str());
 
@@ -124,7 +126,7 @@ impl Base {
                         return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::NotFound}});
                     }
 
-                    if DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
+                    if DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection_DIESEL, application_user_email.as_str())? {
                         return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::AlreadyConfirmed}});
                     }
                     
