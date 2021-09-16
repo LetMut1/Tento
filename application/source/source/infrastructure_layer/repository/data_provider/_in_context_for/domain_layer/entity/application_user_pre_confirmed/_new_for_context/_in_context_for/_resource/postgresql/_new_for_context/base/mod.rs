@@ -18,7 +18,7 @@ impl DataProviderApplicationUserPreConfirmedPostgesqlTrait for Base {
         connection: &'outer_a mut Connection,
         application_user_email: &'outer_a str
     ) -> Result<bool, Self::Error> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
         let query: &'static str = 
             "SELECT \
@@ -42,7 +42,7 @@ impl DataProviderApplicationUserPreConfirmedPostgesqlTrait for Base {
         connection: &'outer_a mut Connection,
         application_user_email: &'outer_a str
     ) -> Result<Option<ApplicationUserPreConfirmed>, Self::Error> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
         let query: &'static str = 
             "SELECT \

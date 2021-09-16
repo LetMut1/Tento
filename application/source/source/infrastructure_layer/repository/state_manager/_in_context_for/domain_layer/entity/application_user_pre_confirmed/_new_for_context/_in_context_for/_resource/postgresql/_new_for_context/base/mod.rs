@@ -17,7 +17,7 @@ impl StateManagerApplicationUserPreConfirmedPostgesqlTrait for Base {
         connection: &'outer_a mut Connection,
         application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
     ) -> Result<(), Self::Error> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
         let query: &'static str = 
             "INSERT INTO public.application_user_pre_confirmed AS aupc ( \
