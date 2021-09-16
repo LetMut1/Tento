@@ -3,12 +3,17 @@ use crate::domain_layer::repository::data_provider::_in_context_for::domain_laye
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::base_trait::BaseTrait as ApplicationUserPreConfirmedFactoryTrait;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::_new_for_context::select::Select;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_counter::PreparedStatementParameterCounter;
 use crate::infrastructure_layer::service::diesel_component::schema_describer::public::pre_confirmed_application_user as pre_confirmed_application_user_schema;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::base::Base as ApplicationUserPreConfirmedFactory;
-use diesel::dsl;
+use postgres::Row;
+use postgres::Statement;
+use postgres::types::Type;
+use postgres::Client as Connection;
 use diesel::ExpressionMethods;
 use diesel::OptionalExtension;
-use diesel::PgConnection as Connection;
+use diesel::PgConnection;
 use diesel::QueryDsl;
 use diesel::RunQueryDsl;
 
@@ -18,17 +23,35 @@ impl DataProviderApplicationUserPreConfirmedPostgesqlTrait for Base {
     type Error = BaseError;
 
     fn is_exist_by_application_user_email<'outer_a>(
-        connection: &'outer_a Connection,
+        connection: &'outer_a mut Connection,
         application_user_email: &'outer_a str
     ) -> Result<bool, Self::Error> {
-        return Ok(
-            diesel::select(dsl::exists(pre_confirmed_application_user_schema::table.filter(pre_confirmed_application_user_schema::email.eq(application_user_email))))
-            .get_result::<bool>(connection)?
-        );          // TODO посмотреть, что за запрос !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver = PreparedStatementParameterConvertationResolver::new();
+        
+        let mut prepared_statemant_parameter_counter: PreparedStatementParameterCounter = PreparedStatementParameterCounter::new();
+
+        let mut query: String = 
+            "SELECT \
+                aupc.id as i \
+            FROM public.application_user_pre_confirmed aupc \
+            WHERE aupc.application_user_email = $"
+            .to_string();
+        query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
+
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+
+        let statement: Statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+
+        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        if !row_registry.is_empty() {
+            return Ok(true);
+        }
+
+        return Ok(false);
     }
 
     fn get_by_application_user_email<'outer_a>(
-        connection: &'outer_a Connection,
+        connection: &'outer_a PgConnection,
         application_user_email: &'outer_a str
     ) -> Result<Option<ApplicationUserPreConfirmed>, Self::Error> {
         if let Some(select) = pre_confirmed_application_user_schema::table.filter(
