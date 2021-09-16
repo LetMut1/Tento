@@ -26,15 +26,15 @@ impl Base {
 
         let mut query: String = 
             "SELECT \
-                c.id as i, \
-                c.name as n, \
-                c.personalization_image_path as pip, \
-                c.subscribers_quantity as sq, \
-                c.public_marks_quantity as pmq, \
-                c.hidden_marks_quantity as hmq, \
-                c.reactions_quantity as rq, \
-                c.viewing_quantity as vq, \
-                c.created_at::TEXT as ca \
+                c.id AS i, \
+                c.name AS n, \
+                c.personalization_image_path AS pip, \
+                c.subscribers_quantity AS sq, \
+                c.public_marks_quantity AS pmq, \
+                c.hidden_marks_quantity AS hmq, \
+                c.reactions_quantity AS rq, \
+                c.viewing_quantity AS vq, \
+                c.created_at::TEXT AS ca \
             FROM public.channel c \
             WHERE c.is_private = FALSE AND c.name LIKE $"
             .to_string();
@@ -93,15 +93,15 @@ impl Base {
 
         let mut query: String = 
             "SELECT \
-                c.id as i, \
-                c.name as n, \
-                c.personalization_image_path as pip, \
-                c.subscribers_quantity as sq, \
-                c.public_marks_quantity as pmq, \
-                c.hidden_marks_quantity as hmq, \
-                c.reactions_quantity as rq, \
-                c.viewing_quantity as vq, \
-                c.created_at::TEXT as ca \
+                c.id AS i, \
+                c.name AS n, \
+                c.personalization_image_path AS pip, \
+                c.subscribers_quantity AS sq, \
+                c.public_marks_quantity AS pmq, \
+                c.hidden_marks_quantity AS hmq, \
+                c.reactions_quantity AS rq, \
+                c.viewing_quantity AS vq, \
+                c.created_at::TEXT AS ca \
             FROM public.channel c \
             WHERE c.is_private = FALSE AND c.created_at <= current_timestamp(6)"
             .to_string();
@@ -163,8 +163,8 @@ impl Base {
 
         let mut query: String = 
             "SELECT \
-                c.id as i, \
-                c.subscribers_quantity as sq \
+                c.id AS i, \
+                c.subscribers_quantity AS sq \
             FROM public.channel c \
             WHERE c.is_private = FALSE"
             .to_string();
@@ -219,15 +219,15 @@ impl Base {
 
         let query: String = 
             "SELECT \
-                c.id as i, \
-                c.name as n, \
-                c.personalization_image_path as pip, \
-                c.subscribers_quantity as sq, \
-                c.public_marks_quantity as pmq, \
-                c.hidden_marks_quantity as hmq, \
-                c.reactions_quantity as rq, \
-                c.viewing_quantity as vq, \
-                c.created_at::TEXT as ca \
+                c.id AS i, \
+                c.name AS n, \
+                c.personalization_image_path AS pip, \
+                c.subscribers_quantity AS sq, \
+                c.public_marks_quantity AS pmq, \
+                c.hidden_marks_quantity AS hmq, \
+                c.reactions_quantity AS rq, \
+                c.viewing_quantity AS vq, \
+                c.created_at::TEXT AS ca \
             FROM public.channel c \
             WHERE c.is_private = FALSE AND c.id = ANY($1);"
             .to_string();

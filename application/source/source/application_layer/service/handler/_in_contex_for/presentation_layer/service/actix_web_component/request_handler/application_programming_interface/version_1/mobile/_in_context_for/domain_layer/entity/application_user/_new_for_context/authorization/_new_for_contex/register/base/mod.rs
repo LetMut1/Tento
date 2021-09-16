@@ -95,7 +95,7 @@ impl Base {
                                     return Err(base_error);
                                 }
 
-                                if let Err(base_error) = StateManagerApplicationUserPreConfirmedPostgesql::delete(postgresql_connection_DIESEL, &application_user_pre_confirmed) {
+                                if let Err(base_error) = StateManagerApplicationUserPreConfirmedPostgesql::delete(postgresql_connection, &application_user_pre_confirmed) {
                                     TransactionManager::rollback_transaction(postgresql_connection_DIESEL)?;
 
                                     return Err(base_error);

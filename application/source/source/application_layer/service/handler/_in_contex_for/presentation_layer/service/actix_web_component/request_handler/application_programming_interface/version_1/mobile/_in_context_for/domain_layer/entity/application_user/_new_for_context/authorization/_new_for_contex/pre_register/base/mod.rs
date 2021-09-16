@@ -50,7 +50,7 @@ impl Base {
                         &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_registration_confirmation_token
                     )?;
 
-                    StateManagerApplicationUserPreConfirmedPostgesql::create(postgresql_connection_DIESEL, &application_user_pre_confirmed)?;
+                    StateManagerApplicationUserPreConfirmedPostgesql::create(postgresql_connection, &application_user_pre_confirmed)?;
 
                     EmailSender::send_application_user_registration_confirmation_token(&application_user_registration_confirmation_token)?;
 
