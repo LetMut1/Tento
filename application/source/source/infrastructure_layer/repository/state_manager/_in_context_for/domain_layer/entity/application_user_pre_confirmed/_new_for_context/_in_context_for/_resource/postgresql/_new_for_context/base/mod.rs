@@ -2,7 +2,6 @@ use crate::domain_layer::entity::application_user_pre_confirmed::ApplicationUser
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserPreConfirmedPostgesqlTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_counter::PreparedStatementParameterCounter;
 use postgres::Client as Connection;
 use postgres::Row;
 use postgres::Statement;
@@ -54,7 +53,23 @@ impl StateManagerApplicationUserPreConfirmedPostgesqlTrait for Base {
         connection: &'outer_a mut Connection,
         application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
     ) -> Result<(), Self::Error> {
-        todo!();
+        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+
+        let query: &'static str = 
+            "DELETE FROM ONLY public.application_user_pre_confirmed AS aupc \
+            WHERE aupc.id = $1 \
+            RETURNING \
+                aupc.id AS i;";
+
+        prepared_statemant_parameter_convertation_resolver.add_parameter(application_user_pre_confirmed.get_id()?, Type::INT8);
+
+        let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+
+        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        if row_registry.is_empty() {
+            return Err(BaseError::LogicError {message: "ApplicationUserPreConfirmed can not be deleted from Postgesql database."});
+        }
+
         return Ok(());
     }
 }
