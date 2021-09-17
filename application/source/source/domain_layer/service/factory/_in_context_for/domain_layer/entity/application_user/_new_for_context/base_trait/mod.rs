@@ -1,8 +1,5 @@
-use chrono::DateTime as ChronoDateTime;
-use chrono::offset::Utc;
 use crate::domain_layer::entity::application_user_pre_confirmed::ApplicationUserPreConfirmed;
 use crate::domain_layer::entity::application_user::ApplicationUser;
-use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::_new_for_context::select::Select;
 use std::borrow::Cow;
 
 pub trait BaseTrait {
@@ -17,32 +14,6 @@ pub trait BaseTrait {
             nickname,
             password_hash,
             chrono::Utc::now().to_rfc2822() // TODO 
-        );
-    }
-
-    fn new_from_select(
-        select: Select
-    ) -> ApplicationUser<'static> {
-        let (
-            id,
-            email,
-            nickname,
-            password_hash,
-            created_at
-        ) : (
-            i64,
-            String,
-            String,
-            String,
-            ChronoDateTime<Utc>                 // TODO DELETE
-        ) = select.into_inner();
-
-        return ApplicationUser::new(
-            Some(id),
-            Cow::Owned(email),
-            nickname,
-            password_hash,
-            created_at.to_rfc2822() // TODO
         );
     }
 }

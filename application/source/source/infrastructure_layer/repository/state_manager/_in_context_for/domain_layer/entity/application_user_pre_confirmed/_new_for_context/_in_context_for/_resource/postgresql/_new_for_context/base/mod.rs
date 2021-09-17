@@ -36,8 +36,9 @@ impl StateManagerApplicationUserPreConfirmedPostgesqlTrait for Base {
             RETURNING \
                 aupc.id AS i;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&created_at, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&application_user_email, Type::TEXT)
+            .add_parameter(&created_at, Type::TEXT);
 
         let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 

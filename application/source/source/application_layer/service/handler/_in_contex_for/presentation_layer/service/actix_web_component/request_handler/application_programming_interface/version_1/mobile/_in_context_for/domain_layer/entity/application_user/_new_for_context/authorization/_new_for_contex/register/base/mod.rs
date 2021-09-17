@@ -72,7 +72,7 @@ impl Base {
                 let postgresql_connection_DIESEL: &'_ PostgresqlConnectionDiesel = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
                 let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
-                if !DataProviderApplicationUserPostgresql::is_exist_by_nickanme(postgresql_connection_DIESEL, application_user_nickname.as_str())? {
+                if !DataProviderApplicationUserPostgresql::is_exist_by_nickanme(postgresql_connection, application_user_nickname.as_str())? {
                     if let Some(application_user_pre_confirmed) = DataProviderApplicationUserPreConfirmedPostgesql::find_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
                         let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
@@ -89,7 +89,7 @@ impl Base {
 
                                 TransactionManager::begin_transaction(postgresql_connection_DIESEL)?;
                                 
-                                if let Err(base_error) = StateManagerApplicationUserPostgresql::create(postgresql_connection_DIESEL, &application_user) {
+                                if let Err(base_error) = StateManagerApplicationUserPostgresql::create(postgresql_connection, &application_user) {
                                     TransactionManager::rollback_transaction(postgresql_connection_DIESEL)?;
 
                                     return Err(base_error);
@@ -126,7 +126,7 @@ impl Base {
                         return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::NotFound}});
                     }
 
-                    if DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection_DIESEL, application_user_email.as_str())? {
+                    if DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
                         return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::AlreadyConfirmed}});
                     }
                     

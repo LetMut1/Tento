@@ -22,7 +22,7 @@ impl Base {
 
         if ApplicationUserComponentValidator::is_valid_nickname(application_user_nickname.as_str()) {
             let result: bool = DataProviderApplicationUserPostgresql::is_exist_by_nickanme(
-                &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?, application_user_nickname.as_str()
+                &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, application_user_nickname.as_str()
             )?;
 
             return Ok(Response::new(result));

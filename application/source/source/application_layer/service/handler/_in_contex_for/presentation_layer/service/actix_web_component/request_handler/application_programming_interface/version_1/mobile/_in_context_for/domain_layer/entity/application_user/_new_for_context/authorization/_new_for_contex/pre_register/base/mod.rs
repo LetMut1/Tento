@@ -23,7 +23,6 @@ use crate::infrastructure_layer::service::component_validator::_in_context_for::
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::base::Base as ApplicationUserPreConfirmedFactory;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenFactory;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::pre_register::base::Base as Request;
-use diesel::PgConnection as PostgresqlConnectionDiesel;
 use postgres::Client as PostgresqlConnection;
 use std::sync::Arc;
 
@@ -36,11 +35,10 @@ impl Base {
     ) -> Result<(), BaseError> {
         let application_user_email: String = request.get_application_user_email();
         if ApplicationUserComponentValidator::is_valid_email(application_user_email.as_str())? {
-            let postgresql_connection_DIESEL: &'_ PostgresqlConnectionDiesel = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
             let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
             if !DataProviderApplicationUserPreConfirmedPostgesql::is_exist_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
-                if !DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection_DIESEL, application_user_email.as_str())? {
+                if !DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
                     let application_user_pre_confirmed: ApplicationUserPreConfirmed = ApplicationUserPreConfirmedFactory::new_from_email(application_user_email);  
 
                     let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> =

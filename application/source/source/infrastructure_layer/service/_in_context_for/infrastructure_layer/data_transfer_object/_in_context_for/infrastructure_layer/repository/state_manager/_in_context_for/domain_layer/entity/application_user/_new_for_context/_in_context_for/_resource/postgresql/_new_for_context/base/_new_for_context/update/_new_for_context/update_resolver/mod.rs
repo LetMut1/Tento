@@ -1,22 +1,19 @@
 pub struct UpdateResolver {
     change_email: bool,
     change_nickname: bool,
-    change_password_hash: bool,
-    change_created_at: bool
+    change_password_hash: bool
 }
 
 impl UpdateResolver {
     pub fn new(
         change_email: bool,
         change_nickname: bool,
-        change_password_hash: bool,
-        change_created_at: bool
+        change_password_hash: bool
     ) -> Self {
         return Self {
             change_email,
             change_nickname,
             change_password_hash,
-            change_created_at
         };
     }
 
@@ -36,11 +33,5 @@ impl UpdateResolver {
         &'this self
     ) -> bool {
         return self.change_password_hash;
-    }
-
-    pub fn is_change_created_at<'this>(
-        &'this self
-    ) -> bool {
-        return self.change_created_at;
     }
 }

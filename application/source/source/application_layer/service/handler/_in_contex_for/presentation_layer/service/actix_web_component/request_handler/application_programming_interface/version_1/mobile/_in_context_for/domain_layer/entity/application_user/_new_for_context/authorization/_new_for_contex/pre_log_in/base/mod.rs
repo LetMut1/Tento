@@ -38,8 +38,8 @@ impl Base {
             String
         ) = request.into_inner();
 
-        if let Some(application_user) = DataProviderApplicationUserPostgresql::get_by_email(
-            &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?, application_user_email.as_str()
+        if let Some(application_user) = DataProviderApplicationUserPostgresql::find_by_email(
+            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, application_user_email.as_str()
         )? 
         {
             if PasswordHashResolver::is_valid(application_user_password.as_str(), application_user.get_password_hash())? {

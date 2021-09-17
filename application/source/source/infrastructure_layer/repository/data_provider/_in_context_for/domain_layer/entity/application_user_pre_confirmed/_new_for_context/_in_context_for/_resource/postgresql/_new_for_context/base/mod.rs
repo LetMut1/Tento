@@ -4,10 +4,10 @@ use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::base::Base as ApplicationUserPreConfirmedFactory;
+use postgres::Client as Connection;
 use postgres::Row;
 use postgres::Statement;
 use postgres::types::Type;
-use postgres::Client as Connection;
 
 pub struct Base;
 
