@@ -44,7 +44,7 @@ impl StateManagerApplicationUserPreConfirmedPostgesqlTrait for Base {
 
         let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if row_registry.is_empty() {
-            return Err(BaseError::LogicError {message: "ApplicationUserPreConfirmed can not be inserted into Postgesql database."});
+            return Err(BaseError::LogicError {unreachable: false, message: "ApplicationUserPreConfirmed can not be inserted into Postgesql database."});
         }
 
         return Ok(());
@@ -68,7 +68,7 @@ impl StateManagerApplicationUserPreConfirmedPostgesqlTrait for Base {
 
         let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if row_registry.is_empty() {
-            return Err(BaseError::LogicError {message: "ApplicationUserPreConfirmed can not be deleted from Postgesql database."});
+            return Err(BaseError::LogicError {unreachable: false, message: "ApplicationUserPreConfirmed can not be deleted from Postgesql database."});
         }
 
         return Ok(());

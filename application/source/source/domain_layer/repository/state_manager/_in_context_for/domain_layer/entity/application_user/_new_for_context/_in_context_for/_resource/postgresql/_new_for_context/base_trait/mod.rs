@@ -1,10 +1,11 @@
 use crate::domain_layer::entity::application_user::ApplicationUser;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;
+use crate::domain_layer::service::update_resolver::_in_context_for::domain_layer::entity::application_user::_new_for_context::base_trait::BaseTrait as UpdateResolverApplicationUserTrait;
 use postgres::Client as Connection;
 use std::error::Error;
 
 pub trait BaseTrait {
     type Error: Error;
+    type UpdateResolverApplicationUser: UpdateResolverApplicationUserTrait;
     
     fn create<'outer_a>(
         connection: &'outer_a mut Connection,
@@ -14,6 +15,6 @@ pub trait BaseTrait {
     fn update<'outer_a>(
         connection: &'outer_a mut Connection,
         application_user: &'outer_a ApplicationUser<'_>,
-        update_resolver: UpdateResolver
+        update_resolver: Self::UpdateResolverApplicationUser
     ) -> Result<(), Self::Error>;
 }

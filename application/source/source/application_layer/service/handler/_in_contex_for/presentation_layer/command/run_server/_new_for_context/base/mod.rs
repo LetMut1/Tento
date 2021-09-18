@@ -56,7 +56,7 @@ impl Base {
                         if development_environment_file_path_buffer.exists() {
                             dotenv::from_path(development_environment_file_path_buffer.as_path())?;
                         } else {
-                            return Err(BaseError::LogicError {message: "Any ....env files does not exist."});
+                            return Err(BaseError::LogicError {unreachable: false, message: "Any ....env files does not exist."});
                         }
                     }
 
@@ -68,7 +68,7 @@ impl Base {
                 return Ok(());
             },
             None => {
-                return Err(BaseError::LogicError {message: "The directory does not exist."});
+                return Err(BaseError::LogicError {unreachable: false, message: "The directory does not exist."});
             }
         }
     }

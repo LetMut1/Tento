@@ -60,7 +60,7 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError {message: _} |
+                    BaseError::LogicError {unreachable: _, message: _} |
                     BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
@@ -119,7 +119,7 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError {message: _} => {
+                BaseError::LogicError {unreachable: _, message: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -224,7 +224,7 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError {message: _} |
+                    BaseError::LogicError {unreachable: _, message: _} |
                     BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
@@ -264,7 +264,7 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError {message: _} => {
+                BaseError::LogicError {unreachable: _, message: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -329,7 +329,7 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError {message: _} => {
+                    BaseError::LogicError {unreachable: _, message: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -394,7 +394,7 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError {message: _} |
+                    BaseError::LogicError {unreachable: _, message: _} |
                     BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
@@ -433,7 +433,7 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError {message: _} => {
+                BaseError::LogicError {unreachable: _, message: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();
@@ -506,7 +506,7 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError {message: _} |
+                    BaseError::LogicError {unreachable: _, message: _} |
                     BaseError::RunTimeError {run_time_error: _} => {
                         log::error!("{}", base_error);
 
@@ -542,7 +542,7 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError {message: _} |
+                BaseError::LogicError {unreachable: _, message: _} |
                 BaseError::RunTimeError {run_time_error: _} => {
                     log::error!("{}", base_error);
 
@@ -579,7 +579,7 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError {message: _} |
+                BaseError::LogicError {unreachable: _, message: _} |
                 BaseError::RunTimeError {run_time_error: _} => {
                     log::error!("{}", base_error);
 
@@ -624,7 +624,7 @@ impl Authorization {
                     BaseError::InvalidArgumentError => {
                         return StandardResponseCreator::create_bad_request();
                     },
-                    BaseError::LogicError {message: _} => {
+                    BaseError::LogicError {unreachable: _, message: _} => {
                         log::error!("{}", base_error);
 
                         return StandardResponseCreator::create_internal_server_error();
@@ -703,7 +703,7 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError {message: _} |
+                BaseError::LogicError {unreachable: _, message: _} |
                 BaseError::RunTimeError {run_time_error: _} => {
                     log::error!("{}", base_error);
 
@@ -743,7 +743,7 @@ impl Authorization {
                 BaseError::InvalidArgumentError => {
                     return StandardResponseCreator::create_bad_request();
                 },
-                BaseError::LogicError {message: _} => {
+                BaseError::LogicError {unreachable: _, message: _} => {
                     log::error!("{}", base_error);
 
                     return StandardResponseCreator::create_internal_server_error();

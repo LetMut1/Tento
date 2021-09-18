@@ -44,6 +44,6 @@ impl Base {
             return Err(BaseError::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotFound}});
         }
 
-        return Err(BaseError::LogicError {message: "'AggregateConnectionPool' must exist in application state."});
+        return Err(BaseError::LogicError {unreachable: true, message: "AggregateConnectionPool must exist in application state."});
     }
 }

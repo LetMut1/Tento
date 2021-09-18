@@ -36,7 +36,8 @@ pub enum BaseError {
     },
     InvalidArgumentError,
     LogicError {
-        message: &'static str
+        unreachable: bool,
+        message: &'static str,
     },
     RunTimeError {
         run_time_error: RunTimeError
@@ -49,8 +50,12 @@ impl Display for BaseError {
         formatter: &'outer_a mut Formatter<'_>
     ) -> Result {
         match self {
-            Self::LogicError {message} => {
-                write!(formatter, "BaseError-LogicError: {}", message)?;
+            Self::LogicError {unreachable, message} => {
+                if *unreachable {
+                    write!(formatter, "BaseError-LogicError: [Unreachable] {}", message)?;
+                } else {
+                    write!(formatter, "BaseError-LogicError: {}", message)?;
+                }
             },
             Self::RunTimeError {run_time_error} => {
                 match run_time_error {
@@ -106,7 +111,7 @@ impl From<LogicError> for BaseError {
     fn from(
         logic_error: LogicError
     ) -> Self {
-        return Self::LogicError {message: logic_error.get_message()};
+        return Self::LogicError {unreachable: false, message: logic_error.get_message()};
     }
 }
 

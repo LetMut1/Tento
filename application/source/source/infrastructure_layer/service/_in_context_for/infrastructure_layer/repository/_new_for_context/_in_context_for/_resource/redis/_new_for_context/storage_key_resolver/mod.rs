@@ -13,21 +13,21 @@ impl StorageKeyResolver {
         application_user_log_in_token_device_id: &'outer_a str
     ) -> String {
         return Self::PREFIX_REPOSITORY_APPLICATION_USER_LOG_IN_TOKEN_FIRST.to_string()
-        + application_user_id.to_string().as_str()  + ":" + application_user_log_in_token_device_id;
+            + application_user_id.to_string().as_str()  + ":" + application_user_log_in_token_device_id;
     }
     
     pub fn get_repository_application_user_registration_confirmation_token_first<'outer_a>(
         application_user_pre_confirmed_id: &'outer_a i64
     ) -> String {
         return Self::PREFIX_REPOSITORY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_FIRST.to_string()
-        + application_user_pre_confirmed_id.to_string().as_str();
+            + application_user_pre_confirmed_id.to_string().as_str();
     }
 
     pub fn get_repository_application_user_reset_password_token_first<'outer_a>(
         application_user_id: &'outer_a i64,
     ) -> String {
         return Self::PREFIX_REPOSITORY_APPLICATION_USER_RESET_PASSWORD_TOKEN_FIRST.to_string()
-        + application_user_id.to_string().as_str();
+            + application_user_id.to_string().as_str();
     }
 
     pub fn get_repository_json_access_web_token_bkack_list_first<'outer_a>(
@@ -41,13 +41,13 @@ impl StorageKeyResolver {
         application_user_log_in_token_device_id: &'outer_a str,
     ) -> String {
         return Self::PREFIX_REPOSITORY_JSON_REFRESH_WEB_TOKEN_FIRST.to_string()
-        + application_user_id.to_string().as_str() + ":" + application_user_log_in_token_device_id;
+            + application_user_id.to_string().as_str() + ":" + application_user_log_in_token_device_id;
     }
 
     pub fn get_service_json_refresh_web_token_first<'outer_a>(
         application_user_id: &'outer_a i64
     ) -> String {
         return Self::PREFIX_SERVICE_JSON_REFRESH_WEB_TOKEN_FIRST.to_string()
-        + application_user_id.to_string().as_str();
+            + application_user_id.to_string().as_str();
     }
 }

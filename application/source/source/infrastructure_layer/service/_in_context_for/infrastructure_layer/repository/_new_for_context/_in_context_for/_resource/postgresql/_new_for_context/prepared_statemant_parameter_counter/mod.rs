@@ -16,7 +16,7 @@ impl PreparedStatementParameterCounter {
         &'this mut self
     ) -> Result<&'this u8, BaseError> {
         if self.counter == u8::max_value() {
-            return Err(BaseError::LogicError {message: "Out of range for `u8` type."});
+            return Err(BaseError::LogicError {unreachable: false, message: "Out of range for `u8` type."});
         }
 
         self.counter = self.counter + 1;

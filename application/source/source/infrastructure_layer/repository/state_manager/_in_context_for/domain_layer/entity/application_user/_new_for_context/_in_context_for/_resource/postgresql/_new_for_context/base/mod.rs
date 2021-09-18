@@ -1,8 +1,10 @@
 use crate::domain_layer::entity::application_user::ApplicationUser;
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserPostgresqlTrait;
+use crate::domain_layer::service::update_resolver::_in_context_for::domain_layer::entity::application_user::_new_for_context::base_trait::BaseTrait as UpdateResolverApplicationUserTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::_new_for_context::update::_new_for_context::update_resolver::UpdateResolver;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_counter::PreparedStatementParameterCounter;
+use crate::infrastructure_layer::service::update_resolver::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as UpdateResolverApplicationUser;
 use postgres::Client as Connection;
 use postgres::Row;
 use postgres::Statement;
@@ -12,6 +14,7 @@ pub struct Base;
 
 impl StateManagerApplicationUserPostgresqlTrait for Base {
     type Error = BaseError;
+    type UpdateResolverApplicationUser = UpdateResolverApplicationUser;
 
     fn create<'outer_a>(
         connection: &'outer_a mut Connection,
@@ -55,7 +58,7 @@ impl StateManagerApplicationUserPostgresqlTrait for Base {
 
         let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if row_registry.is_empty() {
-            return Err(BaseError::LogicError {message: "ApplicationUser can not be inserted into Postgesql database."});
+            return Err(BaseError::LogicError {unreachable: false, message: "ApplicationUser can not be inserted into Postgesql database."});
         }
 
         return Ok(());
@@ -64,56 +67,149 @@ impl StateManagerApplicationUserPostgresqlTrait for Base {
     fn update<'outer_a>(
         connection: &'outer_a mut Connection,
         application_user: &'outer_a ApplicationUser<'_>,
-        update_resolver: UpdateResolver                     // TODO изменить нэймспейс !!!!!! НАПИСАТЬ проверку на отсутсвия ТРУ для полей обновления.
+        update_resolver: Self::UpdateResolverApplicationUser
     ) -> Result<(), Self::Error> {
+        if !update_resolver.should_update() {
+            return Err(BaseError::LogicError {unreachable: false, message: "The columns allowing update should exist for ApplicationUser."})
+        }
 
-        // TODO Переписать здесь все после введения нового АпдейтРезолвера
-        //  https://postgrespro.ru/docs/postgresql/9.6/sql-update
+        let email: &'_ str = application_user.get_email();
 
-        // let email: &'_ str = application_user.get_email();
+        let nickanme: &'_ str = application_user.get_nickname();
 
-        // let nickanme: &'_ str = application_user.get_nickname();
+        let password_hash: &'_ str = application_user.get_password_hash();
 
-        // let password_hash: &'_ str = application_user.get_password_hash();
+        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
-        // let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_counter: PreparedStatementParameterCounter = PreparedStatementParameterCounter::new();
 
-        // let query: String = 
-        //     "UPDATE ONLY public.application_user AS au \
-        //     SET ( \
-        //         email, \
-        //         nickname, \
-        //         password_hash \
-        //     ) = ( \
-        //         $1, \
-        //         $2, \
-        //         $3 \
-        //     ) \
-        //     WHERE au.id = $4 \
-        //     RETURNING \
-        //         au.id AS i;"
-        //     .to_string();
+        let mut column_name_registry_description: Option<String> = None;
+        let mut column_value_registry_description: Option<String> = None;
+        if update_resolver.is_update_email() {
+            column_name_registry_description = Some("email".to_string());
 
+            column_value_registry_description = Some(
+                "$".to_string() + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
+            );
 
+            prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
+        }
+        if update_resolver.is_update_nickname() {
+            match column_name_registry_description {
+                Some(mut column_name_registry_description_) => {
+                    column_name_registry_description_ = column_name_registry_description_ + ", nickname";
+                    
+                    column_name_registry_description = Some(column_name_registry_description_);
 
+                    match column_value_registry_description {
+                        Some (mut column_value_registry_description_) => {
+                            column_value_registry_description_ = column_value_registry_description_+ ", $"
+                                + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
 
+                            column_value_registry_description = Some(column_value_registry_description_);
 
+                            prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
+                        },
+                        None => {
+                            return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should exist for ApplicationUser update."});
+                        }
+                    }
+                },
+                None => {
+                    column_name_registry_description = Some("nickname".to_string());
 
+                    match column_value_registry_description {
+                        Some (_) => {
+                            return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should not exist for ApplicationUser."});
+                        },
+                        None => {
+                            column_value_registry_description = Some(
+                                "$".to_string() + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
+                            );
 
+                            prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
+                        }
+                    }
+                }
+            }
+        }
+        if update_resolver.is_update_password_hash() {
+            match column_name_registry_description {
+                Some(mut column_name_registry_description_) => {
+                    column_name_registry_description_ = column_name_registry_description_ + ", password_hash";
 
+                    column_name_registry_description = Some(column_name_registry_description_);
 
+                    match column_value_registry_description {
+                        Some (mut column_value_registry_description_) => {
+                            column_value_registry_description_ = column_value_registry_description_+ ", $"
+                                + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
 
-        // prepared_statemant_parameter_convertation_resolver
-        //     .add_parameter(&email, Type::TEXT)
-        //     .add_parameter(&nickanme, Type::TEXT)
-        //     .add_parameter(&password_hash, Type::TEXT);
+                            column_value_registry_description = Some(column_value_registry_description_);
 
-        // let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+                            prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
+                        },
+                        None => {
+                            return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should exist for ApplicationUser update."});
+                        }
+                    }
+                },
+                None => {
+                    column_name_registry_description = Some("password_hash".to_string());
 
-        // let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
-        // if row_registry.is_empty() {
-        //     return Err(BaseError::LogicError {message: "ApplicationUser can not be inserted into Postgesql database."});
-        // }
+                    match column_value_registry_description {
+                        Some (_) => {
+                            return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should not exist for ApplicationUser."});
+                        },
+                        None => {
+                            column_value_registry_description = Some(
+                                "$".to_string() + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
+                            );
+
+                            prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
+                        }
+                    }
+                }
+            }
+        }
+
+        let query: String;
+
+        match column_name_registry_description {
+            Some(column_name_registry_description_) => {
+                match column_value_registry_description {
+                    Some(column_value_registry_description_) => {
+                        query = 
+                            "UPDATE ONLY public.application_user AS au \
+                            SET ("
+                            .to_string()
+                            + column_name_registry_description_.as_str()
+                            + ") = ("
+                            + column_value_registry_description_.as_str()
+                            + ") \
+                            WHERE au.id = $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
+                            + " RETURNING \
+                                au.id AS i;";
+                        
+                        prepared_statemant_parameter_convertation_resolver.add_parameter(application_user.get_id()?, Type::INT8);
+                    },
+                    None => {
+                        return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should exist for ApplicationUser update."})
+                    }
+                }
+            },
+            None => {
+                return Err(BaseError::LogicError {unreachable: true, message: "The columns name description should exist for ApplicationUser update."})
+            }
+        }
+
+        let statement: Statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+
+        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        if row_registry.is_empty() {
+            return Err(BaseError::LogicError {unreachable: false, message: "ApplicationUser can not be updated in Postgesql database."});
+        }
+
         return Ok(());
     }
 }

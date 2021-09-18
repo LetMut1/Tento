@@ -37,8 +37,8 @@ impl Base {
                 c.created_at::TEXT AS ca \
             FROM public.channel c \
             WHERE c.is_private = FALSE AND c.name LIKE $"
-            .to_string();
-        query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
+            .to_string()
+            + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
 
         let wildcard: String = name.to_string() + "%";
         prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
@@ -217,7 +217,7 @@ impl Base {
 
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
-        let query: String = 
+        let query: &'static str = 
             "SELECT \
                 c.id AS i, \
                 c.name AS n, \
@@ -229,14 +229,13 @@ impl Base {
                 c.viewing_quantity AS vq, \
                 c.created_at::TEXT AS ca \
             FROM public.channel c \
-            WHERE c.is_private = FALSE AND c.id = ANY($1);"
-            .to_string();
+            WHERE c.is_private = FALSE AND c.id = ANY($1);";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&id_registry, Type::INT8_ARRAY);
 
         let mut channel_registry: Vec<ResponseGetManyByIdRegistryChannel> = Vec::new();
 
-        let statement: Statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
         let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if !row_registry.is_empty() {

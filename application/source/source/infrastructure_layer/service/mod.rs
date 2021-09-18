@@ -5,3 +5,4 @@ pub mod diesel_component;
 pub mod email_sender;
 pub mod environment_variable_resolver;
 pub mod factory;
+pub mod update_resolver;
