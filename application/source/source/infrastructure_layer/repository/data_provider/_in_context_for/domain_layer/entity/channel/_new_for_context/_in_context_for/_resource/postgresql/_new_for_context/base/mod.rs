@@ -12,7 +12,7 @@ use postgres::Statement;
 use postgres::types::Type;
 
 pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO 
-
+                    // TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
 impl Base {
     pub fn find_many_by_name<'outer_a>(
         connection: &'outer_a mut Connection,
