@@ -1,0 +1,59 @@
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use postgres::Client as Connection;
+use super::_component::transaction_isolation_level::TransactionIsolationLevel;
+
+pub struct TransactionManager;
+
+impl TransactionManager {
+    pub fn begin_transaction<'outer_a>(
+        connection: &'outer_a mut Connection,
+        transaction_isolation_level: TransactionIsolationLevel
+    ) -> Result<(), BaseError> {
+        let mut query: String = "START TRANSACTION ISOLATION LEVEL".to_string();
+        match transaction_isolation_level {
+            TransactionIsolationLevel::ReadCommitted => {
+                query = query + " READ COMMITTED, READ WRITE, NOT DEFERRABLE;";
+            },
+            TransactionIsolationLevel::RepeatableRead => {
+                query = query + " REPEATABLE READ, READ WRITE, NOT DEFERRABLE;";
+            },
+            TransactionIsolationLevel::Serializable {read_only, deferrable} => {
+                query = query + " SERIALIZABLE,";
+                if read_only {
+                    query = query + " READ ONLY,";
+                } else {
+                    query = query + " READ WRITE,";
+                }
+                if deferrable {
+                    query = query + " DEFERRABLE;";
+                } else {
+                    query = query + " NOT DEFERRABLE;";
+                }
+            }
+        }
+
+        connection.execute(query.as_str(), &[])?;
+
+        return Ok(());
+    }
+
+    pub fn commit_transaction<'outer_a>(
+        connection: &'outer_a mut Connection
+    ) -> Result<(), BaseError> {
+        let query: &'static str = "COMMIT;";
+
+        connection.execute(query, &[])?;
+
+        return Ok(());
+    }
+
+    pub fn rollback_transaction<'outer_a>(
+        connection: &'outer_a mut Connection
+    ) -> Result<(), BaseError> {
+        let query: &'static str = "ROLLBACK;";
+
+        connection.execute(query, &[])?;
+
+        return Ok(());
+    }
+}

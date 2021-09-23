@@ -1,7 +1,5 @@
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
-use diesel::pg::PgConnection as PostgresqlXXXDELETEConnection;
-use diesel::r2d2::ConnectionManager as PostgresqlDELETEXXXConnectionManager;
 use postgres::Config;
 use postgres::NoTls;
 use r2d2_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -13,7 +11,6 @@ use std::str::FromStr;
 
 #[derive(Clone)]
 pub struct AggregateConnectionPool {
-    postgresqlxxxxxdelete_connection_pool: Pool<PostgresqlDELETEXXXConnectionManager<PostgresqlXXXDELETEConnection>>,
     postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>, // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature? Probably having NoTls be the feature, since it makes more sense to have TLS by default
     redis_connection_pool: Pool<RedisConnectionManager>
 }
@@ -24,16 +21,9 @@ impl AggregateConnectionPool {
         return Ok (
             Self {
                 postgresql_connection_pool: Self::establish_postgresql_connection_pool()?,
-                postgresqlxxxxxdelete_connection_pool: Self::establish_postgresqlxxxxxdelete_connection_pool()?,
                 redis_connection_pool: Self::establish_redis_connection_pool()?
             }
         );
-    }
-
-    pub fn get_postgresqlxxxxxxx_connection_pool<'this>(
-        &'this self
-    ) -> &'this Pool<PostgresqlDELETEXXXConnectionManager<PostgresqlXXXDELETEConnection>> {
-        return &self.postgresqlxxxxxdelete_connection_pool;
     }
 
     pub fn get_postgresql_connection_pool<'this>(
@@ -46,11 +36,6 @@ impl AggregateConnectionPool {
         &'this self
     ) -> &'this Pool<RedisConnectionManager> {
         return &self.redis_connection_pool;
-    }
-
-    fn establish_postgresqlxxxxxdelete_connection_pool(
-    ) -> Result<Pool<PostgresqlDELETEXXXConnectionManager<PostgresqlXXXDELETEConnection>>, BaseError> {
-        return Ok(Pool::new(PostgresqlDELETEXXXConnectionManager::<PostgresqlXXXDELETEConnection>::new(EnvironmentVariableResolver::get_resource_postgresql_url()?))?);   // TODO create Pool with builder in preProd state. Просчитать, какое количство Threads можнт использовать одновременно для Actix
     }
 
     fn establish_postgresql_connection_pool(

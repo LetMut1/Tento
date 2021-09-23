@@ -32,7 +32,8 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::transaction_manager::TransactionManager;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::transaction_manager::_component::transaction_isolation_level::TransactionIsolationLevel;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::transaction_manager::transaction_manager::TransactionManager;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::infrastructure_layer::service::component_validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserComponentValidator;
@@ -41,7 +42,6 @@ use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register::base::Base as Request;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web_component::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register::base::Base as Response;
-use diesel::PgConnection as PostgresqlConnectionDiesel;
 use postgres::Client as PostgresqlConnection;
 use redis::Connection as RedisConnection;
 use std::sync::Arc;
@@ -69,7 +69,6 @@ impl Base {
 
         if ApplicationUserComponentValidator::is_valid_password(application_user_password.as_str()) {
             if ApplicationUserComponentValidator::is_valid_nickname(application_user_nickname.as_str()) {
-                let postgresql_connection_DIESEL: &'_ PostgresqlConnectionDiesel = &*ConnectionExtractor::get_postgresqlxxxdelete_connection(&aggregate_connection_pool)?;
                 let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
                 if !DataProviderApplicationUserPostgresql::is_exist_by_nickanme(postgresql_connection, application_user_nickname.as_str())? {
@@ -87,21 +86,21 @@ impl Base {
 
                                 StateManagerApplicationUserRegistrationConfirmationTokenRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
 
-                                TransactionManager::begin_transaction(postgresql_connection_DIESEL)?;
+                                TransactionManager::begin_transaction(postgresql_connection, TransactionIsolationLevel::ReadCommitted)?;
                                 
                                 if let Err(base_error) = StateManagerApplicationUserPostgresql::create(postgresql_connection, &application_user) {
-                                    TransactionManager::rollback_transaction(postgresql_connection_DIESEL)?;
+                                    TransactionManager::rollback_transaction(postgresql_connection)?;
 
                                     return Err(base_error);
                                 }
 
                                 if let Err(base_error) = StateManagerApplicationUserPreConfirmedPostgesql::delete(postgresql_connection, &application_user_pre_confirmed) {
-                                    TransactionManager::rollback_transaction(postgresql_connection_DIESEL)?;
+                                    TransactionManager::rollback_transaction(postgresql_connection)?;
 
                                     return Err(base_error);
                                 }
                                 
-                                TransactionManager::commit_transaction(postgresql_connection_DIESEL)?;
+                                TransactionManager::commit_transaction(postgresql_connection)?;
 
                                 let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::new_from_id_registry(application_user.get_id()?, application_user_log_in_token_device_id.as_str());
 

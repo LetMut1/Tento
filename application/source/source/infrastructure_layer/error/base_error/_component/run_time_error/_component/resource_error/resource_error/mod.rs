@@ -1,4 +1,3 @@
-use diesel::result::Error as DieselError;
 use postgres::Error as PostgresError;
 use r2d2::Error as R2d2Error;
 use redis::RedisError;
@@ -18,9 +17,6 @@ pub enum ResourceError {
     },
     PostgresqlError {
         postgres_error: PostgresError
-    },
-    PostgresqlXXXDELETEError {
-        diesel_error: DieselError
     },
     RedisError {
         redis_error: RedisError

@@ -43,4 +43,3 @@ async fn main(
 // TODO Заменить все дефолтные ответы. (например, неправильный Content-Type)
 // TODO можно ли изменить деолтный ответ при несовпадении Http параметров с ДТО
 // TODO Can we acces to HTTpRequest in Guard? (Check the Params setting opportunity)
-// TODO https://www.reddit.com/r/rust/comments/frkta2/manytomany_relationships_in_diesel_does_anybody/      Diesel MANY-TO-MANY Association example

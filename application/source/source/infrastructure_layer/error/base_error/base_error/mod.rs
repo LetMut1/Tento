@@ -4,7 +4,6 @@ use base64::DecodeError as Base64DecodeError;
 use chrono::ParseError as ChronoParseError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::error::logic_error::LogicError;
-use diesel::result::Error as DieselError;
 use dotenv::Error as DotenvError;
 use lettre_email::error::Error as LettreEmailError;
 use lettre::smtp::error::Error as LettreSmtpError;
@@ -79,9 +78,6 @@ impl Display for BaseError {
                             },
                             ResourceError::PostgresqlError {postgres_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", postgres_error)?;
-                            },
-                            ResourceError::PostgresqlXXXDELETEError {diesel_error} => {
-                                write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", diesel_error)?;
                             },
                             ResourceError::RedisError {redis_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
@@ -224,14 +220,6 @@ impl From<PostgresError> for BaseError {
         postgres_error: PostgresError
     ) -> Self {
         return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgres_error}}};
-    }
-}
-
-impl From<DieselError> for BaseError {
-    fn from(
-        diesel_error: DieselError
-    ) -> Self {
-        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlXXXDELETEError {diesel_error}}};
     }
 }
 
