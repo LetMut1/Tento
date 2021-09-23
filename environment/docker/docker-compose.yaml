@@ -11,7 +11,7 @@ services:
             POSTGRES_HOST_AUTH_METHOD: 'md5'
             POSTGRES_USER: 'root'
             POSTGRES_PASSWORD: 'password'
-            POSTGRES_DB: 'mem_is'
+            POSTGRES_DB: 'memis'
         volumes:
             - postgresql_data:/var/lib/postgresql/data
         restart: always

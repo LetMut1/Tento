@@ -1,5 +1,0 @@
-FROM rust:1.48.0
-
-RUN \
-mkdir -p /usr/local/MemIs/application/ && \
-cargo install diesel_cli --no-default-features --features postgres

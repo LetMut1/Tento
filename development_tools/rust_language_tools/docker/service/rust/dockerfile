@@ -1,7 +1,7 @@
 FROM rust:1.48.0
 
 RUN \
-mkdir -p /usr/local/MemIs && \
+mkdir -p /usr/local/memis && \
 # For VSCode extensions {
 # For "matklad.rust-analyzer and "rust-lang.rust" extensions {
 rustup component add \
@@ -16,4 +16,6 @@ rustup component add \
 apt-get update && \
 apt-get install -y \
     pkg-config \
-    libssl-dev
+    libssl-dev && \
+cargo install diesel_cli --no-default-features --features postgres
+    
