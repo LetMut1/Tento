@@ -15,6 +15,6 @@ pub trait PasswordHashResolverTrait {
         password: &'outer_a str,
         password_hash: &'outer_a str
     ) -> Result<bool, Self::Error> {
-        return Ok(Self::Encoder::is_valid(password, password_hash)?);
+        return Ok(<Self::Encoder as PasswordEncoderTrait>::is_valid(password, password_hash)?);
     }
 }
