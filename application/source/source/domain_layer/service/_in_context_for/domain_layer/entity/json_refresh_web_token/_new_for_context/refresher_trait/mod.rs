@@ -7,7 +7,9 @@ pub trait RefresherTrait {
     fn refresh<'outer_a>(
         json_refresh_web_token: &'outer_a mut JsonRefreshWebToken<'_>
     ) -> () {
-        json_refresh_web_token.set_obfuscation_value(Self::ObfuscationValueGenerator::generate());
+        json_refresh_web_token.set_obfuscation_value(
+            <Self::ObfuscationValueGenerator as ObfuscationValueGeneratorTrait>::generate()
+        );
 
         return ();
     }

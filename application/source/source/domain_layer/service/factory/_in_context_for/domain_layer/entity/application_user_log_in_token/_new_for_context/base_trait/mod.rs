@@ -1,14 +1,15 @@
 use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::entity::application_user::ApplicationUser;
-use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::_new_for_context::common::Common;
-use std::error::Error;
 use crate::domain_layer::error::logic_error::LogicError;
-use std::convert::From;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::value_generator_trait::ValueGeneratorTrait;
+use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::_new_for_context::common::Common;
 use std::borrow::Cow;
-use uuid::Uuid;
+use std::convert::From;
+use std::error::Error;
 
 pub trait BaseTrait {
     type Error: Error + From<LogicError>;
+    type ValueGenerator: ValueGeneratorTrait;
 
     fn create_from_application_user<'outer_a>(
         application_user: &'outer_a ApplicationUser,
@@ -19,7 +20,7 @@ pub trait BaseTrait {
                 application_user.get_id()?,
                 device_id,
                 Cow::Borrowed(application_user.get_email()),
-                Uuid::new_v4().to_string(),       // TODO создать генератор значения + метода Рефреш в модели
+                <Self::ValueGenerator as ValueGeneratorTrait>::generate(),
                 0
             )
         );

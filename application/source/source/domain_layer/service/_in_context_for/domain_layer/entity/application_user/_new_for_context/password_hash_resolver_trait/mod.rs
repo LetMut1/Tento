@@ -8,7 +8,7 @@ pub trait PasswordHashResolverTrait {
     fn create<'outer_a>(
         password: &'outer_a str
     ) -> Result<String, Self::Error> {
-        return Ok(Self::Encoder::encode(password)?);
+        return Ok(<Self::Encoder as PasswordEncoderTrait>::encode(password)?);
     }
 
     fn is_valid<'outer_a>(

@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 pub struct ApplicationUserLogInToken<'outer_a> {
     application_user_id: &'outer_a i64,
-    device_id: &'outer_a str,                           // TODO Почему тут не Овниниг или COw
+    device_id: &'outer_a str,
     application_user_email: Cow<'outer_a, str>,
     value: String,
     wrong_enter_tries_quantity: u8

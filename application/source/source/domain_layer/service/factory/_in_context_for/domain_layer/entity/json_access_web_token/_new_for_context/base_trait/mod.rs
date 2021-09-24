@@ -13,7 +13,7 @@ pub trait BaseTrait {
     ) -> Result<JsonAccessWebToken<'outer_a>, Self::Error> {
         return Ok(
             JsonAccessWebToken::new(
-                Self::JsonAccessWebTokenPayloadFactory::create_from_json_refresh_web_token(json_refresh_web_token)?
+                <Self::JsonAccessWebTokenPayloadFactory as JsonAccessWebTokenPayloadFactoryTrait>::create_from_json_refresh_web_token(json_refresh_web_token)?
             )
         );
     }
@@ -22,7 +22,7 @@ pub trait BaseTrait {
         payload_common: PayloadCommon<'static>
     ) -> JsonAccessWebToken<'static> {
         return JsonAccessWebToken::new(
-            Self::JsonAccessWebTokenPayloadFactory::create_from_payload_common(payload_common)
+            <Self::JsonAccessWebTokenPayloadFactory as JsonAccessWebTokenPayloadFactoryTrait>::create_from_payload_common(payload_common)
         );
     }
 }

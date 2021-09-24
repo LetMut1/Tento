@@ -3,9 +3,9 @@ use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_encoder_trait::PasswordEncoderTrait;
 use uuid::Uuid;
 
-pub struct PasswordEnvoder;
+pub struct PasswordEncoder;
 
-impl PasswordEncoderTrait for PasswordEnvoder {      // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090  // TODO CREATE CUSTOM CONFIG ?
+impl PasswordEncoderTrait for PasswordEncoder {      // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090  // TODO CREATE CUSTOM CONFIG ?
     type Error = BaseError;
 
     fn encode<'outer_a>(
