@@ -29,8 +29,10 @@ pub trait BaseTrait {
     fn is_valid_password<'outer_a>(
         password: &'outer_a str
     ) -> bool {
+        let password_chars_count: usize = password.chars().count();
+
         return !password.contains(' ')
-            && password.chars().count() >= (Self::PASSWORD_MINIMUM_LENGTH as usize)
-            && password.chars().count() <= (Self::PASSWORD_MAXIMUM_LENGTH as usize);
-    }   // TODO усилить пароль (ввести обязательность цифр,  и так далее)
+            && password_chars_count >= (Self::PASSWORD_MINIMUM_LENGTH as usize)
+            && password_chars_count <= (Self::PASSWORD_MAXIMUM_LENGTH as usize);
+    }   // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
 }
