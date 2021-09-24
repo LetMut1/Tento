@@ -18,7 +18,7 @@ impl StateManagerApplicationUserPostgresqlTrait for Base {
 
     fn create<'outer_a>(
         connection: &'outer_a mut Connection,
-        application_user: &'outer_a ApplicationUser<'_>
+        application_user: &'outer_a ApplicationUser
     ) -> Result<(), Self::Error> {
         let email: &'_ str = application_user.get_email();
 
@@ -66,7 +66,7 @@ impl StateManagerApplicationUserPostgresqlTrait for Base {
 
     fn update<'outer_a>(
         connection: &'outer_a mut Connection,
-        application_user: &'outer_a ApplicationUser<'_>,
+        application_user: &'outer_a ApplicationUser,
         update_resolver: Self::UpdateResolverApplicationUser
     ) -> Result<(), Self::Error> {
         if !update_resolver.should_update() {

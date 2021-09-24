@@ -5,10 +5,10 @@ use super::_component::transaction_isolation_level::TransactionIsolationLevel;
 pub struct TransactionManager;
 
 impl TransactionManager {
-    pub fn begin_transaction<'outer_a>(
+    pub fn start_transaction<'outer_a>(
         connection: &'outer_a mut Connection,
         transaction_isolation_level: TransactionIsolationLevel
-    ) -> Result<(), BaseError> {
+    ) -> Result<Self, BaseError> {
         let mut query: String = "START TRANSACTION ISOLATION LEVEL".to_string();
         match transaction_isolation_level {
             TransactionIsolationLevel::ReadCommitted => {
@@ -34,10 +34,11 @@ impl TransactionManager {
 
         connection.execute(query.as_str(), &[])?;
 
-        return Ok(());
+        return Ok(Self);
     }
 
     pub fn commit_transaction<'outer_a>(
+        self,
         connection: &'outer_a mut Connection
     ) -> Result<(), BaseError> {
         let query: &'static str = "COMMIT;";
@@ -48,6 +49,7 @@ impl TransactionManager {
     }
 
     pub fn rollback_transaction<'outer_a>(
+        self,
         connection: &'outer_a mut Connection
     ) -> Result<(), BaseError> {
         let query: &'static str = "ROLLBACK;";

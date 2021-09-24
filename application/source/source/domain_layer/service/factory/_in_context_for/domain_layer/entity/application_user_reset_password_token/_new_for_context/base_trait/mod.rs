@@ -11,7 +11,7 @@ pub trait BaseTrait {
     type Error: Error + From<LogicError>;
 
     fn new_from_application_user<'outer_a>(
-        application_user: &'outer_a ApplicationUser<'_>
+        application_user: &'outer_a ApplicationUser
     ) -> Result<ApplicationUserResetPasswordToken<'outer_a>, Self::Error> {
         return Ok(
             ApplicationUserResetPasswordToken::new(

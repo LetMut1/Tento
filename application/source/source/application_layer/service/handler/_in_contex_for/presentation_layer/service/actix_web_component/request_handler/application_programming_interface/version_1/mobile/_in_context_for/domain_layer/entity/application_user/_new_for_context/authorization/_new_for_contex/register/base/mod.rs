@@ -79,28 +79,31 @@ impl Base {
                             redis_connection, application_user_pre_confirmed.get_id()?
                         )? 
                         {
-                            if application_user_registration_confirmation_token.get_value() == application_user_registration_confirmation_token_value.as_str() {
-                                let application_user: ApplicationUser<'_> = ApplicationUserFactory::new_from_application_user_pre_confirmed(
-                                    &application_user_pre_confirmed, application_user_nickname, PasswordHashResolver::create(application_user_password.as_str())?
-                                );
+                            let application_user_password_hash: String = PasswordHashResolver::create(application_user_password.as_str())?;
 
+                            if application_user_registration_confirmation_token.get_value() == application_user_registration_confirmation_token_value.as_str() {
                                 StateManagerApplicationUserRegistrationConfirmationTokenRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
 
-                                TransactionManager::begin_transaction(postgresql_connection, TransactionIsolationLevel::ReadCommitted)?;
-                                
-                                if let Err(base_error) = StateManagerApplicationUserPostgresql::create(postgresql_connection, &application_user) {
-                                    TransactionManager::rollback_transaction(postgresql_connection)?;
-
-                                    return Err(base_error);
-                                }
+                                let transaction_manager: TransactionManager = TransactionManager::start_transaction(postgresql_connection, TransactionIsolationLevel::ReadCommitted)?;
 
                                 if let Err(base_error) = StateManagerApplicationUserPreConfirmedPostgesql::delete(postgresql_connection, &application_user_pre_confirmed) {
-                                    TransactionManager::rollback_transaction(postgresql_connection)?;
+                                    transaction_manager.rollback_transaction(postgresql_connection)?;
+
+                                    return Err(base_error);
+                                }
+
+                                let application_user: ApplicationUser = ApplicationUserFactory::new_from_application_user_pre_confirmed(
+                                    application_user_pre_confirmed, application_user_nickname, application_user_password_hash
+                                );
+
+                                
+                                if let Err(base_error) = StateManagerApplicationUserPostgresql::create(postgresql_connection, &application_user) {
+                                    transaction_manager.rollback_transaction(postgresql_connection)?;
 
                                     return Err(base_error);
                                 }
                                 
-                                TransactionManager::commit_transaction(postgresql_connection)?;
+                                transaction_manager.commit_transaction(postgresql_connection)?;
 
                                 let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::new_from_id_registry(application_user.get_id()?, application_user_log_in_token_device_id.as_str());
 

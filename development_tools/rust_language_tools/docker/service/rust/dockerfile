@@ -17,5 +17,6 @@ apt-get update && \
 apt-get install -y \
     pkg-config \
     libssl-dev && \
+                                                                        # TODO TODO TODO для чего pkg-config, libssl-dev? МОжно ли без них?
 cargo install diesel_cli --no-default-features --features postgres
     

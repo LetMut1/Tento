@@ -8,7 +8,6 @@ use postgres::Client as Connection;
 use postgres::Row;
 use postgres::Statement;
 use postgres::types::Type;
-use std::borrow::Cow;
 
 pub struct Base;
 
@@ -66,7 +65,7 @@ impl DataProviderApplicationUserPostgresqlTrait for Base {
     fn find_by_email<'outer_a>(
         connection: &'outer_a mut Connection,
         email: &'outer_a str
-    ) -> Result<Option<ApplicationUser<'static>>, Self::Error> {
+    ) -> Result<Option<ApplicationUser>, Self::Error> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
         let query: &'static str = 
@@ -88,7 +87,7 @@ impl DataProviderApplicationUserPostgresqlTrait for Base {
             return Ok(Some(
                 ApplicationUser::new(
                     Some(row_registry[0].try_get::<'_, usize, i64>(0)?),
-                    Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1)?),
+                    row_registry[0].try_get::<'_, usize, String>(1)?,
                     row_registry[0].try_get::<'_, usize, String>(2)?,
                     row_registry[0].try_get::<'_, usize, String>(3)?,
                     row_registry[0].try_get::<'_, usize, String>(4)?
@@ -102,7 +101,7 @@ impl DataProviderApplicationUserPostgresqlTrait for Base {
     fn find_by_id<'outer_a>(
         connection: &'outer_a mut Connection,
         id: &'outer_a i64
-    ) -> Result<Option<ApplicationUser<'static>>, Self::Error> {
+    ) -> Result<Option<ApplicationUser>, Self::Error> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
         let query: &'static str = 
@@ -124,7 +123,7 @@ impl DataProviderApplicationUserPostgresqlTrait for Base {
             return Ok(Some(
                 ApplicationUser::new(
                     Some(row_registry[0].try_get::<'_, usize, i64>(0)?),
-                    Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1)?),
+                    row_registry[0].try_get::<'_, usize, String>(1)?,
                     row_registry[0].try_get::<'_, usize, String>(2)?,
                     row_registry[0].try_get::<'_, usize, String>(3)?,
                     row_registry[0].try_get::<'_, usize, String>(4)?

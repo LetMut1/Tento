@@ -38,6 +38,12 @@ impl ApplicationUserPreConfirmed {
         return self.application_user_email.as_str();
     }
 
+    pub fn get_application_user_email_as_owner(
+        self
+    ) -> String {
+        return self.application_user_email;
+    }
+
     pub fn get_created_at<'this>(
         &'this self
     ) -> &'this str {

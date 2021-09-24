@@ -1,18 +1,17 @@
 use crate::domain_layer::error::logic_error::LogicError;
-use std::borrow::Cow;
 
-pub struct ApplicationUser<'outer_a> {
+pub struct ApplicationUser {
     id: Option<i64>,
-    email: Cow<'outer_a, str>,
+    email: String,
     nickname: String,
     password_hash: String,
     created_at: String
 }
 
-impl<'outer_a> ApplicationUser<'outer_a> {
+impl ApplicationUser {
     pub fn new(
         id: Option<i64>,
-        email: Cow<'outer_a, str>,
+        email: String,
         nickname: String,
         password_hash: String,
         created_at: String
@@ -24,15 +23,6 @@ impl<'outer_a> ApplicationUser<'outer_a> {
             password_hash,
             created_at 
         };
-    }
-
-    pub fn set_password_hash<'this>(
-        &'this mut self,
-        password_hash: String
-    ) -> &'this mut Self {
-        self.password_hash = password_hash;
-
-        return self;
     }
 
     pub fn get_id<'this>(
@@ -51,7 +41,7 @@ impl<'outer_a> ApplicationUser<'outer_a> {
     pub fn get_email<'this>(
         &'this self
     ) -> &'this str {
-        return self.email.as_ref();
+        return self.email.as_str();
     }
 
     pub fn get_nickname<'this>(
@@ -70,5 +60,14 @@ impl<'outer_a> ApplicationUser<'outer_a> {
         &'this self
     ) -> &'this str {
         return self.created_at.as_str();
+    }
+
+    pub fn set_password_hash<'this>(
+        &'this mut self,
+        password_hash: String
+    ) -> &'this mut Self {
+        self.password_hash = password_hash;
+
+        return self;
     }
 }

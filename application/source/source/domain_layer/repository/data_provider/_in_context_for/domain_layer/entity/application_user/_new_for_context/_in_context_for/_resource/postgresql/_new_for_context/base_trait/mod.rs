@@ -18,10 +18,10 @@ pub trait BaseTrait {
     fn find_by_email<'outer_a>(
         connection: &'outer_a mut Connection,
         email: &'outer_a str
-    ) -> Result<Option<ApplicationUser<'static>>, Self::Error>;
+    ) -> Result<Option<ApplicationUser>, Self::Error>;
 
     fn find_by_id<'outer_a>(
         connection: &'outer_a mut Connection,
         id: &'outer_a i64
-    ) -> Result<Option<ApplicationUser<'static>>, Self::Error>;
+    ) -> Result<Option<ApplicationUser>, Self::Error>;
 }

@@ -9,12 +9,12 @@ pub trait BaseTrait {
     
     fn create<'outer_a>(
         connection: &'outer_a mut Connection,
-        application_user: &'outer_a ApplicationUser<'_>
+        application_user: &'outer_a ApplicationUser
     ) -> Result<(), Self::Error>;
 
     fn update<'outer_a>(
         connection: &'outer_a mut Connection,
-        application_user: &'outer_a ApplicationUser<'_>,
+        application_user: &'outer_a ApplicationUser,
         update_resolver: Self::UpdateResolverApplicationUser
     ) -> Result<(), Self::Error>;
 }
