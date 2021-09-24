@@ -59,7 +59,7 @@ impl DataProviderApplicationUserPreConfirmedPostgesqlTrait for Base {
         let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if !row_registry.is_empty() {
             return Ok(Some(
-                ApplicationUserPreConfirmed::new(
+                ApplicationUserPreConfirmedFactory::create(
                     Some(row_registry[0].try_get::<'_, usize, i64>(0)?),
                     row_registry[0].try_get::<'_, usize, String>(1)?,
                     row_registry[0].try_get::<'_, usize, String>(2)?

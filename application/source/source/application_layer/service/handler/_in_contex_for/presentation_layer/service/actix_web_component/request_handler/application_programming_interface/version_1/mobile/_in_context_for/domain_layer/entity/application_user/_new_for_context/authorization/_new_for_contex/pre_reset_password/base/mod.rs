@@ -41,7 +41,7 @@ impl Base {
                     StateManagerApplicationUserResetPasswordTokenRedis::update_expiration_time(redis_connection, &application_user_reset_password_token)?;
                 },
                 None => {
-                    application_user_reset_password_token = ApplicationUserResetPasswordTokenFactory::new_from_application_user(&application_user)?;
+                    application_user_reset_password_token = ApplicationUserResetPasswordTokenFactory::create_from_application_user(&application_user)?;
 
                     StateManagerApplicationUserResetPasswordTokenRedis::create(redis_connection, &application_user_reset_password_token)?;
                 }

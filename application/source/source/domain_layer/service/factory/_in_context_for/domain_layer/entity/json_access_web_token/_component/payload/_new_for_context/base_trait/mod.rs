@@ -7,11 +7,11 @@ use std::error::Error;
 pub trait BaseTrait {
     type Error: Error;
 
-    fn new_from_json_refresh_web_token<'outer_a>(
+    fn create_from_json_refresh_web_token<'outer_a>(
         json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
     ) -> Result<Payload<'outer_a>, Self::Error>;
 
-    fn new_from_payload_common(
+    fn create_from_payload_common(
         payload_common: PayloadCommon<'static>
     ) -> Payload<'static> {
         let (

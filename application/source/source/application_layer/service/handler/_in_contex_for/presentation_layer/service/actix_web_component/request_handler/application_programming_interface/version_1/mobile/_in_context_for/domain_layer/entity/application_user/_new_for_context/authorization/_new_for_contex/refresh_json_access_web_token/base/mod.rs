@@ -56,7 +56,7 @@ impl Base {
                     RepositoryProxy::update(connection, &json_refresh_web_token_)?;
 
                     let json_access_web_token: String = SerializationFormResolver::serialize(
-                        &JsonAccessWebTokenFactory::new_from_json_refresh_web_token(&json_refresh_web_token_)?
+                        &JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token_)?
                     )?;
 
                     let json_refresh_web_token: String = Encoder::encode(&json_refresh_web_token_)?;

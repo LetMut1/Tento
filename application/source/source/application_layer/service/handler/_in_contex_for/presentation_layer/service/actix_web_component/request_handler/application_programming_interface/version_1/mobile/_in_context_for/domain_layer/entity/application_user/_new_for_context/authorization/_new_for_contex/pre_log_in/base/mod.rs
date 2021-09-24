@@ -57,7 +57,7 @@ impl Base {
                         StateManagerApplicationUserLogInTokenRedis::update_expiration_time(connection, &application_user_log_in_token)?;
                     },
                     None => {
-                        application_user_log_in_token = ApplicationUserLogInTokenFactory::new_from_application_user(
+                        application_user_log_in_token = ApplicationUserLogInTokenFactory::create_from_application_user(
                             &application_user, application_user_log_in_token_device_id.as_str()
                         )?;
 

@@ -39,10 +39,10 @@ impl Base {
 
             if !DataProviderApplicationUserPreConfirmedPostgesql::is_exist_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
                 if !DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
-                    let application_user_pre_confirmed: ApplicationUserPreConfirmed = ApplicationUserPreConfirmedFactory::new_from_email(application_user_email);  
+                    let application_user_pre_confirmed: ApplicationUserPreConfirmed = ApplicationUserPreConfirmedFactory::create_from_application_user_email(application_user_email);  
 
                     let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> =
-                    ApplicationUserRegistrationConfirmationTokenFactory::new_from_application_user_pre_confirmed(&application_user_pre_confirmed)?;
+                    ApplicationUserRegistrationConfirmationTokenFactory::create_from_application_user_pre_confirmed(&application_user_pre_confirmed)?;
                     
                     StateManagerApplicationUserRegistrationConfirmationTokenRedis::create(
                         &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_registration_confirmation_token

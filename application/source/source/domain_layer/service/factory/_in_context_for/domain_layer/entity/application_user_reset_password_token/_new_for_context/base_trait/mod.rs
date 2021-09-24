@@ -10,7 +10,7 @@ use uuid::Uuid;
 pub trait BaseTrait {
     type Error: Error + From<LogicError>;
 
-    fn new_from_application_user<'outer_a>(
+    fn create_from_application_user<'outer_a>(
         application_user: &'outer_a ApplicationUser
     ) -> Result<ApplicationUserResetPasswordToken<'outer_a>, Self::Error> {
         return Ok(
@@ -23,7 +23,7 @@ pub trait BaseTrait {
         );
     }
 
-    fn new_from_common<'outer_a>(
+    fn create_from_common<'outer_a>(
         common: Common<'_>,
         application_user_id: &'outer_a i64
     ) -> ApplicationUserResetPasswordToken<'outer_a> {

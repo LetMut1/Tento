@@ -33,7 +33,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
 
         if token_part_registry.len() == 3 && SignatureCreator::is_valid(token_part_registry[0], token_part_registry[1], token_part_registry[2])? {
             return Ok(
-                JsonAccessWebTokenFactory::new_from_payload_common(
+                JsonAccessWebTokenFactory::create_from_payload_common(
                     serde_json::from_slice::<'_, PayloadCommon>(&base64::decode_config(token_part_registry[1].as_bytes(), base64::URL_SAFE)?)?
                 )
             );

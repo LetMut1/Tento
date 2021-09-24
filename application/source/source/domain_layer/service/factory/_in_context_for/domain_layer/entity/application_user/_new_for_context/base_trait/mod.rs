@@ -2,7 +2,17 @@ use crate::domain_layer::entity::application_user_pre_confirmed::ApplicationUser
 use crate::domain_layer::entity::application_user::ApplicationUser;
 
 pub trait BaseTrait {
-    fn new_from_application_user_pre_confirmed(
+    fn create(
+        id: Option<i64>,
+        email: String,
+        nickname: String,
+        password_hash: String,
+        created_at: String
+    ) -> ApplicationUser {
+        return ApplicationUser::new(id, email, nickname, password_hash, created_at);
+    }
+
+    fn create_from_application_user_pre_confirmed(
         application_user_pre_confirmed: ApplicationUserPreConfirmed,
         nickname: String,
         password_hash: String

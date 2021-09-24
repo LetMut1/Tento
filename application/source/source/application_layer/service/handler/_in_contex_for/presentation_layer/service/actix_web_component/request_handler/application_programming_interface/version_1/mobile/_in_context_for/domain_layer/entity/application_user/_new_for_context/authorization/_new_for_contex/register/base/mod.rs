@@ -92,7 +92,7 @@ impl Base {
                                     return Err(base_error);
                                 }
 
-                                let application_user: ApplicationUser = ApplicationUserFactory::new_from_application_user_pre_confirmed(
+                                let application_user: ApplicationUser = ApplicationUserFactory::create_from_application_user_pre_confirmed(
                                     application_user_pre_confirmed, application_user_nickname, application_user_password_hash
                                 );
 
@@ -105,11 +105,11 @@ impl Base {
                                 
                                 transaction_manager.commit_transaction(postgresql_connection)?;
 
-                                let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::new_from_id_registry(application_user.get_id()?, application_user_log_in_token_device_id.as_str());
+                                let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::create_from_id_registry(application_user.get_id()?, application_user_log_in_token_device_id.as_str());
 
                                 RepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
 
-                                let json_access_web_token: String = SerializationFormResolver::serialize(&JsonAccessWebTokenFactory::new_from_json_refresh_web_token(&json_refresh_web_token)?)?;
+                                let json_access_web_token: String = SerializationFormResolver::serialize(&JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token)?)?;
 
                                 let json_refresh_web_token: String = Encoder::encode(&json_refresh_web_token)?;
 

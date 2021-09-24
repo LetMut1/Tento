@@ -23,7 +23,7 @@ impl DataProviderApplicationUserRegistrationConfirmationTokenRedisTrait for Base
         {
             Some(json_encoded_common) => {
                 return Ok(Some(
-                    ApplicationUserRegistrationConfirmationTokenFactory::new_from_common(
+                    ApplicationUserRegistrationConfirmationTokenFactory::create_from_common(
                         serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?, application_user_pre_confirmed_id
                     )
                 ));

@@ -23,7 +23,7 @@ impl DataProviderJsonRefreshWebTokenRedisTrait for Base {
         )?
         {
             Some(json_encoded_common) => {
-                return Ok(Some(JsonRefreshWebTokenFactory::new_from_common(serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?)));
+                return Ok(Some(JsonRefreshWebTokenFactory::create_from_common(serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?)));
             },
             None => {
                 return Ok(None);

@@ -5,7 +5,7 @@ use std::borrow::Cow;
 use uuid::Uuid;
 
 pub trait BaseTrait {
-    fn new_from_id_registry<'outer_a>(
+    fn create_from_id_registry<'outer_a>(
         application_user_id: &'outer_a i64,
         application_user_log_in_token_device_id: &'outer_a str
     ) -> JsonRefreshWebToken<'outer_a> {
@@ -17,7 +17,7 @@ pub trait BaseTrait {
         );
     }
 
-    fn new_from_common(
+    fn create_from_common(
         common: Common<'_>
     ) -> JsonRefreshWebToken<'_> {
         let (

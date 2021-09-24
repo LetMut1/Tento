@@ -11,7 +11,7 @@ pub struct Base;
 impl JsonAccessWebTokenPayloadFactoryTrait for Base {
     type Error = BaseError;
 
-    fn new_from_json_refresh_web_token<'outer_a>(
+    fn create_from_json_refresh_web_token<'outer_a>(
         json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
     ) -> Result<Payload<'outer_a>, Self::Error> {
         return Ok(

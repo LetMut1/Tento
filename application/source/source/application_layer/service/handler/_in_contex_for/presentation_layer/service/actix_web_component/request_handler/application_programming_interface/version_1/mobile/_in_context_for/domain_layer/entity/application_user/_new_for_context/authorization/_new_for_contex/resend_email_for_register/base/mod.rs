@@ -40,7 +40,7 @@ impl Base {
                     StateManagerApplicationUserRegistrationConfirmationTokenRedis::update_expiration_time(connection, &application_user_registration_confirmation_token)?;
                 },
                 None => {
-                    application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationTokenFactory::new_from_application_user_pre_confirmed(&application_user_pre_confirmed)?;
+                    application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationTokenFactory::create_from_application_user_pre_confirmed(&application_user_pre_confirmed)?;
 
                     StateManagerApplicationUserRegistrationConfirmationTokenRedis::create(connection, &application_user_registration_confirmation_token)?;
                 }

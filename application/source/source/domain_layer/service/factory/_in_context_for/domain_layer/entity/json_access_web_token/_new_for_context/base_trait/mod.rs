@@ -8,21 +8,21 @@ pub trait BaseTrait {
     type Error: Error;
     type JsonAccessWebTokenPayloadFactory: JsonAccessWebTokenPayloadFactoryTrait<Error = Self::Error>;
 
-    fn new_from_json_refresh_web_token<'outer_a>(
+    fn create_from_json_refresh_web_token<'outer_a>(
         json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
     ) -> Result<JsonAccessWebToken<'outer_a>, Self::Error> {
         return Ok(
             JsonAccessWebToken::new(
-                Self::JsonAccessWebTokenPayloadFactory::new_from_json_refresh_web_token(json_refresh_web_token)?
+                Self::JsonAccessWebTokenPayloadFactory::create_from_json_refresh_web_token(json_refresh_web_token)?
             )
         );
     }
 
-    fn new_from_payload_common(
+    fn create_from_payload_common(
         payload_common: PayloadCommon<'static>
     ) -> JsonAccessWebToken<'static> {
         return JsonAccessWebToken::new(
-            Self::JsonAccessWebTokenPayloadFactory::new_from_payload_common(payload_common)
+            Self::JsonAccessWebTokenPayloadFactory::create_from_payload_common(payload_common)
         );
     }
 }
