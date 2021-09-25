@@ -9,7 +9,7 @@ pub struct Base;
 
 impl Base {
     pub fn create_from_common<'outer_a>(
-        common: Common<'_>,
+        common: Common<'outer_a>,
         application_user_id: &'outer_a i64,
         device_id: &'outer_a str
     ) -> ApplicationUserLogInToken<'outer_a> {
@@ -26,7 +26,7 @@ impl Base {
         return ApplicationUserLogInToken::new(
             application_user_id,
             device_id,
-            Cow::Owned(application_user_email.into_owned()),
+            application_user_email,
             value.into_owned(),
             wrong_enter_tries_quantity.into_owned()
         );

@@ -79,8 +79,15 @@ impl Channel {
 
     pub fn get_description<'this>(
         &'this self
-    ) -> &'this Option<String> {
-        return &self.description;
+    ) -> Option<&'this str> {
+        match self.description {
+            Some(ref description) => {
+                return Some(description.as_str());
+            },
+            None => {
+                return None;
+            }
+        }
     }
 
     pub fn get_is_private<'this>(

@@ -134,8 +134,15 @@ impl ChannelFeedPublication {
 
     pub fn get_delete_on<'this>(
         &'this self
-    ) -> &'this Option<String> {
-        return &self.delete_on;
+    ) -> Option<&'this str> {
+        match self.delete_on {
+            Some(ref delete_on) => {
+                return Some(delete_on.as_str());
+            },
+            None => {
+                return None;
+            }
+        }
     }
 
     pub fn get_created_at<'this>(

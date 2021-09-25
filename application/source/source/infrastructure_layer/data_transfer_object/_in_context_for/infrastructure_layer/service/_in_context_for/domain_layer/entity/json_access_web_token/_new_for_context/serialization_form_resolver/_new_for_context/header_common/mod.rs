@@ -3,8 +3,8 @@ use serde::Serialize;
 
 #[derive(Serialize, Debug)]
 pub struct HeaderCommon<'outer_a> {
-    #[serde(rename = "jawtpt")]
-    json_access_web_token_payload_type: &'outer_a str,
+    #[serde(rename = "jawtht")]
+    json_access_web_token_header_type: &'outer_a str,
 }
 
 impl<'outer_a> HeaderCommon<'outer_a> {
@@ -12,7 +12,7 @@ impl<'outer_a> HeaderCommon<'outer_a> {
         json_access_web_token: &'outer_a JsonAccessWebToken<'_>
     ) -> Self {
         return Self {
-            json_access_web_token_payload_type: json_access_web_token.get_type()
+            json_access_web_token_header_type: json_access_web_token.get_type()
         };
     }
 }

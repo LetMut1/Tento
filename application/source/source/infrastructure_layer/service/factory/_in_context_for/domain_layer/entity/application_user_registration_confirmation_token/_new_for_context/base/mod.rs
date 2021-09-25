@@ -9,7 +9,7 @@ pub struct Base;
 
 impl Base {
     pub fn create_from_common<'outer_a>(
-        common: Common<'_>,
+        common: Common<'outer_a>,
         application_user_pre_confirmed_id: &'outer_a i64
     ) -> ApplicationUserRegistrationConfirmationToken<'outer_a> {
         let (
@@ -24,7 +24,7 @@ impl Base {
 
         return ApplicationUserRegistrationConfirmationToken::new(
             application_user_pre_confirmed_id,
-            Cow::Owned(application_user_email.into_owned()),
+            application_user_email,
             value.into_owned(),
             wrong_enter_tries_quantity.into_owned()
         );
