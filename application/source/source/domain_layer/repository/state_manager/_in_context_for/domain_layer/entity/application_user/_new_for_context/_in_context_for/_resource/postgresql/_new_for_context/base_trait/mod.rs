@@ -7,14 +7,14 @@ pub trait BaseTrait {
     type Error: Error;
     type UpdateResolverApplicationUser: UpdateResolverApplicationUserTrait;
     
-    fn create<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user: &'outer_a ApplicationUser
+    fn create<'a>(
+        connection: &'a mut Connection,
+        application_user: &'a ApplicationUser
     ) -> Result<(), Self::Error>;
 
-    fn update<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user: &'outer_a ApplicationUser,
+    fn update<'a>(
+        connection: &'a mut Connection,
+        application_user: &'a ApplicationUser,
         update_resolver: Self::UpdateResolverApplicationUser
     ) -> Result<(), Self::Error>;
 }

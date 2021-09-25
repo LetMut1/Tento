@@ -28,9 +28,9 @@ impl ApplicationUserDirectMessagePublication {
         };
     }
 
-    pub fn get_id<'this>(
-        &'this self
-    ) -> Result<&'this i64, LogicError> {
+    pub fn get_id<'a>(
+        &'a self
+    ) -> Result<&'a i64, LogicError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
@@ -41,33 +41,33 @@ impl ApplicationUserDirectMessagePublication {
         }
     }
 
-    pub fn get_application_user_direct_message_id<'this>(
-        &'this self
-    ) -> &'this i64 {
+    pub fn get_application_user_direct_message_id<'a>(
+        &'a self
+    ) -> &'a i64 {
         return &self.application_user_direct_message_id;
     }
 
-    pub fn get_application_user_id<'this>(
-        &'this self
-    ) -> &'this i64 {
+    pub fn get_application_user_id<'a>(
+        &'a self
+    ) -> &'a i64 {
         return &self.application_user_id;
     }
 
-    pub fn get_channel_feed_publication_id<'this>(
-        &'this self
-    ) -> &'this i64 {
+    pub fn get_channel_feed_publication_id<'a>(
+        &'a self
+    ) -> &'a i64 {
         return &self.channel_feed_publication_id;
     }
 
-    pub fn get_channel_feed_publication_reaction_id<'this>(
-        &'this self
-    ) -> &'this i64 {
+    pub fn get_channel_feed_publication_reaction_id<'a>(
+        &'a self
+    ) -> &'a i64 {
         return &self.channel_feed_publication_reaction_id;
     }
 
-    pub fn get_created_at<'this>(
-        &'this self
-    ) -> &'this str {
+    pub fn get_created_at<'a>(
+        &'a self
+    ) -> &'a str {
         return self.created_at.as_str();
     }
 }

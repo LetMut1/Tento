@@ -12,9 +12,9 @@ pub struct Base;
 impl ApplicationUserPreConfirmedStateManagerPostgesqlTrait for Base {
     type Error = BaseError;
 
-    fn create<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
+    fn create<'a>(
+        connection: &'a mut Connection,
+        application_user_pre_confirmed: &'a ApplicationUserPreConfirmed
     ) -> Result<(), Self::Error> {
         let application_user_email: &'_ str = application_user_pre_confirmed.get_application_user_email();
 
@@ -50,9 +50,9 @@ impl ApplicationUserPreConfirmedStateManagerPostgesqlTrait for Base {
         return Ok(());
     }
 
-    fn delete<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
+    fn delete<'a>(
+        connection: &'a mut Connection,
+        application_user_pre_confirmed: &'a ApplicationUserPreConfirmed
     ) -> Result<(), Self::Error> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 

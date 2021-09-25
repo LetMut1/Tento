@@ -5,18 +5,18 @@ use std::error::Error;
 pub trait BaseTrait {
     type Error: Error;
 
-    fn create<'outer_a>(
-        connection: &'outer_a mut Connection, 
-        application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
+    fn create<'a>(
+        connection: &'a mut Connection, 
+        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), Self::Error>;
 
-    fn delete<'outer_a>(
-        connection: &'outer_a mut Connection, 
-        application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
+    fn delete<'a>(
+        connection: &'a mut Connection, 
+        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), Self::Error>;
 
-    fn update_expiration_time<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
+    fn update_expiration_time<'a>(
+        connection: &'a mut Connection,
+        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), Self::Error>;
 }

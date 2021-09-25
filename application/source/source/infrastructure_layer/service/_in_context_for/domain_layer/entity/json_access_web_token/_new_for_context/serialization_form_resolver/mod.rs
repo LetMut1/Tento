@@ -13,8 +13,8 @@ pub struct SerializationFormResolver;
 impl SerializationFormResolverTrait for SerializationFormResolver {
     type Error = BaseError;
 
-    fn serialize<'outer_a>(
-        json_access_web_token: &'outer_a JsonAccessWebToken<'_>
+    fn serialize<'a>(
+        json_access_web_token: &'a JsonAccessWebToken<'_>
     ) -> Result<String, Self::Error> {
         let header: String = base64::encode_config(serde_json::to_vec(&HeaderCommon::new(json_access_web_token))?, base64::URL_SAFE);
 
@@ -25,8 +25,8 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
         return Ok(header + Self::TOKEN_PARTS_SEPARATOR + payload.as_str() + Self::TOKEN_PARTS_SEPARATOR + signature.as_str());
     }
 
-    fn deserialize<'outer_a>(
-        classic_form: &'outer_a str
+    fn deserialize<'a>(
+        classic_form: &'a str
     ) -> Result<JsonAccessWebToken<'static>, Self::Error> {
         let token_part_registry: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
 

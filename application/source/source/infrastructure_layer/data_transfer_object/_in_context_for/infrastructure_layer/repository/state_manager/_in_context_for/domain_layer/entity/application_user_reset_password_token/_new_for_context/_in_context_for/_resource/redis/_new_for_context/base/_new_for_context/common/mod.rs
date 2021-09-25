@@ -4,18 +4,18 @@ use serde::Serialize;
 use std::borrow::Cow;
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Common<'outer_a> {
+pub struct Common<'a> {
     #[serde(rename = "aue")]
-    application_user_email: Cow<'outer_a, str>,
+    application_user_email: Cow<'a, str>,
     #[serde(rename = "v")]
-    value: Cow<'outer_a, str>,
+    value: Cow<'a, str>,
     #[serde(rename = "wetq")]
-    wrong_enter_tries_quantity: Cow<'outer_a, u8>
+    wrong_enter_tries_quantity: Cow<'a, u8>
 }
 
-impl<'outer_a> Common<'outer_a> {
+impl<'a> Common<'a> {
     pub fn new(
-        application_user_reset_password_token: &'outer_a ApplicationUserResetPasswordToken<'_>
+        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken<'_>
     ) -> Self {
         return Self {
             application_user_email: Cow::Borrowed(application_user_reset_password_token.get_application_user_email()),
@@ -26,7 +26,7 @@ impl<'outer_a> Common<'outer_a> {
 
     pub fn into_inner(
         self
-    ) -> (Cow<'outer_a, str>, Cow<'outer_a, str>, Cow<'outer_a, u8>) {
+    ) -> (Cow<'a, str>, Cow<'a, str>, Cow<'a, u8>) {
         return (
             self.application_user_email,
             self.value,

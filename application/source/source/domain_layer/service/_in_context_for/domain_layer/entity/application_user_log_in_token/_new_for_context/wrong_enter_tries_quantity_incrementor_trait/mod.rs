@@ -6,8 +6,8 @@ use std::error::Error;
 pub trait WrongEnterTriesQuantityIncrementorTrait {
     type Error: Error + From<LogicError>;
 
-    fn increment<'outer_a>(
-        application_user_log_in_token: &'outer_a mut ApplicationUserLogInToken<'_>
+    fn increment<'a>(
+        application_user_log_in_token: &'a mut ApplicationUserLogInToken<'_>
     ) -> Result<(), Self::Error> {
         let wrong_enter_tries_quantity: u8 = *application_user_log_in_token.get_wrong_enter_tries_quantity();
         if wrong_enter_tries_quantity == u8::max_value() {

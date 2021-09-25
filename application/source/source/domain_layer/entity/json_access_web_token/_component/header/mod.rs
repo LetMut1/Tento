@@ -9,8 +9,8 @@ impl Header {
         return Self {};
     }
 
-    pub fn get_type<'this>(
-        &'this self
+    pub fn get_type<'a>(
+        &'a self
     ) -> &'static str {
         return Self::TYPE;
     }

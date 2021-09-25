@@ -5,13 +5,13 @@ use std::error::Error;
 pub trait BaseTrait {
     type Error: Error;
 
-    fn is_exist_by_application_user_email<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_email: &'outer_a str
+    fn is_exist_by_application_user_email<'a>(
+        connection: &'a mut Connection,
+        application_user_email: &'a str
     ) -> Result<bool, Self::Error>;
 
-    fn find_by_application_user_email<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_email: &'outer_a str
+    fn find_by_application_user_email<'a>(
+        connection: &'a mut Connection,
+        application_user_email: &'a str
     ) -> Result<Option<ApplicationUserPreConfirmed>, Self::Error>;
 }

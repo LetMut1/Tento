@@ -6,19 +6,19 @@ use std::error::Error;
 pub trait BaseTrait {
     type Error: Error;
 
-    fn create<'outer_a>(
-        connection: &'outer_a mut Connection,
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    fn create<'a>(
+        connection: &'a mut Connection,
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error>;
 
-    fn update<'outer_a>(
-        connection: &'outer_a mut Connection,
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    fn update<'a>(
+        connection: &'a mut Connection,
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error>;
 
 
-    fn delete<'outer_a>(
-        connection: &'outer_a mut Connection,
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    fn delete<'a>(
+        connection: &'a mut Connection,
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error>;
 }

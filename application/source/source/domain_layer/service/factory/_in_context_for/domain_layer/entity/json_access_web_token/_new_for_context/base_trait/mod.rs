@@ -7,9 +7,9 @@ pub trait BaseTrait {
     type Error: Error;
     type JsonAccessWebTokenPayloadFactory: JsonAccessWebTokenPayloadFactoryTrait<Error = Self::Error>;
 
-    fn create_from_json_refresh_web_token<'outer_a>(
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<JsonAccessWebToken<'outer_a>, Self::Error> {
+    fn create_from_json_refresh_web_token<'a>(
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
+    ) -> Result<JsonAccessWebToken<'a>, Self::Error> {
         return Ok(
             JsonAccessWebToken::new(
                 <Self::JsonAccessWebTokenPayloadFactory as JsonAccessWebTokenPayloadFactoryTrait>::create_from_json_refresh_web_token(json_refresh_web_token)?

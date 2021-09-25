@@ -4,7 +4,7 @@ use std::error::Error;
 pub trait ExpirationTimeResolverTrait {
     type Error: Error;
 
-    fn is_expired<'outer_a>(
-        json_access_web_token: &'outer_a JsonAccessWebToken<'_>
+    fn is_expired<'a>(
+        json_access_web_token: &'a JsonAccessWebToken<'_>
     ) -> Result<bool, Self::Error>;
 }

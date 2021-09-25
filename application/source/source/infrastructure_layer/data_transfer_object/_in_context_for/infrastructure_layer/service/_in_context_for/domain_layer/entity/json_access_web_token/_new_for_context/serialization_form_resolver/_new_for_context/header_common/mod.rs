@@ -2,14 +2,14 @@ use crate::domain_layer::entity::json_access_web_token::json_access_web_token::J
 use serde::Serialize;
 
 #[derive(Serialize, Debug)]
-pub struct HeaderCommon<'outer_a> {
+pub struct HeaderCommon<'a> {
     #[serde(rename = "jawtht")]
-    json_access_web_token_header_type: &'outer_a str,
+    json_access_web_token_header_type: &'a str,
 }
 
-impl<'outer_a> HeaderCommon<'outer_a> {
+impl<'a> HeaderCommon<'a> {
     pub fn new(
-        json_access_web_token: &'outer_a JsonAccessWebToken<'_>
+        json_access_web_token: &'a JsonAccessWebToken<'_>
     ) -> Self {
         return Self {
             json_access_web_token_header_type: json_access_web_token.get_type()

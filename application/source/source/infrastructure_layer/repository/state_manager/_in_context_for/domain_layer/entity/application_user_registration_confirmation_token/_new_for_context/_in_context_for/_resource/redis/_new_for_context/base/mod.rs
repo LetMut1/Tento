@@ -11,9 +11,9 @@ pub struct Base;
 impl ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait for Base {
     type Error = BaseError;
 
-    fn create<'outer_a>(
-        connection: &'outer_a mut Connection, 
-        application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
+    fn create<'a>(
+        connection: &'a mut Connection, 
+        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), Self::Error> {
         connection.set_ex::<String, String, ()>(
             StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
@@ -26,9 +26,9 @@ impl ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait for Base
         return Ok(());
     }
 
-    fn delete<'outer_a>(
-        connection: &'outer_a mut Connection, 
-        application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
+    fn delete<'a>(
+        connection: &'a mut Connection, 
+        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
             StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
@@ -39,9 +39,9 @@ impl ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait for Base
         return Ok(());
     }
 
-    fn update_expiration_time<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_registration_confirmation_token: &'outer_a ApplicationUserRegistrationConfirmationToken<'_>
+    fn update_expiration_time<'a>(
+        connection: &'a mut Connection,
+        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), Self::Error> {
         connection.expire::<String, ()>(
             StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(

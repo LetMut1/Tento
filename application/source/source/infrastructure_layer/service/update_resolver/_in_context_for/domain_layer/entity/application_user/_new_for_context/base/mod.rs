@@ -21,20 +21,20 @@ impl Base {
 }
 
 impl UpdateResolverApplicationUserTrait for Base {
-    fn is_update_email<'this>(
-        &'this self
+    fn is_update_email<'a>(
+        &'a self
     ) -> bool {
         return self.update_email;
     }
 
-    fn is_update_nickname<'this>(
-        &'this self
+    fn is_update_nickname<'a>(
+        &'a self
     ) -> bool {
         return self.update_nickname;
     }
 
-    fn is_update_password_hash<'this>(
-        &'this self
+    fn is_update_password_hash<'a>(
+        &'a self
     ) -> bool {
         return self.update_password_hash;
     }

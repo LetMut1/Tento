@@ -11,9 +11,9 @@ pub struct Base;
 impl ApplicationUserLogInTokenStateManagerRedisTrait for Base {
     type Error = BaseError;
 
-    fn create<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
+    fn create<'a>(
+        connection: &'a mut Connection,
+        application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
     ) -> Result<(), Self::Error> {
         connection.set_ex::<String, String, ()>(
             StorageKeyResolver::get_repository_application_user_log_in_token_first(
@@ -26,9 +26,9 @@ impl ApplicationUserLogInTokenStateManagerRedisTrait for Base {
         return Ok(());
     }
 
-    fn delete<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
+    fn delete<'a>(
+        connection: &'a mut Connection,
+        application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
     ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
             StorageKeyResolver::get_repository_application_user_log_in_token_first(
@@ -39,9 +39,9 @@ impl ApplicationUserLogInTokenStateManagerRedisTrait for Base {
         return Ok(());
     }
 
-    fn update_expiration_time<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_log_in_token: &'outer_a ApplicationUserLogInToken<'_>
+    fn update_expiration_time<'a>(
+        connection: &'a mut Connection,
+        application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
     ) -> Result<(), Self::Error> {
         connection.expire::<String, ()>(
             StorageKeyResolver::get_repository_application_user_log_in_token_first(

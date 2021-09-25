@@ -12,10 +12,10 @@ pub struct Base;
 impl JsonRefreshWebTokenDataProviderRedisTrait for Base {
     type Error = BaseError;
 
-    fn find_by_application_user_id_and_application_user_log_in_token_device_id<'outer_a>(
-        connection: &'outer_a mut Connection, 
-        application_user_id: &'outer_a i64, 
-        application_user_log_in_token_device_id: &'outer_a str,
+    fn find_by_application_user_id_and_application_user_log_in_token_device_id<'a>(
+        connection: &'a mut Connection, 
+        application_user_id: &'a i64, 
+        application_user_log_in_token_device_id: &'a str,
     ) -> Result<Option<JsonRefreshWebToken<'static>>, Self::Error> {
         match connection.get::<String, Option<String>>(
             StorageKeyResolver::get_repository_json_refresh_web_token_first(application_user_id, application_user_log_in_token_device_id)
@@ -30,9 +30,9 @@ impl JsonRefreshWebTokenDataProviderRedisTrait for Base {
         }
     }
 
-    fn find_by_application_user_id_and_application_user_log_in_token_device_id_registry<'outer_a>(
-        connection: &'outer_a mut Connection, 
-        application_user_id: &'outer_a i64, 
+    fn find_by_application_user_id_and_application_user_log_in_token_device_id_registry<'a>(
+        connection: &'a mut Connection, 
+        application_user_id: &'a i64, 
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, Self::Error> {
         let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = Vec::new();

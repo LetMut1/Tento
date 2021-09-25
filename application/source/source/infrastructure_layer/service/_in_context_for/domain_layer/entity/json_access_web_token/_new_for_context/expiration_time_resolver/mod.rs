@@ -9,8 +9,8 @@ pub struct ExpirationTimeResolver;
 impl ExpirationTimeResolverTrait for ExpirationTimeResolver {
     type Error = BaseError;
 
-    fn is_expired<'outer_a>(
-        json_access_web_token: &'outer_a JsonAccessWebToken<'_>
+    fn is_expired<'a>(
+        json_access_web_token: &'a JsonAccessWebToken<'_>
     ) -> Result<bool, Self::Error> {
         return Ok(
             !DateTimeResolver::is_greater_or_equal_than(

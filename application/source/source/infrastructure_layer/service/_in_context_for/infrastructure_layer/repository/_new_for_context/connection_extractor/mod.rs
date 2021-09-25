@@ -9,14 +9,14 @@ use super::aggregate_connection_pool::AggregateConnectionPool;
 pub struct ConnectionExtractor;
 
 impl ConnectionExtractor {
-    pub fn get_postgresql_connection<'outer_a>(
-        aggregate_connection_pool: &'outer_a Arc<AggregateConnectionPool>
+    pub fn get_postgresql_connection<'a>(
+        aggregate_connection_pool: &'a Arc<AggregateConnectionPool>
     ) -> Result<PooledConnection<PostgresqlConnectionManager<NoTls>>, BaseError> {  // TODO NoTls-problem 
         return Ok(aggregate_connection_pool.get_postgresql_connection_pool().get()?);
     }
 
-    pub fn get_redis_connection<'outer_a>(
-        aggregate_connection_pool: &'outer_a Arc<AggregateConnectionPool>
+    pub fn get_redis_connection<'a>(
+        aggregate_connection_pool: &'a Arc<AggregateConnectionPool>
     ) -> Result<PooledConnection<RedisConnectionManager>, BaseError> {
         return Ok(aggregate_connection_pool.get_redis_connection_pool().get()?);
     }

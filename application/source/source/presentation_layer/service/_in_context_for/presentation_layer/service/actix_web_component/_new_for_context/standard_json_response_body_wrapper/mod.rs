@@ -14,8 +14,8 @@ impl StandardJsonResponseBodyWrapper {
         return Ok(serde_json::to_string(&Self::SUCCESS_RESULT)?);
     }
 
-    pub fn wrap_for_success_with_body<'outer_a, S>(
-        body: &'outer_a S
+    pub fn wrap_for_success_with_body<'a, S>(
+        body: &'a S
     ) -> Result<String, BaseError>
     where
         S: Serialize

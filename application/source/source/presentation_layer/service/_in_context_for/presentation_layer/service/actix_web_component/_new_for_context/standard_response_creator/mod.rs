@@ -30,8 +30,8 @@ impl StandardResponseCreator {
         }
     }
 
-    pub fn wrap_for_success_with_body_and_create_ok<'outer_a, S>(
-        body: &'outer_a S
+    pub fn wrap_for_success_with_body_and_create_ok<'a, S>(
+        body: &'a S
     ) -> HttpResponse<Body>
     where
         S: Serialize

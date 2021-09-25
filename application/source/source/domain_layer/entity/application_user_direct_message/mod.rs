@@ -16,9 +16,9 @@ impl ApplicationUserDirectMessage {
         };
     }
 
-    pub fn get_id<'this>(
-        &'this self
-    ) -> Result<&'this i64, LogicError> {
+    pub fn get_id<'a>(
+        &'a self
+    ) -> Result<&'a i64, LogicError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
@@ -29,9 +29,9 @@ impl ApplicationUserDirectMessage {
         }
     }
 
-    pub fn get_list_of_members<'this>(
-        &'this self
-    ) -> &'this str {
+    pub fn get_list_of_members<'a>(
+        &'a self
+    ) -> &'a str {
         return self.list_of_members.as_str();
     }
 }

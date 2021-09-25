@@ -12,9 +12,9 @@ pub struct Base;
 impl JsonRefreshWebTokenStateManagerRedisTrait for Base {
     type Error = BaseError;
 
-    fn create<'outer_a>(
-        connection: &'outer_a mut Connection,
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    fn create<'a>(
+        connection: &'a mut Connection,
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
         connection.set_ex::<String, String, ()>(
             StorageKeyResolver::get_repository_json_refresh_web_token_first(
@@ -27,9 +27,9 @@ impl JsonRefreshWebTokenStateManagerRedisTrait for Base {
         return Ok(());
     }
 
-    fn update<'outer_a>(
-        connection: &'outer_a mut Connection,
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    fn update<'a>(
+        connection: &'a mut Connection,
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
         Self::create(connection, json_refresh_web_token)?;
 
@@ -37,9 +37,9 @@ impl JsonRefreshWebTokenStateManagerRedisTrait for Base {
     }
 
 
-    fn delete<'outer_a>(
-        connection: &'outer_a mut Connection,
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    fn delete<'a>(
+        connection: &'a mut Connection,
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
             StorageKeyResolver::get_repository_json_refresh_web_token_first(

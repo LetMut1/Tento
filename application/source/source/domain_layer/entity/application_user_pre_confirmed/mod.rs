@@ -19,9 +19,9 @@ impl ApplicationUserPreConfirmed {
         };
     }
 
-    pub fn get_id<'this>(
-        &'this self
-    ) -> Result<&'this i64, LogicError> {
+    pub fn get_id<'a>(
+        &'a self
+    ) -> Result<&'a i64, LogicError> {
         match self.id {
             Some(ref id) => {
                 return Ok(id);
@@ -32,9 +32,9 @@ impl ApplicationUserPreConfirmed {
         }
     }
 
-    pub fn get_application_user_email<'this>(
-        &'this self
-    ) -> &'this str {
+    pub fn get_application_user_email<'a>(
+        &'a self
+    ) -> &'a str {
         return self.application_user_email.as_str();
     }
 
@@ -44,9 +44,9 @@ impl ApplicationUserPreConfirmed {
         return self.application_user_email;
     }
 
-    pub fn get_created_at<'this>(
-        &'this self
-    ) -> &'this str {
+    pub fn get_created_at<'a>(
+        &'a self
+    ) -> &'a str {
         return self.created_at.as_str();
     }
 }

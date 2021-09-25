@@ -5,8 +5,8 @@ use actix_web::Error;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web_component::middleware::authentication_resolver::authentication_resolver::_new_for_contex::call::base::Base as HandlerBase;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
+use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web_component::_new_for_context::standard_response_creator::StandardResponseCreator;
 use futures::future::Either;
 use futures::future::ok as FutureOk;
@@ -46,15 +46,15 @@ where
     type Error = Error;
     type Future = Either<S::Future, Ready<Result<Self::Response, Self::Error>>>;
 
-    fn poll_ready<'this, 'outer_a>(
-        &'this mut self,
-        context: &'outer_a mut Context
+    fn poll_ready<'a, 'b>(
+        &'a mut self,
+        context: &'b mut Context
     ) -> Poll<Result<(), Self::Error>> {
         return self.service.poll_ready(context);
     }
 
-    fn call<'this>(
-        &'this mut self,
+    fn call<'a>(
+        &'a mut self,
         service_request: ServiceRequest
     ) -> Self::Future {
         if let Err(ref base_error) = HandlerBase::handle(&service_request) {

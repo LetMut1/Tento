@@ -37,9 +37,9 @@ impl Base {
 impl JsonAccessWebTokenPayloadFactoryTrait for Base {
     type Error = BaseError;
 
-    fn create_from_json_refresh_web_token<'outer_a>(
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<Payload<'outer_a>, Self::Error> {
+    fn create_from_json_refresh_web_token<'a>(
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
+    ) -> Result<Payload<'a>, Self::Error> {
         return Ok(
             Payload::new(
                 Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),

@@ -16,9 +16,9 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
-    pub fn handle<'outer_a>(
+    pub fn handle<'a>(
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
-        json_access_web_token: &'outer_a JsonAccessWebToken<'_>
+        json_access_web_token: &'a JsonAccessWebToken<'_>
     ) -> Result<(), BaseError> {
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 

@@ -14,9 +14,9 @@ pub struct Base;
 impl ApplicationUserPreConfirmedDataProviderPostgesqlTrait for Base {
     type Error = BaseError;
 
-    fn is_exist_by_application_user_email<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_email: &'outer_a str
+    fn is_exist_by_application_user_email<'a>(
+        connection: &'a mut Connection,
+        application_user_email: &'a str
     ) -> Result<bool, Self::Error> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
@@ -38,9 +38,9 @@ impl ApplicationUserPreConfirmedDataProviderPostgesqlTrait for Base {
         return Ok(false);
     }
 
-    fn find_by_application_user_email<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_email: &'outer_a str
+    fn find_by_application_user_email<'a>(
+        connection: &'a mut Connection,
+        application_user_email: &'a str
     ) -> Result<Option<ApplicationUserPreConfirmed>, Self::Error> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 

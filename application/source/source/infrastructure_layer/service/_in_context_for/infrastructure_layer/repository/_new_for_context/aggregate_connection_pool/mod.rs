@@ -26,15 +26,15 @@ impl AggregateConnectionPool {
         );
     }
 
-    pub fn get_postgresql_connection_pool<'this>(
-        &'this self
-    ) -> &'this Pool<PostgresqlConnectionManager<NoTls>> {
+    pub fn get_postgresql_connection_pool<'a>(
+        &'a self
+    ) -> &'a Pool<PostgresqlConnectionManager<NoTls>> {
         return &self.postgresql_connection_pool;
     }
 
-    pub fn get_redis_connection_pool<'this>(
-        &'this self
-    ) -> &'this Pool<RedisConnectionManager> {
+    pub fn get_redis_connection_pool<'a>(
+        &'a self
+    ) -> &'a Pool<RedisConnectionManager> {
         return &self.redis_connection_pool;
     }
 

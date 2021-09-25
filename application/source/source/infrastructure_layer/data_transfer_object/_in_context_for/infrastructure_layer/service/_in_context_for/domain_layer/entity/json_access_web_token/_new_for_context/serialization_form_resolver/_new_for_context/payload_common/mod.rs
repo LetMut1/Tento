@@ -4,20 +4,20 @@ use serde::Serialize;
 use std::borrow::Cow;
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct PayloadCommon<'outer_a> {
+pub struct PayloadCommon<'a> {
     #[serde(rename = "jawti")]
-    json_access_web_token_id: Cow<'outer_a, str>,
+    json_access_web_token_id: Cow<'a, str>,
     #[serde(rename = "aui")]
-    application_user_id: Cow<'outer_a, i64>,
+    application_user_id: Cow<'a, i64>,
     #[serde(rename = "aulitdi")]
-    application_user_log_in_token_device_id: Cow<'outer_a, str>,
+    application_user_log_in_token_device_id: Cow<'a, str>,
     #[serde(rename = "et")]
-    expiration_time: Cow<'outer_a, str>
+    expiration_time: Cow<'a, str>
 }
 
-impl<'outer_a> PayloadCommon<'outer_a> {
+impl<'a> PayloadCommon<'a> {
     pub fn new(
-        json_access_web_token: &'outer_a JsonAccessWebToken<'_>
+        json_access_web_token: &'a JsonAccessWebToken<'_>
     ) -> Self {
         return Self {
             json_access_web_token_id: Cow::Borrowed(json_access_web_token.get_id()),
@@ -29,7 +29,7 @@ impl<'outer_a> PayloadCommon<'outer_a> {
 
     pub fn into_inner(
         self
-    ) -> (Cow<'outer_a, str>, Cow<'outer_a, i64>, Cow<'outer_a, str>, Cow<'outer_a, str>) {
+    ) -> (Cow<'a, str>, Cow<'a, i64>, Cow<'a, str>, Cow<'a, str>) {
         return (
             self.json_access_web_token_id,
             self.application_user_id,

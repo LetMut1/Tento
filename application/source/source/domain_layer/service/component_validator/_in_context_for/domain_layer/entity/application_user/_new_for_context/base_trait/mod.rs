@@ -11,8 +11,8 @@ pub trait BaseTrait {
     const PASSWORD_MINIMUM_LENGTH: u8 = 7;
     const PASSWORD_MAXIMUM_LENGTH: u8 = 65;
 
-    fn is_valid_email<'outer_a>(
-        email: &'outer_a str
+    fn is_valid_email<'a>(
+        email: &'a str
     ) -> Result<bool, Self::Error> {
         return Ok(
             Regex::new(r"\S+@\S+")?.is_match(email)
@@ -20,14 +20,14 @@ pub trait BaseTrait {
         );
     }
 
-    fn is_valid_nickname<'outer_a>(
-        nickname: &'outer_a str
+    fn is_valid_nickname<'a>(
+        nickname: &'a str
     ) -> bool {
         return nickname.chars().count() <= (Self::NICKNAME_MAXIMUM_LENGTH as usize);
     }
 
-    fn is_valid_password<'outer_a>(
-        password: &'outer_a str
+    fn is_valid_password<'a>(
+        password: &'a str
     ) -> bool {
         let password_chars_count: usize = password.chars().count();
 

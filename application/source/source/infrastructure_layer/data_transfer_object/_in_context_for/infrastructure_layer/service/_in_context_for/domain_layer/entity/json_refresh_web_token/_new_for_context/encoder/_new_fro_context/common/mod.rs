@@ -3,20 +3,20 @@ use serde::Serialize;
 use std::borrow::Cow;
 
 #[derive(Serialize, Debug)]
-pub struct Common<'outer_a> {
+pub struct Common<'a> {
     #[serde(rename = "jawti")]
-    json_access_web_token_id: Cow<'outer_a, str>,
+    json_access_web_token_id: Cow<'a, str>,
     #[serde(rename = "aui")]
-    application_user_id: Cow<'outer_a, i64>,
+    application_user_id: Cow<'a, i64>,
     #[serde(rename = "aulitdi")]
-    application_user_log_in_token_device_id: Cow<'outer_a, str>,
+    application_user_log_in_token_device_id: Cow<'a, str>,
     #[serde(rename = "v")]
-    obfuscation_value: Cow<'outer_a, str>
+    obfuscation_value: Cow<'a, str>
 }
 
-impl<'outer_a> Common<'outer_a> {
+impl<'a> Common<'a> {
     pub fn new(
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Self {
         return Self {
             json_access_web_token_id: Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),

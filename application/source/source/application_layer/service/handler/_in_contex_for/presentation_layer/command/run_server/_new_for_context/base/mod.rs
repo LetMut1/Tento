@@ -134,8 +134,8 @@ impl Base {
         return Ok(());
     }
 
-    fn configure_http_server<'outer_a>(
-        service_config: &'outer_a mut ServiceConfig
+    fn configure_http_server<'a>(
+        service_config: &'a mut ServiceConfig
     ) -> () {
         service_config     // TODO default_service 
         .service(

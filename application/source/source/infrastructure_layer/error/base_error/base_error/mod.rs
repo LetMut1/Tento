@@ -44,9 +44,9 @@ pub enum BaseError {
 }
 
 impl Display for BaseError {
-    fn fmt<'this, 'outer_a>(
-        &'this self,
-        formatter: &'outer_a mut Formatter<'_>
+    fn fmt<'a, 'b>(
+        &'a self,
+        formatter: &'b mut Formatter<'_>
     ) -> Result {
         match self {
             Self::LogicError {unreachable, message} => {

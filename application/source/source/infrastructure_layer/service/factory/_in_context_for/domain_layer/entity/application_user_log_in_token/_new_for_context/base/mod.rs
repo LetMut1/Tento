@@ -8,11 +8,11 @@ use std::borrow::Cow;
 pub struct Base;
 
 impl Base {
-    pub fn create_from_common<'outer_a>(
-        common: Common<'outer_a>,
-        application_user_id: &'outer_a i64,
-        device_id: &'outer_a str
-    ) -> ApplicationUserLogInToken<'outer_a> {
+    pub fn create_from_common<'a>(
+        common: Common<'a>,
+        application_user_id: &'a i64,
+        device_id: &'a str
+    ) -> ApplicationUserLogInToken<'a> {
         let (
             application_user_email,
             value,

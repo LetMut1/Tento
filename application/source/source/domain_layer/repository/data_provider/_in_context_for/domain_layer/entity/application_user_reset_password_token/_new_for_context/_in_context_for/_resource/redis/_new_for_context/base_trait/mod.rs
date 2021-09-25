@@ -5,8 +5,8 @@ use std::error::Error;
 pub trait BaseTrait {
     type Error: Error;
 
-    fn find_by_application_user_id<'outer_a, 'outer_b>(
-        connection: &'outer_a mut Connection,
-        application_user_id: &'outer_b i64
-    ) -> Result<Option<ApplicationUserResetPasswordToken<'outer_b>>, Self::Error>;
+    fn find_by_application_user_id<'a, 'b>(
+        connection: &'a mut Connection,
+        application_user_id: &'b i64
+    ) -> Result<Option<ApplicationUserResetPasswordToken<'b>>, Self::Error>;
 }

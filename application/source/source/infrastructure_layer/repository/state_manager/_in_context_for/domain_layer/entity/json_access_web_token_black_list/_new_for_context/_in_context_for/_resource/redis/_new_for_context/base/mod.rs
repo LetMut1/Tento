@@ -11,9 +11,9 @@ pub struct Base;
 impl JsonAccessWebTokenBlackListStateManagerRedisTrait for Base {
     type Error = BaseError;
 
-    fn create<'outer_a>(
-        connection: &'outer_a mut Connection,
-        json_access_web_token_black_list: &'outer_a JsonAccessWebTokenBlackList<'_>
+    fn create<'a>(
+        connection: &'a mut Connection,
+        json_access_web_token_black_list: &'a JsonAccessWebTokenBlackList<'_>
     ) -> Result<(), Self::Error> {
         connection.set_ex::<String, u8, ()>(
             StorageKeyResolver::get_repository_json_access_web_token_bkack_list_first(

@@ -4,12 +4,12 @@ use std::error::Error;
 pub trait EncoderTrait {
     type Error: Error;
 
-    fn encode<'outer_a>(
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    fn encode<'a>(
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<String, Self::Error>;
 
-    fn is_valid<'outer_a>(
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>,
-        json_refresh_web_token_hash: &'outer_a str
+    fn is_valid<'a>(
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>,
+        json_refresh_web_token_hash: &'a str
     ) -> Result<bool, Self::Error>;
 }

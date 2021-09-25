@@ -1,19 +1,19 @@
 use std::borrow::Cow;
 
-pub struct JsonRefreshWebToken<'outer_a> {
+pub struct JsonRefreshWebToken<'a> {
     json_access_web_token_id: String,
-    application_user_id: Cow<'outer_a, i64>,
-    application_user_log_in_token_device_id: Cow<'outer_a, str>,
+    application_user_id: Cow<'a, i64>,
+    application_user_log_in_token_device_id: Cow<'a, str>,
     obfuscation_value: String
 }
 
-impl<'outer_a> JsonRefreshWebToken<'outer_a> {
+impl<'a> JsonRefreshWebToken<'a> {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: u16 = 60 * 24 * 30;
 
     pub fn new(
         json_access_web_token_id: String,
-        application_user_id: Cow<'outer_a, i64>,
-        application_user_log_in_token_device_id: Cow<'outer_a, str>,
+        application_user_id: Cow<'a, i64>,
+        application_user_log_in_token_device_id: Cow<'a, str>,
         obfuscation_value: String
     ) -> Self {
         return Self {
@@ -24,34 +24,34 @@ impl<'outer_a> JsonRefreshWebToken<'outer_a> {
         };
     }
 
-    pub fn get_json_access_web_token_id<'this>(
-        &'this self
-    ) -> &'this str {
+    pub fn get_json_access_web_token_id<'b>(
+        &'b self
+    ) -> &'b str {
         return self.json_access_web_token_id.as_str();
     }
 
-    pub fn get_application_user_id<'this>(
-        &'this self
-    ) -> &'this i64 {
+    pub fn get_application_user_id<'b>(
+        &'b self
+    ) -> &'b i64 {
         return self.application_user_id.as_ref();
     }
 
-    pub fn get_application_user_log_in_token_device_id<'this>(
-        &'this self
-    ) -> &'this str {
+    pub fn get_application_user_log_in_token_device_id<'b>(
+        &'b self
+    ) -> &'b str {
         return self.application_user_log_in_token_device_id.as_ref();
     }
 
-    pub fn get_obfuscation_value<'this>(
-        &'this self
-    ) -> &'this str {
+    pub fn get_obfuscation_value<'b>(
+        &'b self
+    ) -> &'b str {
         return self.obfuscation_value.as_str();
     }
 
-    pub fn set_obfuscation_value<'this>(
-        &'this mut self,
+    pub fn set_obfuscation_value<'b>(
+        &'b mut self,
         obfuscation_value: String
-    ) -> &'this mut Self {
+    ) -> &'b mut Self {
         self.obfuscation_value = obfuscation_value;
 
         return self;

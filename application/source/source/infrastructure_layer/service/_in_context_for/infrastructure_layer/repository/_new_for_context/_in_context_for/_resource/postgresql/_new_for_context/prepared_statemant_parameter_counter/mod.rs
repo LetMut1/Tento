@@ -12,9 +12,9 @@ impl PreparedStatementParameterCounter {
         };
     }
 
-    pub fn get_next<'this>(
-        &'this mut self
-    ) -> Result<&'this u8, BaseError> {
+    pub fn get_next<'a>(
+        &'a mut self
+    ) -> Result<&'a u8, BaseError> {
         if self.counter == u8::max_value() {
             return Err(BaseError::LogicError {unreachable: false, message: "Out of range for `u8` type."});
         }

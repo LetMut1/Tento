@@ -12,11 +12,11 @@ pub struct Base;
 impl ApplicationUserLogInTokenDataProviderRedisTrait for Base {
     type Error = BaseError;
 
-    fn find_by_application_user_id_and_device_id<'outer_a, 'outer_b>(
-        connection: &'outer_a mut Connection,
-        application_user_id: &'outer_b i64,
-        device_id: &'outer_b str,
-    ) -> Result<Option<ApplicationUserLogInToken<'outer_b>>, Self::Error> {
+    fn find_by_application_user_id_and_device_id<'a, 'b>(
+        connection: &'a mut Connection,
+        application_user_id: &'b i64,
+        device_id: &'b str,
+    ) -> Result<Option<ApplicationUserLogInToken<'b>>, Self::Error> {
         match connection.get::<String, Option<String>>(
             StorageKeyResolver::get_repository_application_user_log_in_token_first(application_user_id, device_id)
         )?

@@ -17,9 +17,9 @@ impl SignatureCreator {
 impl SignatureCreatorTrait for SignatureCreator {
     type Error = BaseError;
 
-    fn create<'outer_a>(
-        header: &'outer_a str,
-        payload: &'outer_a str
+    fn create<'a>(
+        header: &'a str,
+        payload: &'a str
     ) -> Result<String, Self::Error> {
         let mut hmac: Hmac<Sha512> = Self::get_configured_hmac()?;
         hmac.input((header.to_string() + payload).as_bytes());
@@ -27,10 +27,10 @@ impl SignatureCreatorTrait for SignatureCreator {
         return Ok(hex::encode(hmac.result().code()));   // TODO TIme attack
     }
 
-    fn is_valid<'outer_a>(
-        header: &'outer_a str,
-        payload: &'outer_a str,
-        signature: &'outer_a str
+    fn is_valid<'a>(
+        header: &'a str,
+        payload: &'a str,
+        signature: &'a str
     ) -> Result<bool, Self::Error> {
         return Ok(Self::create(header, payload)?.as_str() == signature);
     }

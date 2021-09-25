@@ -5,7 +5,7 @@ use std::error::Error;
 pub trait BaseTrait {
     type Error: Error;
 
-    fn create_from_json_refresh_web_token<'outer_a>(
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
-    ) -> Result<Payload<'outer_a>, Self::Error>;
+    fn create_from_json_refresh_web_token<'a>(
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
+    ) -> Result<Payload<'a>, Self::Error>;
 }

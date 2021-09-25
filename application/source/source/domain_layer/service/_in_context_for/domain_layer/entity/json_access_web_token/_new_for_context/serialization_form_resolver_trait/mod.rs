@@ -6,11 +6,11 @@ pub trait SerializationFormResolverTrait {
 
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
-    fn serialize<'outer_a>(
-        json_access_web_token: &'outer_a JsonAccessWebToken<'_>
+    fn serialize<'a>(
+        json_access_web_token: &'a JsonAccessWebToken<'_>
     ) -> Result<String, Self::Error>;
 
-    fn deserialize<'outer_a>(
-        classic_form: &'outer_a str
+    fn deserialize<'a>(
+        classic_form: &'a str
     ) -> Result<JsonAccessWebToken<'static>, Self::Error>;
 }

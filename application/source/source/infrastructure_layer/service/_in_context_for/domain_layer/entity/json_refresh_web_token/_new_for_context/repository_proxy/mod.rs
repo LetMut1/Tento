@@ -13,9 +13,9 @@ pub struct RepositoryProxy;
 impl RepositoryProxyTrait for RepositoryProxy {
     type Error = BaseError;
 
-    fn create<'outer_a>(
-        connection: &'outer_a mut Connection,
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    fn create<'a>(
+        connection: &'a mut Connection,
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
         let application_user_log_in_token_device_id: String = 
             json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
@@ -47,9 +47,9 @@ impl RepositoryProxyTrait for RepositoryProxy {
         return Ok(());
     }
 
-    fn update<'outer_a>(
-        connection: &'outer_a mut Connection,
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    fn update<'a>(
+        connection: &'a mut Connection,
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
         DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
 
@@ -58,9 +58,9 @@ impl RepositoryProxyTrait for RepositoryProxy {
         return Ok(());
     }
 
-    fn delete<'outer_a>(
-        connection: &'outer_a mut Connection,
-        json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
+    fn delete<'a>(
+        connection: &'a mut Connection,
+        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
         JsonRefreshWebTokenStateManagerRedis::delete(connection, json_refresh_web_token)?;
 
@@ -94,9 +94,9 @@ impl RepositoryProxyTrait for RepositoryProxy {
         return Ok(());
     }
 
-    fn get_by_application_user_id<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_id: &'outer_a i64
+    fn get_by_application_user_id<'a>(
+        connection: &'a mut Connection,
+        application_user_id: &'a i64
     ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, Self::Error> {
         if let Some(application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, application_user_id)? {
             return JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id_registry(

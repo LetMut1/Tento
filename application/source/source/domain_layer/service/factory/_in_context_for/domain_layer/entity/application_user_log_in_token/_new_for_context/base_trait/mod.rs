@@ -10,10 +10,10 @@ pub trait BaseTrait {
     type Error: Error + From<LogicError>;
     type ValueGenerator: ValueGeneratorTrait;
 
-    fn create_from_application_user<'outer_a>(
-        application_user: &'outer_a ApplicationUser,
-        device_id: &'outer_a str
-    ) -> Result<ApplicationUserLogInToken<'outer_a>, Self::Error> {
+    fn create_from_application_user<'a>(
+        application_user: &'a ApplicationUser,
+        device_id: &'a str
+    ) -> Result<ApplicationUserLogInToken<'a>, Self::Error> {
         return Ok(
             ApplicationUserLogInToken::new(
                 application_user.get_id()?,

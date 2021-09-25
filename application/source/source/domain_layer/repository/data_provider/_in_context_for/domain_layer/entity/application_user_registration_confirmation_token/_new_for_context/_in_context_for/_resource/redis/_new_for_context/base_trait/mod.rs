@@ -5,8 +5,8 @@ use std::error::Error;
 pub trait BaseTrait {
     type Error: Error;
 
-    fn find_by_application_user_pre_confirmed_id<'outer_a, 'outer_b>(
-        connection: &'outer_a mut Connection,
-        application_user_pre_confirmed_id: &'outer_b i64
-    ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'outer_b>>, Self::Error>;
+    fn find_by_application_user_pre_confirmed_id<'a, 'b>(
+        connection: &'a mut Connection,
+        application_user_pre_confirmed_id: &'b i64
+    ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'b>>, Self::Error>;
 }

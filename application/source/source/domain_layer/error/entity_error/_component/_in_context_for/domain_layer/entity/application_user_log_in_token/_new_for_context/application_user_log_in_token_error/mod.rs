@@ -10,9 +10,9 @@ pub enum ApplicationUserLogInTokenError {
 }
 
 impl Display for ApplicationUserLogInTokenError {
-    fn fmt<'this, 'outer_a>(
-        &'this self,
-        _: &'outer_a mut Formatter<'_>
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>
     ) -> Result {
         return Ok(());
     }

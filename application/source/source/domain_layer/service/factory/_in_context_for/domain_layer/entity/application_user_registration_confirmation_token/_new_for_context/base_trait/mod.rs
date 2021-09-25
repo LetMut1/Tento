@@ -10,8 +10,8 @@ pub trait BaseTrait {
     type Error: Error + From<LogicError>;
     type ValueGenerator: ValueGeneratorTrait;
 
-    fn create_from_application_user_pre_confirmed<'outer_a>(
-        application_user_pre_confirmed: &'outer_a ApplicationUserPreConfirmed
+    fn create_from_application_user_pre_confirmed<'a>(
+        application_user_pre_confirmed: &'a ApplicationUserPreConfirmed
     ) -> Result<ApplicationUserRegistrationConfirmationToken<'_>, Self::Error> {
         return Ok(
             ApplicationUserRegistrationConfirmationToken::new(

@@ -14,9 +14,9 @@ pub struct Base;
 impl ApplicationUserDataProviderPostgresqlTrait for Base {
     type Error = BaseError;
 
-    fn is_exist_by_nickanme<'outer_a>(
-        connection: &'outer_a mut Connection,
-        nickname: &'outer_a str
+    fn is_exist_by_nickanme<'a>(
+        connection: &'a mut Connection,
+        nickname: &'a str
     ) -> Result<bool, Self::Error> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
@@ -38,9 +38,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         return Ok(false);
     }
 
-    fn is_exist_by_email<'outer_a>(
-        connection: &'outer_a mut Connection,
-        email: &'outer_a str
+    fn is_exist_by_email<'a>(
+        connection: &'a mut Connection,
+        email: &'a str
     ) -> Result<bool, Self::Error> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
@@ -62,9 +62,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         return Ok(false);
     }
 
-    fn find_by_email<'outer_a>(
-        connection: &'outer_a mut Connection,
-        email: &'outer_a str
+    fn find_by_email<'a>(
+        connection: &'a mut Connection,
+        email: &'a str
     ) -> Result<Option<ApplicationUser>, Self::Error> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
@@ -98,9 +98,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         return Ok(None);
     }
 
-    fn find_by_id<'outer_a>(
-        connection: &'outer_a mut Connection,
-        id: &'outer_a i64
+    fn find_by_id<'a>(
+        connection: &'a mut Connection,
+        id: &'a i64
     ) -> Result<Option<ApplicationUser>, Self::Error> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 

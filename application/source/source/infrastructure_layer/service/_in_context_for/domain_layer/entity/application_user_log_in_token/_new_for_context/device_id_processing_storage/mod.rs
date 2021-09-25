@@ -9,9 +9,9 @@ pub struct DeviceIdProcessingStorage;
 impl DeviceIdProcessingStorage {
     const SEPARATOR: &'static str = ":";
 
-    pub fn create<'outer_a>(
-        connection: &'outer_a mut Connection, 
-        application_user_id: &'outer_a i64,
+    pub fn create<'a>(
+        connection: &'a mut Connection, 
+        application_user_id: &'a i64,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), BaseError> {
         connection.set_ex::<String, String, ()>(
@@ -23,9 +23,9 @@ impl DeviceIdProcessingStorage {
         return Ok(());
     }
 
-    pub fn update<'outer_a>(
-        connection: &'outer_a mut Connection, 
-        application_user_id: &'outer_a i64,
+    pub fn update<'a>(
+        connection: &'a mut Connection, 
+        application_user_id: &'a i64,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), BaseError> {
         Self::create(connection, application_user_id, application_user_log_in_token_device_id_registry)?;
@@ -33,9 +33,9 @@ impl DeviceIdProcessingStorage {
         return Ok(());
     }
 
-    pub fn delete<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_id: &'outer_a i64,
+    pub fn delete<'a>(
+        connection: &'a mut Connection,
+        application_user_id: &'a i64,
     ) -> Result<(), BaseError> {
         connection.del::<String, ()>(
             StorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id)
@@ -44,9 +44,9 @@ impl DeviceIdProcessingStorage {
         return Ok(());
     }
 
-    pub fn update_expiration_time<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_id: &'outer_a i64
+    pub fn update_expiration_time<'a>(
+        connection: &'a mut Connection,
+        application_user_id: &'a i64
     ) -> Result<(), BaseError> {
         connection.expire::<String, ()>(
             StorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id),
@@ -56,9 +56,9 @@ impl DeviceIdProcessingStorage {
         return Ok(());
     }
 
-    pub fn get<'outer_a>(
-        connection: &'outer_a mut Connection,
-        application_user_id: &'outer_a i64
+    pub fn get<'a>(
+        connection: &'a mut Connection,
+        application_user_id: &'a i64
     ) -> Result<Option<Vec<String>>, BaseError> {
         if let Some(application_user_log_in_token_device_id_sequence) = connection.get::<String, Option<String>>(
             StorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id)

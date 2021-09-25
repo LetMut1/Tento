@@ -14,11 +14,11 @@ use postgres::types::Type;
 pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO 
                     // TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
 impl Base {
-    pub fn find_many_by_name<'outer_a>(
-        connection: &'outer_a mut Connection,
-        name: &'outer_a str,
-        requery_name: &'outer_a Option<String>,
-        limit: &'outer_a i16
+    pub fn find_many_by_name<'a>(
+        connection: &'a mut Connection,
+        name: &'a str,
+        requery_name: &'a Option<String>,
+        limit: &'a i16
     ) -> Result<Option<Vec<ResponseGetManyByNameChannel>>, BaseError> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
         
@@ -81,11 +81,11 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn find_many_by_created_at<'outer_a>(
-        connection: &'outer_a mut Connection,
-        created_at: &'outer_a Option<String>,
-        order: &'outer_a i8,
-        limit: &'outer_a i16
+    pub fn find_many_by_created_at<'a>(
+        connection: &'a mut Connection,
+        created_at: &'a Option<String>,
+        order: &'a i8,
+        limit: &'a i16
     ) -> Result<Option<Vec<ResponseGetManyByCreatedAtChannel>>, BaseError> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
@@ -151,11 +151,11 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn find_many_by_subscribers_quantity<'outer_a>(
-        connection: &'outer_a mut Connection,
-        subscribers_quantity: &'outer_a Option<i64>,
-        order: &'outer_a i8,
-        limit: &'outer_a i16
+    pub fn find_many_by_subscribers_quantity<'a>(
+        connection: &'a mut Connection,
+        subscribers_quantity: &'a Option<i64>,
+        order: &'a i8,
+        limit: &'a i16
     ) -> Result<Option<Vec<ResponseGetManyBySubscribersQuantityChannel>>, BaseError> {
         let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
 
@@ -207,9 +207,9 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn find_many_by_id_registry<'outer_a>(
-        connection: &'outer_a mut Connection,
-        id_registry: &'outer_a Vec<i64>
+    pub fn find_many_by_id_registry<'a>(
+        connection: &'a mut Connection,
+        id_registry: &'a Vec<i64>
     ) -> Result<Option<Vec<ResponseGetManyByIdRegistryChannel>>, BaseError> {
         if id_registry.is_empty() {
             return Ok(None)

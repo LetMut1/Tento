@@ -8,10 +8,10 @@ use std::borrow::Cow;
 pub struct Base;
 
 impl Base {
-    pub fn create_from_common<'outer_a>(
-        common: Common<'outer_a>,
-        application_user_pre_confirmed_id: &'outer_a i64
-    ) -> ApplicationUserRegistrationConfirmationToken<'outer_a> {
+    pub fn create_from_common<'a>(
+        common: Common<'a>,
+        application_user_pre_confirmed_id: &'a i64
+    ) -> ApplicationUserRegistrationConfirmationToken<'a> {
         let (
             application_user_email,
             value,

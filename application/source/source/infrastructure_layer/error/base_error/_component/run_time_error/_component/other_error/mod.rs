@@ -23,23 +23,23 @@ impl OtherError {
         };
     }
 
-    pub fn get_error_kind_description<'this>(
-        &'this self
+    pub fn get_error_kind_description<'a>(
+        &'a self
     ) -> &'static str {
         return self.error_kind_description;
     }
 
-    pub fn get_message<'this>(
-        &'this self
-    ) -> &'this str {
+    pub fn get_message<'a>(
+        &'a self
+    ) -> &'a str {
         return self.message.as_str();
     }
 }
 
 impl Display for OtherError {
-    fn fmt<'this, 'outer_a>(
-        &'this self,
-        _: &'outer_a mut Formatter<'_>
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>
     ) -> Result {
         return Ok(());
     }
