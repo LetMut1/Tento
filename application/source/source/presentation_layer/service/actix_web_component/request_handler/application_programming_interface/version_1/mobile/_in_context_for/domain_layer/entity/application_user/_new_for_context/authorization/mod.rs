@@ -53,7 +53,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         match HandlerCheckNicknameForExisting::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => {
-                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response);
             },
             Err(base_error) => {
                 match base_error {
@@ -157,7 +157,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         match HandlerRegister::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => { 
-                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response);
             },
             Err(ref base_error) => {
                 match base_error {
@@ -302,7 +302,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         match HandlerPreLogIn::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => { 
-                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response); 
             },
             Err(ref base_error) => {
                 match base_error {
@@ -366,7 +366,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         match HandlerLogIn::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => { 
-                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response); 
             },
             Err(ref base_error) => {
                 match base_error {
@@ -471,7 +471,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         match HandlerRefreshJsonAccessWebToken::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => {
-                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response);
             },
             Err(ref base_error) => {
                 match base_error {
@@ -597,7 +597,7 @@ impl Authorization {
     ) -> HttpResponse<Body> {
         match HandlerPreResetPassword::handle(data.into_inner(), form.into_inner()) {
             Ok(response) => {
-                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response);
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response);
             },
             Err(ref base_error) => {
                 match base_error {

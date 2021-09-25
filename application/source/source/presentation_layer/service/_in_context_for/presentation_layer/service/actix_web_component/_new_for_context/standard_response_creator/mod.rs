@@ -30,8 +30,8 @@ impl StandardResponseCreator {
         }
     }
 
-    pub fn wrap_for_success_with_body_and_create_ok<'a, S>(
-        body: &'a S
+    pub fn wrap_for_success_with_body_and_create_ok<S>(
+        body: S
     ) -> HttpResponse<Body>
     where
         S: Serialize
@@ -98,7 +98,7 @@ impl StandardResponseCreator {
         body: String
     ) -> HttpResponse<Body> {
         return HttpResponse::Ok()
-        .set_header(header::CONTENT_TYPE, "application/json")
-        .body(body);
+            .set_header(header::CONTENT_TYPE, "application/json")
+            .body(body);
     }
 }

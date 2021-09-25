@@ -1,22 +1,22 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct SuccessResultWithBody<'a, S> 
+pub struct SuccessResultWithBody<S> 
 where
     S: Serialize
 {
     #[serde(rename = "s")]
     success: bool,
     #[serde(rename = "b")]
-    body: &'a S
+    body: S
 }
 
-impl<'a, S> SuccessResultWithBody<'a, S>
+impl<S> SuccessResultWithBody<S>
 where
     S: Serialize
 {
     pub fn new(
-        body: &'a S
+        body: S
     ) -> Self {
         return Self {
             success: true,

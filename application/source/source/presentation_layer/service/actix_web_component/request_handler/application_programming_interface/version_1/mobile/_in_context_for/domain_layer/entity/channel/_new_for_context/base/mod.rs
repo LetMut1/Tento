@@ -23,7 +23,7 @@ impl Base {
     ) -> HttpResponse<Body> {
         match HandlerGetManyByName::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => { 
-                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response); 
             },
             Err(ref base_error) => {
                 match base_error {
@@ -50,7 +50,7 @@ impl Base {
     ) -> HttpResponse<Body> {
         match HandlerGetManyByCreatedName::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => { 
-                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response); 
             },
             Err(ref base_error) => {
                 match base_error {
@@ -77,7 +77,7 @@ impl Base {
     ) -> HttpResponse<Body> {
         match HandlerGetManyBySubscribersQuantity::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => { 
-                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response); 
             },
             Err(ref base_error) => {
                 match base_error {
@@ -104,7 +104,7 @@ impl Base {
     ) -> HttpResponse<Body> {
         match HandlerGetManyByIdRegistry::handle(data.into_inner(), query.into_inner()) {
             Ok(response) => { 
-                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(&response); 
+                return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response); 
             },
             Err(ref base_error) => {
                 match base_error {
