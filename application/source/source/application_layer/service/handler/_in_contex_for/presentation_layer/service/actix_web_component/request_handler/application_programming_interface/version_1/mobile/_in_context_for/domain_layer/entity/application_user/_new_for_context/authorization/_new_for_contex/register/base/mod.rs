@@ -75,7 +75,7 @@ impl Base {
                     if let Some(application_user_pre_confirmed) = DataProviderApplicationUserPreConfirmedPostgesql::find_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
                         let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-                        if let Some(mut application_user_registration_confirmation_token) = DataProviderApplicationUserRegistrationConfirmationTokenRedis::get_by_application_user_pre_confirmed_id(
+                        if let Some(mut application_user_registration_confirmation_token) = DataProviderApplicationUserRegistrationConfirmationTokenRedis::find_by_application_user_pre_confirmed_id(
                             redis_connection, application_user_pre_confirmed.get_id()?
                         )? 
                         {

@@ -99,7 +99,7 @@ impl RepositoryProxyTrait for RepositoryProxy {
         application_user_id: &'outer_a i64
     ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, Self::Error> {
         if let Some(application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, application_user_id)? {
-            return DataProviderJsonRefreshWebTokenRedis::get_by_application_user_id_and_application_user_log_in_token_device_id_registry(
+            return DataProviderJsonRefreshWebTokenRedis::find_by_application_user_id_and_application_user_log_in_token_device_id_registry(
                 connection, application_user_id, application_user_log_in_token_device_id_registry
             );
         }

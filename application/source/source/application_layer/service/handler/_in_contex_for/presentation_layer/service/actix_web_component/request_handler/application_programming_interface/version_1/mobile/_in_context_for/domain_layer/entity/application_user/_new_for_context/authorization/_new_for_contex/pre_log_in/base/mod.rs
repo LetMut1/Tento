@@ -47,7 +47,7 @@ impl Base {
 
                 let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-                match DataProviderApplicationUserLogInTokenRedis::get_by_application_user_id_and_device_id(
+                match DataProviderApplicationUserLogInTokenRedis::find_by_application_user_id_and_device_id(
                     connection, application_user.get_id()?, application_user_log_in_token_device_id.as_str()
                 )? 
                 {

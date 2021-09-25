@@ -34,7 +34,7 @@ impl Base {
 
             let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            match DataProviderApplicationUserResetPasswordTokenRedis::get_by_application_user_id(redis_connection, application_user.get_id()?)? {
+            match DataProviderApplicationUserResetPasswordTokenRedis::find_by_application_user_id(redis_connection, application_user.get_id()?)? {
                 Some(existing_application_user_reset_password_token) => {
                     application_user_reset_password_token = existing_application_user_reset_password_token;
 

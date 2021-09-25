@@ -12,7 +12,7 @@ pub struct Base;
 impl DataProviderApplicationUserLogInTokenRedisTrait for Base {
     type Error = BaseError;
 
-    fn get_by_application_user_id_and_device_id<'outer_a, 'outer_b>(
+    fn find_by_application_user_id_and_device_id<'outer_a, 'outer_b>(
         connection: &'outer_a mut Connection,
         application_user_id: &'outer_b i64,
         device_id: &'outer_b str,

@@ -24,7 +24,7 @@ impl Base {
     ) -> Result<(), BaseError> {
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-        if let Some(json_refresh_web_token) = DataProviderJsonRefreshWebTokenRedis::get_by_application_user_id_and_application_user_log_in_token_device_id(
+        if let Some(json_refresh_web_token) = DataProviderJsonRefreshWebTokenRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
             connection, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
         )?
         {

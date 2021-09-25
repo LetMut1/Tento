@@ -45,7 +45,7 @@ impl Base {
         if ApplicationUserComponentValidator::is_valid_password(application_user_password.as_str()) {
             let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            if let Some(mut application_user_reset_password_token) = DataProviderApplicationUserResetPasswordTokenRedis::get_by_application_user_id(
+            if let Some(mut application_user_reset_password_token) = DataProviderApplicationUserResetPasswordTokenRedis::find_by_application_user_id(
                 redis_connection, &application_user_id
             )? 
             {

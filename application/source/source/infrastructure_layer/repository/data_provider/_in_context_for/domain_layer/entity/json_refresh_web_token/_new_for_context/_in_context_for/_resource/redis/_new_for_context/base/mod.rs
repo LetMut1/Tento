@@ -12,7 +12,7 @@ pub struct Base;
 impl DataProviderJsonRefreshWebTokenRedisTrait for Base {
     type Error = BaseError;
 
-    fn get_by_application_user_id_and_application_user_log_in_token_device_id<'outer_a>(
+    fn find_by_application_user_id_and_application_user_log_in_token_device_id<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a i64, 
         application_user_log_in_token_device_id: &'outer_a str,
@@ -30,7 +30,7 @@ impl DataProviderJsonRefreshWebTokenRedisTrait for Base {
         }
     }
 
-    fn get_by_application_user_id_and_application_user_log_in_token_device_id_registry<'outer_a>(
+    fn find_by_application_user_id_and_application_user_log_in_token_device_id_registry<'outer_a>(
         connection: &'outer_a mut Connection, 
         application_user_id: &'outer_a i64, 
         application_user_log_in_token_device_id_registry: Vec<String>
@@ -38,7 +38,7 @@ impl DataProviderJsonRefreshWebTokenRedisTrait for Base {
         let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = Vec::new();
 
         for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
-            if let Some(json_refresh_web_token) = Self::get_by_application_user_id_and_application_user_log_in_token_device_id(
+            if let Some(json_refresh_web_token) = Self::find_by_application_user_id_and_application_user_log_in_token_device_id(
                 connection, application_user_id, application_user_log_in_token_device_id.as_str()
             )?
             {

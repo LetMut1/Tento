@@ -20,7 +20,7 @@ impl Base {
     ) -> Result<(), BaseError> {     // TODO Защита от частого посыла емэй
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-        if let Some(application_user_reset_password_token) = DataProviderApplicationUserResetPasswordTokenRedis::get_by_application_user_id(
+        if let Some(application_user_reset_password_token) = DataProviderApplicationUserResetPasswordTokenRedis::find_by_application_user_id(
             connection, &request.get_application_user_id()
         )? 
         {

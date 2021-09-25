@@ -25,7 +25,7 @@ impl Base {
             i64
         ) = request.into_inner();
 
-        if let Some(application_user_log_in_token) = DataProviderApplicationUserLogInTokenRedis::get_by_application_user_id_and_device_id(
+        if let Some(application_user_log_in_token) = DataProviderApplicationUserLogInTokenRedis::find_by_application_user_id_and_device_id(
             &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_id, application_user_log_in_token_device_id.as_str()
         )? 
         {

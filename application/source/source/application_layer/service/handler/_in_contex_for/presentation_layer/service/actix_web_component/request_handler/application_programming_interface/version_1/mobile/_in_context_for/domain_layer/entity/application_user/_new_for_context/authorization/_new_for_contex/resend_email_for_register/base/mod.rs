@@ -33,7 +33,7 @@ impl Base {
 
             let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            match DataProviderApplicationUserRegistrationConfirmationTokenRedis::get_by_application_user_pre_confirmed_id(connection, application_user_pre_confirmed.get_id()?)? {
+            match DataProviderApplicationUserRegistrationConfirmationTokenRedis::find_by_application_user_pre_confirmed_id(connection, application_user_pre_confirmed.get_id()?)? {
                 Some(existing_application_user_registration_confirmation_token) => {
                     application_user_registration_confirmation_token = existing_application_user_registration_confirmation_token;
 
