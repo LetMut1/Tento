@@ -1,16 +1,16 @@
 use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserLogInTokenRedisTrait;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserPostgresqlTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserLogInTokenRedisTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenDataProviderRedisTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserDataProviderPostgresqlTrait;
+use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenStateManagerRedisTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_hash_resolver_trait::PasswordHashResolverTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenFactoryTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as DataProviderApplicationUserLogInTokenRedis;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as DataProviderApplicationUserPostgresql;
-use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as StateManagerApplicationUserLogInTokenRedis;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserLogInTokenDataProviderRedis;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
+use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserLogInTokenStateManagerRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
@@ -38,7 +38,7 @@ impl Base {
             String
         ) = request.into_inner();
 
-        if let Some(application_user) = DataProviderApplicationUserPostgresql::find_by_email(
+        if let Some(application_user) = ApplicationUserDataProviderPostgresql::find_by_email(
             &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, application_user_email.as_str()
         )? 
         {
@@ -47,21 +47,21 @@ impl Base {
 
                 let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-                match DataProviderApplicationUserLogInTokenRedis::find_by_application_user_id_and_device_id(
+                match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
                     connection, application_user.get_id()?, application_user_log_in_token_device_id.as_str()
                 )? 
                 {
                     Some(existing_application_user_log_in_token) => {
                         application_user_log_in_token = existing_application_user_log_in_token;
 
-                        StateManagerApplicationUserLogInTokenRedis::update_expiration_time(connection, &application_user_log_in_token)?;
+                        ApplicationUserLogInTokenStateManagerRedis::update_expiration_time(connection, &application_user_log_in_token)?;
                     },
                     None => {
                         application_user_log_in_token = ApplicationUserLogInTokenFactory::create_from_application_user(
                             &application_user, application_user_log_in_token_device_id.as_str()
                         )?;
 
-                        StateManagerApplicationUserLogInTokenRedis::create(connection, &application_user_log_in_token)?;
+                        ApplicationUserLogInTokenStateManagerRedis::create(connection, &application_user_log_in_token)?;
                     }
                 }
 

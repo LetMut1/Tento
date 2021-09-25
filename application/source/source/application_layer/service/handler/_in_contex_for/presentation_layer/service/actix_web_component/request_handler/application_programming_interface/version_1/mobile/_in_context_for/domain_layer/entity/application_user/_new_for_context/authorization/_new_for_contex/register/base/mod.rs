@@ -5,12 +5,12 @@ use crate::domain_layer::error::entity_error::_component::_in_context_for::domai
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserPreConfirmedPostgesqlTrait;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserRegistrationConfirmationTokenRedisTrait;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserPostgresqlTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserPreConfirmedPostgesqlTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserRegistrationConfirmationTokenRedisTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserPostgresqlTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserPreConfirmedDataProviderPostgesqlTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserRegistrationConfirmationTokenDataProviderRedisTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserDataProviderPostgresqlTrait;
+use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserPreConfirmedStateManagerPostgesqlTrait;
+use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait;
+use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserStateManagerPostgresqlTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::wrong_enter_tries_quantity_incrementor_trait::WrongEnterTriesQuantityIncrementorTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_hash_resolver_trait::PasswordHashResolverTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
@@ -21,12 +21,12 @@ use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base_trait::BaseTrait as JsonAccessWebTokenFactoryTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base_trait::BaseTrait as JsonRefreshWebTokenFactoryTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as DataProviderApplicationUserPreConfirmedPostgesql;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as DataProviderApplicationUserRegistrationConfirmationTokenRedis;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as DataProviderApplicationUserPostgresql;
-use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as StateManagerApplicationUserPreConfirmedPostgesql;
-use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as StateManagerApplicationUserRegistrationConfirmationTokenRedis;
-use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as StateManagerApplicationUserPostgresql;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserPreConfirmedDataProviderPostgesql;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenDataProviderRedis;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
+use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserPreConfirmedStateManagerPostgesql;
+use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenStateManagerRedis;
+use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserStateManagerPostgresql;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
@@ -71,22 +71,22 @@ impl Base {
             if ApplicationUserComponentValidator::is_valid_nickname(application_user_nickname.as_str()) {
                 let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
-                if !DataProviderApplicationUserPostgresql::is_exist_by_nickanme(postgresql_connection, application_user_nickname.as_str())? {
-                    if let Some(application_user_pre_confirmed) = DataProviderApplicationUserPreConfirmedPostgesql::find_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
+                if !ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(postgresql_connection, application_user_nickname.as_str())? {
+                    if let Some(application_user_pre_confirmed) = ApplicationUserPreConfirmedDataProviderPostgesql::find_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
                         let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-                        if let Some(mut application_user_registration_confirmation_token) = DataProviderApplicationUserRegistrationConfirmationTokenRedis::find_by_application_user_pre_confirmed_id(
+                        if let Some(mut application_user_registration_confirmation_token) = ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_pre_confirmed_id(
                             redis_connection, application_user_pre_confirmed.get_id()?
                         )? 
                         {
                             let application_user_password_hash: String = PasswordHashResolver::create(application_user_password.as_str())?;
 
                             if application_user_registration_confirmation_token.get_value() == application_user_registration_confirmation_token_value.as_str() {
-                                StateManagerApplicationUserRegistrationConfirmationTokenRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
+                                ApplicationUserRegistrationConfirmationTokenStateManagerRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
 
                                 let transaction_manager: TransactionManager = TransactionManager::start_transaction(postgresql_connection, TransactionIsolationLevel::ReadCommitted)?;
 
-                                if let Err(base_error) = StateManagerApplicationUserPreConfirmedPostgesql::delete(postgresql_connection, &application_user_pre_confirmed) {
+                                if let Err(base_error) = ApplicationUserPreConfirmedStateManagerPostgesql::delete(postgresql_connection, &application_user_pre_confirmed) {
                                     transaction_manager.rollback_transaction(postgresql_connection)?;
 
                                     return Err(base_error);
@@ -97,7 +97,7 @@ impl Base {
                                 );
 
                                 
-                                if let Err(base_error) = StateManagerApplicationUserPostgresql::create(postgresql_connection, &application_user) {
+                                if let Err(base_error) = ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user) {
                                     transaction_manager.rollback_transaction(postgresql_connection)?;
 
                                     return Err(base_error);
@@ -119,7 +119,7 @@ impl Base {
                             WrongEnterTriesQuantityIncrementor::increment(&mut application_user_registration_confirmation_token)?;
 
                             if *application_user_registration_confirmation_token.get_wrong_enter_tries_quantity() >= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                                StateManagerApplicationUserRegistrationConfirmationTokenRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
+                                ApplicationUserRegistrationConfirmationTokenStateManagerRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
                             }
                             
                             return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::InvalidValue}});
@@ -128,7 +128,7 @@ impl Base {
                         return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::NotFound}});
                     }
 
-                    if DataProviderApplicationUserPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
+                    if ApplicationUserDataProviderPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
                         return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::AlreadyConfirmed}});
                     }
                     

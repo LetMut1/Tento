@@ -2,10 +2,10 @@ use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserL
 use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserLogInTokenRedisTrait;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderJsonRefreshWebTokenRedisTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserLogInTokenRedisTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerJsonAccessWebTokenBlackListRedisTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenDataProviderRedisTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as JsonRefreshWebTokenDataProviderRedisTrait;
+use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenStateManagerRedisTrait;
+use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as JsonAccessWebTokenBlackListStateManagerRedisTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::wrong_enter_tries_quantity_incrementor_trait::WrongEnterTriesQuantityIncrementorTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder_trait::EncoderTrait;
@@ -14,10 +14,10 @@ use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base_trait::BaseTrait as JsonAccessWebTokenFactoryTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base_trait::BaseTrait as JsonRefreshWebTokenFactoryTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as DataProviderApplicationUserLogInTokenRedis;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as DataProviderJsonRefreshWebTokenRedis;
-use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as StateManagerApplicationUserLogInTokenRedis;
-use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as StateManagerJsonAccessWebTokenBlackListRedis;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserLogInTokenDataProviderRedis;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
+use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserLogInTokenStateManagerRedis;
+use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonAccessWebTokenBlackListStateManagerRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
@@ -51,16 +51,16 @@ impl Base {
 
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-        if let Some(mut application_user_log_in_token) = DataProviderApplicationUserLogInTokenRedis::find_by_application_user_id_and_device_id(
+        if let Some(mut application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
             connection, &application_user_id, application_user_log_in_token_device_id.as_str()
         )?
         {
             if application_user_log_in_token.get_value() == application_user_log_in_token_value.as_str() {
-                if let Some(existing_json_refresh_web_token) = DataProviderJsonRefreshWebTokenRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
+                if let Some(existing_json_refresh_web_token) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
                     connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 )? 
                 {
-                    StateManagerJsonAccessWebTokenBlackListRedis::create(
+                    JsonAccessWebTokenBlackListStateManagerRedis::create(
                         connection, &JsonAccessWebTokenBlackListFactory::create(existing_json_refresh_web_token.get_json_access_web_token_id())
                     )?;
 
@@ -70,7 +70,7 @@ impl Base {
                 let json_refresh_web_token: JsonRefreshWebToken<'_> =
                 JsonRefreshWebTokenFactory::create_from_id_registry(application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id());
                 
-                StateManagerApplicationUserLogInTokenRedis::delete(connection, &application_user_log_in_token)?;
+                ApplicationUserLogInTokenStateManagerRedis::delete(connection, &application_user_log_in_token)?;
 
                 RepositoryProxy::create(connection, &json_refresh_web_token)?;
 
@@ -84,7 +84,7 @@ impl Base {
             WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token)?;
 
             if *application_user_log_in_token.get_wrong_enter_tries_quantity() >= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                StateManagerApplicationUserLogInTokenRedis::delete(connection, &application_user_log_in_token)?;
+                ApplicationUserLogInTokenStateManagerRedis::delete(connection, &application_user_log_in_token)?;
             }
             
             return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::InvalidValue}});

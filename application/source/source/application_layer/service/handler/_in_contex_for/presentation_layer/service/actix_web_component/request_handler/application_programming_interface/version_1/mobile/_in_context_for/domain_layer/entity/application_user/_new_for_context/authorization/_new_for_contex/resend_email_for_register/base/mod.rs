@@ -1,15 +1,15 @@
 use crate::domain_layer::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::application_user_pre_confirmed_error::ApplicationUserPreConfirmedError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserPreConfirmedPostgesqlTrait;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderApplicationUserRegistrationConfirmationTokenRedisTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerApplicationUserRegistrationConfirmationTokenRedisTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserPreConfirmedDataProviderPostgesqlTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserRegistrationConfirmationTokenDataProviderRedisTrait;
+use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::base_trait::BaseTrait as ApplicationUserRegistrationConfirmationTokenFactoryTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as DataProviderApplicationUserPreConfirmedPostgesql;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as DataProviderApplicationUserRegistrationConfirmationTokenRedis;
-use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as StateManagerApplicationUserRegistrationConfirmationTokenRedis;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserPreConfirmedDataProviderPostgesql;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenDataProviderRedis;
+use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenStateManagerRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::connection_extractor::ConnectionExtractor;
@@ -25,7 +25,7 @@ impl Base {
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
         request: Request
     ) -> Result<(), BaseError> { // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        if let Some(application_user_pre_confirmed) = DataProviderApplicationUserPreConfirmedPostgesql::find_by_application_user_email(
+        if let Some(application_user_pre_confirmed) = ApplicationUserPreConfirmedDataProviderPostgesql::find_by_application_user_email(
             &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, request.get_application_user_email().as_str()
         )? 
         {
@@ -33,16 +33,16 @@ impl Base {
 
             let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            match DataProviderApplicationUserRegistrationConfirmationTokenRedis::find_by_application_user_pre_confirmed_id(connection, application_user_pre_confirmed.get_id()?)? {
+            match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_pre_confirmed_id(connection, application_user_pre_confirmed.get_id()?)? {
                 Some(existing_application_user_registration_confirmation_token) => {
                     application_user_registration_confirmation_token = existing_application_user_registration_confirmation_token;
 
-                    StateManagerApplicationUserRegistrationConfirmationTokenRedis::update_expiration_time(connection, &application_user_registration_confirmation_token)?;
+                    ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(connection, &application_user_registration_confirmation_token)?;
                 },
                 None => {
                     application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationTokenFactory::create_from_application_user_pre_confirmed(&application_user_pre_confirmed)?;
 
-                    StateManagerApplicationUserRegistrationConfirmationTokenRedis::create(connection, &application_user_registration_confirmation_token)?;
+                    ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(connection, &application_user_registration_confirmation_token)?;
                 }
             }
             

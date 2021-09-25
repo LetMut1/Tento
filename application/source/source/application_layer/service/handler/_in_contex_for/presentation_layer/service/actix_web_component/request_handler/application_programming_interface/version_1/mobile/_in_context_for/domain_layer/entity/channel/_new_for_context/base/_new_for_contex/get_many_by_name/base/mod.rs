@@ -1,7 +1,7 @@
 
 use crate::domain_layer::service::component_validator::_in_context_for::domain_layer::entity::channel::_new_for_context::base_trait::BaseTrait as ChannelComponentValidatorTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::channel::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as DataProviderChannelPostgresql;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::channel::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ChannelDataProviderPostgresql;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::infrastructure_layer::service::component_validator::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ChannelComponentValidator;
@@ -52,7 +52,7 @@ impl Base {
             }
         }
 
-        let channel_registry: Option<Vec<Channel>> = DataProviderChannelPostgresql::find_many_by_name(
+        let channel_registry: Option<Vec<Channel>> = ChannelDataProviderPostgresql::find_many_by_name(
             &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, channel_name.as_str(), &requery_channel_name, &(limit as i16)
         )?;
 

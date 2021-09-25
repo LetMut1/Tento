@@ -1,10 +1,10 @@
 use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as DataProviderJsonRefreshWebTokenRedisTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as StateManagerJsonRefreshWebTokenRedisTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as JsonRefreshWebTokenDataProviderRedisTrait;
+use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as JsonRefreshWebTokenStateManagerRedisTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy_trait::RepositoryProxyTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as DataProviderJsonRefreshWebTokenRedis;
-use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as StateManagerJsonRefreshWebTokenRedis;
+use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
+use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenStateManagerRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::device_id_processing_storage::DeviceIdProcessingStorage;
 use redis::Connection;
 
@@ -42,7 +42,7 @@ impl RepositoryProxyTrait for RepositoryProxy {
             }
         }
           
-        StateManagerJsonRefreshWebTokenRedis::create(connection, json_refresh_web_token)?;
+        JsonRefreshWebTokenStateManagerRedis::create(connection, json_refresh_web_token)?;
 
         return Ok(());
     }
@@ -53,7 +53,7 @@ impl RepositoryProxyTrait for RepositoryProxy {
     ) -> Result<(), Self::Error> {
         DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
 
-        StateManagerJsonRefreshWebTokenRedis::update(connection, json_refresh_web_token)?;
+        JsonRefreshWebTokenStateManagerRedis::update(connection, json_refresh_web_token)?;
 
         return Ok(());
     }
@@ -62,7 +62,7 @@ impl RepositoryProxyTrait for RepositoryProxy {
         connection: &'outer_a mut Connection,
         json_refresh_web_token: &'outer_a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
-        StateManagerJsonRefreshWebTokenRedis::delete(connection, json_refresh_web_token)?;
+        JsonRefreshWebTokenStateManagerRedis::delete(connection, json_refresh_web_token)?;
 
         if let Some(mut application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id())? 
         {
@@ -99,7 +99,7 @@ impl RepositoryProxyTrait for RepositoryProxy {
         application_user_id: &'outer_a i64
     ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, Self::Error> {
         if let Some(application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, application_user_id)? {
-            return DataProviderJsonRefreshWebTokenRedis::find_by_application_user_id_and_application_user_log_in_token_device_id_registry(
+            return JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id_registry(
                 connection, application_user_id, application_user_log_in_token_device_id_registry
             );
         }
