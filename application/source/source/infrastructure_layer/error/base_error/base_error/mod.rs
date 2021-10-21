@@ -1,3 +1,4 @@
+use actix_web::Error as ActixWebError;
 use anyhow::Error as AnyhowError;
 use argon2::Error as Argon2Error;
 use base64::DecodeError as Base64DecodeError;
@@ -58,6 +59,9 @@ impl Display for BaseError {
             },
             Self::RunTimeError {run_time_error} => {
                 match run_time_error {
+                    RunTimeError::ActixWebError {actix_web_error} => {
+                        write!(formatter, "BaseError-RunTimeError-ActixWebError: {}", actix_web_error)?;
+                    },
                     RunTimeError::OtherError {other_error} => {
                         write!(formatter, "BaseError-RunTimeError-OtherError-{}: {}", other_error.get_error_kind_description(), other_error.get_message())?;
                     },
@@ -108,6 +112,14 @@ impl From<LogicError> for BaseError {
         logic_error: LogicError
     ) -> Self {
         return Self::LogicError {unreachable: false, message: logic_error.get_message()};
+    }
+}
+
+impl From<ActixWebError> for BaseError {
+    fn from(
+        actix_web_error: ActixWebError
+    ) -> Self {
+        return Self::RunTimeError {run_time_error: RunTimeError::ActixWebError {actix_web_error}};
     }
 }
 
