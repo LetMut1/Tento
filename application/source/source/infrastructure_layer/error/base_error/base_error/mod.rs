@@ -21,8 +21,8 @@ use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
-use std::io::Error as IOError;
-use std::io::ErrorKind as IOErrorKind;
+use std::io::Error as IoError;
+use std::io::ErrorKind as IoErrorKind;
 use std::string::FromUtf8Error;
 use super::_component::run_time_error::_component::other_error::OtherError;
 use super::_component::run_time_error::_component::resource_error::_component::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
@@ -123,11 +123,11 @@ impl From<ActixWebError> for BaseError {
     }
 }
 
-impl From<IOError> for BaseError {
+impl From<IoError> for BaseError {
     fn from(
-        io_error: IOError
+        io_error: IoError
     ) -> Self {
-        return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("IOError", io_error)}};
+        return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("IoError", io_error)}};
     }
 }
 
@@ -135,7 +135,7 @@ impl From<AnyhowError> for BaseError {
     fn from(
         anyhow_error: AnyhowError
     ) -> Self {
-        return Self::from(IOError::new(IOErrorKind::Other, format!("{}", anyhow_error)));
+        return Self::from(IoError::new(IoErrorKind::Other, format!("{}", anyhow_error)));
     }
 }
 
