@@ -1,1 +1,1 @@
-pub mod actix_web_component;
+pub mod actix_web;
