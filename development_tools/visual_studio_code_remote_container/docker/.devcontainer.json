@@ -1,6 +1,5 @@
-// The file is for VSCode "ms-vscode-remote.vscode-remote-extensionpack" extension.
 {
-    "dockerComposeFile": "./docker-compose.yaml",
+    "dockerComposeFile": "./../../rust_language/docker/docker-compose.yaml",
     "service": "rust",
     "workspaceFolder": "/usr/local/memis/",
     "extensions": [
