@@ -1,19 +1,21 @@
 [package]
-name = "command"
+name = "run_server"
 version = "0.1.0"
 authors = ["zda"]
-edition = "2018"
+edition = "2021"
 
 [[bin]]
 name = "run_server"
 path = "./run_server/mod.rs"
+test = true
+doctest = true
+bench = true
+doc = true
+proc-macro = false
+harness = true
+edition = "2021"
+required-features = []
 
 [dependencies]
-actix-web = {version = "3.3.2"}
-application = {path = "./../../../", package = "application", version = "0.1.0"}
-
-[profile.dev]
-opt-level = 0
-
-[profile.release]
-opt-level = 3
+actix-web = {version = "3.3.2", default-features = true, optional = false}
+application = {path = "./../../../", package = "application", version = "0.1.0", default-features = true, optional = false}

@@ -2,55 +2,42 @@
 name = "application"
 version = "0.1.0"
 authors = ["zda"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 name = "application"
 path = "./source/mod.rs"
+test = true
+doctest = true
+bench = true
+doc = true
+proc-macro = false
+harness = true
+edition = "2021"
+crate-type = ["lib"]
+required-features = []
 
 [dependencies]
-actix-service = {version = "1.0.6"}
-actix-web = {version = "3.3.2"}
-anyhow = {version = "1.0.41"}
-base64 = {version = "0.13.0"}
-chrono = {version = "0.4.19"}
-dotenv = {version = "0.15.0"}
-futures = {version = "0.3.13"}
-hex = {version = "0.4.2"}
-lettre = {version = "0.9"}
-lettre_email = {version = "0.9"}
-log = {version = "0.4.14"}
-log4rs = {version = "1.0.0", features = ["all_components"]}
-postgres = {version = "0.19.1"}
-r2d2 = {version = "0.8.9"}
-r2d2_postgres = {version = "0.18.1"}
-r2d2_redis = {version = "0.14.0"}
-redis = {version = "0.20.0", features = ["r2d2"]}
-regex = {version = "1.4.3"}
-rust-argon2 = {version = "0.8"}
-rust-crypto = {version = "0.2.36"}
-serde = {version = "1.0.123", features = ["derive"]}
-serde_json = {version = "1.0"}
-uuid = {version = "0.8.1", features = ["v4"]}
-
-[profile.dev]
-opt-level = 0
-debug = true
-debug-assertions = true
-overflow-checks = true
-lto = false
-panic = 'unwind'
-incremental = true
-codegen-units = 256
-rpath = false
-
-[profile.release]
-opt-level = 3
-debug = false
-debug-assertions = false
-overflow-checks = true
-lto = false
-panic = 'unwind'
-incremental = false
-codegen-units = 16
-rpath = false
+actix-service = {version = "1.0.6", default-features = true, optional = false}
+actix-web = {version = "3.3.2", default-features = true, optional = false}
+anyhow = {version = "1.0.41", default-features = true, optional = false}
+base64 = {version = "0.13.0", default-features = true, optional = false}
+chrono = {version = "0.4.19", default-features = true, optional = false}
+dotenv = {version = "0.15.0", default-features = true, optional = false}
+futures = {version = "0.3.13", default-features = true, optional = false}
+hex = {version = "0.4.2", default-features = true, optional = false}
+lettre = {version = "0.9", default-features = true, optional = false}
+lettre_email = {version = "0.9", default-features = true, optional = false}
+log = {version = "0.4.14", default-features = true, optional = false}
+log4rs = {version = "1.0.0", default-features = true, features = ["all_components"], optional = false}
+postgres = {version = "0.19.1", default-features = true, optional = false}
+r2d2 = {version = "0.8.9", default-features = true, optional = false}
+r2d2_postgres = {version = "0.18.1", default-features = true, optional = false}
+r2d2_redis = {version = "0.14.0", default-features = true, optional = false}
+redis = {version = "0.20.0", default-features = true, features = ["r2d2"], optional = false}
+regex = {version = "1.4.3", default-features = true, optional = false}
+rust-argon2 = {version = "0.8", default-features = true, optional = false}
+rust-crypto = {version = "0.2.36", default-features = true, optional = false}
+serde = {version = "1.0.123", default-features = true, features = ["derive"], optional = false}
+serde_json = {version = "1.0", default-features = true, optional = false}
+uuid = {version = "0.8.1", default-features = true, features = ["v4"], optional = false}

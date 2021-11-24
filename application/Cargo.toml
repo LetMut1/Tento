@@ -1,2 +1,40 @@
 [workspace]
-members = ["./source/", "./source/source/presentation_layer/command/"]
+resolver = "2"
+members = [
+    "./source/",
+    "./source/source/presentation_layer/command/"
+]
+default-members = [
+    "./source/",
+    "./source/source/presentation_layer/command/"
+]
+
+[profile.dev]
+opt-level = 0
+debug = true
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = "unwind"
+incremental = true
+codegen-units = 256
+rpath = false
+
+[profile.dev.build-override]
+opt-level = 0
+codegen-units = 256
+
+[profile.release]
+opt-level = 3       # TODO  3 can be slawer than 2  https://doc.rust-lang.org/cargo/reference/profiles.html  https://doc.rust-lang.org/rustc/profile-guided-optimization.html  
+debug = false
+debug-assertions = false
+overflow-checks = true
+lto = "fat"
+panic = "unwind"
+incremental = false
+codegen-units = 16
+rpath = false
+
+[profile.release.build-override]
+opt-level = 3
+codegen-units = 16
