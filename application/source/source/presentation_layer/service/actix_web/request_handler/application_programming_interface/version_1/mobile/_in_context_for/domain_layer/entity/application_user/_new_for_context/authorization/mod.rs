@@ -6,6 +6,7 @@ use actix_web::web::Form;
 use actix_web::web::Query;
 use actix_web::web::ReqData as RequestData;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::base::Base as HandlerCheckNicknameForExisting;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Base as HandlerCheckEmailForExisting;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in::base::Base as HandlerLogIn;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices::base::Base as HandlerLogOutFromAllDevices;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out::base::Base as HandlerLogOut;
@@ -33,6 +34,7 @@ use crate::infrastructure_layer::error::base_error::_component::run_time_error::
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::Base as RequestCheckNicknameForExisting;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::Base as RequestCheckEmailForExisting;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in::base::Base as RequestLogIn;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::pre_log_in::base::Base as RequestPreLogIn;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::pre_register::base::Base as RequestPreRegister;
@@ -59,8 +61,27 @@ impl Authorization {
                     Ok(response) => {
                         return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response);
                     },
-                    Err(base_error) => {
+                    Err(ref base_error) => {
                         match base_error {
+                            BaseError::EntityError {entity_error} => {
+                                match entity_error {
+                                    EntityError::ApplicationUserError {application_user_error} => {
+                                        match application_user_error {
+                                            ApplicationUserError::InvalidNickname => {
+                                                return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
+                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
+                                                );
+                                            },
+                                            _ => {
+                                                unreachable!("{}", base_error);
+                                            }
+                                        }
+                                    },
+                                    _ => {
+                                        unreachable!("{}", base_error);
+                                    }
+                                }
+                            }
                             BaseError::InvalidArgumentError => {
                                 return StandardResponseCreator::create_bad_request();
                             },
@@ -69,9 +90,58 @@ impl Authorization {
                                 log::error!("{}", base_error);
         
                                 return StandardResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return StandardResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    pub async fn check_email_for_existing(
+        data: Data<AggregateConnectionPool>,
+        query: ActixWebResult<Query<RequestCheckEmailForExisting>>
+    ) -> HttpResponse<Body> {
+        match query {
+            Ok(query_) => {
+                match HandlerCheckEmailForExisting::handle(data.into_inner(), query_.into_inner()) {
+                    Ok(response) => {
+                        return StandardResponseCreator::wrap_for_success_with_body_and_create_ok(response);
+                    },
+                    Err(ref base_error) => {
+                        match base_error {
+                            BaseError::EntityError {entity_error} => {
+                                match entity_error {
+                                    EntityError::ApplicationUserError {application_user_error} => {
+                                        match application_user_error {
+                                            ApplicationUserError::InvalidEmail => {
+                                                return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
+                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
+                                                );
+                                            },
+                                            _ => {
+                                                unreachable!("{}", base_error);
+                                            }
+                                        }
+                                    },
+                                    _ => {
+                                        unreachable!("{}", base_error);
+                                    }
+                                }
+                            }
+                            BaseError::InvalidArgumentError => {
+                                return StandardResponseCreator::create_bad_request();
                             },
-                            _ => {
-                                unreachable!("{}", base_error);
+                            BaseError::LogicError {unreachable: _, message: _} |
+                            BaseError::RunTimeError {run_time_error: _} => {
+                                log::error!("{}", base_error);
+        
+                                return StandardResponseCreator::create_internal_server_error();
                             }
                         }
                     }

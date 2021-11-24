@@ -14,10 +14,10 @@ pub trait BaseTrait {
     fn is_valid_email<'a>(
         email: &'a str
     ) -> Result<bool, Self::Error> {
-        return Ok(
-            Regex::new(r"\S+@\S+")?.is_match(email)
-                && email.chars().count() <= (Self::EMAIL_MAXIMUM_LENGTH as usize)
-        );
+        let is_valid: bool = Regex::new(r"\S+@\S+")?.is_match(email)
+            && email.chars().count() <= (Self::EMAIL_MAXIMUM_LENGTH as usize);
+
+        return Ok(is_valid);
     }
 
     fn is_valid_nickname<'a>(

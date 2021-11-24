@@ -24,6 +24,10 @@ use std::path::PathBuf;
 pub struct Base;
 
 impl Base {
+    const PRODUCTION_ENVIRONMENT_FILE_NAME: &'static str = "production.env";                    // TODO Посмотреть, какие есть еще лучшие форматы аналоги .env (Может, Томл?)
+    const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.env";
+    const DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
+
     pub async fn handle(
     ) -> Result<(), BaseError> {
         Self::load_and_check_environment_variables()?;
@@ -42,17 +46,17 @@ impl Base {
             Some(file_path) => {
                 let file_path_buffer: PathBuf = file_path.join(&Path::new("../../source"));
 
-                let production_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("prod.env"));
+                let production_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME));
                 if production_environment_file_path_buffer.exists() {
                     dotenv::from_path(production_environment_file_path_buffer.as_path())?;
 
                     env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_TRUE)
                 } else {
-                    let development_local_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("dev.local.env"));
+                    let development_local_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new(Self::DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME));
                     if development_local_environment_file_path_buffer.exists() {
                         dotenv::from_path(development_local_environment_file_path_buffer.as_path())?;
                     } else {
-                        let development_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new("dev.env"));
+                        let development_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new(Self::DEVELOPMENT_ENVIRONMENT_FILE_NAME));
                         if development_environment_file_path_buffer.exists() {
                             dotenv::from_path(development_environment_file_path_buffer.as_path())?;
                         } else {
@@ -92,16 +96,16 @@ impl Base {
     fn configure_log(
     ) -> Result<(), BaseError> {
         let fixed_window_roller: FixedWindowRoller = FixedWindowRoller::builder()
-        .base(1)
-        .build(EnvironmentVariableResolver::get_logger_roller_log_file_name()?.as_str(), 10)?;
+            .base(1)
+            .build(EnvironmentVariableResolver::get_logger_roller_log_file_name()?.as_str(), 10)?;
 
         let rolling_file_appender: RollingFileAppender = RollingFileAppender::builder()
-        .append(true)
-        .encoder(Box::new(PatternEncoder::new(EnvironmentVariableResolver::get_logger_encoder_pattern()?.as_str())))
-        .build(
-            EnvironmentVariableResolver::get_logger_log_file_name()?,
-            Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
-        )?;
+            .append(true)
+            .encoder(Box::new(PatternEncoder::new(EnvironmentVariableResolver::get_logger_encoder_pattern()?.as_str())))
+            .build(
+                EnvironmentVariableResolver::get_logger_log_file_name()?,
+                Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
+            )?;
 
         let rolling_file_appender_name: &'static str = "rfa";
 
@@ -146,13 +150,14 @@ impl Base {
                     web::scope("/na")   // TODO NotAuthorized. Можно ли в новой версии АкстикаВеба убрать этоу чать пути 
                     .service( 
                         web::scope("/au")
+                        .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing))
+                        .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existing))
                         .route("/pr", web::post().to(RequestHandlerApplicationUserAuthorization::pre_register))
                         .route("/r", web::post().to(RequestHandlerApplicationUserAuthorization::register))
                         .route("/refr", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_register))
                         .route("/pli", web::post().to(RequestHandlerApplicationUserAuthorization::pre_log_in))
                         .route("/refl", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_log_in))
                         .route("/li", web::post().to(RequestHandlerApplicationUserAuthorization::log_in))
-                        .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing))
                         .route("/rjawt", web::post().to(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token))
                         .route("/prp", web::post().to(RequestHandlerApplicationUserAuthorization::pre_reset_password))
                         .route("/rp", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password))
