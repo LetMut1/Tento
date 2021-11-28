@@ -2,7 +2,7 @@ version: '3.8'
 
 services: 
     rust_language:
-        container_name: memis_rust
+        container_name: memis_rust_language
         build:
             context: ./service/rust_language/
             dockerfile: dockerfile
