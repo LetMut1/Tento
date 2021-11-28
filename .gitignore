@@ -1,2 +1,2 @@
 /project/application/target
-/development_environment/docker/docker-compose.override.yaml
+/development_environment/resource/docker/docker-compose.override.yaml
