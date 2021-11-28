@@ -7,7 +7,7 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn get_id(
+    pub fn into_inner(
         self
     ) -> i64 {
         return self.channel_id;

@@ -18,8 +18,7 @@ impl Base {
         request: Request
     ) -> Result<Response, BaseError> 
     {
-        let channel_id_registry: String = request.get_channel_id_registry();
-        
+        let channel_id_registry: String = request.into_inner();
         let channel_id_registry_: Vec<i64> = serde_json::from_str::<Vec<i64>>(channel_id_registry.as_str())?;
         if channel_id_registry_.len() == 0 || channel_id_registry_.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
             return Err(BaseError::InvalidArgumentError);

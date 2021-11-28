@@ -7,7 +7,7 @@ pub struct Base {
 }
 
 impl Base {
-    pub fn get_channel_id_registry(
+    pub fn into_inner(
         self
     ) -> String {
         return self.channel_id_registry;

@@ -18,7 +18,7 @@ impl Base {
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
         request: Request
     ) -> Result<Response, BaseError> {
-        let application_user_nickname: String = request.get_application_user_nickname();
+        let application_user_nickname: String = request.into_inner();
 
         if ApplicationUserComponentValidator::is_valid_nickname(application_user_nickname.as_str()) {
             let result: bool = ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(

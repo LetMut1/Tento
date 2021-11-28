@@ -18,10 +18,12 @@ impl Base {
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
         request: Request
     ) -> Result<(), BaseError> {     // TODO Защита от частого посыла емэй
+        let application_user_id: i64 = request.into_inner();
+
         let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
         if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(
-            connection, &request.get_application_user_id()
+            connection, &application_user_id
         )? 
         {
             EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;

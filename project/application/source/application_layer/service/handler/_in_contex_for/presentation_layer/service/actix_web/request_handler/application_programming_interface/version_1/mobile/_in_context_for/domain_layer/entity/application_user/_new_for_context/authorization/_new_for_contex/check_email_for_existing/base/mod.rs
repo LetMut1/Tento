@@ -21,7 +21,7 @@ impl Base {
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
         request: Request
     ) -> Result<Response, BaseError> {
-        let application_user_email: String = request.get_application_user_email();
+        let application_user_email: String = request.into_inner();
 
         if ApplicationUserComponentValidator::is_valid_email(application_user_email.as_str())? {
             let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
