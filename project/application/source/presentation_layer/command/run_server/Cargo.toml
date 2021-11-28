@@ -18,4 +18,4 @@ required-features = []
 
 [dependencies]
 actix-web = {version = "3.3.2", default-features = true, optional = false}
-application = {path = "./../../../../", package = "application", version = "0.1.0", default-features = true, optional = false}
+application = {path = "./../../..", package = "application", version = "0.1.0", default-features = true, optional = false}

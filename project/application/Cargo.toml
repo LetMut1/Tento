@@ -1,12 +1,12 @@
 [workspace]
 resolver = "2"
 members = [
-    "./source/",
-    "./source/source/presentation_layer/command/run_server"
+    "./source",
+    "./source/presentation_layer/command/run_server"
 ]
 default-members = [
-    "./source/",
-    "./source/source/presentation_layer/command/run_server"
+    "./source",
+    "./source/presentation_layer/command/run_server"
 ]
 
 [profile.dev]
