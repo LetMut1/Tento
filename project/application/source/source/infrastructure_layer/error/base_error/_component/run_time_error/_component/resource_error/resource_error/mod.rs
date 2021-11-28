@@ -1,4 +1,4 @@
-use postgres::Error as PostgresError;
+use postgres::Error as PostgresqlError;
 use r2d2::Error as R2d2Error;
 use redis::RedisError;
 use std::error::Error;
@@ -16,7 +16,7 @@ pub enum ResourceError {
         email_server_error: EmailServerError
     },
     PostgresqlError {
-        postgres_error: PostgresError
+        postgresql_error: PostgresqlError
     },
     RedisError {
         redis_error: RedisError

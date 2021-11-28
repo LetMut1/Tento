@@ -10,7 +10,7 @@ use lettre_email::error::Error as LettreEmailError;
 use lettre::smtp::error::Error as LettreSmtpError;
 use log::SetLoggerError;
 use log4rs::config::runtime::ConfigErrors as Log4rsConfigErrors;
-use postgres::Error as PostgresError;
+use postgres::Error as PostgresqlError;
 use r2d2::Error as R2d2Error;
 use redis::RedisError;
 use regex::Error as RegexError;
@@ -80,8 +80,8 @@ impl Display for BaseError {
                                     }
                                 }
                             },
-                            ResourceError::PostgresqlError {postgres_error} => {
-                                write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", postgres_error)?;
+                            ResourceError::PostgresqlError {postgresql_error} => {
+                                write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", postgresql_error)?;
                             },
                             ResourceError::RedisError {redis_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
@@ -227,11 +227,11 @@ impl From<R2d2Error> for BaseError {
     }
 }
 
-impl From<PostgresError> for BaseError {
+impl From<PostgresqlError> for BaseError {
     fn from(
-        postgres_error: PostgresError
+        postgresql_error: PostgresqlError
     ) -> Self {
-        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgres_error}}};
+        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error}}};
     }
 }
 
