@@ -6,7 +6,7 @@ edition = "2021"
 
 [[bin]]
 name = "run_server"
-path = "./run_server/mod.rs"
+path = "./mod.rs"
 test = true
 doctest = true
 bench = true
@@ -18,4 +18,4 @@ required-features = []
 
 [dependencies]
 actix-web = {version = "3.3.2", default-features = true, optional = false}
-application = {path = "./../../../", package = "application", version = "0.1.0", default-features = true, optional = false}
+application = {path = "./../../../../", package = "application", version = "0.1.0", default-features = true, optional = false}

@@ -1,3 +1,2 @@
-/application/target
-/development_tools/rust_language/docker/docker-compose.override.yaml
+/project/application/target
 /development_environment/docker/docker-compose.override.yaml

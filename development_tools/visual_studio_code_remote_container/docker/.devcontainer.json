@@ -1,7 +1,7 @@
 {
     "dockerComposeFile": "./../../rust_language/docker/docker-compose.yaml",
-    "service": "rust",
-    "workspaceFolder": "/usr/local/memis/",
+    "service": "rust_language",
+    "workspaceFolder": "/_memis",
     "extensions": [
 		"matklad.rust-analyzer",
 		"ms-azuretools.vscode-docker",
@@ -13,6 +13,10 @@
 		"terminal.integrated.shell.linux": "/bin/bash",
 		"files.watcherExclude": {
 			"**/target/**": true
-		}
+		},
+		"rust-analyzer.linkedProjects": [
+			"/_memis/project/application/Cargo.toml"
+		]
+
 	}
 }

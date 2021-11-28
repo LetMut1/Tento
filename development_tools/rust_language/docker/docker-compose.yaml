@@ -1,18 +1,18 @@
 version: '3.8'
 
 services: 
-    rust:
+    rust_language:
         container_name: memis_rust
         build:
-            context: ./service/rust/
+            context: ./service/rust_language/
             dockerfile: dockerfile
         environment: 
             USER: ${USER}
         volumes:
-            - ./../../../:/usr/local/memis/
+            - ./../../../:/_memis
         ports:
             - 8080:80
-        working_dir: /usr/local/memis/application/
+        working_dir: /_memis
         restart: always
         tty: true
         init: true
