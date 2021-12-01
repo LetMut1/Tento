@@ -17,7 +17,6 @@ use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_ac
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder_trait::EncoderTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy_trait::RepositoryProxyTrait;
 use crate::domain_layer::service::component_validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base_trait::BaseTrait as ApplicationUserComponentValidatorTrait;
-use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::application_user::_new_for_context::base_trait::BaseTrait as ApplicationUserFactoryTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base_trait::BaseTrait as JsonAccessWebTokenFactoryTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base_trait::BaseTrait as JsonRefreshWebTokenFactoryTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
@@ -37,7 +36,6 @@ use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer:
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::infrastructure_layer::service::component_validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserComponentValidator;
-use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserFactory;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register::base::Base as Request;
@@ -92,10 +90,23 @@ impl Base {
                                     return Err(base_error);
                                 }
 
-                                let application_user: ApplicationUser = ApplicationUserFactory::create_from_application_user_pre_confirmed(
-                                    application_user_pre_confirmed, application_user_nickname, application_user_password_hash
-                                );
+                                let (
+                                    _application_user_pre_confirmed_id,
+                                    application_user_pre_confirmed_application_user_email,
+                                    _application_user_pre_confirmed_created_at
+                                ) : (
+                                    Option<i64>,
+                                    String,
+                                    String
+                                ) = application_user_pre_confirmed.into_inner();
 
+                                let application_user: ApplicationUser = ApplicationUser::new(
+                                    None,
+                                    application_user_pre_confirmed_application_user_email,
+                                    application_user_nickname,
+                                    application_user_password_hash,
+                                    chrono::Utc::now().to_rfc2822() // TODO  Delete. Все Часы делаются через БД.
+                                );
                                 
                                 if let Err(base_error) = ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user) {
                                     transaction_manager.rollback_transaction(postgresql_connection)?;

@@ -38,15 +38,19 @@ impl ApplicationUserPreConfirmed {
         return self.application_user_email.as_str();
     }
 
-    pub fn get_application_user_email_as_owner(
-        self
-    ) -> String {
-        return self.application_user_email;
-    }
-
     pub fn get_created_at<'a>(
         &'a self
     ) -> &'a str {
         return self.created_at.as_str();
+    }
+
+    pub fn into_inner(
+        self
+    ) -> (Option<i64>, String, String) {
+        return (
+            self.id,
+            self.application_user_email,
+            self.created_at
+        );
     }
 }
