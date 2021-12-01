@@ -22,7 +22,7 @@ impl ApplicationUserLogInTokenDataProviderRedisTrait for Base {
         )?
         {
             Some(json_encoded_common) => {
-                let common: Common = serde_json::from_str::<'_, Common<'_>>(json_encoded_common.as_str())?;
+                let common: Common<'static> = serde_json::from_str::<'_, Common<'static>>(json_encoded_common.as_str())?;
 
                 let (
                     application_user_log_in_token_value,
@@ -32,7 +32,7 @@ impl ApplicationUserLogInTokenDataProviderRedisTrait for Base {
                     Cow<'_, u8>
                 ) = common.into_inner();
         
-                let application_user_log_in_token: ApplicationUserLogInToken = ApplicationUserLogInToken::new(
+                let application_user_log_in_token: ApplicationUserLogInToken<'b> = ApplicationUserLogInToken::new(
                     application_user_id,
                     device_id,
                     application_user_log_in_token_value.into_owned(),

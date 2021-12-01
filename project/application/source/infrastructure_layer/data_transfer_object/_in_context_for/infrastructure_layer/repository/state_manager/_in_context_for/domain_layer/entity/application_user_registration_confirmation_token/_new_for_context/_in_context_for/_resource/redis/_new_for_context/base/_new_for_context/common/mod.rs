@@ -5,10 +5,10 @@ use std::borrow::Cow;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Common<'a> {
-    #[serde(rename = "v")]
-    value: Cow<'a, str>,
-    #[serde(rename = "wetq")]
-    wrong_enter_tries_quantity: Cow<'a, u8>
+    #[serde(rename = "aurctv")]
+    application_user_registration_confirmation_token_value: Cow<'a, str>,
+    #[serde(rename = "aurgtwetq")]
+    application_user_registration_confirmation_token_wrong_enter_tries_quantity: Cow<'a, u8>
 }
 
 impl<'a> Common<'a> {
@@ -16,8 +16,10 @@ impl<'a> Common<'a> {
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Self {
         return Self {
-            value: Cow::Borrowed(application_user_registration_confirmation_token.get_value()),
-            wrong_enter_tries_quantity: Cow::Borrowed(application_user_registration_confirmation_token.get_wrong_enter_tries_quantity())
+            application_user_registration_confirmation_token_value: Cow::Borrowed(application_user_registration_confirmation_token.get_value()),
+            application_user_registration_confirmation_token_wrong_enter_tries_quantity: Cow::Borrowed(
+                application_user_registration_confirmation_token.get_wrong_enter_tries_quantity()
+            )
         };
     }
 
@@ -25,8 +27,8 @@ impl<'a> Common<'a> {
         self
     ) -> (Cow<'a, str>, Cow<'a, u8>) {
         return (
-            self.value,
-            self.wrong_enter_tries_quantity
+            self.application_user_registration_confirmation_token_value,
+            self.application_user_registration_confirmation_token_wrong_enter_tries_quantity
         );
     }
 }
