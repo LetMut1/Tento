@@ -16,7 +16,9 @@ impl<'a> Common<'a> {
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Self {
         return Self {
-            application_user_registration_confirmation_token_value: Cow::Borrowed(application_user_registration_confirmation_token.get_value()),
+            application_user_registration_confirmation_token_value: Cow::Borrowed(
+                application_user_registration_confirmation_token.get_value()
+            ),
             application_user_registration_confirmation_token_wrong_enter_tries_quantity: Cow::Borrowed(
                 application_user_registration_confirmation_token.get_wrong_enter_tries_quantity()
             )

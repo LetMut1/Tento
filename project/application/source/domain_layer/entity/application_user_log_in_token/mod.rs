@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 pub struct ApplicationUserLogInToken<'a> {
     application_user_id: &'a i64,
     device_id: &'a str,
