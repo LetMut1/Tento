@@ -1,4 +1,3 @@
-pub mod application_user_log_in_token;
 pub mod application_user_pre_confirmed;
 pub mod application_user_registration_confirmation_token;
 pub mod application_user_reset_password_token;
