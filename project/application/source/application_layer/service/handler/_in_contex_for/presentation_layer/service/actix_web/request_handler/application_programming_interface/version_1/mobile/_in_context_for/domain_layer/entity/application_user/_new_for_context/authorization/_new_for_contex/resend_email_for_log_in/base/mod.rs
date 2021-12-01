@@ -17,23 +17,37 @@ impl Base {
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
         request: Request
     ) -> Result<(), BaseError> { // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        let (
-            application_user_log_in_token_device_id, 
-            application_user_id
-        ) : (
-            String,
-            i64
-        ) = request.into_inner();
+        // let (
+        //     application_user_log_in_token_device_id, 
+        //     application_user_id
+        // ) : (
+        //     String,
+        //     i64
+        // ) = request.into_inner();
 
-        if let Some(application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
-            &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_id, application_user_log_in_token_device_id.as_str()
-        )? 
-        {
-            EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
+        // if let Some(application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
+        //     &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?,
+        //     &application_user_id, application_user_log_in_token_device_id.as_str()
+        // )? 
+        // {
+        //     EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
 
-            return Ok(());
-        }
+        //     return Ok(());
+        // }
 
-        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound}});
+        // return Err(
+        //     BaseError::EntityError {
+        //         entity_error: EntityError::ApplicationUserLogInTokenError {
+        //             application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound
+        //         }
+        //     }
+        // );
+
+
+
+
+
+        // TODO ЛОГИКА
+        return Ok(());
     }
 }

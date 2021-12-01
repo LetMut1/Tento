@@ -65,14 +65,28 @@ impl Base {
                     }
                 }
 
-                EmailSender::send_application_user_log_in_token(&application_user_log_in_token)?;
+                EmailSender::send_application_user_log_in_token(
+                    application_user_log_in_token.get_value(), application_user.get_email()
+                )?;
 
                 return Ok(Response::new(*application_user.get_id()?));
             }
             
-            return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::WrongPassword}});
+            return Err(
+                BaseError::EntityError {
+                    entity_error: EntityError::ApplicationUserError {
+                        application_user_error: ApplicationUserError::WrongPassword
+                    }
+                }
+            );
         }
 
-        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});
+        return Err(
+            BaseError::EntityError {
+                entity_error: EntityError::ApplicationUserError {
+                    application_user_error: ApplicationUserError::NotFound
+                }
+            }
+        );
     }
 }

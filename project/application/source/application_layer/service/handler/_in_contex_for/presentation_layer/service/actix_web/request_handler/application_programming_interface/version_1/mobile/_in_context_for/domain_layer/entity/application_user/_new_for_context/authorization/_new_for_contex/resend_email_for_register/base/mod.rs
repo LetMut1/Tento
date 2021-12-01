@@ -34,24 +34,39 @@ impl Base {
 
             let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_pre_confirmed_id(connection, application_user_pre_confirmed.get_id()?)? {
+            match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_pre_confirmed_id(
+                connection, application_user_pre_confirmed.get_id()?
+            )?
+            {
                 Some(existing_application_user_registration_confirmation_token) => {
                     application_user_registration_confirmation_token = existing_application_user_registration_confirmation_token;
 
-                    ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(connection, &application_user_registration_confirmation_token)?;
+                    ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
+                        connection, &application_user_registration_confirmation_token
+                    )?;
                 },
                 None => {
-                    application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationTokenFactory::create_from_application_user_pre_confirmed(&application_user_pre_confirmed)?;
+                    application_user_registration_confirmation_token = 
+                        ApplicationUserRegistrationConfirmationTokenFactory::create_from_application_user_pre_confirmed(&application_user_pre_confirmed)?;
 
                     ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(connection, &application_user_registration_confirmation_token)?;
                 }
             }
             
-            EmailSender::send_application_user_registration_confirmation_token(&application_user_registration_confirmation_token)?;
+            EmailSender::send_application_user_registration_confirmation_token(
+                application_user_registration_confirmation_token.get_value(),
+                application_user_pre_confirmed.get_application_user_email()
+            )?;
 
             return Ok(());
         }
 
-        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::NotFound}});
+        return Err(
+            BaseError::EntityError {
+                entity_error: EntityError::ApplicationUserPreConfirmedError {
+                    application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::NotFound
+                }
+            }
+        );
     }
 }

@@ -2,7 +2,6 @@ use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserL
 use crate::domain_layer::entity::application_user::ApplicationUser;
 use crate::domain_layer::error::logic_error::LogicError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::value_generator_trait::ValueGeneratorTrait;
-use std::borrow::Cow;
 use std::convert::From;
 use std::error::Error;
 
@@ -18,7 +17,6 @@ pub trait BaseTrait {
             ApplicationUserLogInToken::new(
                 application_user.get_id()?,
                 device_id,
-                Cow::Borrowed(application_user.get_email()),
                 <Self::ValueGenerator as ValueGeneratorTrait>::generate(),
                 0
             )

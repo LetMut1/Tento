@@ -14,11 +14,9 @@ impl Base {
         device_id: &'a str
     ) -> ApplicationUserLogInToken<'a> {
         let (
-            application_user_email,
             value,
             wrong_enter_tries_quantity
         ) : (
-            Cow<'_, str>,
             Cow<'_, str>,
             Cow<'_, u8>
         ) = common.into_inner();
@@ -26,7 +24,6 @@ impl Base {
         return ApplicationUserLogInToken::new(
             application_user_id,
             device_id,
-            application_user_email,
             value.into_owned(),
             wrong_enter_tries_quantity.into_owned()
         );

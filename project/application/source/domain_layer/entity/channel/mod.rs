@@ -1,6 +1,6 @@
 use crate::domain_layer::error::logic_error::LogicError;
 
-pub struct Channel {
+pub struct Channel {    // TODO НАПРАВЛЕННОСТЬБ
     id: Option<i64>,
     application_user_channel_administrator_id: i64,
     name: String,

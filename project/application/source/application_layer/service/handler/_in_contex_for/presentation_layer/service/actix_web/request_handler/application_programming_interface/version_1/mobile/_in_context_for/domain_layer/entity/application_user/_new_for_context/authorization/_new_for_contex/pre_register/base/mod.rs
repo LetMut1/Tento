@@ -39,10 +39,11 @@ impl Base {
 
             if !ApplicationUserPreConfirmedDataProviderPostgesql::is_exist_by_application_user_email(postgresql_connection, application_user_email.as_str())? {
                 if !ApplicationUserDataProviderPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
-                    let application_user_pre_confirmed: ApplicationUserPreConfirmed = ApplicationUserPreConfirmedFactory::create_from_application_user_email(application_user_email);  
+                    let application_user_pre_confirmed: ApplicationUserPreConfirmed =
+                        ApplicationUserPreConfirmedFactory::create_from_application_user_email(application_user_email);  
 
                     let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_> =
-                    ApplicationUserRegistrationConfirmationTokenFactory::create_from_application_user_pre_confirmed(&application_user_pre_confirmed)?;
+                        ApplicationUserRegistrationConfirmationTokenFactory::create_from_application_user_pre_confirmed(&application_user_pre_confirmed)?;
                     
                     ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(
                         &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_registration_confirmation_token
@@ -50,17 +51,38 @@ impl Base {
 
                     ApplicationUserPreConfirmedStateManagerPostgesql::create(postgresql_connection, &application_user_pre_confirmed)?;
 
-                    EmailSender::send_application_user_registration_confirmation_token(&application_user_registration_confirmation_token)?;
+                    EmailSender::send_application_user_registration_confirmation_token(
+                        application_user_registration_confirmation_token.get_value(),
+                        application_user_pre_confirmed.get_application_user_email()
+                    )?;
 
                     return Ok(());
                 }
                 
-                return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::AlreadyExist}});
+                return Err(
+                    BaseError::EntityError {
+                        entity_error: EntityError::ApplicationUserError {
+                            application_user_error: ApplicationUserError::AlreadyExist
+                        }
+                    }
+                );
             }
             
-            return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserPreConfirmedError {application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::AlreadyExist}});
+            return Err(
+                BaseError::EntityError {
+                    entity_error: EntityError::ApplicationUserPreConfirmedError {
+                        application_user_pre_confirmed_error: ApplicationUserPreConfirmedError::AlreadyExist
+                    }
+                }
+            );
         }
         
-        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidEmail}});
+        return Err(
+            BaseError::EntityError {
+                entity_error: EntityError::ApplicationUserError {
+                    application_user_error: ApplicationUserError::InvalidEmail
+                }
+            }
+        );
     }
 }

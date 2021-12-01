@@ -3,7 +3,6 @@ use std::borrow::Cow;
 pub struct ApplicationUserLogInToken<'a> {
     application_user_id: &'a i64,
     device_id: &'a str,
-    application_user_email: Cow<'a, str>,
     value: String,
     wrong_enter_tries_quantity: u8
 }
@@ -15,14 +14,12 @@ impl<'a> ApplicationUserLogInToken<'a> {
     pub fn new(
         application_user_id: &'a i64,
         device_id: &'a str,
-        application_user_email: Cow<'a, str>,
         value: String,
         wrong_enter_tries_quantity: u8
     ) -> Self {
         return Self {
             application_user_id,
             device_id,
-            application_user_email,
             value,
             wrong_enter_tries_quantity
         };
@@ -38,12 +35,6 @@ impl<'a> ApplicationUserLogInToken<'a> {
         &'b self
     ) -> &'a str {
         return self.device_id;
-    }
-
-    pub fn get_application_user_email<'b>(
-        &'b self
-    ) -> &'b str {
-        return self.application_user_email.as_ref();
     }
 
     pub fn get_value<'b>(

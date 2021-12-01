@@ -2,7 +2,6 @@ use crate::domain_layer::entity::application_user_pre_confirmed::ApplicationUser
 use crate::domain_layer::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::domain_layer::error::logic_error::LogicError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::value_generator_trait::ValueGeneratorTrait;
-use std::borrow::Cow;
 use std::convert::From;
 use std::error::Error;
 
@@ -16,7 +15,6 @@ pub trait BaseTrait {
         return Ok(
             ApplicationUserRegistrationConfirmationToken::new(
                 application_user_pre_confirmed.get_id()?,
-                Cow::Borrowed(application_user_pre_confirmed.get_application_user_email()),
                 <Self::ValueGenerator as ValueGeneratorTrait>::generate(),
                 0
             )

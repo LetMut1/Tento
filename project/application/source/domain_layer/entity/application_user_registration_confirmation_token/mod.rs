@@ -1,8 +1,5 @@
-use std::borrow::Cow;
-
 pub struct ApplicationUserRegistrationConfirmationToken<'a> {
     application_user_pre_confirmed_id: &'a i64,
-    application_user_email: Cow<'a, str>,
     value: String,
     wrong_enter_tries_quantity: u8
 }
@@ -13,13 +10,11 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
 
     pub fn new(
         application_user_pre_confirmed_id: &'a i64,
-        application_user_email: Cow<'a, str>,
         value: String,
         wrong_enter_tries_quantity: u8
     ) -> Self {
         return Self {
             application_user_pre_confirmed_id,
-            application_user_email,
             value,
             wrong_enter_tries_quantity
         };
@@ -29,12 +24,6 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         &'b self
     ) -> &'a i64 {
         return self.application_user_pre_confirmed_id;
-    }
-
-    pub fn get_application_user_email<'b>(
-        &'b self
-    ) -> &'b str {
-        return self.application_user_email.as_ref();
     }
 
     pub fn get_value<'b>(

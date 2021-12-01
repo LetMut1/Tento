@@ -13,18 +13,15 @@ impl Base {
         application_user_pre_confirmed_id: &'a i64
     ) -> ApplicationUserRegistrationConfirmationToken<'a> {
         let (
-            application_user_email,
             value,
             wrong_enter_tries_quantity
         ) : (
-            Cow<'_, str>,
             Cow<'_, str>,
             Cow<'_, u8>
         ) = common.into_inner();
 
         return ApplicationUserRegistrationConfirmationToken::new(
             application_user_pre_confirmed_id,
-            application_user_email,
             value.into_owned(),
             wrong_enter_tries_quantity.into_owned()
         );

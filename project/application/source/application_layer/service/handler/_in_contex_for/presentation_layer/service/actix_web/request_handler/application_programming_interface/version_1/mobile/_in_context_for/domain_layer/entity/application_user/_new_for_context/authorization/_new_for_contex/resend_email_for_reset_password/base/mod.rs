@@ -18,19 +18,28 @@ impl Base {
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
         request: Request
     ) -> Result<(), BaseError> {     // TODO Защита от частого посыла емэй
-        let application_user_id: i64 = request.into_inner();
+        // let application_user_id: i64 = request.into_inner();
 
-        let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+        // let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-        if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(
-            connection, &application_user_id
-        )? 
-        {
-            EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;
+        // if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(
+        //     connection, &application_user_id
+        // )? 
+        // {
+        //     EmailSender::send_application_user_reset_password_token(&application_user_reset_password_token)?;
     
-            return Ok(());
-        }
+        //     return Ok(());
+        // }
 
-        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::NotFound}});
+        // return Err(
+        //     BaseError::EntityError {
+        //         entity_error: EntityError::ApplicationUserResetPasswordTokenError {
+        //             application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::NotFound
+        //         }
+        //     }
+        // );
+
+        // TODO Проверить логку, почему здесь нет проверки на существование пользователя. То есть, почему логика отличается от другиз резетов
+        return Ok(());
     }
 }
