@@ -27,8 +27,8 @@ impl ApplicationUserRegistrationConfirmationTokenDataProviderRedisTrait for Base
                     application_user_registration_confirmation_token_value,
                     application_user_registration_confirmation_token_wrong_enter_tries_quantity
                 ) : (
-                    Cow<'_, str>,
-                    Cow<'_, u8>
+                    Cow<'static, str>,
+                    Cow<'static, u8>
                 ) = common.into_inner();
         
                 let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'b> =

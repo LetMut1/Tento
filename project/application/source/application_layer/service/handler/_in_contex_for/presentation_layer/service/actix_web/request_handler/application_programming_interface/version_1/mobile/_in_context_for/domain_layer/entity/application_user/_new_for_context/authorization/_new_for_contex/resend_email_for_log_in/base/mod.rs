@@ -35,13 +35,7 @@ impl Base {
         //     return Ok(());
         // }
 
-        // return Err(
-        //     BaseError::EntityError {
-        //         entity_error: EntityError::ApplicationUserLogInTokenError {
-        //             application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound
-        //         }
-        //     }
-        // );
+        // return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound}});
 
 
 

@@ -31,13 +31,7 @@ impl Base {
         //     return Ok(());
         // }
 
-        // return Err(
-        //     BaseError::EntityError {
-        //         entity_error: EntityError::ApplicationUserResetPasswordTokenError {
-        //             application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::NotFound
-        //         }
-        //     }
-        // );
+        // return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::NotFound}});
 
         // TODO Проверить логку, почему здесь нет проверки на существование пользователя. То есть, почему логика отличается от другиз резетов
         return Ok(());

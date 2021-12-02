@@ -29,7 +29,7 @@ impl<'a> JsonAccessWebToken<'a> {
     pub fn get_id<'b>(
         &'b self
     ) -> &'b str {
-        return self.payload.get_id();
+        return self.payload.get_json_access_web_token_id();
     }
 
     pub fn get_application_user_id<'b>(

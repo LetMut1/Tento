@@ -28,8 +28,8 @@ impl ApplicationUserLogInTokenDataProviderRedisTrait for Base {
                     application_user_log_in_token_value,
                     application_user_log_in_token_wrong_enter_tries_quantity
                 ) : (
-                    Cow<'_, str>,
-                    Cow<'_, u8>
+                    Cow<'static, str>,
+                    Cow<'static, u8>
                 ) = common.into_inner();
         
                 let application_user_log_in_token: ApplicationUserLogInToken<'b> = ApplicationUserLogInToken::new(

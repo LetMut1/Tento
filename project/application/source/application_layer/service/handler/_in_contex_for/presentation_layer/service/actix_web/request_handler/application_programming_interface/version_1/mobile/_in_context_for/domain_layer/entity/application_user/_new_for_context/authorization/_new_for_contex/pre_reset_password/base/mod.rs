@@ -59,12 +59,6 @@ impl Base {
             return Ok(Response::new(*application_user.get_id()?));
         }
 
-        return Err(
-            BaseError::EntityError {
-                entity_error: EntityError::ApplicationUserError {
-                    application_user_error: ApplicationUserError::NotFound
-                }
-            }
-        );
+        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});
     }
 }
