@@ -11,8 +11,8 @@ pub struct Common<'a> {
     application_user_id: Cow<'a, i64>,
     #[serde(rename = "aulitdi")]
     application_user_log_in_token_device_id: Cow<'a, str>,
-    #[serde(rename = "ov")]
-    obfuscation_value: Cow<'a, str>
+    #[serde(rename = "jrwtov")]
+    json_refresh_web_token_obfuscation_value: Cow<'a, str>
 }
 
 impl<'a> Common<'a> {
@@ -23,7 +23,7 @@ impl<'a> Common<'a> {
             json_access_web_token_id: Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
             application_user_id: Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
             application_user_log_in_token_device_id: Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
-            obfuscation_value: Cow::Borrowed(json_refresh_web_token.get_obfuscation_value())
+            json_refresh_web_token_obfuscation_value: Cow::Borrowed(json_refresh_web_token.get_obfuscation_value())
         }
     }
 
@@ -34,7 +34,7 @@ impl<'a> Common<'a> {
             self.json_access_web_token_id,
             self.application_user_id,
             self.application_user_log_in_token_device_id,
-            self.obfuscation_value
+            self.json_refresh_web_token_obfuscation_value
         );
     }
 }

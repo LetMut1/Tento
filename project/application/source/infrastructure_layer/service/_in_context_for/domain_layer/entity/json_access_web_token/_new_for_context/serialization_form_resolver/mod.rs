@@ -1,13 +1,13 @@
 
 use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
-use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::factory_trait::FactoryTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::signature_creator_trait::SignatureCreatorTrait;
+use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base_trait::BaseTrait as JsonAccessWebTokenFactoryTrait;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::_new_for_context::header_common::HeaderCommon;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::_new_for_context::payload_common::PayloadCommon;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::factory::Factory;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::signature_creator::SignatureCreator;
+use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
 use std::borrow::Cow;
 
 pub struct SerializationFormResolver;
@@ -42,7 +42,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
                 json_access_web_token_id,
                 application_user_id,
                 application_user_log_in_token_device_id,
-                expiration_time
+                json_access_web_token_expiration_time
             ) : (
                 Cow<'static, str>,
                 Cow<'static, i64>,
@@ -50,11 +50,11 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
                 Cow<'static, str>
             ) = payload_common.into_inner();
 
-            let json_access_web_token: JsonAccessWebToken<'static> = Factory::create(
+            let json_access_web_token: JsonAccessWebToken<'static> = JsonAccessWebTokenFactory::create(
                 json_access_web_token_id,
                 application_user_id,
                 application_user_log_in_token_device_id,
-                expiration_time.into_owned()
+                json_access_web_token_expiration_time.into_owned()
             );
 
             return Ok(json_access_web_token);

@@ -4,7 +4,7 @@ use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
 use std::borrow::Cow;
 use std::error::Error;
 
-pub trait FactoryTrait {
+pub trait BaseTrait {
     type Error: Error;
 
     fn create<'a>(

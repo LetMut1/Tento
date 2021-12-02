@@ -47,6 +47,6 @@ impl<'a> JsonAccessWebToken<'a> {
     pub fn get_expiration_time<'b>(
         &'b self
     ) -> &'b str {
-        return self.payload.get_expiration_time();
+        return self.payload.get_json_access_web_token_expiration_time();
     }
 }
