@@ -152,7 +152,7 @@ impl Base {
                         web::scope("/au")
                         .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing))
                         .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existing))
-                        .route("/pr", web::post().to(RequestHandlerApplicationUserAuthorization::pre_register))
+                        .route("/rbfs", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_first_step))
                         .route("/r", web::post().to(RequestHandlerApplicationUserAuthorization::register))
                         .route("/refr", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_register))
                         .route("/pli", web::post().to(RequestHandlerApplicationUserAuthorization::pre_log_in))
