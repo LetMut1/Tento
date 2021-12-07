@@ -1,7 +1,7 @@
-use regex::Regex;
-use std::error::Error;
 use regex::Error as RegexError;
+use regex::Regex;
 use std::convert::From;
+use std::error::Error;
 
 pub trait BaseTrait {
     type Error: Error + From<RegexError>;
