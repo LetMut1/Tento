@@ -3,7 +3,7 @@ pub mod check_nickaname_for_existing;
 pub mod log_in;
 pub mod log_out_from_all_devices;
 pub mod log_out;
-pub mod pre_log_in;
+pub mod log_in_by_first_step;
 pub mod register_by_first_step;
 pub mod pre_reset_password;
 pub mod refresh_json_access_web_token;
