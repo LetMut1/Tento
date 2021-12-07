@@ -4,4 +4,4 @@ pub mod log_in;
 pub mod pre_log_in;
 pub mod pre_reset_password;
 pub mod refresh_json_access_web_token;
-pub mod register;
+pub mod register_by_last_step;
