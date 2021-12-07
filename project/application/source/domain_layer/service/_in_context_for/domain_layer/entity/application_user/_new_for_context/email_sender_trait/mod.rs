@@ -1,4 +1,3 @@
-use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use std::error::Error;
 
 pub trait EmailSenderTrait {
