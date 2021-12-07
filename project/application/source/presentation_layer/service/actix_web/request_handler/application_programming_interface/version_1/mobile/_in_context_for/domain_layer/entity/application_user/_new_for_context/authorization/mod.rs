@@ -18,7 +18,7 @@ use crate::application_layer::service::handler::_in_contex_for::presentation_lay
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_log_in::base::Base as HandlerResendEmailForLogIn;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_register::base::Base as HandlerResendEmailForRegister;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_reset_password::base::Base as HandlerResendEmailForResetPassword;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password::base::Base as HandlerResetPassword;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step::base::Base as HandlerResetPasswordByLastStep;
 use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_pre_confirmed::_new_for_context::application_user_pre_confirmed_error::ApplicationUserPreConfirmedError;
@@ -44,7 +44,7 @@ use crate::presentation_layer::data_transfer_object::request::_in_context_for::p
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_log_in::base::Base as RequestResendEmailForLogIn;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_register::base::Base as RequestResendEmailForRegister;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_reset_password::base::Base as RequestResendEmailForResetPassword;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password::base::Base as RequestResetPassword;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step::base::Base as RequestResetPasswordByLastStep;
 use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::standard_response_creator::StandardResponseCreator;
 use std::convert::From;
 
@@ -826,13 +826,13 @@ impl Authorization {
         }
     }
 
-    pub async fn reset_password(
+    pub async fn reset_password_by_last_step(
         data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestResetPassword>>
+        form: ActixWebResult<Form<RequestResetPasswordByLastStep>>
     ) -> HttpResponse<Body> {
         match form {
             Ok(form_) => {
-                if let Err(ref base_error) = HandlerResetPassword::handle(data.into_inner(), form_.into_inner()) {
+                if let Err(ref base_error) = HandlerResetPasswordByLastStep::handle(data.into_inner(), form_.into_inner()) {
                     match base_error {
                         BaseError::EntityError {entity_error} => {
                             match entity_error {

@@ -159,7 +159,7 @@ impl Base {
                         .route("/libls", web::post().to(RequestHandlerApplicationUserAuthorization::log_in_by_last_step))
                         .route("/refl", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_log_in))
                         .route("/rpbfs", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password_by_first_step))
-                        .route("/rp", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password))
+                        .route("/rpbls", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password_by_last_step))
                         .route("/refrp", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_reset_password))
                         .route("/rjawt", web::post().to(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token))
                     )
