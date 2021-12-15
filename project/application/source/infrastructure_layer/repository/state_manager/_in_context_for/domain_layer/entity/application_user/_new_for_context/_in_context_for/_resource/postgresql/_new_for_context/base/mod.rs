@@ -38,7 +38,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
                 password_hash, \
                 created_at \
             ) VALUES ( \
-                nextval('public.application_user_pre_confirmed1'), \
+                nextval('public.application_user1'), \
                 $1, \
                 $2, \
                 $3, \

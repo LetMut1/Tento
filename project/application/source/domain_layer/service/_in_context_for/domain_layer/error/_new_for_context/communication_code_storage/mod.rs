@@ -9,10 +9,6 @@ impl CommunicationCodeStorage {
     pub const ENTITY_APPLICATION_USER_INVALID_NICKNAME: &'static str = "enapus06";
     pub const ENTITY_APPLICATION_USER_INVALID_PASSWORD: &'static str = "enapus07";
 
-    pub const ENTITY_APPLICATION_USER_PRE_CONFIRMED_ALREADY_EXIST: &'static str = "enapusprco01";
-    pub const ENTITY_APPLICATION_USER_PRE_CONFIRMED_NOT_FOUND: &'static str = "enapusprco02";
-    pub const ENTITY_APPLICATION_USER_PRE_CONFIRMED_ALREADY_CONFIRMED: &'static str = "enapusprco03";
-
     pub const ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND: &'static str = "enapusrecoto02";
     pub const ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE: &'static str = "enapusrecoto03";
 
