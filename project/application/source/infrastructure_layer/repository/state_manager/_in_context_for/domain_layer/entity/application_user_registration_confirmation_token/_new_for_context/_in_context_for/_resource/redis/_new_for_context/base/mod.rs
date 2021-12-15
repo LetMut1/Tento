@@ -17,7 +17,7 @@ impl ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait for Base
     ) -> Result<(), Self::Error> {
         connection.set_ex::<String, String, ()>(
             StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
-                application_user_registration_confirmation_token.get_application_user_pre_confirmed_id()
+                application_user_registration_confirmation_token.get_application_user_email()
             ), 
             serde_json::to_string(&Common::new(application_user_registration_confirmation_token))?,
             (ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
@@ -32,7 +32,7 @@ impl ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait for Base
     ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
             StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
-                application_user_registration_confirmation_token.get_application_user_pre_confirmed_id()
+                application_user_registration_confirmation_token.get_application_user_email()
             )
         )?;
         
@@ -45,7 +45,7 @@ impl ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait for Base
     ) -> Result<(), Self::Error> {
         connection.expire::<String, ()>(
             StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(
-                application_user_registration_confirmation_token.get_application_user_pre_confirmed_id()
+                application_user_registration_confirmation_token.get_application_user_email()
             ),
             (ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;

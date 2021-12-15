@@ -1,12 +1,13 @@
 pub struct CommunicationCodeStorage;
 
 impl CommunicationCodeStorage {
-    pub const ENTITY_APPLICATION_USER_ALREADY_EXIST: &'static str = "enapus01";
-    pub const ENTITY_APPLICATION_USER_NOT_FOUND: &'static str = "enapus02";
-    pub const ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_PASSWORD: &'static str = "enapus03";
-    pub const ENTITY_APPLICATION_USER_INVALID_EMAIL: &'static str = "enapus04";
-    pub const ENTITY_APPLICATION_USER_INVALID_NICKNAME: &'static str = "enapus05";
-    pub const ENTITY_APPLICATION_USER_INVALID_PASSWORD: &'static str = "enapus06";
+    pub const ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST: &'static str = "enapus01";
+    pub const ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST: &'static str = "enapus02";
+    pub const ENTITY_APPLICATION_USER_NOT_FOUND: &'static str = "enapus03";
+    pub const ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_PASSWORD: &'static str = "enapus04";
+    pub const ENTITY_APPLICATION_USER_INVALID_EMAIL: &'static str = "enapus05";
+    pub const ENTITY_APPLICATION_USER_INVALID_NICKNAME: &'static str = "enapus06";
+    pub const ENTITY_APPLICATION_USER_INVALID_PASSWORD: &'static str = "enapus07";
 
     pub const ENTITY_APPLICATION_USER_PRE_CONFIRMED_ALREADY_EXIST: &'static str = "enapusprco01";
     pub const ENTITY_APPLICATION_USER_PRE_CONFIRMED_NOT_FOUND: &'static str = "enapusprco02";
@@ -25,6 +26,4 @@ impl CommunicationCodeStorage {
     pub const ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED: &'static str = "enjsacweto04";
 
     pub const ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND: &'static str = "enjsreweto02";
-
-    pub const COMMON_EMAIL_SENDING_PROBLEM: &'static str = "emse01";
 }

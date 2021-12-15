@@ -5,7 +5,6 @@ use std::fmt::Result;
 
 #[derive(Debug)]
 pub enum ApplicationUserPreConfirmedError {
-    AlreadyExist,
     AlreadyConfirmed,
     NotFound
 }

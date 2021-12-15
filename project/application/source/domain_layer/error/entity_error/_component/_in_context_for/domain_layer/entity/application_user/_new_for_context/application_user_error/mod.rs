@@ -5,7 +5,8 @@ use std::fmt::Result;
 
 #[derive(Debug)]
 pub enum ApplicationUserError {
-    AlreadyExist,
+    EmailAlreadyExist,
+    NicknameAlreadyExist,
     InvalidEmail,
     InvalidNickname,
     InvalidPassword,

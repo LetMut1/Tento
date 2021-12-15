@@ -12,12 +12,12 @@ pub struct Base;
 impl ApplicationUserRegistrationConfirmationTokenDataProviderRedisTrait for Base {
     type Error = BaseError;
 
-    fn find_by_application_user_pre_confirmed_id<'a, 'b>(
+    fn find_by_application_user_email<'a, 'b>(
         connection: &'a mut Connection,
-        application_user_pre_confirmed_id: &'b i64
+        application_user_email: &'b str
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'b>>, Self::Error> {
         match connection.get::<String, Option<String>>(
-            StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(application_user_pre_confirmed_id)
+            StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(application_user_email)
         )?
         {
             Some(json_encoded_common) => {
@@ -33,7 +33,7 @@ impl ApplicationUserRegistrationConfirmationTokenDataProviderRedisTrait for Base
         
                 let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'b> =
                     ApplicationUserRegistrationConfirmationToken::new(
-                        application_user_pre_confirmed_id,
+                        application_user_email,
                         application_user_registration_confirmation_token_value.into_owned(),
                         application_user_registration_confirmation_token_wrong_enter_tries_quantity.into_owned()
                     );
