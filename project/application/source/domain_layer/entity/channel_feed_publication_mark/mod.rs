@@ -1,5 +1,3 @@
-use crate::domain_layer::error::logic_error::LogicError;
-
 pub struct ChannelFeedPublicationMark {
     id: Option<i64>,
     application_user_id: i64,
@@ -24,15 +22,8 @@ impl ChannelFeedPublicationMark {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> Result<&'a i64, LogicError> {
-        match self.id {
-            Some(ref id) => {
-                return Ok(id);
-            }
-            None => {
-                return Err(LogicError::new("Id does not exist yet."))
-            }
-        }
+    ) -> &'a Option<i64> {
+        return &self.id;
     }
 
     pub fn get_application_user_id<'a>(

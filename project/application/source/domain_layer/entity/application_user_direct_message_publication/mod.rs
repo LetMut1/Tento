@@ -1,5 +1,3 @@
-use crate::domain_layer::error::logic_error::LogicError;
-
 pub struct ApplicationUserDirectMessagePublication {
     id: Option<i64>,
     application_user_direct_message_id: i64,
@@ -30,15 +28,8 @@ impl ApplicationUserDirectMessagePublication {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> Result<&'a i64, LogicError> {
-        match self.id {
-            Some(ref id) => {
-                return Ok(id);
-            }
-            None => {
-                return Err(LogicError::new("Id does not exist yet."))
-            }
-        }
+    ) -> &'a Option<i64> {
+        return &self.id;
     }
 
     pub fn get_application_user_direct_message_id<'a>(

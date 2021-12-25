@@ -86,7 +86,7 @@ impl Base {
                                 ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user)?;
 
                                 let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::create_from_id_registry(
-                                    application_user.get_id()?, application_user_log_in_token_device_id.as_str()
+                                    &1111111, application_user_log_in_token_device_id.as_str()
                                 );
 
                                 RepositoryProxy::create(redis_connection, &json_refresh_web_token)?;

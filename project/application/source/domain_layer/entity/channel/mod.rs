@@ -1,5 +1,3 @@
-use crate::domain_layer::error::logic_error::LogicError;
-
 pub struct Channel {    // TODO НАПРАВЛЕННОСТЬБ
     id: Option<i64>,
     application_user_channel_administrator_id: i64,
@@ -48,15 +46,8 @@ impl Channel {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> Result<&'a i64, LogicError> {
-        match self.id {
-            Some(ref id) => {
-                return Ok(id);
-            }
-            None => {
-                return Err(LogicError::new("Id does not exist yet."))
-            }
-        }
+    ) -> &'a Option<i64> {
+        return &self.id;
     }
 
     pub fn get_application_user_channel_administrator_id<'a>(
@@ -128,14 +119,7 @@ impl Channel {
 
     pub fn get_created_at<'a>(
         &'a self
-    ) -> Result<&'a str, LogicError> {
-        match self.created_at {
-            Some(ref created_at) => {
-                return Ok(created_at.as_str());
-            }
-            None => {
-                return Err(LogicError::new("Created_at does not exist yet."))
-            }
-        }
+    ) -> &'a Option<String> {
+        return &self.created_at;
     }
 }

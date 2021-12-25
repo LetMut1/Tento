@@ -30,7 +30,7 @@ use super::_component::run_time_error::_component::resource_error::resource_erro
 use super::_component::run_time_error::run_time_error::RunTimeError;
 
 #[derive(Debug)]
-pub enum BaseError {
+pub enum BaseError {                // TODO Как понять и отследить Бэктрейс ошибки? (Например, ЛогикЕррор). Нужно ли отслеживать? Или же покрыть все функциональными тестами?
     EntityError {
         entity_error: EntityError
     },

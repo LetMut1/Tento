@@ -1,5 +1,3 @@
-use crate::domain_layer::error::logic_error::LogicError;
-
 pub struct ChannelDirectMessagePublication {
     id: Option<i64>,
     channel_id: i64,
@@ -42,15 +40,8 @@ impl ChannelDirectMessagePublication {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> Result<&'a i64, LogicError> {
-        match self.id {
-            Some(ref id) => {
-                return Ok(id);
-            }
-            None => {
-                return Err(LogicError::new("Id does not exist yet."))
-            }
-        }
+    ) -> &'a Option<i64> {
+        return &self.id;
     }
 
     pub fn get_channel_id<'a>(

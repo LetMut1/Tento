@@ -73,6 +73,16 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
             return Err(BaseError::LogicError {unreachable: false, message: "The columns allowing update should exist for ApplicationUser."})
         }
 
+        let application_user_id: &'_ i64;
+                match application_user.get_id() {
+                    Some(application_user_id_) => {
+                        application_user_id = application_user_id_;
+                    },
+                    None => {
+                        return Err(BaseError::LogicError {unreachable: false, message: "Application_user_id should exist"})
+                    }
+                }
+
         let email: &'_ str = application_user.get_email();
 
         let nickanme: &'_ str = application_user.get_nickname();
@@ -191,7 +201,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
                             + " RETURNING \
                                 au.id AS i;";
                         
-                        prepared_statemant_parameter_convertation_resolver.add_parameter(application_user.get_id()?, Type::INT8);
+                        prepared_statemant_parameter_convertation_resolver.add_parameter(application_user_id, Type::INT8);
                     },
                     None => {
                         return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should exist for ApplicationUser update."})

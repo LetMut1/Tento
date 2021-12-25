@@ -46,10 +46,20 @@ impl Base {
             && ApplicationUserValidator::is_valid_password_hash(application_user_password.as_str(), application_user.get_password_hash())? {
                 let application_user_log_in_token: ApplicationUserLogInToken<'_>;
 
+                let application_user_id: &'_ i64;
+                match application_user.get_id() {
+                    Some(application_user_id_) => {
+                        application_user_id = application_user_id_;
+                    },
+                    None => {
+                        return Err(BaseError::LogicError {unreachable: false, message: "Application_user_id should exist"})
+                    }
+                }
+
                 let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
                 match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
-                    connection, application_user.get_id()?, application_user_log_in_token_device_id.as_str()
+                    connection, application_user_id, application_user_log_in_token_device_id.as_str()
                 )? 
                 {
                     Some(application_user_log_in_token_) => {
@@ -59,7 +69,7 @@ impl Base {
                     },
                     None => {
                         application_user_log_in_token = ApplicationUserLogInToken::new(
-                            application_user.get_id()?,
+                            application_user_id,
                             application_user_log_in_token_device_id.as_str(),
                             ValueGenerator::generate(),
                             0
@@ -73,7 +83,7 @@ impl Base {
                     application_user_log_in_token.get_value(), application_user.get_email()
                 )?;
 
-                return Ok(Response::new(*application_user.get_id()?));
+                return Ok(Response::new(*application_user_id));
             }
             
             return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::WrongPassword}});

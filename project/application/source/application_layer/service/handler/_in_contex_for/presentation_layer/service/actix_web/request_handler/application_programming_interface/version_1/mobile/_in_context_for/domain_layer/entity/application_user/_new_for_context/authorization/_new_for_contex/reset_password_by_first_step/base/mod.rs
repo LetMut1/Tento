@@ -33,9 +33,19 @@ impl Base {
         {
             let application_user_reset_password_token: ApplicationUserResetPasswordToken<'_>;
 
+            let application_user_id: &'_ i64;
+                match application_user.get_id() {
+                    Some(application_user_id_) => {
+                        application_user_id = application_user_id_;
+                    },
+                    None => {
+                        return Err(BaseError::LogicError {unreachable: false, message: "Application_user_id should exist"})
+                    }
+                }
+
             let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
-            match ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(redis_connection, application_user.get_id()?)? {
+            match ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(redis_connection, application_user_id)? {
                 Some(application_user_reset_password_token_) => {
                     application_user_reset_password_token = application_user_reset_password_token_;
 
@@ -43,7 +53,7 @@ impl Base {
                 },
                 None => {
                     application_user_reset_password_token = ApplicationUserResetPasswordToken::new(
-                        application_user.get_id()?,
+                        application_user_id,
                         ValueGenerator::generate(),
                         0
                     );
@@ -56,7 +66,7 @@ impl Base {
                 application_user_reset_password_token.get_value(), application_user.get_email()
             )?;
 
-            return Ok(Response::new(*application_user.get_id()?));
+            return Ok(Response::new(*application_user_id));
         }
 
         return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});

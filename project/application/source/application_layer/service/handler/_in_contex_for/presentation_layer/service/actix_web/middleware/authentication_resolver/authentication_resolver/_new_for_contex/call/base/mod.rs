@@ -20,13 +20,13 @@ impl Base {
     pub fn handle<'a>(
         service_request: &'a ServiceRequest
     ) -> Result<(), BaseError> {
-        if let Some(data) = service_request.app_data::<Data<AggregateConnectionPool>>() {
+        if let Some(aggregate_connection_pool) = service_request.app_data::<Data<AggregateConnectionPool>>() {
             if let Some(x_auth_token_header_value) = service_request.headers().get("X-Auth-Token") {
                 if let Ok(header_value) = x_auth_token_header_value.to_str() {
                     let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(header_value)?;
                     if !ExpirationTimeResolver::is_expired(&json_access_web_token)? {
                         if !JsonAccessWebTokenBlackListDataProviderRedis::is_exist_by_json_access_token_id(
-                            &mut *ConnectionExtractor::get_redis_connection(&data.clone().into_inner())?, json_access_web_token.get_id()
+                            &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool.clone().into_inner())?, json_access_web_token.get_id()
                         )? 
                         {
                             service_request.extensions_mut().insert(json_access_web_token);     // TODO В такой реализации При инъекции в РекуестХэндлер этот объкт будет склонирован. А нужно передать его самого. Актикс сейчас не позволякет это сделать. Проверить позже
@@ -44,6 +44,6 @@ impl Base {
             return Err(BaseError::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotFound}});
         }
 
-        return Err(BaseError::LogicError {unreachable: true, message: "AggregateConnectionPool must exist in application state."});
+        return Err(BaseError::LogicError {unreachable: true, message: "Aggregate_connection_pool must exist in application state."});
     }
 }
