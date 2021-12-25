@@ -24,7 +24,7 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
-    pub fn handle(
+    pub fn handle(      // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
         request: Request
     ) -> Result<Response, BaseError> {

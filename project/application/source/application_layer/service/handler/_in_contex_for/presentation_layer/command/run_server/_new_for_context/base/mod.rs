@@ -157,7 +157,7 @@ impl Base {
                         .route("/sefr", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_register))
                         .route("/libfs", web::post().to(RequestHandlerApplicationUserAuthorization::log_in_by_first_step))
                         .route("/libls", web::post().to(RequestHandlerApplicationUserAuthorization::log_in_by_last_step))
-                        .route("/refl", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_log_in))
+                        .route("/sefl", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_log_in))
                         .route("/rpbfs", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password_by_first_step))
                         .route("/rpbls", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password_by_last_step))
                         .route("/refrp", web::post().to(RequestHandlerApplicationUserAuthorization::resend_email_for_reset_password))

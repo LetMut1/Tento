@@ -14,7 +14,7 @@ use crate::application_layer::service::handler::_in_contex_for::presentation_lay
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token::base::Base as HandlerRefreshJsonAccessWebToken;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step::base::Base as HandlerRegisterByFirstStep;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Base as HandlerRegisterByLastStep;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_log_in::base::Base as HandlerResendEmailForLogIn;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as HandlerSendEmailForLogIn;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::resend_email_for_reset_password::base::Base as HandlerResendEmailForResetPassword;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Base as HandlerResetPasswordByFirstStep;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step::base::Base as HandlerResetPasswordByLastStep;
@@ -39,7 +39,7 @@ use crate::presentation_layer::data_transfer_object::request::_in_context_for::p
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as RequestRefreshJsonAccessWebToken;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step::base::Base as RequestRegisterByFirstStep;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::Base as RequestRegisterByLastStep;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_log_in::base::Base as RequestResendEmailForLogIn;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_log_in::base::Base as RequestSendEmailForLogIn;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::resend_email_for_reset_password::base::Base as RequestResendEmailForResetPassword;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::Base as RequestResetPasswordByFirstStep;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step::base::Base as RequestResetPasswordByLastStep;
@@ -374,31 +374,11 @@ impl Authorization {
                             BaseError::InvalidArgumentError => {
                                 return StandardResponseCreator::create_bad_request();
                             },
-                            BaseError::LogicError {unreachable: _, message: _} => {
+                            BaseError::LogicError {unreachable: _, message: _} |
+                            BaseError::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", base_error);
-        
+            
                                 return StandardResponseCreator::create_internal_server_error();
-                            },
-                            BaseError::RunTimeError {run_time_error} => {
-                                log::error!("{}", base_error);
-        
-                                match run_time_error {
-                                    RunTimeError::ResourceError {resource_error} => {
-                                        match resource_error {
-                                            ResourceError::EmailServerError {email_server_error: _} => {
-                                                return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                                    CommunicationCodeStorage::COMMON_EMAIL_SENDING_PROBLEM
-                                                );
-                                            },
-                                            _ => {
-                                                return StandardResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    },
-                                    _ => {
-                                        return StandardResponseCreator::create_internal_server_error();
-                                    }
-                                }
                             }
                         }
                     }
@@ -466,16 +446,28 @@ impl Authorization {
         }
     }
 
-    pub async fn resend_email_for_log_in(
+    pub async fn send_email_for_log_in(
         data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestResendEmailForLogIn>>
+        form: ActixWebResult<Form<RequestSendEmailForLogIn>>
     ) -> HttpResponse<Body> {
         match form {
             Ok(form_) => {
-                if let Err(ref base_error) = HandlerResendEmailForLogIn::handle(data.into_inner(), form_.into_inner()) {
+                if let Err(ref base_error) = HandlerSendEmailForLogIn::handle(data.into_inner(), form_.into_inner()) {
                     match base_error {
                         BaseError::EntityError {entity_error} => {
                             match entity_error {
+                                EntityError::ApplicationUserError {application_user_error} => {
+                                    match application_user_error {
+                                        ApplicationUserError::NotFound => {
+                                            return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
+                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
+                                            );
+                                        },
+                                        _ => {
+                                            unreachable!("{}", base_error);
+                                        }
+                                    }
+                                },
                                 EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
                                     match application_user_log_in_token_error {
                                         ApplicationUserLogInTokenError::NotFound => {
@@ -496,31 +488,11 @@ impl Authorization {
                         BaseError::InvalidArgumentError => {
                             return StandardResponseCreator::create_bad_request();
                         },
-                        BaseError::LogicError {unreachable: _, message: _} => {
+                        BaseError::LogicError {unreachable: _, message: _} |
+                        BaseError::RunTimeError {run_time_error: _} => {
                             log::error!("{}", base_error);
         
                             return StandardResponseCreator::create_internal_server_error();
-                        },
-                        BaseError::RunTimeError {run_time_error} => {
-                            log::error!("{}", base_error);
-        
-                            match run_time_error {
-                                RunTimeError::ResourceError {resource_error} => {
-                                    match resource_error {
-                                        ResourceError::EmailServerError {email_server_error: _} => {
-                                            return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                                CommunicationCodeStorage::COMMON_EMAIL_SENDING_PROBLEM
-                                            );
-                                        },
-                                        _ => {
-                                            return StandardResponseCreator::create_internal_server_error();
-                                        }
-                                    }
-                                },
-                                _ => {
-                                    return StandardResponseCreator::create_internal_server_error();
-                                }
-                            }
                         }
                     }
                 }

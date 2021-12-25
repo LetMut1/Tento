@@ -7,7 +7,7 @@ pub mod log_out;
 pub mod refresh_json_access_web_token;
 pub mod register_by_first_step;
 pub mod register_by_last_step;
-pub mod resend_email_for_log_in;
+pub mod send_email_for_log_in;
 pub mod resend_email_for_reset_password;
 pub mod reset_password_by_first_step;
 pub mod reset_password_by_last_step;
