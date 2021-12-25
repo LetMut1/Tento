@@ -4,7 +4,6 @@ use argon2::Error as Argon2Error;
 use base64::DecodeError as Base64DecodeError;
 use chrono::ParseError as ChronoParseError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
-use crate::domain_layer::error::logic_error::LogicError;
 use dotenv::Error as DotenvError;
 use lettre_email::error::Error as LettreEmailError;
 use lettre::smtp::error::Error as LettreSmtpError;
@@ -24,6 +23,7 @@ use std::fmt::Result;
 use std::io::Error as IoError;
 use std::io::ErrorKind as IoErrorKind;
 use std::string::FromUtf8Error;
+use super::_component::logic_error::LogicError;
 use super::_component::run_time_error::_component::other_error::OtherError;
 use super::_component::run_time_error::_component::resource_error::_component::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
 use super::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
@@ -36,8 +36,7 @@ pub enum BaseError {                // TODO Как понять и отслед�
     },
     InvalidArgumentError,
     LogicError {
-        unreachable: bool,
-        message: &'static str,
+        logic_error: LogicError
     },
     RunTimeError {
         run_time_error: RunTimeError
@@ -50,11 +49,11 @@ impl Display for BaseError {
         formatter: &'b mut Formatter<'_>
     ) -> Result {
         match self {
-            Self::LogicError {unreachable, message} => {
-                if *unreachable {
-                    write!(formatter, "BaseError-LogicError: [Unreachable] {}", message)?;
+            Self::LogicError {logic_error} => {
+                if *logic_error.is_unreachable() {
+                    write!(formatter, "BaseError-LogicError: [Unreachable] {}", logic_error.get_message())?;
                 } else {
-                    write!(formatter, "BaseError-LogicError: {}", message)?;
+                    write!(formatter, "BaseError-LogicError: {}", logic_error.get_message())?;
                 }
             },
             Self::RunTimeError {run_time_error} => {
@@ -111,7 +110,7 @@ impl From<LogicError> for BaseError {
     fn from(
         logic_error: LogicError
     ) -> Self {
-        return Self::LogicError {unreachable: false, message: logic_error.get_message()};
+        return Self::LogicError {logic_error}
     }
 }
 

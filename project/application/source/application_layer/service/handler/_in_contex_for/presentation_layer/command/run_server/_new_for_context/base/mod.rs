@@ -2,6 +2,7 @@ use actix_web::App;
 use actix_web::HttpServer;
 use actix_web::web;
 use actix_web::web::ServiceConfig;
+use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
@@ -60,7 +61,7 @@ impl Base {
                         if development_environment_file_path_buffer.exists() {
                             dotenv::from_path(development_environment_file_path_buffer.as_path())?;
                         } else {
-                            return Err(BaseError::LogicError {unreachable: false, message: "Any ....env files does not exist."});
+                            return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Any ....env files does not exist.")});
                         }
                     }
 
@@ -72,7 +73,7 @@ impl Base {
                 return Ok(());
             },
             None => {
-                return Err(BaseError::LogicError {unreachable: false, message: "The directory does not exist."});
+                return Err(BaseError::LogicError {logic_error: LogicError::new(false, "The directory does not exist.")});
             }
         }
     }

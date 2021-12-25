@@ -1,6 +1,7 @@
 use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
+use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 
 pub struct DateTimeResolver;
@@ -30,7 +31,7 @@ impl DateTimeResolver {
                 return Ok(date_time.format(Self::TIMESTAMP_FORMAT).to_string());
             },
             None => {
-                return Err(BaseError::LogicError {unreachable: false, message: "Too big date must not be added."});
+                return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Too big date must not be added.")});
             }
         };
     }

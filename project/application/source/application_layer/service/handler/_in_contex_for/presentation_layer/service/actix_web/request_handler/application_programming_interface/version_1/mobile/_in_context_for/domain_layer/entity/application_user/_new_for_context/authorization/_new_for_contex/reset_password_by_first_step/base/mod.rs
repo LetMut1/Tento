@@ -6,6 +6,7 @@ use crate::domain_layer::repository::data_provider::_in_context_for::domain_laye
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserResetPasswordTokenStateManagerRedisTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::value_generator_trait::ValueGeneratorTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
+use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserResetPasswordTokenDataProviderRedis;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
@@ -39,7 +40,7 @@ impl Base {
                         application_user_id = application_user_id_;
                     },
                     None => {
-                        return Err(BaseError::LogicError {unreachable: false, message: "Application_user_id should exist"})
+                        return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
                     }
                 }
 

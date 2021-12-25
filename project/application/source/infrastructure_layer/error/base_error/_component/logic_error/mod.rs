@@ -5,14 +5,17 @@ use std::fmt::Result;
 
 #[derive(Debug)]
 pub struct LogicError {
-    message: &'static str
+    unreachable: bool,
+    message: &'static str,
 }
 
 impl LogicError {
     pub fn new(
+        unreachable: bool,
         message: &'static str
     ) -> Self {
         return Self {
+            unreachable,
             message
         };
     }
@@ -21,6 +24,12 @@ impl LogicError {
         &'a self
     ) -> &'static str {
         return self.message;
+    }
+
+    pub fn is_unreachable<'a>(
+        &'a self
+    ) -> &'a bool {
+        return &self.unreachable;
     }
 }
 

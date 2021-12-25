@@ -1,3 +1,4 @@
+use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 
 pub struct PreparedStatementParameterCounter {
@@ -16,7 +17,7 @@ impl PreparedStatementParameterCounter {
         &'a mut self
     ) -> Result<&'a u8, BaseError> {
         if self.counter == u8::max_value() {
-            return Err(BaseError::LogicError {unreachable: false, message: "Out of range for `u8` type."});
+            return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Out of range for `u8` type.")});
         }
 
         self.counter = self.counter + 1;

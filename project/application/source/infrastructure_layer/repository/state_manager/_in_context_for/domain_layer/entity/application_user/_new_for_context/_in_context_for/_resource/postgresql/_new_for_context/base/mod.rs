@@ -1,6 +1,7 @@
 use crate::domain_layer::entity::application_user::ApplicationUser;
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserStateManagerPostgresqlTrait;
 use crate::domain_layer::service::update_resolver::_in_context_for::domain_layer::entity::application_user::_new_for_context::base_trait::BaseTrait as UpdateResolverApplicationUserTrait;
+use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_counter::PreparedStatementParameterCounter;
@@ -58,7 +59,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
 
         let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if row_registry.is_empty() {
-            return Err(BaseError::LogicError {unreachable: false, message: "ApplicationUser can not be inserted into Postgesql database."});
+            return Err(BaseError::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgesql database.")});
         }
 
         return Ok(());
@@ -70,7 +71,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
         update_resolver: Self::UpdateResolverApplicationUser
     ) -> Result<(), Self::Error> {
         if !update_resolver.should_update() {
-            return Err(BaseError::LogicError {unreachable: false, message: "The columns allowing update should exist for ApplicationUser."})
+            return Err(BaseError::LogicError {logic_error: LogicError::new(false, "The columns allowing update should exist for ApplicationUser.")})
         }
 
         let application_user_id: &'_ i64;
@@ -79,7 +80,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
                         application_user_id = application_user_id_;
                     },
                     None => {
-                        return Err(BaseError::LogicError {unreachable: false, message: "Application_user_id should exist"})
+                        return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
                     }
                 }
 
@@ -121,7 +122,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
                             prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
                         },
                         None => {
-                            return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should exist for ApplicationUser update."});
+                            return Err(BaseError::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")});
                         }
                     }
                 },
@@ -130,7 +131,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
 
                     match column_value_registry_description {
                         Some (_) => {
-                            return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should not exist for ApplicationUser."});
+                            return Err(BaseError::LogicError {logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser.")});
                         },
                         None => {
                             column_value_registry_description = Some(
@@ -160,7 +161,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
                             prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
                         },
                         None => {
-                            return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should exist for ApplicationUser update."});
+                            return Err(BaseError::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")});
                         }
                     }
                 },
@@ -169,7 +170,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
 
                     match column_value_registry_description {
                         Some (_) => {
-                            return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should not exist for ApplicationUser."});
+                            return Err(BaseError::LogicError {logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser.")});
                         },
                         None => {
                             column_value_registry_description = Some(
@@ -204,12 +205,12 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
                         prepared_statemant_parameter_convertation_resolver.add_parameter(application_user_id, Type::INT8);
                     },
                     None => {
-                        return Err(BaseError::LogicError {unreachable: true, message: "The columns value description should exist for ApplicationUser update."})
+                        return Err(BaseError::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")})
                     }
                 }
             },
             None => {
-                return Err(BaseError::LogicError {unreachable: true, message: "The columns name description should exist for ApplicationUser update."})
+                return Err(BaseError::LogicError {logic_error: LogicError::new(true, "The columns name description should exist for ApplicationUser update.")})
             }
         }
 
@@ -217,7 +218,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
 
         let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if row_registry.is_empty() {
-            return Err(BaseError::LogicError {unreachable: false, message: "ApplicationUser can not be updated in Postgesql database."});
+            return Err(BaseError::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgesql database.")});
         }
 
         return Ok(());
