@@ -55,15 +55,15 @@ impl Base {
         )?
         {
             if application_user_log_in_token.get_value() == application_user_log_in_token_value.as_str() {
-                if let Some(existing_json_refresh_web_token) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
+                if let Some(json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
                     connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 )? 
                 {
                     JsonAccessWebTokenBlackListStateManagerRedis::create(
-                        connection, &JsonAccessWebTokenBlackList::new(existing_json_refresh_web_token.get_json_access_web_token_id())
+                        connection, &JsonAccessWebTokenBlackList::new(json_refresh_web_token_.get_json_access_web_token_id())
                     )?;
 
-                    RepositoryProxy::delete(connection, &existing_json_refresh_web_token)?;
+                    RepositoryProxy::delete(connection, &json_refresh_web_token_)?;
                 }
 
                 let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::create_from_id_registry(

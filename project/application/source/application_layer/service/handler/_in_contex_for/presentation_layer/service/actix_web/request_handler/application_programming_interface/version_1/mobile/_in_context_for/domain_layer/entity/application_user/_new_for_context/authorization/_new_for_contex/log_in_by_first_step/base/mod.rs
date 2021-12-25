@@ -52,8 +52,8 @@ impl Base {
                     connection, application_user.get_id()?, application_user_log_in_token_device_id.as_str()
                 )? 
                 {
-                    Some(existing_application_user_log_in_token) => {
-                        application_user_log_in_token = existing_application_user_log_in_token;
+                    Some(application_user_log_in_token_) => {
+                        application_user_log_in_token = application_user_log_in_token_;
 
                         ApplicationUserLogInTokenStateManagerRedis::update_expiration_time(connection, &application_user_log_in_token)?;
                     },

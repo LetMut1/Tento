@@ -40,8 +40,8 @@ impl Base {
                     connection, application_user_email.as_str()
                 )?
                 {
-                    Some(existing_application_user_registration_confirmation_token) => {
-                        application_user_registration_confirmation_token = existing_application_user_registration_confirmation_token;
+                    Some(application_user_registration_confirmation_token_) => {
+                        application_user_registration_confirmation_token = application_user_registration_confirmation_token_;
 
                         ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
                             connection, &application_user_registration_confirmation_token

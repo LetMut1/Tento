@@ -70,8 +70,8 @@ impl RepositoryProxyTrait for RepositoryProxy {
 
             let mut aplication_user_log_in_token_device_id_index_option: Option<usize> = None;
 
-            for (index, existing_application_user_log_in_token_device_id) in application_user_log_in_token_device_id_registry.iter().enumerate() {
-                if *existing_application_user_log_in_token_device_id == application_user_log_in_token_device_id {
+            for (index, application_user_log_in_token_device_id_) in application_user_log_in_token_device_id_registry.iter().enumerate() {
+                if *application_user_log_in_token_device_id_ == application_user_log_in_token_device_id {
                     aplication_user_log_in_token_device_id_index_option = Some(index);
 
                     break;
