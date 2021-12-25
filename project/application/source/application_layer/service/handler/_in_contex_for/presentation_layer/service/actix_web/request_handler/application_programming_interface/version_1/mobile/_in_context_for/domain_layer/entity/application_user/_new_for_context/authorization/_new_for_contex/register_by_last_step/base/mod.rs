@@ -73,6 +73,8 @@ impl Base {
                             let application_user_password_hash: String = PasswordHashResolver::create(application_user_password.as_str())?;
 
                             if application_user_registration_confirmation_token.get_value() == application_user_registration_confirmation_token_value.as_str() {
+                                ApplicationUserRegistrationConfirmationTokenStateManagerRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
+
                                 let application_user: ApplicationUser = ApplicationUser::new(
                                     None,
                                     application_user_email,
@@ -80,8 +82,6 @@ impl Base {
                                     application_user_password_hash,
                                     chrono::Utc::now().to_rfc2822() // TODO  Delete. Все Часы делаются через БД.
                                 );
-
-                                ApplicationUserRegistrationConfirmationTokenStateManagerRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
                                 
                                 ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user)?;
 
