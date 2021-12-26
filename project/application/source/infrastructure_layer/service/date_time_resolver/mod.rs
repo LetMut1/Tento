@@ -7,7 +7,7 @@ use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 pub struct DateTimeResolver;
 
 impl DateTimeResolver {
-    const TIMESTAMP_FORMAT: &'static str = "%Y-%m-%d %H:%M:%S%.6f%#z";
+    const TIMESTAMP_FORMAT: &'static str = "%Y-%m-%d %H:%M:%S%.6f%:z";      // TODO был %#z (Он только для парсинга, судя по документации). Проверить совместимость с Бд.
 
     pub fn create_chrono_date_time_utc<'a>(
         date_time: &'a str
