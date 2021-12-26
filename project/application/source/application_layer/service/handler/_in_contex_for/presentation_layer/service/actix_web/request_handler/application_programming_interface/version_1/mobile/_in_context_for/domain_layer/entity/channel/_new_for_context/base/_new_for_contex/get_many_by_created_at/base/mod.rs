@@ -46,7 +46,7 @@ impl Base {
             channel_created_at = Some(channel_created_at_);
         }
 
-        let channel_registry: Option<Vec<Channel>> = ChannelDataProviderPostgresql::find_many_by_created_at(
+        let channel_registry: Option<Vec<Channel>> = ChannelDataProviderPostgresql::per_request_2(
             &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_created_at, &order, &(limit as i16)
         )?;
 

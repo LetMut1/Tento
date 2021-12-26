@@ -10,7 +10,7 @@ pub trait BaseTrait {
     fn create<'a>(
         connection: &'a mut Connection,
         application_user: &'a ApplicationUser
-    ) -> Result<(), Self::Error>;
+    ) -> Result<i64, Self::Error>;
 
     fn update<'a>(
         connection: &'a mut Connection,

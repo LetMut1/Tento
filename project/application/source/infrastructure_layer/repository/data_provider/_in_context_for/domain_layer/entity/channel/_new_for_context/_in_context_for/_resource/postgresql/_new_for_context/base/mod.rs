@@ -14,7 +14,7 @@ use postgres::types::Type;
 pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO 
                     // TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
 impl Base {
-    pub fn find_many_by_name<'a>(
+    pub fn per_request_1<'a>(
         connection: &'a mut Connection,
         name: &'a str,
         requery_name: &'a Option<String>,
@@ -81,7 +81,7 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn find_many_by_created_at<'a>(
+    pub fn per_request_2<'a>(
         connection: &'a mut Connection,
         created_at: &'a Option<String>,
         order: &'a i8,
@@ -151,7 +151,7 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn find_many_by_subscribers_quantity<'a>(
+    pub fn per_request_3<'a>(
         connection: &'a mut Connection,
         subscribers_quantity: &'a Option<i64>,
         order: &'a i8,
@@ -207,7 +207,7 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn find_many_by_id_registry<'a>(
+    pub fn per_request_4<'a>(
         connection: &'a mut Connection,
         id_registry: &'a Vec<i64>
     ) -> Result<Option<Vec<ResponseGetManyByIdRegistryChannel>>, BaseError> {

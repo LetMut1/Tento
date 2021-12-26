@@ -82,10 +82,10 @@ impl Base {
                                     chrono::Utc::now().to_rfc2822() // TODO  Delete. Все Часы делаются через БД.
                                 );
                                 
-                                ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user)?;
+                                let application_user_id: i64 = ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user)?;
 
                                 let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::create_from_id_registry(
-                                    &1111111, application_user_log_in_token_device_id.as_str()
+                                    &application_user_id, application_user_log_in_token_device_id.as_str()
                                 );
 
                                 RepositoryProxy::create(redis_connection, &json_refresh_web_token)?;

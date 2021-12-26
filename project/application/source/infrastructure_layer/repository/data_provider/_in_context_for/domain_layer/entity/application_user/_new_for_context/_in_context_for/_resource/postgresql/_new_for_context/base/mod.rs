@@ -29,11 +29,11 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
         let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
-        if !row_registry.is_empty() {
-            return Ok(true);
+        if row_registry.is_empty() {
+            return Ok(false);
         }
 
-        return Ok(false);
+        return Ok(true);
     }
 
     fn is_exist_by_email<'a>(
@@ -53,11 +53,11 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
         let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
-        if !row_registry.is_empty() {
-            return Ok(true);
+        if row_registry.is_empty() {
+            return Ok(false);
         }
 
-        return Ok(false);
+        return Ok(true);
     }
 
     fn find_by_email<'a>(

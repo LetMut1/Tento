@@ -37,7 +37,7 @@ impl Base {
             return Err(BaseError::InvalidArgumentError);
         }
 
-        let channel_registry: Option<Vec<Channel>> = ChannelDataProviderPostgresql::find_many_by_subscribers_quantity(
+        let channel_registry: Option<Vec<Channel>> = ChannelDataProviderPostgresql::per_request_3(
             &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, &channel_subscribers_quantity, &order, &limit
         )?;
 

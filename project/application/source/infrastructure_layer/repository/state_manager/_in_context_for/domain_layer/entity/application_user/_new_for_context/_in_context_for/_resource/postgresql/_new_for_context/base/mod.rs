@@ -20,7 +20,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
     fn create<'a>(
         connection: &'a mut Connection,
         application_user: &'a ApplicationUser
-    ) -> Result<(), Self::Error> {
+    ) -> Result<i64, Self::Error> {
         let email: &'_ str = application_user.get_email();
 
         let nickanme: &'_ str = application_user.get_nickname();
@@ -62,7 +62,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
             return Err(BaseError::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgesql database.")});
         }
 
-        return Ok(());
+        return Ok(row_registry[0].try_get::<'_, usize, i64>(0)?);
     }
 
     fn update<'a>(
