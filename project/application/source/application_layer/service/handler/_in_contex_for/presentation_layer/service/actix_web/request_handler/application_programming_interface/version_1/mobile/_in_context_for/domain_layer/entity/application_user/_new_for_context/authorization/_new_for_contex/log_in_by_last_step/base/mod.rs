@@ -48,31 +48,31 @@ impl Base {
             String
         ) = request.into_inner();
 
-        let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+        let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
         if let Some(mut application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
-            connection, &application_user_id, application_user_log_in_token_device_id.as_str()
+            redis_connection, &application_user_id, application_user_log_in_token_device_id.as_str()
         )?
         {
             if application_user_log_in_token.get_value() == application_user_log_in_token_value.as_str() {
                 if let Some(json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
-                    connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
+                    redis_connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 )? 
                 {
                     JsonAccessWebTokenBlackListStateManagerRedis::create(
-                        connection, &JsonAccessWebTokenBlackList::new(json_refresh_web_token_.get_json_access_web_token_id())
+                        redis_connection, &JsonAccessWebTokenBlackList::new(json_refresh_web_token_.get_json_access_web_token_id())
                     )?;
 
-                    RepositoryProxy::delete(connection, &json_refresh_web_token_)?;
+                    RepositoryProxy::delete(redis_connection, &json_refresh_web_token_)?;
                 }
 
                 let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::create_from_id_registry(
                     application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 );
                 
-                ApplicationUserLogInTokenStateManagerRedis::delete(connection, &application_user_log_in_token)?;
+                ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token)?;
 
-                RepositoryProxy::create(connection, &json_refresh_web_token)?;
+                RepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
 
                 let json_access_web_token: String = SerializationFormResolver::serialize(
                     &JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token)?
@@ -86,7 +86,7 @@ impl Base {
             WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token)?;
 
             if *application_user_log_in_token.get_wrong_enter_tries_quantity() >= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                ApplicationUserLogInTokenStateManagerRedis::delete(connection, &application_user_log_in_token)?;
+                ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token)?;
             }
             
             return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::InvalidValue}});

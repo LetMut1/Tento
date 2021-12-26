@@ -71,14 +71,14 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
         update_resolver: Self::UpdateResolverApplicationUser
     ) -> Result<(), Self::Error> {
         let application_user_id: &'_ i64;
-                match application_user.get_id() {
-                    Some(application_user_id_) => {
-                        application_user_id = application_user_id_;
-                    },
-                    None => {
-                        return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
-                    }
-                }
+        match application_user.get_id() {
+            Some(application_user_id_) => {
+                application_user_id = application_user_id_;
+            },
+            None => {
+                return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
+            }
+        }
 
         let email: &'_ str = application_user.get_email();
 

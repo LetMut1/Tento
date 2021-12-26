@@ -19,16 +19,16 @@ impl Base {
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
         json_access_web_token: &'a JsonAccessWebToken<'_>
     ) -> Result<(), BaseError> {
-        let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+        let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
         if let Some(json_refresh_web_token_registry) = RepositoryProxy::get_by_application_user_id(
-            connection, json_access_web_token.get_application_user_id()
+            redis_connection, json_access_web_token.get_application_user_id()
         )?
         {
             for json_refresh_web_token in json_refresh_web_token_registry.iter() {
-                RepositoryProxy::delete(connection, json_refresh_web_token)?;
+                RepositoryProxy::delete(redis_connection, json_refresh_web_token)?;
 
-                JsonAccessWebTokenBlackListStateManagerRedis::create(connection, &JsonAccessWebTokenBlackList::new(json_access_web_token.get_id()))?;
+                JsonAccessWebTokenBlackListStateManagerRedis::create(redis_connection, &JsonAccessWebTokenBlackList::new(json_access_web_token.get_id()))?;
             }
             
             return Ok(());

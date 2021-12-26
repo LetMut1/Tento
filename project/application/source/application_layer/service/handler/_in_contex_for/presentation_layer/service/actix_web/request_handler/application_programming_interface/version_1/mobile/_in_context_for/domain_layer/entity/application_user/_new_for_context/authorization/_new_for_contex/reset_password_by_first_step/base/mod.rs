@@ -35,14 +35,14 @@ impl Base {
             let application_user_reset_password_token: ApplicationUserResetPasswordToken<'_>;
 
             let application_user_id: &'_ i64;
-                match application_user.get_id() {
-                    Some(application_user_id_) => {
-                        application_user_id = application_user_id_;
-                    },
-                    None => {
-                        return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
-                    }
+            match application_user.get_id() {
+                Some(application_user_id_) => {
+                    application_user_id = application_user_id_;
+                },
+                None => {
+                    return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
                 }
+            }
 
             let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 

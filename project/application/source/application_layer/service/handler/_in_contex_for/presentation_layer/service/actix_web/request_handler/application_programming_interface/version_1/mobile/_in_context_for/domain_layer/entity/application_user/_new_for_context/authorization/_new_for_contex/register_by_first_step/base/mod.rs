@@ -34,17 +34,17 @@ impl Base {
             )? {
                 let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;
 
-                let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+                let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
                 match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_email(
-                    connection, application_user_email.as_str()
+                    redis_connection, application_user_email.as_str()
                 )?
                 {
                     Some(application_user_registration_confirmation_token_) => {
                         application_user_registration_confirmation_token = application_user_registration_confirmation_token_;
 
                         ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
-                            connection, &application_user_registration_confirmation_token
+                            redis_connection, &application_user_registration_confirmation_token
                         )?;
                     },
                     None => {
@@ -54,7 +54,7 @@ impl Base {
                                 0
                             );
 
-                        ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(connection, &application_user_registration_confirmation_token)?;
+                        ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(redis_connection, &application_user_registration_confirmation_token)?;
                     }
                 }
                 

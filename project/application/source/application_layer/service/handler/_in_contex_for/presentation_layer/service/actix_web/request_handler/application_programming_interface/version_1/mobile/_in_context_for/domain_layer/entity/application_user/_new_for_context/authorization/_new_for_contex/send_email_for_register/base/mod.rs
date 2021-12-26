@@ -22,15 +22,15 @@ impl Base {
     ) -> Result<(), BaseError> { // TODO  TODO  TODO  TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let application_user_email: String = request.into_inner();
 
-        let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+        let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
         match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_email(
-            connection, application_user_email.as_str()
+            redis_connection, application_user_email.as_str()
         )?
         {
             Some(application_user_registration_confirmation_token) => {
                 ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
-                    connection, &application_user_registration_confirmation_token
+                    redis_connection, &application_user_registration_confirmation_token
                 )?;
 
                 EmailSender::send_application_user_registration_confirmation_token(

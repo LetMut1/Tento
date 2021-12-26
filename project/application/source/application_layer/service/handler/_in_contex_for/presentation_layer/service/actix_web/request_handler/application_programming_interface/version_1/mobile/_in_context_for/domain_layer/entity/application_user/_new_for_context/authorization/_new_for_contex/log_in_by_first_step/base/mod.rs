@@ -57,16 +57,16 @@ impl Base {
                     }
                 }
 
-                let connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+                let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
                 match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
-                    connection, application_user_id, application_user_log_in_token_device_id.as_str()
+                    redis_connection, application_user_id, application_user_log_in_token_device_id.as_str()
                 )? 
                 {
                     Some(application_user_log_in_token_) => {
                         application_user_log_in_token = application_user_log_in_token_;
 
-                        ApplicationUserLogInTokenStateManagerRedis::update_expiration_time(connection, &application_user_log_in_token)?;
+                        ApplicationUserLogInTokenStateManagerRedis::update_expiration_time(redis_connection, &application_user_log_in_token)?;
                     },
                     None => {
                         application_user_log_in_token = ApplicationUserLogInToken::new(
@@ -76,7 +76,7 @@ impl Base {
                             0
                         );
 
-                        ApplicationUserLogInTokenStateManagerRedis::create(connection, &application_user_log_in_token)?;
+                        ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token)?;
                     }
                 }
 
