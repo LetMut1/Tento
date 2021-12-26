@@ -40,7 +40,7 @@ impl Base {
     ) -> Result<Response, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let (
             application_user_id,
-            application_user_log_in_token_device_id,  
+            application_user_log_in_token_device_id,  // TODO ПРоверить все входящие значения application_user_log_in_token_device_id нв формат. Формата может не быть. Нужно определиться, есть ли формат, напримре, UUID
             application_user_log_in_token_value
         ) : (
             i64,
@@ -83,7 +83,9 @@ impl Base {
 
             WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token)?;
 
-            if *application_user_log_in_token.get_wrong_enter_tries_quantity() >= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+            if *application_user_log_in_token.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token)?;
+            } else {
                 ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token)?;
             }
             

@@ -45,7 +45,7 @@ impl Base {
         request: Request
     ) -> Result<Response, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let (
-            application_user_log_in_token_device_id, 
+            application_user_log_in_token_device_id, // TODO Это значение должно быть одно для 1 устройствоа клиента. ЛУчше сделать его постоянным, - Mac устрйоства, или что-то подобное. То значение, которе будет для КЛаудМессадж. Хранить в БД. 
             application_user_nickname,
             application_user_password,
             application_user_email,
@@ -101,7 +101,9 @@ impl Base {
 
                             WrongEnterTriesQuantityIncrementor::increment(&mut application_user_registration_confirmation_token)?;
 
-                            if *application_user_registration_confirmation_token.get_wrong_enter_tries_quantity() >= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                            if *application_user_registration_confirmation_token.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                                ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(redis_connection, &application_user_registration_confirmation_token)?;
+                            } else {
                                 ApplicationUserRegistrationConfirmationTokenStateManagerRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
                             }
                             

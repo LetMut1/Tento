@@ -66,7 +66,9 @@ impl Base {
 
                 WrongEnterTriesQuantityIncrementor::increment(&mut application_user_reset_password_token)?;
 
-                if *application_user_reset_password_token.get_wrong_enter_tries_quantity() >= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                if *application_user_reset_password_token.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                    ApplicationUserResetPasswordTokenStateManagerRedis::create(redis_connection, &application_user_reset_password_token)?;
+                } else {
                     ApplicationUserResetPasswordTokenStateManagerRedis::delete(redis_connection, &application_user_reset_password_token)?;
                 }
 
