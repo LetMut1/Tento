@@ -55,7 +55,7 @@ impl Base {
                     if let Some(mut application_user) = ApplicationUserDataProviderPostgresql::find_by_id(postgresql_connection, &application_user_id)? {
                         application_user.set_password_hash(PasswordHashResolver::create(application_user_password.as_str())?);
 
-                        ApplicationUserStateManagerPostgresql::update(postgresql_connection, &application_user, UpdateResolverApplicationUser::new(false, false, true))?;
+                        ApplicationUserStateManagerPostgresql::update(postgresql_connection, &application_user, UpdateResolverApplicationUser::new(false, false, true)?)?;
 
                         ApplicationUserResetPasswordTokenStateManagerRedis::delete(redis_connection, &application_user_reset_password_token)?;
 

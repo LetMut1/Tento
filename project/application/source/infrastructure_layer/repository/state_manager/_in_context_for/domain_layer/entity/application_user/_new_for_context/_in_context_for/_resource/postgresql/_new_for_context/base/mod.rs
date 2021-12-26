@@ -70,10 +70,6 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
         application_user: &'a ApplicationUser,
         update_resolver: Self::UpdateResolverApplicationUser
     ) -> Result<(), Self::Error> {
-        if !update_resolver.should_update() {
-            return Err(BaseError::LogicError {logic_error: LogicError::new(false, "The columns allowing update should exist for ApplicationUser.")})
-        }
-
         let application_user_id: &'_ i64;
                 match application_user.get_id() {
                     Some(application_user_id_) => {
