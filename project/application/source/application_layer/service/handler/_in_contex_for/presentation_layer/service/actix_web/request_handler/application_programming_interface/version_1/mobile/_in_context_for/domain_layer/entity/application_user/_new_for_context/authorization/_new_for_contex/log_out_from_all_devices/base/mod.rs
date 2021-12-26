@@ -23,8 +23,7 @@ impl Base {
 
         if let Some(json_refresh_web_token_registry) = RepositoryProxy::get_by_application_user_id(
             redis_connection, json_access_web_token.get_application_user_id()
-        )?
-        {
+        )? {
             for json_refresh_web_token in json_refresh_web_token_registry.iter() {
                 RepositoryProxy::delete(redis_connection, json_refresh_web_token)?;
 

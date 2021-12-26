@@ -47,8 +47,7 @@ impl Base {
 
             if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(
                 redis_connection, &application_user_id
-            )? 
-            {
+            )? {
                 if application_user_reset_password_token.get_value()== application_user_reset_password_token_value.as_str() {
                     let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 

@@ -52,13 +52,11 @@ impl Base {
 
         if let Some(mut application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
             redis_connection, &application_user_id, application_user_log_in_token_device_id.as_str()
-        )?
-        {
+        )? {
             if application_user_log_in_token.get_value() == application_user_log_in_token_value.as_str() {
                 if let Some(json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
                     redis_connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
-                )? 
-                {
+                )? {
                     JsonAccessWebTokenBlackListStateManagerRedis::create(
                         redis_connection, &JsonAccessWebTokenBlackList::new(json_refresh_web_token_.get_json_access_web_token_id())
                     )?;

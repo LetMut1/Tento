@@ -26,8 +26,7 @@ impl Base {
 
         match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_email(
             redis_connection, application_user_email.as_str()
-        )?
-        {
+        )? {
             Some(application_user_registration_confirmation_token) => {
                 ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
                     redis_connection, &application_user_registration_confirmation_token

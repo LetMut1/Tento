@@ -68,8 +68,7 @@ impl Base {
 
                         if let Some(mut application_user_registration_confirmation_token) = ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_email(
                             redis_connection, application_user_email.as_str()
-                        )? 
-                        {
+                        )? {
                             let application_user_password_hash: String = PasswordHashResolver::create(application_user_password.as_str())?;
 
                             if application_user_registration_confirmation_token.get_value() == application_user_registration_confirmation_token_value.as_str() {

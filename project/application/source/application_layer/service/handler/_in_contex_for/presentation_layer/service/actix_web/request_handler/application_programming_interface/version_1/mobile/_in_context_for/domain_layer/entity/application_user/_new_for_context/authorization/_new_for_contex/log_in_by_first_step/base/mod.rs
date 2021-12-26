@@ -41,8 +41,7 @@ impl Base {
 
         if let Some(application_user) = ApplicationUserDataProviderPostgresql::find_by_email(
             &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, application_user_email.as_str()
-        )? 
-        {
+        )? {
             if ApplicationUserValidator::is_valid_password(application_user_password.as_str())
             && ApplicationUserValidator::is_valid_password_hash(application_user_password.as_str(), application_user.get_password_hash())? {
                 let application_user_log_in_token: ApplicationUserLogInToken<'_>;
@@ -61,8 +60,7 @@ impl Base {
 
                 match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
                     redis_connection, application_user_id, application_user_log_in_token_device_id.as_str()
-                )? 
-                {
+                )? {
                     Some(application_user_log_in_token_) => {
                         application_user_log_in_token = application_user_log_in_token_;
 

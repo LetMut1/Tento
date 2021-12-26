@@ -5,8 +5,7 @@ use application::application_layer::service::handler::_in_contex_for::presentati
 
 #[actix_web::main]
 async fn main(
-) -> ()   // TODO перед релизом понять, имеет ли значение, что именно возвращать в main. Err(...) для Result. Или просто void. (Как понять при деплое, что бинарник верну ошибку)
-{
+) -> () {   // TODO перед релизом понять, имеет ли значение, что именно возвращать в main. Err(...) для Result. Или просто void. (Как понять при деплое, что бинарник верну ошибку)
     if let Err(error) = RunServerHandler::handle().await {
         println!("{}", error);
     }

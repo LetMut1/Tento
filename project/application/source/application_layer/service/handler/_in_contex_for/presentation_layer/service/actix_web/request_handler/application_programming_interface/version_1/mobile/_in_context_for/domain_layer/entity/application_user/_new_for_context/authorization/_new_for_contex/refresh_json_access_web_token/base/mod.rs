@@ -46,11 +46,9 @@ impl Base {
 
             if let Some(mut json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
                 redis_connection, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
-            )?
-            {
+            )? {
                 if json_access_web_token.get_id().as_bytes()[..] == json_refresh_web_token_.get_json_access_web_token_id().as_bytes()[..] 
-                    && Encoder::is_valid(&json_refresh_web_token_, json_refresh_web_token.as_str())? 
-                {
+                    && Encoder::is_valid(&json_refresh_web_token_, json_refresh_web_token.as_str())? {
                     Refresher::refresh(&mut json_refresh_web_token_);
 
                     RepositoryProxy::update(redis_connection, &json_refresh_web_token_)?;

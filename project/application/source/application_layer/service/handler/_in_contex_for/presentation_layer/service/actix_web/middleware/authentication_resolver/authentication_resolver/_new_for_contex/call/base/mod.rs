@@ -28,8 +28,7 @@ impl Base {
                     if !ExpirationTimeResolver::is_expired(&json_access_web_token)? {
                         if !JsonAccessWebTokenBlackListDataProviderRedis::is_exist_by_json_access_token_id(
                             &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool.clone().into_inner())?, json_access_web_token.get_id()
-                        )? 
-                        {
+                        )? {
                             service_request.extensions_mut().insert(json_access_web_token);     // TODO В такой реализации При инъекции в РекуестХэндлер этот объкт будет склонирован. А нужно передать его самого. Актикс сейчас не позволякет это сделать. Проверить позже
 
                             return Ok(());

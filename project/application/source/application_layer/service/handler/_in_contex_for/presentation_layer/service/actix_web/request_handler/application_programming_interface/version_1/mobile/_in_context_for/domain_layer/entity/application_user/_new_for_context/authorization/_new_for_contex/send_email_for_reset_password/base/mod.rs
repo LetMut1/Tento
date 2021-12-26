@@ -24,8 +24,7 @@ impl Base {
 
         if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(
             &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, &application_user_id
-        )? 
-        {
+        )? {
             if let Some(application_user) = ApplicationUserDataProviderPostgresql::find_by_id(
                 &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?,
                 &application_user_id

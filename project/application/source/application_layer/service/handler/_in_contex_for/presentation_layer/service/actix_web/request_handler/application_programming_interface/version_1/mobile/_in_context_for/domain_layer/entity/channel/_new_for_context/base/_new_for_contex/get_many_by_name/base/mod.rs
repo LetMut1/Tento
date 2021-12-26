@@ -18,8 +18,7 @@ impl Base {
     pub fn handle(
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
         request: Request
-    ) -> Result<Response, BaseError> 
-    {
+    ) -> Result<Response, BaseError> {
         let (
             mut channel_name,
             mut requery_channel_name,
