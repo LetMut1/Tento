@@ -45,7 +45,7 @@ Existing values for -ERROR_CODE- can be founded here:
 application/source/source/domain_layer/service/_in_context_for/domain_layer/error/_new_for_context/communication_code_storage/mod.rs
 ```
 # ApplicationUser authorized area:
-Every endpoint at this area requires an existing of JsonAccessWebToken, wich should be sended as ``'X-Auth-Token'`` parameter
+Every endpoint at this area requires an existing of JsonAccessWebToken, wich should be sended as ``'X-Jawt'`` parameter
 of HTTP/S Request Header. Response of every endpoint can contain -ERROR_CODE- equals ``'enjsacweto03'``
 ## /v1/m/a/c/gmbn GET
 Returns Channel registry by Channel Name.

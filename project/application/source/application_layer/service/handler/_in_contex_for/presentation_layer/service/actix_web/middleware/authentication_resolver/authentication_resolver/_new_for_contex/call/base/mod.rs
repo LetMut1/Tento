@@ -22,7 +22,7 @@ impl Base {
         service_request: &'a ServiceRequest
     ) -> Result<(), BaseError> {
         if let Some(aggregate_connection_pool) = service_request.app_data::<Data<AggregateConnectionPool>>() {
-            if let Some(x_auth_token_header_value) = service_request.headers().get("X-Auth-Token") {
+            if let Some(x_auth_token_header_value) = service_request.headers().get("X-Jawt") {
                 if let Ok(header_value) = x_auth_token_header_value.to_str() {
                     let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(header_value)?;
                     if !ExpirationTimeResolver::is_expired(&json_access_web_token)? {
