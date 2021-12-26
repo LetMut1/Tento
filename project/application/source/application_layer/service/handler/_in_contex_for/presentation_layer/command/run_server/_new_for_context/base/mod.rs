@@ -30,34 +30,31 @@ impl Base {
     const DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
     pub async fn handle(
+        binary_file_path: String
     ) -> Result<(), BaseError> {
-        Self::load_and_check_environment_variables()?;
+        Self::load_and_check_environment_variables(binary_file_path.as_str())?;
         Self::configure_log()?;
         Self::run_http_server().await?;
 
         return Ok(());
     }
 
-    fn load_and_check_environment_variables(
+    fn load_and_check_environment_variables<'a>(
+        binary_file_path: &'a str
     ) -> Result<(), BaseError> {
-        // TODO Ближе к релизу разобраться, как лучше работать с файлами. (То есть, как использовать относительный(relative) пути.)
-        // TODO !!!!!!!!!!! Разобраться с путями для ЛООГГЕРА  !!!!!!!!!!!!!!!!
-        // TODO Переписать содержимое метода в контексте нахождения директории для .env --------------------------------------------- 
-        match env::current_exe()?.parent() {    // TODO не нравится способ взятия и нахождения директории
+        match Path::new(binary_file_path).parent() {
             Some(file_path) => {
-                let file_path_buffer: PathBuf = file_path.join(&Path::new("../../source"));
-
-                let production_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME));
+                let production_environment_file_path_buffer: PathBuf = file_path.join(&Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME));
                 if production_environment_file_path_buffer.exists() {
                     dotenv::from_path(production_environment_file_path_buffer.as_path())?;
 
                     env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_TRUE)
                 } else {
-                    let development_local_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new(Self::DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME));
+                    let development_local_environment_file_path_buffer: PathBuf = file_path.join(&Path::new(Self::DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME));
                     if development_local_environment_file_path_buffer.exists() {
                         dotenv::from_path(development_local_environment_file_path_buffer.as_path())?;
                     } else {
-                        let development_environment_file_path_buffer: PathBuf = file_path_buffer.join(&Path::new(Self::DEVELOPMENT_ENVIRONMENT_FILE_NAME));
+                        let development_environment_file_path_buffer: PathBuf = file_path.join(&Path::new(Self::DEVELOPMENT_ENVIRONMENT_FILE_NAME));
                         if development_environment_file_path_buffer.exists() {
                             dotenv::from_path(development_environment_file_path_buffer.as_path())?;
                         } else {

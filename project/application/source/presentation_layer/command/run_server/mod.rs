@@ -5,13 +5,13 @@ use application::application_layer::service::handler::_in_contex_for::presentati
 
 #[actix_web::main]
 async fn main(
-) -> () {   // TODO перед релизом понять, имеет ли значение, что именно возвращать в main. Err(...) для Result. Или просто void. (Как понять при деплое, что бинарник верну ошибку)
-    if let Err(error) = RunServerHandler::handle().await {
+) -> () {
+    if let Err(error) = RunServerHandler::handle(std::file!().to_string()).await {
         println!("{}", error);
     }
 
     return ();
-}
+}       // TODO перед релизом понять, имеет ли значение, что именно возвращать в main. Err(...) для Result. Или просто void. (Как понять при деплое, что бинарник верну ошибку)
 
 // TODO Do not remove this block until the problems have been fixed {
     // TODO Ограничивать количество запросов с одного адреса на специфические урлы. (Например, отправка писем, и так далее)
