@@ -41,7 +41,7 @@ impl Base {
 
         let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(json_access_web_token.as_str())?;
 
-        if ExpirationTimeResolver::is_expired(&json_access_web_token)? {
+        if ExpirationTimeResolver::is_expired(&json_access_web_token)? {        // TODO TODO TODO TODO СДелать интервал, когда можео менять. На 3 часа раньше, чем срок экспирации, например
             let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
             if let Some(mut json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
