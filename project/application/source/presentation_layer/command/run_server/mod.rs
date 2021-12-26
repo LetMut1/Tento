@@ -20,7 +20,6 @@ async fn main(
     // Вопрос. Испоьзуется оптимистичная блокировка, то есть, один процесс в одно время, второй ждет или отменяется?)
     // TODO Разобраться в том, как Правильно делать процессы в Редис Атомарными ( аналогия транзакции). Например, безопасное удаление.
     // TODO  Более короткоживужие JAWT для админов разного рода
-    // TODO  Query deserialize error: missing field `n` ( Убрать дефотлный ответ) Послать неправильные запросы, (пустой параметр, Нулл - поэкспериментировать)
     // TODO  Спрятать Апи (Сделать непонятным)
     // TODO  Attack types (DDOS, for example)
     // TODO  Header Connection: Keep-alive - disable https://developer.mozilla.org/ru/docs/Web/HTTP/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BA%D0%B8/Connection
