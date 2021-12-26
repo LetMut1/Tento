@@ -16,7 +16,7 @@ impl ApplicationUserLogInTokenStateManagerRedisTrait for Base {
         application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
     ) -> Result<(), Self::Error> {
         connection.set_ex::<String, String, ()>(
-            StorageKeyResolver::get_repository_application_user_log_in_token_first(
+            StorageKeyResolver::get_2(
                 application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
             ), 
             serde_json::to_string(&Common::new(application_user_log_in_token))?,
@@ -31,7 +31,7 @@ impl ApplicationUserLogInTokenStateManagerRedisTrait for Base {
         application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
     ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
-            StorageKeyResolver::get_repository_application_user_log_in_token_first(
+            StorageKeyResolver::get_2(
                 application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
             )
         )?;
@@ -44,7 +44,7 @@ impl ApplicationUserLogInTokenStateManagerRedisTrait for Base {
         application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
     ) -> Result<(), Self::Error> {
         connection.expire::<String, ()>(
-            StorageKeyResolver::get_repository_application_user_log_in_token_first(
+            StorageKeyResolver::get_2(
                 application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
             ),
             (ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)

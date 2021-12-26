@@ -14,7 +14,7 @@ impl JsonAccessWebTokenBlackListDataProviderRedisTrait for Base {
         json_access_web_token_id: &'a str
     ) -> Result<bool, Self::Error> {
         let result: bool = connection.exists::<String, bool>(
-            StorageKeyResolver::get_repository_json_access_web_token_bkack_list_first(json_access_web_token_id)
+            StorageKeyResolver::get_4(json_access_web_token_id)
         )?;
 
         return Ok(result);

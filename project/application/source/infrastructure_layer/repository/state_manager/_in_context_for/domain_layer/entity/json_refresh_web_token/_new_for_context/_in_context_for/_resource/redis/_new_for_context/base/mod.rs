@@ -17,7 +17,7 @@ impl JsonRefreshWebTokenStateManagerRedisTrait for Base {
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
         connection.set_ex::<String, String, ()>(
-            StorageKeyResolver::get_repository_json_refresh_web_token_first(
+            StorageKeyResolver::get_5(
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
             ), 
             serde_json::to_string(&Common::new(json_refresh_web_token))?,
@@ -42,7 +42,7 @@ impl JsonRefreshWebTokenStateManagerRedisTrait for Base {
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
-            StorageKeyResolver::get_repository_json_refresh_web_token_first(
+            StorageKeyResolver::get_5(
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
             )
         )?;

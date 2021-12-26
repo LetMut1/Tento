@@ -18,7 +18,7 @@ impl ApplicationUserLogInTokenDataProviderRedisTrait for Base {
         device_id: &'b str,
     ) -> Result<Option<ApplicationUserLogInToken<'b>>, Self::Error> {
         match connection.get::<String, Option<String>>(
-            StorageKeyResolver::get_repository_application_user_log_in_token_first(application_user_id, device_id)
+            StorageKeyResolver::get_2(application_user_id, device_id)
         )? {
             Some(json_encoded_common) => {
                 let common: Common<'static> = serde_json::from_str::<'_, Common<'static>>(json_encoded_common.as_str())?;

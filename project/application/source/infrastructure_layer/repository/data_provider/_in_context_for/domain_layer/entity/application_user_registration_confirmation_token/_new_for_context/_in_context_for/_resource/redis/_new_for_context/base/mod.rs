@@ -17,7 +17,7 @@ impl ApplicationUserRegistrationConfirmationTokenDataProviderRedisTrait for Base
         application_user_email: &'b str
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'b>>, Self::Error> {
         match connection.get::<String, Option<String>>(
-            StorageKeyResolver::get_repository_application_user_registration_confirmation_token_first(application_user_email)
+            StorageKeyResolver::get_1(application_user_email)
         )? {
             Some(json_encoded_common) => {
                 let common: Common<'static> = serde_json::from_str::<'_, Common<'static>>(json_encoded_common.as_str())?;

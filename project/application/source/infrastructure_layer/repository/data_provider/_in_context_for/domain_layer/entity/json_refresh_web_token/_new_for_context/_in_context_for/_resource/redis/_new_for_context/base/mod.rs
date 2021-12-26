@@ -18,7 +18,7 @@ impl JsonRefreshWebTokenDataProviderRedisTrait for Base {
         application_user_log_in_token_device_id: &'a str,
     ) -> Result<Option<JsonRefreshWebToken<'static>>, Self::Error> {
         match connection.get::<String, Option<String>>(
-            StorageKeyResolver::get_repository_json_refresh_web_token_first(application_user_id, application_user_log_in_token_device_id)
+            StorageKeyResolver::get_5(application_user_id, application_user_log_in_token_device_id)
         )? {
             Some(json_encoded_common) => {
                 let common: Common<'static> = serde_json::from_str::<'_, Common<'static>>(json_encoded_common.as_str())?;

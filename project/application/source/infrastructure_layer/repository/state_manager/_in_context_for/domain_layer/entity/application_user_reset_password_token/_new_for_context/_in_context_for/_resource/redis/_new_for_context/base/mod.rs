@@ -16,7 +16,7 @@ impl ApplicationUserResetPasswordTokenStateManagerRedisTrait for Base {
         application_user_reset_password_token: &'a ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), Self::Error> {
         connection.set_ex::<String, String, ()>(
-            StorageKeyResolver::get_repository_application_user_reset_password_token_first(
+            StorageKeyResolver::get_3(
                 application_user_reset_password_token.get_application_user_id()
             ), 
             serde_json::to_string(&Common::new(application_user_reset_password_token))?,
@@ -31,7 +31,7 @@ impl ApplicationUserResetPasswordTokenStateManagerRedisTrait for Base {
         application_user_reset_password_token: &'a ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
-            StorageKeyResolver::get_repository_application_user_reset_password_token_first(
+            StorageKeyResolver::get_3(
                 application_user_reset_password_token.get_application_user_id()
             )
         )?;
@@ -44,7 +44,7 @@ impl ApplicationUserResetPasswordTokenStateManagerRedisTrait for Base {
         application_user_reset_password_token: &'a ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), Self::Error> {
         connection.expire::<String, ()>(
-            StorageKeyResolver::get_repository_application_user_reset_password_token_first(
+            StorageKeyResolver::get_3(
                 application_user_reset_password_token.get_application_user_id()
             ),
             (ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)

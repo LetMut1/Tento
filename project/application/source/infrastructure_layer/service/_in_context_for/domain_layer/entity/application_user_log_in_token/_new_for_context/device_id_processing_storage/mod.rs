@@ -15,7 +15,7 @@ impl DeviceIdProcessingStorage {
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), BaseError> {
         connection.set_ex::<String, String, ()>(
-            StorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id), 
+            StorageKeyResolver::get_6(application_user_id), 
             application_user_log_in_token_device_id_registry.join(Self::SEPARATOR),
             (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
@@ -38,7 +38,7 @@ impl DeviceIdProcessingStorage {
         application_user_id: &'a i64,
     ) -> Result<(), BaseError> {
         connection.del::<String, ()>(
-            StorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id)
+            StorageKeyResolver::get_6(application_user_id)
         )?;
         
         return Ok(());
@@ -49,7 +49,7 @@ impl DeviceIdProcessingStorage {
         application_user_id: &'a i64
     ) -> Result<(), BaseError> {
         connection.expire::<String, ()>(
-            StorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id),
+            StorageKeyResolver::get_6(application_user_id),
             (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
 
@@ -61,7 +61,7 @@ impl DeviceIdProcessingStorage {
         application_user_id: &'a i64
     ) -> Result<Option<Vec<String>>, BaseError> {
         if let Some(application_user_log_in_token_device_id_sequence) = connection.get::<String, Option<String>>(
-            StorageKeyResolver::get_service_json_refresh_web_token_first(application_user_id)
+            StorageKeyResolver::get_6(application_user_id)
         )?
         {
             let mut application_user_log_in_token_device_id_registry: Vec<String> = Vec::new();

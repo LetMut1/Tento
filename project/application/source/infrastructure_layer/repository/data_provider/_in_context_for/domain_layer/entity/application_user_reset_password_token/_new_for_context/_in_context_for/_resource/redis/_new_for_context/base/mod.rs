@@ -17,7 +17,7 @@ impl ApplicationUserResetPasswordTokenDataProviderRedisTrait for Base {
         application_user_id: &'b i64
     ) -> Result<Option<ApplicationUserResetPasswordToken<'b>>, Self::Error> {
         match connection.get::<String, Option<String>>(
-            StorageKeyResolver::get_repository_application_user_reset_password_token_first(application_user_id)
+            StorageKeyResolver::get_3(application_user_id)
         )? {
             Some(json_encoded_common) => {
                 let common: Common<'static> = serde_json::from_str::<'_, Common<'static>>(json_encoded_common.as_str())?;
