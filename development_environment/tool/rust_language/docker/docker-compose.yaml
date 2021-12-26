@@ -16,3 +16,8 @@ services:
         restart: always
         tty: true
         init: true
+
+networks:
+    default:
+        name: resource
+        driver: bridge
