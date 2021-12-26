@@ -191,7 +191,7 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
                             SET ("
                             .to_string()
                             + column_name_registry_description_.as_str()
-                            + ") = ("
+                            + ") = ROW("
                             + column_value_registry_description_.as_str()
                             + ") \
                             WHERE au.id = $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
