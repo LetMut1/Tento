@@ -96,6 +96,42 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         return Ok(None);
     }
 
+    fn find_by_nickname<'a>(
+        connection: &'a mut Connection,
+        nickname: &'a str
+    ) -> Result<Option<ApplicationUser>, Self::Error> {
+        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+
+        let query: &'static str = 
+            "SELECT \
+                au.id AS i, \
+                au.email AS e, \
+                au.nickname AS n, \
+                au.password_hash AS ph, \
+                au.created_at::TEXT AS ca \
+            FROM public.application_user au \
+            WHERE au.nickname = $1;";
+
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::TEXT);
+
+        let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+
+        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        if !row_registry.is_empty() {
+            return Ok(Some(
+                ApplicationUser::new(
+                    Some(row_registry[0].try_get::<'_, usize, i64>(0)?),
+                    row_registry[0].try_get::<'_, usize, String>(1)?,
+                    row_registry[0].try_get::<'_, usize, String>(2)?,
+                    row_registry[0].try_get::<'_, usize, String>(3)?,
+                    row_registry[0].try_get::<'_, usize, String>(4)?
+                )
+            ));
+        }
+
+        return Ok(None);
+    }
+
     fn find_by_id<'a>(
         connection: &'a mut Connection,
         id: &'a i64

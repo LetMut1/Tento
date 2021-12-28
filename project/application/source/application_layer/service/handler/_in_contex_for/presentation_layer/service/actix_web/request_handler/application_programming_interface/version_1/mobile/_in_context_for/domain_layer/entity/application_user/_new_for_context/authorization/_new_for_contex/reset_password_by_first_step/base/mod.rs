@@ -17,7 +17,7 @@ use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer:
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::connection_extractor::ConnectionExtractor;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::Base as Request;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::Base as Response;
-use redis::Connection;
+use redis::Connection as RedisConnection;
 use std::sync::Arc;
 
 pub struct Base;
@@ -43,7 +43,7 @@ impl Base {
                 }
             }
 
-            let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+            let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
             match ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(redis_connection, application_user_id)? {
                 Some(application_user_reset_password_token_) => {

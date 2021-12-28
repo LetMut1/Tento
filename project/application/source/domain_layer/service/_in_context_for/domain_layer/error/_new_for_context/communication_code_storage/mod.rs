@@ -4,7 +4,7 @@ impl CommunicationCodeStorage {
     pub const ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST: &'static str = "enapus01";
     pub const ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST: &'static str = "enapus02";
     pub const ENTITY_APPLICATION_USER_NOT_FOUND: &'static str = "enapus03";
-    pub const ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_PASSWORD: &'static str = "enapus04";
+    pub const ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD: &'static str = "enapus04";
     pub const ENTITY_APPLICATION_USER_INVALID_EMAIL: &'static str = "enapus05";
     pub const ENTITY_APPLICATION_USER_INVALID_NICKNAME: &'static str = "enapus06";
     pub const ENTITY_APPLICATION_USER_INVALID_PASSWORD: &'static str = "enapus07";

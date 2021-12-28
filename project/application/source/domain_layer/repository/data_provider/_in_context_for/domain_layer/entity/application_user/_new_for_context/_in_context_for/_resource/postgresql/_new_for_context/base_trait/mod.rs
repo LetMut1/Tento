@@ -20,6 +20,11 @@ pub trait BaseTrait {
         email: &'a str
     ) -> Result<Option<ApplicationUser>, Self::Error>;
 
+    fn find_by_nickname<'a>(
+        connection: &'a mut Connection,
+        nickname: &'a str
+    ) -> Result<Option<ApplicationUser>, Self::Error>;
+
     fn find_by_id<'a>(
         connection: &'a mut Connection,
         id: &'a i64

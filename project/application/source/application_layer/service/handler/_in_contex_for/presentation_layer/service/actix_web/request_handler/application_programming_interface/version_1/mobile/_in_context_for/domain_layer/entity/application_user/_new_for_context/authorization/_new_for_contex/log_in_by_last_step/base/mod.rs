@@ -28,7 +28,7 @@ use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as Request;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as Response;
-use redis::Connection;
+use redis::Connection as RedisConnection;
 use std::sync::Arc;
 
 pub struct Base;
@@ -48,7 +48,7 @@ impl Base {
             String
         ) = request.into_inner();
 
-        let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+        let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
 
         if let Some(mut application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
             redis_connection, &application_user_id, application_user_log_in_token_device_id.as_str()

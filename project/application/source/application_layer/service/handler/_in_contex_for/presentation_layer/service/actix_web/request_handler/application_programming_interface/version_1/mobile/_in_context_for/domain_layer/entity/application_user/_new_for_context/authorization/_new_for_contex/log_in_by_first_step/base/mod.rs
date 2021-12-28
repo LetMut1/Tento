@@ -1,4 +1,5 @@
 use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
+use crate::domain_layer::entity::application_user::ApplicationUser;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenDataProviderRedisTrait;
@@ -19,7 +20,8 @@ use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer:
 use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as Request;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as Response;
-use redis::Connection;
+use postgres::Client as PostgresqlConnection;
+use redis::Connection as RedisConnection;
 use std::sync::Arc;
 
 pub struct Base;
@@ -31,7 +33,7 @@ impl Base {
     ) -> Result<Response, BaseError> {
         let (
             application_user_log_in_token_device_id, 
-            application_user_email, 
+            application_user_email_or_application_user_nickname, 
             application_user_password
         ) : (
             String,
@@ -39,55 +41,70 @@ impl Base {
             String
         ) = request.into_inner();
 
-        if let Some(application_user) = ApplicationUserDataProviderPostgresql::find_by_email(
-            &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?, application_user_email.as_str()
-        )? {
-            if ApplicationUserValidator::is_valid_password(application_user_password.as_str())
-            && ApplicationUserValidator::is_valid_password_hash(application_user_password.as_str(), application_user.get_password_hash())? {
-                let application_user_log_in_token: ApplicationUserLogInToken<'_>;
+        // TODO проверки никнейма и емелйа. Запретить в Никнейме символ СОбаки.
 
-                let application_user_id: &'_ i64;
-                match application_user.get_id() {
-                    Some(application_user_id_) => {
-                        application_user_id = application_user_id_;
+        let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
+
+        let application_user: ApplicationUser;
+        match ApplicationUserDataProviderPostgresql::find_by_email(postgresql_connection, application_user_email_or_application_user_nickname.as_str())? {
+            Some(application_user_) => {
+                application_user = application_user_;
+            },
+            None => {
+                match ApplicationUserDataProviderPostgresql::find_by_nickname(postgresql_connection, application_user_email_or_application_user_nickname.as_str())? {
+                    Some(application_user_) => {
+                        application_user = application_user_;
                     },
                     None => {
-                        return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
+                        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});
                     }
                 }
-
-                let redis_connection: &'_ mut Connection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
-
-                match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
-                    redis_connection, application_user_id, application_user_log_in_token_device_id.as_str()
-                )? {
-                    Some(application_user_log_in_token_) => {
-                        application_user_log_in_token = application_user_log_in_token_;
-
-                        ApplicationUserLogInTokenStateManagerRedis::update_expiration_time(redis_connection, &application_user_log_in_token)?;
-                    },
-                    None => {
-                        application_user_log_in_token = ApplicationUserLogInToken::new(
-                            application_user_id,
-                            application_user_log_in_token_device_id.as_str(),
-                            ValueGenerator::generate(),
-                            0
-                        );
-
-                        ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token)?;
-                    }
-                }
-
-                EmailSender::send_application_user_log_in_token(
-                    application_user_log_in_token.get_value(), application_user.get_email()
-                )?;
-
-                return Ok(Response::new(*application_user_id));
             }
-            
-            return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::WrongPassword}});
         }
 
-        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});
+        if ApplicationUserValidator::is_valid_password(application_user_password.as_str())                                                          // TODO Перенести проверку выше запросов.
+            && ApplicationUserValidator::is_valid_password_hash(application_user_password.as_str(), application_user.get_password_hash())? {
+            let application_user_log_in_token: ApplicationUserLogInToken<'_>;
+
+            let application_user_id: &'_ i64;
+            match application_user.get_id() {
+                Some(application_user_id_) => {
+                    application_user_id = application_user_id_;
+                },
+                None => {
+                    return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
+                }
+            }
+
+            let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?;
+
+            match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
+                redis_connection, application_user_id, application_user_log_in_token_device_id.as_str()
+            )? {
+                Some(application_user_log_in_token_) => {
+                    application_user_log_in_token = application_user_log_in_token_;
+
+                    ApplicationUserLogInTokenStateManagerRedis::update_expiration_time(redis_connection, &application_user_log_in_token)?;
+                },
+                None => {
+                    application_user_log_in_token = ApplicationUserLogInToken::new(
+                        application_user_id,
+                        application_user_log_in_token_device_id.as_str(),
+                        ValueGenerator::generate(),
+                        0
+                    );
+
+                    ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token)?;
+                }
+            }
+
+            EmailSender::send_application_user_log_in_token(
+                application_user_log_in_token.get_value(), application_user.get_email()
+            )?;
+
+            return Ok(Response::new(*application_user_id));
+        }
+            
+        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::WrongPassword}});
     }
 }

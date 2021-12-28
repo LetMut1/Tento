@@ -356,7 +356,7 @@ impl Authorization {
                                             ApplicationUserError::NotFound |
                                             ApplicationUserError::WrongPassword => {
                                                 return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_PASSWORD
+                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
                                                 );
                                             },
                                             _ => {
