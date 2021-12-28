@@ -353,6 +353,7 @@ impl Authorization {
                                 match entity_error {
                                     EntityError::ApplicationUserError {application_user_error} => {
                                         match application_user_error {
+                                            ApplicationUserError::InvalidNickname |
                                             ApplicationUserError::InvalidPassword |
                                             ApplicationUserError::NotFound |
                                             ApplicationUserError::WrongPassword => {

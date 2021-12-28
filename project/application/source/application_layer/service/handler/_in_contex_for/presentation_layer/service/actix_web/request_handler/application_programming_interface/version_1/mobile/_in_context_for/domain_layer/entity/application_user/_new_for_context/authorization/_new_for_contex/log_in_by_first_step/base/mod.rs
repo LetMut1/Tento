@@ -42,17 +42,20 @@ impl Base {
         ) = request.into_inner();
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
-
-            // TODO проверки никнейма и емелйа. Запретить в Никнейме символ СОбаки.
-
             let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractor::get_postgresql_connection(&aggregate_connection_pool)?;
 
             let application_user: ApplicationUser;
-            match ApplicationUserDataProviderPostgresql::find_by_email(postgresql_connection, application_user_email_or_application_user_nickname.as_str())? {
-                Some(application_user_) => {
-                    application_user = application_user_;
-                },
-                None => {
+            if ApplicationUserValidator::is_valid_email(application_user_email_or_application_user_nickname.as_str())? {
+                match ApplicationUserDataProviderPostgresql::find_by_email(postgresql_connection, application_user_email_or_application_user_nickname.as_str())? {
+                    Some(application_user_) => {
+                        application_user = application_user_;
+                    },
+                    None => {
+                        return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});
+                    }
+                }
+            } else {
+                if ApplicationUserValidator::is_valid_nickname(application_user_email_or_application_user_nickname.as_str()) {
                     match ApplicationUserDataProviderPostgresql::find_by_nickname(postgresql_connection, application_user_email_or_application_user_nickname.as_str())? {
                         Some(application_user_) => {
                             application_user = application_user_;
@@ -61,6 +64,8 @@ impl Base {
                             return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});
                         }
                     }
+                } else {
+                    return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidNickname}});
                 }
             }
 
