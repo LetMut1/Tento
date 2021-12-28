@@ -353,6 +353,7 @@ impl Authorization {
                                 match entity_error {
                                     EntityError::ApplicationUserError {application_user_error} => {
                                         match application_user_error {
+                                            ApplicationUserError::InvalidPassword |
                                             ApplicationUserError::NotFound |
                                             ApplicationUserError::WrongPassword => {
                                                 return StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
