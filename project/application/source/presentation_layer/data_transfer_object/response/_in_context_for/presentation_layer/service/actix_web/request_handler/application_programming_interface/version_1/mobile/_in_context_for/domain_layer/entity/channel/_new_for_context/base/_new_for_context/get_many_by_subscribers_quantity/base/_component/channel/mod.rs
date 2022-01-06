@@ -2,9 +2,7 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Channel {
-    #[serde(rename = "ci")]
     channel_id: i64,
-    #[serde(rename = "csq")]
     channel_subscribers_quantity: i64,
 }
 

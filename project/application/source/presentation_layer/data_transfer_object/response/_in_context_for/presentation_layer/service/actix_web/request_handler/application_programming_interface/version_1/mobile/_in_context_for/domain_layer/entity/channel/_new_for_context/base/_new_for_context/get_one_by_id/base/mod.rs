@@ -1,24 +1,15 @@
 // use serde::Serialize;
 
 // #[derive(Serialize)]
-// pub struct Base {
-//     #[serde(rename = "cn")]
+// pub struct Base {                    // TODO Используется ли этот файл
 //     channel_name: String,
-//     #[serde(rename = "cpip")]
 //     channel_personalization_image_path: String,
-//     #[serde(rename = "cd")]
 //     channel_description: String,
-//     #[serde(rename = "csq")]
 //     channel_subscribers_quantity: i64,
-//     #[serde(rename = "cpmq")]
 //     channel_public_marks_quantity: i64,
-//     #[serde(rename = "chmq")]
 //     channel_hidden_marks_quantity: i64,
-//     #[serde(rename = "crq")]
 //     channel_reactions_quantity: i64,
-//     #[serde(rename = "cvq")]
 //     channel_viewing_quantity: i64,
-//     #[serde(rename = "cca")]
 //     channel_created_at: String
 // }
 

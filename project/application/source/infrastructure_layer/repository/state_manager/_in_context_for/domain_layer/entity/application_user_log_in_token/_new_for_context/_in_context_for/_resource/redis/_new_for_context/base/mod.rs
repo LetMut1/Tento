@@ -15,11 +15,9 @@ impl ApplicationUserLogInTokenStateManagerRedisTrait for Base {
         connection: &'a mut Connection,
         application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
     ) -> Result<(), Self::Error> {
-        connection.set_ex::<String, String, ()>(
-            StorageKeyResolver::get_2(
-                application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
-            ), 
-            serde_json::to_string(&Common::new(application_user_log_in_token))?,
+        connection.set_ex::<String, Vec<u8>, ()>(
+            StorageKeyResolver::get_2(application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()), 
+            rmp_serde::to_vec(&Common::new(application_user_log_in_token))?,
             (ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
         
@@ -31,9 +29,7 @@ impl ApplicationUserLogInTokenStateManagerRedisTrait for Base {
         application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
     ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
-            StorageKeyResolver::get_2(
-                application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
-            )
+            StorageKeyResolver::get_2(application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id())
         )?;
         
         return Ok(());
@@ -44,9 +40,7 @@ impl ApplicationUserLogInTokenStateManagerRedisTrait for Base {
         application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
     ) -> Result<(), Self::Error> {
         connection.expire::<String, ()>(
-            StorageKeyResolver::get_2(
-                application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
-            ),
+            StorageKeyResolver::get_2(application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()),
             (ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
 

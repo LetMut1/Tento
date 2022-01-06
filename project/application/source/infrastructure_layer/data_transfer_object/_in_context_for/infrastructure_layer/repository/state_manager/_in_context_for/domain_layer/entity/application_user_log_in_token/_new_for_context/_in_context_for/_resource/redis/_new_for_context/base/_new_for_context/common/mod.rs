@@ -5,9 +5,7 @@ use std::borrow::Cow;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Common<'a> {
-    #[serde(rename = "aulitv")]
     application_user_log_in_token_value: Cow<'a, str>,
-    #[serde(rename = "aulitwetq")]
     application_user_log_in_token_wrong_enter_tries_quantity: Cow<'a, u8>
 }
 

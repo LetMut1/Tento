@@ -18,26 +18,27 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
-actix-service = {version = "1.0.6", default-features = true, optional = false}
-actix-web = {version = "3.3.2", default-features = true, optional = false}
-anyhow = {version = "1.0.41", default-features = true, optional = false}
-base64 = {version = "0.13.0", default-features = true, optional = false}
-chrono = {version = "0.4.19", default-features = true, optional = false}
-dotenv = {version = "0.15.0", default-features = true, optional = false}
-futures = {version = "0.3.13", default-features = true, optional = false}
-hex = {version = "0.4.2", default-features = true, optional = false}
-lettre = {version = "0.9", default-features = true, optional = false}
-lettre_email = {version = "0.9", default-features = true, optional = false}
-log = {version = "0.4.14", default-features = true, optional = false}
-log4rs = {version = "1.0.0", default-features = true, features = ["all_components"], optional = false}
-postgres = {version = "0.19.1", default-features = true, optional = false}
-r2d2 = {version = "0.8.9", default-features = true, optional = false}
-r2d2_postgres = {version = "0.18.1", default-features = true, optional = false}
-r2d2_redis = {version = "0.14.0", default-features = true, optional = false}
-redis = {version = "0.20.0", default-features = true, features = ["r2d2"], optional = false}
-regex = {version = "1.4.3", default-features = true, optional = false}
-rust-argon2 = {version = "0.8", default-features = true, optional = false}
-rust-crypto = {version = "0.2.36", default-features = true, optional = false}
-serde = {version = "1.0.123", default-features = true, features = ["derive"], optional = false}
-serde_json = {version = "1.0", default-features = true, optional = false}
-uuid = {version = "0.8.1", default-features = true, features = ["v4"], optional = false}
+actix-service = {version = "^1.0", default-features = true, optional = false}
+actix-web = {version = "^3.3", default-features = true, optional = false}
+anyhow = {version = "^1.0", default-features = true, optional = false}
+base64 = {version = "^0.13", default-features = true, optional = false}
+chrono = {version = "^0.4", default-features = true, optional = false}
+dotenv = {version = "^0.15", default-features = true, optional = false}
+futures = {version = "^0.3", default-features = true, optional = false}
+hex = {version = "^0.4", default-features = true, optional = false}
+lettre = {version = "^0.9", default-features = true, optional = false}
+lettre_email = {version = "^0.9", default-features = true, optional = false}
+log = {version = "^0.4", default-features = true, optional = false}
+log4rs = {version = "^1.0", default-features = true, features = ["all_components"], optional = false}
+postgres = {version = "^0.19", default-features = true, optional = false}
+r2d2 = {version = "^0.8", default-features = true, optional = false}
+r2d2_postgres = {version = "^0.18", default-features = true, optional = false}
+r2d2_redis = {version = "^0.14", default-features = true, optional = false}
+redis = {version = "^0.20", default-features = true, features = ["r2d2"], optional = false}
+regex = {version = "^1.4", default-features = true, optional = false}
+rmp-serde = {version = "^0.15", default-features = true, optional = false}
+rust-argon2 = {version = "^0.8", default-features = true, optional = false}
+rust-crypto = {version = "^0.2", default-features = true, optional = false}
+serde = {version = "^1.0", default-features = true, features = ["derive"], optional = false}
+serde_json = {version = "^1.0", default-features = true, optional = false}
+uuid = {version = "^0.8", default-features = true, features = ["v4"], optional = false}

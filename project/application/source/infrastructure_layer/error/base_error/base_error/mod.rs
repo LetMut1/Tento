@@ -13,6 +13,8 @@ use postgres::Error as PostgresqlError;
 use r2d2::Error as R2d2Error;
 use redis::RedisError;
 use regex::Error as RegexError;
+use rmp_serde::decode::Error as RmpSerdeDecodeError;
+use rmp_serde::encode::Error as RmpSerdeEncodeError;
 use serde_json::Error as SerdeJsonError;
 use std::convert::From;
 use std::env::VarError;
@@ -151,6 +153,22 @@ impl From<SerdeJsonError> for BaseError {
         serde_json_error: SerdeJsonError
     ) -> Self {
         return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("SerdeJsonError", serde_json_error)}};
+    }
+}
+
+impl From<RmpSerdeEncodeError> for BaseError {
+    fn from(
+        rmp_serde_encode_error: RmpSerdeEncodeError
+    ) -> Self {
+        return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("RmpSerdeEncodeError", rmp_serde_encode_error)}};
+    }
+}
+
+impl From<RmpSerdeDecodeError> for BaseError {
+    fn from(
+        rmp_serde_decode_error: RmpSerdeDecodeError
+    ) -> Self {
+        return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("RmpSerdeEncodeError", rmp_serde_decode_error)}};
     }
 }
 

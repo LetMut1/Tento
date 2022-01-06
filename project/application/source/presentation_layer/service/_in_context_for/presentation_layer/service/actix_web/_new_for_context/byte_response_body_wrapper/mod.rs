@@ -4,28 +4,28 @@ use crate::presentation_layer::data_transfer_object::_in_context_for::presentati
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use serde::Serialize;
 
-pub struct StandardJsonResponseBodyWrapper;
+pub struct ByteResponseBodyWrapper;
 
-impl StandardJsonResponseBodyWrapper {
+impl ByteResponseBodyWrapper {
     const SUCCESS_RESULT: SuccessResult = SuccessResult::new();
 
     pub fn wrap_for_success(
-    ) -> Result<String, BaseError> {
-        return Ok(serde_json::to_string(&Self::SUCCESS_RESULT)?);
+    ) -> Result<Vec<u8>, BaseError> {
+        return Ok(rmp_serde::to_vec(&Self::SUCCESS_RESULT)?);
     }
 
     pub fn wrap_for_success_with_body<S>(
         body: S
-    ) -> Result<String, BaseError>
+    ) -> Result<Vec<u8>, BaseError>
     where
         S: Serialize
     {
-        return Ok(serde_json::to_string(&SuccessResultWithBody::new(body))?);
+        return Ok(rmp_serde::to_vec(&SuccessResultWithBody::new(body))?);
     }
 
     pub fn wrap_for_fail_with_code(
         code: &'static str
-    ) -> Result<String, BaseError> {
-        return Ok(serde_json::to_string(&FailResultWithCode::new(code))?);
+    ) -> Result<Vec<u8>, BaseError> {
+        return Ok(rmp_serde::to_vec(&FailResultWithCode::new(code))?);
     }
 }

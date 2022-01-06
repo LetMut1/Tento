@@ -3,7 +3,6 @@ use serde::Serialize;
 
 #[derive(Serialize, Debug)]
 pub struct HeaderCommon<'a> {
-    #[serde(rename = "jawtht")]
     json_access_web_token_header_type: &'a str,
 }
 

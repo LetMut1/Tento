@@ -2,9 +2,7 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct FailResultWithCode {
-    #[serde(rename = "s")]
     success: bool,
-    #[serde(rename = "c")]
     code: &'static str
 }
 

@@ -21,6 +21,14 @@ services:
             context: ./service/redis
             dockerfile: dockerfile
         restart: always
+    redis_client:
+        container_name: memis_redis_client
+        build:
+            context: ./service/redis_client
+            dockerfile: dockerfile
+        ports:
+        - 5001:5001
+        restart: always
     mailhog:
         container_name: memis_mailhog
         build:

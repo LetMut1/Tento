@@ -2,7 +2,6 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Base {
-    #[serde(rename = "r")]
     result: bool
 }
 

@@ -2,23 +2,14 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Channel {
-    #[serde(rename = "ci")]
     channel_id: i64,
-    #[serde(rename = "cn")]
     channel_name: String,
-    #[serde(rename = "cpip")]
     channel_personalization_image_path: String,
-    #[serde(rename = "csq")]
     channel_subscribers_quantity: i64,
-    #[serde(rename = "cpmq")]
     channel_public_marks_quantity: i64,
-    #[serde(rename = "chmq")]
     channel_hidden_marks_quantity: i64,
-    #[serde(rename = "crq")]
     channel_reactions_quantity: i64,
-    #[serde(rename = "cvq")]
     channel_viewing_quantity: i64,
-    #[serde(rename = "cca")]
     channel_created_at: String
 }
 

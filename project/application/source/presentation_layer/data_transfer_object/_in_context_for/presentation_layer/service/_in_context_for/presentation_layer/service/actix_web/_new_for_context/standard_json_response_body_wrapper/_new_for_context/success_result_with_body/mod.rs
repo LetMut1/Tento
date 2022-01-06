@@ -5,9 +5,7 @@ pub struct SuccessResultWithBody<S>
 where
     S: Serialize
 {
-    #[serde(rename = "s")]
     success: bool,
-    #[serde(rename = "b")]
     body: S
 }
 

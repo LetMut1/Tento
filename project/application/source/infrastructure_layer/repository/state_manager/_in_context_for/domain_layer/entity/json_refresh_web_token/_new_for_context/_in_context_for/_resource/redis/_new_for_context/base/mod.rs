@@ -16,11 +16,11 @@ impl JsonRefreshWebTokenStateManagerRedisTrait for Base {
         connection: &'a mut Connection,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
-        connection.set_ex::<String, String, ()>(
+        connection.set_ex::<String, Vec<u8>, ()>(
             StorageKeyResolver::get_5(
                 json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
             ), 
-            serde_json::to_string(&Common::new(json_refresh_web_token))?,
+            rmp_serde::to_vec(&Common::new(json_refresh_web_token))?,
             (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
 

@@ -3,7 +3,6 @@ use super::_component::channel::Channel;
 
 #[derive(Serialize)]
 pub struct Base {
-    #[serde(rename = "cr")]
     channel_registry: Option<Vec<Channel>>
 }
 

@@ -16,11 +16,9 @@ impl ApplicationUserRegistrationConfirmationTokenDataProviderRedisTrait for Base
         connection: &'a mut Connection,
         application_user_email: &'b str
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'b>>, Self::Error> {
-        match connection.get::<String, Option<String>>(
-            StorageKeyResolver::get_1(application_user_email)
-        )? {
-            Some(json_encoded_common) => {
-                let common: Common<'static> = serde_json::from_str::<'_, Common<'static>>(json_encoded_common.as_str())?;
+        match connection.get::<String, Option<Vec<u8>>>(StorageKeyResolver::get_1(application_user_email))? {
+            Some(data) => {
+                let common: Common<'static> = rmp_serde::from_read_ref::<'_, Vec<u8>, Common<'static>>(&data)?;
 
                 let (
                     application_user_registration_confirmation_token_value,

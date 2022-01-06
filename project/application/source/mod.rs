@@ -17,6 +17,7 @@ extern crate r2d2_redis;
 extern crate r2d2;
 extern crate redis;
 extern crate regex;
+extern crate rmp_serde;
 extern crate serde_json;
 extern crate serde;
 extern crate uuid;

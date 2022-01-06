@@ -2,7 +2,6 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Base {
-    #[serde(rename = "aui")]
     application_user_id: i64
 }
 

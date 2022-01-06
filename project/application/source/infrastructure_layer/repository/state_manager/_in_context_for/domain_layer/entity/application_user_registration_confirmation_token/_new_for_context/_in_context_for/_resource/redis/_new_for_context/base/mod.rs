@@ -15,11 +15,9 @@ impl ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait for Base
         connection: &'a mut Connection, 
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), Self::Error> {
-        connection.set_ex::<String, String, ()>(
-            StorageKeyResolver::get_1(
-                application_user_registration_confirmation_token.get_application_user_email()
-            ), 
-            serde_json::to_string(&Common::new(application_user_registration_confirmation_token))?,
+        connection.set_ex::<String, Vec<u8>, ()>(
+            StorageKeyResolver::get_1(application_user_registration_confirmation_token.get_application_user_email()), 
+            rmp_serde::encode::to_vec(&Common::new(application_user_registration_confirmation_token))?,
             (ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
         
@@ -31,9 +29,7 @@ impl ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait for Base
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), Self::Error> {
         connection.del::<String, ()>(
-            StorageKeyResolver::get_1(
-                application_user_registration_confirmation_token.get_application_user_email()
-            )
+            StorageKeyResolver::get_1(application_user_registration_confirmation_token.get_application_user_email())
         )?;
         
         return Ok(());
@@ -44,9 +40,7 @@ impl ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait for Base
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), Self::Error> {
         connection.expire::<String, ()>(
-            StorageKeyResolver::get_1(
-                application_user_registration_confirmation_token.get_application_user_email()
-            ),
+            StorageKeyResolver::get_1(application_user_registration_confirmation_token.get_application_user_email()),
             (ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         )?;
 
