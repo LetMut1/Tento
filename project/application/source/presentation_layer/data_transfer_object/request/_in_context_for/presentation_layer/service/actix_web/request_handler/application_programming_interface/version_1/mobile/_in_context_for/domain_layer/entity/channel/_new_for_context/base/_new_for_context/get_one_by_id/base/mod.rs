@@ -1,8 +1,8 @@
 use serde::Deserialize;
+use serde::Serialize;
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Base {
-    #[serde(rename = "ci")]
     channel_id: i64,
 }
 

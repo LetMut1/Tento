@@ -1,6 +1,7 @@
+use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Channel {
     channel_id: i64,
     channel_name: String,

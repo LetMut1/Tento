@@ -12,3 +12,6 @@ pub mod reset_password_by_last_step;
 pub mod send_email_for_log_in;
 pub mod send_email_for_register;
 pub mod send_email_for_reset_password;
+
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+pub mod check_nickaname_for_existing_;

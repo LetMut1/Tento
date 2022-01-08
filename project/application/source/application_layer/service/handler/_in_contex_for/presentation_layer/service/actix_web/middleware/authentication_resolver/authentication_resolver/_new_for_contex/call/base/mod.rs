@@ -22,9 +22,9 @@ impl Base {
         service_request: &'a ServiceRequest
     ) -> Result<(), BaseError> {
         if let Some(aggregate_connection_pool) = service_request.app_data::<Data<AggregateConnectionPool>>() {
-            if let Some(x_auth_token_header_value) = service_request.headers().get("X-Jawt") {
-                if let Ok(header_value) = x_auth_token_header_value.to_str() {
-                    let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(header_value)?;
+            if let Some(x_jawt_header_value) = service_request.headers().get("X-Jawt") {
+                if let Ok(x_jawt) = x_jawt_header_value.to_str() {
+                    let json_access_web_token: JsonAccessWebToken<'_> = SerializationFormResolver::deserialize(x_jawt)?;
                     if !ExpirationTimeResolver::is_expired(&json_access_web_token)? {
                         if !JsonAccessWebTokenBlackListDataProviderRedis::is_exist_by_json_access_token_id(
                             &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool.clone().into_inner())?, json_access_web_token.get_id()

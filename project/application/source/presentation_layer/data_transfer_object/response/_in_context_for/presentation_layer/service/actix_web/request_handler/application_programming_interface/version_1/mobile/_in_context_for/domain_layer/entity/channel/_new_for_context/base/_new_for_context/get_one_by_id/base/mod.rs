@@ -1,6 +1,7 @@
+// use serde::Deserialize;
 // use serde::Serialize;
 
-// #[derive(Serialize)]
+// #[derive(Serialize, Deserialize)]
 // pub struct Base {                    // TODO Используется ли этот файл
 //     channel_name: String,
 //     channel_personalization_image_path: String,

@@ -7,14 +7,15 @@ use crate::domain_layer::error::entity_error::_component::_in_context_for::domai
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::standard_response_creator::StandardResponseCreator;
+use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::json_response_creator::JsonResponseCreator;
+use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::response_creator_trait::ResponseCreatorTrait;
+use futures::future;
 use futures::future::Either;
-use futures::future::ok as FutureOk;
 use futures::future::Ready;
 use std::task::Context;
 use std::task::Poll;
 
-pub struct AuthenticationResolver<S, B>
+pub struct AuthenticationResolver_<S, B>
 where
     S: Service<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static
@@ -22,7 +23,7 @@ where
     service: S
 }
 
-impl<S, B> AuthenticationResolver<S, B>
+impl<S, B> AuthenticationResolver_<S, B>
 where
     S: Service<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static
@@ -36,7 +37,7 @@ where
     }
 }
 
-impl<S, B> Service for AuthenticationResolver<S, B>
+impl<S, B> Service for AuthenticationResolver_<S, B>
 where
     S: Service<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static,
@@ -64,15 +65,22 @@ where
                         EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
                             match json_access_web_token_error {
                                 JsonAccessWebTokenError::AlreadyExpired => {
-                                    return Either::Right(FutureOk(service_request.into_response(
-                                        StandardResponseCreator::wrap_for_fail_with_code_and_create_ok(
-                                            CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
-                                        ).into_body()
-                                    )));
+                                    match JsonResponseCreator::wrap_for_fail_and_create_ok(
+                                        CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
+                                    ) {
+                                        Ok(http_response) => {
+                                            return Either::Right(future::ok(service_request.into_response(http_response.into_body())));
+                                        },
+                                        Err(base_error) => {
+                                            log::error!("{}", base_error);
+                    
+                                            return Either::Right(future::ok(service_request.into_response(JsonResponseCreator::create_internal_server_error().into_body())));
+                                        }
+                                    }
                                 },
                                 JsonAccessWebTokenError::InJsonAccessWebTokenBlackList |
                                 JsonAccessWebTokenError::NotFound => {
-                                    return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_unauthorized().into_body())));
+                                    return Either::Right(future::ok(service_request.into_response(JsonResponseCreator::create_unauthorized().into_body())));
                                 },
                                 _ => {
                                     unreachable!("{}", base_error);
@@ -85,13 +93,13 @@ where
                     }
                 },
                 BaseError::InvalidArgumentError => {
-                    return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_bad_request().into_body())));
+                    return Either::Right(future::ok(service_request.into_response(JsonResponseCreator::create_bad_request().into_body())));
                 },
                 BaseError::LogicError {logic_error: _} |
                 BaseError::RunTimeError {run_time_error: _} => {
                     log::error!("{}", base_error);
 
-                    return Either::Right(FutureOk(service_request.into_response(StandardResponseCreator::create_internal_server_error().into_body())));
+                    return Either::Right(future::ok(service_request.into_response(JsonResponseCreator::create_internal_server_error().into_body())));
                 }
             }
         }

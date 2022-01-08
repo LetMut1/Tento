@@ -22,6 +22,9 @@ extern crate serde_json;
 extern crate serde;
 extern crate uuid;
 
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+extern crate ureq;
+
 pub mod _resource;
 pub mod application_layer;
 pub mod domain_layer;

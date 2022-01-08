@@ -1,6 +1,7 @@
+use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Base {
     result: bool
 }

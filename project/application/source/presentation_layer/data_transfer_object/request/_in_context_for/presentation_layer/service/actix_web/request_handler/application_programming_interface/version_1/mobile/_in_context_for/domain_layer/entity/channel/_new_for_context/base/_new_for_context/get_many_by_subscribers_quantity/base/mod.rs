@@ -1,12 +1,10 @@
 use serde::Deserialize;
+use serde::Serialize;
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Base {
-    #[serde(rename = "csq")]
     channel_subscribers_quantity: Option<i64>,
-    #[serde(rename = "o")]
     order: i8,
-    #[serde(rename = "l")]
     limit: i16
 }
 

@@ -6,7 +6,7 @@ use crate::infrastructure_layer::error::base_error::_component::logic_error::Log
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
-use crate::presentation_layer::service::actix_web::middleware::service_factory::authentication_resolver_factory::AuthenticationResolverFactory;
+use crate::presentation_layer::service::actix_web::middleware::authentication_resolver_factory::AuthenticationResolverFactory;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as RequestHandlerApplicationUserAuthorization;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as RequestHandlerChannelBase;
 use log::LevelFilter;

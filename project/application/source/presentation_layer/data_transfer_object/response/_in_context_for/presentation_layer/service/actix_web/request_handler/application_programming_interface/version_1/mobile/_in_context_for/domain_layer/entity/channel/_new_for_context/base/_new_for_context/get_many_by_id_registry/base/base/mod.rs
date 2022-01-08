@@ -1,7 +1,8 @@
+use serde::Deserialize;
 use serde::Serialize;
 use super::_component::channel::Channel;
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Base {
     channel_registry: Option<Vec<Channel>>
 }

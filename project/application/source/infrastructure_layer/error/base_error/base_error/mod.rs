@@ -31,6 +31,9 @@ use super::_component::run_time_error::_component::resource_error::_component::_
 use super::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use super::_component::run_time_error::run_time_error::RunTimeError;
 
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use ureq::Error as UreqError;
+
 #[derive(Debug)]
 pub enum BaseError {                // TODO Как понять и отследить Бэктрейс ошибки? (Например, ЛогикЕррор). Нужно ли отслеживать? Или же покрыть все функциональными тестами?
     EntityError {
@@ -233,6 +236,15 @@ impl From<ChronoParseError> for BaseError {
         chrono_parse_error: ChronoParseError
     ) -> Self {
         return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("ChronoParseError", chrono_parse_error)}};
+    }
+}
+
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+impl From<UreqError> for BaseError {
+    fn from(
+        ureq_error: UreqError
+    ) -> Self {
+        return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("UreqError", ureq_error)}};
     }
 }
 

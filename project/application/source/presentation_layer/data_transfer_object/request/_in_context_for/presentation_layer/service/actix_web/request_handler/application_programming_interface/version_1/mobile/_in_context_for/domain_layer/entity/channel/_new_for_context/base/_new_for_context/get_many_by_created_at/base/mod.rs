@@ -1,12 +1,10 @@
 use serde::Deserialize;
+use serde::Serialize;
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Base {
-    #[serde(rename = "cca")]
     channel_created_at:  Option<String>,
-    #[serde(rename = "o")]
     order: i8,
-    #[serde(rename = "l")]
     limit: i8
 }
 

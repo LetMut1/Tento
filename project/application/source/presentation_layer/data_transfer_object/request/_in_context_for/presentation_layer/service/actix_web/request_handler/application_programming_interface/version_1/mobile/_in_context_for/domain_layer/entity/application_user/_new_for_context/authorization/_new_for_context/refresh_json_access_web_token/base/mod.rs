@@ -1,10 +1,9 @@
 use serde::Deserialize;
+use serde::Serialize;
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Base {
-    #[serde(rename = "jawt")]
     json_access_web_token: String,
-    #[serde(rename = "jrwt")]
     json_refresh_web_token: String
 }
 

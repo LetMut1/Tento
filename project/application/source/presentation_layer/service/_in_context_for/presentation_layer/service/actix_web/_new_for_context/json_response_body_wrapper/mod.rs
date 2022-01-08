@@ -4,15 +4,15 @@ use crate::presentation_layer::data_transfer_object::_in_context_for::presentati
 use serde::Serialize;
 use super::response_body_wrapper_trait::ResponseBodyWrapperTrait;
 
-pub struct ByteResponseBodyWrapper;
+pub struct JsonResponseBodyWrapper;
 
-impl ResponseBodyWrapperTrait for  ByteResponseBodyWrapper {
-    type WrappedBodyType = Vec<u8>;
+impl ResponseBodyWrapperTrait for  JsonResponseBodyWrapper {
+    type WrappedBodyType = String;
     type Error = BaseError;
 
     fn wrap_for_success(
     ) -> Result<Self::WrappedBodyType, Self::Error> {
-        return Ok(rmp_serde::to_vec(&Self::SUCCESS_RESULT)?);
+        return Ok(serde_json::to_string(&Self::SUCCESS_RESULT)?);
     }
 
     fn wrap_for_success_with_body<S>(
@@ -21,12 +21,12 @@ impl ResponseBodyWrapperTrait for  ByteResponseBodyWrapper {
     where
         S: Serialize
     {
-        return Ok(rmp_serde::to_vec(&SuccessResultWithBody::new(body))?);
+        return Ok(serde_json::to_string(&SuccessResultWithBody::new(body))?);
     }
 
     fn wrap_for_fail(
         code: &'static str
     ) -> Result<Self::WrappedBodyType, Self::Error> {
-        return Ok(rmp_serde::to_vec(&FailResultWithCode::new(code))?);
+        return Ok(serde_json::to_string(&FailResultWithCode::new(code))?);
     }
 }

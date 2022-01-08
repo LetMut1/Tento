@@ -40,5 +40,10 @@ rmp-serde = {version = "^0.15", default-features = true, optional = false}
 rust-argon2 = {version = "^0.8", default-features = true, optional = false}
 rust-crypto = {version = "^0.2", default-features = true, optional = false}
 serde = {version = "^1.0", default-features = true, features = ["derive"], optional = false}
-serde_json = {version = "^1.0", default-features = true, optional = false}
+serde_json = {version = "^1.0", default-features = true, optional = false}                          # TODO Сделать это опциональной для  facilitate_non_automatic_functional_testing, когда везде уйду от джсона
+ureq = {version = "^2.4", default-features = true, optional = true}
 uuid = {version = "^0.8", default-features = true, features = ["v4"], optional = false}
+
+[features]
+default = []
+facilitate_non_automatic_functional_testing = ["ureq"]
