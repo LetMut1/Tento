@@ -11,16 +11,16 @@ impl Base {
     pub fn handle(
         request: Request
     ) -> Result<Response, BaseError> {
-        let request_: UreqRequest = ureq::get("http://127.0.0.1:80/v1/m/na/au/cnfe");     // TODO Адрес через конфиг/енв и константы.
+        let mut data: Vec<u8> = vec![];
+        rmp_serde::encode::write(&mut data, &request)?;
 
-        let mut data: Vec<u8> = rmp_serde::to_vec(&request)?;
-        
+        let request_: UreqRequest = ureq::get("http://127.0.0.1:80/v1/m/na/au/cnfe");     // TODO Адрес через конфиг/енв и константы.
         let response_: UreqResponse = request_.send_bytes(&data[..])?;
 
         data.clear();
         response_.into_reader().read_to_end(&mut data)?;
 
-        let response: Response = rmp_serde::from_read_ref(&data)?;
+        let response: Response = rmp_serde::from_read_ref::<'_, [u8], Response>(&data[..])?;
 
         return Ok(response);
     }

@@ -19,7 +19,7 @@ impl ApplicationUserLogInTokenDataProviderRedisTrait for Base {
     ) -> Result<Option<ApplicationUserLogInToken<'b>>, Self::Error> {
         match connection.get::<String, Option<Vec<u8>>>(StorageKeyResolver::get_2(application_user_id, device_id))? {
             Some(data) => {
-                let common: Common<'static> = rmp_serde::from_read_ref::<'_, Vec<u8>, Common<'static>>(&data)?;
+                let common: Common<'static> = rmp_serde::from_read_ref::<'_, [u8], Common<'static>>(&data[..])?;
 
                 let (
                     application_user_log_in_token_value,

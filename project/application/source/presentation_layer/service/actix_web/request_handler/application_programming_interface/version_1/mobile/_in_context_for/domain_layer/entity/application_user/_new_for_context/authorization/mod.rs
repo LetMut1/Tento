@@ -1,6 +1,8 @@
 use actix_web::body::Body;
 use actix_web::HttpResponse;
 use actix_web::Result as ActixWebResult;
+use actix_web::web::Buf;
+use actix_web::web::Bytes;
 use actix_web::web::Data;
 use actix_web::web::Form;
 use actix_web::web::Query;
@@ -1223,38 +1225,45 @@ impl Authorization {
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 impl Authorization {
     pub async fn check_nickname_for_existing_(
-        query: ActixWebResult<Query<RequestCheckNicknameForExisting>>
+        request_body_data: ActixWebResult<Bytes>
     ) -> HttpResponse<Body> {
-        match query {
-            Ok(query_) => {
-                match HandlerCheckNicknameForExisting_::handle(query_.into_inner()) {
-                    Ok(response) => {
-                        match JsonResponseCreator::wrap_for_success_with_body_and_create_ok(response) {
-                            Ok(http_response) => {
-                                return http_response;
+        match request_body_data {
+            Ok(reqest_body_data_) => {
+                match serde_json::from_slice::<'_, RequestCheckNicknameForExisting>(reqest_body_data_.bytes()) {        // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    Ok(request) => {
+                        match HandlerCheckNicknameForExisting_::handle(request) {
+                            Ok(response) => {
+                                match JsonResponseCreator::wrap_for_success_with_body_and_create_ok(response) {
+                                    Ok(http_response) => {
+                                        return http_response;
+                                    },
+                                    Err(base_error) => {
+                                        log::error!("{}", base_error);
+                
+                                        return JsonResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             },
-                            Err(base_error) => {
-                                log::error!("{}", base_error);
-        
-                                return JsonResponseCreator::create_internal_server_error();
+                            Err(ref base_error) => {
+                                match base_error {
+                                    BaseError::EntityError {entity_error: _} => {
+                                        unreachable!("{}", base_error);
+                                    }
+                                    BaseError::InvalidArgumentError => {
+                                        return JsonResponseCreator::create_bad_request();
+                                    },
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", base_error);
+                
+                                        return JsonResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error: _} => {
-                                unreachable!("{}", base_error);
-                            }
-                            BaseError::InvalidArgumentError => {
-                                return JsonResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-        
-                                return JsonResponseCreator::create_internal_server_error();
-                            }
-                        }
+                    Err(wwwwwwXXXXXXXXXXxx) => {
+                        return JsonResponseCreator::create_internal_server_error(); // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     }
                 }
             },

@@ -18,7 +18,7 @@ impl ApplicationUserResetPasswordTokenDataProviderRedisTrait for Base {
     ) -> Result<Option<ApplicationUserResetPasswordToken<'b>>, Self::Error> {
         match connection.get::<String, Option<Vec<u8>>>(StorageKeyResolver::get_3(application_user_id))? {
             Some(data) => {
-                let common: Common<'static> = rmp_serde::from_read_ref::<'_, Vec<u8>, Common<'static>>(&data)?;
+                let common: Common<'static> = rmp_serde::from_read_ref::<'_, [u8], Common<'static>>(&data[..])?;
 
                 let (
                     application_user_reset_password_token_value,

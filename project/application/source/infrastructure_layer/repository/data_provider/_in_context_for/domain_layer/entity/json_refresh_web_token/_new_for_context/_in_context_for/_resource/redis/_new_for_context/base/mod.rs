@@ -19,7 +19,7 @@ impl JsonRefreshWebTokenDataProviderRedisTrait for Base {
     ) -> Result<Option<JsonRefreshWebToken<'static>>, Self::Error> {
         match connection.get::<String, Option<Vec<u8>>>(StorageKeyResolver::get_5(application_user_id, application_user_log_in_token_device_id))? {
             Some(data) => {
-                let common: Common<'static> = rmp_serde::from_read_ref::<'_, Vec<u8>, Common<'static>>(&data)?;
+                let common: Common<'static> = rmp_serde::from_read_ref::<'_, [u8], Common<'static>>(&data[..])?;
 
                 let (
                     json_access_web_token_id,
