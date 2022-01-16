@@ -25,10 +25,11 @@ use std::path::PathBuf;
 pub struct Base;
 
 impl Base {
-    const PRODUCTION_ENVIRONMENT_FILE_NAME: &'static str = "production.env";                    // TODO Посмотреть, какие есть еще лучшие форматы аналоги .env (Может, Томл?)
+    const PRODUCTION_ENVIRONMENT_FILE_NAME: &'static str = "production.env";  // TODO Посмотреть, какие есть еще лучшие форматы аналоги .env (Может, Томл?)
     const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.env";
     const DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
+    #[actix_web::main] 
     pub async fn handle(
         binary_file_path: String
     ) -> Result<(), BaseError> {
