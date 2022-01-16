@@ -4,8 +4,8 @@ use actix_web::Result as ActixWebResult;
 use actix_web::web::Buf;
 use actix_web::web::Bytes;
 use actix_web::web::Data;
-use actix_web::web::Form;
-use actix_web::web::Query;
+use actix_web::HttpRequest;
+use actix_web::FromRequest;
 use actix_web::web::ReqData as RequestData;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Base as HandlerCheckEmailForExisting;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::base::Base as HandlerCheckNicknameForExisting;
@@ -57,40 +57,47 @@ pub struct Authorization;
 impl Authorization {
     pub async fn check_nickname_for_existing(
         data: Data<AggregateConnectionPool>,
-        query: ActixWebResult<Query<RequestCheckNicknameForExisting>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match query {
-            Ok(query_) => {
-                match HandlerCheckNicknameForExisting::handle(data.into_inner(), query_.into_inner()) {
-                    Ok(response_data) => {
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestCheckNicknameForExisting>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        match HandlerCheckNicknameForExisting::handle(data.into_inner(), request_data_) {
+                            Ok(response_data) => {
+                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                    Ok(data) => {
+                                        return ResponseCreator::create_ok(data);
+                                    },
+                                    Err(error) => {
+                                        log::error!("{}", BaseError::from(error));
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             },
-                            Err(error) => {
-                                log::error!("{}", BaseError::from(error));
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error} => {
-                                match entity_error {
-                                    EntityError::ApplicationUserError {application_user_error} => {
-                                        match application_user_error {
-                                            ApplicationUserError::InvalidNickname => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                            Err(ref base_error) => {
+                                match base_error {
+                                    BaseError::EntityError {entity_error} => {
+                                        match entity_error {
+                                            EntityError::ApplicationUserError {application_user_error} => {
+                                                match application_user_error {
+                                                    ApplicationUserError::InvalidNickname => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
                                                     },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
+                                                    _ => {
+                                                        unreachable!("{}", base_error);
                                                     }
                                                 }
                                             },
@@ -98,168 +105,19 @@ impl Authorization {
                                                 unreachable!("{}", base_error);
                                             }
                                         }
+                                    }
+                                    BaseError::InvalidArgumentError => {
+                                        return ResponseCreator::create_bad_request();
                                     },
-                                    _ => {
-                                        unreachable!("{}", base_error);
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", base_error);
+                
+                                        return ResponseCreator::create_internal_server_error();
                                     }
                                 }
                             }
-                            BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
                         }
-                    }
-                }
-            },
-            Err(error) => {
-                log::error!("{}", BaseError::from(error));
-
-                return ResponseCreator::create_internal_server_error();
-            }
-        }
-    }
-
-    pub async fn check_email_for_existing(
-        data: Data<AggregateConnectionPool>,
-        query: ActixWebResult<Query<RequestCheckEmailForExisting>>
-    ) -> HttpResponse<Body> {
-        match query {
-            Ok(query_) => {
-                match HandlerCheckEmailForExisting::handle(data.into_inner(), query_.into_inner()) {
-                    Ok(response_data) => {
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
-                            },
-                            Err(error) => {
-                                log::error!("{}", BaseError::from(error));
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error} => {
-                                match entity_error {
-                                    EntityError::ApplicationUserError {application_user_error} => {
-                                        match application_user_error {
-                                            ApplicationUserError::InvalidEmail => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
-                                                    },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            },
-                                            _ => {
-                                                unreachable!("{}", base_error);
-                                            }
-                                        }
-                                    },
-                                    _ => {
-                                        unreachable!("{}", base_error);
-                                    }
-                                }
-                            }
-                            BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    }
-                }
-            },
-            Err(error) => {
-                log::error!("{}", BaseError::from(error));
-
-                return ResponseCreator::create_internal_server_error();
-            }
-        }
-    }
-
-    pub async fn register_by_first_step(
-        data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestRegisterByFirstStep>>
-    ) -> HttpResponse<Body> {
-        match form {
-            Ok(form_) => {
-                if let Err(ref base_error) = HandlerRegisterByFirstStep::handle(data.into_inner(), form_.into_inner()) {
-                    match base_error {
-                        BaseError::EntityError {entity_error} => {
-                            match entity_error {
-                                EntityError::ApplicationUserError {application_user_error} => {
-                                    match application_user_error {
-                                        ApplicationUserError::EmailAlreadyExist => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
-                                                },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        },
-                                        ApplicationUserError::InvalidEmail => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
-                                                },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("{}", base_error);
-                                        }
-                                    }
-                                },
-                                _ => {
-                                    unreachable!("{}", base_error);
-                                }
-                            }
-                        },
-                        BaseError::InvalidArgumentError => {
-                            return ResponseCreator::create_bad_request();
-                        },
-                        BaseError::LogicError {logic_error: _} | 
-                        BaseError::RunTimeError {run_time_error: _} => {
-                            log::error!("{}", base_error);
-        
-                            return ResponseCreator::create_internal_server_error();
-                        }
-                    }
-                }
-        
-                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
-                    Ok(data) => {
-                        return ResponseCreator::create_ok(data);
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));
@@ -276,84 +134,292 @@ impl Authorization {
         }
     }
 
-    pub async fn register_by_last_step(
+    pub async fn check_email_for_existing(
         data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestRegisterByLastStep>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match form {
-            Ok(form_) => {
-                match HandlerRegisterByLastStep::handle(data.into_inner(), form_.into_inner()) {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestCheckEmailForExisting>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        match HandlerCheckEmailForExisting::handle(data.into_inner(), request_data_) {
+                            Ok(response_data) => {
+                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                    Ok(data) => {
+                                        return ResponseCreator::create_ok(data);
+                                    },
+                                    Err(error) => {
+                                        log::error!("{}", BaseError::from(error));
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            },
+                            Err(ref base_error) => {
+                                match base_error {
+                                    BaseError::EntityError {entity_error} => {
+                                        match entity_error {
+                                            EntityError::ApplicationUserError {application_user_error} => {
+                                                match application_user_error {
+                                                    ApplicationUserError::InvalidEmail => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
+                                                    },
+                                                    _ => {
+                                                        unreachable!("{}", base_error);
+                                                    }
+                                                }
+                                            },
+                                            _ => {
+                                                unreachable!("{}", base_error);
+                                            }
+                                        }
+                                    }
+                                    BaseError::InvalidArgumentError => {
+                                        return ResponseCreator::create_bad_request();
+                                    },
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", base_error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    pub async fn register_by_first_step(
+        data: Data<AggregateConnectionPool>,
+        http_request: HttpRequest
+    ) -> HttpResponse<Body> {
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestRegisterByFirstStep>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        if let Err(ref base_error) = HandlerRegisterByFirstStep::handle(data.into_inner(), request_data_) {
+                            match base_error {
+                                BaseError::EntityError {entity_error} => {
+                                    match entity_error {
+                                        EntityError::ApplicationUserError {application_user_error} => {
+                                            match application_user_error {
+                                                ApplicationUserError::EmailAlreadyExist => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                },
+                                                ApplicationUserError::InvalidEmail => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                }
+                                                _ => {
+                                                    unreachable!("{}", base_error);
+                                                }
+                                            }
+                                        },
+                                        _ => {
+                                            unreachable!("{}", base_error);
+                                        }
+                                    }
+                                },
+                                BaseError::InvalidArgumentError => {
+                                    return ResponseCreator::create_bad_request();
+                                },
+                                BaseError::LogicError {logic_error: _} | 
+                                BaseError::RunTimeError {run_time_error: _} => {
+                                    log::error!("{}", base_error);
+                
+                                    return ResponseCreator::create_internal_server_error();
+                                }
+                            }
+                        }
+                
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
-        
+
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error} => {
-                                match entity_error {
-                                    EntityError::ApplicationUserError {application_user_error} => {
-                                        match application_user_error {
-                                            ApplicationUserError::EmailAlreadyExist => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    pub async fn register_by_last_step(
+        data: Data<AggregateConnectionPool>,
+        http_request: HttpRequest
+    ) -> HttpResponse<Body> {
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestRegisterByLastStep>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        match HandlerRegisterByLastStep::handle(data.into_inner(), request_data_) {
+                            Ok(response_data) => { 
+                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                    Ok(data) => {
+                                        return ResponseCreator::create_ok(data);
+                                    },
+                                    Err(error) => {
+                                        log::error!("{}", BaseError::from(error));
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            },
+                            Err(ref base_error) => {
+                                match base_error {
+                                    BaseError::EntityError {entity_error} => {
+                                        match entity_error {
+                                            EntityError::ApplicationUserError {application_user_error} => {
+                                                match application_user_error {
+                                                    ApplicationUserError::EmailAlreadyExist => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
                                                     },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
+                                                    ApplicationUserError::InvalidNickname => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
+                                                    },
+                                                    ApplicationUserError::InvalidPassword => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
+                                                    },
+                                                    ApplicationUserError::NicknameAlreadyExist => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
+                                                    },
+                                                    _ => {
+                                                        unreachable!("{}", base_error);
                                                     }
                                                 }
                                             },
-                                            ApplicationUserError::InvalidNickname => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                            EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error} => {
+                                                match application_user_registration_confirmation_token_error {
+                                                    ApplicationUserRegistrationConfirmationTokenError::NotFound => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
                                                     },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            },
-                                            ApplicationUserError::InvalidPassword => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
-                                                    },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            },
-                                            ApplicationUserError::NicknameAlreadyExist => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
-                                                    },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
+                                                    ApplicationUserRegistrationConfirmationTokenError::InvalidValue => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             },
@@ -362,6 +428,46 @@ impl Authorization {
                                             }
                                         }
                                     },
+                                    BaseError::InvalidArgumentError => {
+                                        return ResponseCreator::create_bad_request();
+                                    },
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", base_error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    pub async fn send_email_for_register(
+        data: Data<AggregateConnectionPool>,
+        http_request: HttpRequest
+    ) -> HttpResponse<Body> {
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForRegister>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                    if let Err(ref base_error) = HandlerSendEmailForRegister::handle(data.into_inner(), request_data_) {
+                        match base_error {
+                            BaseError::EntityError {entity_error} => {
+                                match entity_error {
                                     EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error} => {
                                         match application_user_registration_confirmation_token_error {
                                             ApplicationUserRegistrationConfirmationTokenError::NotFound => {
@@ -378,161 +484,10 @@ impl Authorization {
                                                     }
                                                 }
                                             },
-                                            ApplicationUserRegistrationConfirmationTokenError::InvalidValue => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
-                                                    },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    _ => {
-                                        unreachable!("{}", base_error);
-                                    }
-                                }
-                            },
-                            BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    }
-                }
-            },
-            Err(error) => {
-                log::error!("{}", BaseError::from(error));
-
-                return ResponseCreator::create_internal_server_error();
-            }
-        }
-    }
-
-    pub async fn send_email_for_register(
-        data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestSendEmailForRegister>>
-    ) -> HttpResponse<Body> {
-        match form {
-            Ok(form_) => {
-                if let Err(ref base_error) = HandlerSendEmailForRegister::handle(data.into_inner(), form_.into_inner()) {
-                    match base_error {
-                        BaseError::EntityError {entity_error} => {
-                            match entity_error {
-                                EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error} => {
-                                    match application_user_registration_confirmation_token_error {
-                                        ApplicationUserRegistrationConfirmationTokenError::NotFound => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
-                                                },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        },
-                                        _ => {
-                                            unreachable!("{}", base_error);
-                                        }
-        
-                                    }
-                                },
-                                _ => {
-                                    unreachable!("{}", base_error);
-                                }
-                            }
-                        },
-                        BaseError::InvalidArgumentError => {
-                            return ResponseCreator::create_bad_request();
-                        },
-                        BaseError::LogicError {logic_error: _} |
-                        BaseError::RunTimeError {run_time_error: _} => {
-                            log::error!("{}", base_error);
-        
-                            return ResponseCreator::create_internal_server_error();
-                        }
-                    }
-                }
-        
-                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
-                    Ok(data) => {
-                        return ResponseCreator::create_ok(data);
-                    },
-                    Err(error) => {
-                        log::error!("{}", BaseError::from(error));
-
-                        return ResponseCreator::create_internal_server_error();
-                    }
-                }
-            },
-            Err(error) => {
-                log::error!("{}", BaseError::from(error));
-
-                return ResponseCreator::create_internal_server_error();
-            }
-        }
-    }
-
-    pub async fn log_in_by_first_step(
-        data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestLogInByFirstStep>>
-    ) -> HttpResponse<Body> {
-        match form {
-            Ok(form_) => {
-                match HandlerLogInByFirstStep::handle(data.into_inner(), form_.into_inner()) {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
-                            },
-                            Err(error) => {
-                                log::error!("{}", BaseError::from(error));
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error} => {
-                                match entity_error {
-                                    EntityError::ApplicationUserError {application_user_error} => {
-                                        match application_user_error {
-                                            ApplicationUserError::InvalidNickname |
-                                            ApplicationUserError::InvalidPassword |
-                                            ApplicationUserError::NotFound |
-                                            ApplicationUserError::WrongPassword => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
-                                                    },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            },
                                             _ => {
                                                 unreachable!("{}", base_error);
                                             }
+            
                                         }
                                     },
                                     _ => {
@@ -551,6 +506,106 @@ impl Authorization {
                             }
                         }
                     }
+            
+                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                        Ok(data) => {
+                            return ResponseCreator::create_ok(data);
+                        },
+                        Err(error) => {
+                            log::error!("{}", BaseError::from(error));
+
+                            return ResponseCreator::create_internal_server_error();
+                        }
+                    }
+                },
+                Err(error) => {
+                    log::error!("{}", BaseError::from(error));
+    
+                    return ResponseCreator::create_internal_server_error();
+                }
+            }
+
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    pub async fn log_in_by_first_step(
+        data: Data<AggregateConnectionPool>,
+        http_request: HttpRequest
+    ) -> HttpResponse<Body> {
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestLogInByFirstStep>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        match HandlerLogInByFirstStep::handle(data.into_inner(), request_data_) {
+                            Ok(response_data) => { 
+                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                    Ok(data) => {
+                                        return ResponseCreator::create_ok(data);
+                                    },
+                                    Err(error) => {
+                                        log::error!("{}", BaseError::from(error));
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            },
+                            Err(ref base_error) => {
+                                match base_error {
+                                    BaseError::EntityError {entity_error} => {
+                                        match entity_error {
+                                            EntityError::ApplicationUserError {application_user_error} => {
+                                                match application_user_error {
+                                                    ApplicationUserError::InvalidNickname |
+                                                    ApplicationUserError::InvalidPassword |
+                                                    ApplicationUserError::NotFound |
+                                                    ApplicationUserError::WrongPassword => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
+                                                    },
+                                                    _ => {
+                                                        unreachable!("{}", base_error);
+                                                    }
+                                                }
+                                            },
+                                            _ => {
+                                                unreachable!("{}", base_error);
+                                            }
+                                        }
+                                    },
+                                    BaseError::InvalidArgumentError => {
+                                        return ResponseCreator::create_bad_request();
+                                    },
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", base_error);
+                    
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+
+                        return ResponseCreator::create_internal_server_error();
+                    }
                 }
             },
             Err(error) => {
@@ -563,74 +618,83 @@ impl Authorization {
 
     pub async fn log_in_by_last_step(
         data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestLogInByLastStep>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match form {
-            Ok(form_) => {
-                match HandlerLogInByLastStep::handle(data.into_inner(), form_.into_inner()) {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
-                            },
-                            Err(error) => {
-                                log::error!("{}", BaseError::from(error));
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error} => {
-                                match entity_error {
-                                    EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
-                                        match application_user_log_in_token_error {
-                                            ApplicationUserLogInTokenError::NotFound => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
-                                                    },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            },
-                                            ApplicationUserLogInTokenError::InvalidValue => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
-                                                    },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            }
-                                        }
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestLogInByLastStep>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        match HandlerLogInByLastStep::handle(data.into_inner(), request_data_) {
+                            Ok(response_data) => { 
+                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                    Ok(data) => {
+                                        return ResponseCreator::create_ok(data);
                                     },
-                                    _ => {
-                                        unreachable!("{}", base_error);
+                                    Err(error) => {
+                                        log::error!("{}", BaseError::from(error));
+                
+                                        return ResponseCreator::create_internal_server_error();
                                     }
                                 }
                             },
-                            BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-        
-                                return ResponseCreator::create_internal_server_error();
+                            Err(ref base_error) => {
+                                match base_error {
+                                    BaseError::EntityError {entity_error} => {
+                                        match entity_error {
+                                            EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
+                                                match application_user_log_in_token_error {
+                                                    ApplicationUserLogInTokenError::NotFound => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
+                                                    },
+                                                    ApplicationUserLogInTokenError::InvalidValue => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            _ => {
+                                                unreachable!("{}", base_error);
+                                            }
+                                        }
+                                    },
+                                    BaseError::InvalidArgumentError => {
+                                        return ResponseCreator::create_bad_request();
+                                    },
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", base_error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
                         }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
@@ -644,27 +708,55 @@ impl Authorization {
 
     pub async fn send_email_for_log_in(
         data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestSendEmailForLogIn>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match form {
-            Ok(form_) => {
-                if let Err(ref base_error) = HandlerSendEmailForLogIn::handle(data.into_inner(), form_.into_inner()) {
-                    match base_error {
-                        BaseError::EntityError {entity_error} => {
-                            match entity_error {
-                                EntityError::ApplicationUserError {application_user_error} => {
-                                    match application_user_error {
-                                        ApplicationUserError::NotFound => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForLogIn>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        if let Err(ref base_error) = HandlerSendEmailForLogIn::handle(data.into_inner(), request_data_) {
+                            match base_error {
+                                BaseError::EntityError {entity_error} => {
+                                    match entity_error {
+                                        EntityError::ApplicationUserError {application_user_error} => {
+                                            match application_user_error {
+                                                ApplicationUserError::NotFound => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
                                                 },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
+                                                _ => {
+                                                    unreachable!("{}", base_error);
+                                                }
+                                            }
+                                        },
+                                        EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
+                                            match application_user_log_in_token_error {
+                                                ApplicationUserLogInTokenError::NotFound => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                },
+                                                _ => {
+                                                    unreachable!("{}", base_error);
                                                 }
                                             }
                                         },
@@ -673,47 +765,28 @@ impl Authorization {
                                         }
                                     }
                                 },
-                                EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
-                                    match application_user_log_in_token_error {
-                                        ApplicationUserLogInTokenError::NotFound => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
-                                                },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        },
-                                        _ => {
-                                            unreachable!("{}", base_error);
-                                        }
-                                    }
+                                BaseError::InvalidArgumentError => {
+                                    return ResponseCreator::create_bad_request();
                                 },
-                                _ => {
-                                    unreachable!("{}", base_error);
+                                BaseError::LogicError {logic_error: _} |
+                                BaseError::RunTimeError {run_time_error: _} => {
+                                    log::error!("{}", base_error);
+                
+                                    return ResponseCreator::create_internal_server_error();
                                 }
                             }
-                        },
-                        BaseError::InvalidArgumentError => {
-                            return ResponseCreator::create_bad_request();
-                        },
-                        BaseError::LogicError {logic_error: _} |
-                        BaseError::RunTimeError {run_time_error: _} => {
-                            log::error!("{}", base_error);
-        
-                            return ResponseCreator::create_internal_server_error();
                         }
-                    }
-                }
-        
-                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
-                    Ok(data) => {
-                        return ResponseCreator::create_ok(data);
+                
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                            Ok(data) => {
+                                return ResponseCreator::create_ok(data);
+                            },
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
+
+                                return ResponseCreator::create_internal_server_error();
+                            }
+                        }
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));
@@ -732,40 +805,65 @@ impl Authorization {
 
     pub async fn refresh_json_access_web_token(
         data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestRefreshJsonAccessWebToken>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match form {
-            Ok(form_) => {
-                match HandlerRefreshJsonAccessWebToken::handle(data.into_inner(), form_.into_inner()) {
-                    Ok(response_data) => {
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestRefreshJsonAccessWebToken>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        match HandlerRefreshJsonAccessWebToken::handle(data.into_inner(), request_data_) {
+                            Ok(response_data) => {
+                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                    Ok(data) => {
+                                        return ResponseCreator::create_ok(data);
+                                    },
+                                    Err(error) => {
+                                        log::error!("{}", BaseError::from(error));
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             },
-                            Err(error) => {
-                                log::error!("{}", BaseError::from(error));
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error} => {
-                                match entity_error {
-                                    EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
-                                        match json_access_web_token_error {
-                                            JsonAccessWebTokenError::NotExpired => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                            Err(ref base_error) => {
+                                match base_error {
+                                    BaseError::EntityError {entity_error} => {
+                                        match entity_error {
+                                            EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
+                                                match json_access_web_token_error {
+                                                    JsonAccessWebTokenError::NotExpired => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
                                                     },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
+                                                    _ => {
+                                                        unreachable!("{}", base_error);
+                                                    }
+                                                }
+                                            },
+                                            EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
+                                                match json_refresh_web_token_error {
+                                                    JsonRefreshWebTokenError::NotFound => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             },
@@ -774,39 +872,23 @@ impl Authorization {
                                             }
                                         }
                                     },
-                                    EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
-                                        match json_refresh_web_token_error {
-                                            JsonRefreshWebTokenError::NotFound => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
-                                                    },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            }
-                                        }
+                                    BaseError::InvalidArgumentError => {
+                                        return ResponseCreator::create_bad_request();
                                     },
-                                    _ => {
-                                        unreachable!("{}", base_error);
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", base_error);
+                
+                                        return ResponseCreator::create_internal_server_error();
                                     }
                                 }
-                            },
-                            BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-        
-                                return ResponseCreator::create_internal_server_error();
                             }
                         }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
@@ -820,11 +902,11 @@ impl Authorization {
 
     pub async fn log_out(
         data: Data<AggregateConnectionPool>,
-        request_data: ActixWebResult<RequestData<JsonAccessWebToken<'_>>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match request_data {
-            Ok(request_data_) => {
-                if let Err(ref base_error) = HandlerLogOut::handle(data.into_inner(), &request_data_.into_inner()) {
+        match RequestData::<JsonAccessWebToken<'_>>::extract(&http_request).await {
+            Ok(request_data) => {
+                if let Err(ref base_error) = HandlerLogOut::handle(data.into_inner(), &request_data.into_inner()) {
                     match base_error {
                         BaseError::EntityError {entity_error} => {
                             match entity_error {
@@ -884,11 +966,11 @@ impl Authorization {
 
     pub async fn log_out_from_all_devices(
         data: Data<AggregateConnectionPool>,
-        request_data: ActixWebResult<RequestData<JsonAccessWebToken<'_>>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match request_data {
-            Ok(request_data_) => {
-                if let Err(ref base_error) = HandlerLogOutFromAllDevices::handle(data.into_inner(), &request_data_.into_inner()) {
+        match RequestData::<JsonAccessWebToken<'_>>::extract(&http_request).await {
+            Ok(request_data) => {
+                if let Err(ref base_error) = HandlerLogOutFromAllDevices::handle(data.into_inner(), &request_data.into_inner()) {
                     match base_error {
                         BaseError::EntityError {entity_error} => {
                             match entity_error {
@@ -948,64 +1030,73 @@ impl Authorization {
 
     pub async fn reset_password_by_first_step(
         data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestResetPasswordByFirstStep>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match form {
-            Ok(form_) => {
-                match HandlerResetPasswordByFirstStep::handle(data.into_inner(), form_.into_inner()) {
-                    Ok(response_data) => {
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestResetPasswordByFirstStep>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        match HandlerResetPasswordByFirstStep::handle(data.into_inner(), request_data_) {
+                            Ok(response_data) => {
+                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                    Ok(data) => {
+                                        return ResponseCreator::create_ok(data);
+                                    },
+                                    Err(error) => {
+                                        log::error!("{}", BaseError::from(error));
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             },
-                            Err(error) => {
-                                log::error!("{}", BaseError::from(error));
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error} => {
-                                match entity_error {
-                                    EntityError::ApplicationUserError {application_user_error} => {
-                                        match application_user_error {
-                                            ApplicationUserError::NotFound => {
-                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
-                                                )) {
-                                                    Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                            Err(ref base_error) => {
+                                match base_error {
+                                    BaseError::EntityError {entity_error} => {
+                                        match entity_error {
+                                            EntityError::ApplicationUserError {application_user_error} => {
+                                                match application_user_error {
+                                                    ApplicationUserError::NotFound => {
+                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
+                                                        )) {
+                                                            Ok(data) => {
+                                                                return ResponseCreator::create_ok(data);
+                                                            },
+                                                            Err(error) => {
+                                                                log::error!("{}", BaseError::from(error));
+                                        
+                                                                return ResponseCreator::create_internal_server_error();
+                                                            }
+                                                        }
                                                     },
-                                                    Err(error) => {
-                                                        log::error!("{}", BaseError::from(error));
-                                
-                                                        return ResponseCreator::create_internal_server_error();
+                                                    _ => {
+                                                        unreachable!("{}", base_error);
                                                     }
+                
                                                 }
                                             },
                                             _ => {
                                                 unreachable!("{}", base_error);
                                             }
-        
                                         }
                                     },
-                                    _ => {
-                                        unreachable!("{}", base_error);
+                                    BaseError::InvalidArgumentError => {
+                                        return ResponseCreator::create_bad_request();
+                                    },
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", base_error);
+                    
+                                        return ResponseCreator::create_internal_server_error();
                                     }
                                 }
-                            },
-                            BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-            
-                                return ResponseCreator::create_internal_server_error();
                             }
                         }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
@@ -1019,102 +1110,111 @@ impl Authorization {
 
     pub async fn reset_password_by_last_step(
         data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestResetPasswordByLastStep>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match form {
-            Ok(form_) => {
-                if let Err(ref base_error) = HandlerResetPasswordByLastStep::handle(data.into_inner(), form_.into_inner()) {
-                    match base_error {
-                        BaseError::EntityError {entity_error} => {
-                            match entity_error {
-                                EntityError::ApplicationUserError {application_user_error} => {
-                                    match application_user_error {
-                                        ApplicationUserError::NotFound => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestResetPasswordByLastStep>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        if let Err(ref base_error) = HandlerResetPasswordByLastStep::handle(data.into_inner(), request_data_) {
+                            match base_error {
+                                BaseError::EntityError {entity_error} => {
+                                    match entity_error {
+                                        EntityError::ApplicationUserError {application_user_error} => {
+                                            match application_user_error {
+                                                ApplicationUserError::NotFound => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
                                                 },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
+                                                ApplicationUserError::InvalidPassword => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                },
+                                                _ => {
+                                                    unreachable!("{}", base_error);
                                                 }
+                
                                             }
                                         },
-                                        ApplicationUserError::InvalidPassword => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
+                                        EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error} => {
+                                            match application_user_reset_password_token_error {
+                                                ApplicationUserResetPasswordTokenError::InvalidValue => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
                                                 },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
+                                                ApplicationUserResetPasswordTokenError::NotFound => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
                                                 }
                                             }
                                         },
                                         _ => {
                                             unreachable!("{}", base_error);
                                         }
-        
                                     }
                                 },
-                                EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error} => {
-                                    match application_user_reset_password_token_error {
-                                        ApplicationUserResetPasswordTokenError::InvalidValue => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
-                                                },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        },
-                                        ApplicationUserResetPasswordTokenError::NotFound => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
-                                                },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                    }
+                                BaseError::InvalidArgumentError => {
+                                    return ResponseCreator::create_bad_request();
                                 },
-                                _ => {
-                                    unreachable!("{}", base_error);
+                                BaseError::LogicError {logic_error: _} |
+                                BaseError::RunTimeError {run_time_error: _} => {
+                                    log::error!("{}", base_error);
+                
+                                    return ResponseCreator::create_internal_server_error();
                                 }
                             }
-                        },
-                        BaseError::InvalidArgumentError => {
-                            return ResponseCreator::create_bad_request();
-                        },
-                        BaseError::LogicError {logic_error: _} |
-                        BaseError::RunTimeError {run_time_error: _} => {
-                            log::error!("{}", base_error);
-        
-                            return ResponseCreator::create_internal_server_error();
                         }
-                    }
-                }
 
-                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
-                    Ok(data) => {
-                        return ResponseCreator::create_ok(data);
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                            Ok(data) => {
+                                return ResponseCreator::create_ok(data);
+                            },
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
+
+                                return ResponseCreator::create_internal_server_error();
+                            }
+                        }
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));
@@ -1133,27 +1233,55 @@ impl Authorization {
 
     pub async fn send_email_for_reset_password(
         data: Data<AggregateConnectionPool>,
-        form: ActixWebResult<Form<RequestSendEmailForResetPassword>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match form {
-            Ok(form_) => {
-                if let Err(ref base_error) = HandlerSendEmailForResetPassword::handle(data.into_inner(), form_.into_inner()) {
-                    match base_error {
-                        BaseError::EntityError {entity_error} => {
-                            match entity_error {
-                                EntityError::ApplicationUserError {application_user_error} => {
-                                    match application_user_error {
-                                        ApplicationUserError::NotFound => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
+        match Bytes::extract(&http_request).await {
+            Ok(request_data) => {
+                match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForResetPassword>(request_data.bytes()) {
+                    Ok(request_data_) => {
+                        if let Err(ref base_error) = HandlerSendEmailForResetPassword::handle(data.into_inner(), request_data_) {
+                            match base_error {
+                                BaseError::EntityError {entity_error} => {
+                                    match entity_error {
+                                        EntityError::ApplicationUserError {application_user_error} => {
+                                            match application_user_error {
+                                                ApplicationUserError::NotFound => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
                                                 },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
+                                                _ => {
+                                                    unreachable!("{}", base_error);
+                                                }
+                                            }
+                                        },
+                                        EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error} => {
+                                            match application_user_reset_password_token_error {
+                                                ApplicationUserResetPasswordTokenError::NotFound => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                },
+                                                _ => {
+                                                    unreachable!("{}", base_error);
                                                 }
                                             }
                                         },
@@ -1162,47 +1290,28 @@ impl Authorization {
                                         }
                                     }
                                 },
-                                EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error} => {
-                                    match application_user_reset_password_token_error {
-                                        ApplicationUserResetPasswordTokenError::NotFound => {
-                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
-                                            )) {
-                                                Ok(data) => {
-                                                    return ResponseCreator::create_ok(data);
-                                                },
-                                                Err(error) => {
-                                                    log::error!("{}", BaseError::from(error));
-                            
-                                                    return ResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        },
-                                        _ => {
-                                            unreachable!("{}", base_error);
-                                        }
-                                    }
+                                BaseError::InvalidArgumentError => {
+                                    return ResponseCreator::create_bad_request();
                                 },
-                                _ => {
-                                    unreachable!("{}", base_error);
+                                BaseError::LogicError {logic_error: _} |
+                                BaseError::RunTimeError {run_time_error: _} => {
+                                    log::error!("{}", base_error);
+                
+                                    return ResponseCreator::create_internal_server_error();
                                 }
                             }
-                        },
-                        BaseError::InvalidArgumentError => {
-                            return ResponseCreator::create_bad_request();
-                        },
-                        BaseError::LogicError {logic_error: _} |
-                        BaseError::RunTimeError {run_time_error: _} => {
-                            log::error!("{}", base_error);
-        
-                            return ResponseCreator::create_internal_server_error();
                         }
-                    }
-                }
-        
-                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
-                    Ok(data) => {
-                        return ResponseCreator::create_ok(data);
+                
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                            Ok(data) => {
+                                return ResponseCreator::create_ok(data);
+                            },
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
+
+                                return ResponseCreator::create_internal_server_error();
+                            }
+                        }
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));

@@ -68,18 +68,18 @@ impl RepositoryProxyTrait for RepositoryProxy {
         {
             let application_user_log_in_token_device_id: String = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
-            let mut aplication_user_log_in_token_device_id_index_option: Option<usize> = None;
+            let mut aplication_user_log_in_token_device_id_index: Option<usize> = None;
 
             for (index, application_user_log_in_token_device_id_) in application_user_log_in_token_device_id_registry.iter().enumerate() {
                 if *application_user_log_in_token_device_id_ == application_user_log_in_token_device_id {
-                    aplication_user_log_in_token_device_id_index_option = Some(index);
+                    aplication_user_log_in_token_device_id_index = Some(index);
 
                     break;
                 }
             }
 
-            if let Some(aplication_user_log_in_token_device_id_index) = aplication_user_log_in_token_device_id_index_option {
-                application_user_log_in_token_device_id_registry.remove(aplication_user_log_in_token_device_id_index);
+            if let Some(aplication_user_log_in_token_device_id_index_) = aplication_user_log_in_token_device_id_index {
+                application_user_log_in_token_device_id_registry.remove(aplication_user_log_in_token_device_id_index_);
 
                 if !application_user_log_in_token_device_id_registry.is_empty() {
                     DeviceIdProcessingStorage::update(
