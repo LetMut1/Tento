@@ -41,7 +41,7 @@ pub trait ResponseCreatorTrait: ResponseCreatorTrait_ {
 }
 
 pub trait ResponseCreatorTrait_ {
-    type ResponseDataWrapper: ResponseDataWrapperTrait;
+    type ResponseDataWrapper: ResponseDataWrapperTrait;                 // TODO ВСЕ ЧЕРЕЗ БАЙТЫ!!!!!!!!!!!!!!!
 
     fn create_ok(
         body: <Self::ResponseDataWrapper as ResponseDataWrapperTrait>::WrappedDataType

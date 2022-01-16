@@ -1,13 +1,16 @@
-// use actix_web::web::Bytes;
-// use serde::Deserialize;
-// use std::error::Error;
+use actix_web::web::Bytes;
+use serde::de::DeserializeOwned;
+use std::error::Error;
 
-// pub trait RequestDataExtractorTrait {
-//     type Error: Error;
+pub trait RequestDataExtractorTrait<D>
+where
+    D: DeserializeOwned
+{
+    type Error: Error;
 
-//     fn extract<'a, D>(
-//         request_body_data: &'a Bytes
-//     ) -> Result<D, Self::Error>
-//     where
-//         D: Deserialize<'a>;              // DeserializeOwned
-// }
+    fn extract<D_>(
+        request_data: Bytes
+    ) -> Result<D_, Self::Error>
+    where
+        D_: DeserializeOwned;
+}

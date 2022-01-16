@@ -4,9 +4,9 @@ use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use serde::de::DeserializeOwned;
 use super::request_data_extractor_trait::RequestDataExtractorTrait;
 
-pub struct JsonRequestDataExtractor;
+pub struct MpRequestDataExtractor;
 
-impl<D> RequestDataExtractorTrait<D> for JsonRequestDataExtractor
+impl<D> RequestDataExtractorTrait<D> for MpRequestDataExtractor
 where
     D: DeserializeOwned
 {
@@ -18,6 +18,6 @@ where
     where
         D_: DeserializeOwned
     {
-        return Ok(serde_json::from_slice::<'_, D_>(request_data.bytes())?);
+        return Ok(rmp_serde::from_read_ref::<'_, [u8], D_>(request_data.bytes())?);
     }
 }
