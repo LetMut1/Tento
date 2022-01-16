@@ -2,22 +2,22 @@ use crate::presentation_layer::data_transfer_object::_in_context_for::presentati
 use serde::Serialize;
 use std::error::Error;
 
-pub trait ResponseBodyWrapperTrait {
+pub trait ResponseDataWrapperTrait {
     const SUCCESS_RESULT: SuccessResult = SuccessResult::new();
 
-    type WrappedBodyType;
+    type WrappedDataType;
     type Error: Error;
 
     fn wrap_for_success(
-    ) -> Result<Self::WrappedBodyType, Self::Error>;
+    ) -> Result<Self::WrappedDataType, Self::Error>;
 
     fn wrap_for_success_with_body<S>(
         body: S
-    ) -> Result<Self::WrappedBodyType, Self::Error>
+    ) -> Result<Self::WrappedDataType, Self::Error>
     where
         S: Serialize;
 
     fn wrap_for_fail(
         code: &'static str
-    ) -> Result<Self::WrappedBodyType, Self::Error>;
+    ) -> Result<Self::WrappedDataType, Self::Error>;
 }

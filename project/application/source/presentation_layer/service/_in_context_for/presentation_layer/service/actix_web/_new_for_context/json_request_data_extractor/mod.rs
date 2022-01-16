@@ -2,19 +2,19 @@
 // use actix_web::web::Bytes;
 // use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 // use serde::Deserialize;
-// use super::request_body_extractor_trait::RequestBodyExtractorTrait;
+// use super::request_body_extractor_trait::RequestDataExtractorTrait;
 
-// pub struct ByteRequestBodyExtractor;
+// pub struct JsonRequestDataExtractor;
 
-// impl RequestBodyExtractorTrait for ByteRequestBodyExtractor {
+// impl RequestDataExtractorTrait for JsonRequestDataExtractor {
 //     type Error = BaseError;
 
 //     fn extract<'a, D>(
 //         request_body_data: &'a Bytes
 //     ) -> Result<D, Self::Error>
 //     where
-//         D: Deserialize<'a> 
+//         D: Deserialize<'a>
 //     {
-//         return Ok(rmp_serde::from_read_ref::<'_, [u8], D>(request_body_data.bytes())?);
+//         return Ok(serde_json::from_slice::<'_, D>(request_body_data.bytes())?);
 //     }
 // }

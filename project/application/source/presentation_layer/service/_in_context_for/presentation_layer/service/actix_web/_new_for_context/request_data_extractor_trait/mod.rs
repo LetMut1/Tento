@@ -2,7 +2,7 @@
 // use serde::Deserialize;
 // use std::error::Error;
 
-// pub trait RequestBodyExtractorTrait {
+// pub trait RequestDataExtractorTrait {
 //     type Error: Error;
 
 //     fn extract<'a, D>(

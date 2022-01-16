@@ -1,27 +1,27 @@
 use actix_web::body::Body;
 use actix_web::HttpResponse;
 use serde::Serialize;
-use super::response_body_wrapper_trait::ResponseBodyWrapperTrait;
+use super::response_data_wrapper_trait::ResponseDataWrapperTrait;
 
 pub trait ResponseCreatorTrait: ResponseCreatorTrait_ {
     fn wrap_for_success_and_create_ok(
-    ) -> Result<HttpResponse<Body>, <Self::ResponseBodyWrapper as ResponseBodyWrapperTrait>::Error> {
-        return Ok(Self::create_ok(Self::ResponseBodyWrapper::wrap_for_success()?));
+    ) -> Result<HttpResponse<Body>, <Self::ResponseDataWrapper as ResponseDataWrapperTrait>::Error> {
+        return Ok(Self::create_ok(Self::ResponseDataWrapper::wrap_for_success()?));
     }
 
     fn wrap_for_success_with_body_and_create_ok<S>(
         body: S
-    ) -> Result<HttpResponse<Body>, <Self::ResponseBodyWrapper as ResponseBodyWrapperTrait>::Error>
+    ) -> Result<HttpResponse<Body>, <Self::ResponseDataWrapper as ResponseDataWrapperTrait>::Error>
     where
         S: Serialize
     {
-        return Ok(Self::create_ok(Self::ResponseBodyWrapper::wrap_for_success_with_body(body)?));
+        return Ok(Self::create_ok(Self::ResponseDataWrapper::wrap_for_success_with_body(body)?));
     }
 
     fn wrap_for_fail_and_create_ok(
         code: &'static str
-    ) -> Result<HttpResponse<Body>, <Self::ResponseBodyWrapper as ResponseBodyWrapperTrait>::Error> {
-        return Ok(Self::create_ok(Self::ResponseBodyWrapper::wrap_for_fail(code)?));
+    ) -> Result<HttpResponse<Body>, <Self::ResponseDataWrapper as ResponseDataWrapperTrait>::Error> {
+        return Ok(Self::create_ok(Self::ResponseDataWrapper::wrap_for_fail(code)?));
     }
 
     fn create_bad_request(
@@ -41,9 +41,9 @@ pub trait ResponseCreatorTrait: ResponseCreatorTrait_ {
 }
 
 pub trait ResponseCreatorTrait_ {
-    type ResponseBodyWrapper: ResponseBodyWrapperTrait;
+    type ResponseDataWrapper: ResponseDataWrapperTrait;
 
     fn create_ok(
-        body: <Self::ResponseBodyWrapper as ResponseBodyWrapperTrait>::WrappedBodyType
+        body: <Self::ResponseDataWrapper as ResponseDataWrapperTrait>::WrappedDataType
     ) -> HttpResponse<Body>;
 }

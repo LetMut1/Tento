@@ -1,8 +1,8 @@
 use actix_web::dev::Body;
 use actix_web::http::header;
 use actix_web::HttpResponse;
-use super::json_response_body_wrapper::JsonResponseBodyWrapper;
-use super::response_body_wrapper_trait::ResponseBodyWrapperTrait;
+use super::json_response_data_wrapper::JsonResponseDataWrapper;
+use super::response_data_wrapper_trait::ResponseDataWrapperTrait;
 use super::response_creator_trait::ResponseCreatorTrait_;
 use super::response_creator_trait::ResponseCreatorTrait;
 
@@ -11,10 +11,10 @@ pub struct JsonResponseCreator;
 impl ResponseCreatorTrait for JsonResponseCreator {}
 
 impl ResponseCreatorTrait_ for JsonResponseCreator {
-    type ResponseBodyWrapper = JsonResponseBodyWrapper;
+    type ResponseDataWrapper = JsonResponseDataWrapper;
 
     fn create_ok(
-        body: <Self::ResponseBodyWrapper as ResponseBodyWrapperTrait>::WrappedBodyType
+        body: <Self::ResponseDataWrapper as ResponseDataWrapperTrait>::WrappedDataType
     ) -> HttpResponse<Body> {
         return HttpResponse::Ok()
             .set_header(header::CONTENT_TYPE, "application/json")
