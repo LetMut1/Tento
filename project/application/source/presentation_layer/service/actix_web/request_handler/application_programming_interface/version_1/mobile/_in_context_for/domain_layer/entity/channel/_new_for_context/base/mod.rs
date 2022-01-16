@@ -13,8 +13,8 @@ use crate::presentation_layer::data_transfer_object::request::_in_context_for::p
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::Base as RequestGetManyByIdRegistry;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestGetManyByName;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::Base as RequestGetManyBySubscribersQuantity;
-use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::byte_response_creator::ByteResponseCreator;
-use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::response_creator_trait::ResponseCreatorTrait;
+use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::response_creator::ResponseCreator;
+use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::response_data_wrapper::ResponseDataWrapper;
 use std::convert::From;
 
 pub struct Base;
@@ -27,15 +27,15 @@ impl Base {
         match query {
             Ok(query_) => {
                 match HandlerGetManyByName::handle(data.into_inner(), query_.into_inner()) {
-                    Ok(response) => { 
-                        match ByteResponseCreator::wrap_for_success_with_body_and_create_ok(response) {
-                            Ok(http_response) => {
-                                return http_response;
+                    Ok(response_data) => { 
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                            Ok(data) => {
+                                return ResponseCreator::create_ok(data);
                             },
-                            Err(base_error) => {
-                                log::error!("{}", base_error);
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
         
-                                return ByteResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_error();
                             }
                         }
                     },
@@ -45,13 +45,13 @@ impl Base {
                                 unreachable!("{}", base_error);
                             },
                             BaseError::InvalidArgumentError => {
-                                return ByteResponseCreator::create_bad_request();
+                                return ResponseCreator::create_bad_request();
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", base_error);
         
-                                return ByteResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -60,7 +60,7 @@ impl Base {
             Err(error) => {
                 log::error!("{}", BaseError::from(error));
 
-                return ByteResponseCreator::create_internal_server_error();
+                return ResponseCreator::create_internal_server_error();
             }
         }
     }
@@ -72,15 +72,15 @@ impl Base {
         match query {
             Ok(query_) => {
                 match HandlerGetManyByCreatedName::handle(data.into_inner(), query_.into_inner()) {
-                    Ok(response) => { 
-                        match ByteResponseCreator::wrap_for_success_with_body_and_create_ok(response) {
-                            Ok(http_response) => {
-                                return http_response;
+                    Ok(response_data) => { 
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                            Ok(data) => {
+                                return ResponseCreator::create_ok(data);
                             },
-                            Err(base_error) => {
-                                log::error!("{}", base_error);
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
         
-                                return ByteResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_error();
                             }
                         }
                     },
@@ -90,13 +90,13 @@ impl Base {
                                 unreachable!("{}", base_error);
                             },
                             BaseError::InvalidArgumentError => {
-                                return ByteResponseCreator::create_bad_request();
+                                return ResponseCreator::create_bad_request();
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", base_error);
         
-                                return ByteResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -105,7 +105,7 @@ impl Base {
             Err(error) => {
                 log::error!("{}", BaseError::from(error));
 
-                return ByteResponseCreator::create_internal_server_error();
+                return ResponseCreator::create_internal_server_error();
             }
         }
     }
@@ -117,15 +117,15 @@ impl Base {
         match query {
             Ok(query_) => {
                 match HandlerGetManyBySubscribersQuantity::handle(data.into_inner(), query_.into_inner()) {
-                    Ok(response) => { 
-                        match ByteResponseCreator::wrap_for_success_with_body_and_create_ok(response) {
-                            Ok(http_response) => {
-                                return http_response;
+                    Ok(response_data) => { 
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                            Ok(data) => {
+                                return ResponseCreator::create_ok(data);
                             },
-                            Err(base_error) => {
-                                log::error!("{}", base_error);
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
         
-                                return ByteResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_error();
                             }
                         }
                     },
@@ -135,13 +135,13 @@ impl Base {
                                 unreachable!("{}", base_error);
                             },
                             BaseError::InvalidArgumentError => {
-                                return ByteResponseCreator::create_bad_request();
+                                return ResponseCreator::create_bad_request();
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", base_error);
         
-                                return ByteResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -150,7 +150,7 @@ impl Base {
             Err(error) => {
                 log::error!("{}", BaseError::from(error));
 
-                return ByteResponseCreator::create_internal_server_error();
+                return ResponseCreator::create_internal_server_error();
             }
         }
     }
@@ -162,15 +162,15 @@ impl Base {
         match query {
             Ok(query_) => {
                 match HandlerGetManyByIdRegistry::handle(data.into_inner(), query_.into_inner()) {
-                    Ok(response) => { 
-                        match ByteResponseCreator::wrap_for_success_with_body_and_create_ok(response) {
-                            Ok(http_response) => {
-                                return http_response;
+                    Ok(response_data) => { 
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                            Ok(data) => {
+                                return ResponseCreator::create_ok(data);
                             },
-                            Err(base_error) => {
-                                log::error!("{}", base_error);
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
         
-                                return ByteResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_error();
                             }
                         }
                     },
@@ -180,13 +180,13 @@ impl Base {
                                 unreachable!("{}", base_error);
                             },
                             BaseError::InvalidArgumentError => {
-                                return ByteResponseCreator::create_bad_request();
+                                return ResponseCreator::create_bad_request();
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", base_error);
         
-                                return ByteResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -195,7 +195,7 @@ impl Base {
             Err(error) => {
                 log::error!("{}", BaseError::from(error));
 
-                return ByteResponseCreator::create_internal_server_error();
+                return ResponseCreator::create_internal_server_error();
             }
         }
     }

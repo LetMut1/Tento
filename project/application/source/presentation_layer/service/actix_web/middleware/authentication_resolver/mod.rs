@@ -7,8 +7,8 @@ use crate::domain_layer::error::entity_error::_component::_in_context_for::domai
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::byte_response_creator::ByteResponseCreator;
-use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::response_creator_trait::ResponseCreatorTrait;
+use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::response_creator::ResponseCreator;
+use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::response_data_wrapper::ResponseDataWrapper;
 use futures::future;
 use futures::future::Either;
 use futures::future::Ready;
@@ -65,22 +65,22 @@ where
                         EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
                             match json_access_web_token_error {
                                 JsonAccessWebTokenError::AlreadyExpired => {
-                                    match ByteResponseCreator::wrap_for_fail_and_create_ok(
+                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                         CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
-                                    ) {
-                                        Ok(http_response) => {
-                                            return Either::Right(future::ok(service_request.into_response(http_response.into_body())));
+                                    )) {
+                                        Ok(data) => {
+                                            return Either::Right(future::ok(service_request.into_response(ResponseCreator::create_ok(data).into_body())));
                                         },
-                                        Err(base_error) => {
-                                            log::error!("{}", base_error);
+                                        Err(error) => {
+                                            log::error!("{}", BaseError::from(error));
                     
-                                            return Either::Right(future::ok(service_request.into_response(ByteResponseCreator::create_internal_server_error().into_body())));
+                                            return Either::Right(future::ok(service_request.into_response(ResponseCreator::create_internal_server_error().into_body())));
                                         }
                                     }
                                 },
                                 JsonAccessWebTokenError::InJsonAccessWebTokenBlackList |
                                 JsonAccessWebTokenError::NotFound => {
-                                    return Either::Right(future::ok(service_request.into_response(ByteResponseCreator::create_unauthorized().into_body())));
+                                    return Either::Right(future::ok(service_request.into_response(ResponseCreator::create_unauthorized().into_body())));
                                 },
                                 _ => {
                                     unreachable!("{}", base_error);
@@ -93,13 +93,13 @@ where
                     }
                 },
                 BaseError::InvalidArgumentError => {
-                    return Either::Right(future::ok(service_request.into_response(ByteResponseCreator::create_bad_request().into_body())));
+                    return Either::Right(future::ok(service_request.into_response(ResponseCreator::create_bad_request().into_body())));
                 },
                 BaseError::LogicError {logic_error: _} |
                 BaseError::RunTimeError {run_time_error: _} => {
                     log::error!("{}", base_error);
 
-                    return Either::Right(future::ok(service_request.into_response(ByteResponseCreator::create_internal_server_error().into_body())));
+                    return Either::Right(future::ok(service_request.into_response(ResponseCreator::create_internal_server_error().into_body())));
                 }
             }
         }
