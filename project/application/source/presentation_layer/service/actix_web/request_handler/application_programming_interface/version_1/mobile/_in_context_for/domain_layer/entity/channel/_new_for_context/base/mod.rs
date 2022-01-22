@@ -1,9 +1,11 @@
 use actix_web::body::Body;
+use actix_web::FromRequest;
+use actix_web::HttpRequest;
 use actix_web::HttpResponse;
-use actix_web::Result as ActixWebResult;
+use actix_web::web::Buf;
+use actix_web::web::Bytes;
 use actix_web::web::Data;
-use actix_web::web::Query;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_created_at::base::Base as HandlerGetManyByCreatedName;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_created_at::base::Base as HandlerGetManyByCreatedAt;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_id_registry::base::Base as HandlerGetManyByIdRegistry;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_name::base::Base as HandlerGetManyByName;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_subscribers_quantity::base::Base as HandlerGetManyBySubscribersQuantity;
@@ -21,39 +23,56 @@ pub struct Base;
 
 impl Base {
     pub async fn get_many_by_name(
-        data: Data<AggregateConnectionPool>,
-        query: ActixWebResult<Query<RequestGetManyByName>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match query {
-            Ok(query_) => {
-                match HandlerGetManyByName::handle(data.into_inner(), query_.into_inner()) {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+            Ok(data) => {
+                match Bytes::extract(&http_request).await {
+                    Ok(request_data) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestGetManyByName>(request_data.bytes()) {
+                            Ok(request_data_) => {
+                                match HandlerGetManyByName::handle(data.into_inner(), request_data_) {
+                                    Ok(response_data) => { 
+                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                            Ok(data) => {
+                                                return ResponseCreator::create_ok(data);
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    Err(ref base_error) => {
+                                        match base_error {
+                                            BaseError::EntityError {entity_error: _} => {
+                                                unreachable!("{}", base_error);
+                                            },
+                                            BaseError::InvalidArgumentError => {
+                                                return ResponseCreator::create_bad_request();
+                                            },
+                                            BaseError::LogicError {logic_error: _} |
+                                            BaseError::RunTimeError {run_time_error: _} => {
+                                                log::error!("{}", base_error);
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    }
+                                }
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
-        
+                
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error: _} => {
-                                unreachable!("{}", base_error);
-                            },
-                            BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
@@ -66,39 +85,56 @@ impl Base {
     }
 
     pub async fn get_many_by_created_at(
-        data: Data<AggregateConnectionPool>,
-        query: ActixWebResult<Query<RequestGetManyByCreatedAt>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match query {
-            Ok(query_) => {
-                match HandlerGetManyByCreatedName::handle(data.into_inner(), query_.into_inner()) {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+            Ok(data) => {
+                match Bytes::extract(&http_request).await {
+                    Ok(request_data) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestGetManyByCreatedAt>(request_data.bytes()) {
+                            Ok(request_data_) => {
+                                match HandlerGetManyByCreatedAt::handle(data.into_inner(), request_data_) {
+                                    Ok(response_data) => { 
+                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                            Ok(data) => {
+                                                return ResponseCreator::create_ok(data);
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    Err(ref base_error) => {
+                                        match base_error {
+                                            BaseError::EntityError {entity_error: _} => {
+                                                unreachable!("{}", base_error);
+                                            },
+                                            BaseError::InvalidArgumentError => {
+                                                return ResponseCreator::create_bad_request();
+                                            },
+                                            BaseError::LogicError {logic_error: _} |
+                                            BaseError::RunTimeError {run_time_error: _} => {
+                                                log::error!("{}", base_error);
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    }
+                                }
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
-        
+                
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error: _} => {
-                                unreachable!("{}", base_error);
-                            },
-                            BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
@@ -111,39 +147,56 @@ impl Base {
     }
     
     pub async fn get_many_by_subscribers_quantity(
-        data: Data<AggregateConnectionPool>,
-        query: ActixWebResult<Query<RequestGetManyBySubscribersQuantity>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match query {
-            Ok(query_) => {
-                match HandlerGetManyBySubscribersQuantity::handle(data.into_inner(), query_.into_inner()) {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+            Ok(data) => {
+                match Bytes::extract(&http_request).await {
+                    Ok(request_data) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestGetManyBySubscribersQuantity>(request_data.bytes()) {
+                            Ok(request_data_) => {
+                                match HandlerGetManyBySubscribersQuantity::handle(data.into_inner(), request_data_) {
+                                    Ok(response_data) => { 
+                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                            Ok(data) => {
+                                                return ResponseCreator::create_ok(data);
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    Err(ref base_error) => {
+                                        match base_error {
+                                            BaseError::EntityError {entity_error: _} => {
+                                                unreachable!("{}", base_error);
+                                            },
+                                            BaseError::InvalidArgumentError => {
+                                                return ResponseCreator::create_bad_request();
+                                            },
+                                            BaseError::LogicError {logic_error: _} |
+                                            BaseError::RunTimeError {run_time_error: _} => {
+                                                log::error!("{}", base_error);
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    }
+                                }
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
-        
+                
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error: _} => {
-                                unreachable!("{}", base_error);
-                            },
-                            BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
@@ -156,39 +209,56 @@ impl Base {
     }
 
     pub async fn get_many_by_id_registry(
-        data: Data<AggregateConnectionPool>,
-        query: ActixWebResult<Query<RequestGetManyByIdRegistry>>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match query {
-            Ok(query_) => {
-                match HandlerGetManyByIdRegistry::handle(data.into_inner(), query_.into_inner()) {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+            Ok(data) => {
+                match Bytes::extract(&http_request).await {
+                    Ok(request_data) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestGetManyByIdRegistry>(request_data.bytes()) {
+                            Ok(request_data_) => {
+                                match HandlerGetManyByIdRegistry::handle(data.into_inner(), request_data_) {
+                                    Ok(response_data) => { 
+                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                            Ok(data) => {
+                                                return ResponseCreator::create_ok(data);
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    Err(ref base_error) => {
+                                        match base_error {
+                                            BaseError::EntityError {entity_error: _} => {
+                                                unreachable!("{}", base_error);
+                                            },
+                                            BaseError::InvalidArgumentError => {
+                                                return ResponseCreator::create_bad_request();
+                                            },
+                                            BaseError::LogicError {logic_error: _} |
+                                            BaseError::RunTimeError {run_time_error: _} => {
+                                                log::error!("{}", base_error);
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    }
+                                }
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
-        
+                
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
-                            BaseError::EntityError {entity_error: _} => {
-                                unreachable!("{}", base_error);
-                            },
-                            BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
-                            },
-                            BaseError::LogicError {logic_error: _} |
-                            BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
-        
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
