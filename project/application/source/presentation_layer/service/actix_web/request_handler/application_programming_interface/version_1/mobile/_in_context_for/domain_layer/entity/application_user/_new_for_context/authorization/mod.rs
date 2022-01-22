@@ -1,6 +1,5 @@
 use actix_web::body::Body;
 use actix_web::HttpResponse;
-use actix_web::Result as ActixWebResult;
 use actix_web::web::Buf;
 use actix_web::web::Bytes;
 use actix_web::web::Data;
@@ -59,12 +58,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestCheckNicknameForExisting>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                match HandlerCheckNicknameForExisting::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestCheckNicknameForExisting>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                match HandlerCheckNicknameForExisting::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => {
                                         match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                             Ok(data) => {
@@ -146,12 +145,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestCheckEmailForExisting>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                match HandlerCheckEmailForExisting::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestCheckEmailForExisting>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                match HandlerCheckEmailForExisting::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => {
                                         match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                             Ok(data) => {
@@ -233,12 +232,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestRegisterByFirstStep>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                if let Err(ref base_error) = HandlerRegisterByFirstStep::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestRegisterByFirstStep>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                if let Err(ref base_error) = HandlerRegisterByFirstStep::handle(application_data.into_inner(), request_data) {
                                     match base_error {
                                         BaseError::EntityError {entity_error} => {
                                             match entity_error {
@@ -331,12 +330,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestRegisterByLastStep>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                match HandlerRegisterByLastStep::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestRegisterByLastStep>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                match HandlerRegisterByLastStep::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => { 
                                         match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                             Ok(data) => {
@@ -492,12 +491,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForRegister>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                            if let Err(ref base_error) = HandlerSendEmailForRegister::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForRegister>(bytes.bytes()) {
+                            Ok(request_data) => {
+                            if let Err(ref base_error) = HandlerSendEmailForRegister::handle(application_data.into_inner(), request_data) {
                                 match base_error {
                                     BaseError::EntityError {entity_error} => {
                                         match entity_error {
@@ -578,12 +577,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestLogInByFirstStep>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                match HandlerLogInByFirstStep::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestLogInByFirstStep>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                match HandlerLogInByFirstStep::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => { 
                                         match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                             Ok(data) => {
@@ -668,12 +667,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestLogInByLastStep>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                match HandlerLogInByLastStep::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestLogInByLastStep>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                match HandlerLogInByLastStep::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => { 
                                         match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                             Ok(data) => {
@@ -766,12 +765,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForLogIn>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                if let Err(ref base_error) = HandlerSendEmailForLogIn::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForLogIn>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                if let Err(ref base_error) = HandlerSendEmailForLogIn::handle(application_data.into_inner(), request_data) {
                                     match base_error {
                                         BaseError::EntityError {entity_error} => {
                                             match entity_error {
@@ -871,12 +870,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestRefreshJsonAccessWebToken>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                match HandlerRefreshJsonAccessWebToken::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestRefreshJsonAccessWebToken>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                match HandlerRefreshJsonAccessWebToken::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => {
                                         match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                             Ok(data) => {
@@ -976,10 +975,10 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
-                match RequestData::<JsonAccessWebToken<'_>>::extract(&http_request).await {
+            Ok(application_data) => {
+                match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(request_data) => {
-                        if let Err(ref base_error) = HandlerLogOut::handle(data.into_inner(), &request_data.into_inner()) {
+                        if let Err(ref base_error) = HandlerLogOut::handle(application_data.into_inner(), &request_data.into_inner()) {
                             match base_error {
                                 BaseError::EntityError {entity_error} => {
                                     match entity_error {
@@ -1048,10 +1047,10 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
-                match RequestData::<JsonAccessWebToken<'_>>::extract(&http_request).await {
+            Ok(application_data) => {
+                match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(request_data) => {
-                        if let Err(ref base_error) = HandlerLogOutFromAllDevices::handle(data.into_inner(), &request_data.into_inner()) {
+                        if let Err(ref base_error) = HandlerLogOutFromAllDevices::handle(application_data.into_inner(), &request_data.into_inner()) {
                             match base_error {
                                 BaseError::EntityError {entity_error} => {
                                     match entity_error {
@@ -1120,12 +1119,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestResetPasswordByFirstStep>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                match HandlerResetPasswordByFirstStep::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestResetPasswordByFirstStep>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                match HandlerResetPasswordByFirstStep::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => {
                                         match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                             Ok(data) => {
@@ -1208,12 +1207,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestResetPasswordByLastStep>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                if let Err(ref base_error) = HandlerResetPasswordByLastStep::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestResetPasswordByLastStep>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                if let Err(ref base_error) = HandlerResetPasswordByLastStep::handle(application_data.into_inner(), request_data) {
                                     match base_error {
                                         BaseError::EntityError {entity_error} => {
                                             match entity_error {
@@ -1339,12 +1338,12 @@ impl Authorization {
         http_request: HttpRequest
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
-            Ok(data) => {
+            Ok(application_data) => {
                 match Bytes::extract(&http_request).await {
-                    Ok(request_data) => {
-                        match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForResetPassword>(request_data.bytes()) {
-                            Ok(request_data_) => {
-                                if let Err(ref base_error) = HandlerSendEmailForResetPassword::handle(data.into_inner(), request_data_) {
+                    Ok(bytes) => {
+                        match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForResetPassword>(bytes.bytes()) {
+                            Ok(request_data) => {
+                                if let Err(ref base_error) = HandlerSendEmailForResetPassword::handle(application_data.into_inner(), request_data) {
                                     match base_error {
                                         BaseError::EntityError {entity_error} => {
                                             match entity_error {
@@ -1444,13 +1443,13 @@ impl Authorization {
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 impl Authorization {
     pub async fn check_nickname_for_existing_(
-        request_body_data: ActixWebResult<Bytes>
+        http_request: HttpRequest
     ) -> HttpResponse<Body> {
-        match request_body_data {
-            Ok(reqest_body_data_) => {
-                match serde_json::from_slice::<'_, RequestCheckNicknameForExisting>(reqest_body_data_.bytes()) {        // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    Ok(request) => {
-                        match HandlerCheckNicknameForExisting_::handle(request) {
+        match Bytes::extract(&http_request).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestCheckNicknameForExisting>(bytes.bytes()) {
+                    Ok(request_data) => {
+                        match HandlerCheckNicknameForExisting_::handle(request_data, http_request.headers()) {
                             Ok(response_data) => {
                                 match serde_json::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                     Ok(data) => {
@@ -1481,8 +1480,10 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(wwwwwwXXXXXXXXXXxx) => {
-                        return ResponseCreator::create_internal_server_error(); // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
