@@ -1,1 +1,1 @@
-pub mod response_body_wrapper_trait;
+pub mod response_data_wrapper_trait;
