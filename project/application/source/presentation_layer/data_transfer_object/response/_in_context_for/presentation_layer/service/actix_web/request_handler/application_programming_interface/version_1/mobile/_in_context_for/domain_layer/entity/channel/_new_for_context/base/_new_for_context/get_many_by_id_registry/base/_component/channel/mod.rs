@@ -1,7 +1,8 @@
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 pub struct Channel {
     channel_id: i64,
     channel_name: String,

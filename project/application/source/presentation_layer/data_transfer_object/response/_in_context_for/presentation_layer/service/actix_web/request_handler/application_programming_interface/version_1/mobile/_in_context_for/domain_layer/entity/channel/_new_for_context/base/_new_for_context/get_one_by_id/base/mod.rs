@@ -1,7 +1,8 @@
 // use serde::Deserialize;
 // use serde::Serialize;
 
-// #[derive(Serialize, Deserialize)]
+// #[derive(Serialize)]
+// #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 // pub struct Base {                    // TODO Используется ли этот файл
 //     channel_name: String,
 //     channel_personalization_image_path: String,
