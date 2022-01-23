@@ -5,6 +5,7 @@ use actix_web::HttpResponse;
 use actix_web::web::Buf;
 use actix_web::web::Bytes;
 use actix_web::web::Data;
+use actix_web::web::Payload;
 use actix_web::web::ReqData as RequestData;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_created_at::base::Base as HandlerGetManyByCreatedAt;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_id_registry::base::Base as HandlerGetManyByIdRegistry;
@@ -25,13 +26,14 @@ pub struct Base;
 
 impl Base {
     pub async fn get_many_by_name(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
-                        match Bytes::extract(&http_request).await {
+                        match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                             Ok(bytes) => {
                                 match rmp_serde:: from_read_ref::<'_, [u8], RequestGetManyByName>(bytes.bytes()) {
                                     Ok(request_data) => {
@@ -96,13 +98,14 @@ impl Base {
     }
 
     pub async fn get_many_by_created_at(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
-                        match Bytes::extract(&http_request).await {
+                        match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                             Ok(bytes) => {
                                 match rmp_serde:: from_read_ref::<'_, [u8], RequestGetManyByCreatedAt>(bytes.bytes()) {
                                     Ok(request_data) => {
@@ -167,13 +170,14 @@ impl Base {
     }
     
     pub async fn get_many_by_subscribers_quantity(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
-                        match Bytes::extract(&http_request).await {
+                        match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                             Ok(bytes) => {
                                 match rmp_serde:: from_read_ref::<'_, [u8], RequestGetManyBySubscribersQuantity>(bytes.bytes()) {
                                     Ok(request_data) => {
@@ -238,13 +242,14 @@ impl Base {
     }
 
     pub async fn get_many_by_id_registry(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
-                        match Bytes::extract(&http_request).await {
+                        match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                             Ok(bytes) => {
                                 match rmp_serde:: from_read_ref::<'_, [u8], RequestGetManyByIdRegistry>(bytes.bytes()) {
                                     Ok(request_data) => {

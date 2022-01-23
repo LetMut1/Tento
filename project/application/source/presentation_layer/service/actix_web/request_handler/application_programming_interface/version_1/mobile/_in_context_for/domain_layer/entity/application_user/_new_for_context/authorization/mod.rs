@@ -1,10 +1,11 @@
 use actix_web::body::Body;
+use actix_web::FromRequest;
+use actix_web::HttpRequest;
 use actix_web::HttpResponse;
 use actix_web::web::Buf;
 use actix_web::web::Bytes;
 use actix_web::web::Data;
-use actix_web::HttpRequest;
-use actix_web::FromRequest;
+use actix_web::web::Payload;
 use actix_web::web::ReqData as RequestData;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Base as HandlerCheckEmailForExisting;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::base::Base as HandlerCheckNicknameForExisting;
@@ -15,9 +16,9 @@ use crate::application_layer::service::handler::_in_contex_for::presentation_lay
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token::base::Base as HandlerRefreshJsonAccessWebToken;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step::base::Base as HandlerRegisterByFirstStep;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Base as HandlerRegisterByLastStep;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as HandlerSendEmailForLogIn;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Base as HandlerResetPasswordByFirstStep;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step::base::Base as HandlerResetPasswordByLastStep;
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as HandlerSendEmailForLogIn;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Base as HandlerSendEmailForRegister;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Base as HandlerSendEmailForResetPassword;
 use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
@@ -47,7 +48,6 @@ use crate::presentation_layer::service::_in_context_for::presentation_layer::ser
 use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::response_data_wrapper::ResponseDataWrapper;
 use std::convert::From;
 
-
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as HandlerCheckNicknameForExisting_;
 
@@ -55,11 +55,12 @@ pub struct Authorization;
 
 impl Authorization {
     pub async fn check_nickname_for_existing(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestCheckNicknameForExisting>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -143,9 +144,10 @@ impl Authorization {
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
     pub async fn check_nickname_for_existing_(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
-        match Bytes::extract(&http_request).await {
+        match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestCheckNicknameForExisting>(bytes.bytes()) {
                     Ok(request_data) => {
@@ -203,11 +205,12 @@ impl Authorization {
     }
 
     pub async fn check_email_for_existing(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestCheckEmailForExisting>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -290,11 +293,12 @@ impl Authorization {
     }
 
     pub async fn register_by_first_step(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestRegisterByFirstStep>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -388,11 +392,12 @@ impl Authorization {
     }
 
     pub async fn register_by_last_step(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestRegisterByLastStep>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -549,11 +554,12 @@ impl Authorization {
     }
 
     pub async fn send_email_for_register(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForRegister>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -635,11 +641,12 @@ impl Authorization {
     }
 
     pub async fn log_in_by_first_step(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestLogInByFirstStep>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -725,11 +732,12 @@ impl Authorization {
     }
 
     pub async fn log_in_by_last_step(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestLogInByLastStep>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -823,11 +831,12 @@ impl Authorization {
     }
 
     pub async fn send_email_for_log_in(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForLogIn>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -928,11 +937,12 @@ impl Authorization {
     }
 
     pub async fn refresh_json_access_web_token(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestRefreshJsonAccessWebToken>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -1177,11 +1187,12 @@ impl Authorization {
     }
 
     pub async fn reset_password_by_first_step(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestResetPasswordByFirstStep>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -1265,11 +1276,12 @@ impl Authorization {
     }
 
     pub async fn reset_password_by_last_step(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestResetPasswordByLastStep>(bytes.bytes()) {
                             Ok(request_data) => {
@@ -1396,11 +1408,12 @@ impl Authorization {
     }
 
     pub async fn send_email_for_reset_password(
-        http_request: HttpRequest
+        http_request: HttpRequest,
+        payload: Payload
     ) -> HttpResponse<Body> {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
-                match Bytes::extract(&http_request).await {
+                match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
                         match rmp_serde:: from_read_ref::<'_, [u8], RequestSendEmailForResetPassword>(bytes.bytes()) {
                             Ok(request_data) => {
