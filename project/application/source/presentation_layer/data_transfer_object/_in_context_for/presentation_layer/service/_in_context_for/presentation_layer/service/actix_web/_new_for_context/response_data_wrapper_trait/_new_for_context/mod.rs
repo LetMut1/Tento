@@ -1,1 +1,1 @@
-pub mod wrapped_result;
+pub mod wrapped_response;
