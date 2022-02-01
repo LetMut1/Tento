@@ -32,7 +32,7 @@ use super::_component::run_time_error::_component::resource_error::resource_erro
 use super::_component::run_time_error::run_time_error::RunTimeError;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use ureq::Error as UreqError;
+use reqwest::Error as ReqwestError;
 
 #[derive(Debug)]
 pub enum BaseError {                // TODO Как понять и отследить Бэктрейс ошибки? (Например, ЛогикЕррор). Нужно ли отслеживать? Или же покрыть все функциональными тестами?
@@ -240,11 +240,11 @@ impl From<ChronoParseError> for BaseError {
 }
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-impl From<UreqError> for BaseError {
+impl From<ReqwestError> for BaseError {
     fn from(
-        ureq_error: UreqError
+        reqwest_error: ReqwestError
     ) -> Self {
-        return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("UreqError", ureq_error)}};
+        return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("UreqError", reqwest_error)}};
     }
 }
 

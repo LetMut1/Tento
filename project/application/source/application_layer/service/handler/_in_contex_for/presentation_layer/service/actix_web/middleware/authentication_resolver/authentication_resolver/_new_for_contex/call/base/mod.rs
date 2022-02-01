@@ -16,11 +16,13 @@ use std::sync::Arc;
 pub struct Base;
 
 impl Base {
+    pub const HEADER_NAME_X_JAWT: &'static str = "X-Jawt";  // TODO эту константу убрать вообщ в другой файл, а не транслировать
+
     pub fn handle<'a>(
         aggregate_connection_pool: Arc<AggregateConnectionPool>,
         header_map: &'a HeaderMap
     ) -> Result<JsonAccessWebToken<'static>, BaseError> {
-        if let Some(x_jawt_header_value) = header_map.get("X-Jawt") {
+        if let Some(x_jawt_header_value) = header_map.get(Self::HEADER_NAME_X_JAWT) {
             if let Ok(x_jawt) = x_jawt_header_value.to_str() {
                 let json_access_web_token: JsonAccessWebToken<'static> = SerializationFormResolver::deserialize(x_jawt)?;
                 if !ExpirationTimeResolver::is_expired(&json_access_web_token)? {
