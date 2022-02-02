@@ -1,4 +1,4 @@
-use actix_web::body::Body;
+use actix_http::body::BoxBody;
 use actix_web::http::header;
 use actix_web::http::StatusCode;
 use actix_web::HttpResponse;
@@ -9,7 +9,7 @@ impl ResponseCreator {
     fn create(
         status_code: StatusCode,
         data: Option<Vec<u8>>
-    ) -> HttpResponse<Body> {
+    ) -> HttpResponse<BoxBody> {
         if let Some(data_) = data {
             return HttpResponse::build(status_code)
                 .set_header(header::CONTENT_TYPE, "application/octet-stream")
@@ -21,23 +21,23 @@ impl ResponseCreator {
     }
 
     pub fn create_bad_request(
-    ) -> HttpResponse<Body> {
+    ) -> HttpResponse<BoxBody> {
         return Self::create(StatusCode::BAD_REQUEST, None);
     }
 
     pub fn create_unauthorized(
-    ) -> HttpResponse<Body> {
+    ) -> HttpResponse<BoxBody> {
         return Self::create(StatusCode::UNAUTHORIZED, None);
     }
 
     pub fn create_internal_server_error(
-    ) -> HttpResponse<Body> {
+    ) -> HttpResponse<BoxBody> {
         return Self::create(StatusCode::INTERNAL_SERVER_ERROR, None);
     }
 
     pub fn create_ok(
         data: Vec<u8>
-    ) -> HttpResponse<Body> {
+    ) -> HttpResponse<BoxBody> {
         return Self::create(StatusCode::OK, Some(data));
     }
 
@@ -45,7 +45,7 @@ impl ResponseCreator {
     pub fn create_(
         status_code: StatusCode,
         data: Option<Vec<u8>>
-    ) -> HttpResponse<Body> {
+    ) -> HttpResponse<BoxBody> {
         return Self::create(status_code, data);
     }
 }

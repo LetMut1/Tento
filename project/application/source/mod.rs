@@ -23,7 +23,7 @@ extern crate serde;
 extern crate uuid;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-extern crate reqwest;
+extern crate actix_http;
 
 pub mod _resource;
 pub mod application_layer;

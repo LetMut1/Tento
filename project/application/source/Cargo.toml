@@ -18,8 +18,9 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
-actix-service = {version = "^1.0", default-features = true, optional = false}
-actix-web = {version = "^3.3", default-features = true, optional = false}
+actix-http = {version = "=3.0.0-rc.1", default-features = true, optional = false}
+actix-service = {version = "^2.0", default-features = true, optional = false}
+actix-web = {version = "=4.0.0-rc.2", default-features = true, optional = false}
 anyhow = {version = "^1.0", default-features = true, optional = false}
 base64 = {version = "^0.13", default-features = true, optional = false}
 chrono = {version = "^0.4", default-features = true, optional = false}
@@ -36,7 +37,6 @@ r2d2_postgres = {version = "^0.18", default-features = true, optional = false}
 r2d2_redis = {version = "^0.14", default-features = true, optional = false}
 redis = {version = "^0.20", default-features = true, features = ["r2d2"], optional = false}
 regex = {version = "^1.4", default-features = true, optional = false}
-reqwest = { version = "^0.11", default-features = true, features = ["blocking"], optional = true}
 rmp-serde = {version = "^0.15", default-features = true, optional = false}
 rust-argon2 = {version = "^0.8", default-features = true, optional = false}
 rust-crypto = {version = "^0.2", default-features = true, optional = false}
@@ -46,4 +46,4 @@ uuid = {version = "^0.8", default-features = true, features = ["v4"], optional =
 
 [features]
 default = []
-facilitate_non_automatic_functional_testing = ["reqwest"]
+facilitate_non_automatic_functional_testing = []
