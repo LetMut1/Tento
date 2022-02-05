@@ -61,11 +61,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestCheckNicknameForExisting>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestCheckNicknameForExisting>(bytes.chunk()) {
                             Ok(request_data) => {
                                 match HandlerCheckNicknameForExisting::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => {
@@ -151,11 +148,8 @@ impl Authorization {
         payload: Payload
     ) -> HttpResponse<BoxBody> {
         match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-            Ok(mut bytes) => {
-                let mut data: Vec<u8> = vec![];
-                bytes.copy_to_slice(&mut data);
-
-                match serde_json::from_slice::<'_, RequestCheckNicknameForExisting>(&data[..]) {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestCheckNicknameForExisting>(bytes.chunk()) {
                     Ok(request_data) => {
                         match HandlerCheckNicknameForExisting_::handle(http_request, request_data).await {
                             Ok(response_data) => {
@@ -215,11 +209,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestCheckEmailForExisting>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestCheckEmailForExisting>(bytes.chunk()) {
                             Ok(request_data) => {
                                 match HandlerCheckEmailForExisting::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => {
@@ -306,11 +297,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestRegisterByFirstStep>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestRegisterByFirstStep>(bytes.chunk()) {
                             Ok(request_data) => {
                                 if let Err(ref base_error) = HandlerRegisterByFirstStep::handle(application_data.into_inner(), request_data) {
                                     match base_error {
@@ -408,11 +396,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestRegisterByLastStep>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestRegisterByLastStep>(bytes.chunk()) {
                             Ok(request_data) => {
                                 match HandlerRegisterByLastStep::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => { 
@@ -573,11 +558,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestSendEmailForRegister>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestSendEmailForRegister>(bytes.chunk()) {
                             Ok(request_data) => {
                             if let Err(ref base_error) = HandlerSendEmailForRegister::handle(application_data.into_inner(), request_data) {
                                 match base_error {
@@ -663,11 +645,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestLogInByFirstStep>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestLogInByFirstStep>(bytes.chunk()) {
                             Ok(request_data) => {
                                 match HandlerLogInByFirstStep::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => { 
@@ -757,11 +736,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestLogInByLastStep>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestLogInByLastStep>(bytes.chunk()) {
                             Ok(request_data) => {
                                 match HandlerLogInByLastStep::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => { 
@@ -859,11 +835,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestSendEmailForLogIn>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestSendEmailForLogIn>(bytes.chunk()) {
                             Ok(request_data) => {
                                 if let Err(ref base_error) = HandlerSendEmailForLogIn::handle(application_data.into_inner(), request_data) {
                                     match base_error {
@@ -968,11 +941,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestRefreshJsonAccessWebToken>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestRefreshJsonAccessWebToken>(bytes.chunk()) {
                             Ok(request_data) => {
                                 match HandlerRefreshJsonAccessWebToken::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => {
@@ -1221,11 +1191,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestResetPasswordByFirstStep>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestResetPasswordByFirstStep>(bytes.chunk()) {
                             Ok(request_data) => {
                                 match HandlerResetPasswordByFirstStep::handle(application_data.into_inner(), request_data) {
                                     Ok(response_data) => {
@@ -1313,11 +1280,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestResetPasswordByLastStep>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestResetPasswordByLastStep>(bytes.chunk()) {
                             Ok(request_data) => {
                                 if let Err(ref base_error) = HandlerResetPasswordByLastStep::handle(application_data.into_inner(), request_data) {
                                     match base_error {
@@ -1448,11 +1412,8 @@ impl Authorization {
         match Data::<AggregateConnectionPool>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                    Ok(mut bytes) => {
-                        let mut data: Vec<u8> = vec![];
-                        bytes.copy_to_slice(&mut data);
-
-                        match rmp_serde::from_read_ref::<'_, [u8], RequestSendEmailForResetPassword>(&data[..]) {
+                    Ok(bytes) => {
+                        match rmp_serde::from_read_ref::<'_, [u8], RequestSendEmailForResetPassword>(bytes.chunk()) {
                             Ok(request_data) => {
                                 if let Err(ref base_error) = HandlerSendEmailForResetPassword::handle(application_data.into_inner(), request_data) {
                                     match base_error {

@@ -38,12 +38,9 @@ impl Base {
         if status_code == StatusCode::OK {
             let body: BoxBody = http_response.into_parts().1;
 
-            let mut bytes: Bytes = body::to_bytes(body).await.unwrap();    // TODO resolve unwrap !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            let bytes: Bytes = body::to_bytes(body).await.unwrap();    // TODO resolve unwrap !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-            let mut data: Vec<u8> = vec![];
-            bytes.copy_to_slice(&mut data);
-
-            let wrapped_response: WrappedResponse<Response> = rmp_serde::from_read_ref::<'_, [u8], WrappedResponse<Response>>(&data[..])?;
+            let wrapped_response: WrappedResponse<Response> = rmp_serde::from_read_ref::<'_, [u8], WrappedResponse<Response>>(bytes.chunk())?;
 
             result = (Some(wrapped_response), status_code);
         }

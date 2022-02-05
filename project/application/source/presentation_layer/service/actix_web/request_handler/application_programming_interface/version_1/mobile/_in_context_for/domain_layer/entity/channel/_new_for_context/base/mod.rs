@@ -34,11 +34,8 @@ impl Base {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
                         match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                            Ok(mut bytes) => {
-                                let mut data: Vec<u8> = vec![];
-                                bytes.copy_to_slice(&mut data);
-        
-                                match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyByName>(&data[..]) {
+                            Ok(bytes) => {
+                                match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyByName>(bytes.chunk()) {
                                     Ok(request_data) => {
                                         match HandlerGetManyByName::handle(application_data.into_inner(), request_data) {
                                             Ok(response_data) => { 
@@ -109,11 +106,8 @@ impl Base {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
                         match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                            Ok(mut bytes) => {
-                                let mut data: Vec<u8> = vec![];
-                                bytes.copy_to_slice(&mut data);
-        
-                                match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyByCreatedAt>(&data[..]) {
+                            Ok(bytes) => {
+                                match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyByCreatedAt>(bytes.chunk()) {
                                     Ok(request_data) => {
                                         match HandlerGetManyByCreatedAt::handle(application_data.into_inner(), request_data) {
                                             Ok(response_data) => { 
@@ -184,11 +178,8 @@ impl Base {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
                         match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                            Ok(mut bytes) => {
-                                let mut data: Vec<u8> = vec![];
-                                bytes.copy_to_slice(&mut data);
-        
-                                match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyBySubscribersQuantity>(&data[..]) {
+                            Ok(bytes) => {
+                                match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyBySubscribersQuantity>(bytes.chunk()) {
                                     Ok(request_data) => {
                                         match HandlerGetManyBySubscribersQuantity::handle(application_data.into_inner(), request_data) {
                                             Ok(response_data) => { 
@@ -259,11 +250,8 @@ impl Base {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
                         match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-                            Ok(mut bytes) => {
-                                let mut data: Vec<u8> = vec![];
-                                bytes.copy_to_slice(&mut data);
-        
-                                match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyByIdRegistry>(&data[..]) {
+                            Ok(bytes) => {
+                                match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyByIdRegistry>(bytes.chunk()) {
                                     Ok(request_data) => {
                                         match HandlerGetManyByIdRegistry::handle(application_data.into_inner(), request_data) {
                                             Ok(response_data) => { 
