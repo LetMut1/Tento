@@ -1,6 +1,6 @@
 use actix_http::body::BoxBody;
+use actix_http::StatusCode;
 use actix_web::http::header;
-use actix_web::http::StatusCode;
 use actix_web::HttpResponse;
 
 pub struct ResponseCreator;
@@ -42,7 +42,7 @@ impl ResponseCreator {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub fn create_(
+    pub fn create_with_status_code(
         status_code: StatusCode,
         data: Option<Vec<u8>>
     ) -> HttpResponse<BoxBody> {

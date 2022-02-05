@@ -145,70 +145,68 @@ impl Authorization {
         }
     }
 
-    // #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    // pub async fn check_nickname_for_existing_(
-    //     http_request: HttpRequest,
-    //     payload: Payload
-    // ) -> HttpResponse<BoxBody> {
-    //     match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-    //         Ok(mut bytes) => {
-    //             let mut data: Vec<u8> = vec![];
-    //             bytes.copy_to_slice(&mut data);
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn check_nickname_for_existing_(
+        http_request: HttpRequest,
+        payload: Payload
+    ) -> HttpResponse<BoxBody> {
+        match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
+            Ok(mut bytes) => {
+                let mut data: Vec<u8> = vec![];
+                bytes.copy_to_slice(&mut data);
 
-    //             match serde_json::from_slice::<'_, RequestCheckNicknameForExisting>(&data[..]) {
-    //                 Ok(request_data) => {
-    //                     match HandlerCheckNicknameForExisting_::handle(request_data, http_request.headers()) {
-    //                         Ok(response_data) => {
-    //                             match response_data.0 {
-    //                                 Some(response_data_) => {
-    //                                     match serde_json::to_vec(&response_data_) {
-    //                                         Ok(data) => {
-    //                                             return ResponseCreator::create_(response_data.1, Some(data));
-    //                                         },
-    //                                         Err(error) => {
-    //                                             log::error!("{}", BaseError::from(error));
+                match serde_json::from_slice::<'_, RequestCheckNicknameForExisting>(&data[..]) {
+                    Ok(request_data) => {
+                        match HandlerCheckNicknameForExisting_::handle(http_request, request_data).await {
+                            Ok(response_data) => {
+                                match response_data.0 {
+                                    Some(response_data_) => {
+                                        match serde_json::to_vec(&response_data_) {
+                                            Ok(data) => {
+                                                return ResponseCreator::create_with_status_code(response_data.1, Some(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
                         
-    //                                             return ResponseCreator::create_internal_server_error();
-    //                                         }
-    //                                     }
-    //                                 },
-    //                                 None => {
-    //                                     return ResponseCreator::create_(response_data.1, None);
-    //                                 },
-    //                             }
-    //                         },
-    //                         Err(ref base_error) => {
-    //                             match base_error {
-    //                                 BaseError::EntityError {entity_error: _} => {
-    //                                     unreachable!("{}", base_error);
-    //                                 }
-    //                                 BaseError::InvalidArgumentError => {
-    //                                     return ResponseCreator::create_bad_request();
-    //                                 },
-    //                                 BaseError::LogicError {logic_error: _} |
-    //                                 BaseError::RunTimeError {run_time_error: _} => {
-    //                                     log::error!("{}", base_error);
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return ResponseCreator::create_with_status_code(response_data.1, None);
+                                    },
+                                }
+                            },
+                            Err(ref base_error) => {
+                                match base_error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", base_error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", base_error);
                 
-    //                                     return ResponseCreator::create_internal_server_error();
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-    //                 },
-    //                 Err(error) => {
-    //                     log::error!("{}", BaseError::from(error));
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
         
-    //                     return ResponseCreator::create_internal_server_error();
-    //                 }
-    //             }
-    //         },
-    //         Err(error) => {
-    //             log::error!("{}", BaseError::from(error));
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
 
-    //             return ResponseCreator::create_internal_server_error();
-    //         }
-    //     }
-    // }
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
 
     pub async fn check_email_for_existing(
         http_request: HttpRequest,

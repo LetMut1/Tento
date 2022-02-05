@@ -1,4 +1,5 @@
 use actix_http::body::BoxBody;
+use actix_http::StatusCode;
 use actix_web::body;
 use actix_web::FromRequest;
 use actix_web::HttpRequest;
@@ -20,7 +21,7 @@ impl Base {
     pub async fn handle(
         http_request: HttpRequest,
         request: Request
-    ) -> Result<WrappedResponse<Response>, BaseError> {
+    ) -> Result<(Option<WrappedResponse<Response>>, StatusCode), BaseError> {
         let mut data: Vec<u8> = vec![];
         rmp_serde::encode::write(&mut data, &request)?;
 
@@ -30,15 +31,23 @@ impl Base {
 
         let http_response: HttpResponse<BoxBody> = Authorization::check_nickname_for_existing(http_request, payload).await;
 
-        let body: BoxBody = http_response.into_parts().1;
+        let status_code: StatusCode = http_response.status();
 
-        let mut bytes: Bytes = body::to_bytes(body).await.unwrap();    // TODO resolve unwrap !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        let mut result: (Option<WrappedResponse<Response>>, StatusCode) = (None, status_code);
 
-        let mut data: Vec<u8> = vec![];
-        bytes.copy_to_slice(&mut data);
+        if status_code == StatusCode::OK {
+            let body: BoxBody = http_response.into_parts().1;
 
-        let response: WrappedResponse<Response> = rmp_serde::from_read_ref::<'_, [u8], WrappedResponse<Response>>(&data[..])?;
+            let mut bytes: Bytes = body::to_bytes(body).await.unwrap();    // TODO resolve unwrap !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        return Ok(response);
+            let mut data: Vec<u8> = vec![];
+            bytes.copy_to_slice(&mut data);
+
+            let wrapped_response: WrappedResponse<Response> = rmp_serde::from_read_ref::<'_, [u8], WrappedResponse<Response>>(&data[..])?;
+
+            result = (Some(wrapped_response), status_code);
+        }
+
+        return Ok(result);
     }
 }
