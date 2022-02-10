@@ -8,6 +8,7 @@ extern crate crypto;
 extern crate dotenv;
 extern crate futures;
 extern crate hex;
+extern crate hyper;
 extern crate lettre_email;
 extern crate lettre;
 extern crate log;
@@ -20,6 +21,7 @@ extern crate regex;
 extern crate rmp_serde;
 extern crate serde_json;
 extern crate serde;
+extern crate tokio;
 extern crate uuid;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]

@@ -18,30 +18,32 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
-actix-http = {version = "=3.0.0-rc.1", default-features = true, optional = false}
-actix-service = {version = "^2.0", default-features = true, optional = false}
-actix-web = {version = "=4.0.0-rc.2", default-features = true, optional = false}
-anyhow = {version = "^1.0", default-features = true, optional = false}
-base64 = {version = "^0.13", default-features = true, optional = false}
-chrono = {version = "^0.4", default-features = true, optional = false}
-dotenv = {version = "^0.15", default-features = true, optional = false}
-futures = {version = "^0.3", default-features = true, optional = false}
-hex = {version = "^0.4", default-features = true, optional = false}
-lettre = {version = "^0.9", default-features = true, optional = false}
-lettre_email = {version = "^0.9", default-features = true, optional = false}
-log = {version = "^0.4", default-features = true, optional = false}
+actix-http = {version = "=3.0.0-rc.1", default-features = true, features = [], optional = false}
+actix-service = {version = "^2.0", default-features = true, features = [], optional = false}
+actix-web = {version = "=4.0.0-rc.2", default-features = true, features = [], optional = false}
+anyhow = {version = "^1.0", default-features = true, features = [], optional = false}
+base64 = {version = "^0.13", default-features = true, features = [], optional = false}
+chrono = {version = "^0.4", default-features = true, features = [], optional = false}
+dotenv = {version = "^0.15", default-features = true, features = [], optional = false}
+futures = {version = "^0.3", default-features = true, features = [], optional = false}
+hex = {version = "^0.4", default-features = true, features = [], optional = false}
+hyper = {version = "^0.14", default-features = true, features = [], optional = false}
+lettre = {version = "^0.9", default-features = true, features = [], optional = false}
+lettre_email = {version = "^0.9", default-features = true, features = [], optional = false}
+log = {version = "^0.4", default-features = true, features = [], optional = false}
 log4rs = {version = "^1.0", default-features = true, features = ["all_components"], optional = false}
-postgres = {version = "^0.19", default-features = true, optional = false}
-r2d2 = {version = "^0.8", default-features = true, optional = false}
-r2d2_postgres = {version = "^0.18", default-features = true, optional = false}
-r2d2_redis = {version = "^0.14", default-features = true, optional = false}
+postgres = {version = "^0.19", default-features = true, features = [], optional = false}
+r2d2 = {version = "^0.8", default-features = true, features = [], optional = false}
+r2d2_postgres = {version = "^0.18", default-features = true, features = [], optional = false}
+r2d2_redis = {version = "^0.14", default-features = true, features = [], optional = false}
 redis = {version = "^0.20", default-features = true, features = ["r2d2"], optional = false}
-regex = {version = "^1.4", default-features = true, optional = false}
-rmp-serde = {version = "^0.15", default-features = true, optional = false}
-rust-argon2 = {version = "^0.8", default-features = true, optional = false}
-rust-crypto = {version = "^0.2", default-features = true, optional = false}
+regex = {version = "^1.4", default-features = true, features = [], optional = false}
+rmp-serde = {version = "^0.15", default-features = true, features = [], optional = false}
+rust-argon2 = {version = "^0.8", default-features = true, features = [], optional = false}
+rust-crypto = {version = "^0.2", default-features = true, features = [], optional = false}
 serde = {version = "^1.0", default-features = true, features = ["derive"], optional = false}
-serde_json = {version = "^1.0", default-features = true, optional = false}                          # TODO Сделать это опциональной для  facilitate_non_automatic_functional_testing, когда везде уйду от джсона
+serde_json = {version = "^1.0", default-features = true, features = [], optional = false}                          # TODO Сделать это опциональной для  facilitate_non_automatic_functional_testing, когда везде уйду от джсона
+tokio = {version = "^1.16", default-features = true, features = [], optional = false}
 uuid = {version = "^0.8", default-features = true, features = ["v4"], optional = false}
 
 [features]
