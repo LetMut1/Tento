@@ -20,8 +20,11 @@ use log4rs::config::Config;
 use log4rs::config::Root;
 use log4rs::encode::pattern::PatternEncoder;
 use std::env;
+use std::net::SocketAddr;
 use std::path::Path;
 use std::path::PathBuf;
+use std::str::FromStr;
+use tokio::signal;
 
 pub struct Base;
 
@@ -30,31 +33,15 @@ impl Base {
     const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.env";
     const DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
-    // #[actix_web::main] 
-    // pub async fn handle(
-    //     binary_file_path: String
-    // ) -> Result<(), BaseError> {
-    //     Self::load_and_check_environment_variables(binary_file_path.as_str())?;
-    //     Self::configure_log()?;
-    //     Self::run_http_server().await?;
-
-    //     return Ok(());
-    // }
-
     #[tokio::main]
     pub async fn handle(
         binary_file_path: String
     ) -> Result<(), BaseError> {
-        // TODO refactor;
-        let addr = "0.0.0.0:80".parse().unwrap();
+        Self::load_and_check_environment_variables(binary_file_path.as_str())?;
+        Self::configure_log()?;
+        Self::run_http_server().await?;
 
-        let server = Server::bind(&addr).serve(RequestResolverCreator);
-
-        println!("Listening on http://{}", addr);
-
-        server.await.unwrap();
-
-        Ok(())
+        return Ok(());
     }
 
     fn load_and_check_environment_variables<'a>(
@@ -136,20 +123,25 @@ impl Base {
         return Ok(());
     }
 
+    async fn create_shutdown_signal(
+    ) -> () {
+        signal::ctrl_c()
+            .await
+            .expect("Failed to install gracefully shutdown signal");        // TODO можно ли Экпект убрать
+
+        return ();
+    }
+
     async fn run_http_server(
     ) -> Result<(), BaseError> {
-        let aggregate_connection_pool: AggregateConnectionPool = AggregateConnectionPool::new()?;
+        // let aggregate_connection_pool: AggregateConnectionPool = AggregateConnectionPool::new()?; // TODO Где интегрировать Пул
+    
+        let socket_addres = SocketAddr::from_str(EnvironmentVariableResolver::get_server_socket_address()?.as_str())?;
 
-        HttpServer::new(
-            move || {
-                return App::new()
-                .data::<AggregateConnectionPool>(aggregate_connection_pool.clone())
-                .configure(Self::configure_http_server);
-            }
-        )
-        .bind(EnvironmentVariableResolver::get_server_socket_address()?)?
-        .run()
-        .await?;
+        Server::bind(&socket_addres)       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
+            .serve(RequestResolverCreator)
+            .with_graceful_shutdown(Self::create_shutdown_signal())
+            .await?;
 
         return Ok(());
     }

@@ -5,6 +5,7 @@ use base64::DecodeError as Base64DecodeError;
 use chrono::ParseError as ChronoParseError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use dotenv::Error as DotenvError;
+use hyper::Error as HyperError;
 use lettre_email::error::Error as LettreEmailError;
 use lettre::smtp::error::Error as LettreSmtpError;
 use log::SetLoggerError;
@@ -24,6 +25,7 @@ use std::fmt::Formatter;
 use std::fmt::Result;
 use std::io::Error as IoError;
 use std::io::ErrorKind as IoErrorKind;
+use std::net::AddrParseError;
 use std::string::FromUtf8Error;
 use super::_component::logic_error::LogicError;
 use super::_component::run_time_error::_component::other_error::OtherError;
@@ -233,6 +235,22 @@ impl From<ChronoParseError> for BaseError {
         chrono_parse_error: ChronoParseError
     ) -> Self {
         return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("ChronoParseError", chrono_parse_error)}};
+    }
+}
+
+impl From<AddrParseError> for BaseError {
+    fn from(
+        addr_parse_error: AddrParseError
+    ) -> Self {
+        return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("AddrParseError", addr_parse_error)}};
+    }
+}
+
+impl From<HyperError> for BaseError {
+    fn from(
+        hyper_error: HyperError
+    ) -> Self {
+        return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("AddrParseError", hyper_error)}};
     }
 }
 
