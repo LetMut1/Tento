@@ -6,6 +6,7 @@ extern crate base64;
 extern crate chrono;
 extern crate crypto;
 extern crate dotenv;
+extern crate futures_util;
 extern crate futures;
 extern crate hex;
 extern crate hyper;
@@ -22,6 +23,7 @@ extern crate rmp_serde;
 extern crate serde_json;
 extern crate serde;
 extern crate tokio;
+extern crate tower_service;
 extern crate uuid;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]

@@ -2,12 +2,14 @@ use actix_web::App;
 use actix_web::HttpServer;
 use actix_web::web;
 use actix_web::web::ServiceConfig;
+use crate::application_layer::service::request_resolver_creator::RequestResolverCreator;
 use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as RequestHandlerApplicationUserAuthorization;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as RequestHandlerChannelBase;
+use hyper::Server;
 use log::LevelFilter;
 use log4rs::append::rolling_file::policy::compound::CompoundPolicy;
 use log4rs::append::rolling_file::policy::compound::roll::fixed_window::FixedWindowRoller;
@@ -28,15 +30,31 @@ impl Base {
     const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.env";
     const DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
-    #[actix_web::main] 
+    // #[actix_web::main] 
+    // pub async fn handle(
+    //     binary_file_path: String
+    // ) -> Result<(), BaseError> {
+    //     Self::load_and_check_environment_variables(binary_file_path.as_str())?;
+    //     Self::configure_log()?;
+    //     Self::run_http_server().await?;
+
+    //     return Ok(());
+    // }
+
+    #[tokio::main]
     pub async fn handle(
         binary_file_path: String
     ) -> Result<(), BaseError> {
-        Self::load_and_check_environment_variables(binary_file_path.as_str())?;
-        Self::configure_log()?;
-        Self::run_http_server().await?;
+        // TODO refactor;
+        let addr = "0.0.0.0:80".parse().unwrap();
 
-        return Ok(());
+        let server = Server::bind(&addr).serve(RequestResolverCreator);
+
+        println!("Listening on http://{}", addr);
+
+        server.await.unwrap();
+
+        Ok(())
     }
 
     fn load_and_check_environment_variables<'a>(
