@@ -13,7 +13,7 @@ use crate::application_layer::service::handler::_in_contex_for::presentation_lay
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_subscribers_quantity::base::Base as HandlerGetManyBySubscribersQuantity;
 use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPoolXXXxDELETE;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::Base as RequestGetManyByCreatedAt;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::Base as RequestGetManyByIdRegistry;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestGetManyByName;
@@ -29,7 +29,7 @@ impl Base {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
@@ -101,7 +101,7 @@ impl Base {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
@@ -173,7 +173,7 @@ impl Base {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {
@@ -245,7 +245,7 @@ impl Base {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(_request_data) => {

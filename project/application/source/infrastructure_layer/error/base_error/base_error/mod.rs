@@ -70,7 +70,7 @@ impl Display for BaseError {
                     },
                     RunTimeError::ResourceError {resource_error} => {
                         match resource_error {
-                            ResourceError::ConnectionPoolError {r2d2_error} => {
+                            ResourceError::ConnectionPoolErrorXXXxDelete {r2d2_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-ConnectionPoolError: {}", r2d2_error)?;
                             },
                             ResourceError::EmailServerError {email_server_error} => {
@@ -258,7 +258,7 @@ impl From<R2d2Error> for BaseError {
     fn from(
         r2d2_error: R2d2Error
     ) -> Self {
-        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolError {r2d2_error}}};
+        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolErrorXXXxDelete {r2d2_error}}};
     }
 }
 

@@ -9,7 +9,7 @@ use super::_component::_in_context_for::_resource::email_server::_new_for_contex
 
 #[derive(Debug)]
 pub enum ResourceError {
-    ConnectionPoolError {
+    ConnectionPoolErrorXXXxDelete {
         r2d2_error: R2d2Error
     },
     EmailServerError {

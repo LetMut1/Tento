@@ -9,7 +9,7 @@ use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonAccessWebTokenBlackListDataProviderRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPoolXXXxDELETE;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::connection_extractor::ConnectionExtractor;
 use std::sync::Arc;
 
@@ -19,7 +19,7 @@ impl Base {
     pub const HEADER_NAME_X_JAWT: &'static str = "X-Jawt";  // TODO эту константу убрать вообщ в другой файл, а не транслировать
 
     pub fn handle<'a>(
-        aggregate_connection_pool: Arc<AggregateConnectionPool>,
+        aggregate_connection_pool: Arc<AggregateConnectionPoolXXXxDELETE>,
         header_map: &'a HeaderMap
     ) -> Result<JsonAccessWebToken<'static>, BaseError> {
         if let Some(x_jawt_header_value) = header_map.get(Self::HEADER_NAME_X_JAWT) {

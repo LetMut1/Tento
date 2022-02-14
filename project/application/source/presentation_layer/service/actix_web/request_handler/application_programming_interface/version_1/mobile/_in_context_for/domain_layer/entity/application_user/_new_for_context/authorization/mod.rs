@@ -31,7 +31,7 @@ use crate::domain_layer::error::entity_error::_component::_in_context_for::domai
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPoolXXXxDELETE;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::Base as RequestCheckEmailForExisting;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::Base as RequestCheckNicknameForExisting;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as RequestLogInByFirstStep;
@@ -58,7 +58,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -206,7 +206,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -294,7 +294,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -393,7 +393,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -555,7 +555,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -642,7 +642,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -733,7 +733,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -832,7 +832,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -938,7 +938,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -1043,7 +1043,7 @@ impl Authorization {
     pub async fn log_out(
         http_request: HttpRequest
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(request_data) => {
@@ -1115,7 +1115,7 @@ impl Authorization {
     pub async fn log_out_from_all_devices(
         http_request: HttpRequest
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match RequestData::<JsonAccessWebToken<'static>>::extract(&http_request).await {
                     Ok(request_data) => {
@@ -1188,7 +1188,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -1277,7 +1277,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {
@@ -1409,7 +1409,7 @@ impl Authorization {
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
-        match Data::<AggregateConnectionPool>::extract(&http_request).await {
+        match Data::<AggregateConnectionPoolXXXxDELETE>::extract(&http_request).await {
             Ok(application_data) => {
                 match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
                     Ok(bytes) => {

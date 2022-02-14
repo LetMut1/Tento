@@ -4,19 +4,19 @@ use r2d2_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use r2d2_redis::RedisConnectionManager;
 use r2d2::PooledConnection;
 use std::sync::Arc;
-use super::aggregate_connection_pool::AggregateConnectionPool;
+use super::aggregate_connection_pool::AggregateConnectionPoolXXXxDELETE;
 
 pub struct ConnectionExtractor;
 
 impl ConnectionExtractor {
     pub fn get_postgresql_connection<'a>(
-        aggregate_connection_pool: &'a Arc<AggregateConnectionPool>
+        aggregate_connection_pool: &'a Arc<AggregateConnectionPoolXXXxDELETE>
     ) -> Result<PooledConnection<PostgresqlConnectionManager<NoTls>>, BaseError> {  // TODO NoTls-problem 
         return Ok(aggregate_connection_pool.get_postgresql_connection_pool().get()?);
     }
 
     pub fn get_redis_connection<'a>(
-        aggregate_connection_pool: &'a Arc<AggregateConnectionPool>
+        aggregate_connection_pool: &'a Arc<AggregateConnectionPoolXXXxDELETE>
     ) -> Result<PooledConnection<RedisConnectionManager>, BaseError> {
         return Ok(aggregate_connection_pool.get_redis_connection_pool().get()?);
     }

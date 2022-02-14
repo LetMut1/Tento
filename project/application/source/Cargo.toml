@@ -18,11 +18,15 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
+# Разобарться, где нужны default фичи
 actix-http = {version = "=3.0.0-rc.1", default-features = true, features = [], optional = false}
 actix-service = {version = "^2.0", default-features = true, features = [], optional = false}
 actix-web = {version = "=4.0.0-rc.2", default-features = true, features = [], optional = false}
 anyhow = {version = "^1.0", default-features = true, features = [], optional = false}
 base64 = {version = "^0.13", default-features = true, features = [], optional = false}
+bb8 = {version = "^0.7", default-features = true, features = [], optional = false}
+bb8-postgres = {version = "^0.7", default-features = true, features = [], optional = false}
+bb8-redis = {version = "^0.10", default-features = true, features = [], optional = false}
 chrono = {version = "^0.4", default-features = true, features = [], optional = false}
 dotenv = {version = "^0.15", default-features = true, features = [], optional = false}
 futures = {version = "^0.3", default-features = true, features = [], optional = false}
@@ -37,7 +41,7 @@ postgres = {version = "^0.19", default-features = true, features = [], optional 
 r2d2 = {version = "^0.8", default-features = true, features = [], optional = false}
 r2d2_postgres = {version = "^0.18", default-features = true, features = [], optional = false}
 r2d2_redis = {version = "^0.14", default-features = true, features = [], optional = false}
-redis = {version = "^0.20", default-features = true, features = ["r2d2"], optional = false}
+redis = {version = "^0.20", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp", "r2d2"], optional = false}  # TODO  TODO TODO TODO delege r2d2 !!!!!!!!!!!!
 regex = {version = "^1.4", default-features = true, features = [], optional = false}
 rmp-serde = {version = "^0.15", default-features = true, features = [], optional = false}
 rust-argon2 = {version = "^0.8", default-features = true, features = [], optional = false}
@@ -45,6 +49,7 @@ rust-crypto = {version = "^0.2", default-features = true, features = [], optiona
 serde = {version = "^1.0", default-features = true, features = ["derive"], optional = false}
 serde_json = {version = "^1.0", default-features = true, features = [], optional = false}                          # TODO Сделать это опциональной для  facilitate_non_automatic_functional_testing, когда везде уйду от джсона
 tokio = {version = "^1.16", default-features = true, features = ["full"], optional = false}  # Убрать фичу Full и понять , какие нужны
+tokio-postgres = {version = "^0.7", default-features = true, features = [], optional = false}
 tower-service = {version = "^0.3", default-features = true, features = [], optional = false}
 uuid = {version = "^0.8", default-features = true, features = ["v4"], optional = false}
 
