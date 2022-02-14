@@ -41,7 +41,8 @@ postgres = {version = "^0.19", default-features = true, features = [], optional 
 r2d2 = {version = "^0.8", default-features = true, features = [], optional = false}
 r2d2_postgres = {version = "^0.18", default-features = true, features = [], optional = false}
 r2d2_redis = {version = "^0.14", default-features = true, features = [], optional = false}
-redis = {version = "^0.20", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp", "r2d2"], optional = false}  # TODO  TODO TODO TODO delege r2d2 !!!!!!!!!!!!   version = last, AggregateConnectionPool, use bb8_redis::redis::ConnectionInfo; -> useredis::ConnectionInfo; 
+redis = {version = "^0.20", default-features = true, features = ["r2d2"], optional = false}  # TODO  TODO TODO TODO delege
+redis_ref = {package = "redis", version = "^0.21", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp"], optional = false}   # TODO Исправить после удалерия верхнего    
 regex = {version = "^1.4", default-features = true, features = [], optional = false}
 rmp-serde = {version = "^0.15", default-features = true, features = [], optional = false}
 rust-argon2 = {version = "^0.8", default-features = true, features = [], optional = false}

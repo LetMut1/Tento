@@ -254,6 +254,7 @@ dependencies = [
  "r2d2_postgres",
  "r2d2_redis",
  "redis 0.20.2",
+ "redis 0.21.5",
  "regex",
  "rmp-serde",
  "rust-argon2",
@@ -1784,19 +1785,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4f0ceb2ec0dd769483ecd283f6615aa83dcd0be556d5294c6e659caefe7cc54"
 dependencies = [
  "async-trait",
- "bytes",
  "combine",
  "dtoa",
- "futures-util",
  "itoa 0.4.8",
- "native-tls",
  "percent-encoding",
- "pin-project-lite",
  "r2d2",
  "sha1",
- "tokio",
- "tokio-native-tls",
- "tokio-util",
  "url",
 ]
 
@@ -1812,9 +1806,12 @@ dependencies = [
  "dtoa",
  "futures-util",
  "itoa 0.4.8",
+ "native-tls",
  "percent-encoding",
  "pin-project-lite",
+ "sha1",
  "tokio",
+ "tokio-native-tls",
  "tokio-util",
  "url",
 ]

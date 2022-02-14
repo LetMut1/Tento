@@ -20,6 +20,7 @@ extern crate log4rs;
 extern crate postgres;
 extern crate r2d2_redis;
 extern crate r2d2;
+extern crate redis_ref;
 extern crate redis;
 extern crate regex;
 extern crate rmp_serde;

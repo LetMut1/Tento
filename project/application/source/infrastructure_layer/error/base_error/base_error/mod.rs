@@ -12,7 +12,8 @@ use log::SetLoggerError;
 use log4rs::config::runtime::ConfigErrors as Log4rsConfigErrors;
 use postgres::Error as PostgresqlError;
 use r2d2::Error as R2d2Error;
-use redis::RedisError;
+use redis::RedisError as RedisEr;
+use redis_ref::RedisError;
 use regex::Error as RegexError;
 use rmp_serde::decode::Error as RmpSerdeDecodeError;
 use rmp_serde::encode::Error as RmpSerdeEncodeError;
@@ -85,6 +86,9 @@ impl Display for BaseError {
                             },
                             ResourceError::PostgresqlError {postgresql_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", postgresql_error)?;
+                            },
+                            ResourceError::RedisErr {redis_error} => {
+                                write!(formatter, "BaseError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
                             },
                             ResourceError::RedisError {redis_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
@@ -267,6 +271,14 @@ impl From<PostgresqlError> for BaseError {
         postgresql_error: PostgresqlError
     ) -> Self {
         return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error}}};
+    }
+}
+
+impl From<RedisEr> for BaseError {
+    fn from(
+        redis_error: RedisEr
+    ) -> Self {
+        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisErr {redis_error}}};
     }
 }
 

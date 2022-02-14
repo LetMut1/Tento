@@ -1,6 +1,7 @@
 use postgres::Error as PostgresqlError;
 use r2d2::Error as R2d2Error;
-use redis::RedisError;
+use redis_ref::RedisError;
+use redis::RedisError as RedisEr;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
@@ -17,6 +18,9 @@ pub enum ResourceError {
     },
     PostgresqlError {
         postgresql_error: PostgresqlError
+    },
+    RedisErr {
+        redis_error: RedisEr
     },
     RedisError {
         redis_error: RedisError
