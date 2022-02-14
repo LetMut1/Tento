@@ -10,7 +10,7 @@ use crate::infrastructure_layer::repository::data_provider::_in_context_for::dom
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPoolXXXxDELETE;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::connection_extractor::ConnectionExtractor;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::connection_extractor::ConnectionExtractorXXXxDelete;
 use std::sync::Arc;
 
 pub struct Base;
@@ -27,7 +27,7 @@ impl Base {
                 let json_access_web_token: JsonAccessWebToken<'static> = SerializationFormResolver::deserialize(x_jawt)?;
                 if !ExpirationTimeResolver::is_expired(&json_access_web_token)? {
                     if !JsonAccessWebTokenBlackListDataProviderRedis::is_exist_by_json_access_token_id(
-                        &mut *ConnectionExtractor::get_redis_connection(&aggregate_connection_pool)?, json_access_web_token.get_id()
+                        &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?, json_access_web_token.get_id()
                     )? {
                         return Ok(json_access_web_token);
                     }

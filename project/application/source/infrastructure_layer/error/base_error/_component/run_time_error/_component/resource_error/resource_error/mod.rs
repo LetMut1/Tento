@@ -1,7 +1,9 @@
-use postgres::Error as PostgresqlError;
+use postgres::Error as PostgresqlErrorXXXxDel;
 use r2d2::Error as R2d2Error;
 use redis_ref::RedisError;
+use tokio_postgres::Error as PostgresqlError;
 use redis::RedisError as RedisEr;
+use bb8::RunError as Bb8Error;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
@@ -13,13 +15,19 @@ pub enum ResourceError {
     ConnectionPoolErrorXXXxDelete {
         r2d2_error: R2d2Error
     },
+    ConnectionPoolRedisError {
+        bb8_redis_error: Bb8Error<RedisError>
+    },
+    ConnectionPoolPostgresqlError {
+        bb8_postgresql_error: Bb8Error<PostgresqlError>
+    },
     EmailServerError {
         email_server_error: EmailServerError
     },
-    PostgresqlError {
-        postgresql_error: PostgresqlError
+    PostgresqlErrorXXXxDel {
+        postgresql_error: PostgresqlErrorXXXxDel
     },
-    RedisErr {
+    RedisErrXXXxDel {
         redis_error: RedisEr
     },
     RedisError {

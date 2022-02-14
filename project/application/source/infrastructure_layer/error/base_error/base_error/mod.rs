@@ -2,6 +2,7 @@ use actix_web::Error as ActixWebError;
 use anyhow::Error as AnyhowError;
 use argon2::Error as Argon2Error;
 use base64::DecodeError as Base64DecodeError;
+use bb8::RunError as Bb8Error;
 use chrono::ParseError as ChronoParseError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use dotenv::Error as DotenvError;
@@ -10,10 +11,10 @@ use lettre_email::error::Error as LettreEmailError;
 use lettre::smtp::error::Error as LettreSmtpError;
 use log::SetLoggerError;
 use log4rs::config::runtime::ConfigErrors as Log4rsConfigErrors;
-use postgres::Error as PostgresqlError;
+use postgres::Error as PostgresqlErr;
 use r2d2::Error as R2d2Error;
-use redis::RedisError as RedisEr;
 use redis_ref::RedisError;
+use redis::RedisError as RedisEr;
 use regex::Error as RegexError;
 use rmp_serde::decode::Error as RmpSerdeDecodeError;
 use rmp_serde::encode::Error as RmpSerdeEncodeError;
@@ -33,6 +34,7 @@ use super::_component::run_time_error::_component::other_error::OtherError;
 use super::_component::run_time_error::_component::resource_error::_component::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
 use super::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use super::_component::run_time_error::run_time_error::RunTimeError;
+use tokio_postgres::Error as PostgresqlError;
 
 #[derive(Debug)]
 pub enum BaseError {                // TODO Как понять и отследить Бэктрейс ошибки? (Например, ЛогикЕррор). Нужно ли отслеживать? Или же покрыть все функциональными тестами?
@@ -74,6 +76,12 @@ impl Display for BaseError {
                             ResourceError::ConnectionPoolErrorXXXxDelete {r2d2_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-ConnectionPoolError: {}", r2d2_error)?;
                             },
+                            ResourceError::ConnectionPoolRedisError {bb8_redis_error} => {
+                                write!(formatter, "BaseError-RunTimeError-ResourceError-ConnectionPoolRedisError: {}", bb8_redis_error)?;
+                            },
+                            ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error} => {
+                                write!(formatter, "BaseError-RunTimeError-ResourceError-ConnectionPoolPostgresqlError: {}", bb8_postgresql_error)?;
+                            },
                             ResourceError::EmailServerError {email_server_error} => {
                                 match email_server_error {
                                     EmailServerError::EmailError {email_error} => {
@@ -84,10 +92,10 @@ impl Display for BaseError {
                                     }
                                 }
                             },
-                            ResourceError::PostgresqlError {postgresql_error} => {
+                            ResourceError::PostgresqlErrorXXXxDel {postgresql_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", postgresql_error)?;
                             },
-                            ResourceError::RedisErr {redis_error} => {
+                            ResourceError::RedisErrXXXxDel {redis_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
                             },
                             ResourceError::RedisError {redis_error} => {
@@ -266,11 +274,28 @@ impl From<R2d2Error> for BaseError {
     }
 }
 
-impl From<PostgresqlError> for BaseError {
+
+impl From<Bb8Error<RedisError>> for BaseError {
     fn from(
-        postgresql_error: PostgresqlError
+        bb8_redis_error: Bb8Error<RedisError>
     ) -> Self {
-        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error}}};
+        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error}}};
+    }
+}
+
+impl From<Bb8Error<PostgresqlError>> for BaseError {
+    fn from(
+        bb8_postgresql_error: Bb8Error<PostgresqlError>
+    ) -> Self {
+        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error}}};
+    }
+}
+
+impl From<PostgresqlErr> for BaseError {
+    fn from(
+        postgresql_error: PostgresqlErr
+    ) -> Self {
+        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlErrorXXXxDel {postgresql_error}}};
     }
 }
 
@@ -278,7 +303,7 @@ impl From<RedisEr> for BaseError {
     fn from(
         redis_error: RedisEr
     ) -> Self {
-        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisErr {redis_error}}};
+        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisErrXXXxDel {redis_error}}};
     }
 }
 
