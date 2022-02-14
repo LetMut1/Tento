@@ -135,6 +135,9 @@ impl Base {
     async fn run_http_server(
     ) -> Result<(), BaseError> {
         // let aggregate_connection_pool: AggregateConnectionPool = AggregateConnectionPool::new()?; // TODO Где интегрировать Пул
+        // https://github.com/djc/bb8/blob/main/postgres/examples/hyper.rs
+        // https://github.com/djc/bb8/issues/24
+        // https://www.reddit.com/r/rust/comments/dx31h1/how_to_use_tokiopostgres_with_hyper/
     
         let socket_addres = SocketAddr::from_str(EnvironmentVariableResolver::get_server_socket_address()?.as_str())?;
 

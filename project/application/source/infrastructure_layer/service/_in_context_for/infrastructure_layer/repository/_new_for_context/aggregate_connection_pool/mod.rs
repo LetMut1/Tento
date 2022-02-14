@@ -1,4 +1,5 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use bb8_redis::redis::ConnectionInfo;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
@@ -8,7 +9,7 @@ use postgres::NoTls as NoTlsXXXxDelete;
 use r2d2_postgres::PostgresConnectionManager as PostgresqlConnectionManagerXXXxDelete;
 use r2d2_redis::RedisConnectionManager as RedisConnectionManagerXXXxDelete;
 use r2d2::Pool as PoolXXXxDelete;
-use redis::ConnectionInfo;
+use redis::ConnectionInfo as ConnectionInfoXXXxDelete;
 use std::clone::Clone;
 use std::str::FromStr;
 use tokio_postgres::Config;
@@ -60,7 +61,7 @@ impl AggregateConnectionPoolXXXxDELETE {
         return Ok(
             PoolXXXxDelete::new(
                 RedisConnectionManagerXXXxDelete::new(
-                    ConnectionInfo::from_str(EnvironmentVariableResolver::get_resource_redis_url()?.as_str())?
+                    ConnectionInfoXXXxDelete::from_str(EnvironmentVariableResolver::get_resource_redis_url()?.as_str())?
                 )?
             )?
         );
