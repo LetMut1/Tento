@@ -132,7 +132,7 @@ impl Base {
         return ();
     }
 
-    async fn run_http_server(
+    async fn run_http_server(       // TODO create HTTP2 (H2).   // TODO TODO  HTTP3 (QUICK), когда будет готов.!!!!!!!!!!!
     ) -> Result<(), BaseError> {
         let aggregate_connection_pool = AggregateConnectionPool::new().await?; // TODO Где интегрировать Пул. Наверно, Для AggregateConnectionPool нужен Mutex!!! // https://github.com/djc/bb8/blob/main/postgres/examples/hyper.rs // https://github.com/djc/bb8/issues/24  // https://www.reddit.com/r/rust/comments/dx31h1/how_to_use_tokiopostgres_with_hyper/
 
