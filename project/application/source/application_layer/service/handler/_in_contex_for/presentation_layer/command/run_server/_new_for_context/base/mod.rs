@@ -5,7 +5,7 @@ use actix_web::web::ServiceConfig;
 use crate::application_layer::service::request_resolver_creator::RequestResolverCreator;
 use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPoolXXXxDELETE;
+use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as RequestHandlerApplicationUserAuthorization;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as RequestHandlerChannelBase;
@@ -134,17 +134,14 @@ impl Base {
 
     async fn run_http_server(
     ) -> Result<(), BaseError> {
-        // let aggregate_connection_pool: AggregateConnectionPool = AggregateConnectionPool::new()?; // TODO Где интегрировать Пул
-        // https://github.com/djc/bb8/blob/main/postgres/examples/hyper.rs
-        // https://github.com/djc/bb8/issues/24
-        // https://www.reddit.com/r/rust/comments/dx31h1/how_to_use_tokiopostgres_with_hyper/
+        let aggregate_connection_pool = AggregateConnectionPool::new().await?; // TODO Где интегрировать Пул. Наверно, Для AggregateConnectionPool нужен Mutex!!! // https://github.com/djc/bb8/blob/main/postgres/examples/hyper.rs // https://github.com/djc/bb8/issues/24  // https://www.reddit.com/r/rust/comments/dx31h1/how_to_use_tokiopostgres_with_hyper/
 
-        // TODO Наверно, Длая AggregateConnectionPool нужен Mutex!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    
+        let request_resolver_creator = RequestResolverCreator::new(aggregate_connection_pool.clone());   // Может, сюда ОвнерМуыинг сделать?
+
         let socket_addres = SocketAddr::from_str(EnvironmentVariableResolver::get_server_socket_address()?.as_str())?;
 
         Server::bind(&socket_addres)       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
-            .serve(RequestResolverCreator)
+            .serve(request_resolver_creator)
             .with_graceful_shutdown(Self::create_shutdown_signal())
             .await?;
 
