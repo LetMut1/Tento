@@ -2,14 +2,21 @@ use actix_web::App;
 use actix_web::HttpServer;
 use actix_web::web;
 use actix_web::web::ServiceConfig;
-use crate::application_layer::service::request_resolver_creator::RequestResolverCreator;
 use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as RequestHandlerApplicationUserAuthorization;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as RequestHandlerChannelBase;
+use hyper::Body;
+use hyper::Method;
+use hyper::Request;
+use hyper::Response;
 use hyper::Server;
+use hyper::server::conn::AddrStream;
+use hyper::service::make_service_fn;
+use hyper::service::service_fn;
+use hyper::StatusCode;
 use log::LevelFilter;
 use log4rs::append::rolling_file::policy::compound::CompoundPolicy;
 use log4rs::append::rolling_file::policy::compound::roll::fixed_window::FixedWindowRoller;
@@ -123,29 +130,76 @@ impl Base {
         return Ok(());
     }
 
+    // TODO  TODO  TODO  УБрать expect. Перерегистрировать с помощью ТОКИО (без использования .with_graceful_shutdown()) ----------
     async fn create_shutdown_signal(
     ) -> () {
         signal::ctrl_c()
             .await
-            .expect("Failed to install gracefully shutdown signal");        // TODO  TODO  TODO  TODO  TODO можно ли Экпект убрать
+            .expect("Failed to install gracefully shutdown signal");
 
         return ();
     }
 
+     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     async fn run_http_server(       // TODO create HTTP2 (H2).   // TODO TODO  HTTP3 (QUICK), когда будет готов.!!!!!!!!!!!
     ) -> Result<(), BaseError> {
-        let aggregate_connection_pool = AggregateConnectionPool::new().await?; // TODO Где интегрировать Пул. Наверно, Для AggregateConnectionPool нужен Mutex!!! // https://github.com/djc/bb8/blob/main/postgres/examples/hyper.rs // https://github.com/djc/bb8/issues/24  // https://www.reddit.com/r/rust/comments/dx31h1/how_to_use_tokiopostgres_with_hyper/
-
-        let request_resolver_creator = RequestResolverCreator::new(aggregate_connection_pool.clone());   // Может, сюда ОвнерМуыинг сделать?
-
         let socket_addres = SocketAddr::from_str(EnvironmentVariableResolver::get_server_socket_address()?.as_str())?;
 
+        let aggregate_connection_pool = AggregateConnectionPool::new().await?; // TODO Где интегрировать Пул. Наверно, Для AggregateConnectionPool нужен Mutex!!! // https://github.com/djc/bb8/blob/main/postgres/examples/hyper.rs // https://github.com/djc/bb8/issues/24  // https://www.reddit.com/r/rust/comments/dx31h1/how_to_use_tokiopostgres_with_hyper/
+
+
+
+
+
+
+
+
+        // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
+        let service = make_service_fn(move |_: &AddrStream| {
+            let aggregate_connection_pool = aggregate_connection_pool.clone();
+            async move {
+                // This is the request handler.
+                return Ok::<_, hyper::Error>(service_fn(move |requset| {
+                    let aggregate_connection_pool = aggregate_connection_pool.clone();
+
+                    return Self::resolve(aggregate_connection_pool, requset);
+                }));
+            }
+        });
+         // TODO  TODO  TODO ------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
         Server::bind(&socket_addres)       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
-            .serve(request_resolver_creator)
+            .serve(service)
             .with_graceful_shutdown(Self::create_shutdown_signal())
             .await?;
 
         return Ok(());
+    }
+
+    async fn resolve(
+        aggregate_connection_pool: AggregateConnectionPool,
+        request: Request<Body>
+    ) -> Result<Response<Body>, hyper::Error> {
+        match (request.method(), request.uri().path()) {
+            // Serve some instructions at /
+            (&Method::GET, "/") => Ok(Response::new(Body::from(
+                "Try POSTing data to /echo such as: `curl localhost:3000/echo -XPOST -d 'hello world'`",
+            ))),
+    
+            // Return the 404 Not Found for other routes.
+            _ => {
+                let mut not_found = Response::default();
+                *not_found.status_mut() = StatusCode::NOT_FOUND;
+                Ok(not_found)
+            }
+        }
     }
 
     fn configure_http_server<'a>(
