@@ -23,9 +23,6 @@ impl Base {
         let (
             application_user_log_in_token_device_id, 
             application_user_id
-        ) : (
-            String,
-            i64
         ) = request.into_inner();
 
         if let Some(application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(

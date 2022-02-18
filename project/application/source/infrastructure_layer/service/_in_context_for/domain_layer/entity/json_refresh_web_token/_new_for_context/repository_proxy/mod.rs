@@ -17,8 +17,7 @@ impl RepositoryProxyTrait for RepositoryProxy {
         connection: &'a mut Connection,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), Self::Error> {
-        let application_user_log_in_token_device_id: String = 
-            json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
+        let application_user_log_in_token_device_id = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
         match DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id())? {
             Some(mut application_user_log_in_token_device_id_registry) => {
@@ -66,7 +65,7 @@ impl RepositoryProxyTrait for RepositoryProxy {
 
         if let Some(mut application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id())? 
         {
-            let application_user_log_in_token_device_id: String = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
+            let application_user_log_in_token_device_id = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
             let mut aplication_user_log_in_token_device_id_index: Option<usize> = None;
 

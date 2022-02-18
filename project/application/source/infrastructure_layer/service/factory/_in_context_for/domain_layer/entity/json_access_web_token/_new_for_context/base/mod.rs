@@ -13,7 +13,7 @@ impl JsonAccessWebTokenFactoryTrait for Base {
     fn create_from_json_refresh_web_token<'a>(
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<JsonAccessWebToken<'a>, Self::Error> {
-        let json_access_web_token: JsonAccessWebToken<'_> = Self::create(
+        let json_access_web_token = Self::create(
             Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
             Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
             Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),

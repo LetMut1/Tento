@@ -7,8 +7,6 @@ use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer:
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_counter::PreparedStatementParameterCounter;
 use crate::infrastructure_layer::service::update_resolver::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as UpdateResolverApplicationUser;
 use postgres::Client as Connection;
-use postgres::Row;
-use postgres::Statement;
 use postgres::types::Type;
 
 pub struct Base;
@@ -21,17 +19,17 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
         connection: &'a mut Connection,
         application_user: &'a ApplicationUser
     ) -> Result<i64, Self::Error> {
-        let email: &'_ str = application_user.get_email();
+        let email = application_user.get_email();
 
-        let nickanme: &'_ str = application_user.get_nickname();
+        let nickanme = application_user.get_nickname();
 
-        let password_hash: &'_ str = application_user.get_password_hash();
+        let password_hash = application_user.get_password_hash();
 
-        let created_at: &'_ str = application_user.get_created_at();
+        let created_at = application_user.get_created_at();
 
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query: &'static str = 
+        let query = 
             "INSERT INTO public.application_user AS au ( \
                 id, \
                 email, \
@@ -55,9 +53,9 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
             .add_parameter(&password_hash, Type::TEXT)
             .add_parameter(&created_at, Type::TEXT);
 
-        let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if row_registry.is_empty() {
             return Err(BaseError::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgesql database.")});
         }
@@ -80,15 +78,15 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
             }
         }
 
-        let email: &'_ str = application_user.get_email();
+        let email = application_user.get_email();
 
-        let nickanme: &'_ str = application_user.get_nickname();
+        let nickanme = application_user.get_nickname();
 
-        let password_hash: &'_ str = application_user.get_password_hash();
+        let password_hash = application_user.get_password_hash();
 
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut prepared_statemant_parameter_counter: PreparedStatementParameterCounter = PreparedStatementParameterCounter::new();
+        let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
 
         let mut column_name_registry_description: Option<String> = None;
         let mut column_value_registry_description: Option<String> = None;
@@ -210,9 +208,9 @@ impl ApplicationUserStateManagerPostgresqlTrait for Base {
             }
         }
 
-        let statement: Statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if row_registry.is_empty() {
             return Err(BaseError::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgesql database.")});
         }

@@ -561,67 +561,66 @@ impl Authorization {
                     Ok(bytes) => {
                         match rmp_serde::from_read_ref::<'_, [u8], RequestSendEmailForRegister>(bytes.chunk()) {
                             Ok(request_data) => {
-                            if let Err(ref base_error) = HandlerSendEmailForRegister::handle(application_data.into_inner(), request_data) {
-                                match base_error {
-                                    BaseError::EntityError {entity_error} => {
-                                        match entity_error {
-                                            EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error} => {
-                                                match application_user_registration_confirmation_token_error {
-                                                    ApplicationUserRegistrationConfirmationTokenError::NotFound => {
-                                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                                            CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
-                                                        )) {
-                                                            Ok(data) => {
-                                                                return ResponseCreator::create_ok(data);
-                                                            },
-                                                            Err(error) => {
-                                                                log::error!("{}", BaseError::from(error));
-                                        
-                                                                return ResponseCreator::create_internal_server_error();
+                                if let Err(ref base_error) = HandlerSendEmailForRegister::handle(application_data.into_inner(), request_data) {
+                                    match base_error {
+                                        BaseError::EntityError {entity_error} => {
+                                            match entity_error {
+                                                EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error} => {
+                                                    match application_user_registration_confirmation_token_error {
+                                                        ApplicationUserRegistrationConfirmationTokenError::NotFound => {
+                                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
+                                                            )) {
+                                                                Ok(data) => {
+                                                                    return ResponseCreator::create_ok(data);
+                                                                },
+                                                                Err(error) => {
+                                                                    log::error!("{}", BaseError::from(error));
+                                            
+                                                                    return ResponseCreator::create_internal_server_error();
+                                                                }
                                                             }
+                                                        },
+                                                        _ => {
+                                                            unreachable!("{}", base_error);
                                                         }
-                                                    },
-                                                    _ => {
-                                                        unreachable!("{}", base_error);
+                        
                                                     }
-                    
+                                                },
+                                                _ => {
+                                                    unreachable!("{}", base_error);
                                                 }
-                                            },
-                                            _ => {
-                                                unreachable!("{}", base_error);
                                             }
+                                        },
+                                        BaseError::InvalidArgumentError => {
+                                            return ResponseCreator::create_bad_request();
+                                        },
+                                        BaseError::LogicError {logic_error: _} |
+                                        BaseError::RunTimeError {run_time_error: _} => {
+                                            log::error!("{}", base_error);
+                        
+                                            return ResponseCreator::create_internal_server_error();
                                         }
-                                    },
-                                    BaseError::InvalidArgumentError => {
-                                        return ResponseCreator::create_bad_request();
-                                    },
-                                    BaseError::LogicError {logic_error: _} |
-                                    BaseError::RunTimeError {run_time_error: _} => {
-                                        log::error!("{}", base_error);
+                                    }
+                                }
                     
+                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                                    Ok(data) => {
+                                        return ResponseCreator::create_ok(data);
+                                    },
+                                    Err(error) => {
+                                        log::error!("{}", BaseError::from(error));
+
                                         return ResponseCreator::create_internal_server_error();
                                     }
                                 }
+                            },
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
+                
+                                return ResponseCreator::create_internal_server_error();
                             }
-                    
-                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
-                                Ok(data) => {
-                                    return ResponseCreator::create_ok(data);
-                                },
-                                Err(error) => {
-                                    log::error!("{}", BaseError::from(error));
-
-                                    return ResponseCreator::create_internal_server_error();
-                                }
-                            }
-                        },
-                        Err(error) => {
-                            log::error!("{}", BaseError::from(error));
-            
-                            return ResponseCreator::create_internal_server_error();
                         }
-                    }
-
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));

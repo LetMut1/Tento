@@ -3,8 +3,6 @@ use crate::domain_layer::repository::data_provider::_in_context_for::domain_laye
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use postgres::Client as Connection;
-use postgres::Row;
-use postgres::Statement;
 use postgres::types::Type;
 
 pub struct Base;
@@ -16,9 +14,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         connection: &'a mut Connection,
         nickname: &'a str
     ) -> Result<bool, Self::Error> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query: &'static str = 
+        let query = 
             "SELECT \
                 au.id AS i \
             FROM public.application_user au \
@@ -26,9 +24,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::TEXT);
 
-        let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if row_registry.is_empty() {
             return Ok(false);
         }
@@ -40,9 +38,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         connection: &'a mut Connection,
         email: &'a str
     ) -> Result<bool, Self::Error> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query: &'static str = 
+        let query = 
             "SELECT \
                 au.id AS i \
             FROM public.application_user au \
@@ -50,9 +48,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
 
-        let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if row_registry.is_empty() {
             return Ok(false);
         }
@@ -64,9 +62,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         connection: &'a mut Connection,
         email: &'a str
     ) -> Result<Option<ApplicationUser>, Self::Error> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query: &'static str = 
+        let query = 
             "SELECT \
                 au.id AS i, \
                 au.email AS e, \
@@ -78,9 +76,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
 
-        let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if !row_registry.is_empty() {
             return Ok(Some(
                 ApplicationUser::new(
@@ -100,9 +98,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         connection: &'a mut Connection,
         nickname: &'a str
     ) -> Result<Option<ApplicationUser>, Self::Error> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query: &'static str = 
+        let query = 
             "SELECT \
                 au.id AS i, \
                 au.email AS e, \
@@ -114,9 +112,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::TEXT);
 
-        let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if !row_registry.is_empty() {
             return Ok(Some(
                 ApplicationUser::new(
@@ -136,9 +134,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
         connection: &'a mut Connection,
         id: &'a i64
     ) -> Result<Option<ApplicationUser>, Self::Error> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query: &'static str = 
+        let query = 
             "SELECT \
                 au.id AS i, \
                 au.email AS e, \
@@ -150,9 +148,9 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(id, Type::INT8);
 
-        let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if !row_registry.is_empty() {
             return Ok(Some(
                 ApplicationUser::new(

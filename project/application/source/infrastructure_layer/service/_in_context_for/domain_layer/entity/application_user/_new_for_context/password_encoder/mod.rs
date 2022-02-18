@@ -11,7 +11,7 @@ impl PasswordEncoderTrait for PasswordEncoder {      // TODO отрабатыв�
     fn encode<'a>(
         password: &'a str
     ) -> Result<String, Self::Error> {
-        let config: Config = Config::default(); 
+        let config = Config::default(); 
 
         return Ok(argon2::hash_encoded(password.as_bytes(), Uuid::new_v4().as_bytes(), &config)?);
     }

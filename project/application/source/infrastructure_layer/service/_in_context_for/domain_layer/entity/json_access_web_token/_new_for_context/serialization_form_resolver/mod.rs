@@ -8,7 +8,6 @@ use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastr
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::signature_creator::SignatureCreator;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
-use std::borrow::Cow;
 
 pub struct SerializationFormResolver;
 
@@ -18,39 +17,35 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
     fn serialize<'a>(
         json_access_web_token: &'a JsonAccessWebToken<'_>
     ) -> Result<String, Self::Error> {
-        let header: String = base64::encode_config(serde_json::to_vec(&HeaderCommon::new(json_access_web_token))?, base64::URL_SAFE);
+        let header = base64::encode_config(serde_json::to_vec(&HeaderCommon::new(json_access_web_token))?, base64::URL_SAFE);
 
-        let payload: String = base64::encode_config(serde_json::to_vec(&PayloadCommon::new(json_access_web_token))?, base64::URL_SAFE);
+        let payload = base64::encode_config(serde_json::to_vec(&PayloadCommon::new(json_access_web_token))?, base64::URL_SAFE);
         
-        let signature: String = SignatureCreator::create(header.as_str(), payload.as_str())?;
+        let signature = SignatureCreator::create(header.as_str(), payload.as_str())?;
 
-        return Ok(header + Self::TOKEN_PARTS_SEPARATOR + payload.as_str() + Self::TOKEN_PARTS_SEPARATOR + signature.as_str());
+        let json_access_web_token_classic_form = header + Self::TOKEN_PARTS_SEPARATOR + payload.as_str() + Self::TOKEN_PARTS_SEPARATOR + signature.as_str();
+
+        return Ok(json_access_web_token_classic_form);
     }
 
     fn deserialize<'a>(
         classic_form: &'a str
     ) -> Result<JsonAccessWebToken<'static>, Self::Error> {
-        let token_part_registry: Vec<&'_ str> = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
+        let token_part_registry = classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
 
         if token_part_registry.len() == 3 && SignatureCreator::is_valid(token_part_registry[0], token_part_registry[1], token_part_registry[2])? {
-            let payload_common: PayloadCommon<'static> = 
-                serde_json::from_slice::<'_, PayloadCommon<'static>>(
-                    &base64::decode_config(token_part_registry[1].as_bytes(), base64::URL_SAFE)?[..]
-                )?;
+            let payload_common = serde_json::from_slice::<'_, PayloadCommon<'static>>(
+                &base64::decode_config(token_part_registry[1].as_bytes(), base64::URL_SAFE)?[..]
+            )?;
 
             let (
                 json_access_web_token_id,
                 application_user_id,
                 application_user_log_in_token_device_id,
                 json_access_web_token_expiration_time
-            ) : (
-                Cow<'static, str>,
-                Cow<'static, i64>,
-                Cow<'static, str>,
-                Cow<'static, str>
             ) = payload_common.into_inner();
 
-            let json_access_web_token: JsonAccessWebToken<'static> = JsonAccessWebTokenFactory::create(
+            let json_access_web_token = JsonAccessWebTokenFactory::create(
                 json_access_web_token_id,
                 application_user_id,
                 application_user_log_in_token_device_id,

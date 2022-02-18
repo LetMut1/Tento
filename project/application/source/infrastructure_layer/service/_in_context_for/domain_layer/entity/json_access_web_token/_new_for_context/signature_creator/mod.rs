@@ -21,7 +21,7 @@ impl SignatureCreatorTrait for SignatureCreator {
         header: &'a str,
         payload: &'a str
     ) -> Result<String, Self::Error> {
-        let mut hmac: Hmac<Sha512> = Self::get_configured_hmac()?;
+        let mut hmac = Self::get_configured_hmac()?;
         hmac.input((header.to_string() + payload).as_bytes());
 
         return Ok(hex::encode(hmac.result().code()));   // TODO TIme attack

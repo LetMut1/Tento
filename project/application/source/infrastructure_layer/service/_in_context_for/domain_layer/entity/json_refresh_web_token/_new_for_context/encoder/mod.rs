@@ -22,7 +22,7 @@ impl EncoderTrait for Encoder {
     fn encode<'a>(
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<String, Self::Error> {
-        let mut hmac: Hmac<Sha512> = Self::get_configured_hmac()?;
+        let mut hmac = Self::get_configured_hmac()?;
         
         hmac.input(serde_json::to_string(&Common::new(json_refresh_web_token))?.as_bytes());
 

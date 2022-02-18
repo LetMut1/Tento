@@ -5,7 +5,6 @@ use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::redis::_new_for_context::storage_key_resolver::StorageKeyResolver;
 use redis::Commands;
 use redis::Connection;
-use std::borrow::Cow;
 
 pub struct Base;
 
@@ -19,21 +18,16 @@ impl JsonRefreshWebTokenDataProviderRedisTrait for Base {
     ) -> Result<Option<JsonRefreshWebToken<'static>>, Self::Error> {
         match connection.get::<String, Option<Vec<u8>>>(StorageKeyResolver::get_5(application_user_id, application_user_log_in_token_device_id))? {
             Some(data) => {
-                let common: Common<'static> = rmp_serde::from_read_ref::<'_, [u8], Common<'static>>(&data[..])?;
+                let common = rmp_serde::from_read_ref::<'_, [u8], Common<'static>>(&data[..])?;
 
                 let (
                     json_access_web_token_id,
                     application_user_id,
                     application_user_log_in_token_device_id,
                     json_refresh_web_token_obfuscation_value
-                ) : (
-                    Cow<'static, str>,
-                    Cow<'static, i64>,
-                    Cow<'static, str>,
-                    Cow<'static, str>
                 ) = common.into_inner();
         
-                let json_refresh_web_token:JsonRefreshWebToken<'static> = JsonRefreshWebToken::new(
+                let json_refresh_web_token = JsonRefreshWebToken::new(
                     json_access_web_token_id.into_owned(),
                     application_user_id,
                     application_user_log_in_token_device_id,

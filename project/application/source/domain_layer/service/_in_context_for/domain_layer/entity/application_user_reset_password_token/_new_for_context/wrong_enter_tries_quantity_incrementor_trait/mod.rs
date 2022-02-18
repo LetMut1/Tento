@@ -9,7 +9,7 @@ pub trait WrongEnterTriesQuantityIncrementorTrait {
     fn increment<'a>(
         application_user_reset_password_token: &'a mut ApplicationUserResetPasswordToken<'_>
     ) -> Result<(), Self::Error> {
-        let wrong_enter_tries_quantity: u8 = *application_user_reset_password_token.get_wrong_enter_tries_quantity();
+        let wrong_enter_tries_quantity = *application_user_reset_password_token.get_wrong_enter_tries_quantity();
         if wrong_enter_tries_quantity == u8::max_value() {
             return Err(LogicError::new(false, "Out of range for `u8` type."))?;
         }

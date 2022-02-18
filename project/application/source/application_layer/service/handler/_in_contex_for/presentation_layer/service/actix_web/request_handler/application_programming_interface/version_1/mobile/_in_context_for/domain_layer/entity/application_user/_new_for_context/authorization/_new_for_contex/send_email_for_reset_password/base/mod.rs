@@ -20,7 +20,7 @@ impl Base {
         aggregate_connection_pool: Arc<AggregateConnectionPoolXXXxDELETE>,
         request: Request
     ) -> Result<(), BaseError> {     // TODO Защита от частого посыла емэй
-        let application_user_id: i64 = request.into_inner();
+        let application_user_id = request.into_inner();
 
         if let Some(application_user_reset_password_token) = ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(
             &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?, &application_user_id

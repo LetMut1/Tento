@@ -18,10 +18,10 @@ impl Base {
         aggregate_connection_pool: Arc<AggregateConnectionPoolXXXxDELETE>,
         request: Request
     ) -> Result<Response, BaseError> {
-        let application_user_nickname: String = request.into_inner();
+        let application_user_nickname = request.into_inner();
 
         if ApplicationUserValidator::is_valid_nickname(application_user_nickname.as_str()) {
-            let result: bool = ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(
+            let result = ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(
                 &mut *ConnectionExtractorXXXxDelete::get_postgresql_connection(&aggregate_connection_pool)?, application_user_nickname.as_str()
             )?;
 

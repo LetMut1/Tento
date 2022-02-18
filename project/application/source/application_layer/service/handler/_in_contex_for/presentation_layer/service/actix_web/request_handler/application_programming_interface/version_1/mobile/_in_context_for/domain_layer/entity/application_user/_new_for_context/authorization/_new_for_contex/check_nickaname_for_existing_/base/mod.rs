@@ -1,9 +1,7 @@
-use actix_http::body::BoxBody;
 use actix_http::StatusCode;
 use actix_web::body;
 use actix_web::FromRequest;
 use actix_web::HttpRequest;
-use actix_web::HttpResponse;
 use actix_web::web::Buf;
 use actix_web::web::Bytes;
 use actix_web::web::Payload;
@@ -25,22 +23,22 @@ impl Base {
         let mut data: Vec<u8> = vec![];
         rmp_serde::encode::write(&mut data, &request)?;
 
-        let payload: Payload = Payload::from_request(
+        let payload = Payload::from_request(
             &http_request, &mut HttpPayloadCreator::create_from_data(Bytes::from(data))
         ).await.unwrap();     // TODO resolve unwrap !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        let http_response: HttpResponse<BoxBody> = Authorization::check_nickname_for_existing(http_request, payload).await;
+        let http_response = Authorization::check_nickname_for_existing(http_request, payload).await;
 
-        let status_code: StatusCode = http_response.status();
+        let status_code = http_response.status();
 
         let mut result: (Option<WrappedResponse<Response>>, StatusCode) = (None, status_code);
 
         if status_code == StatusCode::OK {
-            let body: BoxBody = http_response.into_parts().1;
+            let body = http_response.into_parts().1;
 
-            let bytes: Bytes = body::to_bytes(body).await.unwrap();    // TODO resolve unwrap !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            let bytes = body::to_bytes(body).await.unwrap();    // TODO resolve unwrap !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-            let wrapped_response: WrappedResponse<Response> = rmp_serde::from_read_ref::<'_, [u8], WrappedResponse<Response>>(bytes.chunk())?;
+            let wrapped_response = rmp_serde::from_read_ref::<'_, [u8], WrappedResponse<Response>>(bytes.chunk())?;
 
             result = (Some(wrapped_response), status_code);
         }

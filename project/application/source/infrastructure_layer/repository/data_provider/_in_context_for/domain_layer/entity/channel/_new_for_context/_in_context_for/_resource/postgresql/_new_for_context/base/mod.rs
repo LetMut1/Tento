@@ -7,8 +7,6 @@ use crate::presentation_layer::data_transfer_object::response::_in_context_for::
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_component::channel::Channel as ResponseGetManyByNameChannel;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::_component::channel::Channel as ResponseGetManyBySubscribersQuantityChannel;
 use postgres::Client as Connection;
-use postgres::Row;
-use postgres::Statement;
 use postgres::types::Type;
 
 pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO 
@@ -20,11 +18,11 @@ impl Base {
         requery_name: &'a Option<String>,
         limit: &'a i16
     ) -> Result<Option<Vec<ResponseGetManyByNameChannel>>, BaseError> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         
-        let mut prepared_statemant_parameter_counter: PreparedStatementParameterCounter = PreparedStatementParameterCounter::new();
+        let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
 
-        let mut query: String = 
+        let mut query = 
             "SELECT \
                 c.id AS i, \
                 c.name AS n, \
@@ -40,7 +38,7 @@ impl Base {
             .to_string()
             + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
 
-        let wildcard: String = name.to_string() + "%";
+        let wildcard = name.to_string() + "%";
         prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_name) = requery_name {
@@ -55,12 +53,12 @@ impl Base {
 
         let mut channel_registry: Vec<ResponseGetManyByNameChannel> = Vec::new();
 
-        let statement: Statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if !row_registry.is_empty() {
             for row in row_registry.iter() {
-                let channel: ResponseGetManyByNameChannel = ResponseGetManyByNameChannel::new(
+                let channel = ResponseGetManyByNameChannel::new(
                     row.try_get::<'_, usize, i64>(0)?,
                     row.try_get::<'_, usize, String>(1)?,
                     row.try_get::<'_, usize, String>(2)?,
@@ -87,11 +85,11 @@ impl Base {
         order: &'a i8,
         limit: &'a i16
     ) -> Result<Option<Vec<ResponseGetManyByCreatedAtChannel>>, BaseError> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut prepared_statemant_parameter_counter: PreparedStatementParameterCounter = PreparedStatementParameterCounter::new();
+        let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
 
-        let mut query: String = 
+        let mut query = 
             "SELECT \
                 c.id AS i, \
                 c.name AS n, \
@@ -125,12 +123,12 @@ impl Base {
 
         let mut channel_registry: Vec<ResponseGetManyByCreatedAtChannel> = Vec::new();
 
-        let statement: Statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if !row_registry.is_empty() {
             for row in row_registry.iter() {
-                let channel: ResponseGetManyByCreatedAtChannel = ResponseGetManyByCreatedAtChannel::new(
+                let channel = ResponseGetManyByCreatedAtChannel::new(
                     row.try_get::<'_, usize, i64>(0)?,
                     row.try_get::<'_, usize, String>(1)?,
                     row.try_get::<'_, usize, String>(2)?,
@@ -157,11 +155,11 @@ impl Base {
         order: &'a i8,
         limit: &'a i16
     ) -> Result<Option<Vec<ResponseGetManyBySubscribersQuantityChannel>>, BaseError> {
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut prepared_statemant_parameter_counter: PreparedStatementParameterCounter = PreparedStatementParameterCounter::new();
+        let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
 
-        let mut query: String = 
+        let mut query = 
             "SELECT \
                 c.id AS i, \
                 c.subscribers_quantity AS sq \
@@ -188,12 +186,12 @@ impl Base {
 
         let mut channel_registry: Vec<ResponseGetManyBySubscribersQuantityChannel> = Vec::new();
 
-        let statement: Statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if !row_registry.is_empty() {
             for row in row_registry.iter() {
-                let channel: ResponseGetManyBySubscribersQuantityChannel = ResponseGetManyBySubscribersQuantityChannel::new(
+                let channel = ResponseGetManyBySubscribersQuantityChannel::new(
                     row.try_get::<'_, usize, i64>(0)?,
                     row.try_get::<'_, usize, i64>(1)?
                 );
@@ -215,9 +213,9 @@ impl Base {
             return Ok(None)
         }
 
-        let mut prepared_statemant_parameter_convertation_resolver: PreparedStatementParameterConvertationResolver<'_> = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query: &'static str = 
+        let query = 
             "SELECT \
                 c.id AS i, \
                 c.name AS n, \
@@ -235,12 +233,12 @@ impl Base {
 
         let mut channel_registry: Vec<ResponseGetManyByIdRegistryChannel> = Vec::new();
 
-        let statement: Statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
 
-        let row_registry: Vec<Row> = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
         if !row_registry.is_empty() {
             for row in row_registry.iter() {
-                let channel: ResponseGetManyByIdRegistryChannel = ResponseGetManyByIdRegistryChannel::new(
+                let channel = ResponseGetManyByIdRegistryChannel::new(
                     row.try_get::<'_, usize, i64>(0)?,
                     row.try_get::<'_, usize, String>(1)?,
                     row.try_get::<'_, usize, String>(2)?,

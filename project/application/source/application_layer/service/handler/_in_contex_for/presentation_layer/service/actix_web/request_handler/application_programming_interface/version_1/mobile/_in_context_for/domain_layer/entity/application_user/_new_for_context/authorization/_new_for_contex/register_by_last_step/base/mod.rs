@@ -1,6 +1,5 @@
 use crate::domain_layer::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::domain_layer::entity::application_user::ApplicationUser;
-use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
@@ -33,8 +32,6 @@ use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer
 use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::Base as Request;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::Base as Response;
-use postgres::Client as PostgresqlConnection;
-use redis::Connection as RedisConnection;
 use std::sync::Arc;
 
 pub struct Base;
@@ -50,31 +47,25 @@ impl Base {
             application_user_password,
             application_user_email,
             application_user_registration_confirmation_token_value
-        ) : (
-            String,
-            String,
-            String,
-            String,
-            String
-        ) = request.into_inner();
+        )  = request.into_inner();
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
             if ApplicationUserValidator::is_valid_nickname(application_user_nickname.as_str()) {
-                let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractorXXXxDelete::get_postgresql_connection(&aggregate_connection_pool)?;
+                let postgresql_connection = &mut *ConnectionExtractorXXXxDelete::get_postgresql_connection(&aggregate_connection_pool)?;
 
                 if !ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(postgresql_connection, application_user_nickname.as_str())? {
                     if !ApplicationUserDataProviderPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str())? {
-                        let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?;
+                        let redis_connection = &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?;
 
                         if let Some(mut application_user_registration_confirmation_token) = ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_email(
                             redis_connection, application_user_email.as_str()
                         )? {
                             if application_user_registration_confirmation_token.get_value() == application_user_registration_confirmation_token_value.as_str() {
-                                let application_user_password_hash: String = PasswordHashResolver::create(application_user_password.as_str())?;
+                                let application_user_password_hash = PasswordHashResolver::create(application_user_password.as_str())?;
                                 
                                 ApplicationUserRegistrationConfirmationTokenStateManagerRedis::delete(redis_connection, &application_user_registration_confirmation_token)?;
 
-                                let application_user: ApplicationUser = ApplicationUser::new(
+                                let application_user = ApplicationUser::new(
                                     None,
                                     application_user_email,
                                     application_user_nickname,
@@ -82,19 +73,19 @@ impl Base {
                                     chrono::Utc::now().to_rfc2822() // TODO  Delete. Все Часы делаются через БД.
                                 );
                                 
-                                let application_user_id: i64 = ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user)?;
+                                let application_user_id = ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user)?;
 
-                                let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::create_from_id_registry(
+                                let json_refresh_web_token = JsonRefreshWebTokenFactory::create_from_id_registry(
                                     &application_user_id, application_user_log_in_token_device_id.as_str()
                                 );
 
                                 RepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
 
-                                let json_access_web_token: String = SerializationFormResolver::serialize(
+                                let json_access_web_token = SerializationFormResolver::serialize(
                                     &JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token)?
                                 )?;
 
-                                let json_refresh_web_token: String = Encoder::encode(&json_refresh_web_token)?;
+                                let json_refresh_web_token = Encoder::encode(&json_refresh_web_token)?;
 
                                 return Ok(Response::new(json_access_web_token, json_refresh_web_token));
                             }

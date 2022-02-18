@@ -1,6 +1,5 @@
 use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::entity::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
-use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenDataProviderRedisTrait;
@@ -28,7 +27,6 @@ use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as Request;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as Response;
-use redis::Connection as RedisConnection;
 use std::sync::Arc;
 
 pub struct Base;
@@ -42,13 +40,9 @@ impl Base {
             application_user_id,
             application_user_log_in_token_device_id,  // TODO ПРоверить все входящие значения application_user_log_in_token_device_id нв формат. Формата может не быть. Нужно определиться, есть ли формат, напримре, UUID
             application_user_log_in_token_value
-        ) : (
-            i64,
-            String,
-            String
         ) = request.into_inner();
 
-        let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?;
+        let redis_connection = &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?;
 
         if let Some(mut application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
             redis_connection, &application_user_id, application_user_log_in_token_device_id.as_str()
@@ -64,7 +58,7 @@ impl Base {
                     RepositoryProxy::delete(redis_connection, &json_refresh_web_token_)?;
                 }
 
-                let json_refresh_web_token: JsonRefreshWebToken<'_> = JsonRefreshWebTokenFactory::create_from_id_registry(
+                let json_refresh_web_token = JsonRefreshWebTokenFactory::create_from_id_registry(
                     application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 );
                 
@@ -72,11 +66,11 @@ impl Base {
 
                 RepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
 
-                let json_access_web_token: String = SerializationFormResolver::serialize(
+                let json_access_web_token = SerializationFormResolver::serialize(
                     &JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token)?
                 )?;
 
-                let json_refresh_web_token: String = Encoder::encode(&json_refresh_web_token)?;
+                let json_refresh_web_token = Encoder::encode(&json_refresh_web_token)?;
 
                 return Ok(Response::new(json_access_web_token, json_refresh_web_token));
             }

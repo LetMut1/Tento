@@ -9,7 +9,7 @@ impl TransactionManager {
         connection: &'a mut Connection,
         transaction_isolation_level: TransactionIsolationLevel
     ) -> Result<Self, BaseError> {
-        let mut query: String = "START TRANSACTION ISOLATION LEVEL".to_string();
+        let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
         match transaction_isolation_level {
             TransactionIsolationLevel::ReadCommitted => {
                 query = query + " READ COMMITTED, READ WRITE, NOT DEFERRABLE;";
@@ -41,7 +41,7 @@ impl TransactionManager {
         self,
         connection: &'a mut Connection
     ) -> Result<(), BaseError> {
-        let query: &'static str = "COMMIT;";
+        let query = "COMMIT;";
 
         connection.execute(query, &[])?;
 
@@ -52,7 +52,7 @@ impl TransactionManager {
         self,
         connection: &'a mut Connection
     ) -> Result<(), BaseError> {
-        let query: &'static str = "ROLLBACK;";
+        let query = "ROLLBACK;";
 
         connection.execute(query, &[])?;
 

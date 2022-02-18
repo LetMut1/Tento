@@ -20,8 +20,6 @@ use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer:
 use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as Request;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as Response;
-use postgres::Client as PostgresqlConnection;
-use redis::Connection as RedisConnection;
 use std::sync::Arc;
 
 pub struct Base;
@@ -35,14 +33,10 @@ impl Base {
             application_user_log_in_token_device_id, 
             application_user_email_or_application_user_nickname, 
             application_user_password
-        ) : (
-            String,
-            String,
-            String
         ) = request.into_inner();
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
-            let postgresql_connection: &'_ mut PostgresqlConnection = &mut *ConnectionExtractorXXXxDelete::get_postgresql_connection(&aggregate_connection_pool)?;
+            let postgresql_connection = &mut *ConnectionExtractorXXXxDelete::get_postgresql_connection(&aggregate_connection_pool)?;
 
             let application_user: ApplicationUser;
             if ApplicationUserValidator::is_valid_email(application_user_email_or_application_user_nickname.as_str())? {
@@ -82,7 +76,7 @@ impl Base {
                     }
                 }
 
-                let redis_connection: &'_ mut RedisConnection = &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?;
+                let redis_connection = &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?;
 
                 match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
                     redis_connection, application_user_id, application_user_log_in_token_device_id.as_str()

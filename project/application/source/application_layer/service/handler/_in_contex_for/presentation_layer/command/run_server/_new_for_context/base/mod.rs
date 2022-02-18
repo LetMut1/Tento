@@ -57,17 +57,17 @@ impl Base {
     ) -> Result<(), BaseError> {
         match Path::new(binary_file_path).parent() {
             Some(file_path) => {
-                let production_environment_file_path_buffer: PathBuf = file_path.join(&Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME));
+                let production_environment_file_path_buffer = file_path.join(&Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME));
                 if production_environment_file_path_buffer.exists() {
                     dotenv::from_path(production_environment_file_path_buffer.as_path())?;
 
                     env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_TRUE)
                 } else {
-                    let development_local_environment_file_path_buffer: PathBuf = file_path.join(&Path::new(Self::DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME));
+                    let development_local_environment_file_path_buffer = file_path.join(&Path::new(Self::DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME));
                     if development_local_environment_file_path_buffer.exists() {
                         dotenv::from_path(development_local_environment_file_path_buffer.as_path())?;
                     } else {
-                        let development_environment_file_path_buffer: PathBuf = file_path.join(&Path::new(Self::DEVELOPMENT_ENVIRONMENT_FILE_NAME));
+                        let development_environment_file_path_buffer = file_path.join(&Path::new(Self::DEVELOPMENT_ENVIRONMENT_FILE_NAME));
                         if development_environment_file_path_buffer.exists() {
                             dotenv::from_path(development_environment_file_path_buffer.as_path())?;
                         } else {
@@ -106,11 +106,11 @@ impl Base {
 
     fn configure_log(
     ) -> Result<(), BaseError> {
-        let fixed_window_roller: FixedWindowRoller = FixedWindowRoller::builder()
+        let fixed_window_roller = FixedWindowRoller::builder()
             .base(1)
             .build(EnvironmentVariableResolver::get_logger_roller_log_file_name()?.as_str(), 10)?;
 
-        let rolling_file_appender: RollingFileAppender = RollingFileAppender::builder()
+        let rolling_file_appender = RollingFileAppender::builder()
             .append(true)
             .encoder(Box::new(PatternEncoder::new(EnvironmentVariableResolver::get_logger_encoder_pattern()?.as_str())))
             .build(
@@ -118,13 +118,13 @@ impl Base {
                 Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
             )?;
 
-        let rolling_file_appender_name: &'static str = "rfa";
+        let rolling_file_appender_name = "rfa";
 
-        let appender: Appender = Appender::builder().build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
+        let appender = Appender::builder().build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
 
-        let root: Root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);
+        let root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);
 
-        let config: Config = Config::builder().appender(appender).build(root)?;
+        let config = Config::builder().appender(appender).build(root)?;
 
         log4rs::init_config(config)?;
 

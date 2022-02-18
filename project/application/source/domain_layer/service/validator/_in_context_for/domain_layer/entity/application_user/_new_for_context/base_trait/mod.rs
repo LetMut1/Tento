@@ -14,38 +14,38 @@ pub trait BaseTrait {
     const PASSWORD_MINIMUM_LENGTH: u8 = 7;
     const PASSWORD_MAXIMUM_LENGTH: u8 = 65;
 
-    fn is_valid_email<'a>(
+    fn is_valid_email<'a>(          // TODO Перенести реализацию в инфраструктуру
         email: &'a str
     ) -> Result<bool, Self::Error> {
-        let is_valid: bool = Regex::new(r"\S+@\S+")?.is_match(email)
+        let is_valid = Regex::new(r"\S+@\S+")?.is_match(email)
             && email.chars().count() <= (Self::EMAIL_MAXIMUM_LENGTH as usize);
 
         return Ok(is_valid);
     }
 
-    fn is_valid_nickname<'a>(
+    fn is_valid_nickname<'a>(   // TODO Перенести реализацию в инфраструктуру
         nickname: &'a str
     ) -> bool {
-        let is_valid: bool = nickname.chars().count() <= (Self::NICKNAME_MAXIMUM_LENGTH as usize)
+        let is_valid = nickname.chars().count() <= (Self::NICKNAME_MAXIMUM_LENGTH as usize)
             && !nickname.contains('@')
             && !nickname.contains(' ');     // TODO Проверить символ табуляци TAB
 
         return is_valid;
     }
 
-    fn is_valid_password<'a>(
+    fn is_valid_password<'a>(       // TODO Перенести реализацию в инфраструктуру
         password: &'a str
     ) -> bool {
-        let password_chars_count: usize = password.chars().count();
+        let password_chars_count = password.chars().count();
 
-        let is_valid: bool = password_chars_count >= (Self::PASSWORD_MINIMUM_LENGTH as usize)
+        let is_valid = password_chars_count >= (Self::PASSWORD_MINIMUM_LENGTH as usize)
             && password_chars_count <= (Self::PASSWORD_MAXIMUM_LENGTH as usize)
             && !password.contains(' ');
 
         return is_valid;
     }   // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
 
-    fn is_valid_password_hash<'a>(
+    fn is_valid_password_hash<'a>( // TODO убрать вообще
         password: &'a str,
         password_hash: &'a str
     ) -> Result<bool, <<Self::PasswordHashResolver as PasswordHashResolverTrait>::PasswordEncoder as PasswordEncoderTrait>::Error> {

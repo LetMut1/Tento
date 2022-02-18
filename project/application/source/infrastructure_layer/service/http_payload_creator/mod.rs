@@ -8,7 +8,7 @@ impl HttpPayloadCreator {
     pub fn create_from_data(
         data: Bytes
     ) -> Payload {
-        let mut h1_payload: H1Payload = H1Payload::create(true).1;
+        let mut h1_payload = H1Payload::create(true).1;
         h1_payload.unread_data(data);
 
         return Payload::from(h1_payload);
