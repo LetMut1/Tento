@@ -9,6 +9,7 @@ use crate::infrastructure_layer::service::environment_variable_resolver::Environ
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as RequestHandlerApplicationUserAuthorization;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as RequestHandlerChannelBase;
 use hyper::Body;
+use hyper::Error as HyperError;
 use hyper::Method;
 use hyper::Request;
 use hyper::Response;
@@ -159,7 +160,7 @@ impl Base {
             let aggregate_connection_pool = aggregate_connection_pool.clone();
             async move {
                 // This is the request handler.
-                return Ok::<_, hyper::Error>(service_fn(move |requset| {
+                return Ok::<_, HyperError>(service_fn(move |requset| {
                     let aggregate_connection_pool = aggregate_connection_pool.clone();
 
                     return Self::resolve(aggregate_connection_pool, requset);
@@ -186,7 +187,7 @@ impl Base {
     async fn resolve(
         aggregate_connection_pool: AggregateConnectionPool,
         request: Request<Body>
-    ) -> Result<Response<Body>, hyper::Error> {
+    ) -> Result<Response<Body>, HyperError> {
         match (request.method(), request.uri().path()) {
             // Serve some instructions at /
             (&Method::GET, "/") => Ok(Response::new(Body::from(
