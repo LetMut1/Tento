@@ -188,7 +188,55 @@ impl Base {
         aggregate_connection_pool: AggregateConnectionPool,
         request: Request<Body>
     ) -> Result<Response<Body>, HyperError> {
+        match (request.uri().path(), request.method()) {                      // TODO Пути через константы
+            ("v1/m/au/cnfe", &Method::GET) => {
+            },
+            ("v1/m/au/cefe", &Method::GET) => {
+            },
+            ("v1/m/au/rbfs", &Method::POST) => {
+            },
+            ("v1/m/au/rbls", &Method::POST) => {
+            },
+            ("v1/m/au/sefr", &Method::POST) => {
+            },
+            ("v1/m/au/libfs", &Method::POST) => {
+            },
+            ("v1/m/au/libls", &Method::POST) => {
+            },
+            ("v1/m/au/sefli", &Method::POST) => {
+            },
+            ("v1/m/au/rpbfs", &Method::POST) => {
+            },
+            ("v1/m/au/rpbls", &Method::POST) => {
+            },
+            ("v1/m/au/sefrp", &Method::POST) => {
+            },
+            ("v1/m/au/rjawt", &Method::POST) => {
+            },
+            ("v1/m/au/lo", &Method::POST) => {
+            },
+            ("v1/m/au/lofad", &Method::POST) => {
+            },
+            ("v1/m/c/gmbn", &Method::GET) => {
+            },
+            ("v1/m/c/gmbca", &Method::GET) => {
+            },
+            ("v1/m/c/gmbsq", &Method::GET) => {
+            },
+            ("v1/m/c/gmbir", &Method::GET) => {
+            },
+            _ => {
+            }
+        }
+
+
+
+
+
+
+        //  TODO DELETE --------------------------------------------------------------------------
         match (request.method(), request.uri().path()) {
+
             // Serve some instructions at /
             (&Method::GET, "/") => Ok(Response::new(Body::from(
                 "Try POSTing data to /echo such as: `curl localhost:3000/echo -XPOST -d 'hello world'`",
@@ -201,8 +249,10 @@ impl Base {
                 Ok(not_found)
             }
         }
+        //  TODO DELETE --------------------------------------------------------------------------
     }
 
+    // TODO DELETE after creating Self::resolve() method!!!!!!!!!!!!!!!!!!!!!!!!!!
     fn configure_http_server<'a>(
         service_config: &'a mut ServiceConfig
     ) -> () {
