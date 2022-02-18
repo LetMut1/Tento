@@ -244,6 +244,7 @@ dependencies = [
  "futures",
  "futures-util",
  "hex",
+ "http",
  "hyper",
  "lettre",
  "lettre_email",

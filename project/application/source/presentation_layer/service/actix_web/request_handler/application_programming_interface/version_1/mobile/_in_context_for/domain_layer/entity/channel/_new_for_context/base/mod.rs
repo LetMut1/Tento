@@ -41,12 +41,12 @@ impl Base {
                                             Ok(response_data) => { 
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ResponseCreator::create_okXXXxDelete(data);
                                                     },
                                                     Err(error) => {
                                                         log::error!("{}", BaseError::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                                     }
                                                 }
                                             },
@@ -56,13 +56,13 @@ impl Base {
                                                         unreachable!("{}", base_error);
                                                     },
                                                     BaseError::InvalidArgumentError => {
-                                                        return ResponseCreator::create_bad_request();
+                                                        return ResponseCreator::create_bad_requestXXXxDelete();
                                                     },
                                                     BaseError::LogicError {logic_error: _} |
                                                     BaseError::RunTimeError {run_time_error: _} => {
                                                         log::error!("{}", base_error);
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                                     }
                                                 }
                                             }
@@ -71,28 +71,28 @@ impl Base {
                                     Err(error) => {
                                         log::error!("{}", BaseError::from(error));
                         
-                                        return ResponseCreator::create_internal_server_error();
+                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                     }
                                 }
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
 
-                                return ResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_errorXXXxDelete();
                             }
                         }
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));
 
-                        return ResponseCreator::create_internal_server_error();
+                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                     }
                 }
             },
             Err(error) => {
                 log::error!("{}", BaseError::from(error));
 
-                return ResponseCreator::create_internal_server_error();
+                return ResponseCreator::create_internal_server_errorXXXxDelete();
             }
         }
     }
@@ -113,12 +113,12 @@ impl Base {
                                             Ok(response_data) => { 
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ResponseCreator::create_okXXXxDelete(data);
                                                     },
                                                     Err(error) => {
                                                         log::error!("{}", BaseError::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                                     }
                                                 }
                                             },
@@ -128,13 +128,13 @@ impl Base {
                                                         unreachable!("{}", base_error);
                                                     },
                                                     BaseError::InvalidArgumentError => {
-                                                        return ResponseCreator::create_bad_request();
+                                                        return ResponseCreator::create_bad_requestXXXxDelete();
                                                     },
                                                     BaseError::LogicError {logic_error: _} |
                                                     BaseError::RunTimeError {run_time_error: _} => {
                                                         log::error!("{}", base_error);
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                                     }
                                                 }
                                             }
@@ -143,28 +143,28 @@ impl Base {
                                     Err(error) => {
                                         log::error!("{}", BaseError::from(error));
                         
-                                        return ResponseCreator::create_internal_server_error();
+                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                     }
                                 }
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
 
-                                return ResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_errorXXXxDelete();
                             }
                         }
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));
 
-                        return ResponseCreator::create_internal_server_error();
+                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                     }
                 }
             },
             Err(error) => {
                 log::error!("{}", BaseError::from(error));
 
-                return ResponseCreator::create_internal_server_error();
+                return ResponseCreator::create_internal_server_errorXXXxDelete();
             }
         }
     }
@@ -185,12 +185,12 @@ impl Base {
                                             Ok(response_data) => { 
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ResponseCreator::create_okXXXxDelete(data);
                                                     },
                                                     Err(error) => {
                                                         log::error!("{}", BaseError::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                                     }
                                                 }
                                             },
@@ -200,13 +200,13 @@ impl Base {
                                                         unreachable!("{}", base_error);
                                                     },
                                                     BaseError::InvalidArgumentError => {
-                                                        return ResponseCreator::create_bad_request();
+                                                        return ResponseCreator::create_bad_requestXXXxDelete();
                                                     },
                                                     BaseError::LogicError {logic_error: _} |
                                                     BaseError::RunTimeError {run_time_error: _} => {
                                                         log::error!("{}", base_error);
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                                     }
                                                 }
                                             }
@@ -215,28 +215,28 @@ impl Base {
                                     Err(error) => {
                                         log::error!("{}", BaseError::from(error));
                         
-                                        return ResponseCreator::create_internal_server_error();
+                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                     }
                                 }
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
 
-                                return ResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_errorXXXxDelete();
                             }
                         }
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));
 
-                        return ResponseCreator::create_internal_server_error();
+                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                     }
                 }
             },
             Err(error) => {
                 log::error!("{}", BaseError::from(error));
 
-                return ResponseCreator::create_internal_server_error();
+                return ResponseCreator::create_internal_server_errorXXXxDelete();
             }
         }
     }
@@ -257,12 +257,12 @@ impl Base {
                                             Ok(response_data) => { 
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ResponseCreator::create_okXXXxDelete(data);
                                                     },
                                                     Err(error) => {
                                                         log::error!("{}", BaseError::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                                     }
                                                 }
                                             },
@@ -272,13 +272,13 @@ impl Base {
                                                         unreachable!("{}", base_error);
                                                     },
                                                     BaseError::InvalidArgumentError => {
-                                                        return ResponseCreator::create_bad_request();
+                                                        return ResponseCreator::create_bad_requestXXXxDelete();
                                                     },
                                                     BaseError::LogicError {logic_error: _} |
                                                     BaseError::RunTimeError {run_time_error: _} => {
                                                         log::error!("{}", base_error);
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                                     }
                                                 }
                                             }
@@ -287,28 +287,28 @@ impl Base {
                                     Err(error) => {
                                         log::error!("{}", BaseError::from(error));
                         
-                                        return ResponseCreator::create_internal_server_error();
+                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                                     }
                                 }
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
 
-                                return ResponseCreator::create_internal_server_error();
+                                return ResponseCreator::create_internal_server_errorXXXxDelete();
                             }
                         }
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));
 
-                        return ResponseCreator::create_internal_server_error();
+                        return ResponseCreator::create_internal_server_errorXXXxDelete();
                     }
                 }
             },
             Err(error) => {
                 log::error!("{}", BaseError::from(error));
 
-                return ResponseCreator::create_internal_server_error();
+                return ResponseCreator::create_internal_server_errorXXXxDelete();
             }
         }
     }

@@ -12,6 +12,7 @@ extern crate dotenv;
 extern crate futures_util;
 extern crate futures;
 extern crate hex;
+extern crate http;
 extern crate hyper;
 extern crate lettre_email;
 extern crate lettre;

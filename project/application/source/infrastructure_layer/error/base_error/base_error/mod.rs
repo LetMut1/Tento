@@ -6,6 +6,7 @@ use bb8::RunError as Bb8Error;
 use chrono::ParseError as ChronoParseError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use dotenv::Error as DotenvError;
+use http::Error as HttpError;
 use hyper::Error as HyperError;
 use lettre_email::error::Error as LettreEmailError;
 use lettre::smtp::error::Error as LettreSmtpError;
@@ -247,6 +248,14 @@ impl From<ChronoParseError> for BaseError {
         chrono_parse_error: ChronoParseError
     ) -> Self {
         return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("ChronoParseError", chrono_parse_error)}};
+    }
+}
+
+impl From<HttpError> for BaseError {
+    fn from(
+        http_error: HttpError
+    ) -> Self {
+        return Self::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new("ChronoParseError", http_error)}};
     }
 }
 

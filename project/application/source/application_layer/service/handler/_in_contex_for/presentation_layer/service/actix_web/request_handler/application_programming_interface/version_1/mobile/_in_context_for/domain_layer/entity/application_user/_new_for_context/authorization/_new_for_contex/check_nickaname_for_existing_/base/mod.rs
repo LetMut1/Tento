@@ -27,7 +27,7 @@ impl Base {
             &http_request, &mut HttpPayloadCreator::create_from_data(Bytes::from(data))
         ).await.unwrap();     // TODO resolve unwrap !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        let http_response = Authorization::check_nickname_for_existing(http_request, payload).await;
+        let http_response = Authorization::check_nickname_for_existingXXXxDelete(http_request, payload).await;
 
         let status_code = http_response.status();
 

@@ -17,8 +17,7 @@ edition = "2021"
 crate-type = ["lib"]
 required-features = []
 
-[dependencies]
-#  TODO  TODO TODO TODO Разобарться, где нужны default фичи
+[dependencies]                                                                          #  TODO  TODO TODO TODO Разобарться, где нужны default фичи
 actix-http = {version = "=3.0.0-rc.1", default-features = true, features = [], optional = false}
 actix-service = {version = "^2.0", default-features = true, features = [], optional = false}
 actix-web = {version = "=4.0.0-rc.2", default-features = true, features = [], optional = false}
@@ -32,6 +31,7 @@ dotenv = {version = "^0.15", default-features = true, features = [], optional = 
 futures = {version = "^0.3", default-features = true, features = [], optional = false}
 futures-util = {version = "^0.3", default-features = true, features = [], optional = false}
 hex = {version = "^0.4", default-features = true, features = [], optional = false}
+http = {version = "^0.2", default-features = true, features = [], optional = false}
 hyper = {version = "^0.14", default-features = true, features = ["full"], optional = false}  # Убрать фичу Full и понять , какие нужны
 lettre = {version = "^0.9", default-features = true, features = [], optional = false}
 lettre_email = {version = "^0.9", default-features = true, features = [], optional = false}

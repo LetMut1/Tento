@@ -265,7 +265,7 @@ impl Base {
                     web::scope("/na")   // TODO NotAuthorized. Можно ли в новой версии АкстикаВеба убрать этоу чать пути 
                     .service( 
                         web::scope("/au")
-                        .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing))
+                        .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existingXXXxDelete))
                         .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existing))
                         .route("/rbfs", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_first_step))
                         .route("/rbls", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_last_step))
