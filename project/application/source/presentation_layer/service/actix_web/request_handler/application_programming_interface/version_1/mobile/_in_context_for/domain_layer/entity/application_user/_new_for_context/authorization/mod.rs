@@ -7,6 +7,9 @@ use actix_web::web::Bytes;
 use actix_web::web::Data;
 use actix_web::web::Payload;
 use actix_web::web::ReqData as RequestData;
+use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use bb8_redis::RedisConnectionManager;
+use bb8::Pool;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Base as HandlerCheckEmailForExisting;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::base::Base as HandlerCheckNicknameForExisting;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step::base::Base as HandlerLogInByFirstStep;
@@ -52,6 +55,7 @@ use hyper::body::HttpBody;
 use hyper::Request;
 use hyper::Response;
 use std::convert::From;
+use tokio_postgres::NoTls;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as HandlerCheckNicknameForExisting_;
@@ -148,8 +152,8 @@ impl Authorization {
     }
 
     pub async fn check_nickname_for_existing(
-        aggregate_connection_pool: AggregateConnectionPool,
-        request: Request<Body>
+        request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
     ) -> Response<Body> {
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
@@ -158,7 +162,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestCheckNicknameForExisting>(bytes.chunk()) {
             Ok(request_data) => {
-                match HandlerCheckNicknameForExisting::handle(aggregate_connection_pool, request_data).await {
+                match HandlerCheckNicknameForExisting::handle(postgresql_connection_pool, request_data).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                             Ok(data) => {

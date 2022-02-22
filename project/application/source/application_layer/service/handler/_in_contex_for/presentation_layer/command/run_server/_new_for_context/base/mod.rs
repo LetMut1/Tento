@@ -2,6 +2,9 @@ use actix_web::App;
 use actix_web::HttpServer;
 use actix_web::web;
 use actix_web::web::ServiceConfig;
+use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use bb8_redis::RedisConnectionManager;
+use bb8::Pool;
 use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
@@ -24,13 +27,17 @@ use log4rs::append::rolling_file::policy::compound::roll::fixed_window::FixedWin
 use log4rs::append::rolling_file::policy::compound::trigger::size::SizeTrigger;
 use log4rs::append::rolling_file::RollingFileAppender;
 use log4rs::config::Appender;
-use log4rs::config::Config;
+use log4rs::config::Config as LogConfig;
 use log4rs::config::Root;
 use log4rs::encode::pattern::PatternEncoder;
+use redis_ref::ConnectionInfo;
+use std::clone::Clone;
 use std::env;
 use std::net::SocketAddr;
 use std::path::Path;
 use std::str::FromStr;
+use tokio_postgres::Config as PostgresqlConfig;
+use tokio_postgres::NoTls;
 use tokio::signal;
 
 pub struct Base;
@@ -40,13 +47,12 @@ impl Base {
     const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.env";
     const DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
-    #[tokio::main]
-    pub async fn handle(
+    pub fn handle(
         binary_file_path: String
     ) -> Result<(), BaseError> {
         Self::load_and_check_environment_variables(binary_file_path.as_str())?;
         Self::configure_log()?;
-        Self::run_http_server().await?;
+        Self::run_http_server()?;
 
         return Ok(());
     }
@@ -123,7 +129,7 @@ impl Base {
 
         let root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);
 
-        let config = Config::builder().appender(appender).build(root)?;
+        let config = LogConfig::builder().appender(appender).build(root)?;
 
         log4rs::init_config(config)?;
 
@@ -141,27 +147,41 @@ impl Base {
     }
 
      // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
+    #[tokio::main]
     async fn run_http_server(       // TODO create HTTP2 (H2).   // TODO TODO  HTTP3 (QUICK), когда будет готов.!!!!!!!!!!!
     ) -> Result<(), BaseError> {
+        let postgresql_connection_pool = Pool::builder()    // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature? Probably having NoTls be the feature, since it makes more sense to have TLS by default
+        .build(
+            PostgresqlConnectionManager::new(
+                PostgresqlConfig::from_str(EnvironmentVariableResolver::get_resource_postgresql_url()?.as_str())?,
+                NoTls
+            )
+        ).await?;
+
+        let redis_connection_pool = Pool::builder()
+        .build(
+            RedisConnectionManager::new(
+                ConnectionInfo::from_str(EnvironmentVariableResolver::get_resource_redis_url()?.as_str())?
+            )?
+        ).await?;
+
         let socket_addres = SocketAddr::from_str(EnvironmentVariableResolver::get_server_socket_address()?.as_str())?;
-
-        let aggregate_connection_pool = AggregateConnectionPool::new().await?; // TODO Где интегрировать Пул. Наверно, Для AggregateConnectionPool нужен Mutex!!! // https://github.com/djc/bb8/blob/main/postgres/examples/hyper.rs // https://github.com/djc/bb8/issues/24  // https://www.reddit.com/r/rust/comments/dx31h1/how_to_use_tokiopostgres_with_hyper/
-
-
-
-
-
 
 
 
         // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
         let service = make_service_fn(move |_: &AddrStream| {
-            let aggregate_connection_pool = aggregate_connection_pool.clone();
+            let postgresql_connection_pool = postgresql_connection_pool.clone();
+
+            let redis_connection_pool = redis_connection_pool.clone();
+
             async move {
                 return Ok::<_, HyperError>(service_fn(move |requset| {
-                    let aggregate_connection_pool = aggregate_connection_pool.clone();
+                    let postgresql_connection_pool = postgresql_connection_pool.clone();
 
-                    return Self::resolve(aggregate_connection_pool, requset);
+                    let redis_connection_pool = redis_connection_pool.clone();
+
+                    return Self::resolve(requset, postgresql_connection_pool, redis_connection_pool);
                 }));
             }
         });
@@ -183,72 +203,68 @@ impl Base {
     }
 
     async fn resolve(
-        aggregate_connection_pool: AggregateConnectionPool,
-        request: Request<Body>
+        request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>, 
+        redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Result<Response<Body>, HyperError> {
-        // match (request.uri().path(), request.method()) {                      // TODO Пути через константы?
-        //     ("v1/m/au/cnfe", &Method::GET) => {
-        //         return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(aggregate_connection_pool, request).await);
-        //     },
-        //     ("v1/m/au/cefe", &Method::GET) => {
-        //     },
-        //     ("v1/m/au/rbfs", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/rbls", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/sefr", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/libfs", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/libls", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/sefli", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/rpbfs", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/rpbls", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/sefrp", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/rjawt", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/lo", &Method::POST) => {
-        //     },
-        //     ("v1/m/au/lofad", &Method::POST) => {
-        //     },
-        //     ("v1/m/c/gmbn", &Method::GET) => {
-        //     },
-        //     ("v1/m/c/gmbca", &Method::GET) => {
-        //     },
-        //     ("v1/m/c/gmbsq", &Method::GET) => {
-        //     },
-        //     ("v1/m/c/gmbir", &Method::GET) => {
-        //     },
-        //     _ => {
-        //     }
-        // }
-
-
-
-        return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(aggregate_connection_pool, request).await);
-
+        match (request.uri().path(), request.method()) {                      // TODO Пути через константы?
+            ("v1/m/au/cnfe", &Method::GET) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(request, postgresql_connection_pool).await);
+            },
+            ("v1/m/au/cefe", &Method::GET) => {
+            },
+            ("v1/m/au/rbfs", &Method::POST) => {
+            },
+            ("v1/m/au/rbls", &Method::POST) => {
+            },
+            ("v1/m/au/sefr", &Method::POST) => {
+            },
+            ("v1/m/au/libfs", &Method::POST) => {
+            },
+            ("v1/m/au/libls", &Method::POST) => {
+            },
+            ("v1/m/au/sefli", &Method::POST) => {
+            },
+            ("v1/m/au/rpbfs", &Method::POST) => {
+            },
+            ("v1/m/au/rpbls", &Method::POST) => {
+            },
+            ("v1/m/au/sefrp", &Method::POST) => {
+            },
+            ("v1/m/au/rjawt", &Method::POST) => {
+            },
+            ("v1/m/au/lo", &Method::POST) => {
+            },
+            ("v1/m/au/lofad", &Method::POST) => {
+            },
+            ("v1/m/c/gmbn", &Method::GET) => {
+            },
+            ("v1/m/c/gmbca", &Method::GET) => {
+            },
+            ("v1/m/c/gmbsq", &Method::GET) => {
+            },
+            ("v1/m/c/gmbir", &Method::GET) => {
+            },
+            _ => {
+            }
+        }
 
 
         //  TODO DELETE --------------------------------------------------------------------------
-        // match (request.method(), request.uri().path()) {
+        match (request.method(), request.uri().path()) {
 
-        //     // Serve some instructions at /
-        //     (&Method::GET, "/") => Ok(Response::new(Body::from(
-        //         "Try POSTing data to /echo such as: `curl localhost:3000/echo -XPOST -d 'hello world'`",
-        //     ))),
+            // Serve some instructions at /
+            (&Method::GET, "/") => Ok(Response::new(Body::from(
+                "Try POSTing data to /echo such as: `curl localhost:3000/echo -XPOST -d 'hello world'`",
+            ))),
     
-        //     // Return the 404 Not Found for other routes.
-        //     _ => {
-        //         let mut not_found = Response::default();
-        //         *not_found.status_mut() = StatusCode::NOT_FOUND;
-        //         Ok(not_found)
-        //     }
-        // }
+            // Return the 404 Not Found for other routes.
+            _ => {
+                let mut not_found = Response::default();
+                *not_found.status_mut() = StatusCode::NOT_FOUND;
+                Ok(not_found)
+            }
+        }
         //  TODO DELETE --------------------------------------------------------------------------
     }
 

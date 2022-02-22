@@ -15,8 +15,16 @@ use std::str::FromStr;
 use tokio_postgres::Config;
 use tokio_postgres::NoTls;
 
+
+    // TODO DELETE THIS!!!!!!!!!!!!!!!!1
+
+
+
+
 #[derive(Clone)]
 pub struct AggregateConnectionPoolXXXxDELETE {
+
+
     postgresql_connection_pool: PoolXXXxDelete<PostgresqlConnectionManagerXXXxDelete<NoTls>>, // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature? Probably having NoTls be the feature, since it makes more sense to have TLS by default
     redis_connection_pool: PoolXXXxDelete<RedisConnectionManagerXXXxDelete>
 }
@@ -70,7 +78,7 @@ impl AggregateConnectionPoolXXXxDELETE {
 
 #[derive(Clone)]
 pub struct AggregateConnectionPool {
-    postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>, // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature? Probably having NoTls be the feature, since it makes more sense to have TLS by default
+    postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>, 
     redis_connection_pool: Pool<RedisConnectionManager>
 }
 
