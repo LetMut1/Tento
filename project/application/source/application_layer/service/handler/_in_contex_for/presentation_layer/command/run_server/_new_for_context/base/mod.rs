@@ -1,5 +1,3 @@
-use actix_web::App;
-use actix_web::HttpServer;
 use actix_web::web;
 use actix_web::web::ServiceConfig;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -7,7 +5,6 @@ use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPool;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as RequestHandlerApplicationUserAuthorization;
 use crate::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as RequestHandlerChannelBase;
@@ -161,7 +158,7 @@ impl Base {
 
 
 
-        
+
 
         // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
         let service = make_service_fn(move |_: &AddrStream| {
@@ -216,6 +213,7 @@ impl Base {
                 return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(request, postgresql_connection_pool).await);
             },
             ("v1/m/au/cefe", &Method::GET) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::check_email_for_existing(request, postgresql_connection_pool).await);
             },
             ("v1/m/au/rbfs", &Method::POST) => {
             },
@@ -286,7 +284,7 @@ impl Base {
                     .service( 
                         web::scope("/au")
                         .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existingXXXxDelete))
-                        .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existing))
+                        .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existingXXXxDelete))
                         .route("/rbfs", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_first_step))
                         .route("/rbls", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_last_step))
                         .route("/sefr", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_register))

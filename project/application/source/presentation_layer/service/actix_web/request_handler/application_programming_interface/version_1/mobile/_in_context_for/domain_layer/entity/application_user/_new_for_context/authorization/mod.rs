@@ -286,7 +286,7 @@ impl Authorization {
         }
     }
 
-    pub async fn check_email_for_existing(
+    pub async fn check_email_for_existingXXXxDelete(
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
@@ -296,7 +296,7 @@ impl Authorization {
                     Ok(bytes) => {
                         match rmp_serde::from_read_ref::<'_, [u8], RequestCheckEmailForExisting>(bytes.chunk()) {
                             Ok(request_data) => {
-                                match HandlerCheckEmailForExisting::handle(application_data.into_inner(), request_data) {
+                                match HandlerCheckEmailForExisting::handleXXXxDelete(application_data.into_inner(), request_data) {
                                     Ok(response_data) => {
                                         match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                                             Ok(data) => {
@@ -372,6 +372,82 @@ impl Authorization {
                 return ResponseCreator::create_internal_server_errorXXXxDelete();
             }
         }
+    }
+
+    pub async fn check_email_for_existing(
+        request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
+    ) -> Response<Body> {
+        //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
+        // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
+        // https://github.com/hyperium/hyper/issues/2004
+        let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
+        
+        match rmp_serde::from_read_ref::<'_, [u8], RequestCheckEmailForExisting>(bytes.chunk()) {
+            Ok(request_data) => {
+                match HandlerCheckEmailForExisting::handle(postgresql_connection_pool, request_data).await {
+                    Ok(response_data) => {
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                            Ok(data) => {
+                                return ResponseCreator::create_ok(data);
+                            },
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
+        
+                                return ResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    },
+                    Err(ref base_error) => {
+                        match base_error {
+                            BaseError::EntityError {entity_error} => {
+                                match entity_error {
+                                    EntityError::ApplicationUserError {application_user_error} => {
+                                        match application_user_error {
+                                            ApplicationUserError::InvalidEmail => {
+                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                    CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
+                                                )) {
+                                                    Ok(data) => {
+                                                        return ResponseCreator::create_ok(data);
+                                                    },
+                                                    Err(error) => {
+                                                        log::error!("{}", BaseError::from(error));
+                                
+                                                        return ResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            },
+                                            _ => {
+                                                unreachable!("{}", base_error);
+                                            }
+                                        }
+                                    },
+                                    _ => {
+                                        unreachable!("{}", base_error);
+                                    }
+                                }
+                            }
+                            BaseError::InvalidArgumentError => {
+                                return ResponseCreator::create_bad_request();
+                            },
+                            BaseError::LogicError {logic_error: _} |
+                            BaseError::RunTimeError {run_time_error: _} => {
+                                log::error!("{}", base_error);
+        
+                                return ResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+                
     }
 
     pub async fn register_by_first_step(
