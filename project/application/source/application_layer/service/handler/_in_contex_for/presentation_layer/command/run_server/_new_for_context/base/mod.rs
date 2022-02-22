@@ -136,29 +136,19 @@ impl Base {
         return Ok(());
     }
 
-    // TODO  TODO  TODO  УБрать expect. Перерегистрировать с помощью ТОКИО (без использования .with_graceful_shutdown()) ----------
-    async fn create_shutdown_signal(
-    ) -> () {
-        signal::ctrl_c()
-            .await
-            .expect("Failed to install gracefully shutdown signal");
-
-        return ();
-    }
-
      // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     #[tokio::main]
-    async fn run_http_server(       // TODO create HTTP2 (H2).   // TODO TODO  HTTP3 (QUICK), когда будет готов.!!!!!!!!!!!
+    async fn run_http_server(
     ) -> Result<(), BaseError> {
         let postgresql_connection_pool = Pool::builder()    // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature? Probably having NoTls be the feature, since it makes more sense to have TLS by default
-        .build(
+        .build(                                                      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
             PostgresqlConnectionManager::new(
                 PostgresqlConfig::from_str(EnvironmentVariableResolver::get_resource_postgresql_url()?.as_str())?,
                 NoTls
             )
         ).await?;
 
-        let redis_connection_pool = Pool::builder()
+        let redis_connection_pool = Pool::builder()      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
         .build(
             RedisConnectionManager::new(
                 ConnectionInfo::from_str(EnvironmentVariableResolver::get_resource_redis_url()?.as_str())?
@@ -168,6 +158,10 @@ impl Base {
         let socket_addres = SocketAddr::from_str(EnvironmentVariableResolver::get_server_socket_address()?.as_str())?;
 
 
+
+
+
+        
 
         // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
         let service = make_service_fn(move |_: &AddrStream| {
@@ -200,6 +194,16 @@ impl Base {
             .await?;
 
         return Ok(());
+    }
+
+    // TODO  TODO  TODO  УБрать expect. Перерегистрировать с помощью ТОКИО (без использования .with_graceful_shutdown()) ----------
+    async fn create_shutdown_signal(
+    ) -> () {
+        signal::ctrl_c()
+            .await
+            .expect("Failed to install gracefully shutdown signal");
+
+        return ();
     }
 
     async fn resolve(
