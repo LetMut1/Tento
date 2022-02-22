@@ -158,16 +158,16 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestCheckNicknameForExisting>(bytes.chunk()) {
             Ok(request_data) => {
-                match HandlerCheckNicknameForExisting::handle(aggregate_connection_pool, request_data) {
+                match HandlerCheckNicknameForExisting::handle(aggregate_connection_pool, request_data).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
                             Ok(data) => {
-                                return ResponseCreator::create_okXXXxDelete(data);
+                                return ResponseCreator::create_ok(data);
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
         
-                                return ResponseCreator::create_internal_server_errorXXXxDelete();
+                                return ResponseCreator::create_internal_server_error();
                             }
                         }
                     },
@@ -182,12 +182,12 @@ impl Authorization {
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
                                                 )) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_okXXXxDelete(data);
+                                                        return ResponseCreator::create_ok(data);
                                                     },
                                                     Err(error) => {
                                                         log::error!("{}", BaseError::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_errorXXXxDelete();
+                                                        return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
                                             },
@@ -202,13 +202,13 @@ impl Authorization {
                                 }
                             }
                             BaseError::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_requestXXXxDelete();
+                                return ResponseCreator::create_bad_request();
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", base_error);
         
-                                return ResponseCreator::create_internal_server_errorXXXxDelete();
+                                return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -217,7 +217,7 @@ impl Authorization {
             Err(error) => {
                 log::error!("{}", BaseError::from(error));
 
-                return ResponseCreator::create_internal_server_errorXXXxDelete();
+                return ResponseCreator::create_internal_server_error();
             }
         }
     }

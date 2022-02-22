@@ -31,13 +31,13 @@ pub struct ConnectionExtractor;
 
 impl ConnectionExtractor {
     pub async fn get_postgresql_connection<'a>(
-        aggregate_connection_pool: &'a Arc<AggregateConnectionPool>
+        aggregate_connection_pool: &'a AggregateConnectionPool
     ) -> Result<PooledConnection<'_, PostgresqlConnectionManager<NoTls>>, BaseError> {  // TODO NoTls-problem 
         return Ok(aggregate_connection_pool.get_postgresql_connection_pool().get().await?);
     }
 
     pub async fn get_redis_connection<'a>(
-        aggregate_connection_pool: &'a Arc<AggregateConnectionPool>
+        aggregate_connection_pool: &'a AggregateConnectionPool
     ) -> Result<PooledConnection<'_, RedisConnectionManager>, BaseError> {
         return Ok(aggregate_connection_pool.get_redis_connection_pool().get().await?);
     }

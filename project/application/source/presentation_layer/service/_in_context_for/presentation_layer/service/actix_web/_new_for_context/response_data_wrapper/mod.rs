@@ -18,13 +18,17 @@ impl ResponseDataWrapper {
         return WrappedResponse::new(true, None, Some(data));
     }
 
+    #[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
     pub fn wrap_for_fail(
         error_code: &'static str
     ) -> WrappedResponse<()> {
-        #[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
         return WrappedResponse::new(false, Some(error_code), None);
+    }
 
-        #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub fn wrap_for_fail(
+        error_code: &'static str
+    ) -> WrappedResponse<()> {
         return WrappedResponse::new(false, Some(error_code.to_string()), None);
     }
 }

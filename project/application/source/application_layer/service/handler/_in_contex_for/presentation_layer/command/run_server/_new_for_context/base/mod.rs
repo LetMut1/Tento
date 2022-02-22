@@ -30,7 +30,6 @@ use log4rs::encode::pattern::PatternEncoder;
 use std::env;
 use std::net::SocketAddr;
 use std::path::Path;
-use std::path::PathBuf;
 use std::str::FromStr;
 use tokio::signal;
 
@@ -159,7 +158,6 @@ impl Base {
         let service = make_service_fn(move |_: &AddrStream| {
             let aggregate_connection_pool = aggregate_connection_pool.clone();
             async move {
-                // This is the request handler.
                 return Ok::<_, HyperError>(service_fn(move |requset| {
                     let aggregate_connection_pool = aggregate_connection_pool.clone();
 
@@ -188,67 +186,69 @@ impl Base {
         aggregate_connection_pool: AggregateConnectionPool,
         request: Request<Body>
     ) -> Result<Response<Body>, HyperError> {
-        match (request.uri().path(), request.method()) {                      // TODO Пути через константы
-            ("v1/m/au/cnfe", &Method::GET) => {
-            },
-            ("v1/m/au/cefe", &Method::GET) => {
-            },
-            ("v1/m/au/rbfs", &Method::POST) => {
-            },
-            ("v1/m/au/rbls", &Method::POST) => {
-            },
-            ("v1/m/au/sefr", &Method::POST) => {
-            },
-            ("v1/m/au/libfs", &Method::POST) => {
-            },
-            ("v1/m/au/libls", &Method::POST) => {
-            },
-            ("v1/m/au/sefli", &Method::POST) => {
-            },
-            ("v1/m/au/rpbfs", &Method::POST) => {
-            },
-            ("v1/m/au/rpbls", &Method::POST) => {
-            },
-            ("v1/m/au/sefrp", &Method::POST) => {
-            },
-            ("v1/m/au/rjawt", &Method::POST) => {
-            },
-            ("v1/m/au/lo", &Method::POST) => {
-            },
-            ("v1/m/au/lofad", &Method::POST) => {
-            },
-            ("v1/m/c/gmbn", &Method::GET) => {
-            },
-            ("v1/m/c/gmbca", &Method::GET) => {
-            },
-            ("v1/m/c/gmbsq", &Method::GET) => {
-            },
-            ("v1/m/c/gmbir", &Method::GET) => {
-            },
-            _ => {
-            }
-        }
+        // match (request.uri().path(), request.method()) {                      // TODO Пути через константы?
+        //     ("v1/m/au/cnfe", &Method::GET) => {
+        //         return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(aggregate_connection_pool, request).await);
+        //     },
+        //     ("v1/m/au/cefe", &Method::GET) => {
+        //     },
+        //     ("v1/m/au/rbfs", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/rbls", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/sefr", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/libfs", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/libls", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/sefli", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/rpbfs", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/rpbls", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/sefrp", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/rjawt", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/lo", &Method::POST) => {
+        //     },
+        //     ("v1/m/au/lofad", &Method::POST) => {
+        //     },
+        //     ("v1/m/c/gmbn", &Method::GET) => {
+        //     },
+        //     ("v1/m/c/gmbca", &Method::GET) => {
+        //     },
+        //     ("v1/m/c/gmbsq", &Method::GET) => {
+        //     },
+        //     ("v1/m/c/gmbir", &Method::GET) => {
+        //     },
+        //     _ => {
+        //     }
+        // }
 
 
 
+        return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(aggregate_connection_pool, request).await);
 
 
 
         //  TODO DELETE --------------------------------------------------------------------------
-        match (request.method(), request.uri().path()) {
+        // match (request.method(), request.uri().path()) {
 
-            // Serve some instructions at /
-            (&Method::GET, "/") => Ok(Response::new(Body::from(
-                "Try POSTing data to /echo such as: `curl localhost:3000/echo -XPOST -d 'hello world'`",
-            ))),
+        //     // Serve some instructions at /
+        //     (&Method::GET, "/") => Ok(Response::new(Body::from(
+        //         "Try POSTing data to /echo such as: `curl localhost:3000/echo -XPOST -d 'hello world'`",
+        //     ))),
     
-            // Return the 404 Not Found for other routes.
-            _ => {
-                let mut not_found = Response::default();
-                *not_found.status_mut() = StatusCode::NOT_FOUND;
-                Ok(not_found)
-            }
-        }
+        //     // Return the 404 Not Found for other routes.
+        //     _ => {
+        //         let mut not_found = Response::default();
+        //         *not_found.status_mut() = StatusCode::NOT_FOUND;
+        //         Ok(not_found)
+        //     }
+        // }
         //  TODO DELETE --------------------------------------------------------------------------
     }
 

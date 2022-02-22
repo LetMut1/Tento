@@ -1,11 +1,12 @@
 use crate::domain_layer::entity::application_user::ApplicationUser;
 use postgres::Client as ConnectionXXXxDelete;
+use std::boxed::Box;
 use std::error::Error;
 use std::future::Future;
+use std::marker::Send;
+use std::marker::Sync;
 use std::pin::Pin;
-use std::boxed::Box;
 use tokio_postgres::Client as Connection;
-
 
 pub trait BaseTraitXXXxDelete {
     type Error: Error;
@@ -42,25 +43,25 @@ pub trait BaseTrait {
     fn is_exist_by_nickanme<'a>(
         connection: &'a mut Connection,
         nickname: &'a str
-    ) -> Pin<Box<dyn Future<Output = Result<bool, Self::Error>> + 'a>>;
+    ) -> Pin<Box<dyn Future<Output = Result<bool, Self::Error>> + Send + 'a>>;
 
     fn is_exist_by_email<'a>(
         connection: &'a mut Connection,
         email: &'a str
-    ) -> Pin<Box<dyn Future<Output = Result<bool, Self::Error>> + 'a>>;
+    ) -> Pin<Box<dyn Future<Output = Result<bool, Self::Error>> + Send + 'a>>;
 
     fn find_by_email<'a>(
         connection: &'a mut Connection,
         email: &'a str
-    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + 'a>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + Send + 'a>>;
 
     fn find_by_nickname<'a>(
         connection: &'a mut Connection,
         nickname: &'a str
-    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + 'a>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + Send + 'a>>;
 
     fn find_by_id<'a>(
         connection: &'a mut Connection,
         id: &'a i64
-    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + 'a>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + Send + 'a>>;
 }

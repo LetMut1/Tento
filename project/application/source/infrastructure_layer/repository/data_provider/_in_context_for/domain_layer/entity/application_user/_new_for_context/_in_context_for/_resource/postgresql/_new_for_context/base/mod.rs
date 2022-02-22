@@ -7,6 +7,8 @@ use postgres::Client as ConnectionXXXxDelete;
 use postgres::types::Type as Ty;
 use std::boxed::Box;
 use std::future::Future;
+use std::marker::Send;
+use std::marker::Sync;
 use std::pin::Pin;
 use tokio_postgres::Client as Connection;
 use tokio_postgres::types::Type;
@@ -177,35 +179,35 @@ impl ApplicationUserDataProviderPostgresqlTrait for Base {
     fn is_exist_by_nickanme<'a>(
         connection: &'a mut Connection,
         nickname: &'a str
-    ) -> Pin<Box<dyn Future<Output = Result<bool, Self::Error>> + 'a>> {
+    ) -> Pin<Box<dyn Future<Output = Result<bool, Self::Error>> + Send + 'a>> {
         return Box::pin(Self::is_exist_by_nickanme_(connection, nickname));
     }
 
     fn is_exist_by_email<'a>(
         connection: &'a mut Connection,
         email: &'a str
-    ) -> Pin<Box<dyn Future<Output = Result<bool, Self::Error>> + 'a>> {
+    ) -> Pin<Box<dyn Future<Output = Result<bool, Self::Error>> + Send + 'a>> {
         return Box::pin(Self::is_exist_by_email_(connection, email));
     }
 
     fn find_by_email<'a>(
         connection: &'a mut Connection,
         email: &'a str
-    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + 'a>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + Send + 'a>> {
         return Box::pin(Self::find_by_email_(connection, email));
     }
 
     fn find_by_nickname<'a>(
         connection: &'a mut Connection,
         nickname: &'a str
-    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + 'a>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + Send + 'a>> {
         return Box::pin(Self::find_by_nickname_(connection, nickname));
     }
 
     fn find_by_id<'a>(
         connection: &'a mut Connection,
         id: &'a i64
-    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + 'a>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Option<ApplicationUser>, Self::Error>> + Send + 'a>> {
         return Box::pin(Self::find_by_id_(connection, id));
     }
 }

@@ -2,6 +2,11 @@ use actix_http::body::BoxBody;
 use actix_web::http::header;
 use actix_web::HttpResponse;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use http::Extensions;
+use http::HeaderMap;
+use http::HeaderValue;
+use http::response::Parts;
+use http::Version;
 use hyper::Body;
 use hyper::Response;
 use hyper::StatusCode;
@@ -56,45 +61,47 @@ impl ResponseCreator {
     fn create(                          // TODO Посмотреть, что за дефолтные ответ. НАстроить необходимое
         status_code: StatusCode,
         data: Option<Vec<u8>>
-    ) -> Result<Response<Body>, BaseError> {
-        let response: Response<Body>;
+    ) -> Response<Body> {
+        let mut header_map = HeaderMap::new();
+        header_map.append(header::CONTENT_TYPE, HeaderValue::from_static("application/octet-stream"));
+        header_map.append(header::X_CONTENT_TYPE_OPTIONS, HeaderValue::from_static("nosniff"));
 
+        let mut parts = Response::new(()).into_parts().0;
+        parts.status = status_code;
+        parts.version = Version::HTTP_2;
+        parts.headers = header_map;
+        
+        let body: Body;
         match data {
             Some(data_) => {
-                response = Response::builder()
-                .status(status_code)
-                .header(header::CONTENT_TYPE, "application/octet-stream")
-                .header(header::X_CONTENT_TYPE_OPTIONS, "nosniff")
-                .body(Body::from(data_))?;
+                body = Body::from(data_);
             },
             None => {
-                response = Response::builder()
-                .status(status_code)
-                .body(Body::empty())?;
+                body = Body::empty()
             }
         }
 
-        return Ok(response);
+        return Response::from_parts(parts, body);
     }
 
     pub fn create_bad_request(
-    ) -> Result<Response<Body>, BaseError> {
+    ) -> Response<Body> {
         return Self::create(StatusCode::BAD_REQUEST, None);
     }
 
     pub fn create_unauthorized(
-    ) -> Result<Response<Body>, BaseError> {
+    ) -> Response<Body> {
         return Self::create(StatusCode::UNAUTHORIZED, None);
     }
 
     pub fn create_internal_server_error(
-    ) -> Result<Response<Body>, BaseError> {
+    ) -> Response<Body> {
         return Self::create(StatusCode::INTERNAL_SERVER_ERROR, None);
     }
 
     pub fn create_ok(
         data: Vec<u8>
-    ) -> Result<Response<Body>, BaseError> {
+    ) -> Response<Body> {
         return Self::create(StatusCode::OK, Some(data));
     }
 
@@ -102,7 +109,7 @@ impl ResponseCreator {
     pub fn create_with_status_code(
         status_code: StatusCode,
         data: Option<Vec<u8>>
-    ) -> Result<Response<Body>, BaseError> {
+    ) -> Response<Body> {
         return Self::create(status_code, data);
     }
 }
