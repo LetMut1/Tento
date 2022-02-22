@@ -2,7 +2,7 @@ use crate::domain_layer::error::entity_error::_component::_in_context_for::domai
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenDataProviderRedisTrait;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserDataProviderPostgresqlTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTraitXXXxDelete as ApplicationUserDataProviderPostgresqlTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserLogInTokenDataProviderRedis;
@@ -29,7 +29,7 @@ impl Base {
             &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?,
             &application_user_id, application_user_log_in_token_device_id.as_str()
         )? {
-            if let Some(application_user) = ApplicationUserDataProviderPostgresql::find_by_id(
+            if let Some(application_user) = ApplicationUserDataProviderPostgresql::find_by_idXXXxDelete(
                 &mut *ConnectionExtractorXXXxDelete::get_postgresql_connection(&aggregate_connection_pool)?,
                 &application_user_id
             )? {

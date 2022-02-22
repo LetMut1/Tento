@@ -3,7 +3,7 @@ use crate::domain_layer::entity::application_user::ApplicationUser;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenDataProviderRedisTrait;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserDataProviderPostgresqlTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTraitXXXxDelete as ApplicationUserDataProviderPostgresqlTrait;
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenStateManagerRedisTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::value_generator_trait::ValueGeneratorTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
@@ -40,7 +40,7 @@ impl Base {
 
             let application_user: ApplicationUser;
             if ApplicationUserValidator::is_valid_email(application_user_email_or_application_user_nickname.as_str())? {
-                match ApplicationUserDataProviderPostgresql::find_by_email(postgresql_connection, application_user_email_or_application_user_nickname.as_str())? {
+                match ApplicationUserDataProviderPostgresql::find_by_emailXXXxDelete(postgresql_connection, application_user_email_or_application_user_nickname.as_str())? {
                     Some(application_user_) => {
                         application_user = application_user_;
                     },
@@ -50,7 +50,7 @@ impl Base {
                 }
             } else {
                 if ApplicationUserValidator::is_valid_nickname(application_user_email_or_application_user_nickname.as_str()) {
-                    match ApplicationUserDataProviderPostgresql::find_by_nickname(postgresql_connection, application_user_email_or_application_user_nickname.as_str())? {
+                    match ApplicationUserDataProviderPostgresql::find_by_nicknameXXXxDelete(postgresql_connection, application_user_email_or_application_user_nickname.as_str())? {
                         Some(application_user_) => {
                             application_user = application_user_;
                         },

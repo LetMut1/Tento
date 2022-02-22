@@ -2,7 +2,7 @@ use crate::domain_layer::entity::application_user_registration_confirmation_toke
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserRegistrationConfirmationTokenDataProviderRedisTrait;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserDataProviderPostgresqlTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTraitXXXxDelete as ApplicationUserDataProviderPostgresqlTrait;
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::value_generator_trait::ValueGeneratorTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
@@ -28,7 +28,7 @@ impl Base {
     ) -> Result<(), BaseError> {
         let application_user_email = request.into_inner();
         if ApplicationUserValidator::is_valid_email(application_user_email.as_str())? {
-            if !ApplicationUserDataProviderPostgresql::is_exist_by_email(
+            if !ApplicationUserDataProviderPostgresql::is_exist_by_emailXXXxDelete(
                 &mut *ConnectionExtractorXXXxDelete::get_postgresql_connection(&aggregate_connection_pool)?, application_user_email.as_str()
             )? {
                 let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;

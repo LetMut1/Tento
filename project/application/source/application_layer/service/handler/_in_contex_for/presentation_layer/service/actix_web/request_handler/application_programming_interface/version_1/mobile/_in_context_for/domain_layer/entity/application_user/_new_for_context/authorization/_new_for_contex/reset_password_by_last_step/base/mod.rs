@@ -3,7 +3,7 @@ use crate::domain_layer::error::entity_error::_component::_in_context_for::domai
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserResetPasswordTokenDataProviderRedisTrait;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserDataProviderPostgresqlTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTraitXXXxDelete as ApplicationUserDataProviderPostgresqlTrait;
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserResetPasswordTokenStateManagerRedisTrait;
 use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base_trait::BaseTrait as ApplicationUserStateManagerPostgresqlTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::wrong_enter_tries_quantity_incrementor_trait::WrongEnterTriesQuantityIncrementorTrait;
@@ -45,7 +45,7 @@ impl Base {
                 if application_user_reset_password_token.get_value()== application_user_reset_password_token_value.as_str() {
                     let postgresql_connection = &mut *ConnectionExtractorXXXxDelete::get_postgresql_connection(&aggregate_connection_pool)?;
 
-                    if let Some(mut application_user) = ApplicationUserDataProviderPostgresql::find_by_id(postgresql_connection, &application_user_id)? {
+                    if let Some(mut application_user) = ApplicationUserDataProviderPostgresql::find_by_idXXXxDelete(postgresql_connection, &application_user_id)? {
                         application_user.set_password_hash(PasswordHashResolver::create(application_user_password.as_str())?);
 
                         ApplicationUserStateManagerPostgresql::update(postgresql_connection, &application_user, UpdateResolverApplicationUser::new(false, false, true)?)?;
