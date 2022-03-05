@@ -1,7 +1,7 @@
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserRegistrationConfirmationTokenDataProviderRedisTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait;
+use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTraitXXXxDelete as ApplicationUserRegistrationConfirmationTokenDataProviderRedisTrait;
+use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTraitXXXxDelete as ApplicationUserRegistrationConfirmationTokenStateManagerRedisTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenDataProviderRedis;
@@ -23,11 +23,11 @@ impl Base {
 
         let redis_connection = &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?;
 
-        match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_email(
+        match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_emailXXXxDelete(
             redis_connection, application_user_email.as_str()
         )? {
             Some(application_user_registration_confirmation_token) => {
-                ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
+                ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_timeXXXxDelete(
                     redis_connection, &application_user_registration_confirmation_token
                 )?;
 

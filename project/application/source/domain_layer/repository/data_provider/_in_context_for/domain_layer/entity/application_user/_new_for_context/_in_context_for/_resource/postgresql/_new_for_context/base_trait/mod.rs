@@ -4,7 +4,6 @@ use std::boxed::Box;
 use std::error::Error;
 use std::future::Future;
 use std::marker::Send;
-use std::marker::Sync;
 use std::pin::Pin;
 use tokio_postgres::Client as Connection;
 

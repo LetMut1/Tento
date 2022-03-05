@@ -216,6 +216,7 @@ impl Base {
                 return Ok(RequestHandlerApplicationUserAuthorization::check_email_for_existing(request, postgresql_connection_pool).await);
             },
             ("v1/m/au/rbfs", &Method::POST) => {
+                // return Ok(RequestHandlerApplicationUserAuthorization::register_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/au/rbls", &Method::POST) => {
             },
@@ -285,7 +286,7 @@ impl Base {
                         web::scope("/au")
                         .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existingXXXxDelete))
                         .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existingXXXxDelete))
-                        .route("/rbfs", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_first_step))
+                        .route("/rbfs", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_first_stepXXXxDelete))
                         .route("/rbls", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_last_step))
                         .route("/sefr", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_register))
                         .route("/libfs", web::post().to(RequestHandlerApplicationUserAuthorization::log_in_by_first_step))

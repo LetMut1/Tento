@@ -450,7 +450,7 @@ impl Authorization {
                 
     }
 
-    pub async fn register_by_first_step(
+    pub async fn register_by_first_stepXXXxDelete(
         http_request: HttpRequest,
         payload: Payload
     ) -> HttpResponse<BoxBody> {
@@ -460,7 +460,7 @@ impl Authorization {
                     Ok(bytes) => {
                         match rmp_serde::from_read_ref::<'_, [u8], RequestRegisterByFirstStep>(bytes.chunk()) {
                             Ok(request_data) => {
-                                if let Err(ref base_error) = HandlerRegisterByFirstStep::handle(application_data.into_inner(), request_data) {
+                                if let Err(ref base_error) = HandlerRegisterByFirstStep::handleXXXxDelete(application_data.into_inner(), request_data) {
                                     match base_error {
                                         BaseError::EntityError {entity_error} => {
                                             match entity_error {
@@ -545,6 +545,93 @@ impl Authorization {
                 log::error!("{}", BaseError::from(error));
 
                 return ResponseCreator::create_internal_server_errorXXXxDelete();
+            }
+        }
+    }
+
+    pub async fn register_by_first_step(
+        request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body> {
+        //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
+        // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
+        // https://github.com/hyperium/hyper/issues/2004
+        let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
+
+        match rmp_serde::from_read_ref::<'_, [u8], RequestRegisterByFirstStep>(bytes.chunk()) {
+            Ok(request_data) => {
+                if let Err(ref base_error) = HandlerRegisterByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                    match base_error {
+                        BaseError::EntityError {entity_error} => {
+                            match entity_error {
+                                EntityError::ApplicationUserError {application_user_error} => {
+                                    match application_user_error {
+                                        ApplicationUserError::EmailAlreadyExist => {
+                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
+                                            )) {
+                                                Ok(data) => {
+                                                    return ResponseCreator::create_ok(data);
+                                                },
+                                                Err(error) => {
+                                                    log::error!("{}", BaseError::from(error));
+                            
+                                                    return ResponseCreator::create_internal_server_error();
+                                                }
+                                            }
+                                        },
+                                        ApplicationUserError::InvalidEmail => {
+                                            match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
+                                            )) {
+                                                Ok(data) => {
+                                                    return ResponseCreator::create_ok(data);
+                                                },
+                                                Err(error) => {
+                                                    log::error!("{}", BaseError::from(error));
+                            
+                                                    return ResponseCreator::create_internal_server_error();
+                                                }
+                                            }
+                                        }
+                                        _ => {
+                                            unreachable!("{}", base_error);
+                                        }
+                                    }
+                                },
+                                _ => {
+                                    unreachable!("{}", base_error);
+                                }
+                            }
+                        },
+                        BaseError::InvalidArgumentError => {
+                            return ResponseCreator::create_bad_request();
+                        },
+                        BaseError::LogicError {logic_error: _} | 
+                        BaseError::RunTimeError {run_time_error: _} => {
+                            log::error!("{}", base_error);
+        
+                            return ResponseCreator::create_internal_server_error();
+                        }
+                    }
+                }
+        
+                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                    Ok(data) => {
+                        return ResponseCreator::create_ok(data);
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
             }
         }
     }
