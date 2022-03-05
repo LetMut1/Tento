@@ -214,7 +214,7 @@ impl Base {
                 return Ok(RequestHandlerApplicationUserAuthorization::check_email_for_existing(request, postgresql_connection_pool).await);
             },
             ("v1/m/au/rbfs", &Method::POST) => {
-                // return Ok(RequestHandlerApplicationUserAuthorization::register_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(RequestHandlerApplicationUserAuthorization::register_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/au/rbls", &Method::POST) => {
             },
