@@ -1,4 +1,3 @@
-use actix_web::Error as ActixWebError;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
@@ -8,9 +7,6 @@ use super::_component::resource_error::resource_error::ResourceError;
 
 #[derive(Debug)]
 pub enum RunTimeError {
-    ActixWebError {
-        actix_web_error: ActixWebError
-    },
     OtherError {
         other_error: OtherError 
     },

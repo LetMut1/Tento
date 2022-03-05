@@ -18,14 +18,12 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]                                                                          #  TODO  TODO TODO TODO Разобарться, где нужны default фичи
-actix-http = {version = "=3.0.0-rc.1", default-features = true, features = [], optional = false}
-actix-service = {version = "^2.0", default-features = true, features = [], optional = false}
-actix-web = {version = "=4.0.0-rc.2", default-features = true, features = [], optional = false}
 anyhow = {version = "^1.0", default-features = true, features = [], optional = false}
 base64 = {version = "^0.13", default-features = true, features = [], optional = false}
 bb8 = {version = "^0.7", default-features = true, features = [], optional = false}
 bb8-postgres = {version = "^0.7", default-features = true, features = [], optional = false}
 bb8-redis = {version = "^0.10", default-features = true, features = [], optional = false}
+bytes = {version = "^1.1", default-features = true, features = [], optional = false}
 chrono = {version = "^0.4", default-features = true, features = [], optional = false}
 dotenv = {version = "^0.15", default-features = true, features = [], optional = false}
 futures = {version = "^0.3", default-features = true, features = [], optional = false}

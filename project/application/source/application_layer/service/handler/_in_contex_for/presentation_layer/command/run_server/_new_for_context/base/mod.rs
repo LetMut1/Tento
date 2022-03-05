@@ -1,5 +1,3 @@
-use actix_web::web;
-use actix_web::web::ServiceConfig;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
@@ -272,51 +270,51 @@ impl Base {
     }
 
     // TODO DELETE after creating Self::resolve() method!!!!!!!!!!!!!!!!!!!!!!!!!!
-    fn configure_http_server<'a>(
-        service_config: &'a mut ServiceConfig
-    ) -> () {
-        service_config     // TODO default_service 
-        .service(
-            web::scope("/v1")
-            .service(
-                web::scope("/m")
-                .service(
-                    web::scope("/na")   // TODO NotAuthorized. Можно ли в новой версии АкстикаВеба убрать этоу чать пути 
-                    .service( 
-                        web::scope("/au")
-                        .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existingXXXxDelete))
-                        .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existingXXXxDelete))
-                        .route("/rbfs", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_first_stepXXXxDelete))
-                        .route("/rbls", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_last_step))
-                        .route("/sefr", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_register))
-                        .route("/libfs", web::post().to(RequestHandlerApplicationUserAuthorization::log_in_by_first_step))
-                        .route("/libls", web::post().to(RequestHandlerApplicationUserAuthorization::log_in_by_last_step))
-                        .route("/sefli", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_log_in))
-                        .route("/rpbfs", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password_by_first_step))
-                        .route("/rpbls", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password_by_last_step))
-                        .route("/sefrp", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_reset_password))
-                        .route("/rjawt", web::post().to(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token))
-                    )
-                )
-                .service(
-                    web::scope("/a")
-                    // .wrap(AuthenticationResolverFactory)             // TODO Делать все в Рекуест Хендлерах
-                    .service( 
-                        web::scope("/au")
-                        .route("/lo", web::post().to(RequestHandlerApplicationUserAuthorization::log_out))
-                        .route("/lofad", web::post().to(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices))
-                    )
-                    .service( 
-                        web::scope("/c")
-                        .route("/gmbn", web::get().to(RequestHandlerChannelBase::get_many_by_name))
-                        .route("/gmbca", web::get().to(RequestHandlerChannelBase::get_many_by_created_at))
-                        .route("/gmbsq", web::get().to(RequestHandlerChannelBase::get_many_by_subscribers_quantity))
-                        .route("/gmbir", web::get().to(RequestHandlerChannelBase::get_many_by_id_registry))
-                    )
-                )
-            )
-        );
+    // fn configure_http_server<'a>(
+    //     service_config: &'a mut ServiceConfig
+    // ) -> () {
+    //     service_config     // TODO default_service 
+    //     .service(
+    //         web::scope("/v1")
+    //         .service(
+    //             web::scope("/m")
+    //             .service(
+    //                 web::scope("/na")   // TODO NotAuthorized. Можно ли в новой версии АкстикаВеба убрать этоу чать пути 
+    //                 .service( 
+    //                     web::scope("/au")
+    //                     .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existingXXXxDelete))
+    //                     .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existingXXXxDelete))
+    //                     .route("/rbfs", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_first_stepXXXxDelete))
+    //                     .route("/rbls", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_last_step))
+    //                     .route("/sefr", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_register))
+    //                     .route("/libfs", web::post().to(RequestHandlerApplicationUserAuthorization::log_in_by_first_step))
+    //                     .route("/libls", web::post().to(RequestHandlerApplicationUserAuthorization::log_in_by_last_step))
+    //                     .route("/sefli", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_log_in))
+    //                     .route("/rpbfs", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password_by_first_step))
+    //                     .route("/rpbls", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password_by_last_step))
+    //                     .route("/sefrp", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_reset_password))
+    //                     .route("/rjawt", web::post().to(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token))
+    //                 )
+    //             )
+    //             .service(
+    //                 web::scope("/a")
+    //                 // .wrap(AuthenticationResolverFactory)             // TODO Делать все в Рекуест Хендлерах
+    //                 .service( 
+    //                     web::scope("/au")
+    //                     .route("/lo", web::post().to(RequestHandlerApplicationUserAuthorization::log_out))
+    //                     .route("/lofad", web::post().to(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices))
+    //                 )
+    //                 .service( 
+    //                     web::scope("/c")
+    //                     .route("/gmbn", web::get().to(RequestHandlerChannelBase::get_many_by_name))
+    //                     .route("/gmbca", web::get().to(RequestHandlerChannelBase::get_many_by_created_at))
+    //                     .route("/gmbsq", web::get().to(RequestHandlerChannelBase::get_many_by_subscribers_quantity))
+    //                     .route("/gmbir", web::get().to(RequestHandlerChannelBase::get_many_by_id_registry))
+    //                 )
+    //             )
+    //         )
+    //     );
 
-        return ();
-    }
+    //     return ();
+    // }
 }

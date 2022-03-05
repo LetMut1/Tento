@@ -1,11 +1,10 @@
-extern crate actix_service;
-extern crate actix_web;
 extern crate anyhow;
 extern crate argon2;
 extern crate base64;
 extern crate bb8_postgres;
 extern crate bb8_redis;
 extern crate bb8;
+extern crate bytes;
 extern crate chrono;
 extern crate crypto;
 extern crate dotenv;
@@ -31,9 +30,6 @@ extern crate tokio_postgres;
 extern crate tokio;
 extern crate tower_service;
 extern crate uuid;
-
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-extern crate actix_http;
 
 pub mod _resource;
 pub mod application_layer;
