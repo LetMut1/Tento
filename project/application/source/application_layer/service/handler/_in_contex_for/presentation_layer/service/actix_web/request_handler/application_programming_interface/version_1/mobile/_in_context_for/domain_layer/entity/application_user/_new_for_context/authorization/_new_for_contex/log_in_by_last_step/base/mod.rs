@@ -1,15 +1,12 @@
+use bb8_redis::RedisConnectionManager;
+use bb8::Pool;
 use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::entity::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenDataProviderRedisTrait;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as JsonRefreshWebTokenDataProviderRedisTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as ApplicationUserLogInTokenStateManagerRedisTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as JsonAccessWebTokenBlackListStateManagerRedisTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::wrong_enter_tries_quantity_incrementor_trait::WrongEnterTriesQuantityIncrementorTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder_trait::EncoderTrait;
-use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy_trait::RepositoryProxyTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base_trait::BaseTrait as JsonAccessWebTokenFactoryTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base_trait::BaseTrait as JsonRefreshWebTokenFactoryTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
@@ -21,19 +18,16 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::aggregate_connection_pool::AggregateConnectionPoolXXXxDELETE;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::connection_extractor::ConnectionExtractorXXXxDelete;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as Request;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as Response;
-use std::sync::Arc;
 
 pub struct Base;
 
 impl Base {
-    pub fn handle(
-        aggregate_connection_pool: Arc<AggregateConnectionPoolXXXxDELETE>,
+    pub async fn handle(
+        redis_connection_pool: Pool<RedisConnectionManager>,
         request: Request
     ) -> Result<Response, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let (
@@ -42,29 +36,29 @@ impl Base {
             application_user_log_in_token_value
         ) = request.into_inner();
 
-        let redis_connection = &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?;
+        let redis_connection = &mut *redis_connection_pool.get().await?;
 
         if let Some(mut application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
             redis_connection, &application_user_id, application_user_log_in_token_device_id.as_str()
-        )? {
+        ).await? {
             if application_user_log_in_token.get_value() == application_user_log_in_token_value.as_str() {
                 if let Some(json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
                     redis_connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
-                )? {
+                ).await? {
                     JsonAccessWebTokenBlackListStateManagerRedis::create(
                         redis_connection, &JsonAccessWebTokenBlackList::new(json_refresh_web_token_.get_json_access_web_token_id())
-                    )?;
+                    ).await?;
 
-                    RepositoryProxy::delete(redis_connection, &json_refresh_web_token_)?;
+                    RepositoryProxy::delete(redis_connection, &json_refresh_web_token_).await?;
                 }
 
                 let json_refresh_web_token = JsonRefreshWebTokenFactory::create_from_id_registry(
                     application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
                 );
                 
-                ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token)?;
+                ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token).await?;
 
-                RepositoryProxy::create(redis_connection, &json_refresh_web_token)?;
+                RepositoryProxy::create(redis_connection, &json_refresh_web_token).await?;
 
                 let json_access_web_token = SerializationFormResolver::serialize(
                     &JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token)?
@@ -78,9 +72,9 @@ impl Base {
             WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token)?;
 
             if *application_user_log_in_token.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token)?;
+                ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token).await?;
             } else {
-                ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token)?;
+                ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token).await?;
             }
             
             return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::InvalidValue}});

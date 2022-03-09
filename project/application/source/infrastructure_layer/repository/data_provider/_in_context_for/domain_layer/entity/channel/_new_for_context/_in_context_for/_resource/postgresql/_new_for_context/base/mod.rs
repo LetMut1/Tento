@@ -6,13 +6,13 @@ use crate::presentation_layer::data_transfer_object::response::_in_context_for::
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::_component::channel::Channel as ResponseGetManyByIdRegistryChannel;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_component::channel::Channel as ResponseGetManyByNameChannel;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::_component::channel::Channel as ResponseGetManyBySubscribersQuantityChannel;
-use postgres::Client as Connection;
-use postgres::types::Type;
+use tokio_postgres::Client as Connection;
+use tokio_postgres::types::Type;
 
 pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO 
                     // TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
 impl Base {
-    pub fn per_request_1<'a>(
+    pub async fn per_request_1<'a>(
         connection: &'a mut Connection,
         name: &'a str,
         requery_name: &'a Option<String>,
@@ -53,9 +53,9 @@ impl Base {
 
         let mut channel_registry: Vec<ResponseGetManyByNameChannel> = Vec::new();
 
-        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await?;
 
-        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await?;
         if !row_registry.is_empty() {
             for row in row_registry.iter() {
                 let channel = ResponseGetManyByNameChannel::new(
@@ -79,7 +79,7 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn per_request_2<'a>(
+    pub async fn per_request_2<'a>(
         connection: &'a mut Connection,
         created_at: &'a Option<String>,
         order: &'a i8,
@@ -123,9 +123,9 @@ impl Base {
 
         let mut channel_registry: Vec<ResponseGetManyByCreatedAtChannel> = Vec::new();
 
-        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await?;
 
-        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await?;
         if !row_registry.is_empty() {
             for row in row_registry.iter() {
                 let channel = ResponseGetManyByCreatedAtChannel::new(
@@ -149,7 +149,7 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn per_request_3<'a>(
+    pub async fn per_request_3<'a>(
         connection: &'a mut Connection,
         subscribers_quantity: &'a Option<i64>,
         order: &'a i8,
@@ -186,9 +186,9 @@ impl Base {
 
         let mut channel_registry: Vec<ResponseGetManyBySubscribersQuantityChannel> = Vec::new();
 
-        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await?;
 
-        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await?;
         if !row_registry.is_empty() {
             for row in row_registry.iter() {
                 let channel = ResponseGetManyBySubscribersQuantityChannel::new(
@@ -205,7 +205,7 @@ impl Base {
         return Ok(None);
     }
 
-    pub fn per_request_4<'a>(
+    pub async fn per_request_4<'a>(
         connection: &'a mut Connection,
         id_registry: &'a Vec<i64>
     ) -> Result<Option<Vec<ResponseGetManyByIdRegistryChannel>>, BaseError> {
@@ -233,9 +233,9 @@ impl Base {
 
         let mut channel_registry: Vec<ResponseGetManyByIdRegistryChannel> = Vec::new();
 
-        let statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry())?;
+        let statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await?;
 
-        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry())?;
+        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await?;
         if !row_registry.is_empty() {
             for row in row_registry.iter() {
                 let channel = ResponseGetManyByIdRegistryChannel::new(

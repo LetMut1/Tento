@@ -1,15 +1,15 @@
 use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::redis::_new_for_context::storage_key_resolver::StorageKeyResolver;
-use redis::Commands;
-use redis::Connection;
+use redis_ref::aio::Connection;
+use redis_ref::AsyncCommands;
 
 pub struct DeviceIdProcessingStorage;
 
 impl DeviceIdProcessingStorage {
     const SEPARATOR: &'static str = ":";
 
-    pub fn create<'a>(
+    pub async fn create<'a>(
         connection: &'a mut Connection, 
         application_user_id: &'a i64,
         application_user_log_in_token_device_id_registry: Vec<String>
@@ -18,51 +18,51 @@ impl DeviceIdProcessingStorage {
             StorageKeyResolver::get_6(application_user_id), 
             application_user_log_in_token_device_id_registry.join(Self::SEPARATOR),
             (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
-        )?;
+        ).await?;
 
         return Ok(());
     }
 
-    pub fn update<'a>(
+    pub async fn update<'a>(
         connection: &'a mut Connection, 
         application_user_id: &'a i64,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), BaseError> {
-        Self::create(connection, application_user_id, application_user_log_in_token_device_id_registry)?;
+        Self::create(connection, application_user_id, application_user_log_in_token_device_id_registry).await?;
 
         return Ok(());
     }
 
-    pub fn delete<'a>(
+    pub async fn delete<'a>(
         connection: &'a mut Connection,
         application_user_id: &'a i64,
     ) -> Result<(), BaseError> {
         connection.del::<String, ()>(
             StorageKeyResolver::get_6(application_user_id)
-        )?;
+        ).await?;
         
         return Ok(());
     }
 
-    pub fn update_expiration_time<'a>(
+    pub async fn update_expiration_time<'a>(
         connection: &'a mut Connection,
         application_user_id: &'a i64
     ) -> Result<(), BaseError> {
         connection.expire::<String, ()>(
             StorageKeyResolver::get_6(application_user_id),
             (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
-        )?;
+        ).await?;
 
         return Ok(());
     }
 
-    pub fn get<'a>(
+    pub async fn get<'a>(
         connection: &'a mut Connection,
         application_user_id: &'a i64
     ) -> Result<Option<Vec<String>>, BaseError> {
         if let Some(application_user_log_in_token_device_id_sequence) = connection.get::<String, Option<String>>(
             StorageKeyResolver::get_6(application_user_id)
-        )?
+        ).await?
         {
             let mut application_user_log_in_token_device_id_registry: Vec<String> = Vec::new();
 

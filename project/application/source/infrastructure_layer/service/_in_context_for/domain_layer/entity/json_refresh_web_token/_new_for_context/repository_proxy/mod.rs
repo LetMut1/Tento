@@ -1,34 +1,29 @@
 use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
-use crate::domain_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as JsonRefreshWebTokenDataProviderRedisTrait;
-use crate::domain_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base_trait::BaseTrait as JsonRefreshWebTokenStateManagerRedisTrait;
-use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy_trait::RepositoryProxyTrait;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenStateManagerRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::device_id_processing_storage::DeviceIdProcessingStorage;
-use redis::Connection;
+use redis_ref::aio::Connection;
 
 pub struct RepositoryProxy;
 
-impl RepositoryProxyTrait for RepositoryProxy {
-    type Error = BaseError;
-
-    fn create<'a>(
+impl RepositoryProxy {
+    pub async fn create<'a>(
         connection: &'a mut Connection,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
-    ) -> Result<(), Self::Error> {
+    ) -> Result<(), BaseError> {
         let application_user_log_in_token_device_id = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
-        match DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id())? {
+        match DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id()).await? {
             Some(mut application_user_log_in_token_device_id_registry) => {
                 if !application_user_log_in_token_device_id_registry.contains(&application_user_log_in_token_device_id) {
                     application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id);
 
                     DeviceIdProcessingStorage::update(
                         connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
-                    )?;
+                    ).await?;
                 } else {
-                    DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
+                    DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id()).await?;
                 }
             },
             None => {
@@ -37,33 +32,33 @@ impl RepositoryProxyTrait for RepositoryProxy {
 
                 DeviceIdProcessingStorage::create(
                     connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
-                )?;
+                ).await?;
             }
         }
           
-        JsonRefreshWebTokenStateManagerRedis::create(connection, json_refresh_web_token)?;
+        JsonRefreshWebTokenStateManagerRedis::create(connection, json_refresh_web_token).await?;
 
         return Ok(());
     }
 
-    fn update<'a>(
+    pub async fn update<'a>(
         connection: &'a mut Connection,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
-    ) -> Result<(), Self::Error> {
-        DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id())?;
+    ) -> Result<(), BaseError> {
+        DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id()).await?;
 
-        JsonRefreshWebTokenStateManagerRedis::update(connection, json_refresh_web_token)?;
+        JsonRefreshWebTokenStateManagerRedis::update(connection, json_refresh_web_token).await?;
 
         return Ok(());
     }
 
-    fn delete<'a>(
+    pub async fn delete<'a>(
         connection: &'a mut Connection,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
-    ) -> Result<(), Self::Error> {
-        JsonRefreshWebTokenStateManagerRedis::delete(connection, json_refresh_web_token)?;
+    ) -> Result<(), BaseError> {
+        JsonRefreshWebTokenStateManagerRedis::delete(connection, json_refresh_web_token).await?;
 
-        if let Some(mut application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id())? 
+        if let Some(mut application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id()).await? 
         {
             let application_user_log_in_token_device_id = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
@@ -83,9 +78,9 @@ impl RepositoryProxyTrait for RepositoryProxy {
                 if !application_user_log_in_token_device_id_registry.is_empty() {
                     DeviceIdProcessingStorage::update(
                         connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry
-                    )?;
+                    ).await?;
                 } else {
-                    DeviceIdProcessingStorage::delete(connection, json_refresh_web_token.get_application_user_id())?
+                    DeviceIdProcessingStorage::delete(connection, json_refresh_web_token.get_application_user_id()).await?
                 }
             }
         }
@@ -93,14 +88,14 @@ impl RepositoryProxyTrait for RepositoryProxy {
         return Ok(());
     }
 
-    fn get_by_application_user_id<'a>(
+    pub async fn get_by_application_user_id<'a>(
         connection: &'a mut Connection,
         application_user_id: &'a i64
-    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, Self::Error> {
-        if let Some(application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, application_user_id)? {
+    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, BaseError> {
+        if let Some(application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, application_user_id).await? {
             return JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id_registry(
                 connection, application_user_id, application_user_log_in_token_device_id_registry
-            );
+            ).await;
         }
 
         return Ok(None);
