@@ -11,10 +11,7 @@ use lettre_email::error::Error as LettreEmailError;
 use lettre::smtp::error::Error as LettreSmtpError;
 use log::SetLoggerError;
 use log4rs::config::runtime::ConfigErrors as Log4rsConfigErrors;
-use postgres::Error as PostgresqlErr;
-use r2d2::Error as R2d2Error;
-use redis_ref::RedisError;
-use redis::RedisError as RedisEr;
+use redis::RedisError;
 use regex::Error as RegexError;
 use rmp_serde::decode::Error as RmpSerdeDecodeError;
 use rmp_serde::encode::Error as RmpSerdeEncodeError;
@@ -70,9 +67,6 @@ impl Display for BaseError {
                     },
                     RunTimeError::ResourceError {resource_error} => {
                         match resource_error {
-                            ResourceError::ConnectionPoolErrorXXXxDelete {r2d2_error} => {
-                                write!(formatter, "BaseError-RunTimeError-ResourceError-ConnectionPoolError: {}", r2d2_error)?;
-                            },
                             ResourceError::ConnectionPoolRedisError {bb8_redis_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-ConnectionPoolRedisError: {}", bb8_redis_error)?;
                             },
@@ -89,12 +83,9 @@ impl Display for BaseError {
                                     }
                                 }
                             },
-                            ResourceError::PostgresqlErrorXXXxDel {postgresql_error} => {
+                            ResourceError::PostgresqlError {postgresql_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", postgresql_error)?;
-                            },
-                            ResourceError::RedisErrXXXxDel {redis_error} => {
-                                write!(formatter, "BaseError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
-                            },
+                            }
                             ResourceError::RedisError {redis_error} => {
                                 write!(formatter, "BaseError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
                             }
@@ -263,15 +254,6 @@ impl From<HyperError> for BaseError {
     }
 }
 
-impl From<R2d2Error> for BaseError {
-    fn from(
-        r2d2_error: R2d2Error
-    ) -> Self {
-        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolErrorXXXxDelete {r2d2_error}}};
-    }
-}
-
-
 impl From<Bb8Error<RedisError>> for BaseError {
     fn from(
         bb8_redis_error: Bb8Error<RedisError>
@@ -288,19 +270,11 @@ impl From<Bb8Error<PostgresqlError>> for BaseError {
     }
 }
 
-impl From<PostgresqlErr> for BaseError {
+impl From<PostgresqlError> for BaseError {
     fn from(
-        postgresql_error: PostgresqlErr
+        postgresql_error: PostgresqlError
     ) -> Self {
-        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlErrorXXXxDel {postgresql_error}}};
-    }
-}
-
-impl From<RedisEr> for BaseError {
-    fn from(
-        redis_error: RedisEr
-    ) -> Self {
-        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisErrXXXxDel {redis_error}}};
+        return Self::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error}}};
     }
 }
 

@@ -25,7 +25,7 @@ use log4rs::config::Appender;
 use log4rs::config::Config as LogConfig;
 use log4rs::config::Root;
 use log4rs::encode::pattern::PatternEncoder;
-use redis_ref::ConnectionInfo;
+use redis::ConnectionInfo;
 use std::clone::Clone;
 use std::env;
 use std::net::SocketAddr;

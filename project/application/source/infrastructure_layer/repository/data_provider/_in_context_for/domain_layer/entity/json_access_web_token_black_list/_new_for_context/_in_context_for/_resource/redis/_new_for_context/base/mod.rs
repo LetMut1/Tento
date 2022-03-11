@@ -1,7 +1,7 @@
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::redis::_new_for_context::storage_key_resolver::StorageKeyResolver;
-use redis_ref::aio::Connection;
-use redis_ref::AsyncCommands;
+use redis::aio::Connection;
+use redis::AsyncCommands;
 
 pub struct Base;
 

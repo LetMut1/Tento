@@ -1,11 +1,11 @@
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use postgres::Client as Connection;
 use super::_component::transaction_isolation_level::TransactionIsolationLevel;
+use tokio_postgres::Client as Connection;
 
 pub struct TransactionManager;
 
 impl TransactionManager {
-    pub fn start_transaction<'a>(
+    pub async fn start_transaction<'a>(
         connection: &'a mut Connection,
         transaction_isolation_level: TransactionIsolationLevel
     ) -> Result<Self, BaseError> {
@@ -32,29 +32,29 @@ impl TransactionManager {
             }
         }
 
-        connection.execute(query.as_str(), &[])?;
+        connection.execute(query.as_str(), &[]).await?;
 
         return Ok(Self);
     }
 
-    pub fn commit_transaction<'a>(
+    pub async fn commit_transaction<'a>(
         self,
         connection: &'a mut Connection
     ) -> Result<(), BaseError> {
         let query = "COMMIT;";
 
-        connection.execute(query, &[])?;
+        connection.execute(query, &[]).await?;
 
         return Ok(());
     }
 
-    pub fn rollback_transaction<'a>(
+    pub async fn rollback_transaction<'a>(
         self,
         connection: &'a mut Connection
     ) -> Result<(), BaseError> {
         let query = "ROLLBACK;";
 
-        connection.execute(query, &[])?;
+        connection.execute(query, &[]).await?;
 
         return Ok(());
     }
