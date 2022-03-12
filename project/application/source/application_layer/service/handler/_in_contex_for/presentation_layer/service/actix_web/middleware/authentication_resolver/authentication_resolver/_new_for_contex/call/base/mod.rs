@@ -24,21 +24,17 @@
 //     ) -> Result<JsonAccessWebToken<'static>, BaseError> {
 //         if let Some(x_jawt_header_value) = header_map.get(Self::HEADER_NAME_X_JAWT) {
 //             if let Ok(x_jawt) = x_jawt_header_value.to_str() {
-//                 let json_access_web_token = SerializationFormResolver::deserialize(x_jawt)?;
-//                 if !ExpirationTimeResolver::is_expired(&json_access_web_token)? {
-//                     if !JsonAccessWebTokenBlackListDataProviderRedis::is_exist_by_json_access_token_id(
-//                         &mut *ConnectionExtractorXXXxDelete::get_redis_connection(&aggregate_connection_pool)?, json_access_web_token.get_id()
-//                     )? {
-//                         return Ok(json_access_web_token);
-//                     }
 
-//                     return Err(BaseError::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::InJsonAccessWebTokenBlackList}});
-//                 }
 
-//                 return Err(BaseError::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::AlreadyExpired}});
+
+
+
+
+    
 //             }
 //         }
 
 //         return Err(BaseError::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotFound}});
 //     }
 // }
+// dd

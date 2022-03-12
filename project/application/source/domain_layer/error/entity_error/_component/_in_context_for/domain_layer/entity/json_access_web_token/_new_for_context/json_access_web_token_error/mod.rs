@@ -7,8 +7,7 @@ use std::fmt::Result;
 pub enum JsonAccessWebTokenError {
     AlreadyExpired,
     InJsonAccessWebTokenBlackList,
-    NotExpired,
-    NotFound
+    NotExpired
 }
 
 impl Display for JsonAccessWebTokenError {

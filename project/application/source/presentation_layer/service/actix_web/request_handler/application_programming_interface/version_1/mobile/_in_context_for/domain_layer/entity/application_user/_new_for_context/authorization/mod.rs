@@ -16,7 +16,6 @@ use crate::application_layer::service::handler::_in_contex_for::presentation_lay
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as HandlerSendEmailForLogIn;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Base as HandlerSendEmailForRegister;
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Base as HandlerSendEmailForResetPassword;
-use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
@@ -30,6 +29,8 @@ use crate::presentation_layer::data_transfer_object::request::_in_context_for::p
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::Base as RequestCheckNicknameForExisting;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as RequestLogInByFirstStep;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as RequestLogInByLastStep;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices::base::Base as RequestLogOutFromAllDevices;
+use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out::base::Base as RequestLogOut;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as RequestRefreshJsonAccessWebToken;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step::base::Base as RequestRegisterByFirstStep;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::Base as RequestRegisterByLastStep;
@@ -40,6 +41,7 @@ use crate::presentation_layer::data_transfer_object::request::_in_context_for::p
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::actix_web::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_reset_password::base::Base as RequestSendEmailForResetPassword;
 use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::response_creator::ResponseCreator;
 use crate::presentation_layer::service::_in_context_for::presentation_layer::service::actix_web::_new_for_context::response_data_wrapper::ResponseDataWrapper;
+use http::header::HeaderName;
 use hyper::Body;
 use hyper::body::HttpBody;
 use hyper::Request;
@@ -53,6 +55,8 @@ use tokio_postgres::NoTls;
 pub struct Authorization;
 
 impl Authorization {
+    pub const HEADER_NAME_X_JAWT: &'static str = "x-jawt";  // TODO // TODO // TODO эту константу убрать вообщ в другой файл, а не транслировать. (когда буду переносить константы все)
+
     pub async fn check_nickname_for_existing(
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
@@ -927,111 +931,215 @@ impl Authorization {
     }
 
     pub async fn log_out(
-        json_access_web_token: JsonAccessWebToken<'_>,
+        request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        if let Err(ref base_error) = HandlerLogOut::handle(redis_connection_pool, &json_access_web_token).await {
-            match base_error {
-                BaseError::EntityError {entity_error} => {
-                    match entity_error {
-                        EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
-                            match json_refresh_web_token_error {
-                                JsonRefreshWebTokenError::NotFound => {
-                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                        CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
-                                    )) {
-                                        Ok(data) => {
-                                            return ResponseCreator::create_ok(data);
+        match request.headers().get(HeaderName::from_static(Self::HEADER_NAME_X_JAWT)) {
+            Some(json_access_web_token) => {
+                match String::from_utf8(json_access_web_token.as_bytes().to_vec()) {
+                    Ok(json_access_web_token_) => {
+                        let request_data_log_out = RequestLogOut::new(json_access_web_token_);
+                        if let Err(ref base_error) = HandlerLogOut::handle(redis_connection_pool, request_data_log_out).await {
+                            match base_error {
+                                BaseError::EntityError {entity_error} => {
+                                    match entity_error {
+                                        EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
+                                            match json_refresh_web_token_error {
+                                                JsonRefreshWebTokenError::NotFound => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         },
-                                        Err(error) => {
-                                            log::error!("{}", BaseError::from(error));
-                    
-                                            return ResponseCreator::create_internal_server_error();
+                                        EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
+                                            match json_access_web_token_error {
+                                                JsonAccessWebTokenError::AlreadyExpired => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                },
+                                                JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                },
+                                                _ => {
+                                                    unreachable!("{}", base_error);
+                                                }
+                                            }
+                                        },
+                                        _ => {
+                                            unreachable!("{}", base_error);
                                         }
                                     }
+                                },
+                                BaseError::InvalidArgumentError => {
+                                    return ResponseCreator::create_bad_request();
+                                },
+                                BaseError::LogicError {logic_error: _} |
+                                BaseError::RunTimeError {run_time_error: _} => {
+                                    log::error!("{}", base_error);
+                
+                                    return ResponseCreator::create_internal_server_error();
                                 }
                             }
-                        },
-                        _ => {
-                            unreachable!("{}", base_error);
                         }
+                        
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                            Ok(data) => {
+                                return ResponseCreator::create_ok(data);
+                            },
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
+                
+                                return ResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    },
+                    Err(from_ut8_error) => {
+                        log::error!("{}", BaseError::from(from_ut8_error));
+
+                        return ResponseCreator::create_internal_server_error();
                     }
-                },
-                BaseError::InvalidArgumentError => {
-                    return ResponseCreator::create_bad_request();
-                },
-                BaseError::LogicError {logic_error: _} |
-                BaseError::RunTimeError {run_time_error: _} => {
-                    log::error!("{}", base_error);
-
-                    return ResponseCreator::create_internal_server_error();
                 }
-            }
-        }
-        
-        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
-            Ok(data) => {
-                return ResponseCreator::create_ok(data);
             },
-            Err(error) => {
-                log::error!("{}", BaseError::from(error));
-
-                return ResponseCreator::create_internal_server_error();
+            None => {
+                return ResponseCreator::create_unauthorized();
             }
         }
     }
 
     pub async fn log_out_from_all_devices(
-        json_access_web_token: JsonAccessWebToken<'_>,
+        request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        if let Err(ref base_error) = HandlerLogOutFromAllDevices::handle(redis_connection_pool, &json_access_web_token).await {
-            match base_error {
-                BaseError::EntityError {entity_error} => {
-                    match entity_error {
-                        EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
-                            match json_refresh_web_token_error {
-                                JsonRefreshWebTokenError::NotFound => {
-                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
-                                        CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
-                                    )) {
-                                        Ok(data) => {
-                                            return ResponseCreator::create_ok(data);
+        match request.headers().get(HeaderName::from_static(Self::HEADER_NAME_X_JAWT)) {
+            Some(json_access_web_token) => {
+                match String::from_utf8(json_access_web_token.as_bytes().to_vec()) {
+                    Ok(json_access_web_token_) => {
+                        let request_data_log_out_from_all_devices = RequestLogOutFromAllDevices::new(json_access_web_token_);
+                        if let Err(ref base_error) = HandlerLogOutFromAllDevices::handle(redis_connection_pool, request_data_log_out_from_all_devices).await {
+                            match base_error {
+                                BaseError::EntityError {entity_error} => {
+                                    match entity_error {
+                                        EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
+                                            match json_refresh_web_token_error {
+                                                JsonRefreshWebTokenError::NotFound => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         },
-                                        Err(error) => {
-                                            log::error!("{}", BaseError::from(error));
-                    
-                                            return ResponseCreator::create_internal_server_error();
+                                        EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
+                                            match json_access_web_token_error {
+                                                JsonAccessWebTokenError::AlreadyExpired => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                },
+                                                JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                    match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                        CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
+                                                    )) {
+                                                        Ok(data) => {
+                                                            return ResponseCreator::create_ok(data);
+                                                        },
+                                                        Err(error) => {
+                                                            log::error!("{}", BaseError::from(error));
+                                    
+                                                            return ResponseCreator::create_internal_server_error();
+                                                        }
+                                                    }
+                                                },
+                                                _ => {
+                                                    unreachable!("{}", base_error);
+                                                }
+                                            }
+                                        },
+                                        _ => {
+                                            unreachable!("{}", base_error);
                                         }
                                     }
+                                },
+                                BaseError::InvalidArgumentError => {
+                                    return ResponseCreator::create_bad_request();
+                                },
+                                BaseError::LogicError {logic_error: _} |
+                                BaseError::RunTimeError {run_time_error: _} => {
+                                    log::error!("{}", base_error);
+
+                                    return ResponseCreator::create_internal_server_error();
                                 }
                             }
-                        },
-                        _ => {
-                            unreachable!("{}", base_error);
                         }
+                        
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                            Ok(data) => {
+                                return ResponseCreator::create_ok(data);
+                            },
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
+
+                                return ResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    },
+                    Err(from_ut8_error) => {
+                        log::error!("{}", BaseError::from(from_ut8_error));
+
+                        return ResponseCreator::create_internal_server_error();
                     }
-                },
-                BaseError::InvalidArgumentError => {
-                    return ResponseCreator::create_bad_request();
-                },
-                BaseError::LogicError {logic_error: _} |
-                BaseError::RunTimeError {run_time_error: _} => {
-                    log::error!("{}", base_error);
-
-                    return ResponseCreator::create_internal_server_error();
                 }
-            }
-        }
-        
-        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
-            Ok(data) => {
-                return ResponseCreator::create_ok(data);
             },
-            Err(error) => {
-                log::error!("{}", BaseError::from(error));
-
-                return ResponseCreator::create_internal_server_error();
+            None => {
+                return ResponseCreator::create_unauthorized();
             }
         }
     }

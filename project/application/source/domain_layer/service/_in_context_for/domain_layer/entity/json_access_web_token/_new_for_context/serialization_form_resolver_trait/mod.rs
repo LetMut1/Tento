@@ -11,6 +11,6 @@ pub trait SerializationFormResolverTrait {
     ) -> Result<String, Self::Error>;
 
     fn deserialize<'a>(
-        classic_form: &'a str
+        json_access_web_token_classic_form: &'a str
     ) -> Result<JsonAccessWebToken<'static>, Self::Error>;
 }
