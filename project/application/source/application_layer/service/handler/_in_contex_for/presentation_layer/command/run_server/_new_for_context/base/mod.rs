@@ -207,6 +207,7 @@ impl Base {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Result<Response<Body>, HyperError> {
         match (request.uri().path(), request.method()) {                      // TODO Пути через константы?
+            // Area for not authorized user {.
             ("v1/m/au/cnfe", &Method::GET) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(request, postgresql_connection_pool).await);
             },
@@ -217,26 +218,39 @@ impl Base {
                 return Ok(RequestHandlerApplicationUserAuthorization::register_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/au/rbls", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::register_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/au/sefr", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_register(request, redis_connection_pool).await);
             },
             ("v1/m/au/libfs", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::log_in_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/au/libls", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::log_in_by_last_step(request, redis_connection_pool).await);
             },
             ("v1/m/au/sefli", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_log_in(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/au/rpbfs", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::reset_password_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/au/rpbls", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::reset_password_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/au/sefrp", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_reset_password(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/au/rjawt", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token(request, redis_connection_pool).await);
             },
+            // } Area for not authorized user.
+            // Area for authorized user {.
             ("v1/m/au/lo", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::log_out(request, redis_connection_pool).await);
             },
             ("v1/m/au/lofad", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices(request, redis_connection_pool).await);
             },
             ("v1/m/c/gmbn", &Method::GET) => {
             },
@@ -246,6 +260,7 @@ impl Base {
             },
             ("v1/m/c/gmbir", &Method::GET) => {
             },
+            // } Area for authorized user.
             _ => {
             }
         }
@@ -282,18 +297,7 @@ impl Base {
     //                 web::scope("/na")   // TODO NotAuthorized. Можно ли в новой версии АкстикаВеба убрать этоу чать пути 
     //                 .service( 
     //                     web::scope("/au")
-    //                     .route("/cnfe", web::get().to(RequestHandlerApplicationUserAuthorization::check_nickname_for_existingXXXxDelete))
-    //                     .route("/cefe", web::get().to(RequestHandlerApplicationUserAuthorization::check_email_for_existingXXXxDelete))
-    //                     .route("/rbfs", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_first_stepXXXxDelete))
-    //                     .route("/rbls", web::post().to(RequestHandlerApplicationUserAuthorization::register_by_last_step))
-    //                     .route("/sefr", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_register))
-    //                     .route("/libfs", web::post().to(RequestHandlerApplicationUserAuthorization::log_in_by_first_step))
-    //                     .route("/libls", web::post().to(RequestHandlerApplicationUserAuthorization::log_in_by_last_step))
-    //                     .route("/sefli", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_log_in))
-    //                     .route("/rpbfs", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password_by_first_step))
-    //                     .route("/rpbls", web::post().to(RequestHandlerApplicationUserAuthorization::reset_password_by_last_step))
-    //                     .route("/sefrp", web::post().to(RequestHandlerApplicationUserAuthorization::send_email_for_reset_password))
-    //                     .route("/rjawt", web::post().to(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token))
+                                    ////////////////////////////
     //                 )
     //             )
     //             .service(
@@ -301,8 +305,7 @@ impl Base {
     //                 // .wrap(AuthenticationResolverFactory)             // TODO Делать все в Рекуест Хендлерах
     //                 .service( 
     //                     web::scope("/au")
-    //                     .route("/lo", web::post().to(RequestHandlerApplicationUserAuthorization::log_out))
-    //                     .route("/lofad", web::post().to(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices))
+    //                     //////////////////////////////////
     //                 )
     //                 .service( 
     //                     web::scope("/c")

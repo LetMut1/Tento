@@ -5,7 +5,7 @@ use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer:
 use redis::aio::Connection;
 use redis::AsyncCommands;
 
-#[doc = "Should only be used in use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy."]
+/// Should only be used in use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy.
 pub struct Base;
 
 impl Base {
