@@ -4,8 +4,8 @@ use application::application_layer::service::handler::_in_contex_for::presentati
 
 fn main(
 ) -> () {
-    if let Err(base_error) = RunServerHandler::handle(std::file!().to_string()) {
-        println!("{}", base_error);
+    if let Err(error) = RunServerHandler::handle(std::file!().to_string()) {
+        println!("{}", error);
     }
 
     return ();

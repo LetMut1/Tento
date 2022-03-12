@@ -81,8 +81,8 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error} => {
                                 match entity_error {
                                     EntityError::ApplicationUserError {application_user_error} => {
@@ -102,12 +102,12 @@ impl Authorization {
                                                 }
                                             },
                                             _ => {
-                                                unreachable!("{}", base_error);
+                                                unreachable!("{}", error);
                                             }
                                         }
                                     },
                                     _ => {
-                                        unreachable!("{}", base_error);
+                                        unreachable!("{}", error);
                                     }
                                 }
                             }
@@ -116,7 +116,7 @@ impl Authorization {
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
                             }
@@ -161,15 +161,15 @@ impl Authorization {
     //                                 },
     //                             }
     //                         },
-    //                         Err(ref base_error) => {
-    //                             match base_error {
+    //                         Err(ref error) => {
+    //                             match error {
     //                                 BaseError::EntityError {entity_error: _} |
     //                                 BaseError::InvalidArgumentError => {
-    //                                     unreachable!("{}", base_error);
+    //                                     unreachable!("{}", error);
     //                                 }
     //                                 BaseError::LogicError {logic_error: _} |
     //                                 BaseError::RunTimeError {run_time_error: _} => {
-    //                                     log::error!("{}", base_error);
+    //                                     log::error!("{}", error);
                 
     //                                     return ResponseCreator::create_internal_server_errorXXXxDelete();
     //                                 }
@@ -216,8 +216,8 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error} => {
                                 match entity_error {
                                     EntityError::ApplicationUserError {application_user_error} => {
@@ -237,12 +237,12 @@ impl Authorization {
                                                 }
                                             },
                                             _ => {
-                                                unreachable!("{}", base_error);
+                                                unreachable!("{}", error);
                                             }
                                         }
                                     },
                                     _ => {
-                                        unreachable!("{}", base_error);
+                                        unreachable!("{}", error);
                                     }
                                 }
                             }
@@ -251,7 +251,7 @@ impl Authorization {
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
                             }
@@ -280,8 +280,8 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataRegisterByFirstStep>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(ref base_error) = HandlerRegisterByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
-                    match base_error {
+                if let Err(ref error) = HandlerRegisterByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                    match error {
                         BaseError::EntityError {entity_error} => {
                             match entity_error {
                                 EntityError::ApplicationUserError {application_user_error} => {
@@ -315,12 +315,12 @@ impl Authorization {
                                             }
                                         }
                                         _ => {
-                                            unreachable!("{}", base_error);
+                                            unreachable!("{}", error);
                                         }
                                     }
                                 },
                                 _ => {
-                                    unreachable!("{}", base_error);
+                                    unreachable!("{}", error);
                                 }
                             }
                         },
@@ -329,7 +329,7 @@ impl Authorization {
                         },
                         BaseError::LogicError {logic_error: _} | 
                         BaseError::RunTimeError {run_time_error: _} => {
-                            log::error!("{}", base_error);
+                            log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
                         }
@@ -380,8 +380,8 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error} => {
                                 match entity_error {
                                     EntityError::ApplicationUserError {application_user_error} => {
@@ -443,7 +443,7 @@ impl Authorization {
                                                 }
                                             },
                                             _ => {
-                                                unreachable!("{}", base_error);
+                                                unreachable!("{}", error);
                                             }
                                         }
                                     },
@@ -480,7 +480,7 @@ impl Authorization {
                                         }
                                     },
                                     _ => {
-                                        unreachable!("{}", base_error);
+                                        unreachable!("{}", error);
                                     }
                                 }
                             },
@@ -489,7 +489,7 @@ impl Authorization {
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
                             }
@@ -516,8 +516,8 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForRegister>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(ref base_error) = HandlerSendEmailForRegister::handle(redis_connection_pool, request_data).await {
-                    match base_error {
+                if let Err(ref error) = HandlerSendEmailForRegister::handle(redis_connection_pool, request_data).await {
+                    match error {
                         BaseError::EntityError {entity_error} => {
                             match entity_error {
                                 EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error} => {
@@ -537,13 +537,13 @@ impl Authorization {
                                             }
                                         },
                                         _ => {
-                                            unreachable!("{}", base_error);
+                                            unreachable!("{}", error);
                                         }
         
                                     }
                                 },
                                 _ => {
-                                    unreachable!("{}", base_error);
+                                    unreachable!("{}", error);
                                 }
                             }
                         },
@@ -552,7 +552,7 @@ impl Authorization {
                         },
                         BaseError::LogicError {logic_error: _} |
                         BaseError::RunTimeError {run_time_error: _} => {
-                            log::error!("{}", base_error);
+                            log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
                         }
@@ -603,8 +603,8 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error} => {
                                 match entity_error {
                                     EntityError::ApplicationUserError {application_user_error} => {
@@ -627,12 +627,12 @@ impl Authorization {
                                                 }
                                             },
                                             _ => {
-                                                unreachable!("{}", base_error);
+                                                unreachable!("{}", error);
                                             }
                                         }
                                     },
                                     _ => {
-                                        unreachable!("{}", base_error);
+                                        unreachable!("{}", error);
                                     }
                                 }
                             },
@@ -641,7 +641,7 @@ impl Authorization {
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
             
                                 return ResponseCreator::create_internal_server_error();
                             }
@@ -681,8 +681,8 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error} => {
                                 match entity_error {
                                     EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
@@ -718,7 +718,7 @@ impl Authorization {
                                         }
                                     },
                                     _ => {
-                                        unreachable!("{}", base_error);
+                                        unreachable!("{}", error);
                                     }
                                 }
                             },
@@ -727,7 +727,7 @@ impl Authorization {
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
                             }
@@ -755,8 +755,8 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForLogIn>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(ref base_error) = HandlerSendEmailForLogIn::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
-                    match base_error {
+                if let Err(ref error) = HandlerSendEmailForLogIn::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                    match error {
                         BaseError::EntityError {entity_error} => {
                             match entity_error {
                                 EntityError::ApplicationUserError {application_user_error} => {
@@ -776,7 +776,7 @@ impl Authorization {
                                             }
                                         },
                                         _ => {
-                                            unreachable!("{}", base_error);
+                                            unreachable!("{}", error);
                                         }
                                     }
                                 },
@@ -797,12 +797,12 @@ impl Authorization {
                                             }
                                         },
                                         _ => {
-                                            unreachable!("{}", base_error);
+                                            unreachable!("{}", error);
                                         }
                                     }
                                 },
                                 _ => {
-                                    unreachable!("{}", base_error);
+                                    unreachable!("{}", error);
                                 }
                             }
                         },
@@ -811,7 +811,7 @@ impl Authorization {
                         },
                         BaseError::LogicError {logic_error: _} |
                         BaseError::RunTimeError {run_time_error: _} => {
-                            log::error!("{}", base_error);
+                            log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
                         }
@@ -861,8 +861,8 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error} => {
                                 match entity_error {
                                     EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
@@ -882,7 +882,7 @@ impl Authorization {
                                                 }
                                             },
                                             _ => {
-                                                unreachable!("{}", base_error);
+                                                unreachable!("{}", error);
                                             }
                                         }
                                     },
@@ -905,7 +905,7 @@ impl Authorization {
                                         }
                                     },
                                     _ => {
-                                        unreachable!("{}", base_error);
+                                        unreachable!("{}", error);
                                     }
                                 }
                             },
@@ -914,7 +914,7 @@ impl Authorization {
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
                             }
@@ -939,8 +939,8 @@ impl Authorization {
                 match String::from_utf8(json_access_web_token.as_bytes().to_vec()) {
                     Ok(json_access_web_token_) => {
                         let request_data = RequestDataLogOut::new(json_access_web_token_);
-                        if let Err(ref base_error) = HandlerLogOut::handle(redis_connection_pool, request_data).await {
-                            match base_error {
+                        if let Err(ref error) = HandlerLogOut::handle(redis_connection_pool, request_data).await {
+                            match error {
                                 BaseError::EntityError {entity_error} => {
                                     match entity_error {
                                         EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
@@ -992,12 +992,12 @@ impl Authorization {
                                                     }
                                                 },
                                                 _ => {
-                                                    unreachable!("{}", base_error);
+                                                    unreachable!("{}", error);
                                                 }
                                             }
                                         },
                                         _ => {
-                                            unreachable!("{}", base_error);
+                                            unreachable!("{}", error);
                                         }
                                     }
                                 },
@@ -1006,7 +1006,7 @@ impl Authorization {
                                 },
                                 BaseError::LogicError {logic_error: _} |
                                 BaseError::RunTimeError {run_time_error: _} => {
-                                    log::error!("{}", base_error);
+                                    log::error!("{}", error);
                 
                                     return ResponseCreator::create_internal_server_error();
                                 }
@@ -1024,8 +1024,8 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(from_ut8_error) => {
-                        log::error!("{}", BaseError::from(from_ut8_error));
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
@@ -1046,8 +1046,8 @@ impl Authorization {
                 match String::from_utf8(json_access_web_token.as_bytes().to_vec()) {
                     Ok(json_access_web_token_) => {
                         let request_data = RequestDataLogOutFromAllDevices::new(json_access_web_token_);
-                        if let Err(ref base_error) = HandlerLogOutFromAllDevices::handle(redis_connection_pool, request_data).await {
-                            match base_error {
+                        if let Err(ref error) = HandlerLogOutFromAllDevices::handle(redis_connection_pool, request_data).await {
+                            match error {
                                 BaseError::EntityError {entity_error} => {
                                     match entity_error {
                                         EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
@@ -1099,12 +1099,12 @@ impl Authorization {
                                                     }
                                                 },
                                                 _ => {
-                                                    unreachable!("{}", base_error);
+                                                    unreachable!("{}", error);
                                                 }
                                             }
                                         },
                                         _ => {
-                                            unreachable!("{}", base_error);
+                                            unreachable!("{}", error);
                                         }
                                     }
                                 },
@@ -1113,7 +1113,7 @@ impl Authorization {
                                 },
                                 BaseError::LogicError {logic_error: _} |
                                 BaseError::RunTimeError {run_time_error: _} => {
-                                    log::error!("{}", base_error);
+                                    log::error!("{}", error);
 
                                     return ResponseCreator::create_internal_server_error();
                                 }
@@ -1131,8 +1131,8 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(from_ut8_error) => {
-                        log::error!("{}", BaseError::from(from_ut8_error));
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
@@ -1169,8 +1169,8 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error} => {
                                 match entity_error {
                                     EntityError::ApplicationUserError {application_user_error} => {
@@ -1190,13 +1190,13 @@ impl Authorization {
                                                 }
                                             },
                                             _ => {
-                                                unreachable!("{}", base_error);
+                                                unreachable!("{}", error);
                                             }
         
                                         }
                                     },
                                     _ => {
-                                        unreachable!("{}", base_error);
+                                        unreachable!("{}", error);
                                     }
                                 }
                             },
@@ -1205,7 +1205,7 @@ impl Authorization {
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
             
                                 return ResponseCreator::create_internal_server_error();
                             }
@@ -1233,8 +1233,8 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataResetPasswordByLastStep>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(ref base_error) = HandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
-                    match base_error {
+                if let Err(ref error) = HandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                    match error {
                         BaseError::EntityError {entity_error} => {
                             match entity_error {
                                 EntityError::ApplicationUserError {application_user_error} => {
@@ -1268,7 +1268,7 @@ impl Authorization {
                                             }
                                         },
                                         _ => {
-                                            unreachable!("{}", base_error);
+                                            unreachable!("{}", error);
                                         }
         
                                     }
@@ -1306,7 +1306,7 @@ impl Authorization {
                                     }
                                 },
                                 _ => {
-                                    unreachable!("{}", base_error);
+                                    unreachable!("{}", error);
                                 }
                             }
                         },
@@ -1315,7 +1315,7 @@ impl Authorization {
                         },
                         BaseError::LogicError {logic_error: _} |
                         BaseError::RunTimeError {run_time_error: _} => {
-                            log::error!("{}", base_error);
+                            log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
                         }
@@ -1353,8 +1353,8 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForResetPassword>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(ref base_error) = HandlerSendEmailForResetPassword::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
-                    match base_error {
+                if let Err(ref error) = HandlerSendEmailForResetPassword::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                    match error {
                         BaseError::EntityError {entity_error} => {
                             match entity_error {
                                 EntityError::ApplicationUserError {application_user_error} => {
@@ -1374,7 +1374,7 @@ impl Authorization {
                                             }
                                         },
                                         _ => {
-                                            unreachable!("{}", base_error);
+                                            unreachable!("{}", error);
                                         }
                                     }
                                 },
@@ -1395,12 +1395,12 @@ impl Authorization {
                                             }
                                         },
                                         _ => {
-                                            unreachable!("{}", base_error);
+                                            unreachable!("{}", error);
                                         }
                                     }
                                 },
                                 _ => {
-                                    unreachable!("{}", base_error);
+                                    unreachable!("{}", error);
                                 }
                             }
                         },
@@ -1409,7 +1409,7 @@ impl Authorization {
                         },
                         BaseError::LogicError {logic_error: _} |
                         BaseError::RunTimeError {run_time_error: _} => {
-                            log::error!("{}", base_error);
+                            log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
                         }

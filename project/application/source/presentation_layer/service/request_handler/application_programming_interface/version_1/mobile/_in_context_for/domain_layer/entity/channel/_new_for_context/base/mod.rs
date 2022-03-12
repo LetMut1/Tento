@@ -48,17 +48,17 @@ impl Base {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error: _} => {
-                                unreachable!("{}", base_error);
+                                unreachable!("{}", error);
                             },
                             BaseError::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
                             }
@@ -99,17 +99,17 @@ impl Base {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error: _} => {
-                                unreachable!("{}", base_error);
+                                unreachable!("{}", error);
                             },
                             BaseError::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
                             }
@@ -150,17 +150,17 @@ impl Base {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error: _} => {
-                                unreachable!("{}", base_error);
+                                unreachable!("{}", error);
                             },
                             BaseError::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
                             }
@@ -201,17 +201,17 @@ impl Base {
                             }
                         }
                     },
-                    Err(ref base_error) => {
-                        match base_error {
+                    Err(ref error) => {
+                        match error {
                             BaseError::EntityError {entity_error: _} => {
-                                unreachable!("{}", base_error);
+                                unreachable!("{}", error);
                             },
                             BaseError::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             },
                             BaseError::LogicError {logic_error: _} |
                             BaseError::RunTimeError {run_time_error: _} => {
-                                log::error!("{}", base_error);
+                                log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
                             }
