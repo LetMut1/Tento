@@ -5,7 +5,7 @@ use crate::infrastructure_layer::repository::data_provider::_in_context_for::dom
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::order_convention_resolver::OrderConventionResolver;
 use crate::infrastructure_layer::service::date_time_resolver::DateTimeResolver;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::Base as RequestData;
-use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::base::Base as Response;
+use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::base::Base as ResponseData;
 use tokio_postgres::NoTls;
 
 pub struct Base;
@@ -16,7 +16,7 @@ impl Base {
     pub async fn handle(
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         request_data: RequestData
-    ) -> Result<Response, BaseError> {
+    ) -> Result<ResponseData, BaseError> {
         let (
             mut channel_created_at,
             order,
@@ -44,6 +44,6 @@ impl Base {
             &mut *postgresql_connection_pool.get().await?, &channel_created_at, &order, &(limit as i16)
         ).await?;
 
-        return Ok(Response::new(channel_registry));
+        return Ok(ResponseData::new(channel_registry));
     }
 }

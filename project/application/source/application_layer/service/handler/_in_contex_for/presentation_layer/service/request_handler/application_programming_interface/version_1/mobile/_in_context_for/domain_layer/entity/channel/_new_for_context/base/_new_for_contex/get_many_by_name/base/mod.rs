@@ -5,7 +5,7 @@ use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::channel::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ChannelDataProviderPostgresql;
 use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ChannelValidator;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestData;
-use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::base::Base as Response;
+use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::base::Base as ResponseData;
 use tokio_postgres::NoTls;
 
 pub struct Base;
@@ -16,7 +16,7 @@ impl Base {
     pub async fn handle(
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         request_data: RequestData
-    ) -> Result<Response, BaseError> {
+    ) -> Result<ResponseData, BaseError> {
         let (
             mut channel_name,
             mut requery_channel_name,
@@ -49,6 +49,6 @@ impl Base {
             &mut *postgresql_connection_pool.get().await?, channel_name.as_str(), &requery_channel_name, &(limit as i16)
         ).await?;
 
-        return Ok(Response::new(channel_registry));
+        return Ok(ResponseData::new(channel_registry));
     }
 }

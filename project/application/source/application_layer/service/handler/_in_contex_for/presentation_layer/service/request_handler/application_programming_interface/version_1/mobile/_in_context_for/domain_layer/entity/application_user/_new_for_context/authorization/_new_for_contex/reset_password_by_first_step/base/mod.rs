@@ -14,7 +14,7 @@ use crate::infrastructure_layer::repository::state_manager::_in_context_for::dom
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::value_generator::ValueGenerator;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::Base as RequestData;
-use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::Base as Response;
+use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::Base as ResponseData;
 use tokio_postgres::NoTls;
 
 pub struct Base;
@@ -24,7 +24,7 @@ impl Base {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
-    ) -> Result<Response, BaseError> {
+    ) -> Result<ResponseData, BaseError> {
         let application_user_email = request_data.into_inner();
         if let Some(application_user) = ApplicationUserDataProviderPostgresql::find_by_email(
             &mut *postgresql_connection_pool.get().await?, application_user_email.as_str()
@@ -64,7 +64,7 @@ impl Base {
                 application_user_reset_password_token.get_value(), application_user.get_email()
             )?;
 
-            return Ok(Response::new(*application_user_id));
+            return Ok(ResponseData::new(*application_user_id));
         }
 
         return Err(BaseError::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});

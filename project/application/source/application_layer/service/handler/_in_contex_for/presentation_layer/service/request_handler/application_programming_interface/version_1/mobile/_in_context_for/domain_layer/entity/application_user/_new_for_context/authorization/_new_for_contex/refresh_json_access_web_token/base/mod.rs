@@ -17,7 +17,7 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as RequestData;
-use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as Response;
+use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as ResponseData;
 
 pub struct Base;
 
@@ -25,7 +25,7 @@ impl Base {
     pub async fn handle(
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
-    ) -> Result<Response, BaseError> {
+    ) -> Result<ResponseData, BaseError> {
         let (
             json_access_web_token, 
             json_refresh_web_token
@@ -51,7 +51,7 @@ impl Base {
 
                     let json_refresh_web_token = Encoder::encode(&json_refresh_web_token_)?;
 
-                    return Ok(Response::new(json_access_web_token, json_refresh_web_token));
+                    return Ok(ResponseData::new(json_access_web_token, json_refresh_web_token));
                 }
 
                 return Err(BaseError::InvalidArgumentError);
