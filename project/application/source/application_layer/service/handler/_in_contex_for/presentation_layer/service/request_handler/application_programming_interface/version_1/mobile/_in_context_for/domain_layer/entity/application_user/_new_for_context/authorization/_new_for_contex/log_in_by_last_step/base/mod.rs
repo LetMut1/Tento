@@ -20,7 +20,7 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as Request;
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as Response;
 
 pub struct Base;
@@ -28,13 +28,13 @@ pub struct Base;
 impl Base {
     pub async fn handle(
         redis_connection_pool: Pool<RedisConnectionManager>,
-        request: Request
+        request_data: RequestData
     ) -> Result<Response, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let (
             application_user_id,
             application_user_log_in_token_device_id,  // TODO ПРоверить все входящие значения application_user_log_in_token_device_id нв формат. Формата может не быть. Нужно определиться, есть ли формат, напримре, UUID
             application_user_log_in_token_value
-        ) = request.into_inner();
+        ) = request_data.into_inner();
 
         let redis_connection = &mut *redis_connection_pool.get().await?;
 

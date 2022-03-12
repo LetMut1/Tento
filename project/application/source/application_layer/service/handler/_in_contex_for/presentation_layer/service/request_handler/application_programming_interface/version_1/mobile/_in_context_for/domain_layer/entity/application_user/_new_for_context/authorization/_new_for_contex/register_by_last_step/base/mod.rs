@@ -26,7 +26,7 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
 use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::Base as Request;
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::Base as Response;
 use tokio_postgres::NoTls;
 
@@ -36,7 +36,7 @@ impl Base {
     pub async fn handle(
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        request: Request
+        request_data: RequestData
     ) -> Result<Response, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let (
             application_user_log_in_token_device_id, // TODO Это значение должно быть одно для 1 устройствоа клиента. ЛУчше сделать его постоянным, - Mac устрйоства, или что-то подобное. То значение, которе будет для КЛаудМессадж. Хранить в БД. 
@@ -44,7 +44,7 @@ impl Base {
             application_user_password,
             application_user_email,
             application_user_registration_confirmation_token_value
-        )  = request.into_inner();
+        )  = request_data.into_inner();
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
             if ApplicationUserValidator::is_valid_nickname(application_user_nickname.as_str()) {

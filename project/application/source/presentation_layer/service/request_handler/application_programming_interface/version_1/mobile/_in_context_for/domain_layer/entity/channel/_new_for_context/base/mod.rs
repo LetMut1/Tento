@@ -7,10 +7,10 @@ use crate::application_layer::service::handler::_in_contex_for::presentation_lay
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_subscribers_quantity::base::Base as HandlerGetManyBySubscribersQuantity;
 use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::Base as RequestGetManyByCreatedAt;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::Base as RequestGetManyByIdRegistry;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestGetManyByName;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::Base as RequestGetManyBySubscribersQuantity;
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::Base as RequestDataGetManyByCreatedAt;
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::Base as RequestDataGetManyByIdRegistry;
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestDataGetManyByName;
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::Base as RequestDataGetManyBySubscribersQuantity;
 use crate::presentation_layer::service::response_creator::ResponseCreator;
 use crate::presentation_layer::service::response_data_wrapper::ResponseDataWrapper;
 use hyper::Body;
@@ -33,7 +33,7 @@ impl Base {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
         
-        match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyByName>(bytes.chunk()) {
+        match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyByName>(bytes.chunk()) {
             Ok(request_data) => {
                 match HandlerGetManyByName::handle(postgresql_connection_pool, request_data).await {
                     Ok(response_data) => { 
@@ -84,7 +84,7 @@ impl Base {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyByCreatedAt>(bytes.chunk()) {
+        match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyByCreatedAt>(bytes.chunk()) {
             Ok(request_data) => {
                 match HandlerGetManyByCreatedAt::handle(postgresql_connection_pool, request_data).await {
                     Ok(response_data) => { 
@@ -135,7 +135,7 @@ impl Base {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyBySubscribersQuantity>(bytes.chunk()) {
+        match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyBySubscribersQuantity>(bytes.chunk()) {
             Ok(request_data) => {
                 match HandlerGetManyBySubscribersQuantity::handle(postgresql_connection_pool, request_data).await {
                     Ok(response_data) => { 
@@ -186,7 +186,7 @@ impl Base {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestGetManyByIdRegistry>(bytes.chunk()) {
+        match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyByIdRegistry>(bytes.chunk()) {
             Ok(request_data) => {
                 match HandlerGetManyByIdRegistry::handle(postgresql_connection_pool, request_data).await {
                     Ok(response_data) => { 

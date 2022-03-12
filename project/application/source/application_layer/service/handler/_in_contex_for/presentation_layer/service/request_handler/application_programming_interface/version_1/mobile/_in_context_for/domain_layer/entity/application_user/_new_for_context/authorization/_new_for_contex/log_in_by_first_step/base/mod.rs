@@ -16,7 +16,7 @@ use crate::infrastructure_layer::repository::state_manager::_in_context_for::dom
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::value_generator::ValueGenerator;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as Request;
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as Response;
 use tokio_postgres::NoTls;
 
@@ -26,13 +26,13 @@ impl Base {
     pub async fn handle(      // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        request: Request
+        request_data: RequestData
     ) -> Result<Response, BaseError> {
         let (
             application_user_log_in_token_device_id, 
             application_user_email_or_application_user_nickname, 
             application_user_password
-        ) = request.into_inner();
+        ) = request_data.into_inner();
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
             let postgresql_connection = &mut *postgresql_connection_pool.get().await?;

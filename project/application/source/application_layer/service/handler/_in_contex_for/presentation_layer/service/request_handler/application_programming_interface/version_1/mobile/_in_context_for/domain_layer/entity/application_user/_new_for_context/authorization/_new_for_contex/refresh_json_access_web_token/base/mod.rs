@@ -16,7 +16,7 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::refresher::Refresher;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
-use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as Request;
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as Response;
 
 pub struct Base;
@@ -24,12 +24,12 @@ pub struct Base;
 impl Base {
     pub async fn handle(
         redis_connection_pool: Pool<RedisConnectionManager>,
-        request: Request
+        request_data: RequestData
     ) -> Result<Response, BaseError> {
         let (
             json_access_web_token, 
             json_refresh_web_token
-        ) = request.into_inner();
+        ) = request_data.into_inner();
 
         let json_access_web_token = SerializationFormResolver::deserialize(json_access_web_token.as_str())?;
 
