@@ -1,4 +1,4 @@
-use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::_in_context_for::presentation_layer::service::request_handler::_new_for_context::response_data_wrapper_trait::_new_for_context::wrapped_response::WrappedResponse;
+use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::response_data_wrapper::_new_for_context::wrapped_response::WrappedResponse;
 use serde::Serialize;
 
 pub struct ResponseDataWrapper;

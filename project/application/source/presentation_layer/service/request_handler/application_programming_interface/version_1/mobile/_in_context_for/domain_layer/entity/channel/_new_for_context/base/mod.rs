@@ -11,8 +11,8 @@ use crate::presentation_layer::data_transfer_object::request::_in_context_for::p
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::Base as RequestGetManyByIdRegistry;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestGetManyByName;
 use crate::presentation_layer::data_transfer_object::request::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::Base as RequestGetManyBySubscribersQuantity;
-use crate::presentation_layer::service::_in_context_for::presentation_layer::service::request_handler::_new_for_context::response_creator::ResponseCreator;
-use crate::presentation_layer::service::_in_context_for::presentation_layer::service::request_handler::_new_for_context::response_data_wrapper::ResponseDataWrapper;
+use crate::presentation_layer::service::response_creator::ResponseCreator;
+use crate::presentation_layer::service::response_data_wrapper::ResponseDataWrapper;
 use hyper::Body;
 use hyper::body::HttpBody;
 use hyper::Request;
