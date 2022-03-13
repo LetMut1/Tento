@@ -81,13 +81,13 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref error) => {
+                    Err(error) => {
                         match error {
-                            BaseError::EntityError {entity_error} => {
+                            BaseError::EntityError {ref entity_error} => {
                                 match entity_error {
-                                    EntityError::ApplicationUserError {application_user_error} => {
+                                    &EntityError::ApplicationUserError {ref application_user_error} => {
                                         match application_user_error {
-                                            ApplicationUserError::InvalidNickname => {
+                                            &ApplicationUserError::InvalidNickname => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
                                                 )) {
@@ -161,7 +161,7 @@ impl Authorization {
     //                                 },
     //                             }
     //                         },
-    //                         Err(ref error) => {
+    //                         Err(error) => {
     //                             match error {
     //                                 BaseError::EntityError {entity_error: _} |
     //                                 BaseError::InvalidArgumentError => {
@@ -216,13 +216,13 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref error) => {
+                    Err(error) => {
                         match error {
-                            BaseError::EntityError {entity_error} => {
+                            BaseError::EntityError {ref entity_error} => {
                                 match entity_error {
-                                    EntityError::ApplicationUserError {application_user_error} => {
+                                    &EntityError::ApplicationUserError {ref application_user_error} => {
                                         match application_user_error {
-                                            ApplicationUserError::InvalidEmail => {
+                                            &ApplicationUserError::InvalidEmail => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
                                                 )) {
@@ -280,13 +280,13 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataRegisterByFirstStep>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(ref error) = HandlerRegisterByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = HandlerRegisterByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     match error {
-                        BaseError::EntityError {entity_error} => {
+                        BaseError::EntityError {ref entity_error} => {
                             match entity_error {
-                                EntityError::ApplicationUserError {application_user_error} => {
+                                &EntityError::ApplicationUserError {ref application_user_error} => {
                                     match application_user_error {
-                                        ApplicationUserError::EmailAlreadyExist => {
+                                        &ApplicationUserError::EmailAlreadyExist => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
                                             )) {
@@ -300,7 +300,7 @@ impl Authorization {
                                                 }
                                             }
                                         },
-                                        ApplicationUserError::InvalidEmail => {
+                                        &ApplicationUserError::InvalidEmail => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
                                             )) {
@@ -380,13 +380,13 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref error) => {
+                    Err(error) => {
                         match error {
-                            BaseError::EntityError {entity_error} => {
+                            BaseError::EntityError {ref entity_error} => {
                                 match entity_error {
-                                    EntityError::ApplicationUserError {application_user_error} => {
+                                    &EntityError::ApplicationUserError {ref application_user_error} => {
                                         match application_user_error {
-                                            ApplicationUserError::EmailAlreadyExist => {
+                                            &ApplicationUserError::EmailAlreadyExist => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
                                                 )) {
@@ -400,7 +400,7 @@ impl Authorization {
                                                     }
                                                 }
                                             },
-                                            ApplicationUserError::InvalidNickname => {
+                                            &ApplicationUserError::InvalidNickname => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
                                                 )) {
@@ -414,7 +414,7 @@ impl Authorization {
                                                     }
                                                 }
                                             },
-                                            ApplicationUserError::InvalidPassword => {
+                                            &ApplicationUserError::InvalidPassword => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
                                                 )) {
@@ -428,7 +428,7 @@ impl Authorization {
                                                     }
                                                 }
                                             },
-                                            ApplicationUserError::NicknameAlreadyExist => {
+                                            &ApplicationUserError::NicknameAlreadyExist => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST
                                                 )) {
@@ -447,9 +447,9 @@ impl Authorization {
                                             }
                                         }
                                     },
-                                    EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error} => {
+                                    &EntityError::ApplicationUserRegistrationConfirmationTokenError {ref application_user_registration_confirmation_token_error} => {
                                         match application_user_registration_confirmation_token_error {
-                                            ApplicationUserRegistrationConfirmationTokenError::NotFound => {
+                                            &ApplicationUserRegistrationConfirmationTokenError::NotFound => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
                                                 )) {
@@ -463,7 +463,7 @@ impl Authorization {
                                                     }
                                                 }
                                             },
-                                            ApplicationUserRegistrationConfirmationTokenError::InvalidValue => {
+                                            &ApplicationUserRegistrationConfirmationTokenError::InvalidValue => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE
                                                 )) {
@@ -516,13 +516,13 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForRegister>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(ref error) = HandlerSendEmailForRegister::handle(redis_connection_pool, request_data).await {
+                if let Err(error) = HandlerSendEmailForRegister::handle(redis_connection_pool, request_data).await {
                     match error {
-                        BaseError::EntityError {entity_error} => {
+                        BaseError::EntityError {ref entity_error} => {
                             match entity_error {
-                                EntityError::ApplicationUserRegistrationConfirmationTokenError {application_user_registration_confirmation_token_error} => {
+                                &EntityError::ApplicationUserRegistrationConfirmationTokenError {ref application_user_registration_confirmation_token_error} => {
                                     match application_user_registration_confirmation_token_error {
-                                        ApplicationUserRegistrationConfirmationTokenError::NotFound => {
+                                        &ApplicationUserRegistrationConfirmationTokenError::NotFound => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
                                             )) {
@@ -603,16 +603,16 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref error) => {
+                    Err(error) => {
                         match error {
-                            BaseError::EntityError {entity_error} => {
+                            BaseError::EntityError {ref entity_error} => {
                                 match entity_error {
-                                    EntityError::ApplicationUserError {application_user_error} => {
+                                    &EntityError::ApplicationUserError {ref application_user_error} => {
                                         match application_user_error {
-                                            ApplicationUserError::InvalidNickname |
-                                            ApplicationUserError::InvalidPassword |
-                                            ApplicationUserError::NotFound |
-                                            ApplicationUserError::WrongPassword => {
+                                            &ApplicationUserError::InvalidNickname |
+                                            &ApplicationUserError::InvalidPassword |
+                                            &ApplicationUserError::NotFound |
+                                            &ApplicationUserError::WrongPassword => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
                                                 )) {
@@ -681,13 +681,13 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref error) => {
+                    Err(error) => {
                         match error {
-                            BaseError::EntityError {entity_error} => {
+                            BaseError::EntityError {ref entity_error} => {
                                 match entity_error {
-                                    EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
+                                    &EntityError::ApplicationUserLogInTokenError {ref application_user_log_in_token_error} => {
                                         match application_user_log_in_token_error {
-                                            ApplicationUserLogInTokenError::NotFound => {
+                                            &ApplicationUserLogInTokenError::NotFound => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
                                                 )) {
@@ -701,7 +701,7 @@ impl Authorization {
                                                     }
                                                 }
                                             },
-                                            ApplicationUserLogInTokenError::InvalidValue => {
+                                            &ApplicationUserLogInTokenError::InvalidValue => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE
                                                 )) {
@@ -755,13 +755,13 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForLogIn>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(ref error) = HandlerSendEmailForLogIn::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = HandlerSendEmailForLogIn::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     match error {
-                        BaseError::EntityError {entity_error} => {
+                        BaseError::EntityError {ref entity_error} => {
                             match entity_error {
-                                EntityError::ApplicationUserError {application_user_error} => {
+                                &EntityError::ApplicationUserError {ref application_user_error} => {
                                     match application_user_error {
-                                        ApplicationUserError::NotFound => {
+                                        &ApplicationUserError::NotFound => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
                                             )) {
@@ -780,9 +780,9 @@ impl Authorization {
                                         }
                                     }
                                 },
-                                EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error} => {
+                                &EntityError::ApplicationUserLogInTokenError {ref application_user_log_in_token_error} => {
                                     match application_user_log_in_token_error {
-                                        ApplicationUserLogInTokenError::NotFound => {
+                                        &ApplicationUserLogInTokenError::NotFound => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
                                             )) {
@@ -861,13 +861,13 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref error) => {
+                    Err(error) => {
                         match error {
-                            BaseError::EntityError {entity_error} => {
+                            BaseError::EntityError {ref entity_error} => {
                                 match entity_error {
-                                    EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
+                                    &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                         match json_access_web_token_error {
-                                            JsonAccessWebTokenError::NotExpired => {
+                                            &JsonAccessWebTokenError::NotExpired => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED
                                                 )) {
@@ -886,9 +886,9 @@ impl Authorization {
                                             }
                                         }
                                     },
-                                    EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
+                                    &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
                                         match json_refresh_web_token_error {
-                                            JsonRefreshWebTokenError::NotFound => {
+                                            &JsonRefreshWebTokenError::NotFound => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
                                                 )) {
@@ -938,13 +938,13 @@ impl Authorization {
             Some(json_access_web_token) => {
                 match String::from_utf8(json_access_web_token.as_bytes().to_vec()) {
                     Ok(json_access_web_token_) => {
-                        if let Err(ref error) = HandlerLogOut::handle(redis_connection_pool, RequestDataLogOut::new(json_access_web_token_)).await {
+                        if let Err(error) = HandlerLogOut::handle(redis_connection_pool, RequestDataLogOut::new(json_access_web_token_)).await {
                             match error {
-                                BaseError::EntityError {entity_error} => {
+                                BaseError::EntityError {ref entity_error} => {
                                     match entity_error {
-                                        EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
+                                        &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
                                             match json_refresh_web_token_error {
-                                                JsonRefreshWebTokenError::NotFound => {
+                                                &JsonRefreshWebTokenError::NotFound => {
                                                     match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                         CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
                                                     )) {
@@ -960,9 +960,9 @@ impl Authorization {
                                                 }
                                             }
                                         },
-                                        EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
+                                        &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                             match json_access_web_token_error {
-                                                JsonAccessWebTokenError::AlreadyExpired => {
+                                                &JsonAccessWebTokenError::AlreadyExpired => {
                                                     match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                         CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                     )) {
@@ -976,7 +976,7 @@ impl Authorization {
                                                         }
                                                     }
                                                 },
-                                                JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                                     match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                         CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                     )) {
@@ -1044,15 +1044,15 @@ impl Authorization {
             Some(json_access_web_token) => {
                 match String::from_utf8(json_access_web_token.as_bytes().to_vec()) {
                     Ok(json_access_web_token_) => {
-                        if let Err(ref error) = HandlerLogOutFromAllDevices::handle(
+                        if let Err(error) = HandlerLogOutFromAllDevices::handle(
                             redis_connection_pool, RequestDataLogOutFromAllDevices::new(json_access_web_token_)
                         ).await {
                             match error {
-                                BaseError::EntityError {entity_error} => {
+                                BaseError::EntityError {ref entity_error} => {
                                     match entity_error {
-                                        EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error} => {
+                                        &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
                                             match json_refresh_web_token_error {
-                                                JsonRefreshWebTokenError::NotFound => {
+                                                &JsonRefreshWebTokenError::NotFound => {
                                                     match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                         CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
                                                     )) {
@@ -1068,9 +1068,9 @@ impl Authorization {
                                                 }
                                             }
                                         },
-                                        EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
+                                        &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                             match json_access_web_token_error {
-                                                JsonAccessWebTokenError::AlreadyExpired => {
+                                                &JsonAccessWebTokenError::AlreadyExpired => {
                                                     match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                         CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                     )) {
@@ -1084,7 +1084,7 @@ impl Authorization {
                                                         }
                                                     }
                                                 },
-                                                JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                                     match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                         CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                     )) {
@@ -1169,13 +1169,13 @@ impl Authorization {
                             }
                         }
                     },
-                    Err(ref error) => {
+                    Err(error) => {
                         match error {
-                            BaseError::EntityError {entity_error} => {
+                            BaseError::EntityError {ref entity_error} => {
                                 match entity_error {
-                                    EntityError::ApplicationUserError {application_user_error} => {
+                                    &EntityError::ApplicationUserError {ref application_user_error} => {
                                         match application_user_error {
-                                            ApplicationUserError::NotFound => {
+                                            &ApplicationUserError::NotFound => {
                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
                                                 )) {
@@ -1233,13 +1233,13 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataResetPasswordByLastStep>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(ref error) = HandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = HandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     match error {
-                        BaseError::EntityError {entity_error} => {
+                        BaseError::EntityError {ref entity_error} => {
                             match entity_error {
-                                EntityError::ApplicationUserError {application_user_error} => {
+                                &EntityError::ApplicationUserError {ref application_user_error} => {
                                     match application_user_error {
-                                        ApplicationUserError::NotFound => {
+                                        &ApplicationUserError::NotFound => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
                                             )) {
@@ -1253,7 +1253,7 @@ impl Authorization {
                                                 }
                                             }
                                         },
-                                        ApplicationUserError::InvalidPassword => {
+                                        &ApplicationUserError::InvalidPassword => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
                                             )) {
@@ -1273,9 +1273,9 @@ impl Authorization {
         
                                     }
                                 },
-                                EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error} => {
+                                &EntityError::ApplicationUserResetPasswordTokenError {ref application_user_reset_password_token_error} => {
                                     match application_user_reset_password_token_error {
-                                        ApplicationUserResetPasswordTokenError::InvalidValue => {
+                                        &ApplicationUserResetPasswordTokenError::InvalidValue => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
                                             )) {
@@ -1289,7 +1289,7 @@ impl Authorization {
                                                 }
                                             }
                                         },
-                                        ApplicationUserResetPasswordTokenError::NotFound => {
+                                        &ApplicationUserResetPasswordTokenError::NotFound => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
                                             )) {
@@ -1353,13 +1353,13 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForResetPassword>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(ref error) = HandlerSendEmailForResetPassword::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = HandlerSendEmailForResetPassword::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     match error {
-                        BaseError::EntityError {entity_error} => {
+                        BaseError::EntityError {ref entity_error} => {
                             match entity_error {
-                                EntityError::ApplicationUserError {application_user_error} => {
+                                &EntityError::ApplicationUserError {ref application_user_error} => {
                                     match application_user_error {
-                                        ApplicationUserError::NotFound => {
+                                        &ApplicationUserError::NotFound => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
                                             )) {
@@ -1378,9 +1378,9 @@ impl Authorization {
                                         }
                                     }
                                 },
-                                EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error} => {
+                                &EntityError::ApplicationUserResetPasswordTokenError {ref application_user_reset_password_token_error} => {
                                     match application_user_reset_password_token_error {
-                                        ApplicationUserResetPasswordTokenError::NotFound => {
+                                        &ApplicationUserResetPasswordTokenError::NotFound => {
                                             match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
                                             )) {

@@ -71,13 +71,13 @@ impl Base {
                                             }
                                         }
                                     },
-                                    Err(ref error) => {
+                                    Err(error) => {
                                         match error {
-                                            BaseError::EntityError {entity_error} => {
+                                            BaseError::EntityError {ref entity_error} => {
                                                 match entity_error {
-                                                    EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
+                                                    &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                                         match json_access_web_token_error {
-                                                            JsonAccessWebTokenError::AlreadyExpired => {
+                                                            &JsonAccessWebTokenError::AlreadyExpired => {
                                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                                 )) {
@@ -91,7 +91,7 @@ impl Base {
                                                                     }
                                                                 }
                                                             },
-                                                            JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                            &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                                 )) {
@@ -187,13 +187,13 @@ impl Base {
                                             }
                                         }
                                     },
-                                    Err(ref error) => {
+                                    Err(error) => {
                                         match error {
-                                            BaseError::EntityError {entity_error} => {
+                                            BaseError::EntityError {ref entity_error} => {
                                                 match entity_error {
-                                                    EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
+                                                    &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                                         match json_access_web_token_error {
-                                                            JsonAccessWebTokenError::AlreadyExpired => {
+                                                            &JsonAccessWebTokenError::AlreadyExpired => {
                                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                                 )) {
@@ -207,7 +207,7 @@ impl Base {
                                                                     }
                                                                 }
                                                             },
-                                                            JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                            &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                                 )) {
@@ -303,13 +303,13 @@ impl Base {
                                             }
                                         }
                                     },
-                                    Err(ref error) => {
+                                    Err(error) => {
                                         match error {
-                                            BaseError::EntityError {entity_error} => {
+                                            BaseError::EntityError {ref entity_error} => {
                                                 match entity_error {
-                                                    EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
+                                                    &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                                         match json_access_web_token_error {
-                                                            JsonAccessWebTokenError::AlreadyExpired => {
+                                                            &JsonAccessWebTokenError::AlreadyExpired => {
                                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                                 )) {
@@ -323,7 +323,7 @@ impl Base {
                                                                     }
                                                                 }
                                                             },
-                                                            JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                            &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                                 )) {
@@ -413,13 +413,13 @@ impl Base {
                                             }
                                         }
                                     },
-                                    Err(ref error) => {
+                                    Err(error) => {
                                         match error {
-                                            BaseError::EntityError {entity_error} => {
+                                            BaseError::EntityError {ref entity_error} => {
                                                 match entity_error {
-                                                    EntityError::JsonAccessWebTokenError {json_access_web_token_error} => {
+                                                    &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                                         match json_access_web_token_error {
-                                                            JsonAccessWebTokenError::AlreadyExpired => {
+                                                            &JsonAccessWebTokenError::AlreadyExpired => {
                                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                                 )) {
@@ -433,7 +433,7 @@ impl Base {
                                                                     }
                                                                 }
                                                             },
-                                                            JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                            &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                                                 match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                                 )) {
