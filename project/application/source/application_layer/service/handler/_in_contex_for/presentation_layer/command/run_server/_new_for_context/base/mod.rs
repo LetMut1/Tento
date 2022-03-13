@@ -4,6 +4,7 @@ use bb8::Pool;
 use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
+use crate::presentation_layer::service::request_handler::application_programming_interface::route_not_found::RouteNotFound as RequestHandlerRouteNotFound;
 use crate::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as RequestHandlerApplicationUserAuthorization;
 use crate::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as RequestHandlerChannelBase;
 use hyper::Body;
@@ -15,7 +16,6 @@ use hyper::Server;
 use hyper::server::conn::AddrStream;
 use hyper::service::make_service_fn;
 use hyper::service::service_fn;
-use hyper::StatusCode;
 use log::LevelFilter;
 use log4rs::append::rolling_file::policy::compound::CompoundPolicy;
 use log4rs::append::rolling_file::policy::compound::roll::fixed_window::FixedWindowRoller;
@@ -264,63 +264,8 @@ impl Base {
                 return Ok(RequestHandlerChannelBase::get_many_by_id_registry(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             _ => {
-                // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                return Ok(RequestHandlerRouteNotFound::not_found().await);
             }
         }
-
-
-        //  TODO DELETE --------------------------------------------------------------------------
-        match (request.method(), request.uri().path()) {
-
-            // Serve some instructions at /
-            (&Method::GET, "/") => Ok(Response::new(Body::from(
-                "Try POSTing data to /echo such as: `curl localhost:3000/echo -XPOST -d 'hello world'`",
-            ))),
-    
-            // Return the 404 Not Found for other routes.
-            _ => {
-                let mut not_found = Response::default();
-                *not_found.status_mut() = StatusCode::NOT_FOUND;
-                Ok(not_found)
-            }
-        }
-        //  TODO DELETE --------------------------------------------------------------------------
     }
-
-    // TODO DELETE after creating Self::resolve() method!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // fn configure_http_server<'a>(
-    //     service_config: &'a mut ServiceConfig
-    // ) -> () {
-    //     service_config     // TODO default_service 
-    //     .service(
-    //         web::scope("/v1")
-    //         .service(
-    //             web::scope("/m")
-    //             .service(
-    //                 web::scope("/na")   // TODO NotAuthorized. Можно ли в новой версии АкстикаВеба убрать этоу чать пути 
-    //                 .service( 
-    //                     web::scope("/au")
-                                    ////////////////////////////
-    //                 )
-    //             )
-    //             .service(
-    //                 web::scope("/a")
-    //                 // .wrap(AuthenticationResolverFactory)             // TODO Делать все в Рекуест Хендлерах
-    //                 .service( 
-    //                     web::scope("/au")
-    //                     //////////////////////////////////
-    //                 )
-    //                 .service( 
-    //                     web::scope("/c")
-    //                     .route("/gmbn", web::get().to(RequestHandlerChannelBase::get_many_by_name))
-    //                     .route("/gmbca", web::get().to(RequestHandlerChannelBase::get_many_by_created_at))
-    //                     .route("/gmbsq", web::get().to(RequestHandlerChannelBase::get_many_by_subscribers_quantity))
-    //                     .route("/gmbir", web::get().to(RequestHandlerChannelBase::get_many_by_id_registry))
-    //                 )
-    //             )
-    //         )
-    //     );
-
-    //     return ();
-    // }
 }

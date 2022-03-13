@@ -46,6 +46,11 @@ impl ResponseCreator {
         return Self::create(StatusCode::UNAUTHORIZED, None);
     }
 
+    pub fn create_not_found(
+    ) -> Response<Body> {
+        return Self::create(StatusCode::NOT_FOUND, None);
+    }
+
     pub fn create_internal_server_error(
     ) -> Response<Body> {
         return Self::create(StatusCode::INTERNAL_SERVER_ERROR, None);
