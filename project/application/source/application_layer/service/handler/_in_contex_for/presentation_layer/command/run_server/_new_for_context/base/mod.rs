@@ -208,66 +208,66 @@ impl Base {
     ) -> Result<Response<Body>, HyperError> {
         match (request.uri().path(), request.method()) {                      // TODO Пути через константы?
             // Area for not authorized user.
-            ("v1/m/au/cnfe", &Method::GET) => {
+            ("/v1/m/au/cnfe", &Method::GET) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(request, postgresql_connection_pool).await);
             },
-            ("v1/m/au/cefe", &Method::GET) => {
+            ("/v1/m/au/cefe", &Method::GET) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::check_email_for_existing(request, postgresql_connection_pool).await);
             },
-            ("v1/m/au/rbfs", &Method::POST) => {
+            ("/v1/m/au/rbfs", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::register_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            ("v1/m/au/rbls", &Method::POST) => {
+            ("/v1/m/au/rbls", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::register_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            ("v1/m/au/sefr", &Method::POST) => {
+            ("/v1/m/au/sefr", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_register(request, redis_connection_pool).await);
             },
-            ("v1/m/au/libfs", &Method::POST) => {
+            ("/v1/m/au/libfs", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::log_in_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            ("v1/m/au/libls", &Method::POST) => {
+            ("/v1/m/au/libls", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::log_in_by_last_step(request, redis_connection_pool).await);
             },
-            ("v1/m/au/sefli", &Method::POST) => {
+            ("/v1/m/au/sefli", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_log_in(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            ("v1/m/au/rpbfs", &Method::POST) => {
+            ("/v1/m/au/rpbfs", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::reset_password_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            ("v1/m/au/rpbls", &Method::POST) => {
+            ("/v1/m/au/rpbls", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::reset_password_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            ("v1/m/au/sefrp", &Method::POST) => {
+            ("/v1/m/au/sefrp", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_reset_password(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            ("v1/m/au/rjawt", &Method::POST) => {
+            ("/v1/m/au/rjawt", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token(request, redis_connection_pool).await);
             },
             // Area for authorized user.
-            ("v1/m/au/lo", &Method::POST) => {
+            ("/v1/m/au/lo", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::log_out(request, redis_connection_pool).await);
             },
-            ("v1/m/au/lofad", &Method::POST) => {
+            ("/v1/m/au/lofad", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices(request, redis_connection_pool).await);
             },
-            ("v1/m/c/gmbn", &Method::GET) => {
+            ("/v1/m/c/gmbn", &Method::GET) => {
                 return Ok(RequestHandlerChannelBase::get_many_by_name(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            ("v1/m/c/gmbca", &Method::GET) => {
+            ("/v1/m/c/gmbca", &Method::GET) => {
                 return Ok(RequestHandlerChannelBase::get_many_by_created_at(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            ("v1/m/c/gmbsq", &Method::GET) => {
+            ("/v1/m/c/gmbsq", &Method::GET) => {
                 return Ok(RequestHandlerChannelBase::get_many_by_subscribers_quantity(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            ("v1/m/c/gmbir", &Method::GET) => {
+            ("/v1/m/c/gmbir", &Method::GET) => {
                 return Ok(RequestHandlerChannelBase::get_many_by_id_registry(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             _ => {
                 #[cfg(feature="facilitate_non_automatic_functional_testing")]
                 match (request.uri().path(), request.method()) {
                     // Area for not authorized user.
-                    ("v1/m/au/cnfe_", &Method::GET) => {
+                    ("/v1/m/au/cnfe_", &Method::GET) => {
                         return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing_(request, postgresql_connection_pool).await);
                     },
                     _ => {}
