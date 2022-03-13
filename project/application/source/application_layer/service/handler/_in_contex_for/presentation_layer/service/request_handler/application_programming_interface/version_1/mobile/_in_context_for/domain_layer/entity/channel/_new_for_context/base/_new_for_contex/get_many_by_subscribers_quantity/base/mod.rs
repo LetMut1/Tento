@@ -23,7 +23,7 @@ impl Base {
     ) -> Result<ResponseData, BaseError> {
         let (
             json_access_web_token,
-            channel_subscribers_quantity,
+            channel_subscribers_quantity,       // TODO // TODO // TODO // TODO // TODO  не нужно ли проверять на >=0 ?
             order,
             mut limit
         ) = request_data.into_inner();

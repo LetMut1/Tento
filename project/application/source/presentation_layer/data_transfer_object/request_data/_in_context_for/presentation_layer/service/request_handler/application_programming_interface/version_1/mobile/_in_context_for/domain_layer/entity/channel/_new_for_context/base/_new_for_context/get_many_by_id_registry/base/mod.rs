@@ -1,12 +1,12 @@
 pub struct Base {
     json_access_web_token: String,
-    channel_id_registry: String,
+    channel_id_registry: Vec<i64>,
 }
 
 impl Base {
     pub fn new(
         json_access_web_token: String,
-        channel_id_registry: String,
+        channel_id_registry: Vec<i64>,
     ) -> Self {
         return Self {
             json_access_web_token,
@@ -16,7 +16,7 @@ impl Base {
 
     pub fn into_inner(
         self
-    ) -> (String, String) {
+    ) -> (String, Vec<i64>) {
         return (
             self.json_access_web_token,
             self.channel_id_registry,

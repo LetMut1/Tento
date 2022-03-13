@@ -26,13 +26,12 @@ impl Base {
         
         let _json_access_web_token = Extractor::extract(json_access_web_token.as_str(), &mut *redis_connection_pool.get().await?).await?;
 
-        let channel_id_registry_ = serde_json::from_str::<Vec<i64>>(channel_id_registry.as_str())?;                                                     // TODO Не нужно!!!!!!!
-        if channel_id_registry_.len() == 0 || channel_id_registry_.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
+        if channel_id_registry.len() == 0 || channel_id_registry.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
             return Err(BaseError::InvalidArgumentError);
         }
 
         let channel_registry = ChannelDataProviderPostgresql::per_request_4(
-            &mut *postgresql_connection_pool.get().await?, &channel_id_registry_
+            &mut *postgresql_connection_pool.get().await?, &channel_id_registry
         ).await?;
 
         return Ok(ResponseData::new(channel_registry));

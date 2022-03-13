@@ -22,8 +22,8 @@ impl Base {
     ) -> Result<ResponseData, BaseError> {
         let (
             json_access_web_token,
-            mut channel_name,
-            mut requery_channel_name,
+            channel_name,
+            requery_channel_name,
             mut limit
         ) = request_data.into_inner();
 
@@ -33,21 +33,12 @@ impl Base {
             limit = Self::LIMIT;
         }
 
-        channel_name = String::from_utf8(base64::decode_config(channel_name, base64::URL_SAFE)?)?;
         if !ChannelValidator::is_valid_name(channel_name.as_str()) {
             return Err(BaseError::InvalidArgumentError);
         }
-        match requery_channel_name {
-            Some(mut requery_channel_name_) => {
-                requery_channel_name_ = String::from_utf8(base64::decode_config(requery_channel_name_, base64::URL_SAFE)?)?;
-                if !ChannelValidator::is_valid_name(requery_channel_name_.as_str()) {
-                    return Err(BaseError::InvalidArgumentError);
-                }
-                
-                requery_channel_name = Some(requery_channel_name_);
-            },
-            None => {
-                requery_channel_name = None;
+        if let Some(ref requery_channel_name_) = requery_channel_name {
+            if !ChannelValidator::is_valid_name(requery_channel_name_.as_str()) {
+                return Err(BaseError::InvalidArgumentError);
             }
         }
 

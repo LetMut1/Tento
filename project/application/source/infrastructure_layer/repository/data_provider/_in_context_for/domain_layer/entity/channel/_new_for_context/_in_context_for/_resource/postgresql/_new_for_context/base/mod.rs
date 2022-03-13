@@ -41,10 +41,10 @@ impl Base {
         let wildcard = name.to_string() + "%";
         prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
 
-        if let Some(requery_name) = requery_name {
+        if let Some(requery_name_) = requery_name {
             query = query + " AND c.name > $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(requery_name, Type::TEXT);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(requery_name_, Type::TEXT);
         }
 
         query = query + " ORDER BY c.name ASC LIMIT $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
@@ -104,7 +104,7 @@ impl Base {
             WHERE c.is_private = FALSE AND c.created_at <= current_timestamp(6)"
             .to_string();
 
-        if let Some(created_at) = created_at {
+        if let Some(created_at_) = created_at {
             if OrderConventionResolver::is_asc(order) {
                 query = query + " AND c.created_at > $";
             }
@@ -113,7 +113,7 @@ impl Base {
             }
             query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(created_at, Type::TEXT);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(created_at_, Type::TEXT);
         }
 
         query = query + " ORDER BY c.created_at " + OrderConventionResolver::convert(order)? +
@@ -167,7 +167,7 @@ impl Base {
             WHERE c.is_private = FALSE"
             .to_string();
 
-        if let Some(subscribers_quantity) = subscribers_quantity {
+        if let Some(subscribers_quantity_) = subscribers_quantity {
             if OrderConventionResolver::is_asc(order) {
                 query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($";
             }
@@ -176,7 +176,7 @@ impl Base {
             }
             query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ")";
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity, Type::INT8);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity_, Type::INT8);
         }
 
         query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + OrderConventionResolver::convert(order)? +

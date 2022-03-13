@@ -22,28 +22,25 @@ impl Base {
     ) -> Result<ResponseData, BaseError> {
         let (
             json_access_web_token,
-            mut channel_created_at,
+            channel_created_at,
             order,
             mut limit
         ) = request_data.into_inner();
 
         let _json_access_web_token = Extractor::extract(json_access_web_token.as_str(), &mut *redis_connection_pool.get().await?).await?;
-        
-        if limit <= 0 || limit > Self::LIMIT {
-            limit = Self::LIMIT;
+
+        if let Some(ref channel_created_at_) = channel_created_at {
+            if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
+                return Err(BaseError::InvalidArgumentError);
+            }
         }
 
         if !OrderConventionResolver::can_convert(&order) {
             return Err(BaseError::InvalidArgumentError);
         }
 
-        if let Some(mut channel_created_at_) = channel_created_at {
-            channel_created_at_ = String::from_utf8(base64::decode_config(channel_created_at_, base64::URL_SAFE)?)?;
-            if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
-                return Err(BaseError::InvalidArgumentError);
-            }
-
-            channel_created_at = Some(channel_created_at_);
+        if limit <= 0 || limit > Self::LIMIT {
+            limit = Self::LIMIT;
         }
 
         let channel_registry = ChannelDataProviderPostgresql::per_request_2(

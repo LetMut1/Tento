@@ -52,14 +52,9 @@ Returns Channel registry by Channel Name.
 ### Request Query parameters:
 ```
 'cn': string; - 'channel_name'
-
-Base64(URL_SAFE) encoded;
 ```
 ```
 'rcn': string; - 'requery_channel_name', optional.
-
-Base64(URL_SAFE) encoded;
-
 
 An alternative for Offset. Used only for requering with persistent 'cn'. The value must be equal to the last Channel Name of Channel registry in
 received early response.
@@ -111,8 +106,6 @@ Returns Channel registry by Channel Created_at.
 ### Request Quey parameters:
 ```
 'cca': string; - 'channel_created_at', optional
-
-Base64(URL_SAFE) encoded;
 ```
 ```
 'o': integer; - 'order'.
