@@ -44,13 +44,14 @@ use crate::presentation_layer::service::response_data_wrapper::ResponseDataWrapp
 use http::header::HeaderName;
 use hyper::Body;
 use hyper::body::HttpBody;
+use hyper::body::to_bytes;
 use hyper::Request;
 use hyper::Response;
 use std::convert::From;
 use tokio_postgres::NoTls;
 
-// #[cfg(feature="facilitate_non_automatic_functional_testing")]
-// use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as HandlerCheckNicknameForExisting_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as HandlerCheckNicknameForExisting_;
 
 pub struct Authorization;
 
@@ -132,65 +133,70 @@ impl Authorization {
         }
     }
 
-    // #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    // pub async fn check_nickname_for_existing_(
-    //     http_request: HttpRequest,
-    //     payload: Payload
-    // ) -> HttpResponse<BoxBody> {
-    //     match Bytes::from_request(&http_request, &mut payload.into_inner()).await {
-    //         Ok(bytes) => {
-    //             match serde_json::from_slice::<'_, RequestDataCheckNicknameForExisting>(bytes.chunk()) {
-    //                 Ok(request_data) => {
-    //                     match HandlerCheckNicknameForExisting_::handle(http_request, request_data).await {
-    //                         Ok(response_data) => {
-    //                             match response_data.0 {
-    //                                 Some(response_data_) => {
-    //                                     match serde_json::to_vec(&response_data_) {
-    //                                         Ok(data) => {
-    //                                             return ResponseCreator::create_with_status_codeXXXxDelete(response_data.1, Some(data));
-    //                                         },
-    //                                         Err(error) => {
-    //                                             log::error!("{}", BaseError::from(error));
-                        
-    //                                             return ResponseCreator::create_internal_server_errorXXXxDelete();
-    //                                         }
-    //                                     }
-    //                                 },
-    //                                 None => {
-    //                                     return ResponseCreator::create_with_status_codeXXXxDelete(response_data.1, None);
-    //                                 },
-    //                             }
-    //                         },
-    //                         Err(error) => {
-    //                             match error {
-    //                                 BaseError::EntityError {entity_error: _} |
-    //                                 BaseError::InvalidArgumentError => {
-    //                                     unreachable!("{}", error);
-    //                                 }
-    //                                 BaseError::LogicError {logic_error: _} |
-    //                                 BaseError::RunTimeError {run_time_error: _} => {
-    //                                     log::error!("{}", error);
-                
-    //                                     return ResponseCreator::create_internal_server_errorXXXxDelete();
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-    //                 },
-    //                 Err(error) => {
-    //                     log::error!("{}", BaseError::from(error));
-        
-    //                     return ResponseCreator::create_internal_server_errorXXXxDelete();
-    //                 }
-    //             }
-    //         },
-    //         Err(error) => {
-    //             log::error!("{}", BaseError::from(error));
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn check_nickname_for_existing_(
+        request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
+    ) -> Response<Body> {
+        let (
+            parts,
+            body
+        ) = request.into_parts();
 
-    //             return ResponseCreator::create_internal_server_errorXXXxDelete();
-    //         }
-    //     }
-    // }
+        match to_bytes(body).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestDataCheckNicknameForExisting>(bytes.chunk()) {
+                    Ok(request_data) => {
+                        match HandlerCheckNicknameForExisting_::handle(postgresql_connection_pool, parts, request_data).await {
+                            Ok(response_data) => {
+                                match response_data.0 {
+                                    Some(wrapped_response_data) => {
+                                        match serde_json::to_vec(&wrapped_response_data) {
+                                            Ok(data) => {
+                                                return Response::from_parts(response_data.1, Body::from(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return Response::from_parts(response_data.1, Body::empty());
+                                    },
+                                }
+                            },
+                            Err(error) => {
+                                match error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
 
     pub async fn check_email_for_existing(
         request: Request<Body>,
