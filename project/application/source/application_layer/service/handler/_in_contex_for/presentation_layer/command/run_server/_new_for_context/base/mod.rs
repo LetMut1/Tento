@@ -264,6 +264,15 @@ impl Base {
                 return Ok(RequestHandlerChannelBase::get_many_by_id_registry(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             _ => {
+                #[cfg(feature="facilitate_non_automatic_functional_testing")]
+                match (request.uri().path(), request.method()) {
+                    // Area for not authorized user.
+                    ("v1/m/au/cnfe_", &Method::GET) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing_(request, postgresql_connection_pool).await);
+                    },
+                    _ => {}
+                }
+
                 return Ok(RequestHandlerRouteNotFound::not_found().await);
             }
         }
