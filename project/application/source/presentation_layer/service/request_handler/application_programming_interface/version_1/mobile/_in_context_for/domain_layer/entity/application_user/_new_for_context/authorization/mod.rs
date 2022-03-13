@@ -938,8 +938,7 @@ impl Authorization {
             Some(json_access_web_token) => {
                 match String::from_utf8(json_access_web_token.as_bytes().to_vec()) {
                     Ok(json_access_web_token_) => {
-                        let request_data = RequestDataLogOut::new(json_access_web_token_);
-                        if let Err(ref error) = HandlerLogOut::handle(redis_connection_pool, request_data).await {
+                        if let Err(ref error) = HandlerLogOut::handle(redis_connection_pool, RequestDataLogOut::new(json_access_web_token_)).await {
                             match error {
                                 BaseError::EntityError {entity_error} => {
                                     match entity_error {
@@ -1045,8 +1044,9 @@ impl Authorization {
             Some(json_access_web_token) => {
                 match String::from_utf8(json_access_web_token.as_bytes().to_vec()) {
                     Ok(json_access_web_token_) => {
-                        let request_data = RequestDataLogOutFromAllDevices::new(json_access_web_token_);
-                        if let Err(ref error) = HandlerLogOutFromAllDevices::handle(redis_connection_pool, request_data).await {
+                        if let Err(ref error) = HandlerLogOutFromAllDevices::handle(
+                            redis_connection_pool, RequestDataLogOutFromAllDevices::new(json_access_web_token_)
+                        ).await {
                             match error {
                                 BaseError::EntityError {entity_error} => {
                                     match entity_error {

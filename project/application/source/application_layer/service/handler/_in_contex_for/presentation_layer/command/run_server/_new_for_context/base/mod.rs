@@ -207,7 +207,7 @@ impl Base {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Result<Response<Body>, HyperError> {
         match (request.uri().path(), request.method()) {                      // TODO Пути через константы?
-            // Area for not authorized user {.
+            // Area for not authorized user.
             ("v1/m/au/cnfe", &Method::GET) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(request, postgresql_connection_pool).await);
             },
@@ -244,8 +244,7 @@ impl Base {
             ("v1/m/au/rjawt", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token(request, redis_connection_pool).await);
             },
-            // } Area for not authorized user.
-            // Area for authorized user {.
+            // Area for authorized user.
             ("v1/m/au/lo", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::log_out(request, redis_connection_pool).await);
             },
@@ -253,15 +252,19 @@ impl Base {
                 return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices(request, redis_connection_pool).await);
             },
             ("v1/m/c/gmbn", &Method::GET) => {
+                return Ok(RequestHandlerChannelBase::get_many_by_name(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/c/gmbca", &Method::GET) => {
+                return Ok(RequestHandlerChannelBase::get_many_by_created_at(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/c/gmbsq", &Method::GET) => {
+                return Ok(RequestHandlerChannelBase::get_many_by_subscribers_quantity(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("v1/m/c/gmbir", &Method::GET) => {
+                return Ok(RequestHandlerChannelBase::get_many_by_id_registry(request, postgresql_connection_pool, redis_connection_pool).await);
             },
-            // } Area for authorized user.
             _ => {
+                // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
         }
 

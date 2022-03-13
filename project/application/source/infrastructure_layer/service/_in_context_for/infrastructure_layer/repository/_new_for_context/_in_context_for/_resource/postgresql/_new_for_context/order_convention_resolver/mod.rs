@@ -6,21 +6,21 @@ impl OrderConventionResolver {
     const DESC: &'static str = "DESC";
 
     pub fn is_asc<'a>(
-        order_in_integer_representation: &'a i8
+        order: &'a i8
     ) -> bool {
-        return *order_in_integer_representation == 0;
+        return *order == 0;
     }
 
     pub fn is_desc<'a>(
-        order_in_integer_representation: &'a i8
+        order: &'a i8
     ) -> bool {
-        return *order_in_integer_representation == 1;
+        return *order == 1;
     }
 
     pub fn can_convert<'a>(
-        order_in_integer_representation: &'a i8
+        order: &'a i8
     ) -> bool {
-        if Self::is_asc(order_in_integer_representation) || Self::is_desc(order_in_integer_representation) {
+        if Self::is_asc(order) || Self::is_desc(order) {
             return true;
         }
 
@@ -28,12 +28,12 @@ impl OrderConventionResolver {
     }
 
     pub fn convert<'a>(
-        order_in_integer_representation: &'a i8
+        order: &'a i8
     ) -> Result<&'static str, BaseError> {
-        if Self::is_asc(order_in_integer_representation) {
+        if Self::is_asc(order) {
             return Ok(Self::ASC);
         }
-        if Self::is_desc(order_in_integer_representation) {
+        if Self::is_desc(order) {
             return Ok(Self::DESC);
         }
 
