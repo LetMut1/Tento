@@ -33,3 +33,11 @@ pub mod register_by_first_step_;
 pub mod register_by_last_step_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub mod reset_password_by_first_step_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+pub mod reset_password_by_last_step_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+pub mod send_email_for_log_in_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+pub mod send_email_for_register_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+pub mod send_email_for_reset_password_;
