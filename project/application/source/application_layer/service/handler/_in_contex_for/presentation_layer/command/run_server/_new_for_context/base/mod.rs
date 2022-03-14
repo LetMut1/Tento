@@ -270,6 +270,46 @@ impl Base {
                     ("/v1/m/au/cnfe_", &Method::GET) => {
                         return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing_(request, postgresql_connection_pool).await);
                     },
+                    ("/v1/m/au/cefe_", &Method::GET) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::check_email_for_existing_(request, postgresql_connection_pool).await);
+                    },
+                    ("/v1/m/au/rbfs_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::register_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await);
+                    },
+                    ("/v1/m/au/rbls_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::register_by_last_step_(request, postgresql_connection_pool, redis_connection_pool).await);
+                    },
+                    ("/v1/m/au/sefr_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_register_(request, redis_connection_pool).await);
+                    },
+                    ("/v1/m/au/libfs_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::log_in_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await);
+                    },
+                    ("/v1/m/au/libls_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::log_in_by_last_step_(request, redis_connection_pool).await);
+                    },
+                    ("/v1/m/au/sefli_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_log_in_(request, postgresql_connection_pool, redis_connection_pool).await);
+                    },
+                    ("/v1/m/au/rpbfs_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::reset_password_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await);
+                    },
+                    ("/v1/m/au/rpbls_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::reset_password_by_last_step_(request, postgresql_connection_pool, redis_connection_pool).await);
+                    },
+                    ("/v1/m/au/sefrp_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_reset_password_(request, postgresql_connection_pool, redis_connection_pool).await);
+                    },
+                    ("/v1/m/au/rjawt_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token_(request, redis_connection_pool).await);
+                    },
+                    // Area for authorized user.
+                    // ("/v1/m/au/lo_", &Method::POST) => {
+                    //     return Ok(RequestHandlerApplicationUserAuthorization::log_out_(request, redis_connection_pool).await);
+                    // },
+                    // ("/v1/m/au/lofad_", &Method::POST) => {
+                    //     return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices_(request, redis_connection_pool).await);
+                    // },
                     _ => {}
                 }
 
