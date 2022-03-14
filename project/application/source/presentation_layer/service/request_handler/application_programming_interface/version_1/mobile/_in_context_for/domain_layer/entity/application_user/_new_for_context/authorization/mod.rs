@@ -52,6 +52,26 @@ use tokio_postgres::NoTls;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as HandlerCheckNicknameForExisting_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing_::base::Base as HandlerCheckEmailForExisting_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step_::base::Base as HandlerLogInByFirstStep_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step_::base::Base as HandlerLogInByLastStep_;
+// #[cfg(feature="facilitate_non_automatic_functional_testing")]
+// use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_::base::Base as HandlerLogOut_;
+// #[cfg(feature="facilitate_non_automatic_functional_testing")]
+// use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices_::base::Base as HandlerLogOutFromAllDevices_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token_::base::Base as HandlerRefreshJsonAccessWebToken_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step_::base::Base as HandlerRegisterByFirstStep_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step_::base::Base as HandlerRegisterByLastStep_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step_::base::Base as HandlerResetPasswordByFirstStep_;
+
+
 
 pub struct Authorization;
 
@@ -274,6 +294,71 @@ impl Authorization {
                 
     }
 
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn check_email_for_existing_(
+        request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
+    ) -> Response<Body> {
+        let (
+            parts,
+            body
+        ) = request.into_parts();
+
+        match to_bytes(body).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestDataCheckEmailForExisting>(bytes.chunk()) {
+                    Ok(request_data) => {
+                        match HandlerCheckEmailForExisting_::handle(postgresql_connection_pool, parts, request_data).await {
+                            Ok(response_data) => {
+                                match response_data.0 {
+                                    Some(wrapped_response_data) => {
+                                        match serde_json::to_vec(&wrapped_response_data) {
+                                            Ok(data) => {
+                                                return Response::from_parts(response_data.1, Body::from(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return Response::from_parts(response_data.1, Body::empty());
+                                    },
+                                }
+                            },
+                            Err(error) => {
+                                match error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
     pub async fn register_by_first_step(
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
@@ -349,6 +434,72 @@ impl Authorization {
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));
 
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn register_by_first_step_(
+        request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body> {
+        let (
+            parts,
+            body
+        ) = request.into_parts();
+
+        match to_bytes(body).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestDataRegisterByFirstStep>(bytes.chunk()) {
+                    Ok(request_data) => {
+                        match HandlerRegisterByFirstStep_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                            Ok(response_data) => {
+                                match response_data.0 {
+                                    Some(wrapped_response_data) => {
+                                        match serde_json::to_vec(&wrapped_response_data) {
+                                            Ok(data) => {
+                                                return Response::from_parts(response_data.1, Body::from(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return Response::from_parts(response_data.1, Body::empty());
+                                    },
+                                }
+                            },
+                            Err(error) => {
+                                match error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
@@ -500,6 +651,72 @@ impl Authorization {
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn register_by_last_step_(
+        request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body> {
+        let (
+            parts,
+            body
+        ) = request.into_parts();
+
+        match to_bytes(body).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestDataRegisterByLastStep>(bytes.chunk()) {
+                    Ok(request_data) => {
+                        match HandlerRegisterByLastStep_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                            Ok(response_data) => {
+                                match response_data.0 {
+                                    Some(wrapped_response_data) => {
+                                        match serde_json::to_vec(&wrapped_response_data) {
+                                            Ok(data) => {
+                                                return Response::from_parts(response_data.1, Body::from(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return Response::from_parts(response_data.1, Body::empty());
+                                    },
+                                }
+                            },
+                            Err(error) => {
+                                match error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
@@ -663,6 +880,72 @@ impl Authorization {
         }
     }
 
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn log_in_by_first_step_(
+        request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body> {
+        let (
+            parts,
+            body
+        ) = request.into_parts();
+
+        match to_bytes(body).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestDataLogInByFirstStep>(bytes.chunk()) {
+                    Ok(request_data) => {
+                        match HandlerLogInByFirstStep_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                            Ok(response_data) => {
+                                match response_data.0 {
+                                    Some(wrapped_response_data) => {
+                                        match serde_json::to_vec(&wrapped_response_data) {
+                                            Ok(data) => {
+                                                return Response::from_parts(response_data.1, Body::from(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return Response::from_parts(response_data.1, Body::empty());
+                                    },
+                                }
+                            },
+                            Err(error) => {
+                                match error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
     pub async fn log_in_by_last_step(
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -738,6 +1021,71 @@ impl Authorization {
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn log_in_by_last_step_(
+        request: Request<Body>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body> {
+        let (
+            parts,
+            body
+        ) = request.into_parts();
+
+        match to_bytes(body).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestDataLogInByLastStep>(bytes.chunk()) {
+                    Ok(request_data) => {
+                        match HandlerLogInByLastStep_::handle(redis_connection_pool, parts, request_data).await {
+                            Ok(response_data) => {
+                                match response_data.0 {
+                                    Some(wrapped_response_data) => {
+                                        match serde_json::to_vec(&wrapped_response_data) {
+                                            Ok(data) => {
+                                                return Response::from_parts(response_data.1, Body::from(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return Response::from_parts(response_data.1, Body::empty());
+                                    },
+                                }
+                            },
+                            Err(error) => {
+                                match error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
@@ -925,6 +1273,71 @@ impl Authorization {
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn refresh_json_access_web_token_(
+        request: Request<Body>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body> {
+        let (
+            parts,
+            body
+        ) = request.into_parts();
+
+        match to_bytes(body).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestDataRefreshJsonAccessWebToken>(bytes.chunk()) {
+                    Ok(request_data) => {
+                        match HandlerRefreshJsonAccessWebToken_::handle(redis_connection_pool, parts, request_data).await {
+                            Ok(response_data) => {
+                                match response_data.0 {
+                                    Some(wrapped_response_data) => {
+                                        match serde_json::to_vec(&wrapped_response_data) {
+                                            Ok(data) => {
+                                                return Response::from_parts(response_data.1, Body::from(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return Response::from_parts(response_data.1, Body::empty());
+                                    },
+                                }
+                            },
+                            Err(error) => {
+                                match error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },
@@ -1216,6 +1629,72 @@ impl Authorization {
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
+                    }
+                }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn reset_password_by_first_step_(
+        request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body> {
+        let (
+            parts,
+            body
+        ) = request.into_parts();
+
+        match to_bytes(body).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestDataResetPasswordByFirstStep>(bytes.chunk()) {
+                    Ok(request_data) => {
+                        match HandlerResetPasswordByFirstStep_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                            Ok(response_data) => {
+                                match response_data.0 {
+                                    Some(wrapped_response_data) => {
+                                        match serde_json::to_vec(&wrapped_response_data) {
+                                            Ok(data) => {
+                                                return Response::from_parts(response_data.1, Body::from(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return Response::from_parts(response_data.1, Body::empty());
+                                    },
+                                }
+                            },
+                            Err(error) => {
+                                match error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
+                        return ResponseCreator::create_internal_server_error();
                     }
                 }
             },

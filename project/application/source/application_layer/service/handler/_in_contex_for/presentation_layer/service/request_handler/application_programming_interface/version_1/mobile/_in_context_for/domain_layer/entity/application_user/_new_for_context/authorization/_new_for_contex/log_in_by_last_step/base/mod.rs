@@ -27,7 +27,7 @@ pub struct Base;
 
 impl Base {
     pub async fn handle(
-        redis_connection_pool: Pool<RedisConnectionManager>,
+        redis_connection_pool: Pool<RedisConnectionManager>,        // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
         request_data: RequestData
     ) -> Result<ResponseData, BaseError> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let (
