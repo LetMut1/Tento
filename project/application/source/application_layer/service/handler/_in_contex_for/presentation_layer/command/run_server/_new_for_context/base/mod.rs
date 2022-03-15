@@ -201,13 +201,13 @@ impl Base {
         return ();
     }
 
-    async fn resolve(
+    async fn resolve(                                                           // TODO Пути через константы?
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>, 
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Result<Response<Body>, HyperError> {
-        match (request.uri().path(), request.method()) {                      // TODO Пути через константы?
-            // Area for not authorized user.
+        match (request.uri().path(), request.method()) {
+            // Area for existing routes with not authorized user.
             ("/v1/m/au/cnfe", &Method::GET) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(request, postgresql_connection_pool).await);
             },
@@ -244,7 +244,7 @@ impl Base {
             ("/v1/m/au/rjawt", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token(request, redis_connection_pool).await);
             },
-            // Area for authorized user.
+            // Area for existing routes with authorized user.
             ("/v1/m/au/lo", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::log_out(request, redis_connection_pool).await);
             },
@@ -263,10 +263,11 @@ impl Base {
             ("/v1/m/c/gmbir", &Method::GET) => {
                 return Ok(RequestHandlerChannelBase::get_many_by_id_registry(request, postgresql_connection_pool, redis_connection_pool).await);
             },
+            // Area for not existing routes.
             _ => {
                 #[cfg(feature="facilitate_non_automatic_functional_testing")]
                 match (request.uri().path(), request.method()) {
-                    // Area for not authorized user.
+                    // Area for existing routes with not authorized user.
                     ("/v1/m/au/cnfe_", &Method::GET) => {
                         return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing_(request, postgresql_connection_pool).await);
                     },
@@ -303,13 +304,14 @@ impl Base {
                     ("/v1/m/au/rjawt_", &Method::POST) => {
                         return Ok(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token_(request, redis_connection_pool).await);
                     },
-                    // Area for authorized user.
-                    // ("/v1/m/au/lo_", &Method::POST) => {
-                    //     return Ok(RequestHandlerApplicationUserAuthorization::log_out_(request, redis_connection_pool).await);
-                    // },
-                    // ("/v1/m/au/lofad_", &Method::POST) => {
-                    //     return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices_(request, redis_connection_pool).await);
-                    // },
+                    // Area for existing routes with authorized user.
+                    ("/v1/m/au/lo_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::log_out_(request, redis_connection_pool).await);
+                    },
+                    ("/v1/m/au/lofad_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices_(request, redis_connection_pool).await);
+                    },
+                    // Area for not existing routes.
                     _ => {}
                 }
 

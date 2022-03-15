@@ -58,10 +58,10 @@ use crate::application_layer::service::handler::_in_contex_for::presentation_lay
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step_::base::Base as HandlerLogInByFirstStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step_::base::Base as HandlerLogInByLastStep_;
-// #[cfg(feature="facilitate_non_automatic_functional_testing")]
-// use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices_::base::Base as HandlerLogOutFromAllDevices_;
-// #[cfg(feature="facilitate_non_automatic_functional_testing")]
-// use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_::base::Base as HandlerLogOut_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices_::base::Base as HandlerLogOutFromAllDevices_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_::base::Base as HandlerLogOut_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token_::base::Base as HandlerRefreshJsonAccessWebToken_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
@@ -86,10 +86,6 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step_::base::Base as RequestDataLogInByFirstStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step_::base::Base as RequestDataLogInByLastStep_;
-// #[cfg(feature="facilitate_non_automatic_functional_testing")]
-// use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices_::base::Base as RequestDataLogOutFromAllDevices_;
-// #[cfg(feature="facilitate_non_automatic_functional_testing")]
-// use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_::base::Base as RequestDataLogOut_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token_::base::Base as RequestDataRefreshJsonAccessWebToken_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
@@ -1620,6 +1616,50 @@ impl Authorization {
         }
     }
 
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn log_out_(
+        request: Request<Body>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body> {
+        let parts = request.into_parts().0;
+
+        match HandlerLogOut_::handle(redis_connection_pool, parts).await {
+            Ok(response_data) => {
+                match response_data.0 {
+                    Some(wrapped_response_data) => {
+                        match serde_json::to_vec(&wrapped_response_data) {
+                            Ok(data) => {
+                                return Response::from_parts(response_data.1, Body::from(data));
+                            },
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
+        
+                                return ResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    },
+                    None => {
+                        return Response::from_parts(response_data.1, Body::empty());
+                    },
+                }
+            },
+            Err(error) => {
+                match error {
+                    BaseError::EntityError {entity_error: _} |
+                    BaseError::InvalidArgumentError => {
+                        unreachable!("{}", error);
+                    }
+                    BaseError::LogicError {logic_error: _} |
+                    BaseError::RunTimeError {run_time_error: _} => {
+                        log::error!("{}", error);
+
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
+            }
+        }
+    }
+
     pub async fn log_out_from_all_devices(
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -1724,6 +1764,50 @@ impl Authorization {
             },
             None => {
                 return ResponseCreator::create_unauthorized();
+            }
+        }
+    }
+
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn log_out_from_all_devices_(
+        request: Request<Body>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body> {
+        let parts = request.into_parts().0;
+
+        match HandlerLogOutFromAllDevices_::handle(redis_connection_pool, parts).await {
+            Ok(response_data) => {
+                match response_data.0 {
+                    Some(wrapped_response_data) => {
+                        match serde_json::to_vec(&wrapped_response_data) {
+                            Ok(data) => {
+                                return Response::from_parts(response_data.1, Body::from(data));
+                            },
+                            Err(error) => {
+                                log::error!("{}", BaseError::from(error));
+        
+                                return ResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    },
+                    None => {
+                        return Response::from_parts(response_data.1, Body::empty());
+                    },
+                }
+            },
+            Err(error) => {
+                match error {
+                    BaseError::EntityError {entity_error: _} |
+                    BaseError::InvalidArgumentError => {
+                        unreachable!("{}", error);
+                    }
+                    BaseError::LogicError {logic_error: _} |
+                    BaseError::RunTimeError {run_time_error: _} => {
+                        log::error!("{}", error);
+
+                        return ResponseCreator::create_internal_server_error();
+                    }
+                }
             }
         }
     }
