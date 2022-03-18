@@ -22,6 +22,10 @@ pub mod log_in_by_first_step_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub mod log_in_by_last_step_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
+pub mod log_out_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+pub mod log_out_from_all_devices_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub mod refresh_json_access_web_token_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub mod register_by_first_step_;

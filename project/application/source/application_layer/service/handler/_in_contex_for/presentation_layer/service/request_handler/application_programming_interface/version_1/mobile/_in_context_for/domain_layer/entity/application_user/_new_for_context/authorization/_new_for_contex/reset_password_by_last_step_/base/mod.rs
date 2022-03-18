@@ -7,7 +7,6 @@ use crate::presentation_layer::data_transfer_object::_in_context_for::presentati
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step_::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step_::base::Base as ResponseData;
 use crate::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization;
-use http::request::Parts;
 use http::StatusCode;
 use hyper::Body;
 use hyper::body::to_bytes;
@@ -21,13 +20,17 @@ impl Base {
     pub async fn handle(
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        parts: Parts,
         request_data: RequestData
     ) -> Result<ResponseData, BaseError> {
-        let mut data: Vec<u8> = vec![];
-        rmp_serde::encode::write(&mut data, &request_data)?;
+        let (
+            request_parts,
+            convertible_data
+        ) = request_data.into_inner();
 
-        let request = Request::from_parts(parts, Body::from(data));
+        let mut data: Vec<u8> = vec![];
+        rmp_serde::encode::write(&mut data, &convertible_data)?;
+
+        let request = Request::from_parts(request_parts, Body::from(data));
         
         let response = Authorization::reset_password_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await;
 

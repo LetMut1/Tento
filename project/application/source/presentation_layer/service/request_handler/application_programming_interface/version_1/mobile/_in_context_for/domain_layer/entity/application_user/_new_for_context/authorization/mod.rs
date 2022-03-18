@@ -87,6 +87,10 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step_::base::Base as RequestDataLogInByLastStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_::base::Base as RequestDataLogOut_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices_::base::Base as RequestDataLogOutFromAllDevices_;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token_::base::Base as RequestDataRefreshJsonAccessWebToken_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step_::base::Base as RequestDataRegisterByFirstStep_;
@@ -195,9 +199,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataCheckNicknameForExisting_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataCheckNicknameForExisting>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerCheckNicknameForExisting_::handle(postgresql_connection_pool, parts, request_data).await {
+                        match HandlerCheckNicknameForExisting_::handle(
+                            postgresql_connection_pool,
+                            RequestDataCheckNicknameForExisting_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -336,9 +343,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataCheckEmailForExisting_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataCheckEmailForExisting>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerCheckEmailForExisting_::handle(postgresql_connection_pool, parts, request_data).await {
+                        match HandlerCheckEmailForExisting_::handle(
+                            postgresql_connection_pool, 
+                            RequestDataCheckEmailForExisting_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -489,9 +499,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataRegisterByFirstStep_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataRegisterByFirstStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerRegisterByFirstStep_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                        match HandlerRegisterByFirstStep_::handle(
+                            postgresql_connection_pool,
+                            redis_connection_pool,
+                            RequestDataRegisterByFirstStep_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -705,9 +719,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataRegisterByLastStep_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataRegisterByLastStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerRegisterByLastStep_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                        match HandlerRegisterByLastStep_::handle(
+                            postgresql_connection_pool,
+                            redis_connection_pool,
+                            RequestDataRegisterByLastStep_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -843,9 +861,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataSendEmailForRegister_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataSendEmailForRegister>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerSendEmailForRegister_::handle(redis_connection_pool, parts, request_data).await {
+                        match HandlerSendEmailForRegister_::handle(
+                            redis_connection_pool,
+                            RequestDataSendEmailForRegister_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -988,9 +1009,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataLogInByFirstStep_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataLogInByFirstStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerLogInByFirstStep_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                        match HandlerLogInByFirstStep_::handle(
+                            postgresql_connection_pool,
+                            redis_connection_pool,
+                            RequestDataLogInByFirstStep_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -1139,9 +1164,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataLogInByLastStep_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataLogInByLastStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerLogInByLastStep_::handle(redis_connection_pool, parts, request_data).await {
+                        match HandlerLogInByLastStep_::handle(
+                            redis_connection_pool,
+                            RequestDataLogInByLastStep_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -1299,9 +1327,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataSendEmailForLogIn_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataSendEmailForLogIn>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerSendEmailForLogIn_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                        match HandlerSendEmailForLogIn_::handle(
+                            postgresql_connection_pool,
+                            redis_connection_pool,
+                            RequestDataSendEmailForLogIn_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -1457,9 +1489,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataRefreshJsonAccessWebToken_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataRefreshJsonAccessWebToken>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerRefreshJsonAccessWebToken_::handle(redis_connection_pool, parts, request_data).await {
+                        match HandlerRefreshJsonAccessWebToken_::handle(
+                            redis_connection_pool,
+                            RequestDataRefreshJsonAccessWebToken_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -1621,9 +1656,7 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        let parts = request.into_parts().0;
-
-        match HandlerLogOut_::handle(redis_connection_pool, parts).await {
+        match HandlerLogOut_::handle(redis_connection_pool, RequestDataLogOut_::new(request)).await {
             Ok(response_data) => {
                 match response_data.0 {
                     Some(wrapped_response_data) => {
@@ -1773,9 +1806,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        let parts = request.into_parts().0;
-
-        match HandlerLogOutFromAllDevices_::handle(redis_connection_pool, parts).await {
+        match HandlerLogOutFromAllDevices_::handle(
+            redis_connection_pool,
+            RequestDataLogOutFromAllDevices_::new(request)
+        ).await {
             Ok(response_data) => {
                 match response_data.0 {
                     Some(wrapped_response_data) => {
@@ -1902,9 +1936,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataResetPasswordByFirstStep_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataResetPasswordByFirstStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerResetPasswordByFirstStep_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                        match HandlerResetPasswordByFirstStep_::handle(
+                            postgresql_connection_pool,
+                            redis_connection_pool,
+                            RequestDataResetPasswordByFirstStep_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -2088,9 +2126,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataResetPasswordByLastStep_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataResetPasswordByLastStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerResetPasswordByLastStep_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                        match HandlerResetPasswordByLastStep_::handle(
+                            postgresql_connection_pool,
+                            redis_connection_pool,
+                            RequestDataResetPasswordByLastStep_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
@@ -2248,9 +2290,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataSendEmailForResetPassword_>(bytes.chunk()) {
+                match serde_json::from_slice::<'_, RequestDataSendEmailForResetPassword>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerSendEmailForResetPassword_::handle(postgresql_connection_pool, redis_connection_pool, parts, request_data).await {
+                        match HandlerSendEmailForResetPassword_::handle(
+                            postgresql_connection_pool,
+                            redis_connection_pool,
+                            RequestDataSendEmailForResetPassword_::new(parts, request_data)
+                        ).await {
                             Ok(response_data) => {
                                 match response_data.0 {
                                     Some(wrapped_response_data) => {
