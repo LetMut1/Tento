@@ -44,9 +44,9 @@ impl Base {
 
             let wrapped_response = rmp_serde::from_read_ref::<'_, [u8], WrappedResponseData<ResponseDataLogInByLastStep>>(bytes.chunk())?;
 
-            response_data = (Some(wrapped_response), response_parts);
+            response_data = ResponseData::new(response_parts, Some(wrapped_response));
         } else {
-            response_data = (None, response_parts);
+            response_data = ResponseData::new(response_parts, None);
         }
 
         return Ok(response_data);

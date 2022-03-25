@@ -193,7 +193,7 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -203,14 +203,19 @@ impl Authorization {
                     Ok(request_data) => {
                         match HandlerCheckNicknameForExisting_::handle(
                             postgresql_connection_pool,
-                            RequestDataCheckNicknameForExisting_::new(parts, request_data)
+                            RequestDataCheckNicknameForExisting_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -220,7 +225,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -337,7 +342,7 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -347,14 +352,19 @@ impl Authorization {
                     Ok(request_data) => {
                         match HandlerCheckEmailForExisting_::handle(
                             postgresql_connection_pool, 
-                            RequestDataCheckEmailForExisting_::new(parts, request_data)
+                            RequestDataCheckEmailForExisting_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -364,7 +374,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -493,7 +503,7 @@ impl Authorization {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -504,14 +514,19 @@ impl Authorization {
                         match HandlerRegisterByFirstStep_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataRegisterByFirstStep_::new(parts, request_data)
+                            RequestDataRegisterByFirstStep_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -521,7 +536,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -713,7 +728,7 @@ impl Authorization {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -724,14 +739,19 @@ impl Authorization {
                         match HandlerRegisterByLastStep_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataRegisterByLastStep_::new(parts, request_data)
+                            RequestDataRegisterByLastStep_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -741,7 +761,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -855,7 +875,7 @@ impl Authorization {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -865,14 +885,19 @@ impl Authorization {
                     Ok(request_data) => {
                         match HandlerSendEmailForRegister_::handle(
                             redis_connection_pool,
-                            RequestDataSendEmailForRegister_::new(parts, request_data)
+                            RequestDataSendEmailForRegister_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -882,7 +907,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -1003,7 +1028,7 @@ impl Authorization {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -1014,14 +1039,19 @@ impl Authorization {
                         match HandlerLogInByFirstStep_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataLogInByFirstStep_::new(parts, request_data)
+                            RequestDataLogInByFirstStep_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -1031,7 +1061,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -1158,7 +1188,7 @@ impl Authorization {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -1168,14 +1198,19 @@ impl Authorization {
                     Ok(request_data) => {
                         match HandlerLogInByLastStep_::handle(
                             redis_connection_pool,
-                            RequestDataLogInByLastStep_::new(parts, request_data)
+                            RequestDataLogInByLastStep_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -1185,7 +1220,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -1321,7 +1356,7 @@ impl Authorization {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -1332,14 +1367,19 @@ impl Authorization {
                         match HandlerSendEmailForLogIn_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataSendEmailForLogIn_::new(parts, request_data)
+                            RequestDataSendEmailForLogIn_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -1349,7 +1389,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -1483,7 +1523,7 @@ impl Authorization {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -1493,14 +1533,19 @@ impl Authorization {
                     Ok(request_data) => {
                         match HandlerRefreshJsonAccessWebToken_::handle(
                             redis_connection_pool,
-                            RequestDataRefreshJsonAccessWebToken_::new(parts, request_data)
+                            RequestDataRefreshJsonAccessWebToken_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -1510,7 +1555,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -1658,11 +1703,16 @@ impl Authorization {
     ) -> Response<Body> {
         match HandlerLogOut_::handle(redis_connection_pool, RequestDataLogOut_::new(request)).await {
             Ok(response_data) => {
-                match response_data.0 {
+                let (
+                    parts,
+                    convertible_data
+                ) = response_data.into_inner();
+
+                match convertible_data {
                     Some(wrapped_response_data) => {
                         match serde_json::to_vec(&wrapped_response_data) {
                             Ok(data) => {
-                                return Response::from_parts(response_data.1, Body::from(data));
+                                return Response::from_parts(parts, Body::from(data));
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
@@ -1672,7 +1722,7 @@ impl Authorization {
                         }
                     },
                     None => {
-                        return Response::from_parts(response_data.1, Body::empty());
+                        return Response::from_parts(parts, Body::empty());
                     },
                 }
             },
@@ -1811,11 +1861,16 @@ impl Authorization {
             RequestDataLogOutFromAllDevices_::new(request)
         ).await {
             Ok(response_data) => {
-                match response_data.0 {
+                let (
+                    parts,
+                    convertible_data
+                ) = response_data.into_inner();
+
+                match convertible_data {
                     Some(wrapped_response_data) => {
                         match serde_json::to_vec(&wrapped_response_data) {
                             Ok(data) => {
-                                return Response::from_parts(response_data.1, Body::from(data));
+                                return Response::from_parts(parts, Body::from(data));
                             },
                             Err(error) => {
                                 log::error!("{}", BaseError::from(error));
@@ -1825,7 +1880,7 @@ impl Authorization {
                         }
                     },
                     None => {
-                        return Response::from_parts(response_data.1, Body::empty());
+                        return Response::from_parts(parts, Body::empty());
                     },
                 }
             },
@@ -1930,7 +1985,7 @@ impl Authorization {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -1941,14 +1996,19 @@ impl Authorization {
                         match HandlerResetPasswordByFirstStep_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataResetPasswordByFirstStep_::new(parts, request_data)
+                            RequestDataResetPasswordByFirstStep_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data{
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -1958,7 +2018,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -2120,7 +2180,7 @@ impl Authorization {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -2131,14 +2191,19 @@ impl Authorization {
                         match HandlerResetPasswordByLastStep_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataResetPasswordByLastStep_::new(parts, request_data)
+                            RequestDataResetPasswordByLastStep_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -2148,7 +2213,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
@@ -2284,7 +2349,7 @@ impl Authorization {
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
         let (
-            parts,
+            request_parts,
             body
         ) = request.into_parts();
 
@@ -2295,14 +2360,19 @@ impl Authorization {
                         match HandlerSendEmailForResetPassword_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataSendEmailForResetPassword_::new(parts, request_data)
+                            RequestDataSendEmailForResetPassword_::new(request_parts, request_data)
                         ).await {
                             Ok(response_data) => {
-                                match response_data.0 {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
                                     Some(wrapped_response_data) => {
                                         match serde_json::to_vec(&wrapped_response_data) {
                                             Ok(data) => {
-                                                return Response::from_parts(response_data.1, Body::from(data));
+                                                return Response::from_parts(response_parts, Body::from(data));
                                             },
                                             Err(error) => {
                                                 log::error!("{}", BaseError::from(error));
@@ -2312,7 +2382,7 @@ impl Authorization {
                                         }
                                     },
                                     None => {
-                                        return Response::from_parts(response_data.1, Body::empty());
+                                        return Response::from_parts(response_parts, Body::empty());
                                     },
                                 }
                             },
