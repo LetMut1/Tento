@@ -2,7 +2,7 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
-use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::response_data_wrapper::_new_for_context::wrapped_response::WrappedResponseData;
+use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::_new_for_context::endpoint_response::endpoint_response::EndpointResponse;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::Base as ResponseData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::Base as ResponseDataCheckNicknameForExisting;
@@ -43,7 +43,7 @@ impl Base {
         if response_parts.status == StatusCode::OK {
             let bytes = to_bytes(body).await?;
 
-            let wrapped_response = rmp_serde::from_read_ref::<'_, [u8], WrappedResponseData<ResponseDataCheckNicknameForExisting>>(bytes.chunk())?;
+            let wrapped_response = rmp_serde::from_read_ref::<'_, [u8], EndpointResponse<ResponseDataCheckNicknameForExisting>>(bytes.chunk())?;
 
             response_data = ResponseData::new(response_parts, Some(wrapped_response));
         } else {

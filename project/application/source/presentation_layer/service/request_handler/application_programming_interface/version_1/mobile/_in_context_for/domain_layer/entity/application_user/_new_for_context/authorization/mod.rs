@@ -39,8 +39,8 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_log_in::base::Base as RequestDataSendEmailForLogIn;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register::base::Base as RequestDataSendEmailForRegister;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_reset_password::base::Base as RequestDataSendEmailForResetPassword;
+use crate::presentation_layer::service::_in_context_for::data_transfer_object::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::_new_for_context::endpoint_response::_new_for_context::endpoint_response_creator::ResponseDataWrapper;
 use crate::presentation_layer::service::response_creator::ResponseCreator;
-use crate::presentation_layer::service::response_data_wrapper::ResponseDataWrapper;
 use http::header::HeaderName;
 use hyper::Body;
 use hyper::body::HttpBody;
@@ -477,7 +477,7 @@ impl Authorization {
                     }
                 }
         
-                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     },
@@ -850,7 +850,7 @@ impl Authorization {
                     }
                 }
     
-                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     },
@@ -1330,7 +1330,7 @@ impl Authorization {
                     }
                 }
         
-                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     },
@@ -1672,7 +1672,7 @@ impl Authorization {
                             }
                         }
                         
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_without_data()) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             },
@@ -1827,7 +1827,7 @@ impl Authorization {
                             }
                         }
                         
-                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_without_data()) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             },
@@ -2154,7 +2154,7 @@ impl Authorization {
                     }
                 }
 
-                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     },
@@ -2323,7 +2323,7 @@ impl Authorization {
                     }
                 }
         
-                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success()) {
+                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     },
