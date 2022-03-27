@@ -1,5 +1,5 @@
 # Request standards:
- - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form. Some data can transferred in `HTTP header`
+ - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
  - Values of variable for ``order``ing looks like:
 ```
 0 - is equal to 'ASC'
