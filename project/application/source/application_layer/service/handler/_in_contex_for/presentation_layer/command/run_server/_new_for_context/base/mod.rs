@@ -4,9 +4,9 @@ use bb8::Pool;
 use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
-use crate::presentation_layer::service::request_handler::route_not_found::RouteNotFound as RequestHandlerRouteNotFound;
-use crate::presentation_layer::service::request_handler::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as RequestHandlerApplicationUserAuthorization;
-use crate::presentation_layer::service::request_handler::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as RequestHandlerChannelBase;
+use crate::presentation_layer::service::controller::route_not_found::RouteNotFound as ControllerRouteNotFound;
+use crate::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as ControllerApplicationUserAuthorization;
+use crate::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ControllerChannelBase;
 use hyper::Body;
 use hyper::Error as HyperError;
 use hyper::Method;
@@ -209,59 +209,59 @@ impl Base {
         match (request.uri().path(), request.method()) {
             // Area for existing routes with not authorized user.
             ("/v1/m/au/cnfe", &Method::GET) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing(request, postgresql_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::check_nickname_for_existing(request, postgresql_connection_pool).await);
             },
             ("/v1/m/au/cefe", &Method::GET) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::check_email_for_existing(request, postgresql_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::check_email_for_existing(request, postgresql_connection_pool).await);
             },
             ("/v1/m/au/rbfs", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::register_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::register_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("/v1/m/au/rbls", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::register_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::register_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("/v1/m/au/sefr", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_register(request, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::send_email_for_register(request, redis_connection_pool).await);
             },
             ("/v1/m/au/libfs", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::log_in_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::log_in_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("/v1/m/au/libls", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::log_in_by_last_step(request, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::log_in_by_last_step(request, redis_connection_pool).await);
             },
             ("/v1/m/au/sefli", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_log_in(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::send_email_for_log_in(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("/v1/m/au/rpbfs", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::reset_password_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::reset_password_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("/v1/m/au/rpbls", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::reset_password_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::reset_password_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("/v1/m/au/sefrp", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_reset_password(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::send_email_for_reset_password(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("/v1/m/au/rjawt", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token(request, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::refresh_json_access_web_token(request, redis_connection_pool).await);
             },
             // Area for existing routes with authorized user.
             ("/v1/m/au/lofod", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_one_device(request, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::log_out_from_one_device(request, redis_connection_pool).await);
             },
             ("/v1/m/au/lofad", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices(request, redis_connection_pool).await);
+                return Ok(ControllerApplicationUserAuthorization::log_out_from_all_devices(request, redis_connection_pool).await);
             },
             ("/v1/m/c/gmbn", &Method::GET) => {
-                return Ok(RequestHandlerChannelBase::get_many_by_name(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerChannelBase::get_many_by_name(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("/v1/m/c/gmbca", &Method::GET) => {
-                return Ok(RequestHandlerChannelBase::get_many_by_created_at(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerChannelBase::get_many_by_created_at(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("/v1/m/c/gmbsq", &Method::GET) => {
-                return Ok(RequestHandlerChannelBase::get_many_by_subscribers_quantity(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerChannelBase::get_many_by_subscribers_quantity(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             ("/v1/m/c/gmbir", &Method::GET) => {
-                return Ok(RequestHandlerChannelBase::get_many_by_id_registry(request, postgresql_connection_pool, redis_connection_pool).await);
+                return Ok(ControllerChannelBase::get_many_by_id_registry(request, postgresql_connection_pool, redis_connection_pool).await);
             },
             // Area for not existing routes.
             _ => {
@@ -269,53 +269,53 @@ impl Base {
                 match (request.uri().path(), request.method()) {
                     // Area for existing routes with not authorized user.
                     ("/v1/m/au/cnfe_", &Method::GET) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::check_nickname_for_existing_(request, postgresql_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::check_nickname_for_existing_(request, postgresql_connection_pool).await);
                     },
                     ("/v1/m/au/cefe_", &Method::GET) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::check_email_for_existing_(request, postgresql_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::check_email_for_existing_(request, postgresql_connection_pool).await);
                     },
                     ("/v1/m/au/rbfs_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::register_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::register_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await);
                     },
                     ("/v1/m/au/rbls_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::register_by_last_step_(request, postgresql_connection_pool, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::register_by_last_step_(request, postgresql_connection_pool, redis_connection_pool).await);
                     },
                     ("/v1/m/au/sefr_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_register_(request, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::send_email_for_register_(request, redis_connection_pool).await);
                     },
                     ("/v1/m/au/libfs_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::log_in_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::log_in_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await);
                     },
                     ("/v1/m/au/libls_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::log_in_by_last_step_(request, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::log_in_by_last_step_(request, redis_connection_pool).await);
                     },
                     ("/v1/m/au/sefli_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_log_in_(request, postgresql_connection_pool, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::send_email_for_log_in_(request, postgresql_connection_pool, redis_connection_pool).await);
                     },
                     ("/v1/m/au/rpbfs_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::reset_password_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::reset_password_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await);
                     },
                     ("/v1/m/au/rpbls_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::reset_password_by_last_step_(request, postgresql_connection_pool, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::reset_password_by_last_step_(request, postgresql_connection_pool, redis_connection_pool).await);
                     },
                     ("/v1/m/au/sefrp_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::send_email_for_reset_password_(request, postgresql_connection_pool, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::send_email_for_reset_password_(request, postgresql_connection_pool, redis_connection_pool).await);
                     },
                     ("/v1/m/au/rjawt_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token_(request, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::refresh_json_access_web_token_(request, redis_connection_pool).await);
                     },
                     // Area for existing routes with authorized user.
                     ("/v1/m/au/lofod_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_one_device_(request, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::log_out_from_one_device_(request, redis_connection_pool).await);
                     },
                     ("/v1/m/au/lofad_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices_(request, redis_connection_pool).await);
+                        return Ok(ControllerApplicationUserAuthorization::log_out_from_all_devices_(request, redis_connection_pool).await);
                     },
                     // Area for not existing routes.
                     _ => {}
                 }
 
-                return Ok(RequestHandlerRouteNotFound::not_found().await);
+                return Ok(ControllerRouteNotFound::not_found().await);
             }
         }
     }
