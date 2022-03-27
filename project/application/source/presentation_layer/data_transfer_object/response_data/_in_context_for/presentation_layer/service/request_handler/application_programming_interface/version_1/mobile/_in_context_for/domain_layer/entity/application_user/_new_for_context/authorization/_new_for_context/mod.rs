@@ -15,7 +15,7 @@ pub mod log_in_by_first_step_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub mod log_in_by_last_step_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-pub mod log_out_;
+pub mod log_out_from_one_device;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub mod log_out_from_all_devices_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]

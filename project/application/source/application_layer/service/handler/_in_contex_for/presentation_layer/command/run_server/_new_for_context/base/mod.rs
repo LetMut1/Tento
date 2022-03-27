@@ -245,8 +245,8 @@ impl Base {
                 return Ok(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token(request, redis_connection_pool).await);
             },
             // Area for existing routes with authorized user.
-            ("/v1/m/au/lo", &Method::POST) => {
-                return Ok(RequestHandlerApplicationUserAuthorization::log_out(request, redis_connection_pool).await);
+            ("/v1/m/au/lofod", &Method::POST) => {
+                return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_one_device(request, redis_connection_pool).await);
             },
             ("/v1/m/au/lofad", &Method::POST) => {
                 return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices(request, redis_connection_pool).await);
@@ -305,8 +305,8 @@ impl Base {
                         return Ok(RequestHandlerApplicationUserAuthorization::refresh_json_access_web_token_(request, redis_connection_pool).await);
                     },
                     // Area for existing routes with authorized user.
-                    ("/v1/m/au/lo_", &Method::POST) => {
-                        return Ok(RequestHandlerApplicationUserAuthorization::log_out_(request, redis_connection_pool).await);
+                    ("/v1/m/au/lofod_", &Method::POST) => {
+                        return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_one_device_(request, redis_connection_pool).await);
                     },
                     ("/v1/m/au/lofad_", &Method::POST) => {
                         return Ok(RequestHandlerApplicationUserAuthorization::log_out_from_all_devices_(request, redis_connection_pool).await);

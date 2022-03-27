@@ -3,8 +3,8 @@ use bb8::Pool;
 use bytes::Buf;
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::_new_for_context::endpoint_response::endpoint_response::EndpointResponse;
-use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_::base::Base as RequestData;
-use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_::base::Base as ResponseData;
+use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_one_device_::base::Base as RequestData;
+use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_one_device::base::Base as ResponseData;
 use crate::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization;
 use http::StatusCode;
 use hyper::Body;
@@ -29,7 +29,7 @@ impl Base {
 
         let request = Request::from_parts(request_parts, Body::from(data));
         
-        let response = Authorization::log_out(request, redis_connection_pool).await;
+        let response = Authorization::log_out_from_one_device(request, redis_connection_pool).await;
 
         let response_data: ResponseData;
 

@@ -40,7 +40,7 @@ enum Data<S>
 # Area for authorized application user. API:
  - Every endpoint at this area requires an existing of `json access webtoken`
  - Response of every endpoint at this area can contain `error_code` equals to `enjsacweto03`, `enjsacweto05`.
- - ## /v1/m/au/lo POST
+ - ## /v1/m/au/lofod POST
 ```
 Deauthorizes application user from one device.
 

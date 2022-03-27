@@ -3,7 +3,7 @@ pub mod check_nickaname_for_existing;
 pub mod log_in_by_first_step;
 pub mod log_in_by_last_step;
 pub mod log_out_from_all_devices;
-pub mod log_out;
+pub mod log_out_from_one_device;
 pub mod refresh_json_access_web_token;
 pub mod register_by_first_step;
 pub mod register_by_last_step;
@@ -22,7 +22,7 @@ pub mod log_in_by_first_step_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub mod log_in_by_last_step_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-pub mod log_out_;
+pub mod log_out_from_one_device_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub mod log_out_from_all_devices_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
