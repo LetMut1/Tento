@@ -1,15 +1,15 @@
 use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::_new_for_context::endpoint_response::endpoint_response::EndpointResponse;
 use serde::Serialize;
 
-pub struct ResponseDataWrapper;
+pub struct EndpointResponseCreator;
 
-impl ResponseDataWrapper {
-    pub fn wrap_without_data(
+impl EndpointResponseCreator {
+    pub fn create_without_data(
     ) -> EndpointResponse<()> {
         return EndpointResponse::new_without_data();
     }
 
-    pub fn wrap_for_success_with_body<S>(
+    pub fn create_with_data<S>(
         data: S
     ) -> EndpointResponse<S>
     where
@@ -19,14 +19,14 @@ impl ResponseDataWrapper {
     }
 
     #[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
-    pub fn wrap_for_fail(
+    pub fn create_with_error_code(
         error_code: &'static str
     ) -> EndpointResponse<()> {
         return EndpointResponse::new_with_error_code(error_code)
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub fn wrap_for_fail(
+    pub fn create_with_error_code(
         error_code: &'static str
     ) -> EndpointResponse<()> {
         return EndpointResponse::new_with_error_code(error_code.to_string());

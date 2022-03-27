@@ -28,9 +28,9 @@ impl Base {
         if response_parts.status == StatusCode::OK {
             let bytes = to_bytes(body).await?;
 
-            let wrapped_response = rmp_serde::from_read_ref::<'_, [u8], EndpointResponse<()>>(bytes.chunk())?;
+            let endpoint_response = rmp_serde::from_read_ref::<'_, [u8], EndpointResponse<()>>(bytes.chunk())?;
 
-            response_data = ResponseData::new(response_parts, Some(wrapped_response));
+            response_data = ResponseData::new(response_parts, Some(endpoint_response));
         } else {
             response_data = ResponseData::new(response_parts, None);
         }

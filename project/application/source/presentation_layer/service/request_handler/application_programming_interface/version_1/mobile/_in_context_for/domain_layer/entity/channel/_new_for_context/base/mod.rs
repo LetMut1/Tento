@@ -18,7 +18,7 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::Base as RequestDataGetManyByIdRegistry;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestDataGetManyByName;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::Base as RequestDataGetManyBySubscribersQuantity;
-use crate::presentation_layer::service::_in_context_for::data_transfer_object::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::_new_for_context::endpoint_response::_new_for_context::endpoint_response_creator::ResponseDataWrapper;
+use crate::presentation_layer::service::_in_context_for::data_transfer_object::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::_new_for_context::endpoint_response::_new_for_context::endpoint_response_creator::EndpointResponseCreator;
 use crate::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization;
 use crate::presentation_layer::service::response_creator::ResponseCreator;
 use http::header::HeaderName;
@@ -60,7 +60,7 @@ impl Base {
                                     RequestDataGetManyByName::new(json_access_web_token_, channel_name, requery_channel_name, limit)
                                 ).await {
                                     Ok(response_data) => { 
-                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                                             Ok(data) => {
                                                 return ResponseCreator::create_ok(data);
                                             },
@@ -78,7 +78,7 @@ impl Base {
                                                     &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                                         match json_access_web_token_error {
                                                             &JsonAccessWebTokenError::AlreadyExpired => {
-                                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                                 )) {
                                                                     Ok(data) => {
@@ -92,7 +92,7 @@ impl Base {
                                                                 }
                                                             },
                                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                                 )) {
                                                                     Ok(data) => {
@@ -176,7 +176,7 @@ impl Base {
                                     RequestDataGetManyByCreatedAt::new(json_access_web_token_, channel_created_at, order, limit)
                                 ).await {
                                     Ok(response_data) => { 
-                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                                             Ok(data) => {
                                                 return ResponseCreator::create_ok(data);
                                             },
@@ -194,7 +194,7 @@ impl Base {
                                                     &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                                         match json_access_web_token_error {
                                                             &JsonAccessWebTokenError::AlreadyExpired => {
-                                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                                 )) {
                                                                     Ok(data) => {
@@ -208,7 +208,7 @@ impl Base {
                                                                 }
                                                             },
                                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                                 )) {
                                                                     Ok(data) => {
@@ -292,7 +292,7 @@ impl Base {
                                     RequestDataGetManyBySubscribersQuantity::new(json_access_web_token_, channel_subscribers_quantity, order, limit)
                                 ).await {
                                     Ok(response_data) => { 
-                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                                             Ok(data) => {
                                                 return ResponseCreator::create_ok(data);
                                             },
@@ -310,7 +310,7 @@ impl Base {
                                                     &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                                         match json_access_web_token_error {
                                                             &JsonAccessWebTokenError::AlreadyExpired => {
-                                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                                 )) {
                                                                     Ok(data) => {
@@ -324,7 +324,7 @@ impl Base {
                                                                 }
                                                             },
                                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                                 )) {
                                                                     Ok(data) => {
@@ -402,7 +402,7 @@ impl Base {
                                     RequestDataGetManyByIdRegistry::new(json_access_web_token_, get_many_by_id_registry.into_inner())
                                 ).await {
                                     Ok(response_data) => { 
-                                        match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_success_with_body(response_data)) {
+                                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                                             Ok(data) => {
                                                 return ResponseCreator::create_ok(data);
                                             },
@@ -420,7 +420,7 @@ impl Base {
                                                     &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                                         match json_access_web_token_error {
                                                             &JsonAccessWebTokenError::AlreadyExpired => {
-                                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                                 )) {
                                                                     Ok(data) => {
@@ -434,7 +434,7 @@ impl Base {
                                                                 }
                                                             },
                                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                                match rmp_serde::to_vec(&ResponseDataWrapper::wrap_for_fail(
+                                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                                 )) {
                                                                     Ok(data) => {
