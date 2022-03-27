@@ -41,7 +41,6 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_reset_password::base::Base as RequestDataSendEmailForResetPassword;
 use crate::presentation_layer::service::_in_context_for::data_transfer_object::_in_context_for::presentation_layer::service::request_handler::application_programming_interface::_new_for_context::endpoint_response::_new_for_context::endpoint_response_creator::EndpointResponseCreator;
 use crate::presentation_layer::service::response_creator::ResponseCreator;
-use http::header::HeaderName;
 use hyper::Body;
 use hyper::body::HttpBody;
 use hyper::body::to_bytes;
@@ -110,8 +109,6 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 pub struct Authorization;
 
 impl Authorization {
-    pub const HEADER_NAME_X_JAWT: &'static str = "x-jawt";  // TODO // TODO // TODO эту константу убрать вообщ в другой файл, а не транслировать. (когда буду переносить константы все)
-
     pub async fn check_nickname_for_existing(
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
@@ -1594,64 +1591,62 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        match request.headers().get(HeaderName::from_static(Self::HEADER_NAME_X_JAWT)) {
-            Some(json_access_web_token) => {
-                match String::from_utf8(json_access_web_token.as_bytes().to_vec()) {
-                    Ok(json_access_web_token_) => {
-                        if let Err(error) = HandlerLogOut::handle(redis_connection_pool, RequestDataLogOut::new(json_access_web_token_)).await {
-                            match error {
-                                BaseError::EntityError {ref entity_error} => {
-                                    match entity_error {
-                                        &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
-                                            match json_refresh_web_token_error {
-                                                &JsonRefreshWebTokenError::NotFound => {
-                                                    match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
-                                                        CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
-                                                    )) {
-                                                        Ok(data) => {
-                                                            return ResponseCreator::create_ok(data);
-                                                        },
-                                                        Err(error) => {
-                                                            log::error!("{}", BaseError::from(error));
-                                    
-                                                            return ResponseCreator::create_internal_server_error();
-                                                        }
-                                                    }
+        //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
+        // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
+        // https://github.com/hyperium/hyper/issues/2004
+        let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
+
+        match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogOut>(bytes.chunk()) {
+            Ok(request_data) => {
+                if let Err(error) = HandlerLogOut::handle(redis_connection_pool, request_data).await {
+                    match error {
+                        BaseError::EntityError {ref entity_error} => {
+                            match entity_error {
+                                &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
+                                    match json_refresh_web_token_error {
+                                        &JsonRefreshWebTokenError::NotFound => {
+                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
+                                            )) {
+                                                Ok(data) => {
+                                                    return ResponseCreator::create_ok(data);
+                                                },
+                                                Err(error) => {
+                                                    log::error!("{}", BaseError::from(error));
+                            
+                                                    return ResponseCreator::create_internal_server_error();
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
+                                    match json_access_web_token_error {
+                                        &JsonAccessWebTokenError::AlreadyExpired => {
+                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
+                                            )) {
+                                                Ok(data) => {
+                                                    return ResponseCreator::create_ok(data);
+                                                },
+                                                Err(error) => {
+                                                    log::error!("{}", BaseError::from(error));
+                            
+                                                    return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
                                         },
-                                        &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
-                                            match json_access_web_token_error {
-                                                &JsonAccessWebTokenError::AlreadyExpired => {
-                                                    match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
-                                                        CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
-                                                    )) {
-                                                        Ok(data) => {
-                                                            return ResponseCreator::create_ok(data);
-                                                        },
-                                                        Err(error) => {
-                                                            log::error!("{}", BaseError::from(error));
-                                    
-                                                            return ResponseCreator::create_internal_server_error();
-                                                        }
-                                                    }
+                                        &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
+                                            )) {
+                                                Ok(data) => {
+                                                    return ResponseCreator::create_ok(data);
                                                 },
-                                                &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                    match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
-                                                        CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
-                                                    )) {
-                                                        Ok(data) => {
-                                                            return ResponseCreator::create_ok(data);
-                                                        },
-                                                        Err(error) => {
-                                                            log::error!("{}", BaseError::from(error));
-                                    
-                                                            return ResponseCreator::create_internal_server_error();
-                                                        }
-                                                    }
-                                                },
-                                                _ => {
-                                                    unreachable!("{}", error);
+                                                Err(error) => {
+                                                    log::error!("{}", BaseError::from(error));
+                            
+                                                    return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
                                         },
@@ -1660,28 +1655,26 @@ impl Authorization {
                                         }
                                     }
                                 },
-                                BaseError::InvalidArgumentError => {
-                                    return ResponseCreator::create_bad_request();
-                                },
-                                BaseError::LogicError {logic_error: _} |
-                                BaseError::RunTimeError {run_time_error: _} => {
-                                    log::error!("{}", error);
-                
-                                    return ResponseCreator::create_internal_server_error();
+                                _ => {
+                                    unreachable!("{}", error);
                                 }
                             }
+                        },
+                        BaseError::InvalidArgumentError => {
+                            return ResponseCreator::create_bad_request();
+                        },
+                        BaseError::LogicError {logic_error: _} |
+                        BaseError::RunTimeError {run_time_error: _} => {
+                            log::error!("{}", error);
+
+                            return ResponseCreator::create_internal_server_error();
                         }
-                        
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
-                            },
-                            Err(error) => {
-                                log::error!("{}", BaseError::from(error));
+                    }
+                }
                 
-                                return ResponseCreator::create_internal_server_error();
-                            }
-                        }
+                match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
+                    Ok(data) => {
+                        return ResponseCreator::create_ok(data);
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));
@@ -1690,8 +1683,10 @@ impl Authorization {
                     }
                 }
             },
-            None => {
-                return ResponseCreator::create_unauthorized();
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
             }
         }
     }
@@ -1701,44 +1696,70 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        match HandlerLogOut_::handle(redis_connection_pool, RequestDataLogOut_::new(request)).await {
-            Ok(response_data) => {
-                let (
-                    parts,
-                    convertible_data
-                ) = response_data.into_inner();
+        let (
+            request_parts,
+            body
+        ) = request.into_parts();
 
-                match convertible_data {
-                    Some(endpoint_response) => {
-                        match serde_json::to_vec(&endpoint_response) {
-                            Ok(data) => {
-                                return Response::from_parts(parts, Body::from(data));
+        match to_bytes(body).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestDataLogOut>(bytes.chunk()) {
+                    Ok(request_data) => {
+                        match HandlerLogOut_::handle(
+                            redis_connection_pool,
+                            RequestDataLogOut_::new(request_parts, request_data)
+                        ).await {
+                            Ok(response_data) => {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
+                                    Some(endpoint_response) => {
+                                        match serde_json::to_vec(&endpoint_response) {
+                                            Ok(data) => {
+                                                return Response::from_parts(response_parts, Body::from(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return Response::from_parts(response_parts, Body::empty());
+                                    },
+                                }
                             },
                             Err(error) => {
-                                log::error!("{}", BaseError::from(error));
-        
-                                return ResponseCreator::create_internal_server_error();
+                                match error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
                         }
                     },
-                    None => {
-                        return Response::from_parts(parts, Body::empty());
-                    },
-                }
-            },
-            Err(error) => {
-                match error {
-                    BaseError::EntityError {entity_error: _} |
-                    BaseError::InvalidArgumentError => {
-                        unreachable!("{}", error);
-                    }
-                    BaseError::LogicError {logic_error: _} |
-                    BaseError::RunTimeError {run_time_error: _} => {
-                        log::error!("{}", error);
-
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
             }
         }
     }
@@ -1747,66 +1768,62 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        match request.headers().get(HeaderName::from_static(Self::HEADER_NAME_X_JAWT)) {
-            Some(json_access_web_token) => {
-                match String::from_utf8(json_access_web_token.as_bytes().to_vec()) {
-                    Ok(json_access_web_token_) => {
-                        if let Err(error) = HandlerLogOutFromAllDevices::handle(
-                            redis_connection_pool, RequestDataLogOutFromAllDevices::new(json_access_web_token_)
-                        ).await {
-                            match error {
-                                BaseError::EntityError {ref entity_error} => {
-                                    match entity_error {
-                                        &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
-                                            match json_refresh_web_token_error {
-                                                &JsonRefreshWebTokenError::NotFound => {
-                                                    match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
-                                                        CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND 
-                                                    )) {
-                                                        Ok(data) => {
-                                                            return ResponseCreator::create_ok(data);
-                                                        },
-                                                        Err(error) => {
-                                                            log::error!("{}", BaseError::from(error));
-                                    
-                                                            return ResponseCreator::create_internal_server_error();
-                                                        }
-                                                    }
+        //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
+        // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
+        // https://github.com/hyperium/hyper/issues/2004
+        let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
+
+        match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogOutFromAllDevices>(bytes.chunk()) {
+            Ok(request_data) => {
+                if let Err(error) = HandlerLogOutFromAllDevices::handle(redis_connection_pool, request_data).await {
+                    match error {
+                        BaseError::EntityError {ref entity_error} => {
+                            match entity_error {
+                                &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
+                                    match json_refresh_web_token_error {
+                                        &JsonRefreshWebTokenError::NotFound => {
+                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND 
+                                            )) {
+                                                Ok(data) => {
+                                                    return ResponseCreator::create_ok(data);
+                                                },
+                                                Err(error) => {
+                                                    log::error!("{}", BaseError::from(error));
+                            
+                                                    return ResponseCreator::create_internal_server_error();
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
+                                    match json_access_web_token_error {
+                                        &JsonAccessWebTokenError::AlreadyExpired => {
+                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
+                                            )) {
+                                                Ok(data) => {
+                                                    return ResponseCreator::create_ok(data);
+                                                },
+                                                Err(error) => {
+                                                    log::error!("{}", BaseError::from(error));
+                            
+                                                    return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
                                         },
-                                        &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
-                                            match json_access_web_token_error {
-                                                &JsonAccessWebTokenError::AlreadyExpired => {
-                                                    match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
-                                                        CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
-                                                    )) {
-                                                        Ok(data) => {
-                                                            return ResponseCreator::create_ok(data);
-                                                        },
-                                                        Err(error) => {
-                                                            log::error!("{}", BaseError::from(error));
-                                    
-                                                            return ResponseCreator::create_internal_server_error();
-                                                        }
-                                                    }
+                                        &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
+                                            )) {
+                                                Ok(data) => {
+                                                    return ResponseCreator::create_ok(data);
                                                 },
-                                                &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                    match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
-                                                        CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
-                                                    )) {
-                                                        Ok(data) => {
-                                                            return ResponseCreator::create_ok(data);
-                                                        },
-                                                        Err(error) => {
-                                                            log::error!("{}", BaseError::from(error));
-                                    
-                                                            return ResponseCreator::create_internal_server_error();
-                                                        }
-                                                    }
-                                                },
-                                                _ => {
-                                                    unreachable!("{}", error);
+                                                Err(error) => {
+                                                    log::error!("{}", BaseError::from(error));
+                            
+                                                    return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
                                         },
@@ -1815,28 +1832,26 @@ impl Authorization {
                                         }
                                     }
                                 },
-                                BaseError::InvalidArgumentError => {
-                                    return ResponseCreator::create_bad_request();
-                                },
-                                BaseError::LogicError {logic_error: _} |
-                                BaseError::RunTimeError {run_time_error: _} => {
-                                    log::error!("{}", error);
-
-                                    return ResponseCreator::create_internal_server_error();
+                                _ => {
+                                    unreachable!("{}", error);
                                 }
                             }
-                        }
-                        
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
-                            Ok(data) => {
-                                return ResponseCreator::create_ok(data);
-                            },
-                            Err(error) => {
-                                log::error!("{}", BaseError::from(error));
+                        },
+                        BaseError::InvalidArgumentError => {
+                            return ResponseCreator::create_bad_request();
+                        },
+                        BaseError::LogicError {logic_error: _} |
+                        BaseError::RunTimeError {run_time_error: _} => {
+                            log::error!("{}", error);
 
-                                return ResponseCreator::create_internal_server_error();
-                            }
+                            return ResponseCreator::create_internal_server_error();
                         }
+                    }
+                }
+                
+                match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
+                    Ok(data) => {
+                        return ResponseCreator::create_ok(data);
                     },
                     Err(error) => {
                         log::error!("{}", BaseError::from(error));
@@ -1845,8 +1860,10 @@ impl Authorization {
                     }
                 }
             },
-            None => {
-                return ResponseCreator::create_unauthorized();
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
             }
         }
     }
@@ -1856,47 +1873,70 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        match HandlerLogOutFromAllDevices_::handle(
-            redis_connection_pool,
-            RequestDataLogOutFromAllDevices_::new(request)
-        ).await {
-            Ok(response_data) => {
-                let (
-                    parts,
-                    convertible_data
-                ) = response_data.into_inner();
+        let (
+            request_parts,
+            body
+        ) = request.into_parts();
 
-                match convertible_data {
-                    Some(endpoint_response) => {
-                        match serde_json::to_vec(&endpoint_response) {
-                            Ok(data) => {
-                                return Response::from_parts(parts, Body::from(data));
+        match to_bytes(body).await {
+            Ok(bytes) => {
+                match serde_json::from_slice::<'_, RequestDataLogOutFromAllDevices>(bytes.chunk()) {
+                    Ok(request_data) => {
+                        match HandlerLogOutFromAllDevices_::handle(
+                            redis_connection_pool,
+                            RequestDataLogOutFromAllDevices_::new(request_parts, request_data)
+                        ).await {
+                            Ok(response_data) => {
+                                let (
+                                    response_parts,
+                                    convertible_data
+                                ) = response_data.into_inner();
+
+                                match convertible_data {
+                                    Some(endpoint_response) => {
+                                        match serde_json::to_vec(&endpoint_response) {
+                                            Ok(data) => {
+                                                return Response::from_parts(response_parts, Body::from(data));
+                                            },
+                                            Err(error) => {
+                                                log::error!("{}", BaseError::from(error));
+                        
+                                                return ResponseCreator::create_internal_server_error();
+                                            }
+                                        }
+                                    },
+                                    None => {
+                                        return Response::from_parts(response_parts, Body::empty());
+                                    },
+                                }
                             },
                             Err(error) => {
-                                log::error!("{}", BaseError::from(error));
-        
-                                return ResponseCreator::create_internal_server_error();
+                                match error {
+                                    BaseError::EntityError {entity_error: _} |
+                                    BaseError::InvalidArgumentError => {
+                                        unreachable!("{}", error);
+                                    }
+                                    BaseError::LogicError {logic_error: _} |
+                                    BaseError::RunTimeError {run_time_error: _} => {
+                                        log::error!("{}", error);
+                
+                                        return ResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
                         }
                     },
-                    None => {
-                        return Response::from_parts(parts, Body::empty());
-                    },
-                }
-            },
-            Err(error) => {
-                match error {
-                    BaseError::EntityError {entity_error: _} |
-                    BaseError::InvalidArgumentError => {
-                        unreachable!("{}", error);
-                    }
-                    BaseError::LogicError {logic_error: _} |
-                    BaseError::RunTimeError {run_time_error: _} => {
-                        log::error!("{}", error);
-
+                    Err(error) => {
+                        log::error!("{}", BaseError::from(error));
+        
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
+            },
+            Err(error) => {
+                log::error!("{}", BaseError::from(error));
+
+                return ResponseCreator::create_internal_server_error();
             }
         }
     }

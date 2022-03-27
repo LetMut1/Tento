@@ -1,15 +1,17 @@
-use serde::Deserialize;
-use serde::Serialize;
+// use serde::Deserialize;
+// use serde::Serialize;
 
-#[derive(Serialize, Deserialize)]
-pub struct Base {
-    channel_id: i64,
-}
+// #[derive(Serialize, Deserialize)]
+// pub struct Base {
+//     channel_id: i64,
+// }
 
-impl Base {
-    pub fn into_inner(
-        self
-    ) -> i64 {
-        return self.channel_id;
-    }
-}
+// impl Base {
+//     pub fn into_inner(
+//         self
+//     ) -> i64 {
+//         return self.channel_id;
+//     }
+// }
+
+// TODO TODO TODO delete if not used

@@ -38,14 +38,16 @@ enum Data<S>
 <br/><br/>
 
 # Area for authorized application user. API:
- - Every endpoint at this area requires an existing of `json access webtoken`, wich should be sended as `x-jawt` parameter
-of `HTTP header`.
+ - Every endpoint at this area requires an existing of `json access webtoken`
  - Response of every endpoint at this area can contain `error_code` equals to `enjsacweto03`, `enjsacweto05`.
  - ## /v1/m/au/lo POST
 ```
 Deauthorizes application user from one device.
 
-Request data is absent.
+Request data:
+struct Base {
+    json_access_web_token: String
+}
 
 Result data is absent.
 
@@ -57,7 +59,10 @@ Error codes:
 ```
 Deauthorizes application user from all devices.
 
-Request data is absent.
+Request data:
+struct Base {
+    json_access_web_token: String
+}
 
 Result data is absent.
 
