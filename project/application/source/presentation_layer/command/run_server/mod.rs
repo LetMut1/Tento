@@ -1,10 +1,10 @@
 extern crate application;
 
-use application::application_layer::service::handler::_in_contex_for::presentation_layer::command::run_server::_new_for_context::base::Base as RunServerHandler;
+use application::application_layer::service::action_handler::_in_contex_for::presentation_layer::command::run_server::_new_for_context::base::Base;
 
 fn main(
 ) -> () {
-    if let Err(error) = RunServerHandler::handle(std::file!().to_string()) {
+    if let Err(error) = Base::handle(std::file!().to_string()) {
         println!("{}", error);
     }
 

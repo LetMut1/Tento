@@ -2,20 +2,20 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Base as HandlerCheckEmailForExisting;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::base::Base as HandlerCheckNicknameForExisting;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step::base::Base as HandlerLogInByFirstStep;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step::base::Base as HandlerLogInByLastStep;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices::base::Base as HandlerLogOutFromAllDevices;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_one_device::base::Base as HandlerLogOutFromOneDevice;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token::base::Base as HandlerRefreshJsonAccessWebToken;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step::base::Base as HandlerRegisterByFirstStep;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Base as HandlerRegisterByLastStep;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Base as HandlerResetPasswordByFirstStep;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step::base::Base as HandlerResetPasswordByLastStep;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as HandlerSendEmailForLogIn;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Base as HandlerSendEmailForRegister;
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Base as HandlerSendEmailForResetPassword;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Base as ActionHandlerCheckEmailForExisting;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::base::Base as ActionHandlerCheckNicknameForExisting;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step::base::Base as ActionHandlerLogInByFirstStep;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step::base::Base as ActionHandlerLogInByLastStep;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices::base::Base as ActionHandlerLogOutFromAllDevices;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_one_device::base::Base as ActionHandlerLogOutFromOneDevice;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token::base::Base as ActionHandlerRefreshJsonAccessWebToken;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step::base::Base as ActionHandlerRegisterByFirstStep;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Base as ActionHandlerRegisterByLastStep;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Base as ActionHandlerResetPasswordByFirstStep;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step::base::Base as ActionHandlerResetPasswordByLastStep;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as ActionHandlerSendEmailForLogIn;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Base as ActionHandlerSendEmailForRegister;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Base as ActionHandlerSendEmailForResetPassword;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
@@ -50,33 +50,33 @@ use std::convert::From;
 use tokio_postgres::NoTls;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as HandlerCheckNicknameForExisting_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as ActionHandlerCheckNicknameForExisting_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing_::base::Base as HandlerCheckEmailForExisting_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing_::base::Base as ActionHandlerCheckEmailForExisting_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step_::base::Base as HandlerLogInByFirstStep_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step_::base::Base as ActionHandlerLogInByFirstStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step_::base::Base as HandlerLogInByLastStep_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step_::base::Base as ActionHandlerLogInByLastStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices_::base::Base as HandlerLogOutFromAllDevices_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices_::base::Base as ActionHandlerLogOutFromAllDevices_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_one_device_::base::Base as HandlerLogOutFromOneDevice_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_one_device_::base::Base as ActionHandlerLogOutFromOneDevice_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token_::base::Base as HandlerRefreshJsonAccessWebToken_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token_::base::Base as ActionHandlerRefreshJsonAccessWebToken_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step_::base::Base as HandlerRegisterByFirstStep_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step_::base::Base as ActionHandlerRegisterByFirstStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step_::base::Base as HandlerRegisterByLastStep_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step_::base::Base as ActionHandlerRegisterByLastStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step_::base::Base as HandlerResetPasswordByFirstStep_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step_::base::Base as ActionHandlerResetPasswordByFirstStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step_::base::Base as HandlerResetPasswordByLastStep_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step_::base::Base as ActionHandlerResetPasswordByLastStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in_::base::Base as HandlerSendEmailForLogIn_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in_::base::Base as ActionHandlerSendEmailForLogIn_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register_::base::Base as HandlerSendEmailForRegister_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register_::base::Base as ActionHandlerSendEmailForRegister_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password_::base::Base as HandlerSendEmailForResetPassword_;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password_::base::Base as ActionHandlerSendEmailForResetPassword_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing_::base::Base as RequestDataCheckEmailForExisting_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
@@ -120,7 +120,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataCheckNicknameForExisting>(bytes.chunk()) {
             Ok(request_data) => {
-                match HandlerCheckNicknameForExisting::handle(postgresql_connection_pool, request_data).await {
+                match ActionHandlerCheckNicknameForExisting::handle(postgresql_connection_pool, request_data).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -198,7 +198,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataCheckNicknameForExisting>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerCheckNicknameForExisting_::handle(
+                        match ActionHandlerCheckNicknameForExisting_::handle(
                             postgresql_connection_pool,
                             RequestDataCheckNicknameForExisting_::new(request_parts, request_data)
                         ).await {
@@ -268,7 +268,7 @@ impl Authorization {
         
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataCheckEmailForExisting>(bytes.chunk()) {
             Ok(request_data) => {
-                match HandlerCheckEmailForExisting::handle(postgresql_connection_pool, request_data).await {
+                match ActionHandlerCheckEmailForExisting::handle(postgresql_connection_pool, request_data).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -347,7 +347,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataCheckEmailForExisting>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerCheckEmailForExisting_::handle(
+                        match ActionHandlerCheckEmailForExisting_::handle(
                             postgresql_connection_pool, 
                             RequestDataCheckEmailForExisting_::new(request_parts, request_data)
                         ).await {
@@ -418,7 +418,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataRegisterByFirstStep>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = HandlerRegisterByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerRegisterByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     match error {
                         BaseError::EntityError {ref entity_error} => {
                             match entity_error {
@@ -508,7 +508,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataRegisterByFirstStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerRegisterByFirstStep_::handle(
+                        match ActionHandlerRegisterByFirstStep_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataRegisterByFirstStep_::new(request_parts, request_data)
@@ -580,7 +580,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataRegisterByLastStep>(bytes.chunk()) {
             Ok(request_data) => {
-                match HandlerRegisterByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                match ActionHandlerRegisterByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -733,7 +733,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataRegisterByLastStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerRegisterByLastStep_::handle(
+                        match ActionHandlerRegisterByLastStep_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataRegisterByLastStep_::new(request_parts, request_data)
@@ -804,7 +804,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForRegister>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = HandlerSendEmailForRegister::handle(redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerSendEmailForRegister::handle(redis_connection_pool, request_data).await {
                     match error {
                         BaseError::EntityError {ref entity_error} => {
                             match entity_error {
@@ -880,7 +880,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataSendEmailForRegister>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerSendEmailForRegister_::handle(
+                        match ActionHandlerSendEmailForRegister_::handle(
                             redis_connection_pool,
                             RequestDataSendEmailForRegister_::new(request_parts, request_data)
                         ).await {
@@ -951,7 +951,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogInByFirstStep>(bytes.chunk()) {
             Ok(request_data) => {
-                match HandlerLogInByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                match ActionHandlerLogInByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -1033,7 +1033,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataLogInByFirstStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerLogInByFirstStep_::handle(
+                        match ActionHandlerLogInByFirstStep_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataLogInByFirstStep_::new(request_parts, request_data)
@@ -1104,7 +1104,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogInByLastStep>(bytes.chunk()) {
             Ok(request_data) => {
-                match HandlerLogInByLastStep::handle(redis_connection_pool, request_data).await {
+                match ActionHandlerLogInByLastStep::handle(redis_connection_pool, request_data).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -1193,7 +1193,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataLogInByLastStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerLogInByLastStep_::handle(
+                        match ActionHandlerLogInByLastStep_::handle(
                             redis_connection_pool,
                             RequestDataLogInByLastStep_::new(request_parts, request_data)
                         ).await {
@@ -1264,7 +1264,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForLogIn>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = HandlerSendEmailForLogIn::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerSendEmailForLogIn::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     match error {
                         BaseError::EntityError {ref entity_error} => {
                             match entity_error {
@@ -1361,7 +1361,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataSendEmailForLogIn>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerSendEmailForLogIn_::handle(
+                        match ActionHandlerSendEmailForLogIn_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataSendEmailForLogIn_::new(request_parts, request_data)
@@ -1432,7 +1432,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataRefreshJsonAccessWebToken>(bytes.chunk()) {
             Ok(request_data) => {
-                match HandlerRefreshJsonAccessWebToken::handle(redis_connection_pool, request_data).await {
+                match ActionHandlerRefreshJsonAccessWebToken::handle(redis_connection_pool, request_data).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -1528,7 +1528,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataRefreshJsonAccessWebToken>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerRefreshJsonAccessWebToken_::handle(
+                        match ActionHandlerRefreshJsonAccessWebToken_::handle(
                             redis_connection_pool,
                             RequestDataRefreshJsonAccessWebToken_::new(request_parts, request_data)
                         ).await {
@@ -1598,7 +1598,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogOutFromOneDevice>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = HandlerLogOutFromOneDevice::handle(redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerLogOutFromOneDevice::handle(redis_connection_pool, request_data).await {
                     match error {
                         BaseError::EntityError {ref entity_error} => {
                             match entity_error {
@@ -1705,7 +1705,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataLogOutFromOneDevice>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerLogOutFromOneDevice_::handle(
+                        match ActionHandlerLogOutFromOneDevice_::handle(
                             redis_connection_pool,
                             RequestDataLogOutFromOneDevice_::new(request_parts, request_data)
                         ).await {
@@ -1775,7 +1775,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogOutFromAllDevices>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = HandlerLogOutFromAllDevices::handle(redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerLogOutFromAllDevices::handle(redis_connection_pool, request_data).await {
                     match error {
                         BaseError::EntityError {ref entity_error} => {
                             match entity_error {
@@ -1882,7 +1882,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataLogOutFromAllDevices>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerLogOutFromAllDevices_::handle(
+                        match ActionHandlerLogOutFromAllDevices_::handle(
                             redis_connection_pool,
                             RequestDataLogOutFromAllDevices_::new(request_parts, request_data)
                         ).await {
@@ -1953,7 +1953,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataResetPasswordByFirstStep>(bytes.chunk()) {
             Ok(request_data) => {
-                match HandlerResetPasswordByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                match ActionHandlerResetPasswordByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -2033,7 +2033,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataResetPasswordByFirstStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerResetPasswordByFirstStep_::handle(
+                        match ActionHandlerResetPasswordByFirstStep_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataResetPasswordByFirstStep_::new(request_parts, request_data)
@@ -2105,7 +2105,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataResetPasswordByLastStep>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = HandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     match error {
                         BaseError::EntityError {ref entity_error} => {
                             match entity_error {
@@ -2228,7 +2228,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataResetPasswordByLastStep>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerResetPasswordByLastStep_::handle(
+                        match ActionHandlerResetPasswordByLastStep_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataResetPasswordByLastStep_::new(request_parts, request_data)
@@ -2300,7 +2300,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForResetPassword>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = HandlerSendEmailForResetPassword::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerSendEmailForResetPassword::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     match error {
                         BaseError::EntityError {ref entity_error} => {
                             match entity_error {
@@ -2397,7 +2397,7 @@ impl Authorization {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, RequestDataSendEmailForResetPassword>(bytes.chunk()) {
                     Ok(request_data) => {
-                        match HandlerSendEmailForResetPassword_::handle(
+                        match ActionHandlerSendEmailForResetPassword_::handle(
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataSendEmailForResetPassword_::new(request_parts, request_data)
