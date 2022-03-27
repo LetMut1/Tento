@@ -1,44 +1,287 @@
 # Request standards:
- - All payload (parameters) is transferred in `HTTP body` in encoded with `MessagePack protocol` form.
+ - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form. Some data can transferred in `HTTP header`
  - Values of variable for ``order``ing looks like:
 ```
 0 - is equal to 'ASC'
 1 - is equal to 'DESC'
 ```
+
 # Response standards:
- - All payload (parameters) is transferred in `HTTP body` in encoded with `MessagePack protocol` form.
+ - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
  - The permanent general structure of the each response with `HTTP status code` equal to `200` looks like:
 ```
-struct WrappedResponseData<S> 
+enum EndpointResponse<S>
 {
-    success: bool,
-    error_code: Option<&'static str>,
-    data: Option<S>
+    Data {
+        data: Data<S>
+    },
+    ErrorCode {
+        error_code: String
+    }
+}
+
+enum Data<S>
+{
+    Empty,
+    Filled {
+        data: S
+    }
 }
 ```
-- Structures written under each specific API point will be nested in the `data` field in the `WrappedResponseData`
+- `Result data` structures written under each API endpoint will be nested in the `data` field in the `enum Data<S>`.
+- Existing values for `error_code` can be founded here:
+```
+/project/application/source/domain_layer/service/_in_context_for/domain_layer/error/_new_for_context/communication_code_storage/mod.rs
+```
 - `HTTP status code` unequal to `200` (it is `400`, `401`, ... `500`) have not got `HTTP body`
 
+<br/><br/>
 
-
-
-
-
-
-
-
-
-
-
-
-Existing values for -ERROR_CODE- can be founded here:
+# Area for authorized application user. API:
+ - Every endpoint at this area requires an existing of `json access webtoken`, wich should be sended as `x-jawt` parameter
+of `HTTP header`.
+ - Response of every endpoint at this area can contain `error_code` equals to `enjsacweto03`, `enjsacweto05`.
+ - ## /v1/m/au/lo POST
 ```
-application/source/source/domain_layer/service/_in_context_for/domain_layer/error/_new_for_context/communication_code_storage/mod.rs
+Deauthorizes application user from one device.
+
+Request data is absent.
+
+Result data is absent.
+
+Error codes:
+- enjsreweto02
+
 ```
-# ApplicationUser authorized area:
-Every endpoint at this area requires an existing of JsonAccessWebToken, wich should be sended as ``'X-Jawt'`` parameter
-of HTTP/S Request Header. Response of every endpoint can contain -ERROR_CODE- equals ``'enjsacweto03'``
-## /v1/m/a/c/gmbn GET
+ - ## /v1/m/au/lofad POST
+```
+Deauthorizes application user from all devices.
+
+Request data is absent.
+
+Result data is absent.
+
+Error codes:
+- enjsreweto02
+```
+# Area for not authorized application user. API:
+ - ## /v1/m/au/cnfe GET
+```
+Checks application user nickname for existing.
+
+Request data:
+struct Base {
+    application_user_nickname: String
+}
+
+Result data:
+struct Base {
+    result: bool
+}
+
+Error codes:
+- enapus06
+```
+ - ## /v1/m/au/cefe GET
+```
+Checks application user email for existing.
+
+Request data:
+struct Base {
+    application_user_email: String
+}
+
+Result data:
+struct Base {
+    result: bool
+}
+
+Error codes:
+- enapus05
+```
+ - ## /v1/m/au/rbfs POST
+```
+Registers application user for the first step and sends email to user.
+
+Request data:
+struct Base {
+    application_user_email: String
+}
+
+Result data is absent.
+
+Error codes:
+- enapus01
+- enapus05
+```
+ - ## /v1/m/au/rbls POST
+```
+Registers application user for the last step.
+
+Request data:
+struct Base {
+    application_user_log_in_token_device_id: String,
+    application_user_nickname: String,
+    application_user_password: String,
+    application_user_email: String,
+    application_user_registration_confirmation_token_value: String
+}
+
+Result data:
+struct Base {
+    json_access_web_token: String,
+    json_refresh_web_token: String
+}
+
+Error codes:
+- enapus01
+- enapus02
+- enapus06
+- enapus07
+- enapusrecoto02
+- enapusrecoto03
+```
+ - ## /v1/m/au/sefr POST
+```
+Sends email for register. (Should be used only if the user does not receive an email.)
+
+Request data:
+struct Base {
+    application_user_email: String
+}
+
+Result data is absent.
+
+Error codes:
+- enapusrecoto02
+```
+ - ## /v1/m/au/libfs POST
+```
+Authorizes application user for the firs step and send email to user.
+
+Request data:
+struct Base {
+    application_user_log_in_token_device_id: String,
+    application_user_email_or_application_user_nickname: String,
+    application_user_password: String
+}
+
+Result data:
+struct Base {
+    application_user_id: i64
+}
+
+Error codes:
+- enapus04
+```
+ - ## /v1/m/au/libls POST
+```
+Authorizes application user for the last step.
+
+Request data:
+struct Base {
+    application_user_id: i64,
+    application_user_log_in_token_device_id: String,
+    application_user_log_in_token_value: String
+}
+
+Result data:
+struct Base {
+    json_access_web_token: String,
+    json_refresh_web_token: String
+}
+
+Error codes:
+- enapuslointo02
+- enapuslointo03
+```
+ - ## /v1/m/au/sefli POST
+```
+Sends email for log in. (Should be used only if the user does not receive an email.)
+
+Request data:
+struct Base {
+    application_user_log_in_token_device_id: String,
+    application_user_id: i64
+}
+
+Result data is absent.
+
+Error codes:
+- enapus03
+- enapuslointo02
+```
+ - ## /v1/m/au/rpbfs POST
+```
+Resets application user password for the first step and send email to user.
+
+Request data:
+struct Base {
+    application_user_email: String
+}
+
+Result data:
+struct Base {
+    application_user_id: i64
+}
+
+Error codes:
+- enapus03
+```
+ - ## /v1/m/au/rpbls POST
+```
+Resets application user password for the last step.
+
+Request data:
+struct Base {
+    application_user_id: i64,
+    application_user_password: String,
+    application_user_reset_password_token_value: String
+}
+
+Result data is absent.
+
+Error codes:
+- enapusrepato02
+- enapusrepato03
+- enapus07
+```
+ - ## /v1/m/au/sefrp POST
+```
+Sends email for reset password.  (Should be used only if the user does not receive an email.)
+
+Request data:
+struct Base {
+    application_user_id: i64
+}
+
+Result data is absent.
+
+Error codes:
+- enapus03
+- enapusrepato02
+```
+ - ## /v1/m/au/rjawt POST
+```
+Refreshs json access web token.
+
+Request data:
+struct Base {
+    json_access_web_token: String,
+    json_refresh_web_token: String
+}
+
+Result data:
+struct Base {
+    json_access_web_token: String,
+    json_refresh_web_token: String
+}
+
+Error codes:
+- enjsacweto04
+- enjsreweto02
+``` 
+<!-- ## /v1/m/a/c/gmbn GET
 Returns Channel registry by Channel Name.
 ### Request Query parameters:
 ```
@@ -143,4 +386,4 @@ object_1:
 -ERROR_CODE-:
 ```
 is absent.
-```
+``` -->

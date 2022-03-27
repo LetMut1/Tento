@@ -1761,7 +1761,7 @@ impl Authorization {
                                             match json_refresh_web_token_error {
                                                 &JsonRefreshWebTokenError::NotFound => {
                                                     match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
-                                                        CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
+                                                        CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND 
                                                     )) {
                                                         Ok(data) => {
                                                             return ResponseCreator::create_ok(data);
