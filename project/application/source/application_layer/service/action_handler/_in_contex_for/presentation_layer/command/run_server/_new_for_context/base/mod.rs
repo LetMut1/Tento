@@ -5,8 +5,8 @@ use crate::infrastructure_layer::error::base_error::_component::logic_error::Log
 use crate::infrastructure_layer::error::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::service::controller::route_not_found::RouteNotFound as ControllerRouteNotFound;
-use crate::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as ControllerApplicationUserAuthorization;
-use crate::presentation_layer::service::controller::version_1::mobile::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ControllerChannelBase;
+use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as ControllerApplicationUserAuthorization;
+use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ControllerChannelBase;
 use hyper::Body;
 use hyper::Error as HyperError;
 use hyper::Method;
