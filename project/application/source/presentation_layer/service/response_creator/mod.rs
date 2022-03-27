@@ -61,12 +61,4 @@ impl ResponseCreator {
     ) -> Response<Body> {
         return Self::create(StatusCode::OK, Some(data));
     }
-
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub fn create_with_status_code(
-        status_code: StatusCode,
-        data: Option<Vec<u8>>
-    ) -> Response<Body> {
-        return Self::create(status_code, data);
-    }
 }
