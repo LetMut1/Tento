@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
     postgresql:
-        container_name: memis_postgresql
+        container_name: tento_postgresql
         build:
             context: ./service/postgresql
             dockerfile: dockerfile
@@ -11,18 +11,18 @@ services:
             POSTGRES_HOST_AUTH_METHOD: 'md5'
             POSTGRES_USER: 'root'
             POSTGRES_PASSWORD: 'password'
-            POSTGRES_DB: 'memis'
+            POSTGRES_DB: 'tento'
         volumes:
             - postgresql_data:/var/lib/postgresql/data
         restart: always
     redis:
-        container_name: memis_redis
+        container_name: tento_redis
         build:
             context: ./service/redis
             dockerfile: dockerfile
         restart: always
     redis_client:
-        container_name: memis_redis_client
+        container_name: tento_redis_client
         build:
             context: ./service/redis_client
             dockerfile: dockerfile
@@ -30,7 +30,7 @@ services:
         - 5001:5001
         restart: always
     mailhog:
-        container_name: memis_mailhog
+        container_name: tento_mailhog
         build:
             context: ./service/mailhog
             dockerfile: dockerfile

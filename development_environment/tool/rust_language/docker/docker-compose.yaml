@@ -2,17 +2,17 @@ version: '3.8'
 
 services: 
     rust_language:
-        container_name: memis_rust_language
+        container_name: tento_rust_language
         build:
             context: ./service/rust_language/
             dockerfile: dockerfile
         environment: 
             USER: ${USER}
         volumes:
-            - ./../../../../:/_memis
+            - ./../../../../:/_tento
         ports:
             - 80:80
-        working_dir: /_memis
+        working_dir: /_tento
         restart: always
         tty: true
         init: true

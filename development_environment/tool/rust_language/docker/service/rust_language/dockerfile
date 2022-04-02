@@ -1,7 +1,7 @@
 FROM rust:1.56.1
 
 RUN \
-mkdir -p /_memis && \
+mkdir -p /_tento && \
 # For VSCode extensions {
 # For "matklad.rust-analyzer and "rust-lang.rust" extensions {
 rustup component add \

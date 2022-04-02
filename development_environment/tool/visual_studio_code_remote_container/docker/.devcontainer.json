@@ -1,7 +1,7 @@
 {
     "dockerComposeFile": "./../../rust_language/docker/docker-compose.yaml",
     "service": "rust_language",
-    "workspaceFolder": "/_memis",
+    "workspaceFolder": "/_tento",
     "extensions": [
 		"matklad.rust-analyzer",
 		"ms-azuretools.vscode-docker",
@@ -15,7 +15,7 @@
 			"**/target/**": true
 		},
 		"rust-analyzer.linkedProjects": [
-			"/_memis/project/application/Cargo.toml"
+			"/_tento/project/application/Cargo.toml"
 		]
 
 	}
