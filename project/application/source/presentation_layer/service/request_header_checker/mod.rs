@@ -30,8 +30,9 @@ impl RequestHeaderChecker {
                 return false;
             }
         }
-
-        // TODO Length Нужно проверять при ОктетСтриме
+        if let None = header_map.get(header::CONTENT_LENGTH) {              // TODO  TODO TODO Как понять, что значение хедера верное? Если значение больше, чем есть на самом желе, то процесс обработки будет ждать дополнительную дату, пока значение из хедера и значение по факту из Боди не сравняется
+            return false;
+        }
 
         return true;
     }

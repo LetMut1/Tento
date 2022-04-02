@@ -3,6 +3,7 @@
  - Every request should contain this `HTTP header`s: 
  ```
  content-type: application/octet-stream
+ content-length: _
  x-content-type-options: nosniff
  ```
  - Values of variable for ``order``ing looks like:

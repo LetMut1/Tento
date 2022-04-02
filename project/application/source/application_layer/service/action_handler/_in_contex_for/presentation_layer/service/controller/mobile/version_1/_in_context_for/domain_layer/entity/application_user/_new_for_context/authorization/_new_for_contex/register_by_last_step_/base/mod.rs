@@ -8,6 +8,8 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step_::base::Base as ResponseData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::Base as ResponseDataRegisterByLastStep;
 use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization;
+use http::header;
+use http::HeaderValue;
 use http::StatusCode;
 use hyper::Body;
 use hyper::body::to_bytes;
@@ -24,12 +26,17 @@ impl Base {
         request_data: RequestData
     ) -> Result<ResponseData, BaseError> {
         let (
-            request_parts,
+            mut request_parts,
             convertible_data
         ) = request_data.into_inner();
 
         let mut data: Vec<u8> = vec![];
         rmp_serde::encode::write(&mut data, &convertible_data)?;
+
+        let mut header_map = request_parts.headers;
+        header_map.remove(header::CONTENT_LENGTH);
+        header_map.append(header::CONTENT_LENGTH, HeaderValue::from(data.len() as u64));
+        request_parts.headers = header_map;
 
         let request = Request::from_parts(request_parts, Body::from(data));
         

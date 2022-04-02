@@ -26,11 +26,10 @@ pub trait BaseTrait {
     fn is_valid_nickname<'a>(   // TODO Перенести реализацию в инфраструктуру
         nickname: &'a str
     ) -> bool {
-        let is_valid = nickname.chars().count() <= (Self::NICKNAME_MAXIMUM_LENGTH as usize)
+        return nickname.chars().count() <= (Self::NICKNAME_MAXIMUM_LENGTH as usize)
             && !nickname.contains('@')
-            && !nickname.contains(' ');     // TODO Проверить символ табуляци TAB
-
-        return is_valid;
+            && !nickname.contains(' ')     // TODO Проверить символ табуляци TAB
+            && !nickname.is_empty();
     }
 
     fn is_valid_password<'a>(       // TODO Перенести реализацию в инфраструктуру
@@ -38,11 +37,9 @@ pub trait BaseTrait {
     ) -> bool {
         let password_chars_count = password.chars().count();
 
-        let is_valid = password_chars_count >= (Self::PASSWORD_MINIMUM_LENGTH as usize)
+        return password_chars_count >= (Self::PASSWORD_MINIMUM_LENGTH as usize)
             && password_chars_count <= (Self::PASSWORD_MAXIMUM_LENGTH as usize)
             && !password.contains(' ');
-
-        return is_valid;
     }   // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
 
     fn is_valid_password_hash<'a>( // TODO убрать вообще
