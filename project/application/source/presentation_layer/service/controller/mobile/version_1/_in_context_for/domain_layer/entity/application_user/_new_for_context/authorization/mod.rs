@@ -39,7 +39,8 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_log_in::base::Base as RequestDataSendEmailForLogIn;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register::base::Base as RequestDataSendEmailForRegister;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_reset_password::base::Base as RequestDataSendEmailForResetPassword;
-use crate::presentation_layer::service::_in_context_for::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::endpoint_response::_new_for_context::endpoint_response_creator::EndpointResponseCreator;
+use crate::presentation_layer::service::_in_context_for::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::endpoint_response::_new_for_context::endpoint_response_creator::EndpointResponseCreator;
+use crate::presentation_layer::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::service::response_creator::ResponseCreator;
 use hyper::Body;
 use hyper::body::HttpBody;
@@ -113,6 +114,10 @@ impl Authorization {
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -189,6 +194,10 @@ impl Authorization {
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+
         let (
             request_parts,
             body
@@ -261,6 +270,10 @@ impl Authorization {
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -338,6 +351,10 @@ impl Authorization {
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -411,6 +428,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -499,6 +520,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -573,6 +598,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -724,6 +753,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -797,6 +830,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -871,6 +908,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -944,6 +985,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -1024,6 +1069,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -1097,6 +1146,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -1184,6 +1237,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -1257,6 +1314,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -1352,6 +1413,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -1425,6 +1490,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -1519,6 +1588,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -1591,6 +1664,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -1696,6 +1773,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -1768,6 +1849,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -1873,6 +1958,10 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -1946,6 +2035,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -2024,6 +2117,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -2098,6 +2195,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -2219,6 +2320,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body
@@ -2293,6 +2398,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -2388,6 +2497,10 @@ impl Authorization {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         let (
             request_parts,
             body

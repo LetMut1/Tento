@@ -14,7 +14,8 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::Base as RequestDataGetManyByIdRegistry;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestDataGetManyByName;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::Base as RequestDataGetManyBySubscribersQuantity;
-use crate::presentation_layer::service::_in_context_for::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::endpoint_response::_new_for_context::endpoint_response_creator::EndpointResponseCreator;
+use crate::presentation_layer::service::_in_context_for::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::endpoint_response::_new_for_context::endpoint_response_creator::EndpointResponseCreator;
+use crate::presentation_layer::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::service::response_creator::ResponseCreator;
 use hyper::Body;
 use hyper::body::HttpBody;
@@ -31,6 +32,10 @@ impl Base {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -121,6 +126,10 @@ impl Base {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -211,6 +220,10 @@ impl Base {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -301,6 +314,10 @@ impl Base {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ResponseCreator::create_bad_request();
+        }
+        
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
