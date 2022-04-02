@@ -1,5 +1,10 @@
 # Request standards:
  - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
+ - Every request should contain this `HTTP header`s: 
+ ```
+ content-type: application/octet-stream
+ x-content-type-options: nosniff
+ ```
  - Values of variable for ``order``ing looks like:
 ```
 0 - is equal to 'ASC'
@@ -8,6 +13,11 @@
 
 # Response standards:
  - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
+ - Every response should contain this `HTTP header`s: 
+ ```
+ content-type: application/octet-stream
+ x-content-type-options: nosniff
+ ```
  - The permanent general structure of the each response with `HTTP status code` equal to `200` looks like:
 ```
 enum EndpointResponse<S>
