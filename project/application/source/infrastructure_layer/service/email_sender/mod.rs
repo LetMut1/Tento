@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use lettre_email::EmailBuilder;
 use lettre::ClientSecurity;
@@ -17,7 +17,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
         subject: &'a str,
         body: String,
         to: &'a str
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), ErrorAggregator> {
         let email = EmailBuilder::new().subject(subject).text(body).from("from_changethis@yandex.ru".to_string()).to(to).build()?; //TODO
 
         let smtp_client: SmtpClient;

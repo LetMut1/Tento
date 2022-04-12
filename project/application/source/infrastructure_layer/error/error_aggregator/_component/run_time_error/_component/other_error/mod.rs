@@ -44,5 +44,3 @@ impl Display for OtherError {
         return Ok(());
     }
 }
-
-impl Error for OtherError {}

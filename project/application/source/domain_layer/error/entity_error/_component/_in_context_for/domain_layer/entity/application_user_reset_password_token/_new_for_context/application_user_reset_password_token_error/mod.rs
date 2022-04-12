@@ -1,4 +1,3 @@
-use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
@@ -17,5 +16,3 @@ impl Display for ApplicationUserResetPasswordTokenError {
         return Ok(());
     }
 }
-
-impl Error for ApplicationUserResetPasswordTokenError {}

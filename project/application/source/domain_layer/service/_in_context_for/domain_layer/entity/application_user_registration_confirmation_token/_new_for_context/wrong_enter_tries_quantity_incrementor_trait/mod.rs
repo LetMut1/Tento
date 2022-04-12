@@ -1,5 +1,5 @@
 use crate::domain_layer::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
-use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
+use crate::infrastructure_layer::error::error_aggregator::_component::logic_error::LogicError;
 use std::convert::From;
 use std::error::Error;
 

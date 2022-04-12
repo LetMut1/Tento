@@ -1,4 +1,3 @@
-use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
@@ -39,5 +38,3 @@ impl Display for EntityError {
         return Ok(());
     }
 }
-
-impl Error for EntityError {}

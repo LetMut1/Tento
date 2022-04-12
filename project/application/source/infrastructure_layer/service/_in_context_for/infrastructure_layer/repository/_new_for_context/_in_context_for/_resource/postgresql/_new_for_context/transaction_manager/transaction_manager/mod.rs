@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use super::_component::transaction_isolation_level::TransactionIsolationLevel;
 use tokio_postgres::Client as Connection;
 
@@ -8,7 +8,7 @@ impl TransactionManager {
     pub async fn start_transaction<'a>(
         connection: &'a mut Connection,
         transaction_isolation_level: TransactionIsolationLevel
-    ) -> Result<Self, BaseError> {
+    ) -> Result<Self, ErrorAggregator> {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
         match transaction_isolation_level {
             TransactionIsolationLevel::ReadCommitted => {
@@ -40,7 +40,7 @@ impl TransactionManager {
     pub async fn commit_transaction<'a>(
         self,
         connection: &'a mut Connection
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), ErrorAggregator> {
         let query = "COMMIT;";
 
         connection.execute(query, &[]).await?;
@@ -51,7 +51,7 @@ impl TransactionManager {
     pub async fn rollback_transaction<'a>(
         self,
         connection: &'a mut Connection
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), ErrorAggregator> {
         let query = "ROLLBACK;";
 
         connection.execute(query, &[]).await?;

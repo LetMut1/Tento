@@ -1,7 +1,7 @@
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::endpoint_response::endpoint_response::EndpointResponse;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices_::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices_::base::Base as ResponseData;
@@ -20,7 +20,7 @@ impl Base {
     pub async fn handle(
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
-    ) -> Result<ResponseData, BaseError> {
+    ) -> Result<ResponseData, ErrorAggregator> {
         let (
             mut request_parts,
             convertible_data

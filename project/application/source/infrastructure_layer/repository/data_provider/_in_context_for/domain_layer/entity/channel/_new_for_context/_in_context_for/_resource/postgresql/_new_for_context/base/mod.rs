@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::order_convention_resolver::OrderConventionResolver;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_counter::PreparedStatementParameterCounter;
@@ -17,7 +17,7 @@ impl Base {
         name: &'a str,
         requery_name: &'a Option<String>,
         limit: &'a i16
-    ) -> Result<Option<Vec<ResponseDataGetManyByNameChannel>>, BaseError> {
+    ) -> Result<Option<Vec<ResponseDataGetManyByNameChannel>>, ErrorAggregator> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         
         let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
@@ -84,7 +84,7 @@ impl Base {
         created_at: &'a Option<String>,
         order: &'a i8,
         limit: &'a i16
-    ) -> Result<Option<Vec<ResponseDataGetManyByCreatedAtChannel>>, BaseError> {
+    ) -> Result<Option<Vec<ResponseDataGetManyByCreatedAtChannel>>, ErrorAggregator> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
@@ -154,7 +154,7 @@ impl Base {
         subscribers_quantity: &'a Option<i64>,
         order: &'a i8,
         limit: &'a i16
-    ) -> Result<Option<Vec<ResponseDataGetManyBySubscribersQuantityChannel>>, BaseError> {
+    ) -> Result<Option<Vec<ResponseDataGetManyBySubscribersQuantityChannel>>, ErrorAggregator> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
@@ -208,7 +208,7 @@ impl Base {
     pub async fn per_request_4<'a>(
         connection: &'a mut Connection,
         id_registry: &'a Vec<i64>
-    ) -> Result<Option<Vec<ResponseDataGetManyByIdRegistryChannel>>, BaseError> {
+    ) -> Result<Option<Vec<ResponseDataGetManyByIdRegistryChannel>>, ErrorAggregator> {
         if id_registry.is_empty() {
             return Ok(None)
         }

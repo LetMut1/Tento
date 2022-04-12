@@ -1,6 +1,6 @@
 use crate::domain_layer::service::update_resolver::_in_context_for::domain_layer::entity::application_user::_new_for_context::base_trait::BaseTrait as UpdateResolverApplicationUserTrait;
-use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::_component::logic_error::LogicError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 
 pub struct Base {
     update_email: bool,
@@ -13,7 +13,7 @@ impl Base {
         update_email: bool,
         update_nickname: bool,
         update_password_hash: bool
-    ) -> Result<Self, BaseError> {
+    ) -> Result<Self, ErrorAggregator> {
         if update_email || update_nickname || update_password_hash {
             return  Ok(
                 Self {
@@ -24,7 +24,7 @@ impl Base {
             );
         }
 
-        return Err(BaseError::LogicError {logic_error: LogicError::new(false, "The columns allowing update should exist for ApplicationUser.")})
+        return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "The columns allowing update should exist for ApplicationUser.")})
     }
 }
 

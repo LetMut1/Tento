@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use std::env;
 
 pub struct EnvironmentVariableResolver;
@@ -18,7 +18,7 @@ impl EnvironmentVariableResolver {
     pub const RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY: &'static str = "RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS";
 
     pub fn is_production(
-    ) -> Result<bool, BaseError> {
+    ) -> Result<bool, ErrorAggregator> {
         if env::var(Self::IS_PRODUCTION_KEY)? == Self::IS_PRODUCTION_VALUE_TRUE {
             return Ok(true);
         }
@@ -27,47 +27,47 @@ impl EnvironmentVariableResolver {
     }
 
     pub fn get_server_socket_address(
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         return Ok(env::var(Self::SERVER_SOCKET_ADDRESS_KEY)?);
     }
 
     pub fn get_logger_roller_log_file_name(
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         return Ok(env::var(Self::LOGGER_ROLLER_LOG_FILE_NAME_KEY)?);
     }
 
     pub fn get_logger_log_file_name(
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         return Ok(env::var(Self::LOGGER_LOG_FILE_NAME_KEY)?);
     }
 
     pub fn get_logger_encoder_pattern(
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         return Ok(env::var(Self::LOGGER_ENCODER_PATTERN_KEY)?);
     }
 
     pub fn get_security_jrwt_encoding_private_key(
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         return Ok(env::var(Self::SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY)?);
     }
 
     pub fn get_security_jawt_signature_encoding_private_key(
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         return Ok(env::var(Self::SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY)?);
     }
 
     pub fn get_resource_postgresql_url(
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         return Ok(env::var(Self::RESOURCE_POSTGRESQL_URL_KEY)?);
     }
 
     pub fn get_resource_redis_url(
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         return Ok(env::var(Self::RESOURCE_REDIS_URL_KEY)?);
     }
 
     pub fn get_resource_email_server_socket_address(
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         return Ok(env::var(Self::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY)?);
     }
 }

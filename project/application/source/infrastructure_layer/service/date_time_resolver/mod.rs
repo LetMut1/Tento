@@ -1,8 +1,8 @@
 use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
-use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::_component::logic_error::LogicError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 
 pub struct DateTimeResolver;
 
@@ -11,7 +11,7 @@ impl DateTimeResolver {
 
     pub fn create_chrono_date_time_utc<'a>(
         date_time: &'a str
-    ) -> Result<DateTime<Utc>, BaseError> {
+    ) -> Result<DateTime<Utc>, ErrorAggregator> {
         return Ok(DateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT)?.with_timezone(&Utc));
     }
 
@@ -25,20 +25,20 @@ impl DateTimeResolver {
     pub fn add_interval_from<'a>(
         date_time: &'a DateTime<Utc>,
         quantity_of_minutes: &'a i64
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         match date_time.checked_add_signed(Duration::minutes(*quantity_of_minutes)) {
             Some(date_time) => {
                 return Ok(date_time.format(Self::TIMESTAMP_FORMAT).to_string());
             },
             None => {
-                return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Too big date must not be added.")});
+                return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Too big date must not be added.")});
             }
         };
     }
     
     pub fn add_interval_from_now<'a>(
         quantity_of_minutes: &'a i64
-    ) -> Result<String, BaseError> {
+    ) -> Result<String, ErrorAggregator> {
         return Self::add_interval_from(&Utc::now(), quantity_of_minutes)
     }
 

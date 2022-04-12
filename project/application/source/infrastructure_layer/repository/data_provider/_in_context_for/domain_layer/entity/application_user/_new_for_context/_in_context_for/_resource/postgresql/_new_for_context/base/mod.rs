@@ -1,5 +1,5 @@
 use crate::domain_layer::entity::application_user::ApplicationUser;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use tokio_postgres::Client as Connection;
 use tokio_postgres::types::Type;
@@ -10,7 +10,7 @@ impl Base {
     pub async fn is_exist_by_nickanme<'a>(
         connection: &'a mut Connection,
         nickname: &'a str
-    ) -> Result<bool, BaseError> {
+    ) -> Result<bool, ErrorAggregator> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 
@@ -34,7 +34,7 @@ impl Base {
     pub async fn is_exist_by_email<'a>(
         connection: &'a mut Connection,
         email: &'a str
-    ) -> Result<bool, BaseError> {
+    ) -> Result<bool, ErrorAggregator> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 
@@ -58,7 +58,7 @@ impl Base {
     pub async fn find_by_email<'a>(
         connection: &'a mut Connection,
         email: &'a str
-    ) -> Result<Option<ApplicationUser>, BaseError> {
+    ) -> Result<Option<ApplicationUser>, ErrorAggregator> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 
@@ -94,7 +94,7 @@ impl Base {
     pub async fn find_by_nickname<'a>(
         connection: &'a mut Connection,
         nickname: &'a str
-    ) -> Result<Option<ApplicationUser>, BaseError> {
+    ) -> Result<Option<ApplicationUser>, ErrorAggregator> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 
@@ -130,7 +130,7 @@ impl Base {
     pub async fn find_by_id<'a>(
         connection: &'a mut Connection,
         id: &'a i64
-    ) -> Result<Option<ApplicationUser>, BaseError> {
+    ) -> Result<Option<ApplicationUser>, ErrorAggregator> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 

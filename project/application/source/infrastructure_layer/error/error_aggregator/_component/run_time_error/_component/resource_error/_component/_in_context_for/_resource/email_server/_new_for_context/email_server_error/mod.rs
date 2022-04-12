@@ -1,6 +1,5 @@
 use lettre_email::error::Error as EmailError;
 use lettre::smtp::error::Error as SmtpError;
-use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
@@ -23,5 +22,3 @@ impl Display for EmailServerError {
         return Ok(());
     }
 }
-
-impl Error for EmailServerError {}

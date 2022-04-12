@@ -1,8 +1,8 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
-use crate::infrastructure_layer::error::base_error::_component::logic_error::LogicError;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::_component::logic_error::LogicError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::service::controller::route_not_found::RouteNotFound as ControllerRouteNotFound;
 use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as ControllerApplicationUserAuthorization;
@@ -44,7 +44,7 @@ impl Base {
 
     pub fn handle(
         binary_file_path: String
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), ErrorAggregator> {
         Self::load_and_check_environment_variables(binary_file_path.as_str())?;
         Self::configure_log()?;
         Self::run_http_server()?;
@@ -54,7 +54,7 @@ impl Base {
 
     fn load_and_check_environment_variables<'a>(
         binary_file_path: &'a str
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), ErrorAggregator> {
         match Path::new(binary_file_path).parent() {
             Some(file_path) => {
                 let production_environment_file_path_buffer = file_path.join(&Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME));
@@ -71,7 +71,7 @@ impl Base {
                         if development_environment_file_path_buffer.exists() {
                             dotenv::from_path(development_environment_file_path_buffer.as_path())?;
                         } else {
-                            return Err(BaseError::LogicError {logic_error: LogicError::new(false, "Any ....env files does not exist.")});
+                            return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Any ....env files does not exist.")});
                         }
                     }
 
@@ -83,13 +83,13 @@ impl Base {
                 return Ok(());
             },
             None => {
-                return Err(BaseError::LogicError {logic_error: LogicError::new(false, "The directory does not exist.")});
+                return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "The directory does not exist.")});
             }
         }
     }
 
     fn check_environment_variables(
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), ErrorAggregator> {
         EnvironmentVariableResolver::is_production()?;
         EnvironmentVariableResolver::get_server_socket_address()?;
         EnvironmentVariableResolver::get_logger_roller_log_file_name()?;
@@ -105,7 +105,7 @@ impl Base {
     }
 
     fn configure_log(
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), ErrorAggregator> {
         let fixed_window_roller = FixedWindowRoller::builder()
             .base(1)
             .build(EnvironmentVariableResolver::get_logger_roller_log_file_name()?.as_str(), 10)?;
@@ -134,7 +134,7 @@ impl Base {
      // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     #[tokio::main]
     async fn run_http_server(
-    ) -> Result<(), BaseError> {
+    ) -> Result<(), ErrorAggregator> {
         let postgresql_connection_pool = Pool::builder()    // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature? Probably having NoTls be the feature, since it makes more sense to have TLS by default
         .build(                                                      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
             PostgresqlConnectionManager::new(

@@ -2,7 +2,7 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use crate::domain_layer::service::validator::_in_context_for::domain_layer::entity::channel::_new_for_context::base_trait::BaseTrait as ChannelValidatorTrait;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::channel::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ChannelDataProviderPostgresql;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::extractor::Extractor;
 use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ChannelValidator;
@@ -19,7 +19,7 @@ impl Base {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
-    ) -> Result<ResponseData, BaseError> {
+    ) -> Result<ResponseData, ErrorAggregator> {
         let (
             json_access_web_token,
             channel_name,
@@ -34,11 +34,11 @@ impl Base {
         }
 
         if !ChannelValidator::is_valid_name(channel_name.as_str()) {
-            return Err(BaseError::InvalidArgumentError);
+            return Err(ErrorAggregator::InvalidArgumentError);
         }
         if let Some(ref requery_channel_name_) = requery_channel_name {
             if !ChannelValidator::is_valid_name(requery_channel_name_.as_str()) {
-                return Err(BaseError::InvalidArgumentError);
+                return Err(ErrorAggregator::InvalidArgumentError);
             }
         }
 

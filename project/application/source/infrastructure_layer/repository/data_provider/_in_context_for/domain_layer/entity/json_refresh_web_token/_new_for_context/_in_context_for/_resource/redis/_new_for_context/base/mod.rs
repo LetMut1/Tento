@@ -1,6 +1,6 @@
 use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::_new_for_context::common::Common;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::redis::_new_for_context::storage_key_resolver::StorageKeyResolver;
 use redis::aio::Connection;
 use redis::AsyncCommands;
@@ -12,7 +12,7 @@ impl Base {
         connection: &'a mut Connection, 
         application_user_id: &'a i64, 
         application_user_log_in_token_device_id: &'a str,
-    ) -> Result<Option<JsonRefreshWebToken<'static>>, BaseError> {
+    ) -> Result<Option<JsonRefreshWebToken<'static>>, ErrorAggregator> {
         match connection.get::<String, Option<Vec<u8>>>(StorageKeyResolver::get_5(application_user_id, application_user_log_in_token_device_id)).await? {
             Some(data) => {
                 let common = rmp_serde::from_read_ref::<'_, [u8], Common<'static>>(&data[..])?;
@@ -43,7 +43,7 @@ impl Base {
         connection: &'a mut Connection, 
         application_user_id: &'a i64, 
         application_user_log_in_token_device_id_registry: Vec<String>
-    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, BaseError> {
+    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, ErrorAggregator> {
         let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = Vec::new();
 
         for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {

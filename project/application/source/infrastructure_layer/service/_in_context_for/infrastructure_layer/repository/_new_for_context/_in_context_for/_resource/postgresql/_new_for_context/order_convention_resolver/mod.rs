@@ -1,5 +1,5 @@
 pub struct OrderConventionResolver;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 
 impl OrderConventionResolver {
     const ASC: &'static str = "ASC";
@@ -29,7 +29,7 @@ impl OrderConventionResolver {
 
     pub fn convert<'a>(
         order: &'a i8
-    ) -> Result<&'static str, BaseError> {
+    ) -> Result<&'static str, ErrorAggregator> {
         if Self::is_asc(order) {
             return Ok(Self::ASC);
         }
@@ -37,6 +37,6 @@ impl OrderConventionResolver {
             return Ok(Self::DESC);
         }
 
-        return Err(BaseError::InvalidArgumentError);
+        return Err(ErrorAggregator::InvalidArgumentError);
     }
 }

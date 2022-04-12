@@ -34,7 +34,7 @@ use super::_component::run_time_error::run_time_error::RunTimeError;
 use tokio_postgres::Error as PostgresqlError;
 
 #[derive(Debug)]
-pub enum BaseError {                // TODO Как понять и отследить Бэктрейс ошибки? (Например, ЛогикЕррор). Нужно ли отслеживать? Или же покрыть все функциональными тестами?
+pub enum ErrorAggregator {                // TODO Как понять и отследить Бэктрейс ошибки? (Например, ЛогикЕррор). Нужно ли отслеживать? Или же покрыть все функциональными тестами?
     EntityError {
         entity_error: EntityError
     },
@@ -47,7 +47,7 @@ pub enum BaseError {                // TODO Как понять и отслед�
     }
 }
 
-impl Display for BaseError {
+impl Display for ErrorAggregator {
     fn fmt<'a, 'b>(
         &'a self,
         formatter: &'b mut Formatter<'_>
@@ -55,39 +55,39 @@ impl Display for BaseError {
         match self {
             Self::LogicError {logic_error} => {
                 if *logic_error.is_unreachable() {
-                    write!(formatter, "BaseError-LogicError: [Unreachable] {}", logic_error.get_message())?;
+                    write!(formatter, "ErrorAggregator-LogicError: [Unreachable] {}", logic_error.get_message())?;
                 } else {
-                    write!(formatter, "BaseError-LogicError: {}", logic_error.get_message())?;
+                    write!(formatter, "ErrorAggregator-LogicError: {}", logic_error.get_message())?;
                 }
             },
             Self::RunTimeError {run_time_error} => {
                 match run_time_error {
                     RunTimeError::OtherError {other_error} => {
-                        write!(formatter, "BaseError-RunTimeError-OtherError-{}: {}", other_error.get_error_kind_description(), other_error.get_message())?;
+                        write!(formatter, "ErrorAggregator-RunTimeError-OtherError-{}: {}", other_error.get_error_kind_description(), other_error.get_message())?;
                     },
                     RunTimeError::ResourceError {resource_error} => {
                         match resource_error {
                             ResourceError::ConnectionPoolRedisError {bb8_redis_error} => {
-                                write!(formatter, "BaseError-RunTimeError-ResourceError-ConnectionPoolRedisError: {}", bb8_redis_error)?;
+                                write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-ConnectionPoolRedisError: {}", bb8_redis_error)?;
                             },
                             ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error} => {
-                                write!(formatter, "BaseError-RunTimeError-ResourceError-ConnectionPoolPostgresqlError: {}", bb8_postgresql_error)?;
+                                write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-ConnectionPoolPostgresqlError: {}", bb8_postgresql_error)?;
                             },
                             ResourceError::EmailServerError {email_server_error} => {
                                 match email_server_error {
                                     EmailServerError::EmailError {email_error} => {
-                                        write!(formatter, "BaseError-RunTimeError-ResourceError-EmailServerError-EmailError: {}", email_error)?;
+                                        write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-EmailServerError-EmailError: {}", email_error)?;
                                     },
                                     EmailServerError::SmtpError {smtp_error} => {
-                                        write!(formatter, "BaseError-RunTimeError-ResourceError-EmailServerError-SmtpError: {}", smtp_error)?;
+                                        write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-EmailServerError-SmtpError: {}", smtp_error)?;
                                     }
                                 }
                             },
                             ResourceError::PostgresqlError {postgresql_error} => {
-                                write!(formatter, "BaseError-RunTimeError-ResourceError-PostgresqlError: {}", postgresql_error)?;
-                            }
+                                write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-PostgresqlError: {}", postgresql_error)?;
+                            },
                             ResourceError::RedisError {redis_error} => {
-                                write!(formatter, "BaseError-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
+                                write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
                             }
                         }
                     }
@@ -100,9 +100,9 @@ impl Display for BaseError {
     }
 }
 
-impl Error for BaseError {}
+impl Error for ErrorAggregator {}
 
-impl From<EntityError> for BaseError {
+impl From<EntityError> for ErrorAggregator {
     fn from(
         entity_error: EntityError
     ) -> Self {
@@ -110,7 +110,7 @@ impl From<EntityError> for BaseError {
     }
 }
 
-impl From<LogicError> for BaseError {
+impl From<LogicError> for ErrorAggregator {
     fn from(
         logic_error: LogicError
     ) -> Self {
@@ -118,7 +118,7 @@ impl From<LogicError> for BaseError {
     }
 }
 
-impl From<IoError> for BaseError {
+impl From<IoError> for ErrorAggregator {
     fn from(
         io_error: IoError
     ) -> Self {
@@ -126,7 +126,7 @@ impl From<IoError> for BaseError {
     }
 }
 
-impl From<AnyhowError> for BaseError {
+impl From<AnyhowError> for ErrorAggregator {
     fn from(
         anyhow_error: AnyhowError
     ) -> Self {
@@ -134,7 +134,7 @@ impl From<AnyhowError> for BaseError {
     }
 }
 
-impl From<VarError> for BaseError {
+impl From<VarError> for ErrorAggregator {
     fn from(
         var_error: VarError
     ) -> Self {
@@ -142,7 +142,7 @@ impl From<VarError> for BaseError {
     }
 }
 
-impl From<SerdeJsonError> for BaseError {
+impl From<SerdeJsonError> for ErrorAggregator {
     fn from(
         serde_json_error: SerdeJsonError
     ) -> Self {
@@ -150,7 +150,7 @@ impl From<SerdeJsonError> for BaseError {
     }
 }
 
-impl From<RmpSerdeEncodeError> for BaseError {
+impl From<RmpSerdeEncodeError> for ErrorAggregator {
     fn from(
         rmp_serde_encode_error: RmpSerdeEncodeError
     ) -> Self {
@@ -158,7 +158,7 @@ impl From<RmpSerdeEncodeError> for BaseError {
     }
 }
 
-impl From<RmpSerdeDecodeError> for BaseError {
+impl From<RmpSerdeDecodeError> for ErrorAggregator {
     fn from(
         rmp_serde_decode_error: RmpSerdeDecodeError
     ) -> Self {
@@ -166,7 +166,7 @@ impl From<RmpSerdeDecodeError> for BaseError {
     }
 }
 
-impl From<Base64DecodeError> for BaseError {
+impl From<Base64DecodeError> for ErrorAggregator {
     fn from(
         base64_decode_error: Base64DecodeError
     ) -> Self {
@@ -174,7 +174,7 @@ impl From<Base64DecodeError> for BaseError {
     }
 }
 
-impl From<RegexError> for BaseError {
+impl From<RegexError> for ErrorAggregator {
     fn from(
         regex_error: RegexError
     ) -> Self {
@@ -182,7 +182,7 @@ impl From<RegexError> for BaseError {
     }
 }
 
-impl From<Argon2Error> for BaseError {
+impl From<Argon2Error> for ErrorAggregator {
     fn from(
         argon2_error: Argon2Error
     ) -> Self {
@@ -190,7 +190,7 @@ impl From<Argon2Error> for BaseError {
     }
 }
 
-impl From<DotenvError> for BaseError {
+impl From<DotenvError> for ErrorAggregator {
     fn from(
         dotenv_error: DotenvError
     ) -> Self {
@@ -198,7 +198,7 @@ impl From<DotenvError> for BaseError {
     }
 }
 
-impl From<Log4rsConfigErrors> for BaseError {
+impl From<Log4rsConfigErrors> for ErrorAggregator {
     fn from(
         log4rs_config_errors: Log4rsConfigErrors
     ) -> Self {
@@ -206,7 +206,7 @@ impl From<Log4rsConfigErrors> for BaseError {
     }
 }
 
-impl From<SetLoggerError> for BaseError {
+impl From<SetLoggerError> for ErrorAggregator {
     fn from(
         set_logger_error: SetLoggerError
     ) -> Self {
@@ -214,7 +214,7 @@ impl From<SetLoggerError> for BaseError {
     }
 }
 
-impl From<FromUtf8Error> for BaseError {
+impl From<FromUtf8Error> for ErrorAggregator {
     fn from(
         from_utf8_error: FromUtf8Error
     ) -> Self {
@@ -222,7 +222,7 @@ impl From<FromUtf8Error> for BaseError {
     }
 }
 
-impl From<ChronoParseError> for BaseError {
+impl From<ChronoParseError> for ErrorAggregator {
     fn from(
         chrono_parse_error: ChronoParseError
     ) -> Self {
@@ -230,7 +230,7 @@ impl From<ChronoParseError> for BaseError {
     }
 }
 
-impl From<HttpError> for BaseError {
+impl From<HttpError> for ErrorAggregator {
     fn from(
         http_error: HttpError
     ) -> Self {
@@ -238,7 +238,7 @@ impl From<HttpError> for BaseError {
     }
 }
 
-impl From<AddrParseError> for BaseError {
+impl From<AddrParseError> for ErrorAggregator {
     fn from(
         addr_parse_error: AddrParseError
     ) -> Self {
@@ -246,7 +246,7 @@ impl From<AddrParseError> for BaseError {
     }
 }
 
-impl From<HyperError> for BaseError {
+impl From<HyperError> for ErrorAggregator {
     fn from(
         hyper_error: HyperError
     ) -> Self {
@@ -254,7 +254,7 @@ impl From<HyperError> for BaseError {
     }
 }
 
-impl From<Bb8Error<RedisError>> for BaseError {
+impl From<Bb8Error<RedisError>> for ErrorAggregator {
     fn from(
         bb8_redis_error: Bb8Error<RedisError>
     ) -> Self {
@@ -262,7 +262,7 @@ impl From<Bb8Error<RedisError>> for BaseError {
     }
 }
 
-impl From<Bb8Error<PostgresqlError>> for BaseError {
+impl From<Bb8Error<PostgresqlError>> for ErrorAggregator {
     fn from(
         bb8_postgresql_error: Bb8Error<PostgresqlError>
     ) -> Self {
@@ -270,7 +270,7 @@ impl From<Bb8Error<PostgresqlError>> for BaseError {
     }
 }
 
-impl From<PostgresqlError> for BaseError {
+impl From<PostgresqlError> for ErrorAggregator {
     fn from(
         postgresql_error: PostgresqlError
     ) -> Self {
@@ -278,7 +278,7 @@ impl From<PostgresqlError> for BaseError {
     }
 }
 
-impl From<RedisError> for BaseError {
+impl From<RedisError> for ErrorAggregator {
     fn from(
         redis_error: RedisError
     ) -> Self {
@@ -286,7 +286,7 @@ impl From<RedisError> for BaseError {
     }
 }
 
-impl From<LettreEmailError> for BaseError {
+impl From<LettreEmailError> for ErrorAggregator {
     fn from(
         lettre_email_error: LettreEmailError
     ) -> Self {
@@ -294,7 +294,7 @@ impl From<LettreEmailError> for BaseError {
     }
 }
 
-impl From<LettreSmtpError> for BaseError {
+impl From<LettreSmtpError> for ErrorAggregator {
     fn from(
         lettre_smtp_error: LettreSmtpError
     ) -> Self {

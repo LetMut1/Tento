@@ -1,7 +1,6 @@
 use redis::RedisError;
 use tokio_postgres::Error as PostgresqlError;
 use bb8::RunError as Bb8Error;
-use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
@@ -34,5 +33,3 @@ impl Display for ResourceError {
         return Ok(());
     }
 }
-
-impl Error for ResourceError {}

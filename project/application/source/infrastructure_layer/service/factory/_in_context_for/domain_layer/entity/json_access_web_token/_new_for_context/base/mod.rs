@@ -1,14 +1,14 @@
 use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base_trait::BaseTrait as JsonAccessWebTokenFactoryTrait;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::service::date_time_resolver::DateTimeResolver;
 use std::borrow::Cow;
 
 pub struct Base;
 
 impl JsonAccessWebTokenFactoryTrait for Base {
-    type Error = BaseError;
+    type Error = ErrorAggregator;
 
     fn create_from_json_refresh_web_token<'a>(
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>

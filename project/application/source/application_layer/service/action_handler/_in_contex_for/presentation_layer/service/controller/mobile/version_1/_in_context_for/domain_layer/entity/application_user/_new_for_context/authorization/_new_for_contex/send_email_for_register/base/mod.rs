@@ -3,7 +3,7 @@ use bb8::Pool;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
-use crate::infrastructure_layer::error::base_error::base_error::BaseError;
+use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenDataProviderRedis;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenStateManagerRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender::EmailSender;
@@ -15,7 +15,7 @@ impl Base {
     pub async fn handle(
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
-    ) -> Result<(), BaseError> { // TODO  TODO  TODO  TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
+    ) -> Result<(), ErrorAggregator> { // TODO  TODO  TODO  TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let application_user_email = request_data.into_inner();
 
         let redis_connection = &mut *redis_connection_pool.get().await?;
@@ -37,7 +37,7 @@ impl Base {
             },
             None => {
                 return Err(
-                    BaseError::EntityError {
+                    ErrorAggregator::EntityError {
                         entity_error: EntityError::ApplicationUserRegistrationConfirmationTokenError {
                             application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::NotFound
                         }
