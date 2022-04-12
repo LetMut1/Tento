@@ -35,7 +35,7 @@ impl Base {
             match application_user.get_id() {
                 Some(application_user_id_) => {
                     application_user_id = application_user_id_;
-                },
+                }
                 None => {
                     return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
                 }
@@ -48,7 +48,7 @@ impl Base {
                     application_user_reset_password_token = application_user_reset_password_token_;
 
                     ApplicationUserResetPasswordTokenStateManagerRedis::update_expiration_time(redis_connection, &application_user_reset_password_token).await?;
-                },
+                }
                 None => {
                     application_user_reset_password_token = ApplicationUserResetPasswordToken::new(
                         application_user_id,

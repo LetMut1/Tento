@@ -59,40 +59,40 @@ impl Display for ErrorAggregator {
                 } else {
                     write!(formatter, "ErrorAggregator-LogicError: {}", logic_error.get_message())?;
                 }
-            },
+            }
             Self::RunTimeError {run_time_error} => {
                 match run_time_error {
                     RunTimeError::OtherError {other_error} => {
                         write!(formatter, "ErrorAggregator-RunTimeError-OtherError-{}: {}", other_error.get_error_kind_description(), other_error.get_message())?;
-                    },
+                    }
                     RunTimeError::ResourceError {resource_error} => {
                         match resource_error {
                             ResourceError::ConnectionPoolRedisError {bb8_redis_error} => {
                                 write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-ConnectionPoolRedisError: {}", bb8_redis_error)?;
-                            },
+                            }
                             ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error} => {
                                 write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-ConnectionPoolPostgresqlError: {}", bb8_postgresql_error)?;
-                            },
+                            }
                             ResourceError::EmailServerError {email_server_error} => {
                                 match email_server_error {
                                     EmailServerError::EmailError {email_error} => {
                                         write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-EmailServerError-EmailError: {}", email_error)?;
-                                    },
+                                    }
                                     EmailServerError::SmtpError {smtp_error} => {
                                         write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-EmailServerError-SmtpError: {}", smtp_error)?;
                                     }
                                 }
-                            },
+                            }
                             ResourceError::PostgresqlError {postgresql_error} => {
                                 write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-PostgresqlError: {}", postgresql_error)?;
-                            },
+                            }
                             ResourceError::RedisError {redis_error} => {
                                 write!(formatter, "ErrorAggregator-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
                             }
                         }
                     }
                 }
-            },
+            }
             _ => {}
         }
 

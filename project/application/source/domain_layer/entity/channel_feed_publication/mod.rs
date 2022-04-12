@@ -129,7 +129,7 @@ impl ChannelFeedPublication {
         match self.delete_on {
             Some(ref delete_on) => {
                 return Some(delete_on.as_str());
-            },
+            }
             None => {
                 return None;
             }

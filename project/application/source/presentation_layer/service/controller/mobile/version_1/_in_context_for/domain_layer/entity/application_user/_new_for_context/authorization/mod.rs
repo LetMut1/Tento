@@ -130,14 +130,14 @@ impl Authorization {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -150,19 +150,19 @@ impl Authorization {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             _ => {
                                                 unreachable!("{}", error);
                                             }
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
@@ -170,7 +170,7 @@ impl Authorization {
                             }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -180,7 +180,7 @@ impl Authorization {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -222,19 +222,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -250,14 +250,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -286,14 +286,14 @@ impl Authorization {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -306,19 +306,19 @@ impl Authorization {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             _ => {
                                                 unreachable!("{}", error);
                                             }
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
@@ -326,7 +326,7 @@ impl Authorization {
                             }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -336,7 +336,7 @@ impl Authorization {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -379,19 +379,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -407,14 +407,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -451,21 +451,21 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         &ApplicationUserError::InvalidEmail => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
@@ -477,15 +477,15 @@ impl Authorization {
                                             unreachable!("{}", error);
                                         }
                                     }
-                                },
+                                }
                                 _ => {
                                     unreachable!("{}", error);
                                 }
                             }
-                        },
+                        }
                         ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
-                        },
+                        }
                         ErrorAggregator::LogicError {logic_error: _} | 
                         ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
@@ -498,14 +498,14 @@ impl Authorization {
                 match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -549,19 +549,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -577,14 +577,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -614,14 +614,14 @@ impl Authorization {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -634,61 +634,61 @@ impl Authorization {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             &ApplicationUserError::InvalidNickname => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             &ApplicationUserError::InvalidPassword => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             &ApplicationUserError::NicknameAlreadyExist => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             _ => {
                                                 unreachable!("{}", error);
                                             }
                                         }
-                                    },
+                                    }
                                     &EntityError::ApplicationUserRegistrationConfirmationTokenError {ref application_user_registration_confirmation_token_error} => {
                                         match application_user_registration_confirmation_token_error {
                                             &ApplicationUserRegistrationConfirmationTokenError::NotFound => {
@@ -697,21 +697,21 @@ impl Authorization {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             &ApplicationUserRegistrationConfirmationTokenError::InvalidValue => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
@@ -720,15 +720,15 @@ impl Authorization {
                                                 }
                                             }
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
                                 }
-                            },
+                            }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -738,7 +738,7 @@ impl Authorization {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -782,19 +782,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -810,14 +810,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -853,28 +853,28 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         _ => {
                                             unreachable!("{}", error);
                                         }
         
                                     }
-                                },
+                                }
                                 _ => {
                                     unreachable!("{}", error);
                                 }
                             }
-                        },
+                        }
                         ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
-                        },
+                        }
                         ErrorAggregator::LogicError {logic_error: _} |
                         ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
@@ -887,14 +887,14 @@ impl Authorization {
                 match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -936,19 +936,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -964,14 +964,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1001,14 +1001,14 @@ impl Authorization {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -1024,27 +1024,27 @@ impl Authorization {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             _ => {
                                                 unreachable!("{}", error);
                                             }
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
                                 }
-                            },
+                            }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -1054,7 +1054,7 @@ impl Authorization {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1098,19 +1098,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -1126,14 +1126,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1162,14 +1162,14 @@ impl Authorization {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -1182,21 +1182,21 @@ impl Authorization {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             &ApplicationUserLogInTokenError::InvalidValue => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
@@ -1205,15 +1205,15 @@ impl Authorization {
                                                 }
                                             }
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
                                 }
-                            },
+                            }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -1223,7 +1223,7 @@ impl Authorization {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1265,19 +1265,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -1293,14 +1293,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1337,19 +1337,19 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         _ => {
                                             unreachable!("{}", error);
                                         }
                                     }
-                                },
+                                }
                                 &EntityError::ApplicationUserLogInTokenError {ref application_user_log_in_token_error} => {
                                     match application_user_log_in_token_error {
                                         &ApplicationUserLogInTokenError::NotFound => {
@@ -1358,27 +1358,27 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         _ => {
                                             unreachable!("{}", error);
                                         }
                                     }
-                                },
+                                }
                                 _ => {
                                     unreachable!("{}", error);
                                 }
                             }
-                        },
+                        }
                         ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
-                        },
+                        }
                         ErrorAggregator::LogicError {logic_error: _} |
                         ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
@@ -1391,14 +1391,14 @@ impl Authorization {
                 match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1442,19 +1442,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -1470,14 +1470,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1506,14 +1506,14 @@ impl Authorization {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -1526,19 +1526,19 @@ impl Authorization {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             _ => {
                                                 unreachable!("{}", error);
                                             }
                                         }
-                                    },
+                                    }
                                     &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
                                         match json_refresh_web_token_error {
                                             &JsonRefreshWebTokenError::NotFound => {
@@ -1547,7 +1547,7 @@ impl Authorization {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
@@ -1556,15 +1556,15 @@ impl Authorization {
                                                 }
                                             }
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
                                 }
-                            },
+                            }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -1574,7 +1574,7 @@ impl Authorization {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1616,19 +1616,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -1644,14 +1644,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1687,7 +1687,7 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
@@ -1696,7 +1696,7 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                },
+                                }
                                 &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                     match json_access_web_token_error {
                                         &JsonAccessWebTokenError::AlreadyExpired => {
@@ -1705,41 +1705,41 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         _ => {
                                             unreachable!("{}", error);
                                         }
                                     }
-                                },
+                                }
                                 _ => {
                                     unreachable!("{}", error);
                                 }
                             }
-                        },
+                        }
                         ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
-                        },
+                        }
                         ErrorAggregator::LogicError {logic_error: _} |
                         ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
@@ -1752,14 +1752,14 @@ impl Authorization {
                 match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1801,19 +1801,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -1829,14 +1829,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1872,7 +1872,7 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
@@ -1881,7 +1881,7 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                },
+                                }
                                 &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                     match json_access_web_token_error {
                                         &JsonAccessWebTokenError::AlreadyExpired => {
@@ -1890,41 +1890,41 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         _ => {
                                             unreachable!("{}", error);
                                         }
                                     }
-                                },
+                                }
                                 _ => {
                                     unreachable!("{}", error);
                                 }
                             }
-                        },
+                        }
                         ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
-                        },
+                        }
                         ErrorAggregator::LogicError {logic_error: _} |
                         ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
@@ -1937,14 +1937,14 @@ impl Authorization {
                 match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -1986,19 +1986,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -2014,14 +2014,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -2051,14 +2051,14 @@ impl Authorization {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -2071,28 +2071,28 @@ impl Authorization {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             _ => {
                                                 unreachable!("{}", error);
                                             }
         
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
                                 }
-                            },
+                            }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -2102,7 +2102,7 @@ impl Authorization {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -2146,19 +2146,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -2174,14 +2174,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -2218,34 +2218,34 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         &ApplicationUserError::InvalidPassword => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         _ => {
                                             unreachable!("{}", error);
                                         }
         
                                     }
-                                },
+                                }
                                 &EntityError::ApplicationUserResetPasswordTokenError {ref application_user_reset_password_token_error} => {
                                     match application_user_reset_password_token_error {
                                         &ApplicationUserResetPasswordTokenError::InvalidValue => {
@@ -2254,21 +2254,21 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         &ApplicationUserResetPasswordTokenError::NotFound => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
@@ -2277,15 +2277,15 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                },
+                                }
                                 _ => {
                                     unreachable!("{}", error);
                                 }
                             }
-                        },
+                        }
                         ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
-                        },
+                        }
                         ErrorAggregator::LogicError {logic_error: _} |
                         ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
@@ -2298,14 +2298,14 @@ impl Authorization {
                 match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -2349,19 +2349,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -2377,14 +2377,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -2421,19 +2421,19 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         _ => {
                                             unreachable!("{}", error);
                                         }
                                     }
-                                },
+                                }
                                 &EntityError::ApplicationUserResetPasswordTokenError {ref application_user_reset_password_token_error} => {
                                     match application_user_reset_password_token_error {
                                         &ApplicationUserResetPasswordTokenError::NotFound => {
@@ -2442,27 +2442,27 @@ impl Authorization {
                                             )) {
                                                 Ok(data) => {
                                                     return ResponseCreator::create_ok(data);
-                                                },
+                                                }
                                                 Err(error) => {
                                                     log::error!("{}", ErrorAggregator::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
                                             }
-                                        },
+                                        }
                                         _ => {
                                             unreachable!("{}", error);
                                         }
                                     }
-                                },
+                                }
                                 _ => {
                                     unreachable!("{}", error);
                                 }
                             }
-                        },
+                        }
                         ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
-                        },
+                        }
                         ErrorAggregator::LogicError {logic_error: _} |
                         ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
@@ -2475,14 +2475,14 @@ impl Authorization {
                 match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -2526,19 +2526,19 @@ impl Authorization {
                                         match serde_json::to_vec(&endpoint_response) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
-                                            },
+                                            }
                                             Err(error) => {
                                                 log::error!("{}", ErrorAggregator::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
                                         }
-                                    },
+                                    }
                                     None => {
                                         return Response::from_parts(response_parts, Body::empty());
-                                    },
+                                    }
                                 }
-                            },
+                            }
                             Err(error) => {
                                 match error {
                                     ErrorAggregator::EntityError {entity_error: _} |
@@ -2554,14 +2554,14 @@ impl Authorization {
                                 }
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         log::error!("{}", ErrorAggregator::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 

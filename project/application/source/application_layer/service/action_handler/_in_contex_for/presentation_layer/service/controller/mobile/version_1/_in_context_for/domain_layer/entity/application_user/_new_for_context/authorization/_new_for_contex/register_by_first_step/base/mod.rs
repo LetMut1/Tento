@@ -43,7 +43,7 @@ impl Base {
                         ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
                             redis_connection, &application_user_registration_confirmation_token
                         ).await?;
-                    },
+                    }
                     None => {
                         application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationToken::new(
                                 application_user_email.as_str(),

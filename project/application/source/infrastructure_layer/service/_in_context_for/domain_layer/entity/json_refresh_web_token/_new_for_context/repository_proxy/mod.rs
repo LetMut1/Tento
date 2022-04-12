@@ -25,7 +25,7 @@ impl RepositoryProxy {
                 } else {
                     DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id()).await?;
                 }
-            },
+            }
             None => {
                 let mut application_user_log_in_token_device_id_registry: Vec<String> = Vec::new();
                 application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id);

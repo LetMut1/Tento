@@ -13,10 +13,10 @@ impl TransactionManager {
         match transaction_isolation_level {
             TransactionIsolationLevel::ReadCommitted => {
                 query = query + " READ COMMITTED, READ WRITE, NOT DEFERRABLE;";
-            },
+            }
             TransactionIsolationLevel::RepeatableRead => {
                 query = query + " REPEATABLE READ, READ WRITE, NOT DEFERRABLE;";
-            },
+            }
             TransactionIsolationLevel::Serializable {read_only, deferrable} => {
                 query = query + " SERIALIZABLE,";
                 if read_only {

@@ -68,7 +68,7 @@ impl Base {
         match application_user.get_id() {
             Some(application_user_id_) => {
                 application_user_id = application_user_id_;
-            },
+            }
             None => {
                 return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
             }
@@ -110,19 +110,19 @@ impl Base {
                             column_value_registry_description = Some(column_value_registry_description_);
 
                             prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
-                        },
+                        }
                         None => {
                             return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")});
                         }
                     }
-                },
+                }
                 None => {
                     column_name_registry_description = Some("nickname".to_string());
 
                     match column_value_registry_description {
                         Some (_) => {
                             return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser.")});
-                        },
+                        }
                         None => {
                             column_value_registry_description = Some(
                                 "$".to_string() + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
@@ -149,19 +149,19 @@ impl Base {
                             column_value_registry_description = Some(column_value_registry_description_);
 
                             prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
-                        },
+                        }
                         None => {
                             return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")});
                         }
                     }
-                },
+                }
                 None => {
                     column_name_registry_description = Some("password_hash".to_string());
 
                     match column_value_registry_description {
                         Some (_) => {
                             return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser.")});
-                        },
+                        }
                         None => {
                             column_value_registry_description = Some(
                                 "$".to_string() + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
@@ -193,12 +193,12 @@ impl Base {
                                 au.id AS i;";
                         
                         prepared_statemant_parameter_convertation_resolver.add_parameter(application_user_id, Type::INT8);
-                    },
+                    }
                     None => {
                         return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")})
                     }
                 }
-            },
+            }
             None => {
                 return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns name description should exist for ApplicationUser update.")})
             }

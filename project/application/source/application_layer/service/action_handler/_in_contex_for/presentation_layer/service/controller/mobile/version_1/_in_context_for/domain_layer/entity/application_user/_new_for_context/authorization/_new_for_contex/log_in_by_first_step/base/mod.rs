@@ -42,7 +42,7 @@ impl Base {
                 match ApplicationUserDataProviderPostgresql::find_by_email(postgresql_connection, application_user_email_or_application_user_nickname.as_str()).await? {
                     Some(application_user_) => {
                         application_user = application_user_;
-                    },
+                    }
                     None => {
                         return Err(ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});
                     }
@@ -52,7 +52,7 @@ impl Base {
                     match ApplicationUserDataProviderPostgresql::find_by_nickname(postgresql_connection, application_user_email_or_application_user_nickname.as_str()).await? {
                         Some(application_user_) => {
                             application_user = application_user_;
-                        },
+                        }
                         None => {
                             return Err(ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});
                         }
@@ -69,7 +69,7 @@ impl Base {
                 match application_user.get_id() {
                     Some(application_user_id_) => {
                         application_user_id = application_user_id_;
-                    },
+                    }
                     None => {
                         return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
                     }
@@ -84,7 +84,7 @@ impl Base {
                         application_user_log_in_token = application_user_log_in_token_;
 
                         ApplicationUserLogInTokenStateManagerRedis::update_expiration_time(redis_connection, &application_user_log_in_token).await?;
-                    },
+                    }
                     None => {
                         application_user_log_in_token = ApplicationUserLogInToken::new(
                             application_user_id,

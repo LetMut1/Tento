@@ -34,7 +34,7 @@ impl Base {
                 )?;
         
                 return Ok(());
-            },
+            }
             None => {
                 return Err(
                     ErrorAggregator::EntityError {

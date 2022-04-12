@@ -15,7 +15,7 @@ impl RequestHeaderChecker {
                 if *header_value != ResponseCreator::HEADER_VALUE_CONTENT_TYPE {
                     return false;
                 }
-            },
+            }
             None => {
                 return false;
             }
@@ -25,7 +25,7 @@ impl RequestHeaderChecker {
                 if *header_value != ResponseCreator::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS {
                     return false;
                 }
-            },
+            }
             None => {
                 return false;
             }

@@ -32,7 +32,7 @@ impl Base {
                 );
 
                 return Ok(Some(json_refresh_web_token));
-            },
+            }
             None => {
                 return Ok(None);
             }

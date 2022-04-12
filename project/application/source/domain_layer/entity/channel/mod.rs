@@ -74,7 +74,7 @@ impl Channel {
         match self.description {
             Some(ref description) => {
                 return Some(description.as_str());
-            },
+            }
             None => {
                 return None;
             }

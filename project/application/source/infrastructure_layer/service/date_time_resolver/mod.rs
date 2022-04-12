@@ -29,7 +29,7 @@ impl DateTimeResolver {
         match date_time.checked_add_signed(Duration::minutes(*quantity_of_minutes)) {
             Some(date_time) => {
                 return Ok(date_time.format(Self::TIMESTAMP_FORMAT).to_string());
-            },
+            }
             None => {
                 return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Too big date must not be added.")});
             }

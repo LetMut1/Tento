@@ -48,14 +48,14 @@ impl Base {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -68,41 +68,41 @@ impl Base {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             _ => {
                                                 unreachable!("{}", error);
                                             }
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
                                 }
-                            },
+                            }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -112,7 +112,7 @@ impl Base {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -142,14 +142,14 @@ impl Base {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -162,41 +162,41 @@ impl Base {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             _ => {
                                                 unreachable!("{}", error);
                                             }
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
                                 }
-                            },
+                            }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -206,7 +206,7 @@ impl Base {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -236,14 +236,14 @@ impl Base {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -256,41 +256,41 @@ impl Base {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             _ => {
                                                 unreachable!("{}", error);
                                             }
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
                                 }
-                            },
+                            }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -300,7 +300,7 @@ impl Base {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 
@@ -330,14 +330,14 @@ impl Base {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
-                            },
+                            }
                             Err(error) => {
                                 log::error!("{}", ErrorAggregator::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
-                    },
+                    }
                     Err(error) => {
                         match error {
                             ErrorAggregator::EntityError {ref entity_error} => {
@@ -350,41 +350,41 @@ impl Base {
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
                                                         return ResponseCreator::create_ok(data);
-                                                    },
+                                                    }
                                                     Err(error) => {
                                                         log::error!("{}", ErrorAggregator::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
                                                 }
-                                            },
+                                            }
                                             _ => {
                                                 unreachable!("{}", error);
                                             }
                                         }
-                                    },
+                                    }
                                     _ => {
                                         unreachable!("{}", error);
                                     }
                                 }
-                            },
+                            }
                             ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
-                            },
+                            }
                             ErrorAggregator::LogicError {logic_error: _} |
                             ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
@@ -394,7 +394,7 @@ impl Base {
                         }
                     }
                 }
-            },
+            }
             Err(error) => {
                 log::error!("{}", ErrorAggregator::from(error));
 

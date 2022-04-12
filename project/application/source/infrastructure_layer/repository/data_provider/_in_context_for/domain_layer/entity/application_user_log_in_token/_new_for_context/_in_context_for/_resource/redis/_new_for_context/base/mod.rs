@@ -30,7 +30,7 @@ impl Base {
                 );
 
                 return Ok(Some(application_user_log_in_token));
-            },
+            }
             None => {
                 return Ok(None);
             }

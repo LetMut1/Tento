@@ -30,7 +30,7 @@ impl ResponseCreator {
         match data {
             Some(data_) => {
                 body = Body::from(data_);
-            },
+            }
             None => {
                 body = Body::empty()
             }

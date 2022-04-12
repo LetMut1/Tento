@@ -28,7 +28,7 @@ impl Base {
                 );
 
                 return Ok(Some(application_user_registration_confirmation_token));
-            },
+            }
             None => {
                 return Ok(None);
             }

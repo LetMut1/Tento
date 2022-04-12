@@ -25,7 +25,7 @@ enum EndpointResponse<S>
 {
     Data {
         data: Data<S>
-    },
+    }
     ErrorCode {
         error_code: String
     }
