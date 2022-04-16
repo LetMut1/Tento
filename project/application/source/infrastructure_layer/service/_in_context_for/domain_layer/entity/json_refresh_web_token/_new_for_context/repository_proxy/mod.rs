@@ -1,5 +1,5 @@
 use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenStateManagerRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::device_id_processing_storage::DeviceIdProcessingStorage;
@@ -11,7 +11,7 @@ impl RepositoryProxy {
     pub async fn create<'a>(
         connection: &'a mut Connection,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
-    ) -> Result<(), ErrorAggregator> {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_log_in_token_device_id = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
 
         match DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id()).await? {
@@ -27,7 +27,7 @@ impl RepositoryProxy {
                 }
             }
             None => {
-                let mut application_user_log_in_token_device_id_registry: Vec<String> = Vec::new();
+                let mut application_user_log_in_token_device_id_registry: Vec<String> = vec![];
                 application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id);
 
                 DeviceIdProcessingStorage::create(
@@ -44,7 +44,7 @@ impl RepositoryProxy {
     pub async fn update<'a>(
         connection: &'a mut Connection,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
-    ) -> Result<(), ErrorAggregator> {
+    ) -> Result<(), ErrorAuditor> {
         DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id()).await?;
 
         JsonRefreshWebTokenStateManagerRedis::update(connection, json_refresh_web_token).await?;
@@ -55,7 +55,7 @@ impl RepositoryProxy {
     pub async fn delete<'a>(
         connection: &'a mut Connection,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
-    ) -> Result<(), ErrorAggregator> {
+    ) -> Result<(), ErrorAuditor> {
         JsonRefreshWebTokenStateManagerRedis::delete(connection, json_refresh_web_token).await?;
 
         if let Some(mut application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id()).await? 
@@ -91,7 +91,7 @@ impl RepositoryProxy {
     pub async fn get_by_application_user_id<'a>(
         connection: &'a mut Connection,
         application_user_id: &'a i64
-    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, ErrorAggregator> {
+    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, ErrorAuditor> {
         if let Some(application_user_log_in_token_device_id_registry) = DeviceIdProcessingStorage::get(connection, application_user_id).await? {
             return JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id_registry(
                 connection, application_user_id, application_user_log_in_token_device_id_registry

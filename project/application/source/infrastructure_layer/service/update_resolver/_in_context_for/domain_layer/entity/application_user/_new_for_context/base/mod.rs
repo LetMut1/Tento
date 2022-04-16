@@ -1,6 +1,8 @@
 use crate::domain_layer::service::update_resolver::_in_context_for::domain_layer::entity::application_user::_new_for_context::base_trait::BaseTrait as UpdateResolverApplicationUserTrait;
-use crate::infrastructure_layer::error::error_aggregator::_component::logic_error::LogicError;
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::logic_error::LogicError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 
 pub struct Base {
     update_email: bool,
@@ -13,7 +15,7 @@ impl Base {
         update_email: bool,
         update_nickname: bool,
         update_password_hash: bool
-    ) -> Result<Self, ErrorAggregator> {
+    ) -> Result<Self, ErrorAuditor> {
         if update_email || update_nickname || update_password_hash {
             return  Ok(
                 Self {
@@ -24,7 +26,12 @@ impl Base {
             );
         }
 
-        return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "The columns allowing update should exist for ApplicationUser.")})
+        return Err(
+            ErrorAuditor::new(
+                ErrorAggregator::LogicError {logic_error: LogicError::new(false, "The columns allowing update should exist for ApplicationUser.")},
+                BacktracePart::new(line!(), file!(), None)
+            )
+        );
     }
 }
 

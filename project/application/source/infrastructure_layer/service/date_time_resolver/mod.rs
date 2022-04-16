@@ -1,8 +1,12 @@
 use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
-use crate::infrastructure_layer::error::error_aggregator::_component::logic_error::LogicError;
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::logic_error::LogicError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::other_error::OtherError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 
 pub struct DateTimeResolver;
 
@@ -11,8 +15,20 @@ impl DateTimeResolver {
 
     pub fn create_chrono_date_time_utc<'a>(
         date_time: &'a str
-    ) -> Result<DateTime<Utc>, ErrorAggregator> {
-        return Ok(DateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT)?.with_timezone(&Utc));
+    ) -> Result<DateTime<Utc>, ErrorAuditor> {
+        match DateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT) {
+            Ok(date_time) => {
+                return Ok(date_time.with_timezone(&Utc));
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
     }
 
     pub fn is_greater_or_equal_than<'a>(
@@ -25,20 +41,25 @@ impl DateTimeResolver {
     pub fn add_interval_from<'a>(
         date_time: &'a DateTime<Utc>,
         quantity_of_minutes: &'a i64
-    ) -> Result<String, ErrorAggregator> {
+    ) -> Result<String, ErrorAuditor> {
         match date_time.checked_add_signed(Duration::minutes(*quantity_of_minutes)) {
             Some(date_time) => {
                 return Ok(date_time.format(Self::TIMESTAMP_FORMAT).to_string());
             }
             None => {
-                return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Too big date must not be added.")});
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Too big date must not be added.")},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
             }
         };
     }
     
     pub fn add_interval_from_now<'a>(
         quantity_of_minutes: &'a i64
-    ) -> Result<String, ErrorAggregator> {
+    ) -> Result<String, ErrorAuditor> {
         return Self::add_interval_from(&Utc::now(), quantity_of_minutes)
     }
 

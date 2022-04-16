@@ -1,7 +1,7 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::channel::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ChannelDataProviderPostgresql;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::extractor::Extractor;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::order_convention_resolver::OrderConventionResolver;
@@ -19,7 +19,7 @@ impl Base {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
-    ) -> Result<ResponseData, ErrorAggregator> {
+    ) -> Result<ResponseData, ErrorAuditor> {
         let (
             json_access_web_token,
             channel_created_at,
@@ -31,12 +31,12 @@ impl Base {
 
         if let Some(ref channel_created_at_) = channel_created_at {
             if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
-                return Err(ErrorAggregator::InvalidArgumentError);
+                return Err(ErrorAuditor::InvalidArgumentError);
             }
         }
 
         if !OrderConventionResolver::can_convert(&order) {
-            return Err(ErrorAggregator::InvalidArgumentError);
+            return Err(ErrorAuditor::InvalidArgumentError);
         }
 
         if limit <= 0 || limit > Self::LIMIT {

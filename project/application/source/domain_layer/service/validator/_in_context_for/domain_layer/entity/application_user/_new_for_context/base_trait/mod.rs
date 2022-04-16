@@ -1,12 +1,13 @@
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_encoder_trait::PasswordEncoderTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_hash_resolver_trait::PasswordHashResolverTrait;
-use regex::Error as RegexError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::other_error::OtherError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use regex::Regex;
-use std::convert::From;
-use std::error::Error;
 
 pub trait BaseTrait {
-    type Error: Error + From<RegexError>;
     type PasswordHashResolver: PasswordHashResolverTrait;
 
     const EMAIL_MAXIMUM_LENGTH: u16 = 320;
@@ -16,11 +17,20 @@ pub trait BaseTrait {
 
     fn is_valid_email<'a>(          // TODO Перенести реализацию в инфраструктуру
         email: &'a str
-    ) -> Result<bool, Self::Error> {
-        let is_valid = Regex::new(r"\S+@\S+")?.is_match(email)
-            && email.chars().count() <= (Self::EMAIL_MAXIMUM_LENGTH as usize);
-
-        return Ok(is_valid);
+    ) -> Result<bool, ErrorAuditor> {
+        match Regex::new(r"\S+@\S+") {
+            Ok(regex) => {
+                return Ok(regex.is_match(email) && email.chars().count() <= (Self::EMAIL_MAXIMUM_LENGTH as usize))
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
     }
 
     fn is_valid_nickname<'a>(   // TODO Перенести реализацию в инфраструктуру

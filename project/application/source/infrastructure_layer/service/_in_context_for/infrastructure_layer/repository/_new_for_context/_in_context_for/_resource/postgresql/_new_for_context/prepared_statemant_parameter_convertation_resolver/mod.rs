@@ -10,8 +10,8 @@ impl<'a> PreparedStatementParameterConvertationResolver<'a> {
     pub fn new(
     ) -> Self {
         return Self {
-            parameter_registry: Vec::new(),
-            parameter_type_registry: Vec::new()
+            parameter_registry: vec![],
+            parameter_type_registry: vec![]
         };
     }
 

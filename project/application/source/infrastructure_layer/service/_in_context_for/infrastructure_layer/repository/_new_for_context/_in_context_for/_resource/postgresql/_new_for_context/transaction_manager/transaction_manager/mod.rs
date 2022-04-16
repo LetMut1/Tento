@@ -1,4 +1,8 @@
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use super::_component::transaction_isolation_level::TransactionIsolationLevel;
 use tokio_postgres::Client as Connection;
 
@@ -8,7 +12,7 @@ impl TransactionManager {
     pub async fn start_transaction<'a>(
         connection: &'a mut Connection,
         transaction_isolation_level: TransactionIsolationLevel
-    ) -> Result<Self, ErrorAggregator> {
+    ) -> Result<Self, ErrorAuditor> {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
         match transaction_isolation_level {
             TransactionIsolationLevel::ReadCommitted => {
@@ -32,7 +36,14 @@ impl TransactionManager {
             }
         }
 
-        connection.execute(query.as_str(), &[]).await?;
+        if let Err(error) = connection.execute(query.as_str(), &[]).await {
+            return Err(
+                ErrorAuditor::new(
+                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
 
         return Ok(Self);
     }
@@ -40,10 +51,17 @@ impl TransactionManager {
     pub async fn commit_transaction<'a>(
         self,
         connection: &'a mut Connection
-    ) -> Result<(), ErrorAggregator> {
+    ) -> Result<(), ErrorAuditor> {
         let query = "COMMIT;";
 
-        connection.execute(query, &[]).await?;
+        if let Err(error) = connection.execute(query, &[]).await {
+            return Err(
+                ErrorAuditor::new(
+                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
 
         return Ok(());
     }
@@ -51,10 +69,17 @@ impl TransactionManager {
     pub async fn rollback_transaction<'a>(
         self,
         connection: &'a mut Connection
-    ) -> Result<(), ErrorAggregator> {
+    ) -> Result<(), ErrorAuditor> {
         let query = "ROLLBACK;";
 
-        connection.execute(query, &[]).await?;
+        if let Err(error) = connection.execute(query, &[]).await {
+            return Err(
+                ErrorAuditor::new(
+                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
 
         return Ok(());
     }

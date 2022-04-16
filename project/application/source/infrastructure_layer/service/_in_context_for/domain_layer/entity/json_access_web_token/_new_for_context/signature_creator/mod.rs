@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::signature_creator_trait::SignatureCreatorTrait;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crypto::hmac::Hmac;
@@ -9,13 +9,13 @@ pub struct SignatureCreator;
 
 impl SignatureCreator {
     fn get_configured_hmac(
-    ) -> Result<Hmac<Sha512>, ErrorAggregator> {
+    ) -> Result<Hmac<Sha512>, ErrorAuditor> {
         return Ok(Hmac::new(Sha512::new(), EnvironmentVariableResolver::get_security_jawt_signature_encoding_private_key()?.as_bytes()));
     }
 }
 
 impl SignatureCreatorTrait for SignatureCreator {
-    type Error = ErrorAggregator;
+    type Error = ErrorAuditor;
 
     fn create<'a>(
         header: &'a str,

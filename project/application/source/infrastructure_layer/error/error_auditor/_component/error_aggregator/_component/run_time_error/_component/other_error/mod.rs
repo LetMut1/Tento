@@ -5,28 +5,19 @@ use std::fmt::Result;
 
 #[derive(Debug)]
 pub struct OtherError {
-    error_kind_description: &'static str,
     message: String
 }
 
 impl OtherError {
     pub fn new<E>(
-        error_kind_description: &'static str,
         error: E
     ) -> Self
     where
         E: Error
     {
         return Self {
-            error_kind_description,
             message: format!("{}", error)
         };
-    }
-
-    pub fn get_error_kind_description<'a>(
-        &'a self
-    ) -> &'static str {
-        return self.error_kind_description;
     }
 
     pub fn get_message<'a>(

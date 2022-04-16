@@ -1,5 +1,9 @@
 use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::redis::_new_for_context::storage_key_resolver::StorageKeyResolver;
 use redis::aio::Connection;
 use redis::AsyncCommands;
@@ -13,12 +17,19 @@ impl DeviceIdProcessingStorage {
         connection: &'a mut Connection, 
         application_user_id: &'a i64,
         application_user_log_in_token_device_id_registry: Vec<String>
-    ) -> Result<(), ErrorAggregator> {
-        connection.set_ex::<String, String, ()>(
+    ) -> Result<(), ErrorAuditor> {
+        if let Err(error) = connection.set_ex::<String, String, ()>(
             StorageKeyResolver::get_6(application_user_id), 
             application_user_log_in_token_device_id_registry.join(Self::SEPARATOR),
             (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
-        ).await?;
+        ).await {
+            return Err(
+                ErrorAuditor::new(
+                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
 
         return Ok(());
     }
@@ -27,8 +38,8 @@ impl DeviceIdProcessingStorage {
         connection: &'a mut Connection, 
         application_user_id: &'a i64,
         application_user_log_in_token_device_id_registry: Vec<String>
-    ) -> Result<(), ErrorAggregator> {
-        Self::create(connection, application_user_id, application_user_log_in_token_device_id_registry).await?;
+    ) -> Result<(), ErrorAuditor> {
+        Self::create(connection, application_user_id, application_user_log_in_token_device_id_registry).await?;     // TODO )?
 
         return Ok(());
     }
@@ -36,10 +47,17 @@ impl DeviceIdProcessingStorage {
     pub async fn delete<'a>(
         connection: &'a mut Connection,
         application_user_id: &'a i64,
-    ) -> Result<(), ErrorAggregator> {
-        connection.del::<String, ()>(
+    ) -> Result<(), ErrorAuditor> {
+        if let Err(error) = connection.del::<String, ()>(
             StorageKeyResolver::get_6(application_user_id)
-        ).await?;
+        ).await {
+            return Err(
+                ErrorAuditor::new(
+                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
         
         return Ok(());
     }
@@ -47,11 +65,18 @@ impl DeviceIdProcessingStorage {
     pub async fn update_expiration_time<'a>(
         connection: &'a mut Connection,
         application_user_id: &'a i64
-    ) -> Result<(), ErrorAggregator> {
-        connection.expire::<String, ()>(
+    ) -> Result<(), ErrorAuditor> {
+        if let Err(error) = connection.expire::<String, ()>(
             StorageKeyResolver::get_6(application_user_id),
             (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
-        ).await?;
+        ).await {
+            return Err(
+                ErrorAuditor::new(
+                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
 
         return Ok(());
     }
@@ -59,20 +84,31 @@ impl DeviceIdProcessingStorage {
     pub async fn get<'a>(
         connection: &'a mut Connection,
         application_user_id: &'a i64
-    ) -> Result<Option<Vec<String>>, ErrorAggregator> {
-        if let Some(application_user_log_in_token_device_id_sequence) = connection.get::<String, Option<String>>(
+    ) -> Result<Option<Vec<String>>, ErrorAuditor> {
+        match connection.get::<String, Option<String>>(
             StorageKeyResolver::get_6(application_user_id)
-        ).await?
-        {
-            let mut application_user_log_in_token_device_id_registry: Vec<String> = Vec::new();
-
-            for application_user_log_in_token_device_id in application_user_log_in_token_device_id_sequence.split::<'_, &'_ str>(Self::SEPARATOR) {
-                application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id.to_string());
-            }
-
-            return Ok(Some(application_user_log_in_token_device_id_registry));
-        }
+        ).await {
+            Ok(application_user_log_in_token_device_id_sequence) => {
+                if let Some(application_user_log_in_token_device_id_sequence_) = application_user_log_in_token_device_id_sequence {
+                    let mut application_user_log_in_token_device_id_registry: Vec<String> = vec![];
         
-        return Ok(None);
+                    for application_user_log_in_token_device_id in application_user_log_in_token_device_id_sequence_.split::<'_, &'_ str>(Self::SEPARATOR) {
+                        application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id.to_string());
+                    }
+        
+                    return Ok(Some(application_user_log_in_token_device_id_registry));
+                }
+                
+                return Ok(None);
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
     }
 }

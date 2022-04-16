@@ -3,7 +3,11 @@ use bb8::Pool;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base_trait::BaseTrait as ApplicationUserValidatorTrait;
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
 use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::Base as RequestData;
@@ -16,17 +20,34 @@ impl Base {
     pub async fn handle(
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         request_data: RequestData
-    ) -> Result<ResponseData, ErrorAggregator> {
+    ) -> Result<ResponseData, ErrorAuditor> {
         let application_user_nickname = request_data.into_inner();
 
         if ApplicationUserValidator::is_valid_nickname(application_user_nickname.as_str()) {
-            let result = ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(
-                &mut *postgresql_connection_pool.get().await?, application_user_nickname.as_str()
-            ).await?;
-
-            return Ok(ResponseData::new(result));
+            match postgresql_connection_pool.get().await {
+                Ok(mut pooled_connection) => {
+                    let result = ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(
+                        &mut *pooled_connection, application_user_nickname.as_str()
+                    ).await?;
+        
+                    return Ok(ResponseData::new(result));
+                }
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            }
         }
 
-        return Err(ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidNickname}});
+        return Err(
+            ErrorAuditor::new(
+                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidNickname}},
+                BacktracePart::new(line!(), file!(), None)
+            )
+        );
     }
 }

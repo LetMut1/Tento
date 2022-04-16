@@ -3,7 +3,7 @@ use bb8::Pool;
 use crate::domain_layer::entity::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonAccessWebTokenBlackListStateManagerRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::extractor::Extractor;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
@@ -15,7 +15,7 @@ impl Base {
     pub async fn handle<'a>(
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
-    ) -> Result<(), ErrorAggregator> {
+    ) -> Result<(), ErrorAuditor> {
         let redis_connection  = &mut *redis_connection_pool.get().await?;
 
         let json_access_web_token = request_data.into_inner();
@@ -32,6 +32,6 @@ impl Base {
             return Ok(());
         }
 
-        return Err(ErrorAggregator::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}});
+        return Err(ErrorAuditor::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}});
     }
 }

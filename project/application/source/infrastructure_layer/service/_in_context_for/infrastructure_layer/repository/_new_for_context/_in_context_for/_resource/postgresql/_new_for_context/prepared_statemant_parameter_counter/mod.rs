@@ -1,5 +1,7 @@
-use crate::infrastructure_layer::error::error_aggregator::_component::logic_error::LogicError;
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::logic_error::LogicError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 
 pub struct PreparedStatementParameterCounter {
     counter: u8
@@ -15,9 +17,14 @@ impl PreparedStatementParameterCounter {
 
     pub fn get_next<'a>(
         &'a mut self
-    ) -> Result<&'a u8, ErrorAggregator> {
+    ) -> Result<&'a u8, ErrorAuditor> {
         if self.counter == u8::max_value() {
-            return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Out of range for `u8` type.")});
+            return Err(
+                ErrorAuditor::new(
+                    ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Out of range for `u8` type.")},
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
         }
 
         self.counter = self.counter + 1;

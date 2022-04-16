@@ -1,1 +1,1 @@
-pub mod error_aggregator;
+pub mod error_auditor;

@@ -1,7 +1,11 @@
 use crate::domain_layer::entity::application_user::ApplicationUser;
 use crate::domain_layer::service::update_resolver::_in_context_for::domain_layer::entity::application_user::_new_for_context::base_trait::BaseTrait as UpdateResolverApplicationUserTrait;
-use crate::infrastructure_layer::error::error_aggregator::_component::logic_error::LogicError;
-use crate::infrastructure_layer::error::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::logic_error::LogicError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_counter::PreparedStatementParameterCounter;
 use crate::infrastructure_layer::service::update_resolver::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as UpdateResolverApplicationUser;
@@ -14,7 +18,7 @@ impl Base {
     pub async fn create<'a>(
         connection: &'a mut Connection,
         application_user: &'a ApplicationUser
-    ) -> Result<i64, ErrorAggregator> {
+    ) -> Result<i64, ErrorAuditor> {
         let email = application_user.get_email();
 
         let nickanme = application_user.get_nickname();
@@ -49,28 +53,75 @@ impl Base {
             .add_parameter(&password_hash, Type::TEXT)
             .add_parameter(&created_at, Type::TEXT);
 
-        let statement = connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await?;
+        match connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+            Ok(ref statement) => {
+                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                    Ok(row_registry) => {
+                        if row_registry.is_empty() {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgesql database.")},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
 
-        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await?;
-        if row_registry.is_empty() {
-            return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgesql database.")});
+                        let id: i64;
+                        match row_registry[0].try_get::<'_, usize, i64>(0) {
+                            Ok(id_) => {
+                                id = id_;
+                            }
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        }
+
+                
+                        return Ok(id);
+                    }
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
         }
-
-        return Ok(row_registry[0].try_get::<'_, usize, i64>(0)?);
     }
 
     pub async fn update<'a>(
         connection: &'a mut Connection,
         application_user: &'a ApplicationUser,
         update_resolver: UpdateResolverApplicationUser
-    ) -> Result<(), ErrorAggregator> {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_id: &'_ i64;
         match application_user.get_id() {
             Some(application_user_id_) => {
                 application_user_id = application_user_id_;
             }
             None => {
-                return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")});
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::LogicError {logic_error: LogicError::new(false, "The application_user_id should exist.")},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
             }
         }
 
@@ -103,7 +154,7 @@ impl Base {
                     column_name_registry_description = Some(column_name_registry_description_);
 
                     match column_value_registry_description {
-                        Some (mut column_value_registry_description_) => {
+                        Some(mut column_value_registry_description_) => {
                             column_value_registry_description_ = column_value_registry_description_+ ", $"
                                 + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
 
@@ -112,7 +163,12 @@ impl Base {
                             prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
                         }
                         None => {
-                            return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")});
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
                         }
                     }
                 }
@@ -120,8 +176,13 @@ impl Base {
                     column_name_registry_description = Some("nickname".to_string());
 
                     match column_value_registry_description {
-                        Some (_) => {
-                            return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser.")});
+                        Some(_) => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser update.")},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
                         }
                         None => {
                             column_value_registry_description = Some(
@@ -142,7 +203,7 @@ impl Base {
                     column_name_registry_description = Some(column_name_registry_description_);
 
                     match column_value_registry_description {
-                        Some (mut column_value_registry_description_) => {
+                        Some(mut column_value_registry_description_) => {
                             column_value_registry_description_ = column_value_registry_description_+ ", $"
                                 + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
 
@@ -151,7 +212,12 @@ impl Base {
                             prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
                         }
                         None => {
-                            return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")});
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
                         }
                     }
                 }
@@ -159,8 +225,13 @@ impl Base {
                     column_name_registry_description = Some("password_hash".to_string());
 
                     match column_value_registry_description {
-                        Some (_) => {
-                            return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser.")});
+                        Some(_) => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser update.")},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
                         }
                         None => {
                             column_value_registry_description = Some(
@@ -195,22 +266,58 @@ impl Base {
                         prepared_statemant_parameter_convertation_resolver.add_parameter(application_user_id, Type::INT8);
                     }
                     None => {
-                        return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")})
+                        return Err(
+                            ErrorAuditor::new(
+                                ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")},
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
                     }
                 }
             }
             None => {
-                return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns name description should exist for ApplicationUser update.")})
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns name description should exist for ApplicationUser update.")},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
             }
         }
 
-        let statement = connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await?;
-
-        let row_registry = connection.query(&statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await?;
-        if row_registry.is_empty() {
-            return Err(ErrorAggregator::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgesql database.")});
+        match connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+            Ok(ref statement) => {
+                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                    Ok(row_registry) => {
+                        if row_registry.is_empty() {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgesql database.")},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                
+                        return Ok(());
+                    }
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error}}},
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error}}},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
         }
-
-        return Ok(());
     }
 }
