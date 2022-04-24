@@ -341,10 +341,12 @@ impl Base {
     ) -> Result<Response<Body>, HyperError> {
         match (request.uri().path(), request.method()) {
             // Area for existing routes with not authorized user.
-            ("/v1/m/au/cnfe", &Method::GET) => {
+            // GET functional. This is because there is a restriction on mobile frontend.
+            ("/v1/m/au/cnfe", &Method::POST) => {
                 return Ok(ControllerApplicationUserAuthorization::check_nickname_for_existing(request, postgresql_connection_pool).await);
             }
-            ("/v1/m/au/cefe", &Method::GET) => {
+            // GET functional. This is because there is a restriction on mobile frontend.
+            ("/v1/m/au/cefe", &Method::POST) => {
                 return Ok(ControllerApplicationUserAuthorization::check_email_for_existing(request, postgresql_connection_pool).await);
             }
             ("/v1/m/au/rbfs", &Method::POST) => {
@@ -384,16 +386,20 @@ impl Base {
             ("/v1/m/au/lofad", &Method::POST) => {
                 return Ok(ControllerApplicationUserAuthorization::log_out_from_all_devices(request, redis_connection_pool).await);
             }
-            ("/v1/m/c/gmbn", &Method::GET) => {
+            // GET functional. This is because there is a restriction on mobile frontend.
+            ("/v1/m/c/gmbn", &Method::POST) => {
                 return Ok(ControllerChannelBase::get_many_by_name(request, postgresql_connection_pool, redis_connection_pool).await);
             }
-            ("/v1/m/c/gmbca", &Method::GET) => {
+            // GET functional. This is because there is a restriction on mobile frontend.
+            ("/v1/m/c/gmbca", &Method::POST) => {
                 return Ok(ControllerChannelBase::get_many_by_created_at(request, postgresql_connection_pool, redis_connection_pool).await);
             }
-            ("/v1/m/c/gmbsq", &Method::GET) => {
+            // GET functional. This is because there is a restriction on mobile frontend.
+            ("/v1/m/c/gmbsq", &Method::POST) => {
                 return Ok(ControllerChannelBase::get_many_by_subscribers_quantity(request, postgresql_connection_pool, redis_connection_pool).await);
             }
-            ("/v1/m/c/gmbir", &Method::GET) => {
+            // GET functional. This is because there is a restriction on mobile frontend.
+            ("/v1/m/c/gmbir", &Method::POST) => {
                 return Ok(ControllerChannelBase::get_many_by_id_registry(request, postgresql_connection_pool, redis_connection_pool).await);
             }
             // Area for not existing routes.
@@ -401,10 +407,12 @@ impl Base {
                 #[cfg(feature="facilitate_non_automatic_functional_testing")]
                 match (request.uri().path(), request.method()) {
                     // Area for existing routes with not authorized user.
-                    ("/v1/m/au/cnfe_", &Method::GET) => {
+                    // GET functional. This is because there is a restriction on mobile frontend.
+                    ("/v1/m/au/cnfe_", &Method::POST) => {
                         return Ok(ControllerApplicationUserAuthorization::check_nickname_for_existing_(request, postgresql_connection_pool).await);
                     }
-                    ("/v1/m/au/cefe_", &Method::GET) => {
+                    // GET functional. This is because there is a restriction on mobile frontend.
+                    ("/v1/m/au/cefe_", &Method::POST) => {
                         return Ok(ControllerApplicationUserAuthorization::check_email_for_existing_(request, postgresql_connection_pool).await);
                     }
                     ("/v1/m/au/rbfs_", &Method::POST) => {

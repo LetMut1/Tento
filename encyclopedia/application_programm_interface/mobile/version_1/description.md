@@ -50,7 +50,11 @@ enum Data<S>
 
 # Area for authorized application user. API:
  - Every endpoint at this area requires an existing of `json access webtoken`
- - Response of every endpoint at this area can contain `error_code` equals to `enjsacweto03`, `enjsacweto05`.
+ - Response of every endpoint at this area can contain `error_code` equals to 
+ ```
+  - enjsacweto03
+  - enjsacweto05
+ ```
  - ## /v1/m/au/lofod POST
 ```
 Deauthorizes application user from one device.
@@ -81,7 +85,7 @@ Error codes:
 - enjsreweto02
 ```
 # Area for not authorized application user. API:
- - ## /v1/m/au/cnfe GET
+ - ## /v1/m/au/cnfe POST (GET functional)
 ```
 Checks application user nickname for existing.
 
@@ -98,7 +102,7 @@ struct Base {
 Error codes:
 - enapus06
 ```
- - ## /v1/m/au/cefe GET
+ - ## /v1/m/au/cefe POST (GET functional)
 ```
 Checks application user email for existing.
 
