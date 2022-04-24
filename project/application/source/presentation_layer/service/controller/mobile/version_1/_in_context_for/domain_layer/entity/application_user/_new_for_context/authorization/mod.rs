@@ -24,7 +24,7 @@ use crate::domain_layer::error::entity_error::_component::_in_context_for::domai
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
-use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::Base as RequestDataCheckEmailForExisting;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::Base as RequestDataCheckNicknameForExisting;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as RequestDataLogInByFirstStep;
@@ -132,15 +132,15 @@ impl Authorization {
                                 return ResponseCreator::create_ok(data);
                             }
                             Err(error) => {
-                                log::error!("{}", ErrorAuditor::from(error));
+                                // log::error!("{}", ErrorAuditor::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
                     Err(error) => {
-                        match error {
-                            ErrorAuditor::EntityError {ref entity_error} => {
+                        match error.get_error_aggregator() {
+                            &ErrorAggregator::EntityError {ref entity_error} => {
                                 match entity_error {
                                     &EntityError::ApplicationUserError {ref application_user_error} => {
                                         match application_user_error {
@@ -152,7 +152,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -168,11 +168,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ErrorAuditor::InvalidArgumentError => {
+                            &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            ErrorAuditor::LogicError {logic_error: _} |
-                            ErrorAuditor::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError {logic_error: _} |
+                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -182,7 +182,7 @@ impl Authorization {
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -224,7 +224,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -236,13 +236,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -252,14 +252,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -288,15 +288,15 @@ impl Authorization {
                                 return ResponseCreator::create_ok(data);
                             }
                             Err(error) => {
-                                log::error!("{}", ErrorAuditor::from(error));
+                                // log::error!("{}", ErrorAuditor::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
                     Err(error) => {
-                        match error {
-                            ErrorAuditor::EntityError {ref entity_error} => {
+                        match error.get_error_aggregator() {
+                            &ErrorAggregator::EntityError {ref entity_error} => {
                                 match entity_error {
                                     &EntityError::ApplicationUserError {ref application_user_error} => {
                                         match application_user_error {
@@ -308,7 +308,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -324,11 +324,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ErrorAuditor::InvalidArgumentError => {
+                            &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            ErrorAuditor::LogicError {logic_error: _} |
-                            ErrorAuditor::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError {logic_error: _} |
+                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -338,7 +338,7 @@ impl Authorization {
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -381,7 +381,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -393,13 +393,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -409,14 +409,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -440,8 +440,8 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataRegisterByFirstStep>(bytes.chunk()) {
             Ok(request_data) => {
                 if let Err(error) = ActionHandlerRegisterByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
-                    match error {
-                        ErrorAuditor::EntityError {ref entity_error} => {
+                    match error.get_error_aggregator() {
+                        &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
                                 &EntityError::ApplicationUserError {ref application_user_error} => {
                                     match application_user_error {
@@ -453,7 +453,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -467,7 +467,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -483,11 +483,11 @@ impl Authorization {
                                 }
                             }
                         }
-                        ErrorAuditor::InvalidArgumentError => {
+                        &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        ErrorAuditor::LogicError {logic_error: _} | 
-                        ErrorAuditor::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError {logic_error: _} | 
+                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
@@ -500,14 +500,14 @@ impl Authorization {
                         return ResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -551,7 +551,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -563,13 +563,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -579,14 +579,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -616,15 +616,15 @@ impl Authorization {
                                 return ResponseCreator::create_ok(data);
                             }
                             Err(error) => {
-                                log::error!("{}", ErrorAuditor::from(error));
+                                // log::error!("{}", ErrorAuditor::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
                     Err(error) => {
-                        match error {
-                            ErrorAuditor::EntityError {ref entity_error} => {
+                        match error.get_error_aggregator() {
+                            &ErrorAggregator::EntityError {ref entity_error} => {
                                 match entity_error {
                                     &EntityError::ApplicationUserError {ref application_user_error} => {
                                         match application_user_error {
@@ -636,7 +636,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -650,7 +650,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -664,7 +664,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -678,7 +678,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -699,7 +699,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -713,7 +713,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -726,11 +726,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ErrorAuditor::InvalidArgumentError => {
+                            &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            ErrorAuditor::LogicError {logic_error: _} |
-                            ErrorAuditor::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError {logic_error: _} |
+                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -740,7 +740,7 @@ impl Authorization {
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -784,7 +784,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -796,13 +796,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -812,14 +812,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -842,8 +842,8 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForRegister>(bytes.chunk()) {
             Ok(request_data) => {
                 if let Err(error) = ActionHandlerSendEmailForRegister::handle(redis_connection_pool, request_data).await {
-                    match error {
-                        ErrorAuditor::EntityError {ref entity_error} => {
+                    match error.get_error_aggregator() {
+                        &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
                                 &EntityError::ApplicationUserRegistrationConfirmationTokenError {ref application_user_registration_confirmation_token_error} => {
                                     match application_user_registration_confirmation_token_error {
@@ -855,7 +855,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -872,11 +872,11 @@ impl Authorization {
                                 }
                             }
                         }
-                        ErrorAuditor::InvalidArgumentError => {
+                        &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        ErrorAuditor::LogicError {logic_error: _} |
-                        ErrorAuditor::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError {logic_error: _} |
+                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
@@ -889,14 +889,14 @@ impl Authorization {
                         return ResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -938,7 +938,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -950,13 +950,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -966,14 +966,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1003,15 +1003,15 @@ impl Authorization {
                                 return ResponseCreator::create_ok(data);
                             }
                             Err(error) => {
-                                log::error!("{}", ErrorAuditor::from(error));
+                                // log::error!("{}", ErrorAuditor::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
                     Err(error) => {
-                        match error {
-                            ErrorAuditor::EntityError {ref entity_error} => {
+                        match error.get_error_aggregator() {
+                            &ErrorAggregator::EntityError {ref entity_error} => {
                                 match entity_error {
                                     &EntityError::ApplicationUserError {ref application_user_error} => {
                                         match application_user_error {
@@ -1026,7 +1026,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -1042,11 +1042,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ErrorAuditor::InvalidArgumentError => {
+                            &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            ErrorAuditor::LogicError {logic_error: _} |
-                            ErrorAuditor::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError {logic_error: _} |
+                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
             
                                 return ResponseCreator::create_internal_server_error();
@@ -1056,7 +1056,7 @@ impl Authorization {
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1100,7 +1100,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -1112,13 +1112,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1128,14 +1128,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1164,15 +1164,15 @@ impl Authorization {
                                 return ResponseCreator::create_ok(data);
                             }
                             Err(error) => {
-                                log::error!("{}", ErrorAuditor::from(error));
+                                // log::error!("{}", ErrorAuditor::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
                     Err(error) => {
-                        match error {
-                            ErrorAuditor::EntityError {ref entity_error} => {
+                        match error.get_error_aggregator() {
+                            &ErrorAggregator::EntityError {ref entity_error} => {
                                 match entity_error {
                                     &EntityError::ApplicationUserLogInTokenError {ref application_user_log_in_token_error} => {
                                         match application_user_log_in_token_error {
@@ -1184,7 +1184,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -1198,7 +1198,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -1211,11 +1211,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ErrorAuditor::InvalidArgumentError => {
+                            &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            ErrorAuditor::LogicError {logic_error: _} |
-                            ErrorAuditor::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError {logic_error: _} |
+                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -1225,7 +1225,7 @@ impl Authorization {
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1267,7 +1267,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -1279,13 +1279,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1295,14 +1295,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1326,8 +1326,8 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForLogIn>(bytes.chunk()) {
             Ok(request_data) => {
                 if let Err(error) = ActionHandlerSendEmailForLogIn::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
-                    match error {
-                        ErrorAuditor::EntityError {ref entity_error} => {
+                    match error.get_error_aggregator() {
+                        &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
                                 &EntityError::ApplicationUserError {ref application_user_error} => {
                                     match application_user_error {
@@ -1339,7 +1339,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -1360,7 +1360,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -1376,11 +1376,11 @@ impl Authorization {
                                 }
                             }
                         }
-                        ErrorAuditor::InvalidArgumentError => {
+                        &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        ErrorAuditor::LogicError {logic_error: _} |
-                        ErrorAuditor::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError {logic_error: _} |
+                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
@@ -1393,14 +1393,14 @@ impl Authorization {
                         return ResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1444,7 +1444,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -1456,13 +1456,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1472,14 +1472,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1508,15 +1508,15 @@ impl Authorization {
                                 return ResponseCreator::create_ok(data);
                             }
                             Err(error) => {
-                                log::error!("{}", ErrorAuditor::from(error));
+                                // log::error!("{}", ErrorAuditor::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
                     Err(error) => {
-                        match error {
-                            ErrorAuditor::EntityError {ref entity_error} => {
+                        match error.get_error_aggregator() {
+                            &ErrorAggregator::EntityError {ref entity_error} => {
                                 match entity_error {
                                     &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
                                         match json_access_web_token_error {
@@ -1528,7 +1528,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -1549,7 +1549,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -1562,11 +1562,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ErrorAuditor::InvalidArgumentError => {
+                            &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            ErrorAuditor::LogicError {logic_error: _} |
-                            ErrorAuditor::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError {logic_error: _} |
+                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -1576,7 +1576,7 @@ impl Authorization {
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1618,7 +1618,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -1630,13 +1630,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1646,14 +1646,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1676,8 +1676,8 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogOutFromOneDevice>(bytes.chunk()) {
             Ok(request_data) => {
                 if let Err(error) = ActionHandlerLogOutFromOneDevice::handle(redis_connection_pool, request_data).await {
-                    match error {
-                        ErrorAuditor::EntityError {ref entity_error} => {
+                    match error.get_error_aggregator() {
+                        &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
                                 &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
                                     match json_refresh_web_token_error {
@@ -1689,7 +1689,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -1707,7 +1707,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -1721,7 +1721,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -1737,11 +1737,11 @@ impl Authorization {
                                 }
                             }
                         }
-                        ErrorAuditor::InvalidArgumentError => {
+                        &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        ErrorAuditor::LogicError {logic_error: _} |
-                        ErrorAuditor::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError {logic_error: _} |
+                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
 
                             return ResponseCreator::create_internal_server_error();
@@ -1754,14 +1754,14 @@ impl Authorization {
                         return ResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1803,7 +1803,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -1815,13 +1815,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1831,14 +1831,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1861,8 +1861,8 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogOutFromAllDevices>(bytes.chunk()) {
             Ok(request_data) => {
                 if let Err(error) = ActionHandlerLogOutFromAllDevices::handle(redis_connection_pool, request_data).await {
-                    match error {
-                        ErrorAuditor::EntityError {ref entity_error} => {
+                    match error.get_error_aggregator() {
+                        &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
                                 &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
                                     match json_refresh_web_token_error {
@@ -1874,7 +1874,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -1892,7 +1892,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -1906,7 +1906,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -1922,11 +1922,11 @@ impl Authorization {
                                 }
                             }
                         }
-                        ErrorAuditor::InvalidArgumentError => {
+                        &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        ErrorAuditor::LogicError {logic_error: _} |
-                        ErrorAuditor::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError {logic_error: _} |
+                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
 
                             return ResponseCreator::create_internal_server_error();
@@ -1939,14 +1939,14 @@ impl Authorization {
                         return ResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -1988,7 +1988,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -2000,13 +2000,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -2016,14 +2016,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -2053,15 +2053,15 @@ impl Authorization {
                                 return ResponseCreator::create_ok(data);
                             }
                             Err(error) => {
-                                log::error!("{}", ErrorAuditor::from(error));
+                                // log::error!("{}", ErrorAuditor::from(error));
         
                                 return ResponseCreator::create_internal_server_error();
                             }
                         }
                     }
                     Err(error) => {
-                        match error {
-                            ErrorAuditor::EntityError {ref entity_error} => {
+                        match error.get_error_aggregator() {
+                            &ErrorAggregator::EntityError {ref entity_error} => {
                                 match entity_error {
                                     &EntityError::ApplicationUserError {ref application_user_error} => {
                                         match application_user_error {
@@ -2073,7 +2073,7 @@ impl Authorization {
                                                         return ResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
-                                                        log::error!("{}", ErrorAuditor::from(error));
+                                                        // log::error!("{}", ErrorAuditor::from(error));
                                 
                                                         return ResponseCreator::create_internal_server_error();
                                                     }
@@ -2090,11 +2090,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ErrorAuditor::InvalidArgumentError => {
+                            &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            ErrorAuditor::LogicError {logic_error: _} |
-                            ErrorAuditor::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError {logic_error: _} |
+                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                 log::error!("{}", error);
             
                                 return ResponseCreator::create_internal_server_error();
@@ -2104,7 +2104,7 @@ impl Authorization {
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -2148,7 +2148,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -2160,13 +2160,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -2176,14 +2176,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -2207,8 +2207,8 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataResetPasswordByLastStep>(bytes.chunk()) {
             Ok(request_data) => {
                 if let Err(error) = ActionHandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
-                    match error {
-                        ErrorAuditor::EntityError {ref entity_error} => {
+                    match error.get_error_aggregator() {
+                        &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
                                 &EntityError::ApplicationUserError {ref application_user_error} => {
                                     match application_user_error {
@@ -2220,7 +2220,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -2234,7 +2234,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -2256,7 +2256,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -2270,7 +2270,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -2283,11 +2283,11 @@ impl Authorization {
                                 }
                             }
                         }
-                        ErrorAuditor::InvalidArgumentError => {
+                        &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        ErrorAuditor::LogicError {logic_error: _} |
-                        ErrorAuditor::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError {logic_error: _} |
+                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
@@ -2300,14 +2300,14 @@ impl Authorization {
                         return ResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -2351,7 +2351,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -2363,13 +2363,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -2379,14 +2379,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -2410,8 +2410,8 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForResetPassword>(bytes.chunk()) {
             Ok(request_data) => {
                 if let Err(error) = ActionHandlerSendEmailForResetPassword::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
-                    match error {
-                        ErrorAuditor::EntityError {ref entity_error} => {
+                    match error.get_error_aggregator() {
+                        &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
                                 &EntityError::ApplicationUserError {ref application_user_error} => {
                                     match application_user_error {
@@ -2423,7 +2423,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -2444,7 +2444,7 @@ impl Authorization {
                                                     return ResponseCreator::create_ok(data);
                                                 }
                                                 Err(error) => {
-                                                    log::error!("{}", ErrorAuditor::from(error));
+                                                    // log::error!("{}", ErrorAuditor::from(error));
                             
                                                     return ResponseCreator::create_internal_server_error();
                                                 }
@@ -2460,11 +2460,11 @@ impl Authorization {
                                 }
                             }
                         }
-                        ErrorAuditor::InvalidArgumentError => {
+                        &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        ErrorAuditor::LogicError {logic_error: _} |
-                        ErrorAuditor::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError {logic_error: _} |
+                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
                             log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
@@ -2477,14 +2477,14 @@ impl Authorization {
                         return ResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
 
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }
@@ -2528,7 +2528,7 @@ impl Authorization {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
                                             Err(error) => {
-                                                log::error!("{}", ErrorAuditor::from(error));
+                                                // log::error!("{}", ErrorAuditor::from(error));
                         
                                                 return ResponseCreator::create_internal_server_error();
                                             }
@@ -2540,13 +2540,13 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error {
-                                    ErrorAuditor::EntityError {entity_error: _} |
-                                    ErrorAuditor::InvalidArgumentError => {
+                                match error.get_error_aggregator() {
+                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    ErrorAuditor::LogicError {logic_error: _} |
-                                    ErrorAuditor::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError {logic_error: _} |
+                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -2556,14 +2556,14 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        log::error!("{}", ErrorAuditor::from(error));
+                        // log::error!("{}", ErrorAuditor::from(error));
         
                         return ResponseCreator::create_internal_server_error();
                     }
                 }
             }
             Err(error) => {
-                log::error!("{}", ErrorAuditor::from(error));
+                // log::error!("{}", ErrorAuditor::from(error));
 
                 return ResponseCreator::create_internal_server_error();
             }

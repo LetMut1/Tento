@@ -6,19 +6,19 @@ use std::fmt::Result;
 pub struct BacktracePart {
     line_number: u32,
     file_path: &'static str,
-    information: Option<String>
+    context: Option<String>
 }
 
 impl BacktracePart {
     pub fn new(
         line_number: u32,
         file_path: &'static str,
-        information: Option<String>
+        context: Option<String>
     ) -> Self {
         return Self {
             line_number,
             file_path,
-            information
+            context
         }
     }
 }

@@ -8,6 +8,10 @@ use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_ac
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder_trait::EncoderTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::refresher_trait::RefresherTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base_trait::BaseTrait as JsonAccessWebTokenFactoryTrait;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
@@ -34,32 +38,59 @@ impl Base {
         let json_access_web_token = SerializationFormResolver::deserialize(json_access_web_token.as_str())?;
 
         if ExpirationTimeResolver::is_expired(&json_access_web_token)? {        // TODO TODO TODO TODO СДелать интервал, когда можео менять. На 3 часа раньше, чем срок экспирации, например
-            let redis_connection = &mut *redis_connection_pool.get().await?;
+            match redis_connection_pool.get().await {
+                Ok(mut redis_pooled_connection) => {
+                    let connection = &mut *redis_pooled_connection;
 
-            if let Some(mut json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
-                redis_connection, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
-            ).await? {
-                if json_access_web_token.get_id().as_bytes()[..] == json_refresh_web_token_.get_json_access_web_token_id().as_bytes()[..] 
-                    && Encoder::is_valid(&json_refresh_web_token_, json_refresh_web_token.as_str())? {
-                    Refresher::refresh(&mut json_refresh_web_token_);
-
-                    RepositoryProxy::update(redis_connection, &json_refresh_web_token_).await?;
-
-                    let json_access_web_token = SerializationFormResolver::serialize(
-                        &JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token_)?
-                    )?;
-
-                    let json_refresh_web_token = Encoder::encode(&json_refresh_web_token_)?;
-
-                    return Ok(ResponseData::new(json_access_web_token, json_refresh_web_token));
+                    if let Some(mut json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
+                        connection, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
+                    ).await? {
+                        if json_access_web_token.get_id().as_bytes()[..] == json_refresh_web_token_.get_json_access_web_token_id().as_bytes()[..] 
+                            && Encoder::is_valid(&json_refresh_web_token_, json_refresh_web_token.as_str())? {
+                            Refresher::refresh(&mut json_refresh_web_token_);
+        
+                            RepositoryProxy::update(connection, &json_refresh_web_token_).await?;
+        
+                            let json_access_web_token = SerializationFormResolver::serialize(
+                                &JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token_)?
+                            )?;
+        
+                            let json_refresh_web_token = Encoder::encode(&json_refresh_web_token_)?;
+        
+                            return Ok(ResponseData::new(json_access_web_token, json_refresh_web_token));
+                        }
+        
+                        return Err(
+                            ErrorAuditor::new(
+                                ErrorAggregator::InvalidArgumentError,
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+        
+                    return Err(
+                        ErrorAuditor::new(
+                            ErrorAggregator::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}},
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
                 }
-
-                return Err(ErrorAuditor::InvalidArgumentError);
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
             }
-
-            return Err(ErrorAuditor::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}});
         }
         
-        return Err(ErrorAuditor::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotExpired}});
+        return Err(
+            ErrorAuditor::new(
+                ErrorAggregator::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotExpired}},
+                BacktracePart::new(line!(), file!(), None)
+            )
+        );
     }
 }

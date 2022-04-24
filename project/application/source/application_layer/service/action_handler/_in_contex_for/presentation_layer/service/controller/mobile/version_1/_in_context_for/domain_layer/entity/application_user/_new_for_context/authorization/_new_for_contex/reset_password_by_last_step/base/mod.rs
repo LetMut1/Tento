@@ -8,6 +8,10 @@ use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::wrong_enter_tries_quantity_incrementor_trait::WrongEnterTriesQuantityIncrementorTrait;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_hash_resolver_trait::PasswordHashResolverTrait;
 use crate::domain_layer::service::validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base_trait::BaseTrait as ApplicationUserValidatorTrait;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserResetPasswordTokenDataProviderRedis;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
@@ -35,41 +39,85 @@ impl Base {
         ) = request_data.into_inner();
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
-            let redis_connection = &mut *redis_connection_pool.get().await?;
+            match redis_connection_pool.get().await {
+                Ok(mut redis_pooled_connection) => {
+                    let redis_connection = &mut *redis_pooled_connection;
 
-            if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(
-                redis_connection, &application_user_id
-            ).await? {
-                if application_user_reset_password_token.get_value()== application_user_reset_password_token_value.as_str() {
-                    let postgresql_connection = &mut *postgresql_connection_pool.get().await?;
+                    if let Some(mut application_user_reset_password_token) = ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(
+                        redis_connection, &application_user_id
+                    ).await? {
+                        if application_user_reset_password_token.get_value()== application_user_reset_password_token_value.as_str() {
+                            match postgresql_connection_pool.get().await {
+                                Ok(mut postgresql_pooled_connection) => {
+                                    let postgresql_connection = &mut *postgresql_pooled_connection;
 
-                    if let Some(mut application_user) = ApplicationUserDataProviderPostgresql::find_by_id(postgresql_connection, &application_user_id).await? {
-                        application_user.set_password_hash(PasswordHashResolver::create(application_user_password.as_str())?);
+                                    if let Some(mut application_user) = ApplicationUserDataProviderPostgresql::find_by_id(postgresql_connection, &application_user_id).await? {
+                                        application_user.set_password_hash(PasswordHashResolver::create(application_user_password.as_str())?);
+        
+                                        ApplicationUserStateManagerPostgresql::update(postgresql_connection, &application_user, UpdateResolverApplicationUser::new(false, false, true)?).await?;
+        
+                                        ApplicationUserResetPasswordTokenStateManagerRedis::delete(redis_connection, &application_user_reset_password_token).await?;
+        
+                                        return Ok(());
+                                    }
+        
+                                    return Err(
+                                        ErrorAuditor::new(
+                                            ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
+                                            BacktracePart::new(line!(), file!(), None)
+                                        )
+                                    );
+                                }
+                                Err(error) => {
+                                    return Err(
+                                        ErrorAuditor::new(
+                                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                                            BacktracePart::new(line!(), file!(), None)
+                                        )
+                                    );
+                                }
+                            }
+                        }
 
-                        ApplicationUserStateManagerPostgresql::update(postgresql_connection, &application_user, UpdateResolverApplicationUser::new(false, false, true)?).await?;
+                        WrongEnterTriesQuantityIncrementor::increment(&mut application_user_reset_password_token)?;
 
-                        ApplicationUserResetPasswordTokenStateManagerRedis::delete(redis_connection, &application_user_reset_password_token).await?;
+                        if *application_user_reset_password_token.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                            ApplicationUserResetPasswordTokenStateManagerRedis::create(redis_connection, &application_user_reset_password_token).await?;
+                        } else {
+                            ApplicationUserResetPasswordTokenStateManagerRedis::delete(redis_connection, &application_user_reset_password_token).await?;
+                        }
 
-                        return Ok(());
+                        return Err(
+                            ErrorAuditor::new(
+                                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::InvalidValue}},
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
                     }
 
-                    return Err(ErrorAuditor::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}});
+                    return Err(
+                        ErrorAuditor::new(
+                            ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::NotFound}},
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
                 }
-
-                WrongEnterTriesQuantityIncrementor::increment(&mut application_user_reset_password_token)?;
-
-                if *application_user_reset_password_token.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                    ApplicationUserResetPasswordTokenStateManagerRedis::create(redis_connection, &application_user_reset_password_token).await?;
-                } else {
-                    ApplicationUserResetPasswordTokenStateManagerRedis::delete(redis_connection, &application_user_reset_password_token).await?;
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
                 }
-
-                return Err(ErrorAuditor::EntityError {entity_error: EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::InvalidValue}});
             }
-
-            return Err(ErrorAuditor::EntityError {entity_error: EntityError::ApplicationUserResetPasswordTokenError {application_user_reset_password_token_error: ApplicationUserResetPasswordTokenError::NotFound}});
         }
 
-        return Err(ErrorAuditor::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidPassword}});
+        return Err(
+            ErrorAuditor::new(
+                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidPassword}},
+                BacktracePart::new(line!(), file!(), None)
+            )
+        );
     }
 }

@@ -3,6 +3,10 @@ use bb8::Pool;
 use crate::domain_layer::entity::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonAccessWebTokenBlackListStateManagerRedis;
@@ -13,24 +17,41 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 pub struct Base;
 
 impl Base {
-    pub async fn handle<'a>(
+    pub async fn handle(
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
     ) -> Result<(), ErrorAuditor> {
-        let redis_connection = &mut *redis_connection_pool.get().await?;
+        match redis_connection_pool.get().await {
+            Ok(mut redis_pooled_connection) => {
+                let connection = &mut *redis_pooled_connection;
 
-        let json_access_web_token = request_data.into_inner();
-        let json_access_web_token_ = Extractor::extract(json_access_web_token.as_str(), redis_connection).await?;
-        if let Some(json_refresh_web_token) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
-            redis_connection, json_access_web_token_.get_application_user_id(), json_access_web_token_.get_application_user_log_in_token_device_id()
-        ).await? {
-            RepositoryProxy::delete(redis_connection, &json_refresh_web_token).await?;
-
-            JsonAccessWebTokenBlackListStateManagerRedis::create(redis_connection, &JsonAccessWebTokenBlackList::new(json_access_web_token_.get_id())).await?;
-
-            return Ok(());
+                let json_access_web_token = request_data.into_inner();
+                let json_access_web_token_ = Extractor::extract(json_access_web_token.as_str(), connection).await?;
+                if let Some(json_refresh_web_token) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
+                    connection, json_access_web_token_.get_application_user_id(), json_access_web_token_.get_application_user_log_in_token_device_id()
+                ).await? {
+                    RepositoryProxy::delete(connection, &json_refresh_web_token).await?;
+        
+                    JsonAccessWebTokenBlackListStateManagerRedis::create(connection, &JsonAccessWebTokenBlackList::new(json_access_web_token_.get_id())).await?;
+        
+                    return Ok(());
+                }
+        
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
         }
-
-        return Err(ErrorAuditor::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}});
     }
 }
