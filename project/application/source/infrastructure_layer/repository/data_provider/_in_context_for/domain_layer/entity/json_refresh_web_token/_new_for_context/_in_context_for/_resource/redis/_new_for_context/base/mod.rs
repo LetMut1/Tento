@@ -74,10 +74,19 @@ impl Base {
         let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = vec![];
 
         for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
-            if let Some(json_refresh_web_token) = Self::find_by_application_user_id_and_application_user_log_in_token_device_id(
+            match Self::find_by_application_user_id_and_application_user_log_in_token_device_id(
                 connection, application_user_id, application_user_log_in_token_device_id.as_str()
-            ).await? {
-                json_refresh_web_token_registry.push(json_refresh_web_token);
+            ).await {
+                Ok(json_refresh_web_token) => {
+                    if let Some(json_refresh_web_token_) = json_refresh_web_token {
+                        json_refresh_web_token_registry.push(json_refresh_web_token_);
+                    }
+                }
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+                    return Err(error);
+                }
             }
         }
 

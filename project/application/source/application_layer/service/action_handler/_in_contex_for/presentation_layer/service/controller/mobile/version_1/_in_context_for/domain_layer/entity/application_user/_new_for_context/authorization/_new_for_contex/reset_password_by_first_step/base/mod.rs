@@ -33,74 +33,99 @@ impl Base {
 
         match postgresql_connection_pool.get().await {
             Ok(mut postgresql_pooled_connection) => {
-                if let Some(application_user) = ApplicationUserDataProviderPostgresql::find_by_email(
+                match ApplicationUserDataProviderPostgresql::find_by_email(
                     &mut *postgresql_pooled_connection, application_user_email.as_str()
-                ).await? {
-                    let application_user_reset_password_token: ApplicationUserResetPasswordToken<'_>;
-        
-                    let application_user_id: &'_ i64;
-                    match application_user.get_id() {
-                        Some(application_user_id_) => {
-                            application_user_id = application_user_id_;
-                        }
-                        None => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")},
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-        
-                    match redis_connection_pool.get().await {
-                        Ok(mut redis_pooled_connection) => {
-                            let redis_connection = &mut *redis_pooled_connection;
-
-                            match ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(redis_connection, application_user_id).await? {
-                                Some(application_user_reset_password_token_) => {
-                                    application_user_reset_password_token = application_user_reset_password_token_;
-                
-                                    ApplicationUserResetPasswordTokenStateManagerRedis::update_expiration_time(redis_connection, &application_user_reset_password_token).await?;
+                ).await {
+                    Ok(application_user) => {
+                        if let Some(application_user_) = application_user {
+                            let application_user_id: &'_ i64;
+                            match application_user_.get_id() {
+                                Some(application_user_id_) => {
+                                    application_user_id = application_user_id_;
                                 }
                                 None => {
-                                    application_user_reset_password_token = ApplicationUserResetPasswordToken::new(
-                                        application_user_id,
-                                        ValueGenerator::generate(),
-                                        0
+                                    return Err(
+                                        ErrorAuditor::new(
+                                            ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")},
+                                            BacktracePart::new(line!(), file!(), None)
+                                        )
                                     );
-                
-                                    ApplicationUserResetPasswordTokenStateManagerRedis::create(redis_connection, &application_user_reset_password_token).await?;
                                 }
                             }
                 
-                            if let Err(mut error) = EmailSender::send_application_user_reset_password_token(
-                                application_user_reset_password_token.get_value(), application_user.get_email()
-                            ) {
-                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                            match redis_connection_pool.get().await {
+                                Ok(mut redis_pooled_connection) => {
+                                    let redis_connection = &mut *redis_pooled_connection;
+
+                                    match ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(redis_connection, application_user_id).await {
+                                        Ok(application_user_reset_password_token_) => {
+                                            let application_user_reset_password_token: ApplicationUserResetPasswordToken<'_>;
+                                            match application_user_reset_password_token_ {
+                                                Some(application_user_reset_password_token__) => {
+                                                    application_user_reset_password_token = application_user_reset_password_token__;
+                                
+                                                    if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerRedis::update_expiration_time(redis_connection, &application_user_reset_password_token).await {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                 
-                                return Err(error);
+                                                        return Err(error);
+                                                    }
+                                                }
+                                                None => {
+                                                    application_user_reset_password_token = ApplicationUserResetPasswordToken::new(
+                                                        application_user_id,
+                                                        ValueGenerator::generate(),
+                                                        0
+                                                    );
+                                
+                                                    if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerRedis::create(redis_connection, &application_user_reset_password_token).await {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                                                        return Err(error);
+                                                    }
+                                                }
+                                            }
+                                
+                                            if let Err(mut error) = EmailSender::send_application_user_reset_password_token(
+                                                application_user_reset_password_token.get_value(), application_user_.get_email()
+                                            ) {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                
+                                                return Err(error);
+                                            }
+                                
+                                            return Ok(ResponseData::new(*application_user_id));
+                                        }
+                                        Err(mut error) => {
+                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                    
+                                            return Err(error);
+                                        }
+                                    }
+                                }
+                                Err(error) => {
+                                    return Err(
+                                        ErrorAuditor::new(
+                                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
+                                            BacktracePart::new(line!(), file!(), None)
+                                        )
+                                    );
+                                }
                             }
+                        }
                 
-                            return Ok(ResponseData::new(*application_user_id));
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
+                        return Err(
+                            ErrorAuditor::new(
+                                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                        return Err(error);
                     }
                 }
-        
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
             }
             Err(error) => {
                 return Err(

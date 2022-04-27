@@ -28,24 +28,29 @@ impl Base {
 
                 match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_email(
                     redis_connection, application_user_email.as_str()
-                ).await? {
-                    Some(application_user_registration_confirmation_token) => {
-                        ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
-                            redis_connection, &application_user_registration_confirmation_token
-                        ).await?;
+                ).await {
+                    Ok(application_user_registration_confirmation_token) => {
+                        if let Some(application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
+                            if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
+                                redis_connection, &application_user_registration_confirmation_token_
+                            ).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
         
-                        if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
-                            application_user_registration_confirmation_token.get_value(),
-                            application_user_email.as_str()
-                        ) {
-                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                return Err(error);
+                            }
             
-                            return Err(error);
-                        }
+                            if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
+                                application_user_registration_confirmation_token_.get_value(),
+                                application_user_email.as_str()
+                            ) {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                 
-                        return Ok(());
-                    }
-                    None => {
+                                return Err(error);
+                            }
+                    
+                            return Ok(());
+                        }
+        
                         return Err(
                             ErrorAuditor::new(
                                 ErrorAggregator::EntityError {
@@ -56,6 +61,11 @@ impl Base {
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
+                    }
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        
+                        return Err(error);
                     }
                 }
             }

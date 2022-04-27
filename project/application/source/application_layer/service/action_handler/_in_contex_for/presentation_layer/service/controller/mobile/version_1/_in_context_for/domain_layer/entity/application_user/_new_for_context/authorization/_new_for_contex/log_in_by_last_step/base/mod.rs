@@ -44,35 +44,69 @@ impl Base {
             Ok(mut pooled_connection) => {
                 let redis_connection = &mut *pooled_connection;
 
-                if let Some(mut application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
+                match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
                     redis_connection, &application_user_id, application_user_log_in_token_device_id.as_str()
-                ).await? {
-                    if application_user_log_in_token.get_value() == application_user_log_in_token_value.as_str() {
-                        if let Some(json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
-                            redis_connection, application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
-                        ).await? {
-                            JsonAccessWebTokenBlackListStateManagerRedis::create(
-                                redis_connection, &JsonAccessWebTokenBlackList::new(json_refresh_web_token_.get_json_access_web_token_id())
-                            ).await?;
-        
-                            RepositoryProxy::delete(redis_connection, &json_refresh_web_token_).await?;
-                        }
-        
-                        let json_refresh_web_token = JsonRefreshWebTokenFactory::create_from_id_registry(
-                            application_user_log_in_token.get_application_user_id(), application_user_log_in_token.get_device_id()
-                        );
+                ).await {
+                    Ok(application_user_log_in_token) => {
+                        if let Some(mut application_user_log_in_token_) = application_user_log_in_token {
+                            if application_user_log_in_token_.get_value() == application_user_log_in_token_value.as_str() {
+                                match JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
+                                    redis_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
+                                ).await {
+                                    Ok(json_refresh_web_token) => {
+                                        if let Some(json_refresh_web_token_) = json_refresh_web_token {
+                                            if let Err(mut error) = JsonAccessWebTokenBlackListStateManagerRedis::create(
+                                                redis_connection, &JsonAccessWebTokenBlackList::new(json_refresh_web_token_.get_json_access_web_token_id())
+                                            ).await {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                         
-                        ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token).await?;
-        
-                        RepositoryProxy::create(redis_connection, &json_refresh_web_token).await?;
-        
-                        match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token) {
-                            Ok(ref json_access_web_token) => {
-                                match SerializationFormResolver::serialize(json_access_web_token) {
-                                    Ok(json_access_web_token_) => {
-                                        match Encoder::encode(&json_refresh_web_token) {
-                                            Ok(json_refresh_web_token_) => {
-                                                return Ok(ResponseData::new(json_access_web_token_, json_refresh_web_token_));
+                                                return Err(error);
+                                            }
+                        
+                                            if let Err(mut error) = RepositoryProxy::delete(redis_connection, &json_refresh_web_token_).await {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                                return Err(error);
+                                            }
+                                        }
+                        
+                                        let json_refresh_web_token_ = JsonRefreshWebTokenFactory::create_from_id_registry(
+                                            application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
+                                        );
+                                        
+                                        if let Err(mut error) = ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token_).await {
+                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                            return Err(error);
+                                        }
+                        
+                                        if let Err(mut error) = RepositoryProxy::create(redis_connection, &json_refresh_web_token_).await {
+                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                            return Err(error);
+                                        }
+                        
+                                        match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token_) {
+                                            Ok(ref json_access_web_token) => {
+                                                match SerializationFormResolver::serialize(json_access_web_token) {
+                                                    Ok(json_access_web_token_) => {
+                                                        match Encoder::encode(&json_refresh_web_token_) {
+                                                            Ok(json_refresh_web_token_) => {
+                                                                return Ok(ResponseData::new(json_access_web_token_, json_refresh_web_token_));
+                                                            }
+                                                            Err(mut error) => {
+                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                
+                                                                return Err(error);
+                                                            }
+                                                        }
+                                                    }
+                                                    Err(mut error) => {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                        
+                                                        return Err(error);
+                                                    }
+                                                }
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -88,40 +122,48 @@ impl Base {
                                     }
                                 }
                             }
-                            Err(mut error) => {
+                
+                            if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token_) {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                 
                                 return Err(error);
                             }
+                
+                            if *application_user_log_in_token_.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                                if let Err(mut error) = ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token_).await {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                    return Err(error);
+                                }
+                            } else {
+                                if let Err(mut error) = ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token_).await {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                    return Err(error);
+                                }
+                            }
+                            
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::InvalidValue}},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
                         }
+                
+                        return Err(
+                            ErrorAuditor::new(
+                                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound}},
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
                     }
-        
-                    if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token) {
+                    Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
         
                         return Err(error);
                     }
-        
-                    if *application_user_log_in_token.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                        ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token).await?;
-                    } else {
-                        ApplicationUserLogInTokenStateManagerRedis::delete(redis_connection, &application_user_log_in_token).await?;
-                    }
-                    
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::InvalidValue}},
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
                 }
-        
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
             }
             Err(error) => {
                 return Err(

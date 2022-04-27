@@ -34,36 +34,50 @@ impl Base {
 
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
-                let _json_access_web_token = Extractor::extract(json_access_web_token.as_str(), &mut *redis_pooled_connection).await?;
-
-                if limit < Self::LIMIT_MINIMUM_VALUE || limit > Self::LIMIT_MAXIMUM_VALUE {
-                    limit = Self::LIMIT_MINIMUM_VALUE;
-                }
-        
-                if !OrderConventionResolver::can_convert(&order) {
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::InvalidArgumentError,
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-        
-                match postgresql_connection_pool.get().await {
-                    Ok(mut postgresql_pooled_connection) => {
-                        let channel_registry = ChannelDataProviderPostgresql::per_request_3(
-                            &mut *postgresql_pooled_connection, &channel_subscribers_quantity, &order, &limit
-                        ).await?;
+                match Extractor::extract(json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
+                    Ok(_json_access_web_token_) => {
+                        if limit < Self::LIMIT_MINIMUM_VALUE || limit > Self::LIMIT_MAXIMUM_VALUE {
+                            limit = Self::LIMIT_MINIMUM_VALUE;
+                        }
                 
-                        return Ok(ResponseData::new(channel_registry));
+                        if !OrderConventionResolver::can_convert(&order) {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::InvalidArgumentError,
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                
+                        match postgresql_connection_pool.get().await {
+                            Ok(mut postgresql_pooled_connection) => {
+                                match ChannelDataProviderPostgresql::per_request_3(
+                                    &mut *postgresql_pooled_connection, &channel_subscribers_quantity, &order, &limit
+                                ).await {
+                                    Ok(channel_registry) => {
+                                        return Ok(ResponseData::new(channel_registry));
+                                    }
+                                    Err(mut error) => {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                        return Err(error);
+                                    }
+                                }
+                            }
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        }
                     }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        
+                        return Err(error);
                     }
                 }
             }

@@ -31,49 +31,67 @@ impl Base {
 
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
-                if let Some(application_user_log_in_token) = ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
+                match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
                     &mut *redis_pooled_connection,
                     &application_user_id, application_user_log_in_token_device_id.as_str()
-                ).await? {
-                    match postgresql_connection_pool.get().await {
-                        Ok(mut postgresql_pooled_connection) => {
-                            if let Some(application_user) = ApplicationUserDataProviderPostgresql::find_by_id(
-                                &mut *postgresql_pooled_connection,
-                                &application_user_id
-                            ).await? {
-                                if let Err(mut error) = EmailSender::send_application_user_log_in_token(application_user_log_in_token.get_value(), application_user.get_email()) {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
-                                    return Err(error);
+                ).await {
+                    Ok(application_user_log_in_token) => {
+                        if let Some(application_user_log_in_token_) = application_user_log_in_token {
+                            match postgresql_connection_pool.get().await {
+                                Ok(mut postgresql_pooled_connection) => {
+                                    match ApplicationUserDataProviderPostgresql::find_by_id(
+                                        &mut *postgresql_pooled_connection,
+                                        &application_user_id
+                                    ).await {
+                                        Ok(application_user) => {
+                                            if let Some(application_user_) = application_user {
+                                                if let Err(mut error) = EmailSender::send_application_user_log_in_token(application_user_log_in_token_.get_value(), application_user_.get_email()) {
+                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                    
+                                                    return Err(error);
+                                                }
+                                
+                                                return Ok(());
+                                            }
+                                
+                                            return Err(
+                                                ErrorAuditor::new(
+                                                    ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
+                                                    BacktracePart::new(line!(), file!(), None)
+                                                )
+                                            );
+                                        }
+                                        Err(mut error) => {
+                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                            
+                                            return Err(error);
+                                        }
+                                    }
                                 }
-                
-                                return Ok(());
+                                Err(error) => {
+                                    return Err(
+                                        ErrorAuditor::new(
+                                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                                            BacktracePart::new(line!(), file!(), None)
+                                        )
+                                    );
+                                }
                             }
+                        }
                 
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
+                        return Err(
+                            ErrorAuditor::new(
+                                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound}},
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        
+                        return Err(error);
                     }
                 }
-        
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
             }
             Err(error) => {
                 return Err(

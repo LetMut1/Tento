@@ -26,23 +26,48 @@ impl Base {
                 let connection = &mut *redis_pooled_connection;
 
                 let json_access_web_token = request_data.into_inner();
-                let json_access_web_token_ = Extractor::extract(json_access_web_token.as_str(), connection).await?;
-                if let Some(json_refresh_web_token) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
-                    connection, json_access_web_token_.get_application_user_id(), json_access_web_token_.get_application_user_log_in_token_device_id()
-                ).await? {
-                    RepositoryProxy::delete(connection, &json_refresh_web_token).await?;
+                match Extractor::extract(json_access_web_token.as_str(), connection).await {
+                    Ok(json_access_web_token_) => {
+                        match JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
+                            connection, json_access_web_token_.get_application_user_id(), json_access_web_token_.get_application_user_log_in_token_device_id()
+                        ).await {
+                            Ok(json_refresh_web_token) => {
+                                if let Some(json_refresh_web_token_) = json_refresh_web_token {
+                                    if let Err(mut error) = RepositoryProxy::delete(connection, &json_refresh_web_token_).await {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                                        return Err(error);
+                                    }
+                        
+                                    if let Err(mut error) = JsonAccessWebTokenBlackListStateManagerRedis::create(connection, &JsonAccessWebTokenBlackList::new(json_access_web_token_.get_id())).await {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                                        return Err(error);
+                                    }
+                        
+                                    return Ok(());
+                                }
+                        
+                                return Err(
+                                    ErrorAuditor::new(
+                                        ErrorAggregator::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}},
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                            Err(mut error) => {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                                return Err(error);
+                            }
+                        }
+                    }
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
         
-                    JsonAccessWebTokenBlackListStateManagerRedis::create(connection, &JsonAccessWebTokenBlackList::new(json_access_web_token_.get_id())).await?;
-        
-                    return Ok(());
+                        return Err(error);
+                    }
                 }
-        
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
             }
             Err(error) => {
                 return Err(

@@ -33,46 +33,60 @@ impl Base {
 
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
-                let _json_access_web_token = Extractor::extract(json_access_web_token.as_str(), &mut *redis_pooled_connection).await?;
-
-                if limit <= 0 || limit > Self::LIMIT {
-                    limit = Self::LIMIT;
-                }
-        
-                if !ChannelValidator::is_valid_name(channel_name.as_str()) {
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::InvalidArgumentError,
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-                if let Some(ref requery_channel_name_) = requery_channel_name {
-                    if !ChannelValidator::is_valid_name(requery_channel_name_.as_str()) {
-                        return Err(
-                            ErrorAuditor::new(
-                                ErrorAggregator::InvalidArgumentError,
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-
-                match postgresql_connection_pool.get().await {
-                    Ok(mut postgresql_pooled_connection) => {
-                        let channel_registry = ChannelDataProviderPostgresql::per_request_1(
-                            &mut *postgresql_pooled_connection, channel_name.as_str(), &requery_channel_name, &(limit as i16)
-                        ).await?;
+                match Extractor::extract(json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
+                    Ok(_json_access_web_token_) => {
+                        if limit <= 0 || limit > Self::LIMIT {
+                            limit = Self::LIMIT;
+                        }
                 
-                        return Ok(ResponseData::new(channel_registry));
+                        if !ChannelValidator::is_valid_name(channel_name.as_str()) {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::InvalidArgumentError,
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                        if let Some(ref requery_channel_name_) = requery_channel_name {
+                            if !ChannelValidator::is_valid_name(requery_channel_name_.as_str()) {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        ErrorAggregator::InvalidArgumentError,
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        }
+        
+                        match postgresql_connection_pool.get().await {
+                            Ok(mut postgresql_pooled_connection) => {
+                                match ChannelDataProviderPostgresql::per_request_1(
+                                    &mut *postgresql_pooled_connection, channel_name.as_str(), &requery_channel_name, &(limit as i16)
+                                ).await {
+                                    Ok(channel_registry) => {
+                                        return Ok(ResponseData::new(channel_registry));
+                                    }
+                                    Err(mut error) => {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                        return Err(error);
+                                    }
+                                }
+                            }
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        }
                     }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        
+                        return Err(error);
                     }
                 }
             }

@@ -33,47 +33,61 @@ impl Base {
 
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
-                let _json_access_web_token = Extractor::extract(json_access_web_token.as_str(), &mut *redis_pooled_connection).await?;
-
-                if let Some(ref channel_created_at_) = channel_created_at {
-                    if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
-                        return Err(
-                            ErrorAuditor::new(
-                                ErrorAggregator::InvalidArgumentError,
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-        
-                if !OrderConventionResolver::can_convert(&order) {
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::InvalidArgumentError,
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-        
-                if limit <= 0 || limit > Self::LIMIT {
-                    limit = Self::LIMIT;
-                }
-
-                match postgresql_connection_pool.get().await {
-                    Ok(mut postgresql_pooled_connection) => {
-                        let channel_registry = ChannelDataProviderPostgresql::per_request_2(
-                            &mut *postgresql_pooled_connection, &channel_created_at, &order, &(limit as i16)
-                        ).await?;
+                match Extractor::extract(json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
+                    Ok(_json_access_web_token_) => {
+                        if let Some(ref channel_created_at_) = channel_created_at {
+                            if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        ErrorAggregator::InvalidArgumentError,
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        }
                 
-                        return Ok(ResponseData::new(channel_registry));
+                        if !OrderConventionResolver::can_convert(&order) {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::InvalidArgumentError,
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                
+                        if limit <= 0 || limit > Self::LIMIT {
+                            limit = Self::LIMIT;
+                        }
+        
+                        match postgresql_connection_pool.get().await {
+                            Ok(mut postgresql_pooled_connection) => {
+                                match ChannelDataProviderPostgresql::per_request_2(
+                                    &mut *postgresql_pooled_connection, &channel_created_at, &order, &(limit as i16)
+                                ).await {
+                                    Ok(channel_registry) => {
+                                        return Ok(ResponseData::new(channel_registry));
+                                    }
+                                    Err(mut error) => {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                        return Err(error);
+                                    }
+                                }
+                            }
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        }
                     }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        
+                        return Err(error);
                     }
                 }
             }

@@ -49,32 +49,50 @@ impl Base {
                     match ApplicationUserValidator::is_valid_email(application_user_email_or_application_user_nickname.as_str()) {
                         Ok(is_valid_email) => {
                             if is_valid_email {
-                                match ApplicationUserDataProviderPostgresql::find_by_email(postgresql_connection, application_user_email_or_application_user_nickname.as_str()).await? {
-                                    Some(application_user_) => {
-                                        application_user = application_user_;
+                                match ApplicationUserDataProviderPostgresql::find_by_email(postgresql_connection, application_user_email_or_application_user_nickname.as_str()).await {
+                                    Ok(application_user_) => {
+                                        match application_user_ {
+                                            Some(application_user__) => {
+                                                application_user = application_user__;
+                                            }
+                                            None => {
+                                                return Err(
+                                                    ErrorAuditor::new(
+                                                        ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
+                                                        BacktracePart::new(line!(), file!(), None)
+                                                    )
+                                                );
+                                            }
+                                        }
                                     }
-                                    None => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
+                                    Err(mut error) => {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                        return Err(error);
                                     }
                                 }
                             } else {
                                 if ApplicationUserValidator::is_valid_nickname(application_user_email_or_application_user_nickname.as_str()) {
-                                    match ApplicationUserDataProviderPostgresql::find_by_nickname(postgresql_connection, application_user_email_or_application_user_nickname.as_str()).await? {
-                                        Some(application_user_) => {
-                                            application_user = application_user_;
+                                    match ApplicationUserDataProviderPostgresql::find_by_nickname(postgresql_connection, application_user_email_or_application_user_nickname.as_str()).await {
+                                        Ok(application_user_) => {
+                                            match application_user_ {
+                                                Some(application_user__) => {
+                                                    application_user = application_user__;
+                                                }
+                                                None => {
+                                                    return Err(
+                                                        ErrorAuditor::new(
+                                                            ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
+                                                            BacktracePart::new(line!(), file!(), None)
+                                                        )
+                                                    );
+                                                }
+                                            }
                                         }
-                                        None => {
-                                            return Err(
-                                                ErrorAuditor::new(
-                                                    ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
-                                                    BacktracePart::new(line!(), file!(), None)
-                                                )
-                                            );
+                                        Err(mut error) => {
+                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                            
+                                            return Err(error);
                                         }
                                     }
                                 } else {
@@ -120,33 +138,50 @@ impl Base {
         
                                         match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
                                             redis_connection, application_user_id, application_user_log_in_token_device_id.as_str()
-                                        ).await? {
-                                            Some(application_user_log_in_token_) => {
-                                                application_user_log_in_token = application_user_log_in_token_;
-        
-                                                ApplicationUserLogInTokenStateManagerRedis::update_expiration_time(redis_connection, &application_user_log_in_token).await?;
+                                        ).await {
+                                            Ok(application_user_log_in_token_) => {
+                                                match application_user_log_in_token_ {
+                                                    Some(application_user_log_in_token__) => {
+                                                        application_user_log_in_token = application_user_log_in_token__;
+                
+                                                        if let Err(mut error) = ApplicationUserLogInTokenStateManagerRedis::update_expiration_time(redis_connection, &application_user_log_in_token).await {
+                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            
+                                                            return Err(error);
+                                                        }
+                                                    }
+                                                    None => {
+                                                        application_user_log_in_token = ApplicationUserLogInToken::new(
+                                                            application_user_id,
+                                                            application_user_log_in_token_device_id.as_str(),
+                                                            ValueGenerator::generate(),
+                                                            0
+                                                        );
+                
+                                                        if let Err(mut error) = ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token).await {
+                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            
+                                                            return Err(error);
+                                                        }
+                                                    }
+                                                }
+                
+                                                if let Err(mut error) = EmailSender::send_application_user_log_in_token(
+                                                    application_user_log_in_token.get_value(), application_user.get_email()
+                                                ) {
+                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                    
+                                                    return Err(error);
+                                                }
+                
+                                                return Ok(ResponseData::new(*application_user_id));
                                             }
-                                            None => {
-                                                application_user_log_in_token = ApplicationUserLogInToken::new(
-                                                    application_user_id,
-                                                    application_user_log_in_token_device_id.as_str(),
-                                                    ValueGenerator::generate(),
-                                                    0
-                                                );
-        
-                                                ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token).await?;
+                                            Err(mut error) => {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                
+                                                return Err(error);
                                             }
                                         }
-        
-                                        if let Err(mut error) = EmailSender::send_application_user_log_in_token(
-                                            application_user_log_in_token.get_value(), application_user.get_email()
-                                        ) {
-                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
-                                            return Err(error);
-                                        }
-        
-                                        return Ok(ResponseData::new(*application_user_id));
                                     }
                                     Err(error) => {
                                         return Err(
