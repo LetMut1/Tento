@@ -3,6 +3,4 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 
 pub struct PasswordHashResolver;
 
-impl PasswordHashResolverTrait for PasswordHashResolver {
-    type PasswordEncoder = PasswordEncoder;
-}
+impl PasswordHashResolverTrait for PasswordHashResolver {}

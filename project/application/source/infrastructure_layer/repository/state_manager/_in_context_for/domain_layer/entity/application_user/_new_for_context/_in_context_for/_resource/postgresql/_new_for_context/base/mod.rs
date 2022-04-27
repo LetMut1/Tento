@@ -135,13 +135,25 @@ impl Base {
 
         let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
 
+        let mut counter: &'_ u8;
+
         let mut column_name_registry_description: Option<String> = None;
         let mut column_value_registry_description: Option<String> = None;
         if update_resolver.is_update_email() {
             column_name_registry_description = Some("email".to_string());
 
+            match prepared_statemant_parameter_counter.get_next() {
+                Ok(counter_) => {
+                    counter = counter_;
+                }
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+                    return Err(error);
+                }
+            }
             column_value_registry_description = Some(
-                "$".to_string() + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
+                "$".to_string() + counter.to_string().as_str()
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
@@ -155,8 +167,17 @@ impl Base {
 
                     match column_value_registry_description {
                         Some(mut column_value_registry_description_) => {
-                            column_value_registry_description_ = column_value_registry_description_+ ", $"
-                                + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
+                            match prepared_statemant_parameter_counter.get_next() {
+                                Ok(counter_) => {
+                                    counter = counter_;
+                                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
+                            }
+                            column_value_registry_description_ = column_value_registry_description_+ ", $" + counter.to_string().as_str();
 
                             column_value_registry_description = Some(column_value_registry_description_);
 
@@ -185,9 +206,17 @@ impl Base {
                             );
                         }
                         None => {
-                            column_value_registry_description = Some(
-                                "$".to_string() + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
-                            );
+                            match prepared_statemant_parameter_counter.get_next() {
+                                Ok(counter_) => {
+                                    counter = counter_;
+                                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
+                            }
+                            column_value_registry_description = Some("$".to_string() + counter.to_string().as_str());
 
                             prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
                         }
@@ -204,8 +233,17 @@ impl Base {
 
                     match column_value_registry_description {
                         Some(mut column_value_registry_description_) => {
-                            column_value_registry_description_ = column_value_registry_description_+ ", $"
-                                + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
+                            match prepared_statemant_parameter_counter.get_next() {
+                                Ok(counter_) => {
+                                    counter = counter_;
+                                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
+                            }
+                            column_value_registry_description_ = column_value_registry_description_+ ", $" + counter.to_string().as_str();
 
                             column_value_registry_description = Some(column_value_registry_description_);
 
@@ -234,9 +272,17 @@ impl Base {
                             );
                         }
                         None => {
-                            column_value_registry_description = Some(
-                                "$".to_string() + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
-                            );
+                            match prepared_statemant_parameter_counter.get_next() {
+                                Ok(counter_) => {
+                                    counter = counter_;
+                                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
+                            }
+                            column_value_registry_description = Some("$".to_string() + counter.to_string().as_str());
 
                             prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
                         }
@@ -246,11 +292,20 @@ impl Base {
         }
 
         let query: String;
-
         match column_name_registry_description {
             Some(column_name_registry_description_) => {
                 match column_value_registry_description {
                     Some(column_value_registry_description_) => {
+                        match prepared_statemant_parameter_counter.get_next() {
+                            Ok(counter_) => {
+                                counter = counter_;
+                            }
+                            Err(mut error) => {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                                return Err(error);
+                            }
+                        }
                         query = 
                             "UPDATE ONLY public.application_user AS au \
                             SET ("
@@ -259,7 +314,7 @@ impl Base {
                             + ") = ROW("
                             + column_value_registry_description_.as_str()
                             + ") \
-                            WHERE au.id = $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str()
+                            WHERE au.id = $" + counter.to_string().as_str()
                             + " RETURNING \
                                 au.id AS i;";
                         

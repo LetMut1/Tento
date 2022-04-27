@@ -34,10 +34,14 @@ impl Base {
                             redis_connection, &application_user_registration_confirmation_token
                         ).await?;
         
-                        EmailSender::send_application_user_registration_confirmation_token(
+                        if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
                             application_user_registration_confirmation_token.get_value(),
                             application_user_email.as_str()
-                        )?;
+                        ) {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            
+                            return Err(error);
+                        }
                 
                         return Ok(());
                     }

@@ -23,31 +23,47 @@ impl Base {
     ) -> Result<ResponseData, ErrorAuditor> {
         let application_user_email = request_data.into_inner();
 
-        if ApplicationUserValidator::is_valid_email(application_user_email.as_str())? {
-            match postgresql_connection_pool.get().await {
-                Ok(mut pooled_connection) => {
-                    let result = ApplicationUserDataProviderPostgresql::is_exist_by_email(
-                        &mut *pooled_connection, application_user_email.as_str()
-                    ).await?;
+        match ApplicationUserValidator::is_valid_email(application_user_email.as_str()) {
+            Ok(is_valid_email) => {
+                if is_valid_email {
+                    match postgresql_connection_pool.get().await {
+                        Ok(mut pooled_connection) => {
+                            match ApplicationUserDataProviderPostgresql::is_exist_by_email(
+                                &mut *pooled_connection, application_user_email.as_str()
+                            ).await {
+                                Ok(result) => {
+                                    return Ok(ResponseData::new(result));
+                                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
+                            }
+                        }
+                        Err(error) => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                    }
+                }
         
-                    return Ok(ResponseData::new(result));
-                }
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidEmail}},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
             }
         }
-
-        return Err(
-            ErrorAuditor::new(
-                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidEmail}},
-                BacktracePart::new(line!(), file!(), None)
-            )
-        );
     }
 }

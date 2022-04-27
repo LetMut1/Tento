@@ -66,36 +66,68 @@ impl Base {
                                             redis_connection, application_user_email.as_str()
                                         ).await? {
                                             if application_user_registration_confirmation_token.get_value() == application_user_registration_confirmation_token_value.as_str() {
-                                                let application_user_password_hash = PasswordHashResolver::create(application_user_password.as_str())?;
+                                                match PasswordHashResolver::create(application_user_password.as_str()) {
+                                                    Ok(application_user_password_hash) => {
+                                                        ApplicationUserRegistrationConfirmationTokenStateManagerRedis::delete(redis_connection, &application_user_registration_confirmation_token).await?;
+                
+                                                        let application_user = ApplicationUser::new(
+                                                            None,
+                                                            application_user_email,
+                                                            application_user_nickname,
+                                                            application_user_password_hash,
+                                                            chrono::Utc::now().to_rfc2822() // TODO  Delete. Все Часы делаются через БД.
+                                                        );
+                                                        
+                                                        let application_user_id = ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user).await?;
+                        
+                                                        let json_refresh_web_token = JsonRefreshWebTokenFactory::create_from_id_registry(
+                                                            &application_user_id, application_user_log_in_token_device_id.as_str()
+                                                        );
+                        
+                                                        RepositoryProxy::create(redis_connection, &json_refresh_web_token).await?;
+                        
+                                                        match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token) {
+                                                            Ok(ref json_access_web_token) => {
+                                                                match SerializationFormResolver::serialize(json_access_web_token) {
+                                                                    Ok(json_access_web_token_) => {
+                                                                        match Encoder::encode(&json_refresh_web_token) {
+                                                                            Ok(json_refresh_web_token_) => {
+                                                                                return Ok(ResponseData::new(json_access_web_token_, json_refresh_web_token_));
+                                                                            }
+                                                                            Err(mut error) => {
+                                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                                
+                                                                                return Err(error);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    Err(mut error) => {
+                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                        
+                                                                        return Err(error);
+                                                                    }
+                                                                }
+                                                            }
+                                                            Err(mut error) => {
+                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 
-                                                ApplicationUserRegistrationConfirmationTokenStateManagerRedis::delete(redis_connection, &application_user_registration_confirmation_token).await?;
-                
-                                                let application_user = ApplicationUser::new(
-                                                    None,
-                                                    application_user_email,
-                                                    application_user_nickname,
-                                                    application_user_password_hash,
-                                                    chrono::Utc::now().to_rfc2822() // TODO  Delete. Все Часы делаются через БД.
-                                                );
-                                                
-                                                let application_user_id = ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user).await?;
-                
-                                                let json_refresh_web_token = JsonRefreshWebTokenFactory::create_from_id_registry(
-                                                    &application_user_id, application_user_log_in_token_device_id.as_str()
-                                                );
-                
-                                                RepositoryProxy::create(redis_connection, &json_refresh_web_token).await?;
-                
-                                                let json_access_web_token = SerializationFormResolver::serialize(
-                                                    &JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token)?
-                                                )?;
-                
-                                                let json_refresh_web_token = Encoder::encode(&json_refresh_web_token)?;
-                
-                                                return Ok(ResponseData::new(json_access_web_token, json_refresh_web_token));
+                                                                return Err(error);
+                                                            }
+                                                        }
+                                                    }
+                                                    Err(mut error) => {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                        
+                                                        return Err(error);
+                                                    }
+                                                }
                                             }
                 
-                                            WrongEnterTriesQuantityIncrementor::increment(&mut application_user_registration_confirmation_token)?;
+                                            if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_registration_confirmation_token) {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                
+                                                return Err(error);
+                                            }
                 
                                             if *application_user_registration_confirmation_token.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                                 ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(redis_connection, &application_user_registration_confirmation_token).await?;

@@ -31,75 +31,91 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             .build() {
             Ok(email) => {
                 let smtp_client: SmtpClient;
-                if EnvironmentVariableResolver::is_production()? {
-                    match SmtpClient::new_simple("TODO") {   // TODO
-                        Ok(smtp_client_) => {
-                            smtp_client = smtp_client_.hello_name(ClientId::Domain("TODO".to_string())) // TODO
-                                .credentials(Credentials::new("usToDO".to_string(), "pasTODO".to_string())) // TODO
-                                .smtp_utf8(true)
-                                .authentication_mechanism(Mechanism::Plain)// TODO
-                                .connection_reuse(ConnectionReuseParameters::NoReuse);// TODO 
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError {
-                                        run_time_error: RunTimeError::ResourceError {
-                                            resource_error: ResourceError::EmailServerError {
-                                                email_server_error: EmailServerError::SmtpError {
-                                                    smtp_error: error
+                match EnvironmentVariableResolver::is_production() {
+                    Ok(is_production) => {
+                        if is_production {
+                            match SmtpClient::new_simple("TODO") {   // TODO
+                                Ok(smtp_client_) => {
+                                    smtp_client = smtp_client_.hello_name(ClientId::Domain("TODO".to_string())) // TODO
+                                        .credentials(Credentials::new("usToDO".to_string(), "pasTODO".to_string())) // TODO
+                                        .smtp_utf8(true)
+                                        .authentication_mechanism(Mechanism::Plain)// TODO
+                                        .connection_reuse(ConnectionReuseParameters::NoReuse);// TODO 
+                                }
+                                Err(error) => {
+                                    return Err(
+                                        ErrorAuditor::new(
+                                            ErrorAggregator::RunTimeError {
+                                                run_time_error: RunTimeError::ResourceError {
+                                                    resource_error: ResourceError::EmailServerError {
+                                                        email_server_error: EmailServerError::SmtpError {
+                                                            smtp_error: error
+                                                        }
+                                                    }
                                                 }
-                                            }
+                                            },
+                                            BacktracePart::new(line!(), file!(), None)
+                                        )
+                                    );
+                                }
+                            }
+                        } else {
+                            match EnvironmentVariableResolver::get_resource_email_server_socket_address() {
+                                Ok(resource_email_server_socket_address) => {
+                                    match SmtpClient::new(resource_email_server_socket_address.as_str(), ClientSecurity::None) {
+                                        Ok(smtp_client_) => {
+                                            smtp_client = smtp_client_;
                                         }
-                                    },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-                } else {
-                    match SmtpClient::new(
-                        EnvironmentVariableResolver::get_resource_email_server_socket_address()?.as_str(), ClientSecurity::None
-                    ) {
-                        Ok(smtp_client_) => {
-                            smtp_client = smtp_client_;
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError {
-                                        run_time_error: RunTimeError::ResourceError {
-                                            resource_error: ResourceError::EmailServerError {
-                                                email_server_error: EmailServerError::SmtpError {
-                                                    smtp_error: error
-                                                }
-                                            }
-                                        }
-                                    },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-                }
-                if let Err(error) = smtp_client.transport().send(email.into()) {
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::RunTimeError {
-                                run_time_error: RunTimeError::ResourceError {
-                                    resource_error: ResourceError::EmailServerError {
-                                        email_server_error: EmailServerError::SmtpError {
-                                            smtp_error: error
+                                        Err(error) => {
+                                            return Err(
+                                                ErrorAuditor::new(
+                                                    ErrorAggregator::RunTimeError {
+                                                        run_time_error: RunTimeError::ResourceError {
+                                                            resource_error: ResourceError::EmailServerError {
+                                                                email_server_error: EmailServerError::SmtpError {
+                                                                    smtp_error: error
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    BacktracePart::new(line!(), file!(), None)
+                                                )
+                                            );
                                         }
                                     }
                                 }
-                            },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
+                            }
+                        }
+                        if let Err(error) = smtp_client.transport().send(email.into()) {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::RunTimeError {
+                                        run_time_error: RunTimeError::ResourceError {
+                                            resource_error: ResourceError::EmailServerError {
+                                                email_server_error: EmailServerError::SmtpError {
+                                                    smtp_error: error
+                                                }
+                                            }
+                                        }
+                                    },
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                
+                        return Ok(()); 
+                    }
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
         
-                return Ok(()); 
+                        return Err(error);
+                    }
+                }
             }
             Err(error) => {
                 return Err(

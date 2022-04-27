@@ -30,80 +30,94 @@ impl Base {
         request_data: RequestData
     ) -> Result<(), ErrorAuditor> {
         let application_user_email = request_data.into_inner();
-        if ApplicationUserValidator::is_valid_email(application_user_email.as_str())? {
-            match postgresql_connection_pool.get().await {
-                Ok(mut postgresql_pooled_connection) => {
-                    if !ApplicationUserDataProviderPostgresql::is_exist_by_email(
-                        &mut *postgresql_pooled_connection, application_user_email.as_str()
-                    ).await? {
-                        let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;
-
-                        match redis_connection_pool.get().await {
-                            Ok(mut redis_pooled_connection) => {
-                                let redis_connection = &mut *redis_pooled_connection;
-
-                                match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_email(
-                                    redis_connection, application_user_email.as_str()
-                                ).await? {
-                                    Some(application_user_registration_confirmation_token_) => {
-                                        application_user_registration_confirmation_token = application_user_registration_confirmation_token_;
-                
-                                        ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
-                                            redis_connection, &application_user_registration_confirmation_token
-                                        ).await?;
+        
+        match ApplicationUserValidator::is_valid_email(application_user_email.as_str()) {
+            Ok(is_valid_email) => {
+                if is_valid_email {
+                    match postgresql_connection_pool.get().await {
+                        Ok(mut postgresql_pooled_connection) => {
+                            if !ApplicationUserDataProviderPostgresql::is_exist_by_email(
+                                &mut *postgresql_pooled_connection, application_user_email.as_str()
+                            ).await? {
+                                let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;
+        
+                                match redis_connection_pool.get().await {
+                                    Ok(mut redis_pooled_connection) => {
+                                        let redis_connection = &mut *redis_pooled_connection;
+        
+                                        match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_email(
+                                            redis_connection, application_user_email.as_str()
+                                        ).await? {
+                                            Some(application_user_registration_confirmation_token_) => {
+                                                application_user_registration_confirmation_token = application_user_registration_confirmation_token_;
+                        
+                                                ApplicationUserRegistrationConfirmationTokenStateManagerRedis::update_expiration_time(
+                                                    redis_connection, &application_user_registration_confirmation_token
+                                                ).await?;
+                                            }
+                                            None => {
+                                                application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationToken::new(
+                                                        application_user_email.as_str(),
+                                                        ValueGenerator::generate(),
+                                                        0
+                                                    );
+                        
+                                                ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(redis_connection, &application_user_registration_confirmation_token).await?;
+                                            }
+                                        }
+                                        
+                                        if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
+                                            application_user_registration_confirmation_token.get_value(),
+                                            application_user_email.as_str()
+                                        ) {
+                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                            
+                                            return Err(error);
+                                        }
+                        
+                                        return Ok(());
                                     }
-                                    None => {
-                                        application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationToken::new(
-                                                application_user_email.as_str(),
-                                                ValueGenerator::generate(),
-                                                0
-                                            );
-                
-                                        ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(redis_connection, &application_user_registration_confirmation_token).await?;
+                                    Err(error) => {
+                                        return Err(
+                                            ErrorAuditor::new(
+                                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
+                                                BacktracePart::new(line!(), file!(), None)
+                                            )
+                                        );
                                     }
                                 }
+                            }
                                 
-                                EmailSender::send_application_user_registration_confirmation_token(
-                                    application_user_registration_confirmation_token.get_value(),
-                                    application_user_email.as_str()
-                                )?;
-                
-                                return Ok(());
-                            }
-                            Err(error) => {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
-                            }
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::EmailAlreadyExist}},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                        Err(error) => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
                         }
                     }
-                        
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::EmailAlreadyExist}},
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
                 }
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
+                
+                return Err(
+                    ErrorAuditor::new(
+                        ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidEmail}},
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
             }
         }
-        
-        return Err(
-            ErrorAuditor::new(
-                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidEmail}},
-                BacktracePart::new(line!(), file!(), None)
-            )
-        );
     }
 }

@@ -29,11 +29,18 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
                     Ok(payload_data) => {
                         let payload = base64::encode_config(&payload_data[..], base64::STANDARD);
                 
-                        let signature = SignatureCreator::create(header.as_str(), payload.as_str())?;
+                        match SignatureCreator::create(header.as_str(), payload.as_str()) {
+                            Ok(signature) => {
+                                let json_access_web_token_classic_form = header + Self::TOKEN_PARTS_SEPARATOR + payload.as_str() + Self::TOKEN_PARTS_SEPARATOR + signature.as_str();
                 
-                        let json_access_web_token_classic_form = header + Self::TOKEN_PARTS_SEPARATOR + payload.as_str() + Self::TOKEN_PARTS_SEPARATOR + signature.as_str();
+                                return Ok(json_access_web_token_classic_form);
+                            }
+                            Err(mut error) => {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                 
-                        return Ok(json_access_web_token_classic_form);
+                                return Err(error);
+                            }
+                        }
                     }
                     Err(error) => {
                         return Err(
@@ -61,44 +68,62 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
     ) -> Result<JsonAccessWebToken<'static>, Self::Error> {
         let token_part_registry = json_access_web_token_classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
 
-        if token_part_registry.len() == 3 && SignatureCreator::is_valid(token_part_registry[0], token_part_registry[1], token_part_registry[2])? {
-            match base64::decode_config(token_part_registry[1].as_bytes(), base64::STANDARD) {
-                Ok(data) => {
-                    match serde_json::from_slice::<'_, PayloadCommon<'static>>(&data[..]) {
-                        Ok(payload_common) => {
-                            let (
-                                json_access_web_token_id,
-                                application_user_id,
-                                application_user_log_in_token_device_id,
-                                json_access_web_token_expiration_time
-                            ) = payload_common.into_inner();
-                
-                            let json_access_web_token = JsonAccessWebTokenFactory::create(
-                                json_access_web_token_id,
-                                application_user_id,
-                                application_user_log_in_token_device_id,
-                                json_access_web_token_expiration_time.into_owned()
-                            );
-                
-                            return Ok(json_access_web_token);
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
+        if token_part_registry.len() == 3 {
+            match SignatureCreator::is_valid(token_part_registry[0], token_part_registry[1], token_part_registry[2]) {
+                Ok(is_valid) => {
+                    if is_valid {
+                        match base64::decode_config(token_part_registry[1].as_bytes(), base64::STANDARD) {
+                            Ok(data) => {
+                                match serde_json::from_slice::<'_, PayloadCommon<'static>>(&data[..]) {
+                                    Ok(payload_common) => {
+                                        let (
+                                            json_access_web_token_id,
+                                            application_user_id,
+                                            application_user_log_in_token_device_id,
+                                            json_access_web_token_expiration_time
+                                        ) = payload_common.into_inner();
+                            
+                                        let json_access_web_token = JsonAccessWebTokenFactory::create(
+                                            json_access_web_token_id,
+                                            application_user_id,
+                                            application_user_log_in_token_device_id,
+                                            json_access_web_token_expiration_time.into_owned()
+                                        );
+                            
+                                        return Ok(json_access_web_token);
+                                    }
+                                    Err(error) => {
+                                        return Err(
+                                            ErrorAuditor::new(
+                                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                                                BacktracePart::new(line!(), file!(), None)
+                                            )
+                                        );
+                                    }
+                                }
+                            }
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
                         }
                     }
-                }
-                Err(error) => {
+            
                     return Err(
                         ErrorAuditor::new(
-                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                            ErrorAggregator::InvalidArgumentError,
                             BacktracePart::new(line!(), file!(), None)
                         )
                     );
+                }
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                    return Err(error);
                 }
             }
         }

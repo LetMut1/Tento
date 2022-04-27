@@ -39,7 +39,11 @@ impl DeviceIdProcessingStorage {
         application_user_id: &'a i64,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), ErrorAuditor> {
-        Self::create(connection, application_user_id, application_user_log_in_token_device_id_registry).await?;     // TODO )?
+        if let Err(mut error) = Self::create(connection, application_user_id, application_user_log_in_token_device_id_registry).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+            return Err(error);
+        }
 
         return Ok(());
     }

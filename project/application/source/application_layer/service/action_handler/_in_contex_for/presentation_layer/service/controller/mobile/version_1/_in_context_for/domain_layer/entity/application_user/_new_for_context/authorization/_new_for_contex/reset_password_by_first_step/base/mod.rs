@@ -74,9 +74,13 @@ impl Base {
                                 }
                             }
                 
-                            EmailSender::send_application_user_reset_password_token(
+                            if let Err(mut error) = EmailSender::send_application_user_reset_password_token(
                                 application_user_reset_password_token.get_value(), application_user.get_email()
-                            )?;
+                            ) {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                                return Err(error);
+                            }
                 
                             return Ok(ResponseData::new(*application_user_id));
                         }

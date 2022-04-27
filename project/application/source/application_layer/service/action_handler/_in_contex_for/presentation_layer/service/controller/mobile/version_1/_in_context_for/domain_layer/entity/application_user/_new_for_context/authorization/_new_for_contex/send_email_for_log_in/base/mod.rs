@@ -41,7 +41,11 @@ impl Base {
                                 &mut *postgresql_pooled_connection,
                                 &application_user_id
                             ).await? {
-                                EmailSender::send_application_user_log_in_token(application_user_log_in_token.get_value(), application_user.get_email())?;
+                                if let Err(mut error) = EmailSender::send_application_user_log_in_token(application_user_log_in_token.get_value(), application_user.get_email()) {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
                 
                                 return Ok(());
                             }

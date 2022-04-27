@@ -35,62 +35,107 @@ impl Base {
             json_refresh_web_token
         ) = request_data.into_inner();
 
-        let json_access_web_token = SerializationFormResolver::deserialize(json_access_web_token.as_str())?;
-
-        if ExpirationTimeResolver::is_expired(&json_access_web_token)? {        // TODO TODO TODO TODO СДелать интервал, когда можео менять. На 3 часа раньше, чем срок экспирации, например
-            match redis_connection_pool.get().await {
-                Ok(mut redis_pooled_connection) => {
-                    let connection = &mut *redis_pooled_connection;
-
-                    if let Some(mut json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
-                        connection, json_access_web_token.get_application_user_id(), json_access_web_token.get_application_user_log_in_token_device_id()
-                    ).await? {
-                        if json_access_web_token.get_id().as_bytes()[..] == json_refresh_web_token_.get_json_access_web_token_id().as_bytes()[..] 
-                            && Encoder::is_valid(&json_refresh_web_token_, json_refresh_web_token.as_str())? {
-                            Refresher::refresh(&mut json_refresh_web_token_);
-        
-                            RepositoryProxy::update(connection, &json_refresh_web_token_).await?;
-        
-                            let json_access_web_token = SerializationFormResolver::serialize(
-                                &JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token_)?
-                            )?;
-        
-                            let json_refresh_web_token = Encoder::encode(&json_refresh_web_token_)?;
-        
-                            return Ok(ResponseData::new(json_access_web_token, json_refresh_web_token));
+        match SerializationFormResolver::deserialize(json_access_web_token.as_str()) {
+            Ok(json_access_web_token_) => {
+                match ExpirationTimeResolver::is_expired(&json_access_web_token_) {
+                    Ok(is_expired) => {
+                        if is_expired {        // TODO TODO TODO TODO СДелать интервал, когда можео менять. На 3 часа раньше, чем срок экспирации, например
+                            match redis_connection_pool.get().await {
+                                Ok(mut redis_pooled_connection) => {
+                                    let connection = &mut *redis_pooled_connection;
+                
+                                    if let Some(mut json_refresh_web_token_) = JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
+                                        connection, json_access_web_token_.get_application_user_id(), json_access_web_token_.get_application_user_log_in_token_device_id()
+                                    ).await? {
+                                        match Encoder::is_valid(&json_refresh_web_token_, json_refresh_web_token.as_str()) {
+                                            Ok(is_valid) => {
+                                                if is_valid && json_access_web_token_.get_id().as_bytes()[..] == json_refresh_web_token_.get_json_access_web_token_id().as_bytes()[..] {
+                                                    Refresher::refresh(&mut json_refresh_web_token_);
+                                
+                                                    RepositoryProxy::update(connection, &json_refresh_web_token_).await?;
+                                
+                                                    match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token_) {
+                                                        Ok(ref new_json_access_web_token) => {
+                                                            match SerializationFormResolver::serialize(new_json_access_web_token) {
+                                                                Ok(new_json_access_web_token_) => {
+                                                                    match Encoder::encode(&json_refresh_web_token_) {
+                                                                        Ok(new_json_refresh_web_token) => {
+                                                                            return Ok(ResponseData::new(new_json_access_web_token_, new_json_refresh_web_token));
+                                                                        }
+                                                                        Err(mut error) => {
+                                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                            
+                                                                            return Err(error);
+                                                                        }
+                                                                    }
+                                                                }
+                                                                Err(mut error) => {
+                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                    
+                                                                    return Err(error);
+                                                                }
+                                                            }
+                                                        }
+                                                        Err(mut error) => {
+                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                            
+                                                            return Err(error);
+                                                        }
+                                                    }
+                                                }
+                                
+                                                return Err(
+                                                    ErrorAuditor::new(
+                                                        ErrorAggregator::InvalidArgumentError,
+                                                        BacktracePart::new(line!(), file!(), None)
+                                                    )
+                                                );
+                                            }
+                                            Err(mut error) => {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                
+                                                return Err(error);
+                                            }
+                                        }
+                                    }
+                        
+                                    return Err(
+                                        ErrorAuditor::new(
+                                            ErrorAggregator::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}},
+                                            BacktracePart::new(line!(), file!(), None)
+                                        )
+                                    );
+                                }
+                                Err(error) => {
+                                    return Err(
+                                        ErrorAuditor::new(
+                                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
+                                            BacktracePart::new(line!(), file!(), None)
+                                        )
+                                    );
+                                }
+                            }
                         }
-        
+                        
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::InvalidArgumentError,
+                                ErrorAggregator::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotExpired}},
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
                     }
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
         
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}},
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
+                        return Err(error);
+                    }
                 }
             }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
         }
-        
-        return Err(
-            ErrorAuditor::new(
-                ErrorAggregator::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotExpired}},
-                BacktracePart::new(line!(), file!(), None)
-            )
-        );
     }
 }

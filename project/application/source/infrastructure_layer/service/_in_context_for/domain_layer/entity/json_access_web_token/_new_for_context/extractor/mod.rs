@@ -18,25 +18,42 @@ impl Extractor {
         json_access_web_token_classic_form: &'a str,
         connection: &'a mut Connection
     ) -> Result<JsonAccessWebToken<'static>, ErrorAuditor> {
-        let json_access_web_token = SerializationFormResolver::deserialize(json_access_web_token_classic_form)?;
-        if !ExpirationTimeResolver::is_expired(&json_access_web_token)? {
-            if !JsonAccessWebTokenBlackListDataProviderRedis::is_exist_by_json_access_token_id(connection, json_access_web_token.get_id()).await? {
-                return Ok(json_access_web_token);
+        match SerializationFormResolver::deserialize(json_access_web_token_classic_form) {
+            Ok(json_access_web_token) => {
+                match ExpirationTimeResolver::is_expired(&json_access_web_token) {
+                    Ok(is_expired) => {
+                        if !is_expired {
+                            if !JsonAccessWebTokenBlackListDataProviderRedis::is_exist_by_json_access_token_id(connection, json_access_web_token.get_id()).await? {
+                                return Ok(json_access_web_token);
+                            }
+                
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::InJsonAccessWebTokenBlackList}},
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                
+                        return Err(
+                            ErrorAuditor::new(
+                                ErrorAggregator::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::AlreadyExpired}},
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        
+                        return Err(error);
+                    }
+                }
             }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-            return Err(
-                ErrorAuditor::new(
-                    ErrorAggregator::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::InJsonAccessWebTokenBlackList}},
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
+                return Err(error);
+            }
         }
-
-        return Err(
-            ErrorAuditor::new(
-                ErrorAggregator::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::AlreadyExpired}},
-                BacktracePart::new(line!(), file!(), None)
-            )
-        );
     }
 }

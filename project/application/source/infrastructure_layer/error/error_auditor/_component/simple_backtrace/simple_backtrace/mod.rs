@@ -16,6 +16,15 @@ impl SimpleBacktrace {
             backtrace_part_registry: vec![backtrace_part]
         };
     }
+
+    pub fn add<'a>(
+        &'a mut self,
+        backtrace_part: BacktracePart
+    ) -> () {
+        self.backtrace_part_registry.push(backtrace_part);
+
+        return ();
+    }
 }
 
 impl Display for SimpleBacktrace {

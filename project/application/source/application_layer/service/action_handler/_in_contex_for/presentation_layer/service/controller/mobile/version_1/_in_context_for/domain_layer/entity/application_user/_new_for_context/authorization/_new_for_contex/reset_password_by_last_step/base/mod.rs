@@ -52,13 +52,31 @@ impl Base {
                                     let postgresql_connection = &mut *postgresql_pooled_connection;
 
                                     if let Some(mut application_user) = ApplicationUserDataProviderPostgresql::find_by_id(postgresql_connection, &application_user_id).await? {
-                                        application_user.set_password_hash(PasswordHashResolver::create(application_user_password.as_str())?);
+                                        match PasswordHashResolver::create(application_user_password.as_str()) {
+                                            Ok(password_hash) => {
+                                                application_user.set_password_hash(password_hash);
         
-                                        ApplicationUserStateManagerPostgresql::update(postgresql_connection, &application_user, UpdateResolverApplicationUser::new(false, false, true)?).await?;
-        
-                                        ApplicationUserResetPasswordTokenStateManagerRedis::delete(redis_connection, &application_user_reset_password_token).await?;
-        
-                                        return Ok(());
+                                                match UpdateResolverApplicationUser::new(false, false, true) {
+                                                    Ok(update_resolver_application_user) => {
+                                                        ApplicationUserStateManagerPostgresql::update(postgresql_connection, &application_user, update_resolver_application_user).await?;
+                
+                                                        ApplicationUserResetPasswordTokenStateManagerRedis::delete(redis_connection, &application_user_reset_password_token).await?;
+                        
+                                                        return Ok(());
+                                                    }
+                                                    Err(mut error) => {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                        
+                                                        return Err(error);
+                                                    }
+                                                }
+                                            }
+                                            Err(mut error) => {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                
+                                                return Err(error);
+                                            }
+                                        }
                                     }
         
                                     return Err(
@@ -79,7 +97,11 @@ impl Base {
                             }
                         }
 
-                        WrongEnterTriesQuantityIncrementor::increment(&mut application_user_reset_password_token)?;
+                        if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_reset_password_token) {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            
+                            return Err(error);
+                        }
 
                         if *application_user_reset_password_token.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                             ApplicationUserResetPasswordTokenStateManagerRedis::create(redis_connection, &application_user_reset_password_token).await?;

@@ -66,16 +66,41 @@ impl Base {
         
                         RepositoryProxy::create(redis_connection, &json_refresh_web_token).await?;
         
-                        let json_access_web_token = SerializationFormResolver::serialize(
-                            &JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token)?
-                        )?;
-        
-                        let json_refresh_web_token = Encoder::encode(&json_refresh_web_token)?;
-        
-                        return Ok(ResponseData::new(json_access_web_token, json_refresh_web_token));
+                        match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token) {
+                            Ok(ref json_access_web_token) => {
+                                match SerializationFormResolver::serialize(json_access_web_token) {
+                                    Ok(json_access_web_token_) => {
+                                        match Encoder::encode(&json_refresh_web_token) {
+                                            Ok(json_refresh_web_token_) => {
+                                                return Ok(ResponseData::new(json_access_web_token_, json_refresh_web_token_));
+                                            }
+                                            Err(mut error) => {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                
+                                                return Err(error);
+                                            }
+                                        }
+                                    }
+                                    Err(mut error) => {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                        return Err(error);
+                                    }
+                                }
+                            }
+                            Err(mut error) => {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                                return Err(error);
+                            }
+                        }
                     }
         
-                    WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token)?;
+                    if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token) {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        
+                        return Err(error);
+                    }
         
                     if *application_user_log_in_token.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                         ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token).await?;

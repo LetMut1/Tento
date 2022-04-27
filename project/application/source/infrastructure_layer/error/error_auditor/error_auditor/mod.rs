@@ -23,7 +23,18 @@ impl ErrorAuditor {
         };
     }
 
-    pub fn get_error_aggregator<'a>(&'a self) -> &'a ErrorAggregator {
+    pub fn add_backtrace_part<'a>(
+        &'a mut self,
+        backtrace_part: BacktracePart
+    ) -> () {
+        self.simple_backtrace.add(backtrace_part);
+
+        return ();
+    }
+
+    pub fn get_error_aggregator<'a>(
+        &'a self
+    ) -> &'a ErrorAggregator {
         return &self.error_aggregator;
     }
 }
@@ -33,50 +44,6 @@ impl Display for ErrorAuditor {
         &'a self,
         formatter: &'b mut Formatter<'_>
     ) -> Result {
-        // match self {
-        //     Self::LogicError {logic_error} => {
-        //         if *logic_error.is_unreachable() {
-        //             write!(formatter, "ErrorAuditor-LogicError: [Unreachable] {}", logic_error.get_message())?;
-        //         } else {
-        //             write!(formatter, "ErrorAuditor-LogicError: {}", logic_error.get_message())?;
-        //         }
-        //     }
-        //     Self::RunTimeError {run_time_error} => {
-        //         match run_time_error {
-        //             RunTimeError::OtherError {other_error} => {
-        //                 write!(formatter, "ErrorAuditor-RunTimeError-OtherError-{}: {}", other_error.get_error_kind_description(), other_error.get_message())?;
-        //             }
-        //             RunTimeError::ResourceError {resource_error} => {
-        //                 match resource_error {
-        //                     ResourceError::ConnectionPoolRedisError {bb8_redis_error} => {
-        //                         write!(formatter, "ErrorAuditor-RunTimeError-ResourceError-ConnectionPoolRedisError: {}", bb8_redis_error)?;
-        //                     }
-        //                     ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error} => {
-        //                         write!(formatter, "ErrorAuditor-RunTimeError-ResourceError-ConnectionPoolPostgresqlError: {}", bb8_postgresql_error)?;
-        //                     }
-        //                     ResourceError::EmailServerError {email_server_error} => {
-        //                         match email_server_error {
-        //                             EmailServerError::EmailError {email_error} => {
-        //                                 write!(formatter, "ErrorAuditor-RunTimeError-ResourceError-EmailServerError-EmailError: {}", email_error)?;
-        //                             }
-        //                             EmailServerError::SmtpError {smtp_error} => {
-        //                                 write!(formatter, "ErrorAuditor-RunTimeError-ResourceError-EmailServerError-SmtpError: {}", smtp_error)?;
-        //                             }
-        //                         }
-        //                     }
-        //                     ResourceError::PostgresqlError {postgresql_error} => {
-        //                         write!(formatter, "ErrorAuditor-RunTimeError-ResourceError-PostgresqlError: {}", postgresql_error)?;
-        //                     }
-        //                     ResourceError::RedisError {redis_error} => {
-        //                         write!(formatter, "ErrorAuditor-RunTimeError-ResourceError-RedisError: {}", redis_error)?;
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     _ => {}
-        // }
-
         return Ok(());
     }
 }

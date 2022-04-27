@@ -50,9 +50,21 @@ impl Base {
     pub fn handle(
         binary_file_path: String
     ) -> Result<(), ErrorAuditor> {
-        Self::load_and_check_environment_variables(binary_file_path.as_str())?;
-        Self::configure_log()?;
-        Self::run_http_server()?;
+        if let Err(mut error) = Self::load_and_check_environment_variables(binary_file_path.as_str()) {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = Self::configure_log() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = Self::run_http_server() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
 
         return Ok(());
     }
@@ -109,7 +121,11 @@ impl Base {
                     env::set_var(EnvironmentVariableResolver::IS_PRODUCTION_KEY, EnvironmentVariableResolver::IS_PRODUCTION_VALUE_FALSE);
                 }
 
-                Self::check_environment_variables()?;
+                if let Err(mut error) = Self::check_environment_variables() {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                    return Err(error);
+                }
 
                 return Ok(());
             }
@@ -127,139 +143,99 @@ impl Base {
 
     fn check_environment_variables(
     ) -> Result<(), ErrorAuditor> {
-        EnvironmentVariableResolver::is_production()?;
-        EnvironmentVariableResolver::get_server_socket_address()?;
-        EnvironmentVariableResolver::get_logger_roller_log_file_name()?;
-        EnvironmentVariableResolver::get_logger_log_file_name()?;
-        EnvironmentVariableResolver::get_logger_encoder_pattern()?;
-        EnvironmentVariableResolver::get_security_jrwt_encoding_private_key()?;
-        EnvironmentVariableResolver::get_security_jawt_signature_encoding_private_key()?;
-        EnvironmentVariableResolver::get_resource_postgresql_url()?;
-        EnvironmentVariableResolver::get_resource_redis_url()?;
-        EnvironmentVariableResolver::get_resource_email_server_socket_address()?;
+        if let Err(mut error) = EnvironmentVariableResolver::is_production() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = EnvironmentVariableResolver::get_server_socket_address() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = EnvironmentVariableResolver::get_logger_roller_log_file_name() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = EnvironmentVariableResolver::get_logger_log_file_name() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = EnvironmentVariableResolver::get_logger_encoder_pattern() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = EnvironmentVariableResolver::get_security_jrwt_encoding_private_key() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = EnvironmentVariableResolver::get_security_jawt_signature_encoding_private_key() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = EnvironmentVariableResolver::get_resource_postgresql_url() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = EnvironmentVariableResolver::get_resource_redis_url() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+        if let Err(mut error) = EnvironmentVariableResolver::get_resource_email_server_socket_address() {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
 
         return Ok(());
     }
 
     fn configure_log(
     ) -> Result<(), ErrorAuditor> {
-        match FixedWindowRoller::builder()
-            .base(1)
-            .build(EnvironmentVariableResolver::get_logger_roller_log_file_name()?.as_str(), 10) {
-                Ok(fixed_window_roller) => {
-                    match RollingFileAppender::builder()
-                        .append(true)
-                        .encoder(Box::new(PatternEncoder::new(EnvironmentVariableResolver::get_logger_encoder_pattern()?.as_str())))
-                        .build(
-                            EnvironmentVariableResolver::get_logger_log_file_name()?,
-                            Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
-                        ) {
-                        Ok(rolling_file_appender) => {
-                            let rolling_file_appender_name = "rfa";             // TODO  TODO  Const
-            
-                            let appender = Appender::builder()
-                                .build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
-                    
-                            let root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);  // TODO TODO TODO FIlter
-                    
-                            match LogConfig::builder()
-                                .appender(appender)
-                                .build(root) {
-                                Ok(config) => {             
-                                    if let Err(error) = log4rs::init_config(config) {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                            
-                                    return Ok(());
-                                }
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            }
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-                }
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error.root_cause())}},
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            }
-    }
-
-     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
-    #[tokio::main]
-    async fn run_http_server(
-    ) -> Result<(), ErrorAuditor> {
-        match PostgresqlConfig::from_str(EnvironmentVariableResolver::get_resource_postgresql_url()?.as_str()) {
-            Ok(config) => {
-                match Pool::builder()    // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature? Probably having NoTls be the feature, since it makes more sense to have TLS by default
-                    .build(PostgresqlConnectionManager::new(config, NoTls)).await {                                          // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-                    Ok(postgresql_connection_pool) => {
-                        match ConnectionInfo::from_str(EnvironmentVariableResolver::get_resource_redis_url()?.as_str()) {
-                            Ok(connection_info) => {
-                                match RedisConnectionManager::new(connection_info) {
-                                    Ok(redis_connection_manager) => {
-                                        match Pool::builder()      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-                                            .build(redis_connection_manager).await {
-                                            Ok(redis_connection_pool) => {
-                                                match SocketAddr::from_str(EnvironmentVariableResolver::get_server_socket_address()?.as_str()) {
-                                                    Ok(socket_addres) => {
-
-
-                                                        // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
-                                                        let service = make_service_fn(move |_: &AddrStream| {
-                                                            let postgresql_connection_pool = postgresql_connection_pool.clone();
-                                                
-                                                            let redis_connection_pool = redis_connection_pool.clone();
-                                                
-                                                            async move {
-                                                                return Ok::<_, HyperError>(service_fn(move |requset| {
-                                                                    let postgresql_connection_pool = postgresql_connection_pool.clone();
-                                                
-                                                                    let redis_connection_pool = redis_connection_pool.clone();
-                                                
-                                                                    return Self::resolve(requset, postgresql_connection_pool, redis_connection_pool);
-                                                                }));
-                                                            }
-                                                        });
-                                                        // TODO  TODO  TODO ------------------------------------------------------------------------------------------------------------------
-                                                
-                                                
-                                                
-                                                
-                                                        if let Err(error) = Server::bind(&socket_addres)       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
-                                                            .serve(service)
-                                                            .with_graceful_shutdown(Self::create_shutdown_signal())
-                                                            .await {
-                                                                return Err(
-                                                                    ErrorAuditor::new(
-                                                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                                                                        BacktracePart::new(line!(), file!(), None)
-                                                                    )
-                                                                );
-                                                            }
+        match EnvironmentVariableResolver::get_logger_roller_log_file_name() {
+            Ok(logger_roller_log_file_name) => {
+                match FixedWindowRoller::builder()
+                    .base(1)
+                    .build(logger_roller_log_file_name.as_str(), 10) {          // TODO 10 - КОНСТАНТА или енваронмент
+                    Ok(fixed_window_roller) => {
+                        match EnvironmentVariableResolver::get_logger_encoder_pattern() {
+                            Ok(logger_encoder_pattern) => {
+                                match EnvironmentVariableResolver::get_logger_log_file_name() {
+                                    Ok(logger_log_file_name) => {
+                                        match RollingFileAppender::builder()
+                                            .append(true)
+                                            .encoder(Box::new(PatternEncoder::new(logger_encoder_pattern.as_str())))
+                                            .build(
+                                                logger_log_file_name,                                                                                           // TODO Через Тип неопходимый, а не СТринг
+                                                Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
+                                            ) {
+                                            Ok(rolling_file_appender) => {
+                                                let rolling_file_appender_name = "rfa";             // TODO  TODO  Const или Енваронмент
+                                
+                                                let appender = Appender::builder()
+                                                    .build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
+                                        
+                                                let root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);  // TODO TODO TODO FIlter
+                                        
+                                                match LogConfig::builder()
+                                                    .appender(appender)
+                                                    .build(root) {
+                                                    Ok(config) => {             
+                                                        if let Err(error) = log4rs::init_config(config) {
+                                                            return Err(
+                                                                ErrorAuditor::new(
+                                                                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                                                                    BacktracePart::new(line!(), file!(), None)
+                                                                )
+                                                            );
+                                                        }
                                                 
                                                         return Ok(());
                                                     }
@@ -276,6 +252,146 @@ impl Base {
                                             Err(error) => {
                                                 return Err(
                                                     ErrorAuditor::new(
+                                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                                                        BacktracePart::new(line!(), file!(), None)
+                                                    )
+                                                );
+                                            }
+                                        }
+                                    }
+                                    Err(mut error) => {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                        return Err(error);
+                                    }
+                                }
+                            }
+                            Err(mut error) => {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                                return Err(error);
+                            }
+                        }
+                    }
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error.root_cause())}},
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                }
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        }
+    }
+
+     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
+    #[tokio::main]                      // TODO написать без макроса
+    async fn run_http_server(
+    ) -> Result<(), ErrorAuditor> {
+        match EnvironmentVariableResolver::get_resource_postgresql_url() {
+            Ok(resource_postgresql_url) => {
+                match PostgresqlConfig::from_str(resource_postgresql_url.as_str()) {
+                    Ok(config) => {
+                        match Pool::builder()    // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature? Probably having NoTls be the feature, since it makes more sense to have TLS by default
+                            .build(PostgresqlConnectionManager::new(config, NoTls)).await {                                          // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                            Ok(postgresql_connection_pool) => {
+                                match EnvironmentVariableResolver::get_resource_redis_url() {
+                                    Ok(resource_redis_url) => {
+                                        match ConnectionInfo::from_str(resource_redis_url.as_str()) {
+                                            Ok(connection_info) => {
+                                                match RedisConnectionManager::new(connection_info) {
+                                                    Ok(redis_connection_manager) => {
+                                                        match Pool::builder()      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                                                            .build(redis_connection_manager).await {
+                                                            Ok(redis_connection_pool) => {
+                                                                match EnvironmentVariableResolver::get_server_socket_address() {
+                                                                    Ok(server_socket_address) => {
+                                                                        match SocketAddr::from_str(server_socket_address.as_str()) {
+                                                                            Ok(socket_addres) => {
+                        
+                        
+                                                                                // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
+                                                                                let service = make_service_fn(move |_: &AddrStream| {
+                                                                                    let postgresql_connection_pool = postgresql_connection_pool.clone();
+                                                                        
+                                                                                    let redis_connection_pool = redis_connection_pool.clone();
+                                                                        
+                                                                                    async move {
+                                                                                        return Ok::<_, HyperError>(service_fn(move |requset| {
+                                                                                            let postgresql_connection_pool = postgresql_connection_pool.clone();
+                                                                        
+                                                                                            let redis_connection_pool = redis_connection_pool.clone();
+                                                                        
+                                                                                            return Self::resolve(requset, postgresql_connection_pool, redis_connection_pool);
+                                                                                        }));
+                                                                                    }
+                                                                                });
+                                                                                // TODO  TODO  TODO ------------------------------------------------------------------------------------------------------------------
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                                if let Err(error) = Server::bind(&socket_addres)       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
+                                                                                    .serve(service)
+                                                                                    .with_graceful_shutdown(Self::create_shutdown_signal())
+                                                                                    .await {
+                                                                                        return Err(
+                                                                                            ErrorAuditor::new(
+                                                                                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                                                                                                BacktracePart::new(line!(), file!(), None)
+                                                                                            )
+                                                                                        );
+                                                                                    }
+                                                                        
+                                                                                return Ok(());
+                                                                            }
+                                                                            Err(error) => {
+                                                                                return Err(
+                                                                                    ErrorAuditor::new(
+                                                                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                                                                                        BacktracePart::new(line!(), file!(), None)
+                                                                                    )
+                                                                                );
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    Err(mut error) => {
+                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                        
+                                                                        return Err(error);
+                                                                    }
+                                                                }
+                                                            }
+                                                            Err(error) => {
+                                                                return Err(
+                                                                    ErrorAuditor::new(
+                                                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                                                                        BacktracePart::new(line!(), file!(), None)
+                                                                    )
+                                                                );
+                                                            }
+                                                        }
+                                                    }
+                                                    Err(error) => {
+                                                        return Err(
+                                                            ErrorAuditor::new(
+                                                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                                                                BacktracePart::new(line!(), file!(), None)
+                                                            )
+                                                        );
+                                                    }
+                                                }
+                                            }
+                                            Err(error) => {
+                                                return Err(
+                                                    ErrorAuditor::new(
                                                         ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
                                                         BacktracePart::new(line!(), file!(), None)
                                                     )
@@ -283,20 +399,17 @@ impl Base {
                                             }
                                         }
                                     }
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
+                                    Err(mut error) => {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        
+                                        return Err(error);
                                     }
                                 }
                             }
                             Err(error) => {
                                 return Err(
                                     ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error}}},
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -313,13 +426,10 @@ impl Base {
                     }
                 }
             }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error}}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
             }
         }
     }

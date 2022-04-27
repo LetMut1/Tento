@@ -52,7 +52,13 @@ impl Base {
         connection: &'a mut Connection,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<(), ErrorAuditor> {
-        return Self::create(connection, json_refresh_web_token).await;  // TODO )?
+        if let Err(mut error) = Self::create(connection, json_refresh_web_token).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+            return Err(error);
+        }
+
+        return Ok(());
     }
 
     pub async fn delete<'a>(

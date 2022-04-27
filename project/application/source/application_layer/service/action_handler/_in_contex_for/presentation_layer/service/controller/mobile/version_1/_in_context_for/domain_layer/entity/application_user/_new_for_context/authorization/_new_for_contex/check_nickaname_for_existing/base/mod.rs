@@ -26,11 +26,18 @@ impl Base {
         if ApplicationUserValidator::is_valid_nickname(application_user_nickname.as_str()) {
             match postgresql_connection_pool.get().await {
                 Ok(mut pooled_connection) => {
-                    let result = ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(
+                    match ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(
                         &mut *pooled_connection, application_user_nickname.as_str()
-                    ).await?;
-        
-                    return Ok(ResponseData::new(result));
+                    ).await {
+                        Ok(result) => {
+                            return Ok(ResponseData::new(result));
+                        }
+                        Err(mut error) => {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            
+                            return Err(error);
+                        }
+                    }
                 }
                 Err(error) => {
                     return Err(

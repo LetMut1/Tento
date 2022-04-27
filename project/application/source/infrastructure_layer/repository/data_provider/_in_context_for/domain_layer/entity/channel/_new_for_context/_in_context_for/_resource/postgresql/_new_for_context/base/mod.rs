@@ -26,6 +26,17 @@ impl Base {
         
         let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
 
+        let mut counter: &'_ u8;
+        match prepared_statemant_parameter_counter.get_next() {
+            Ok(counter_) => {
+                counter = counter_;
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        }
         let mut query = 
             "SELECT \
                 c.id AS i, \
@@ -40,18 +51,38 @@ impl Base {
             FROM public.channel c \
             WHERE c.is_private = FALSE AND c.name LIKE $"
             .to_string()
-            + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
+            + counter.to_string().as_str();
 
         let wildcard = name.to_string() + "%";
         prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_name_) = requery_name {
-            query = query + " AND c.name > $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str();
+            match prepared_statemant_parameter_counter.get_next() {
+                Ok(counter_) => {
+                    counter = counter_;
+                }
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+                    return Err(error);
+                }
+            }
+            query = query + " AND c.name > $" + counter.to_string().as_str();
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_name_, Type::TEXT);
         }
 
-        query = query + " ORDER BY c.name ASC LIMIT $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
+        match prepared_statemant_parameter_counter.get_next() {
+            Ok(counter_) => {
+                counter = counter_;
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        }
+        query = query + " ORDER BY c.name ASC LIMIT $" + counter.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(limit, Type::INT2);
 
@@ -249,6 +280,8 @@ impl Base {
 
         let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
 
+        let mut counter: &'_ u8;
+
         let mut query = 
             "SELECT \
                 c.id AS i, \
@@ -267,17 +300,55 @@ impl Base {
         if let Some(created_at_) = created_at {
             if OrderConventionResolver::is_asc(order) {
                 query = query + " AND c.created_at > $";
+            } else {
+                if OrderConventionResolver::is_desc(order) {
+                    query = query + " AND c.created_at < $";
+                } else {
+                    return Err(
+                        ErrorAuditor::new(
+                            ErrorAggregator::InvalidArgumentError,
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
             }
-            if OrderConventionResolver::is_desc(order) {
-                query = query + " AND c.created_at < $";
+            match prepared_statemant_parameter_counter.get_next() {
+                Ok(counter_) => {
+                    counter = counter_;
+                }
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+                    return Err(error);
+                }
             }
-            query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
+            query = query + counter.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(created_at_, Type::TEXT);
         }
 
-        query = query + " ORDER BY c.created_at " + OrderConventionResolver::convert(order)? +
-        " LIMIT $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
+        let order_: &'static str;
+        match prepared_statemant_parameter_counter.get_next() {
+            Ok(counter_) => {
+                counter = counter_;
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        }
+        match OrderConventionResolver::convert(order) {
+            Ok(order__) => {
+                order_ = order__;
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        }
+        query = query + " ORDER BY c.created_at " + order_ + " LIMIT $" + counter.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(limit, Type::INT2);
 
@@ -475,6 +546,8 @@ impl Base {
 
         let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
 
+        let mut counter: &'_ u8;
+
         let mut query = 
             "SELECT \
                 c.id AS i, \
@@ -486,17 +559,55 @@ impl Base {
         if let Some(subscribers_quantity_) = subscribers_quantity {
             if OrderConventionResolver::is_asc(order) {
                 query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($";
+            } else {
+                if OrderConventionResolver::is_desc(order) {
+                    query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) < public.limit_channel_subscribers_quantity($";
+                } else {
+                    return Err(
+                        ErrorAuditor::new(
+                            ErrorAggregator::InvalidArgumentError,
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
             }
-            if OrderConventionResolver::is_desc(order) {
-                query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) < public.limit_channel_subscribers_quantity($";
+            match prepared_statemant_parameter_counter.get_next() {
+                Ok(counter_) => {
+                    counter = counter_;
+                }
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+                    return Err(error);
+                }
             }
-            query = query + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ")";
+            query = query + counter.to_string().as_str() + ")";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity_, Type::INT8);
         }
 
-        query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + OrderConventionResolver::convert(order)? +
-        " LIMIT $" + prepared_statemant_parameter_counter.get_next()?.to_string().as_str() + ";";
+        let order_: &'static str;
+        match prepared_statemant_parameter_counter.get_next() {
+            Ok(counter_) => {
+                counter = counter_;
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        }
+        match OrderConventionResolver::convert(order) {
+            Ok(order__) => {
+                order_ = order__;
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        }
+        query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + order_ +" LIMIT $" + counter.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(limit, Type::INT2);
 

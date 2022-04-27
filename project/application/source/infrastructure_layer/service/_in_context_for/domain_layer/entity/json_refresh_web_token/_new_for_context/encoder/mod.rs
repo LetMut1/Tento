@@ -16,7 +16,16 @@ pub struct Encoder;
 impl Encoder {
     fn get_configured_hmac(
     ) -> Result<Hmac<Sha512>, ErrorAuditor> {
-        return Ok(Hmac::new(Sha512::new(), EnvironmentVariableResolver::get_security_jrwt_encoding_private_key()?.as_bytes()));
+        match EnvironmentVariableResolver::get_security_jrwt_encoding_private_key() {
+            Ok(security_jrwt_encoding_private_key) => {
+                return Ok(Hmac::new(Sha512::new(), security_jrwt_encoding_private_key.as_bytes()));
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        }
     }
 }
 
@@ -28,10 +37,18 @@ impl EncoderTrait for Encoder {
     ) -> Result<String, Self::Error> {
         match serde_json::to_vec(&Common::new(json_refresh_web_token)) {
             Ok(data) => {
-                let mut hmac = Self::get_configured_hmac()?;
-                hmac.input(&data[..]);
+                match Self::get_configured_hmac() {
+                    Ok(mut hmac) => {
+                        hmac.input(&data[..]);
         
-                return Ok(hex::encode(hmac.result().code()));   // TODO  TODO TODO time attac
+                        return Ok(hex::encode(hmac.result().code()));   // TODO  TODO TODO time attac
+                    }
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        
+                        return Err(error);
+                    }
+                }
             }
             Err(error) => {
                 return Err(
@@ -48,6 +65,15 @@ impl EncoderTrait for Encoder {
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>,
         json_refresh_web_token_hash: &'a str
     ) -> Result<bool, Self::Error> {
-        return Ok(Self::encode(json_refresh_web_token)?.as_str() == json_refresh_web_token_hash);
+        match Self::encode(json_refresh_web_token) {
+            Ok(json_refresh_web_token_hash_) => {
+                return Ok(json_refresh_web_token_hash_.as_bytes() == json_refresh_web_token_hash.as_bytes());
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        }
     }
 }
