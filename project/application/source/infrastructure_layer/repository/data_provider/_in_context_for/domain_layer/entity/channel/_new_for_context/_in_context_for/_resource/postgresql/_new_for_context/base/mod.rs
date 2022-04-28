@@ -93,7 +93,7 @@ impl Base {
                 match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            for row in row_registry.iter() {
+                            '_a: for row in row_registry.iter() {
                                 let channel_id: i64;
                                 match row.try_get::<'_, usize, i64>(0) {
                                     Ok(channel_id_) => {
@@ -359,7 +359,7 @@ impl Base {
                 match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            for row in row_registry.iter() {
+                            '_a: for row in row_registry.iter() {
                                 let channel_id: i64;
                                 match row.try_get::<'_, usize, i64>(0) {
                                     Ok(channel_id_) => {
@@ -618,7 +618,7 @@ impl Base {
                 match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            for row in row_registry.iter() {
+                            '_a: for row in row_registry.iter() {
                                 let channel_id: i64;
                                 match row.try_get::<'_, usize, i64>(0) {
                                     Ok(channel_id_) => {
@@ -716,7 +716,7 @@ impl Base {
                 match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            for row in row_registry.iter() {
+                            '_a: for row in row_registry.iter() {
                                 let channel_id: i64;
                                 match row.try_get::<'_, usize, i64>(0) {
                                     Ok(channel_id_) => {

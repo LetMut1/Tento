@@ -30,7 +30,7 @@ impl Base {
                         match RepositoryProxy::get_by_application_user_id(connection, json_access_web_token_.get_application_user_id()).await {
                             Ok(json_refresh_web_token_registry) => {
                                 if let Some(json_refresh_web_token_registry_) = json_refresh_web_token_registry {
-                                    for json_refresh_web_token in json_refresh_web_token_registry_.iter() {
+                                    '_a: for json_refresh_web_token in json_refresh_web_token_registry_.iter() {
                                         if let Err(mut error) = RepositoryProxy::delete(connection, json_refresh_web_token).await {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                 

@@ -100,11 +100,11 @@ impl RepositoryProxy {
         
                     let mut aplication_user_log_in_token_device_id_index: Option<usize> = None;
         
-                    for (index, application_user_log_in_token_device_id_) in application_user_log_in_token_device_id_registry_.iter().enumerate() {
+                    'b: for (index, application_user_log_in_token_device_id_) in application_user_log_in_token_device_id_registry_.iter().enumerate() {
                         if *application_user_log_in_token_device_id_ == application_user_log_in_token_device_id {
                             aplication_user_log_in_token_device_id_index = Some(index);
         
-                            break;
+                            break 'b;
                         }
                     }
         

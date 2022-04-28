@@ -73,7 +73,7 @@ impl Base {
     ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, ErrorAuditor> {
         let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = vec![];
 
-        for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
+        '_a: for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
             match Self::find_by_application_user_id_and_application_user_log_in_token_device_id(
                 connection, application_user_id, application_user_log_in_token_device_id.as_str()
             ).await {

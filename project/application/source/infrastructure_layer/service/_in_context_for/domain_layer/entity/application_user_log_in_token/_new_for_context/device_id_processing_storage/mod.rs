@@ -96,7 +96,7 @@ impl DeviceIdProcessingStorage {
                 if let Some(application_user_log_in_token_device_id_sequence_) = application_user_log_in_token_device_id_sequence {
                     let mut application_user_log_in_token_device_id_registry: Vec<String> = vec![];
         
-                    for application_user_log_in_token_device_id in application_user_log_in_token_device_id_sequence_.split::<'_, &'_ str>(Self::SEPARATOR) {
+                    '_a: for application_user_log_in_token_device_id in application_user_log_in_token_device_id_sequence_.split::<'_, &'_ str>(Self::SEPARATOR) {
                         application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id.to_string());
                     }
         
