@@ -19,16 +19,27 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step::base::Base as RequestData;
-use tokio_postgres::NoTls;
+use std::clone::Clone;
+use std::marker::Send;
+use std::marker::Sync;
+use tokio_postgres::Socket;
+use tokio_postgres::tls::MakeTlsConnect;
+use tokio_postgres::tls::TlsConnect;
 
 pub struct Base;
 
 impl Base {
-    pub async fn handle(
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+    pub async fn handle<T>(
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), ErrorAuditor>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         let application_user_email = request_data.into_inner();
         
         match ApplicationUserValidator::is_valid_email(application_user_email.as_str()) {

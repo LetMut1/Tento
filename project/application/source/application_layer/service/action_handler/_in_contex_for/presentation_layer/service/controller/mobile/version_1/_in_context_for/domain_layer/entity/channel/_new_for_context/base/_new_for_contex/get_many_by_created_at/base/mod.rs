@@ -12,18 +12,29 @@ use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer:
 use crate::infrastructure_layer::service::date_time_resolver::DateTimeResolver;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::base::Base as ResponseData;
-use tokio_postgres::NoTls;
+use std::clone::Clone;
+use std::marker::Send;
+use std::marker::Sync;
+use tokio_postgres::Socket;
+use tokio_postgres::tls::MakeTlsConnect;
+use tokio_postgres::tls::TlsConnect;
 
 pub struct Base;
 
 impl Base {
     const LIMIT: i8 = 30;
 
-    pub async fn handle(
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+    pub async fn handle<T>(
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
-    ) -> Result<ResponseData, ErrorAuditor> {
+    ) -> Result<ResponseData, ErrorAuditor>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         let (
             json_access_web_token,
             channel_created_at,

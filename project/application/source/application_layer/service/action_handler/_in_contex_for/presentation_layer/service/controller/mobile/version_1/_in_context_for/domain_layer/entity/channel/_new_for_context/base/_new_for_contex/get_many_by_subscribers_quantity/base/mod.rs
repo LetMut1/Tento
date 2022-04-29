@@ -12,7 +12,12 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::order_convention_resolver::OrderConventionResolver;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::base::Base as ResponseData;
-use tokio_postgres::NoTls;
+use std::clone::Clone;
+use std::marker::Send;
+use std::marker::Sync;
+use tokio_postgres::Socket;
+use tokio_postgres::tls::MakeTlsConnect;
+use tokio_postgres::tls::TlsConnect;
 
 pub struct Base;
 
@@ -20,11 +25,17 @@ impl Base {
     const LIMIT_MINIMUM_VALUE: i16 = 300;
     const LIMIT_MAXIMUM_VALUE: i16 = 500;
 
-    pub async fn handle(
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+    pub async fn handle<T>(
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
-    ) -> Result<ResponseData, ErrorAuditor> {
+    ) -> Result<ResponseData, ErrorAuditor>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         let (
             json_access_web_token,
             channel_subscribers_quantity,       // TODO // TODO // TODO // TODO // TODO  не нужно ли проверять на >=0 ?

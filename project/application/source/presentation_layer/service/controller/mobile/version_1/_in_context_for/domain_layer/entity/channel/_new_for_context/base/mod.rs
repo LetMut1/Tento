@@ -21,17 +21,28 @@ use hyper::Body;
 use hyper::body::HttpBody;
 use hyper::Request;
 use hyper::Response;
+use std::clone::Clone;
 use std::convert::From;
-use tokio_postgres::NoTls;
+use std::marker::Send;
+use std::marker::Sync;
+use tokio_postgres::Socket;
+use tokio_postgres::tls::MakeTlsConnect;
+use tokio_postgres::tls::TlsConnect;
 
 pub struct Base;
 
 impl Base {
-    pub async fn get_many_by_name(
+    pub async fn get_many_by_name<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -121,11 +132,17 @@ impl Base {
         }
     }
 
-    pub async fn get_many_by_created_at(
+    pub async fn get_many_by_created_at<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -215,11 +232,17 @@ impl Base {
         }
     }
     
-    pub async fn get_many_by_subscribers_quantity(
+    pub async fn get_many_by_subscribers_quantity<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -309,11 +332,17 @@ impl Base {
         }
     }
 
-    pub async fn get_many_by_id_registry(
+    pub async fn get_many_by_id_registry<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }

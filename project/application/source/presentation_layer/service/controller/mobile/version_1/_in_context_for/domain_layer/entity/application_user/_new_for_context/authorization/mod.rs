@@ -47,8 +47,13 @@ use hyper::body::HttpBody;
 use hyper::body::to_bytes;
 use hyper::Request;
 use hyper::Response;
+use std::clone::Clone;
 use std::convert::From;
-use tokio_postgres::NoTls;
+use std::marker::Send;
+use std::marker::Sync;
+use tokio_postgres::Socket;
+use tokio_postgres::tls::MakeTlsConnect;
+use tokio_postgres::tls::TlsConnect;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as ActionHandlerCheckNicknameForExisting_;
@@ -110,10 +115,16 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 pub struct Authorization;
 
 impl Authorization {
-    pub async fn check_nickname_for_existing(
+    pub async fn check_nickname_for_existing<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
-    ) -> Response<Body> {
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -190,10 +201,16 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn check_nickname_for_existing_(
+    pub async fn check_nickname_for_existing_<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
-    ) -> Response<Body> {
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -266,10 +283,16 @@ impl Authorization {
         }
     }
 
-    pub async fn check_email_for_existing(
+    pub async fn check_email_for_existing<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
-    ) -> Response<Body> {
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -347,10 +370,16 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn check_email_for_existing_(
+    pub async fn check_email_for_existing_<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
-    ) -> Response<Body> {
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -423,11 +452,17 @@ impl Authorization {
         }
     }
 
-    pub async fn register_by_first_step(
+    pub async fn register_by_first_step<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -515,11 +550,17 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn register_by_first_step_(
+    pub async fn register_by_first_step_<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -593,11 +634,17 @@ impl Authorization {
         }
     }
 
-    pub async fn register_by_last_step(
+    pub async fn register_by_last_step<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -748,11 +795,17 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn register_by_last_step_(
+    pub async fn register_by_last_step_<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -980,11 +1033,17 @@ impl Authorization {
         }
     }
 
-    pub async fn log_in_by_first_step(
+    pub async fn log_in_by_first_step<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -1064,11 +1123,17 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn log_in_by_first_step_(
+    pub async fn log_in_by_first_step_<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -1309,11 +1374,17 @@ impl Authorization {
         }
     }
 
-    pub async fn send_email_for_log_in(
+    pub async fn send_email_for_log_in<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -1408,11 +1479,17 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn send_email_for_log_in_(
+    pub async fn send_email_for_log_in_<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -2030,11 +2107,17 @@ impl Authorization {
         }
     }
 
-    pub async fn reset_password_by_first_step(
+    pub async fn reset_password_by_first_step<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -2112,11 +2195,17 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn reset_password_by_first_step_(
+    pub async fn reset_password_by_first_step_<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -2190,11 +2279,17 @@ impl Authorization {
         }
     }
 
-    pub async fn reset_password_by_last_step(
+    pub async fn reset_password_by_last_step<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -2315,11 +2410,17 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn reset_password_by_last_step_(
+    pub async fn reset_password_by_last_step_<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -2393,11 +2494,17 @@ impl Authorization {
         }
     }
 
-    pub async fn send_email_for_reset_password(
+    pub async fn send_email_for_reset_password<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }
@@ -2492,11 +2599,17 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn send_email_for_reset_password_(
+    pub async fn send_email_for_reset_password_<T>(
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ResponseCreator::create_bad_request();
         }

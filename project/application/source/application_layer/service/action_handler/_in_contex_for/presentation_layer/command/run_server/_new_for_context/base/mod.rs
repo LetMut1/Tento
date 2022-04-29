@@ -33,11 +33,16 @@ use log4rs::encode::pattern::PatternEncoder;
 use redis::ConnectionInfo;
 use std::clone::Clone;
 use std::env;
+use std::marker::Send;
+use std::marker::Sync;
 use std::net::SocketAddr;
 use std::path::Path;
 use std::str::FromStr;
 use tokio_postgres::Config as PostgresqlConfig;
 use tokio_postgres::NoTls;
+use tokio_postgres::Socket;
+use tokio_postgres::tls::MakeTlsConnect;
+use tokio_postgres::tls::TlsConnect;
 use tokio::signal;
 
 pub struct Base;
@@ -293,15 +298,40 @@ impl Base {
 
      // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     #[tokio::main]                      // TODO написать без макроса
-    async fn run_http_server(
-    ) -> Result<(), ErrorAuditor> {
+    async fn run_http_server<T>(
+    ) -> Result<(), ErrorAuditor>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         match EnvironmentVariableResolver::get_resource_postgresql_url() {
             Ok(resource_postgresql_url) => {
                 match PostgresqlConfig::from_str(resource_postgresql_url.as_str()) {
                     Ok(config) => {
-                        match Pool::builder()    // TODO Для девелопмента ТЛС не нужен (НО можно подключить, как вариант), для Продакша - обязательно. Здесь Пул, который содержит только для Дев. Можно Пулы выделить в Оптион для дев и прод окруженияю. Либо через Дженерик, создавать и отдавать в зависимости от от ИзПродакшн значения. Либо Base it on a feature? Probably having NoTls be the feature, since it makes more sense to have TLS by default
-                            .build(PostgresqlConnectionManager::new(config, NoTls)).await {                                          // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-                            Ok(postgresql_connection_pool) => {
+                        match EnvironmentVariableResolver::is_production() {
+                            Ok(is_production) => {
+                                let postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>;
+                                if is_production {
+                                    todo!();                                                                                                // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                                } else {
+                                    match Pool::builder()
+                                        .build(PostgresqlConnectionManager::new(config, NoTls)).await {                                          // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                                        Ok(postgresql_connection_pool_) => {
+                                            postgresql_connection_pool = postgresql_connection_pool_;
+                                        }
+                                        Err(error) => {
+                                            return Err(
+                                                ErrorAuditor::new(
+                                                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error}}},
+                                                    BacktracePart::new(line!(), file!(), None)
+                                                )
+                                            );
+                                        }
+                                    }
+                                }
+
                                 match EnvironmentVariableResolver::get_resource_redis_url() {
                                     Ok(resource_redis_url) => {
                                         match ConnectionInfo::from_str(resource_redis_url.as_str()) {
@@ -410,13 +440,10 @@ impl Base {
                                     }
                                 }
                             }
-                            Err(error) => {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error}}},
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
+                            Err(mut error) => {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                                return Err(error);
                             }
                         }
                     }
@@ -448,11 +475,17 @@ impl Base {
         return ();
     }
 
-    async fn resolve(                                                           // TODO Пути через константы?
+    async fn resolve<T>(                                                           // TODO Пути через константы?
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>, 
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>, 
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where 
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         match (request.uri().path(), request.method()) {
             // Area for existing routes with not authorized user.
             // GET functional. This is because there is a restriction on mobile frontend.
