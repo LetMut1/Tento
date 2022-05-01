@@ -3,11 +3,11 @@ use crate::infrastructure_layer::error::error_auditor::_component::error_aggrega
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 
-pub struct PreparedStatementParameterCounter {
+pub struct CounterU8 {
     counter: u8
 }
 
-impl PreparedStatementParameterCounter {
+impl CounterU8 {
     pub fn new(
     ) -> Self {
         return Self {

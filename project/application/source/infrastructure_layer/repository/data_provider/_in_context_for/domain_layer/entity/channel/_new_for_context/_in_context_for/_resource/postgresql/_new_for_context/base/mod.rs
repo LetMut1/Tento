@@ -5,7 +5,7 @@ use crate::infrastructure_layer::error::error_auditor::_component::simple_backtr
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::order_convention_resolver::OrderConventionResolver;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_counter::PreparedStatementParameterCounter;
+use crate::infrastructure_layer::service::counter_u8::CounterU8;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::_component::channel::Channel as ResponseDataGetManyByCreatedAtChannel;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::_component::channel::Channel as ResponseDataGetManyByIdRegistryChannel;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_component::channel::Channel as ResponseDataGetManyByNameChannel;
@@ -24,10 +24,10 @@ impl Base {
     ) -> Result<Option<Vec<ResponseDataGetManyByNameChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         
-        let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
+        let mut counter_u8 = CounterU8::new();
 
         let mut counter: &'_ u8;
-        match prepared_statemant_parameter_counter.get_next() {
+        match counter_u8.get_next() {
             Ok(counter_) => {
                 counter = counter_;
             }
@@ -57,7 +57,7 @@ impl Base {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_name_) = requery_name {
-            match prepared_statemant_parameter_counter.get_next() {
+            match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter = counter_;
                 }
@@ -72,7 +72,7 @@ impl Base {
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_name_, Type::TEXT);
         }
 
-        match prepared_statemant_parameter_counter.get_next() {
+        match counter_u8.get_next() {
             Ok(counter_) => {
                 counter = counter_;
             }
@@ -278,7 +278,7 @@ impl Base {
     ) -> Result<Option<Vec<ResponseDataGetManyByCreatedAtChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
+        let mut counter_u8 = CounterU8::new();
 
         let mut counter: &'_ u8;
 
@@ -312,7 +312,7 @@ impl Base {
                     );
                 }
             }
-            match prepared_statemant_parameter_counter.get_next() {
+            match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter = counter_;
                 }
@@ -328,7 +328,7 @@ impl Base {
         }
 
         let order_: &'static str;
-        match prepared_statemant_parameter_counter.get_next() {
+        match counter_u8.get_next() {
             Ok(counter_) => {
                 counter = counter_;
             }
@@ -544,7 +544,7 @@ impl Base {
     ) -> Result<Option<Vec<ResponseDataGetManyBySubscribersQuantityChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
+        let mut counter_u8 = CounterU8::new();
 
         let mut counter: &'_ u8;
 
@@ -571,7 +571,7 @@ impl Base {
                     );
                 }
             }
-            match prepared_statemant_parameter_counter.get_next() {
+            match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter = counter_;
                 }
@@ -587,7 +587,7 @@ impl Base {
         }
 
         let order_: &'static str;
-        match prepared_statemant_parameter_counter.get_next() {
+        match counter_u8.get_next() {
             Ok(counter_) => {
                 counter = counter_;
             }

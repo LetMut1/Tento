@@ -7,7 +7,7 @@ use crate::infrastructure_layer::error::error_auditor::_component::error_aggrega
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_counter::PreparedStatementParameterCounter;
+use crate::infrastructure_layer::service::counter_u8::CounterU8;
 use crate::infrastructure_layer::service::update_resolver::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as UpdateResolverApplicationUser;
 use tokio_postgres::Client as Connection;
 use tokio_postgres::types::Type;
@@ -133,7 +133,7 @@ impl Base {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut prepared_statemant_parameter_counter = PreparedStatementParameterCounter::new();
+        let mut counter_u8 = CounterU8::new();
 
         let mut counter: &'_ u8;
 
@@ -142,7 +142,7 @@ impl Base {
         if update_resolver.is_update_email() {
             column_name_registry_description = Some("email".to_string());
 
-            match prepared_statemant_parameter_counter.get_next() {
+            match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter = counter_;
                 }
@@ -167,7 +167,7 @@ impl Base {
 
                     match column_value_registry_description {
                         Some(mut column_value_registry_description_) => {
-                            match prepared_statemant_parameter_counter.get_next() {
+                            match counter_u8.get_next() {
                                 Ok(counter_) => {
                                     counter = counter_;
                                 }
@@ -206,7 +206,7 @@ impl Base {
                             );
                         }
                         None => {
-                            match prepared_statemant_parameter_counter.get_next() {
+                            match counter_u8.get_next() {
                                 Ok(counter_) => {
                                     counter = counter_;
                                 }
@@ -233,7 +233,7 @@ impl Base {
 
                     match column_value_registry_description {
                         Some(mut column_value_registry_description_) => {
-                            match prepared_statemant_parameter_counter.get_next() {
+                            match counter_u8.get_next() {
                                 Ok(counter_) => {
                                     counter = counter_;
                                 }
@@ -272,7 +272,7 @@ impl Base {
                             );
                         }
                         None => {
-                            match prepared_statemant_parameter_counter.get_next() {
+                            match counter_u8.get_next() {
                                 Ok(counter_) => {
                                     counter = counter_;
                                 }
@@ -296,7 +296,7 @@ impl Base {
             Some(column_name_registry_description_) => {
                 match column_value_registry_description {
                     Some(column_value_registry_description_) => {
-                        match prepared_statemant_parameter_counter.get_next() {
+                        match counter_u8.get_next() {
                             Ok(counter_) => {
                                 counter = counter_;
                             }
