@@ -128,7 +128,7 @@ impl Base {
                             if is_valid {
                                 let application_user_log_in_token: ApplicationUserLogInToken<'_>;
         
-                                let application_user_id: &'_ i64;
+                                let application_user_id: i64;
                                 match application_user.get_id() {
                                     Some(application_user_id_) => {
                                         application_user_id = application_user_id_;
@@ -185,7 +185,7 @@ impl Base {
                                                     return Err(error);
                                                 }
                 
-                                                return Ok(ResponseData::new(*application_user_id));
+                                                return Ok(ResponseData::new(application_user_id));
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

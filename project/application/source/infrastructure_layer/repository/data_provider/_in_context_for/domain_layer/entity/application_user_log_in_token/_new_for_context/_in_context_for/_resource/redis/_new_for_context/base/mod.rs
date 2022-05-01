@@ -15,7 +15,7 @@ pub struct Base;
 impl Base {
     pub async fn find_by_application_user_id_and_device_id<'a, 'b>(
         connection: &'a mut Connection,
-        application_user_id: &'b i64,
+        application_user_id: i64,
         device_id: &'b str,
     ) -> Result<Option<ApplicationUserLogInToken<'b>>, ErrorAuditor> {
         match connection.get::<String, Option<Vec<u8>>>(StorageKeyResolver::get_2(application_user_id, device_id)).await {
@@ -33,7 +33,7 @@ impl Base {
                                     application_user_id,
                                     device_id,
                                     application_user_log_in_token_value.into_owned(),
-                                    application_user_log_in_token_wrong_enter_tries_quantity.into_owned()
+                                    application_user_log_in_token_wrong_enter_tries_quantity
                                 );
                 
                                 return Ok(Some(application_user_log_in_token));

@@ -57,7 +57,7 @@ impl Base {
                             }
                         }
                 
-                        if !OrderConventionResolver::can_convert(&order) {
+                        if !OrderConventionResolver::can_convert(order) {
                             return Err(
                                 ErrorAuditor::new(
                                     ErrorAggregator::InvalidArgumentError,
@@ -73,7 +73,7 @@ impl Base {
                         match postgresql_connection_pool.get().await {
                             Ok(mut postgresql_pooled_connection) => {
                                 match ChannelDataProviderPostgresql::per_request_2(
-                                    &mut *postgresql_pooled_connection, &channel_created_at, &order, &(limit as i16)
+                                    &mut *postgresql_pooled_connection, &channel_created_at, order, limit as i16
                                 ).await {
                                     Ok(channel_registry) => {
                                         return Ok(ResponseData::new(channel_registry));

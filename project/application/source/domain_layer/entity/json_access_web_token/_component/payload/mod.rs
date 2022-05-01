@@ -4,7 +4,7 @@ use std::clone::Clone;
 #[derive(Clone)]
 pub struct Payload<'a> {
     json_access_web_token_id: Cow<'a, str>,
-    application_user_id: Cow<'a, i64>,
+    application_user_id: i64,
     application_user_log_in_token_device_id: Cow<'a, str>,
     json_access_web_token_expiration_time: String
 }
@@ -12,7 +12,7 @@ pub struct Payload<'a> {
 impl<'a> Payload<'a> {
     pub fn new(
         json_access_web_token_id: Cow<'a, str>,
-        application_user_id: Cow<'a, i64>,
+        application_user_id: i64,
         application_user_log_in_token_device_id: Cow<'a, str>,
         json_access_web_token_expiration_time: String
     ) -> Self {
@@ -32,8 +32,8 @@ impl<'a> Payload<'a> {
 
     pub fn get_application_user_id<'b>(
         &'b self
-    ) -> &'b i64 {
-        return self.application_user_id.as_ref();
+    ) -> i64 {
+        return self.application_user_id;
     }
 
     pub fn get_application_user_log_in_token_device_id<'b>(

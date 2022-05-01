@@ -31,7 +31,7 @@ impl Base {
                                 let application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationToken::new(
                                     application_user_email,
                                     application_user_registration_confirmation_token_value.into_owned(),
-                                    application_user_registration_confirmation_token_wrong_enter_tries_quantity.into_owned()
+                                    application_user_registration_confirmation_token_wrong_enter_tries_quantity
                                 );
                 
                                 return Ok(Some(application_user_registration_confirmation_token));

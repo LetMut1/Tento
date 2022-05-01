@@ -40,26 +40,26 @@ impl ChannelDirectMessagePublication {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> &'a Option<i64> {
-        return &self.id;
+    ) -> Option<i64> {
+        return self.id;
     }
 
     pub fn get_channel_id<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.channel_id;
+    ) -> i64 {
+        return self.channel_id;
     }
 
     pub fn get_application_user_channel_administrator_id<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.application_user_channel_administrator_id;
+    ) -> i64 {
+        return self.application_user_channel_administrator_id;
     }
 
     pub fn get_content_type<'a>(
         &'a self
-    ) -> &'a u8 {
-        return &self.content_type;
+    ) -> u8 {
+        return self.content_type;
     }
 
     pub fn get_content_type_component<'a>(
@@ -70,14 +70,14 @@ impl ChannelDirectMessagePublication {
 
     pub fn get_viewing_quantity<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.viewing_quantity;
+    ) -> i64 {
+        return self.viewing_quantity;
     }
 
     pub fn get_status<'a>(
         &'a self
-    ) -> &'a u8 {
-        return &self.status;
+    ) -> u8 {
+        return self.status;
     }
 
     pub fn get_visible_from<'a>(

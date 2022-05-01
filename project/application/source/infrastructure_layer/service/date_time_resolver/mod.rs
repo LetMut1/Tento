@@ -40,9 +40,9 @@ impl DateTimeResolver {
 
     pub fn add_interval_from<'a>(
         date_time: &'a DateTime<Utc>,
-        quantity_of_minutes: &'a i64
+        quantity_of_minutes: i64
     ) -> Result<String, ErrorAuditor> {
-        match date_time.checked_add_signed(Duration::minutes(*quantity_of_minutes)) {
+        match date_time.checked_add_signed(Duration::minutes(quantity_of_minutes)) {
             Some(date_time) => {
                 return Ok(date_time.format(Self::TIMESTAMP_FORMAT).to_string());
             }
@@ -58,7 +58,7 @@ impl DateTimeResolver {
     }
     
     pub fn add_interval_from_now<'a>(
-        quantity_of_minutes: &'a i64
+        quantity_of_minutes: i64
     ) -> Result<String, ErrorAuditor> {
         return Self::add_interval_from(&Utc::now(), quantity_of_minutes)
     }

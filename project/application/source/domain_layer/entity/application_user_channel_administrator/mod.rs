@@ -25,8 +25,8 @@ impl ApplicationUserChannelAdministrator {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> &'a Option<i64> {
-        return &self.id;
+    ) -> Option<i64> {
+        return self.id;
     }
 
     pub fn get_email<'a>(

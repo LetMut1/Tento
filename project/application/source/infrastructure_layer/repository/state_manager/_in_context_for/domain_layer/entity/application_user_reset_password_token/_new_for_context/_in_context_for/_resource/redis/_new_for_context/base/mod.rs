@@ -15,7 +15,7 @@ pub struct Base;
 impl Base {
     pub async fn create<'a>(
         connection: &'a mut Connection, 
-        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken<'_>
+        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken
     ) -> Result<(), ErrorAuditor> {
         match rmp_serde::to_vec(&Common::new(application_user_reset_password_token)) {
             Ok(data) => {
@@ -47,7 +47,7 @@ impl Base {
 
     pub async fn delete<'a>(
         connection: &'a mut Connection, 
-        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken<'_>
+        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken
     ) -> Result<(), ErrorAuditor> {
         if let Err(error) = connection.del::<String, ()>(
             StorageKeyResolver::get_3(application_user_reset_password_token.get_application_user_id())
@@ -65,7 +65,7 @@ impl Base {
 
     pub async fn update_expiration_time<'a>(
         connection: &'a mut Connection,
-        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken<'_>
+        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken
     ) -> Result<(), ErrorAuditor> {
         if let Err(error) = connection.expire::<String, ()>(
             StorageKeyResolver::get_3(application_user_reset_password_token.get_application_user_id()),

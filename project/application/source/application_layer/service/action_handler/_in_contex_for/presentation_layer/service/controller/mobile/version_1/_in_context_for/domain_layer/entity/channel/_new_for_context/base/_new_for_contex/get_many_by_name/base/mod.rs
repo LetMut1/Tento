@@ -72,7 +72,7 @@ impl Base {
                         match postgresql_connection_pool.get().await {
                             Ok(mut postgresql_pooled_connection) => {
                                 match ChannelDataProviderPostgresql::per_request_1(
-                                    &mut *postgresql_pooled_connection, channel_name.as_str(), &requery_channel_name, &(limit as i16)
+                                    &mut *postgresql_pooled_connection, channel_name.as_str(), &requery_channel_name, limit as i16
                                 ).await {
                                     Ok(channel_registry) => {
                                         return Ok(ResponseData::new(channel_registry));

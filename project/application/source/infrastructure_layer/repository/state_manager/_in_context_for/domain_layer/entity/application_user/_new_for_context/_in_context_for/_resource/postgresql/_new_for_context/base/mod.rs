@@ -110,7 +110,7 @@ impl Base {
         application_user: &'a ApplicationUser,
         update_resolver: UpdateResolverApplicationUser
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id: &'_ i64;
+        let application_user_id: i64;
         match application_user.get_id() {
             Some(application_user_id_) => {
                 application_user_id = application_user_id_;
@@ -135,7 +135,7 @@ impl Base {
 
         let mut counter_u8 = CounterU8::new();
 
-        let mut counter: &'_ u8;
+        let mut counter_u8_value: u8;
 
         let mut column_name_registry_description: Option<String> = None;
         let mut column_value_registry_description: Option<String> = None;
@@ -144,7 +144,7 @@ impl Base {
 
             match counter_u8.get_next() {
                 Ok(counter_) => {
-                    counter = counter_;
+                    counter_u8_value = counter_;
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -153,7 +153,7 @@ impl Base {
                 }
             }
             column_value_registry_description = Some(
-                "$".to_string() + counter.to_string().as_str()
+                "$".to_string() + counter_u8_value.to_string().as_str()
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
@@ -169,7 +169,7 @@ impl Base {
                         Some(mut column_value_registry_description_) => {
                             match counter_u8.get_next() {
                                 Ok(counter_) => {
-                                    counter = counter_;
+                                    counter_u8_value = counter_;
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -177,7 +177,7 @@ impl Base {
                                     return Err(error);
                                 }
                             }
-                            column_value_registry_description_ = column_value_registry_description_+ ", $" + counter.to_string().as_str();
+                            column_value_registry_description_ = column_value_registry_description_+ ", $" + counter_u8_value.to_string().as_str();
 
                             column_value_registry_description = Some(column_value_registry_description_);
 
@@ -208,7 +208,7 @@ impl Base {
                         None => {
                             match counter_u8.get_next() {
                                 Ok(counter_) => {
-                                    counter = counter_;
+                                    counter_u8_value = counter_;
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -216,7 +216,7 @@ impl Base {
                                     return Err(error);
                                 }
                             }
-                            column_value_registry_description = Some("$".to_string() + counter.to_string().as_str());
+                            column_value_registry_description = Some("$".to_string() + counter_u8_value.to_string().as_str());
 
                             prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
                         }
@@ -235,7 +235,7 @@ impl Base {
                         Some(mut column_value_registry_description_) => {
                             match counter_u8.get_next() {
                                 Ok(counter_) => {
-                                    counter = counter_;
+                                    counter_u8_value = counter_;
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -243,7 +243,7 @@ impl Base {
                                     return Err(error);
                                 }
                             }
-                            column_value_registry_description_ = column_value_registry_description_+ ", $" + counter.to_string().as_str();
+                            column_value_registry_description_ = column_value_registry_description_+ ", $" + counter_u8_value.to_string().as_str();
 
                             column_value_registry_description = Some(column_value_registry_description_);
 
@@ -274,7 +274,7 @@ impl Base {
                         None => {
                             match counter_u8.get_next() {
                                 Ok(counter_) => {
-                                    counter = counter_;
+                                    counter_u8_value = counter_;
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -282,7 +282,7 @@ impl Base {
                                     return Err(error);
                                 }
                             }
-                            column_value_registry_description = Some("$".to_string() + counter.to_string().as_str());
+                            column_value_registry_description = Some("$".to_string() + counter_u8_value.to_string().as_str());
 
                             prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
                         }
@@ -298,7 +298,7 @@ impl Base {
                     Some(column_value_registry_description_) => {
                         match counter_u8.get_next() {
                             Ok(counter_) => {
-                                counter = counter_;
+                                counter_u8_value = counter_;
                             }
                             Err(mut error) => {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -314,11 +314,11 @@ impl Base {
                             + ") = ROW("
                             + column_value_registry_description_.as_str()
                             + ") \
-                            WHERE au.id = $" + counter.to_string().as_str()
+                            WHERE au.id = $" + counter_u8_value.to_string().as_str()
                             + " RETURNING \
                                 au.id AS i;";
                         
-                        prepared_statemant_parameter_convertation_resolver.add_parameter(application_user_id, Type::INT8);
+                        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
                     }
                     None => {
                         return Err(

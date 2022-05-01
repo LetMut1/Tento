@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 pub struct JsonRefreshWebToken<'a> {
     json_access_web_token_id: String,
-    application_user_id: Cow<'a, i64>,
+    application_user_id: i64,
     application_user_log_in_token_device_id: Cow<'a, str>,
     obfuscation_value: String
 }
@@ -12,7 +12,7 @@ impl<'a> JsonRefreshWebToken<'a> {
 
     pub fn new(
         json_access_web_token_id: String,
-        application_user_id: Cow<'a, i64>,
+        application_user_id: i64,
         application_user_log_in_token_device_id: Cow<'a, str>,
         obfuscation_value: String
     ) -> Self {
@@ -32,8 +32,8 @@ impl<'a> JsonRefreshWebToken<'a> {
 
     pub fn get_application_user_id<'b>(
         &'b self
-    ) -> &'b i64 {
-        return self.application_user_id.as_ref();
+    ) -> i64 {
+        return self.application_user_id;
     }
 
     pub fn get_application_user_log_in_token_device_id<'b>(

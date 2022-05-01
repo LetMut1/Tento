@@ -14,12 +14,12 @@ impl JsonAccessWebTokenFactoryTrait for Base {
     fn create_from_json_refresh_web_token<'a>(
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
     ) -> Result<JsonAccessWebToken<'a>, Self::Error> {
-        match DateTimeResolver::add_interval_from_now(&(JsonAccessWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64)) {
+        match DateTimeResolver::add_interval_from_now(JsonAccessWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
             Ok(expiration_time) => {
                 return Ok(
                     Self::create(
                         Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
-                        Cow::Borrowed(json_refresh_web_token.get_application_user_id()),
+                        json_refresh_web_token.get_application_user_id(),
                         Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
                         expiration_time
                     )

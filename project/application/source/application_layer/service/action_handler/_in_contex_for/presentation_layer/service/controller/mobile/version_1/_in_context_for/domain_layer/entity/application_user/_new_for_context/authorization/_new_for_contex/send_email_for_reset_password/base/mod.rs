@@ -40,7 +40,7 @@ impl Base {
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
                 match ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(
-                    &mut *redis_pooled_connection, &application_user_id
+                    &mut *redis_pooled_connection, application_user_id
                 ).await {
                     Ok(application_user_reset_password_token) => {
                         if let Some(application_user_reset_password_token_) = application_user_reset_password_token {
@@ -48,7 +48,7 @@ impl Base {
                                 Ok(mut postgresql_pooled_connection) => {
                                     match ApplicationUserDataProviderPostgresql::find_by_id(
                                         &mut *postgresql_pooled_connection,
-                                        &application_user_id
+                                        application_user_id
                                     ).await {
                                         Ok(application_user) => {
                                             if let Some(application_user_) = application_user {

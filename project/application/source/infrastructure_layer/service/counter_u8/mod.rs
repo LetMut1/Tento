@@ -17,7 +17,7 @@ impl CounterU8 {
 
     pub fn get_next<'a>(
         &'a mut self
-    ) -> Result<&'a u8, ErrorAuditor> {
+    ) -> Result<u8, ErrorAuditor> {
         if self.counter == u8::max_value() {
             return Err(
                 ErrorAuditor::new(
@@ -26,9 +26,8 @@ impl CounterU8 {
                 )
             );
         }
-
         self.counter = self.counter + 1;
 
-        return Ok(&self.counter);
+        return Ok(self.counter);
     }
 }

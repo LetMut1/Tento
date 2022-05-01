@@ -367,7 +367,7 @@ impl Base {
 
     pub async fn find_by_id<'a>(
         connection: &'a mut Connection,
-        id: &'a i64
+        id: i64
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -381,7 +381,7 @@ impl Base {
             FROM public.application_user au \
             WHERE au.id = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&id, Type::INT8);
 
         match connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {

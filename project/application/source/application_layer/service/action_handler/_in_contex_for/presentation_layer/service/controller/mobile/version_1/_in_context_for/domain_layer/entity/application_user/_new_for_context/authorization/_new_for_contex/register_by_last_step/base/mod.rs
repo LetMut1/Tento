@@ -102,7 +102,7 @@ impl Base {
                                                                                 match ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user).await {
                                                                                     Ok(application_user_id) => {
                                                                                         let json_refresh_web_token = JsonRefreshWebTokenFactory::create_from_id_registry(
-                                                                                            &application_user_id, application_user_log_in_token_device_id.as_str()
+                                                                                            application_user_id, application_user_log_in_token_device_id.as_str()
                                                                                         );
                                                         
                                                                                         if let Err(mut error) = RepositoryProxy::create(redis_connection, &json_refresh_web_token).await {
@@ -161,7 +161,7 @@ impl Base {
                                                                         return Err(error);
                                                                     }
                                         
-                                                                    if *application_user_registration_confirmation_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                                                                    if application_user_registration_confirmation_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                                                         if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(redis_connection, &application_user_registration_confirmation_token_).await {
                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 

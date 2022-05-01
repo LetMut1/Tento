@@ -13,10 +13,10 @@ use redis::AsyncCommands;
 pub struct Base;
 
 impl Base {
-    pub async fn find_by_application_user_id<'a, 'b>(
+    pub async fn find_by_application_user_id<'a>(
         connection: &'a mut Connection,
-        application_user_id: &'b i64
-    ) -> Result<Option<ApplicationUserResetPasswordToken<'b>>, ErrorAuditor> {
+        application_user_id: i64
+    ) -> Result<Option<ApplicationUserResetPasswordToken>, ErrorAuditor> {
         match connection.get::<String, Option<Vec<u8>>>(StorageKeyResolver::get_3(application_user_id)).await {
             Ok(data) => {
                 match data {
@@ -31,7 +31,7 @@ impl Base {
                                 let application_user_reset_password_token = ApplicationUserResetPasswordToken::new(
                                     application_user_id,
                                     application_user_reset_password_token_value.into_owned(),
-                                    application_user_reset_password_token_wrong_enter_tries_quantity.into_owned()
+                                    application_user_reset_password_token_wrong_enter_tries_quantity
                                 );
                 
                                 return Ok(Some(application_user_reset_password_token));

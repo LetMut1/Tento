@@ -19,19 +19,19 @@ impl ApplicationUserSubscription {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> &'a Option<i64> {
-        return &self.id;
+    ) -> Option<i64> {
+        return self.id;
     }
 
     pub fn get_publisher_application_user_id<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.publisher_application_user_id;
+    ) -> i64 {
+        return self.publisher_application_user_id;
     }
 
     pub fn get_subscriber_application_user_id<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.subscriber_application_user_id;
+    ) -> i64 {
+        return self.subscriber_application_user_id;
     }
 }

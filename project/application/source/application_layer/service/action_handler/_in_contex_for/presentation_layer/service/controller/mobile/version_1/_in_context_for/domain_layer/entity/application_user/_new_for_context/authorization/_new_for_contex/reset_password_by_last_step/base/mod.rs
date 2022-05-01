@@ -55,7 +55,7 @@ impl Base {
                     let redis_connection = &mut *redis_pooled_connection;
 
                     match ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(
-                        redis_connection, &application_user_id
+                        redis_connection, application_user_id
                     ).await {
                         Ok(application_user_reset_password_token) => {
                             if let Some(mut application_user_reset_password_token_) = application_user_reset_password_token {
@@ -64,7 +64,7 @@ impl Base {
                                         Ok(mut postgresql_pooled_connection) => {
                                             let postgresql_connection = &mut *postgresql_pooled_connection;
         
-                                            match ApplicationUserDataProviderPostgresql::find_by_id(postgresql_connection, &application_user_id).await {
+                                            match ApplicationUserDataProviderPostgresql::find_by_id(postgresql_connection, application_user_id).await {
                                                 Ok(application_user) => {
                                                     if let Some(mut application_user_) = application_user {
                                                         match PasswordHashResolver::create(application_user_password.as_str()) {
@@ -133,7 +133,7 @@ impl Base {
                                     return Err(error);
                                 }
         
-                                if *application_user_reset_password_token_.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                                if application_user_reset_password_token_.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                     if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerRedis::create(redis_connection, &application_user_reset_password_token_).await {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 

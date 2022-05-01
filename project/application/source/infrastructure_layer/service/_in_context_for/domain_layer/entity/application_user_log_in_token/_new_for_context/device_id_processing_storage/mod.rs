@@ -15,7 +15,7 @@ impl DeviceIdProcessingStorage {
 
     pub async fn create<'a>(
         connection: &'a mut Connection, 
-        application_user_id: &'a i64,
+        application_user_id: i64,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), ErrorAuditor> {
         if let Err(error) = connection.set_ex::<String, String, ()>(
@@ -36,7 +36,7 @@ impl DeviceIdProcessingStorage {
 
     pub async fn update<'a>(
         connection: &'a mut Connection, 
-        application_user_id: &'a i64,
+        application_user_id: i64,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), ErrorAuditor> {
         if let Err(mut error) = Self::create(connection, application_user_id, application_user_log_in_token_device_id_registry).await {
@@ -50,7 +50,7 @@ impl DeviceIdProcessingStorage {
 
     pub async fn delete<'a>(
         connection: &'a mut Connection,
-        application_user_id: &'a i64,
+        application_user_id: i64,
     ) -> Result<(), ErrorAuditor> {
         if let Err(error) = connection.del::<String, ()>(
             StorageKeyResolver::get_6(application_user_id)
@@ -68,7 +68,7 @@ impl DeviceIdProcessingStorage {
 
     pub async fn update_expiration_time<'a>(
         connection: &'a mut Connection,
-        application_user_id: &'a i64
+        application_user_id: i64
     ) -> Result<(), ErrorAuditor> {
         if let Err(error) = connection.expire::<String, ()>(
             StorageKeyResolver::get_6(application_user_id),
@@ -87,7 +87,7 @@ impl DeviceIdProcessingStorage {
 
     pub async fn get<'a>(
         connection: &'a mut Connection,
-        application_user_id: &'a i64
+        application_user_id: i64
     ) -> Result<Option<Vec<String>>, ErrorAuditor> {
         match connection.get::<String, Option<String>>(
             StorageKeyResolver::get_6(application_user_id)

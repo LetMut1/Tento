@@ -15,14 +15,14 @@ impl StorageKeyResolver {
     }
 
     pub fn get_2<'a>(
-        application_user_id: &'a i64,
+        application_user_id: i64,
         application_user_log_in_token_device_id: &'a str
     ) -> String {
         return Self::PREFIX_2.to_string() + application_user_id.to_string().as_str()  + ":" + application_user_log_in_token_device_id;
     }
 
     pub fn get_3<'a>(
-        application_user_id: &'a i64,
+        application_user_id: i64,
     ) -> String {
         return Self::PREFIX_3.to_string() + application_user_id.to_string().as_str();
     }
@@ -34,14 +34,14 @@ impl StorageKeyResolver {
     }
 
     pub fn get_5<'a>(
-        application_user_id: &'a i64,
+        application_user_id: i64,
         application_user_log_in_token_device_id: &'a str,
     ) -> String {
         return Self::PREFIX_5.to_string() + application_user_id.to_string().as_str() + ":" + application_user_log_in_token_device_id;
     }
 
     pub fn get_6<'a>(
-        application_user_id: &'a i64
+        application_user_id: i64
     ) -> String {
         return Self::PREFIX_6.to_string() + application_user_id.to_string().as_str();
     }

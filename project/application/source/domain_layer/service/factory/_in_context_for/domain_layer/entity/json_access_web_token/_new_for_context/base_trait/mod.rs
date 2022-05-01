@@ -9,7 +9,7 @@ pub trait BaseTrait {
 
     fn create<'a>(
         json_access_web_token_id: Cow<'a, str>,
-        application_user_id: Cow<'a, i64>,
+        application_user_id: i64,
         application_user_log_in_token_device_id: Cow<'a, str>,
         expiration_time: String
     ) -> JsonAccessWebToken<'a> {

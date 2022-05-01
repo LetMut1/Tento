@@ -34,7 +34,7 @@ impl<'a> JsonAccessWebToken<'a> {
 
     pub fn get_application_user_id<'b>(
         &'b self
-    ) -> &'b i64 {
+    ) -> i64 {
         return self.payload.get_application_user_id();
     }
 

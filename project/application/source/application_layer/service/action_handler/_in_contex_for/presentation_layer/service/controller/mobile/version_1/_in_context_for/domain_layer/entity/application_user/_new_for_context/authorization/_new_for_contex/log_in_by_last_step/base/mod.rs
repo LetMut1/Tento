@@ -45,7 +45,7 @@ impl Base {
                 let redis_connection = &mut *pooled_connection;
 
                 match ApplicationUserLogInTokenDataProviderRedis::find_by_application_user_id_and_device_id(
-                    redis_connection, &application_user_id, application_user_log_in_token_device_id.as_str()
+                    redis_connection, application_user_id, application_user_log_in_token_device_id.as_str()
                 ).await {
                     Ok(application_user_log_in_token) => {
                         if let Some(mut application_user_log_in_token_) = application_user_log_in_token {
@@ -129,7 +129,7 @@ impl Base {
                                 return Err(error);
                             }
                 
-                            if *application_user_log_in_token_.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                            if application_user_log_in_token_.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                 if let Err(mut error) = ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token_).await {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                         

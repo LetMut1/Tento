@@ -34,15 +34,14 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
 
     pub fn get_wrong_enter_tries_quantity<'b>(
         &'b self
-    ) -> &'b u8 {
-        return &self.wrong_enter_tries_quantity;
+    ) -> u8 {
+        return self.wrong_enter_tries_quantity;
     }
 
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
         wrong_enter_tries_quantity: u8
     ) -> &'b mut Self {
-
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
         return self;

@@ -141,7 +141,7 @@ impl RepositoryProxy {
 
     pub async fn get_by_application_user_id<'a>(
         connection: &'a mut Connection,
-        application_user_id: &'a i64
+        application_user_id: i64
     ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, ErrorAuditor> {
         match DeviceIdProcessingStorage::get(connection, application_user_id).await {
             Ok(application_user_log_in_token_device_id_registry) => {

@@ -8,12 +8,12 @@ pub trait BaseTrait {
     type ObfuscationValueGenerator: ObfuscationValueGeneratorTrait;
 
     fn create_from_id_registry<'a>(
-        application_user_id: &'a i64,
+        application_user_id: i64,
         application_user_log_in_token_device_id: &'a str
     ) -> JsonRefreshWebToken<'a> {
         return JsonRefreshWebToken::new(
             Uuid::new_v4().to_string(),
-            Cow::Borrowed(application_user_id),
+            application_user_id,
             Cow::Borrowed(application_user_log_in_token_device_id),
             <Self::ObfuscationValueGenerator as ObfuscationValueGeneratorTrait>::generate()
         );

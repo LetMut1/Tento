@@ -15,7 +15,7 @@ pub struct Base;
 impl Base {
     pub async fn find_by_application_user_id_and_application_user_log_in_token_device_id<'a>(
         connection: &'a mut Connection, 
-        application_user_id: &'a i64, 
+        application_user_id: i64, 
         application_user_log_in_token_device_id: &'a str,
     ) -> Result<Option<JsonRefreshWebToken<'static>>, ErrorAuditor> {
         match connection.get::<String, Option<Vec<u8>>>(StorageKeyResolver::get_5(application_user_id, application_user_log_in_token_device_id)).await {
@@ -68,7 +68,7 @@ impl Base {
 
     pub async fn find_by_application_user_id_and_application_user_log_in_token_device_id_registry<'a>(
         connection: &'a mut Connection, 
-        application_user_id: &'a i64, 
+        application_user_id: i64, 
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, ErrorAuditor> {
         let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = vec![];

@@ -46,14 +46,14 @@ impl Channel {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> &'a Option<i64> {
-        return &self.id;
+    ) -> Option<i64> {
+        return self.id;
     }
 
     pub fn get_application_user_channel_administrator_id<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.application_user_channel_administrator_id;
+    ) -> i64 {
+        return self.application_user_channel_administrator_id;
     }
 
     pub fn get_name<'a>(
@@ -89,32 +89,32 @@ impl Channel {
 
     pub fn get_subscribers_quantity<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.subscribers_quantity;
+    ) -> i64 {
+        return self.subscribers_quantity;
     }
     
     pub fn get_public_marks_quantoty<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.public_marks_quantity;
+    ) -> i64 {
+        return self.public_marks_quantity;
     }
 
     pub fn get_hidden_marks_quantity<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.hidden_marks_quantity;
+    ) -> i64 {
+        return self.hidden_marks_quantity;
     }
 
     pub fn get_reactions_quantity<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.reactions_quantity;
+    ) -> i64 {
+        return self.reactions_quantity;
     }
 
     pub fn get_viewing_quantity<'a>(
         &'a self
-    ) -> &'a i64 {
-        return &self.viewing_quantity;
+    ) -> i64 {
+        return self.viewing_quantity;
     }
 
     pub fn get_created_at<'a>(

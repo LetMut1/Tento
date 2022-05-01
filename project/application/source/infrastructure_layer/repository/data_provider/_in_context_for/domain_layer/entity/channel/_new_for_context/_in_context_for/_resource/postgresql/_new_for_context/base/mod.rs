@@ -20,16 +20,16 @@ impl Base {
         connection: &'a mut Connection,
         name: &'a str,
         requery_name: &'a Option<String>,
-        limit: &'a i16
+        limit: i16
     ) -> Result<Option<Vec<ResponseDataGetManyByNameChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         
         let mut counter_u8 = CounterU8::new();
 
-        let mut counter: &'_ u8;
+        let mut counter_u8_value: u8;
         match counter_u8.get_next() {
             Ok(counter_) => {
-                counter = counter_;
+                counter_u8_value = counter_;
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -51,7 +51,7 @@ impl Base {
             FROM public.channel c \
             WHERE c.is_private = FALSE AND c.name LIKE $"
             .to_string()
-            + counter.to_string().as_str();
+            + counter_u8_value.to_string().as_str();
 
         let wildcard = name.to_string() + "%";
         prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
@@ -59,7 +59,7 @@ impl Base {
         if let Some(requery_name_) = requery_name {
             match counter_u8.get_next() {
                 Ok(counter_) => {
-                    counter = counter_;
+                    counter_u8_value = counter_;
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -67,14 +67,14 @@ impl Base {
                     return Err(error);
                 }
             }
-            query = query + " AND c.name > $" + counter.to_string().as_str();
+            query = query + " AND c.name > $" + counter_u8_value.to_string().as_str();
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_name_, Type::TEXT);
         }
 
         match counter_u8.get_next() {
             Ok(counter_) => {
-                counter = counter_;
+                counter_u8_value = counter_;
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -82,9 +82,9 @@ impl Base {
                 return Err(error);
             }
         }
-        query = query + " ORDER BY c.name ASC LIMIT $" + counter.to_string().as_str() + ";";
+        query = query + " ORDER BY c.name ASC LIMIT $" + counter_u8_value.to_string().as_str() + ";";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let mut channel_registry: Vec<ResponseDataGetManyByNameChannel> = vec![];
 
@@ -273,14 +273,14 @@ impl Base {
     pub async fn per_request_2<'a>(
         connection: &'a mut Connection,
         created_at: &'a Option<String>,
-        order: &'a i8,
-        limit: &'a i16
+        order: i8,
+        limit: i16
     ) -> Result<Option<Vec<ResponseDataGetManyByCreatedAtChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter_u8 = CounterU8::new();
 
-        let mut counter: &'_ u8;
+        let mut counter_u8_value: u8;
 
         let mut query = 
             "SELECT \
@@ -314,7 +314,7 @@ impl Base {
             }
             match counter_u8.get_next() {
                 Ok(counter_) => {
-                    counter = counter_;
+                    counter_u8_value = counter_;
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -322,7 +322,7 @@ impl Base {
                     return Err(error);
                 }
             }
-            query = query + counter.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
+            query = query + counter_u8_value.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(created_at_, Type::TEXT);
         }
@@ -330,7 +330,7 @@ impl Base {
         let order_: &'static str;
         match counter_u8.get_next() {
             Ok(counter_) => {
-                counter = counter_;
+                counter_u8_value = counter_;
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -348,9 +348,9 @@ impl Base {
                 return Err(error);
             }
         }
-        query = query + " ORDER BY c.created_at " + order_ + " LIMIT $" + counter.to_string().as_str() + ";";
+        query = query + " ORDER BY c.created_at " + order_ + " LIMIT $" + counter_u8_value.to_string().as_str() + ";";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let mut channel_registry: Vec<ResponseDataGetManyByCreatedAtChannel> = vec![];
 
@@ -538,15 +538,15 @@ impl Base {
 
     pub async fn per_request_3<'a>(
         connection: &'a mut Connection,
-        subscribers_quantity: &'a Option<i64>,
-        order: &'a i8,
-        limit: &'a i16
+        subscribers_quantity: Option<i64>,
+        order: i8,
+        limit: i16
     ) -> Result<Option<Vec<ResponseDataGetManyBySubscribersQuantityChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter_u8 = CounterU8::new();
 
-        let mut counter: &'_ u8;
+        let mut counter_u8_value: u8;
 
         let mut query = 
             "SELECT \
@@ -556,7 +556,7 @@ impl Base {
             WHERE c.is_private = FALSE"
             .to_string();
 
-        if let Some(subscribers_quantity_) = subscribers_quantity {
+        if let Some(ref subscribers_quantity_) = subscribers_quantity {
             if OrderConventionResolver::is_asc(order) {
                 query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($";
             } else {
@@ -573,7 +573,7 @@ impl Base {
             }
             match counter_u8.get_next() {
                 Ok(counter_) => {
-                    counter = counter_;
+                    counter_u8_value = counter_;
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -581,7 +581,7 @@ impl Base {
                     return Err(error);
                 }
             }
-            query = query + counter.to_string().as_str() + ")";
+            query = query + counter_u8_value.to_string().as_str() + ")";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity_, Type::INT8);
         }
@@ -589,7 +589,7 @@ impl Base {
         let order_: &'static str;
         match counter_u8.get_next() {
             Ok(counter_) => {
-                counter = counter_;
+                counter_u8_value = counter_;
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -607,9 +607,9 @@ impl Base {
                 return Err(error);
             }
         }
-        query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + order_ +" LIMIT $" + counter.to_string().as_str() + ";";
+        query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + order_ +" LIMIT $" + counter_u8_value.to_string().as_str() + ";";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let mut channel_registry: Vec<ResponseDataGetManyBySubscribersQuantityChannel> = vec![];
 
