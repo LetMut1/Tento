@@ -1,6 +1,7 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
+use crate::_code_optimization::PostgresqlConnectionPool;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::logic_error::LogicError;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
@@ -298,28 +299,22 @@ impl Base {
 
      // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     #[tokio::main]                      // TODO написать без макроса
-    async fn run_http_server<T>(
-    ) -> Result<(), ErrorAuditor>
-    where 
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-    {
+    async fn run_http_server(
+    ) -> Result<(), ErrorAuditor> {
         match EnvironmentVariableResolver::get_resource_postgresql_url() {
             Ok(resource_postgresql_url) => {
                 match PostgresqlConfig::from_str(resource_postgresql_url.as_str()) {
                     Ok(config) => {
                         match EnvironmentVariableResolver::is_production() {
                             Ok(is_production) => {
-                                let postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>;
+                                let postgresql_connection_pool: PostgresqlConnectionPool;
                                 if is_production {
-                                    todo!();                                                                                                // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                                    todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
                                 } else {
                                     match Pool::builder()
-                                        .build(PostgresqlConnectionManager::new(config, NoTls)).await {                                          // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                                        .build(PostgresqlConnectionManager::new(config, NoTls)).await {         // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
                                         Ok(postgresql_connection_pool_) => {
-                                            postgresql_connection_pool = postgresql_connection_pool_;
+                                            postgresql_connection_pool = PostgresqlConnectionPool::Development {postgresql_connection_pool: postgresql_connection_pool_};
                                         }
                                         Err(error) => {
                                             return Err(
@@ -348,25 +343,31 @@ impl Base {
                         
                         
                                                                                 // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
-                                                                                let service = make_service_fn(move |_: &AddrStream| {
-                                                                                    let postgresql_connection_pool = postgresql_connection_pool.clone();
-                                                                        
-                                                                                    let redis_connection_pool = redis_connection_pool.clone();
-                                                                        
-                                                                                    async move {
-                                                                                        return Ok::<_, HyperError>(
-                                                                                            service_fn(move |requset| {
-                                                                                                let postgresql_connection_pool = postgresql_connection_pool.clone();
+                                                                                let service = make_service_fn(
+                                                                                    move |_: &AddrStream| {
+                                                                                        let postgresql_connection_pool_ = postgresql_connection_pool.clone();
                                                                             
-                                                                                                let redis_connection_pool = redis_connection_pool.clone();
+                                                                                        let redis_connection_pool_ = redis_connection_pool.clone();
                                                                             
-                                                                                                return async move {
-                                                                                                    return Ok::<_, HyperError>(Self::resolve(requset, postgresql_connection_pool, redis_connection_pool).await);
-                                                                                                };
-                                                                                            })
-                                                                                        );
+                                                                                        async move {
+                                                                                            return Ok::<_, HyperError>(
+                                                                                                service_fn(move |requset| {
+                                                                                                    let postgresql_connection_pool__ = postgresql_connection_pool_.clone();
+                                                                                
+                                                                                                    let redis_connection_pool__ = redis_connection_pool_.clone();
+                                                                                
+                                                                                                    return async move {
+                                                                                                        match postgresql_connection_pool__ {
+                                                                                                            PostgresqlConnectionPool::Development {postgresql_connection_pool} => {
+                                                                                                                return Ok::<_, HyperError>(Self::resolve(requset, postgresql_connection_pool, redis_connection_pool__).await);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    };
+                                                                                                })
+                                                                                            );
+                                                                                        }
                                                                                     }
-                                                                                });
+                                                                                );
                                                                                 // TODO  TODO  TODO ------------------------------------------------------------------------------------------------------------------
                                                                         
                                                                         
