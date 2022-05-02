@@ -71,7 +71,7 @@ impl Base {
                                 
                                             return Err(
                                                 ErrorAuditor::new(
-                                                    ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
+                                                    ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::NotFound } },
                                                     BacktracePart::new(line!(), file!(), None)
                                                 )
                                             );
@@ -86,7 +86,7 @@ impl Base {
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
-                                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                                            ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
                                             BacktracePart::new(line!(), file!(), None)
                                         )
                                     );
@@ -96,7 +96,7 @@ impl Base {
                 
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserLogInTokenError {application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound}},
+                                ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserLogInTokenError { application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -111,7 +111,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
+                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolRedisError { bb8_redis_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

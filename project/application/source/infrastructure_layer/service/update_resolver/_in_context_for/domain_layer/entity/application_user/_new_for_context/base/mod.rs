@@ -28,7 +28,7 @@ impl Base {
 
         return Err(
             ErrorAuditor::new(
-                ErrorAggregator::LogicError {logic_error: LogicError::new(false, "The columns allowing update should exist for ApplicationUser.")},
+                ErrorAggregator::LogicError { logic_error: LogicError::new(false, "The columns allowing update should exist for ApplicationUser.") },
                 BacktracePart::new(line!(), file!(), None)
             )
         );

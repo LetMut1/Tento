@@ -25,7 +25,7 @@ impl Base {
         ).await {
             return Err(
                 ErrorAuditor::new(
-                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );

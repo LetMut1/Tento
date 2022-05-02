@@ -33,7 +33,7 @@ impl Extractor {
                         
                                     return Err(
                                         ErrorAuditor::new(
-                                            ErrorAggregator::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::InJsonAccessWebTokenBlackList}},
+                                            ErrorAggregator::EntityError { entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::InJsonAccessWebTokenBlackList } },
                                             BacktracePart::new(line!(), file!(), None)
                                         )
                                     );
@@ -48,7 +48,7 @@ impl Extractor {
                 
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::AlreadyExpired}},
+                                ErrorAggregator::EntityError { entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::AlreadyExpired } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );

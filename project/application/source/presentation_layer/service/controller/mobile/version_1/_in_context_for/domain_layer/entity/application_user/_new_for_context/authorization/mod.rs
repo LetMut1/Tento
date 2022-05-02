@@ -153,9 +153,9 @@ impl Authorization {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::ApplicationUserError {ref application_user_error} => {
+                                    &EntityError::ApplicationUserError { ref application_user_error } => {
                                         match application_user_error {
                                             &ApplicationUserError::InvalidNickname => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -184,8 +184,8 @@ impl Authorization {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -258,12 +258,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -324,9 +324,9 @@ impl Authorization {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::ApplicationUserError {ref application_user_error} => {
+                                    &EntityError::ApplicationUserError { ref application_user_error } => {
                                         match application_user_error {
                                             &ApplicationUserError::InvalidEmail => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -355,8 +355,8 @@ impl Authorization {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -430,12 +430,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -486,9 +486,9 @@ impl Authorization {
                     environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     match error.get_error_aggregator() {
-                        &ErrorAggregator::EntityError {ref entity_error} => {
+                        &ErrorAggregator::EntityError { ref entity_error } => {
                             match entity_error {
-                                &EntityError::ApplicationUserError {ref application_user_error} => {
+                                &EntityError::ApplicationUserError { ref application_user_error } => {
                                     match application_user_error {
                                         &ApplicationUserError::EmailAlreadyExist => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -531,8 +531,8 @@ impl Authorization {
                         &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        &ErrorAggregator::LogicError {logic_error: _} | 
-                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError { logic_error: _ } | 
+                        &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                             log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
@@ -617,12 +617,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -686,9 +686,9 @@ impl Authorization {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::ApplicationUserError {ref application_user_error} => {
+                                    &EntityError::ApplicationUserError { ref application_user_error } => {
                                         match application_user_error {
                                             &ApplicationUserError::EmailAlreadyExist => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -751,7 +751,7 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    &EntityError::ApplicationUserRegistrationConfirmationTokenError {ref application_user_registration_confirmation_token_error} => {
+                                    &EntityError::ApplicationUserRegistrationConfirmationTokenError { ref application_user_registration_confirmation_token_error } => {
                                         match application_user_registration_confirmation_token_error {
                                             &ApplicationUserRegistrationConfirmationTokenError::NotFound => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -791,8 +791,8 @@ impl Authorization {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -867,12 +867,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -916,9 +916,9 @@ impl Authorization {
                     environment_variable_resolver, redis_connection_pool, request_data
                 ).await {
                     match error.get_error_aggregator() {
-                        &ErrorAggregator::EntityError {ref entity_error} => {
+                        &ErrorAggregator::EntityError { ref entity_error } => {
                             match entity_error {
-                                &EntityError::ApplicationUserRegistrationConfirmationTokenError {ref application_user_registration_confirmation_token_error} => {
+                                &EntityError::ApplicationUserRegistrationConfirmationTokenError { ref application_user_registration_confirmation_token_error } => {
                                     match application_user_registration_confirmation_token_error {
                                         &ApplicationUserRegistrationConfirmationTokenError::NotFound => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -948,8 +948,8 @@ impl Authorization {
                         &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        &ErrorAggregator::LogicError {logic_error: _} |
-                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError { logic_error: _ } |
+                        &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                             log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
@@ -1026,12 +1026,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1095,9 +1095,9 @@ impl Authorization {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::ApplicationUserError {ref application_user_error} => {
+                                    &EntityError::ApplicationUserError { ref application_user_error } => {
                                         match application_user_error {
                                             &ApplicationUserError::InvalidNickname |
                                             &ApplicationUserError::InvalidPassword |
@@ -1129,8 +1129,8 @@ impl Authorization {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
             
                                 return ResponseCreator::create_internal_server_error();
@@ -1205,12 +1205,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1267,9 +1267,9 @@ impl Authorization {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::ApplicationUserLogInTokenError {ref application_user_log_in_token_error} => {
+                                    &EntityError::ApplicationUserLogInTokenError { ref application_user_log_in_token_error } => {
                                         match application_user_log_in_token_error {
                                             &ApplicationUserLogInTokenError::NotFound => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -1309,8 +1309,8 @@ impl Authorization {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -1377,12 +1377,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1433,9 +1433,9 @@ impl Authorization {
                     environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     match error.get_error_aggregator() {
-                        &ErrorAggregator::EntityError {ref entity_error} => {
+                        &ErrorAggregator::EntityError { ref entity_error } => {
                             match entity_error {
-                                &EntityError::ApplicationUserError {ref application_user_error} => {
+                                &EntityError::ApplicationUserError { ref application_user_error } => {
                                     match application_user_error {
                                         &ApplicationUserError::NotFound => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -1456,7 +1456,7 @@ impl Authorization {
                                         }
                                     }
                                 }
-                                &EntityError::ApplicationUserLogInTokenError {ref application_user_log_in_token_error} => {
+                                &EntityError::ApplicationUserLogInTokenError { ref application_user_log_in_token_error } => {
                                     match application_user_log_in_token_error {
                                         &ApplicationUserLogInTokenError::NotFound => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -1485,8 +1485,8 @@ impl Authorization {
                         &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        &ErrorAggregator::LogicError {logic_error: _} |
-                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError { logic_error: _ } |
+                        &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                             log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
@@ -1571,12 +1571,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1633,9 +1633,9 @@ impl Authorization {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
+                                    &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                         match json_access_web_token_error {
                                             &JsonAccessWebTokenError::NotExpired => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -1656,7 +1656,7 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
+                                    &EntityError::JsonRefreshWebTokenError { ref json_refresh_web_token_error } => {
                                         match json_refresh_web_token_error {
                                             &JsonRefreshWebTokenError::NotFound => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -1682,8 +1682,8 @@ impl Authorization {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -1750,12 +1750,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1799,9 +1799,9 @@ impl Authorization {
                     environment_variable_resolver, redis_connection_pool, request_data
                 ).await {
                     match error.get_error_aggregator() {
-                        &ErrorAggregator::EntityError {ref entity_error} => {
+                        &ErrorAggregator::EntityError { ref entity_error } => {
                             match entity_error {
-                                &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
+                                &EntityError::JsonRefreshWebTokenError { ref json_refresh_web_token_error } => {
                                     match json_refresh_web_token_error {
                                         &JsonRefreshWebTokenError::NotFound => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -1819,7 +1819,7 @@ impl Authorization {
                                         }
                                     }
                                 }
-                                &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
+                                &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                     match json_access_web_token_error {
                                         &JsonAccessWebTokenError::AlreadyExpired => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -1862,8 +1862,8 @@ impl Authorization {
                         &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        &ErrorAggregator::LogicError {logic_error: _} |
-                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError { logic_error: _ } |
+                        &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                             log::error!("{}", error);
 
                             return ResponseCreator::create_internal_server_error();
@@ -1940,12 +1940,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -1989,9 +1989,9 @@ impl Authorization {
                     environment_variable_resolver, redis_connection_pool, request_data
                 ).await {
                     match error.get_error_aggregator() {
-                        &ErrorAggregator::EntityError {ref entity_error} => {
+                        &ErrorAggregator::EntityError { ref entity_error } => {
                             match entity_error {
-                                &EntityError::JsonRefreshWebTokenError {ref json_refresh_web_token_error} => {
+                                &EntityError::JsonRefreshWebTokenError { ref json_refresh_web_token_error } => {
                                     match json_refresh_web_token_error {
                                         &JsonRefreshWebTokenError::NotFound => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -2009,7 +2009,7 @@ impl Authorization {
                                         }
                                     }
                                 }
-                                &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
+                                &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                     match json_access_web_token_error {
                                         &JsonAccessWebTokenError::AlreadyExpired => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -2052,8 +2052,8 @@ impl Authorization {
                         &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        &ErrorAggregator::LogicError {logic_error: _} |
-                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError { logic_error: _ } |
+                        &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                             log::error!("{}", error);
 
                             return ResponseCreator::create_internal_server_error();
@@ -2130,12 +2130,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -2199,9 +2199,9 @@ impl Authorization {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::ApplicationUserError {ref application_user_error} => {
+                                    &EntityError::ApplicationUserError { ref application_user_error } => {
                                         match application_user_error {
                                             &ApplicationUserError::NotFound => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -2231,8 +2231,8 @@ impl Authorization {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
             
                                 return ResponseCreator::create_internal_server_error();
@@ -2307,12 +2307,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -2361,9 +2361,9 @@ impl Authorization {
             Ok(request_data) => {
                 if let Err(error) = ActionHandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
                     match error.get_error_aggregator() {
-                        &ErrorAggregator::EntityError {ref entity_error} => {
+                        &ErrorAggregator::EntityError { ref entity_error } => {
                             match entity_error {
-                                &EntityError::ApplicationUserError {ref application_user_error} => {
+                                &EntityError::ApplicationUserError { ref application_user_error } => {
                                     match application_user_error {
                                         &ApplicationUserError::NotFound => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -2399,7 +2399,7 @@ impl Authorization {
         
                                     }
                                 }
-                                &EntityError::ApplicationUserResetPasswordTokenError {ref application_user_reset_password_token_error} => {
+                                &EntityError::ApplicationUserResetPasswordTokenError { ref application_user_reset_password_token_error } => {
                                     match application_user_reset_password_token_error {
                                         &ApplicationUserResetPasswordTokenError::InvalidValue => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -2439,8 +2439,8 @@ impl Authorization {
                         &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        &ErrorAggregator::LogicError {logic_error: _} |
-                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError { logic_error: _ } |
+                        &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                             log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
@@ -2525,12 +2525,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();
@@ -2581,9 +2581,9 @@ impl Authorization {
                     environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     match error.get_error_aggregator() {
-                        &ErrorAggregator::EntityError {ref entity_error} => {
+                        &ErrorAggregator::EntityError { ref entity_error } => {
                             match entity_error {
-                                &EntityError::ApplicationUserError {ref application_user_error} => {
+                                &EntityError::ApplicationUserError { ref application_user_error } => {
                                     match application_user_error {
                                         &ApplicationUserError::NotFound => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -2604,7 +2604,7 @@ impl Authorization {
                                         }
                                     }
                                 }
-                                &EntityError::ApplicationUserResetPasswordTokenError {ref application_user_reset_password_token_error} => {
+                                &EntityError::ApplicationUserResetPasswordTokenError { ref application_user_reset_password_token_error } => {
                                     match application_user_reset_password_token_error {
                                         &ApplicationUserResetPasswordTokenError::NotFound => {
                                             match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -2633,8 +2633,8 @@ impl Authorization {
                         &ErrorAggregator::InvalidArgumentError => {
                             return ResponseCreator::create_bad_request();
                         }
-                        &ErrorAggregator::LogicError {logic_error: _} |
-                        &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                        &ErrorAggregator::LogicError { logic_error: _ } |
+                        &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                             log::error!("{}", error);
         
                             return ResponseCreator::create_internal_server_error();
@@ -2719,12 +2719,12 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    &ErrorAggregator::EntityError {entity_error: _} |
+                                    &ErrorAggregator::EntityError { entity_error: _ } |
                                     &ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("{}", error);
                                     }
-                                    &ErrorAggregator::LogicError {logic_error: _} |
-                                    &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                                    &ErrorAggregator::LogicError { logic_error: _ } |
+                                    &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                         log::error!("{}", error);
                 
                                         return ResponseCreator::create_internal_server_error();

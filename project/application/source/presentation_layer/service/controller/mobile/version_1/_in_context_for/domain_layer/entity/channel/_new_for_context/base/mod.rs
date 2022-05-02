@@ -73,9 +73,9 @@ impl Base {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
+                                    &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                         match json_access_web_token_error {
                                             &JsonAccessWebTokenError::AlreadyExpired => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -118,8 +118,8 @@ impl Base {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -176,9 +176,9 @@ impl Base {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
+                                    &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                         match json_access_web_token_error {
                                             &JsonAccessWebTokenError::AlreadyExpired => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -221,8 +221,8 @@ impl Base {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -279,9 +279,9 @@ impl Base {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
+                                    &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                         match json_access_web_token_error {
                                             &JsonAccessWebTokenError::AlreadyExpired => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -324,8 +324,8 @@ impl Base {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();
@@ -382,9 +382,9 @@ impl Base {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError {ref entity_error} => {
+                            &ErrorAggregator::EntityError { ref entity_error } => {
                                 match entity_error {
-                                    &EntityError::JsonAccessWebTokenError {ref json_access_web_token_error} => {
+                                    &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                         match json_access_web_token_error {
                                             &JsonAccessWebTokenError::AlreadyExpired => {
                                                 match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
@@ -427,8 +427,8 @@ impl Base {
                             &ErrorAggregator::InvalidArgumentError => {
                                 return ResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError {logic_error: _} |
-                            &ErrorAggregator::RunTimeError {run_time_error: _} => {
+                            &ErrorAggregator::LogicError { logic_error: _ } |
+                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
                                 return ResponseCreator::create_internal_server_error();

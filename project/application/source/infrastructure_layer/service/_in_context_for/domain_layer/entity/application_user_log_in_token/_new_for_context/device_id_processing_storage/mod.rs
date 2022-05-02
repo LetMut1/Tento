@@ -25,7 +25,7 @@ impl DeviceIdProcessingStorage {
         ).await {
             return Err(
                 ErrorAuditor::new(
-                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -57,7 +57,7 @@ impl DeviceIdProcessingStorage {
         ).await {
             return Err(
                 ErrorAuditor::new(
-                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -76,7 +76,7 @@ impl DeviceIdProcessingStorage {
         ).await {
             return Err(
                 ErrorAuditor::new(
-                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -108,7 +108,7 @@ impl DeviceIdProcessingStorage {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::RedisError {redis_error: error}}},
+                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

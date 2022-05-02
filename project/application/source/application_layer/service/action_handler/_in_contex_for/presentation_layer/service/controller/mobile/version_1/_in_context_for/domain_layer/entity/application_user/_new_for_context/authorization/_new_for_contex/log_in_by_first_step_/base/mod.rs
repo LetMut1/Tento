@@ -51,7 +51,7 @@ impl Base {
         if let Err(error) = rmp_serde::encode::write(&mut data, &convertible_data) {
             return Err(
                 ErrorAuditor::new(
-                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -83,7 +83,7 @@ impl Base {
                         Err(error) => {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -93,7 +93,7 @@ impl Base {
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
-                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                            ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                             BacktracePart::new(line!(), file!(), None)
                         )
                     );

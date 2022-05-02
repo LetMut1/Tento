@@ -21,7 +21,7 @@ impl TransactionManager {
             TransactionIsolationLevel::RepeatableRead => {
                 query = query + " REPEATABLE READ, READ WRITE, NOT DEFERRABLE;";
             }
-            TransactionIsolationLevel::Serializable {read_only, deferrable} => {
+            TransactionIsolationLevel::Serializable { read_only, deferrable } => {
                 query = query + " SERIALIZABLE,";
                 if read_only {
                     query = query + " READ ONLY,";
@@ -39,7 +39,7 @@ impl TransactionManager {
         if let Err(error) = connection.execute(query.as_str(), &[]).await {
             return Err(
                 ErrorAuditor::new(
-                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -57,7 +57,7 @@ impl TransactionManager {
         if let Err(error) = connection.execute(query, &[]).await {
             return Err(
                 ErrorAuditor::new(
-                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -75,7 +75,7 @@ impl TransactionManager {
         if let Err(error) = connection.execute(query, &[]).await {
             return Err(
                 ErrorAuditor::new(
-                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );

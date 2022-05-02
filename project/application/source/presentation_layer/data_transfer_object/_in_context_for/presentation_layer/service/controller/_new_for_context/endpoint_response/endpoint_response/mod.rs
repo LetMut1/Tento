@@ -27,13 +27,13 @@ where
 {
     pub fn new_without_data(
     ) -> Self {
-        return Self::Data {data: Data::Empty};
+        return Self::Data { data: Data::Empty };
     }
 
     pub fn new_with_data(
         data: S
     ) -> Self {
-        return Self::Data {data: Data::Filled {data}};
+        return Self::Data { data: Data::Filled { data } };
     }
 
     pub fn new_with_error_code(
@@ -42,6 +42,6 @@ where
         #[cfg(feature="facilitate_non_automatic_functional_testing")]
         error_code: String
     ) -> Self {
-        return Self::ErrorCode {error_code};
+        return Self::ErrorCode { error_code };
     }
 }

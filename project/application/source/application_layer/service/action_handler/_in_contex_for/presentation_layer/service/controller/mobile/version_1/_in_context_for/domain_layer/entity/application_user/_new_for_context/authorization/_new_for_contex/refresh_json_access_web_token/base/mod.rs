@@ -109,7 +109,7 @@ impl Base {
                                 
                                             return Err(
                                                 ErrorAuditor::new(
-                                                    ErrorAggregator::EntityError {entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound}},
+                                                    ErrorAggregator::EntityError { entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound } },
                                                     BacktracePart::new(line!(), file!(), None)
                                                 )
                                             );
@@ -124,7 +124,7 @@ impl Base {
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
-                                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
+                                            ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolRedisError { bb8_redis_error: error } } },
                                             BacktracePart::new(line!(), file!(), None)
                                         )
                                     );
@@ -134,7 +134,7 @@ impl Base {
                         
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::EntityError {entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotExpired}},
+                                ErrorAggregator::EntityError { entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotExpired } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );

@@ -23,7 +23,7 @@ impl DateTimeResolver {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -49,7 +49,7 @@ impl DateTimeResolver {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Too big date must not be added.")},
+                        ErrorAggregator::LogicError { logic_error: LogicError::new(false, "Too big date must not be added.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

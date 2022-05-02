@@ -115,7 +115,7 @@ impl Base {
                                             Err(error) => {
                                                 return Err(
                                                     ErrorAuditor::new(
-                                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
+                                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolRedisError { bb8_redis_error: error } } },
                                                         BacktracePart::new(line!(), file!(), None)
                                                     )
                                                 );
@@ -125,7 +125,7 @@ impl Base {
                                         
                                     return Err(
                                         ErrorAuditor::new(
-                                            ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::EmailAlreadyExist}},
+                                            ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::EmailAlreadyExist } },
                                             BacktracePart::new(line!(), file!(), None)
                                         )
                                     );
@@ -140,7 +140,7 @@ impl Base {
                         Err(error) => {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -150,7 +150,7 @@ impl Base {
                 
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidEmail}},
+                        ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::InvalidEmail } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

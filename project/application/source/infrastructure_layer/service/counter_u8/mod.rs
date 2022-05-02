@@ -21,7 +21,7 @@ impl CounterU8 {
         if self.counter == u8::max_value() {
             return Err(
                 ErrorAuditor::new(
-                    ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Out of range for `u8` type.")},
+                    ErrorAggregator::LogicError { logic_error: LogicError::new(false, "Out of range for `u8` type.") },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );

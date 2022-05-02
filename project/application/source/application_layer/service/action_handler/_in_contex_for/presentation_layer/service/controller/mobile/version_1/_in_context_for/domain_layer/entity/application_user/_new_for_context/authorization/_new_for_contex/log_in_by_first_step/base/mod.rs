@@ -71,7 +71,7 @@ impl Base {
                                             None => {
                                                 return Err(
                                                     ErrorAuditor::new(
-                                                        ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
+                                                        ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::NotFound } },
                                                         BacktracePart::new(line!(), file!(), None)
                                                     )
                                                 );
@@ -95,7 +95,7 @@ impl Base {
                                                 None => {
                                                     return Err(
                                                         ErrorAuditor::new(
-                                                            ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::NotFound}},
+                                                            ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::NotFound } },
                                                             BacktracePart::new(line!(), file!(), None)
                                                         )
                                                     );
@@ -111,7 +111,7 @@ impl Base {
                                 } else {
                                     return Err(
                                         ErrorAuditor::new(
-                                            ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidNickname}},
+                                            ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::InvalidNickname } },
                                             BacktracePart::new(line!(), file!(), None)
                                         )
                                     );
@@ -138,7 +138,7 @@ impl Base {
                                     None => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::LogicError {logic_error: LogicError::new(false, "Application_user_id should exist")},
+                                                ErrorAggregator::LogicError { logic_error: LogicError::new(false, "Application_user_id should exist") },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -199,7 +199,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolRedisError {bb8_redis_error: error}}},
+                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolRedisError { bb8_redis_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -209,7 +209,7 @@ impl Base {
         
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::WrongPassword}},
+                                    ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::WrongPassword } },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -224,7 +224,7 @@ impl Base {
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
-                            ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::ConnectionPoolPostgresqlError {bb8_postgresql_error: error}}},
+                            ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
                             BacktracePart::new(line!(), file!(), None)
                         )
                     );
@@ -234,7 +234,7 @@ impl Base {
 
         return Err(
             ErrorAuditor::new(
-                ErrorAggregator::EntityError {entity_error: EntityError::ApplicationUserError {application_user_error: ApplicationUserError::InvalidPassword}},
+                ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::InvalidPassword } },
                 BacktracePart::new(line!(), file!(), None)
             )
         );

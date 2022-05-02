@@ -60,7 +60,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgesql database.")},
+                                    ErrorAggregator::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgesql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -74,7 +74,7 @@ impl Base {
                             Err(error) => {
                                 return Err(
                                     ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -87,7 +87,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -97,7 +97,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error }}},
+                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -118,7 +118,7 @@ impl Base {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::LogicError {logic_error: LogicError::new(false, "The application_user_id should exist.")},
+                        ErrorAggregator::LogicError { logic_error: LogicError::new(false, "The application_user_id should exist.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -186,7 +186,7 @@ impl Base {
                         None => {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")},
+                                    ErrorAggregator::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -200,7 +200,7 @@ impl Base {
                         Some(_) => {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser update.")},
+                                    ErrorAggregator::LogicError { logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser update.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -252,7 +252,7 @@ impl Base {
                         None => {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")},
+                                    ErrorAggregator::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -266,7 +266,7 @@ impl Base {
                         Some(_) => {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser update.")},
+                                    ErrorAggregator::LogicError { logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser update.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -323,7 +323,7 @@ impl Base {
                     None => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.")},
+                                ErrorAggregator::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.") },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -333,7 +333,7 @@ impl Base {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::LogicError {logic_error: LogicError::new(true, "The columns name description should exist for ApplicationUser update.")},
+                        ErrorAggregator::LogicError { logic_error: LogicError::new(true, "The columns name description should exist for ApplicationUser update.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -347,7 +347,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::LogicError {logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgesql database.")},
+                                    ErrorAggregator::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgesql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -358,7 +358,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error}}},
+                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -368,7 +368,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::ResourceError {resource_error: ResourceError::PostgresqlError {postgresql_error: error}}},
+                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

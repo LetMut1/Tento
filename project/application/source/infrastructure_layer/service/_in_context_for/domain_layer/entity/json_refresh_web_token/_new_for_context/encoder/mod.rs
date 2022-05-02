@@ -41,7 +41,7 @@ impl EncoderTrait for Encoder {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
+                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
