@@ -7,6 +7,7 @@ use crate::infrastructure_layer::error::error_auditor::_component::error_aggrega
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::endpoint_response::endpoint_response::EndpointResponse;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step_::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step_::base::Base as ResponseData;
@@ -29,7 +30,8 @@ use tokio_postgres::tls::TlsConnect;
 pub struct Base;
 
 impl Base {
-    pub async fn handle<T>(
+    pub async fn handle<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
@@ -62,7 +64,7 @@ impl Base {
 
         let request = Request::from_parts(request_parts, Body::from(data));
         
-        let response = Authorization::log_in_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await;
+        let response = Authorization::log_in_by_first_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
 
         let response_data: ResponseData;
 

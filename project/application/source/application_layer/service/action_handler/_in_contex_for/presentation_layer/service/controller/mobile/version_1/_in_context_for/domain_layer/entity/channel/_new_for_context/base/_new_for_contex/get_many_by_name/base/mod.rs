@@ -9,6 +9,7 @@ use crate::infrastructure_layer::error::error_auditor::_component::simple_backtr
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::channel::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ChannelDataProviderPostgresql;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::extractor::Extractor;
+use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ChannelValidator;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::base::Base as ResponseData;
@@ -24,7 +25,8 @@ pub struct Base;
 impl Base {
     const LIMIT: i8 = 30;
 
-    pub async fn handle<T>(
+    pub async fn handle<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
@@ -44,7 +46,7 @@ impl Base {
 
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
-                match Extractor::extract(json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
+                match Extractor::extract(environment_variable_resolver, json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
                     Ok(_json_access_web_token_) => {
                         if limit <= 0 || limit > Self::LIMIT {
                             limit = Self::LIMIT;

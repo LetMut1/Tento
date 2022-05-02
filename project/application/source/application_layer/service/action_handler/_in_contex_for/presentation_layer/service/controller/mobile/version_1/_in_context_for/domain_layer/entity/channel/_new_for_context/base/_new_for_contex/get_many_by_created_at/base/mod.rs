@@ -10,6 +10,7 @@ use crate::infrastructure_layer::repository::data_provider::_in_context_for::dom
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::extractor::Extractor;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::order_convention_resolver::OrderConventionResolver;
 use crate::infrastructure_layer::service::date_time_resolver::DateTimeResolver;
+use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::base::Base as ResponseData;
 use std::clone::Clone;
@@ -24,7 +25,8 @@ pub struct Base;
 impl Base {
     const LIMIT: i8 = 30;
 
-    pub async fn handle<T>(
+    pub async fn handle<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
@@ -44,7 +46,7 @@ impl Base {
 
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
-                match Extractor::extract(json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
+                match Extractor::extract(environment_variable_resolver, json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
                     Ok(_json_access_web_token_) => {
                         if let Some(ref channel_created_at_) = channel_created_at {
                             if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {

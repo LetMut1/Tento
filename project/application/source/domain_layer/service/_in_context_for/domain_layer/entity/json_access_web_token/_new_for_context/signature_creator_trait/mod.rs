@@ -1,16 +1,16 @@
-use std::error::Error;
+use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 
 pub trait SignatureCreatorTrait {
-    type Error: Error;
-
     fn create<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         header: &'a str,
         payload: &'a str
-    ) -> Result<String, Self::Error>;
+    ) -> String;
 
     fn is_valid<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         header: &'a str,
         payload: &'a str,
         signature: &'a str
-    ) -> Result<bool, Self::Error>;
+    ) -> bool;
 }

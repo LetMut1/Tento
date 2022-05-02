@@ -6,6 +6,7 @@ use crate::infrastructure_layer::error::error_auditor::_component::error_aggrega
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::endpoint_response::endpoint_response::EndpointResponse;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices_::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices_::base::Base as ResponseData;
@@ -21,7 +22,8 @@ use std::convert::From;
 pub struct Base;
 
 impl Base {
-    pub async fn handle(
+    pub async fn handle<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
     ) -> Result<ResponseData, ErrorAuditor> {
@@ -47,7 +49,7 @@ impl Base {
 
         let request = Request::from_parts(request_parts, Body::from(data));
         
-        let response = Authorization::log_out_from_all_devices(request, redis_connection_pool).await;
+        let response = Authorization::log_out_from_all_devices(environment_variable_resolver, request, redis_connection_pool).await;
 
         let response_data: ResponseData;
 

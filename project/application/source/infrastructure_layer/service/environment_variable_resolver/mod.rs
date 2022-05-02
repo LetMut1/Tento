@@ -1,5 +1,7 @@
+use std::clone::Clone;
 use std::net::SocketAddr;
 
+#[derive(Clone)]
 pub struct EnvironmentVariableResolver {
     is_production_environment: bool,
     server_socket_address: SocketAddr,

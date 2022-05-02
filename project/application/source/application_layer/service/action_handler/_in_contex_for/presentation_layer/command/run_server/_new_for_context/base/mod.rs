@@ -57,8 +57,8 @@ impl Base {
         binary_file_path: String
     ) -> Result<(), ErrorAuditor> {
         match Self::load_environment_variable_registry(binary_file_path.as_str()) {
-            Ok(ref environment_variable_resolver) => {
-                if let Err(mut error) = Self::configure_log(environment_variable_resolver) {
+            Ok(environment_variable_resolver) => {
+                if let Err(mut error) = Self::configure_log(&environment_variable_resolver) {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
         
                     return Err(error);
@@ -354,7 +354,7 @@ impl Base {
                         Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
                     ) {
                     Ok(rolling_file_appender) => {
-                        let rolling_file_appender_name = "rfa";             // TODO  TODO  Const или Енваронмент
+                        let rolling_file_appender_name = "rfa";            // TODO  TODO  Const или Енваронмент
         
                         let appender = Appender::builder()
                             .build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
@@ -409,8 +409,8 @@ impl Base {
 
      // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     #[tokio::main]                      // TODO написать без макроса
-    async fn run_http_server<'a>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver
+    async fn run_http_server(
+        environment_variable_resolver: EnvironmentVariableResolver
     ) -> Result<(), ErrorAuditor> {
         match PostgresqlConfig::from_str(environment_variable_resolver.get_resource_postgresql_url()) {
             Ok(config) => {
@@ -441,11 +441,13 @@ impl Base {
                                 match Pool::builder()      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
                                     .build(redis_connection_manager).await {
                                     Ok(redis_connection_pool) => {
-
+                                        let builder = Server::bind(environment_variable_resolver.get_server_socket_address());
 
                                         // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
                                         let service = make_service_fn(
                                             move |_: &AddrStream| {
+                                                let environment_variable_resolver_ = environment_variable_resolver.clone();
+
                                                 let postgresql_connection_pool_ = postgresql_connection_pool.clone();
                                     
                                                 let redis_connection_pool_ = redis_connection_pool.clone();
@@ -453,6 +455,8 @@ impl Base {
                                                 async move {
                                                     return Ok::<_, HyperError>(
                                                         service_fn(move |requset| {
+                                                            let environment_variable_resolver__ = environment_variable_resolver_.clone();
+
                                                             let postgresql_connection_pool__ = postgresql_connection_pool_.clone();
                                         
                                                             let redis_connection_pool__ = redis_connection_pool_.clone();
@@ -460,7 +464,7 @@ impl Base {
                                                             return async move {
                                                                 match postgresql_connection_pool__ {
                                                                     PostgresqlConnectionPool::Development {postgresql_connection_pool} => {
-                                                                        return Ok::<_, HyperError>(Self::resolve(requset, postgresql_connection_pool, redis_connection_pool__).await);
+                                                                        return Ok::<_, HyperError>(Self::resolve(&environment_variable_resolver__, requset, postgresql_connection_pool, redis_connection_pool__).await);
                                                                     }
                                                                 }
                                                             };
@@ -473,7 +477,7 @@ impl Base {
                                 
                                 
                                 
-                                        if let Err(error) = Server::bind(environment_variable_resolver.get_server_socket_address())       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
+                                        if let Err(error) = builder       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
                                             .serve(service)
                                             .with_graceful_shutdown(Self::create_shutdown_signal())
                                             .await {
@@ -537,7 +541,8 @@ impl Base {
         return ();
     }
 
-    async fn resolve<T>(                                                           // TODO TODO  TODO Пути через константы?
+    async fn resolve<'a, T>(                                                           // TODO TODO  TODO Пути через константы?
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>, 
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -552,64 +557,64 @@ impl Base {
             // Area for existing routes with not authorized user.
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/au/cnfe", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::check_nickname_for_existing(request, postgresql_connection_pool).await;
+                return ControllerApplicationUserAuthorization::check_nickname_for_existing(environment_variable_resolver, request, postgresql_connection_pool).await;
             }
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/au/cefe", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::check_email_for_existing(request, postgresql_connection_pool).await;
+                return ControllerApplicationUserAuthorization::check_email_for_existing(environment_variable_resolver, request, postgresql_connection_pool).await;
             }
             ("/v1/m/au/rbfs", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::register_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::register_by_first_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/rbls", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::register_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::register_by_last_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/sefr", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::send_email_for_register(request, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::send_email_for_register(environment_variable_resolver, request, redis_connection_pool).await;
             }
             ("/v1/m/au/libfs", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::log_in_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::log_in_by_first_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/libls", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::log_in_by_last_step(request, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::log_in_by_last_step(environment_variable_resolver, request, redis_connection_pool).await;
             }
             ("/v1/m/au/sefli", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::send_email_for_log_in(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::send_email_for_log_in(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/rpbfs", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::reset_password_by_first_step(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::reset_password_by_first_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/rpbls", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::reset_password_by_last_step(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::reset_password_by_last_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/sefrp", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::send_email_for_reset_password(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::send_email_for_reset_password(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/rjawt", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::refresh_json_access_web_token(request, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::refresh_json_access_web_token(environment_variable_resolver, request, redis_connection_pool).await;
             }
             // Area for existing routes with authorized user.
             ("/v1/m/au/lofod", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::log_out_from_one_device(request, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::log_out_from_one_device(environment_variable_resolver, request, redis_connection_pool).await;
             }
             ("/v1/m/au/lofad", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::log_out_from_all_devices(request, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::log_out_from_all_devices(environment_variable_resolver, request, redis_connection_pool).await;
             }
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbn", &Method::POST) => {
-                return ControllerChannelBase::get_many_by_name(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerChannelBase::get_many_by_name(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbca", &Method::POST) => {
-                return ControllerChannelBase::get_many_by_created_at(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerChannelBase::get_many_by_created_at(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbsq", &Method::POST) => {
-                return ControllerChannelBase::get_many_by_subscribers_quantity(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerChannelBase::get_many_by_subscribers_quantity(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbir", &Method::POST) => {
-                return ControllerChannelBase::get_many_by_id_registry(request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerChannelBase::get_many_by_id_registry(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             // Area for not existing routes.
             _ => {
@@ -618,48 +623,48 @@ impl Base {
                     // Area for existing routes with not authorized user.
                     // GET functional. This is because there is a restriction on mobile frontend.
                     ("/v1/m/au/cnfe_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::check_nickname_for_existing_(request, postgresql_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::check_nickname_for_existing_(environment_variable_resolver, request, postgresql_connection_pool).await;
                     }
                     // GET functional. This is because there is a restriction on mobile frontend.
                     ("/v1/m/au/cefe_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::check_email_for_existing_(request, postgresql_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::check_email_for_existing_(environment_variable_resolver, request, postgresql_connection_pool).await;
                     }
                     ("/v1/m/au/rbfs_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::register_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::register_by_first_step_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/rbls_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::register_by_last_step_(request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::register_by_last_step_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/sefr_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::send_email_for_register_(request, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::send_email_for_register_(environment_variable_resolver, request, redis_connection_pool).await;
                     }
                     ("/v1/m/au/libfs_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::log_in_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::log_in_by_first_step_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/libls_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::log_in_by_last_step_(request, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::log_in_by_last_step_(environment_variable_resolver, request, redis_connection_pool).await;
                     }
                     ("/v1/m/au/sefli_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::send_email_for_log_in_(request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::send_email_for_log_in_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/rpbfs_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::reset_password_by_first_step_(request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::reset_password_by_first_step_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/rpbls_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::reset_password_by_last_step_(request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::reset_password_by_last_step_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/sefrp_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::send_email_for_reset_password_(request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::send_email_for_reset_password_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/rjawt_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::refresh_json_access_web_token_(request, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::refresh_json_access_web_token_(environment_variable_resolver, request, redis_connection_pool).await;
                     }
                     // Area for existing routes with authorized user.
                     ("/v1/m/au/lofod_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::log_out_from_one_device_(request, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::log_out_from_one_device_(environment_variable_resolver, request, redis_connection_pool).await;
                     }
                     ("/v1/m/au/lofad_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::log_out_from_all_devices_(request, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::log_out_from_all_devices_(environment_variable_resolver, request, redis_connection_pool).await;
                     }
                     // Area for not existing routes.
                     _ => {}

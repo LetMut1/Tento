@@ -19,6 +19,7 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::refresher::Refresher;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
+use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::infrastructure_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::Base as ResponseData;
@@ -26,7 +27,8 @@ use crate::presentation_layer::data_transfer_object::response_data::_in_context_
 pub struct Base;
 
 impl Base {
-    pub async fn handle(
+    pub async fn handle<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
     ) -> Result<ResponseData, ErrorAuditor> {
@@ -35,7 +37,7 @@ impl Base {
             json_refresh_web_token
         ) = request_data.into_inner();
 
-        match SerializationFormResolver::deserialize(json_access_web_token.as_str()) {
+        match SerializationFormResolver::deserialize(environment_variable_resolver, json_access_web_token.as_str()) {
             Ok(json_access_web_token_) => {
                 match ExpirationTimeResolver::is_expired(&json_access_web_token_) {
                     Ok(is_expired) => {
@@ -49,7 +51,7 @@ impl Base {
                                     ).await {
                                         Ok(json_refresh_web_token_) => {
                                             if let Some(mut json_refresh_web_token__) = json_refresh_web_token_ {
-                                                match Encoder::is_valid(&json_refresh_web_token__, json_refresh_web_token.as_str()) {
+                                                match Encoder::is_valid(environment_variable_resolver, &json_refresh_web_token__, json_refresh_web_token.as_str()) {
                                                     Ok(is_valid) => {
                                                         if is_valid && json_access_web_token_.get_id().as_bytes()[..] == json_refresh_web_token__.get_json_access_web_token_id().as_bytes()[..] {
                                                             Refresher::refresh(&mut json_refresh_web_token__);
@@ -62,9 +64,9 @@ impl Base {
                                         
                                                             match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token__) {
                                                                 Ok(ref new_json_access_web_token) => {
-                                                                    match SerializationFormResolver::serialize(new_json_access_web_token) {
+                                                                    match SerializationFormResolver::serialize(environment_variable_resolver, new_json_access_web_token) {
                                                                         Ok(new_json_access_web_token_) => {
-                                                                            match Encoder::encode(&json_refresh_web_token__) {
+                                                                            match Encoder::encode(environment_variable_resolver, &json_refresh_web_token__) {
                                                                                 Ok(new_json_refresh_web_token) => {
                                                                                     return Ok(ResponseData::new(new_json_access_web_token_, new_json_refresh_web_token));
                                                                                 }

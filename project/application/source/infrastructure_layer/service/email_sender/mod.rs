@@ -19,6 +19,7 @@ pub struct EmailSender;
 
 impl EmailSender {   // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         subject: &'a str,
         body: String,
         to: &'a str
@@ -31,67 +32,16 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             .build() {
             Ok(email) => {
                 let smtp_client: SmtpClient;
-                match EnvironmentVariableResolver::is_productionXXXDELETE() {
-                    Ok(is_production) => {
-                        if is_production {
-                            match SmtpClient::new_simple("TODO") {   // TODO
-                                Ok(smtp_client_) => {
-                                    smtp_client = smtp_client_.hello_name(ClientId::Domain("TODO".to_string())) // TODO
-                                        .credentials(Credentials::new("usToDO".to_string(), "pasTODO".to_string())) // TODO
-                                        .smtp_utf8(true)
-                                        .authentication_mechanism(Mechanism::Plain)// TODO
-                                        .connection_reuse(ConnectionReuseParameters::NoReuse);// TODO 
-                                }
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            ErrorAggregator::RunTimeError {
-                                                run_time_error: RunTimeError::ResourceError {
-                                                    resource_error: ResourceError::EmailServerError {
-                                                        email_server_error: EmailServerError::SmtpError {
-                                                            smtp_error: error
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            }
-                        } else {
-                            match EnvironmentVariableResolver::get_resource_email_server_socket_addressXXXDELETE() {
-                                Ok(resource_email_server_socket_address) => {
-                                    match SmtpClient::new(resource_email_server_socket_address.as_str(), ClientSecurity::None) {
-                                        Ok(smtp_client_) => {
-                                            smtp_client = smtp_client_;
-                                        }
-                                        Err(error) => {
-                                            return Err(
-                                                ErrorAuditor::new(
-                                                    ErrorAggregator::RunTimeError {
-                                                        run_time_error: RunTimeError::ResourceError {
-                                                            resource_error: ResourceError::EmailServerError {
-                                                                email_server_error: EmailServerError::SmtpError {
-                                                                    smtp_error: error
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    BacktracePart::new(line!(), file!(), None)
-                                                )
-                                            );
-                                        }
-                                    }
-                                }
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
-                                    return Err(error);
-                                }
-                            }
+                if environment_variable_resolver.get_is_production_environment() {
+                    match SmtpClient::new_simple("TODO") {   // TODO                            НАСТРОИТЬ В Препроде!!!!!!!!!!!!!!!!!!!!!
+                        Ok(smtp_client_) => {
+                            smtp_client = smtp_client_.hello_name(ClientId::Domain("TODO".to_string())) // TODO
+                                .credentials(Credentials::new("usToDO".to_string(), "pasTODO".to_string())) // TODO
+                                .smtp_utf8(true)
+                                .authentication_mechanism(Mechanism::Plain)// TODO
+                                .connection_reuse(ConnectionReuseParameters::NoReuse);// TODO 
                         }
-                        if let Err(error) = smtp_client.transport().send(email.into()) {
+                        Err(error) => {
                             return Err(
                                 ErrorAuditor::new(
                                     ErrorAggregator::RunTimeError {
@@ -107,15 +57,48 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                                 )
                             );
                         }
-                
-                        return Ok(()); 
                     }
-                    Err(mut error) => {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
-                        return Err(error);
+                } else {
+                    match SmtpClient::new(*environment_variable_resolver.get_resource_email_server_socket_address(), ClientSecurity::None) {
+                        Ok(smtp_client_) => {
+                            smtp_client = smtp_client_;
+                        }
+                        Err(error) => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    ErrorAggregator::RunTimeError {
+                                        run_time_error: RunTimeError::ResourceError {
+                                            resource_error: ResourceError::EmailServerError {
+                                                email_server_error: EmailServerError::SmtpError {
+                                                    smtp_error: error
+                                                }
+                                            }
+                                        }
+                                    },
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
                     }
                 }
+                if let Err(error) = smtp_client.transport().send(email.into()) {
+                    return Err(
+                        ErrorAuditor::new(
+                            ErrorAggregator::RunTimeError {
+                                run_time_error: RunTimeError::ResourceError {
+                                    resource_error: ResourceError::EmailServerError {
+                                        email_server_error: EmailServerError::SmtpError {
+                                            smtp_error: error
+                                        }
+                                    }
+                                }
+                            },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+        
+                return Ok(()); 
             }
             Err(error) => {
                 return Err(

@@ -9,16 +9,18 @@ use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAudit
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonAccessWebTokenBlackListDataProviderRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
+use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use redis::aio::Connection;
 
 pub struct Extractor;
 
 impl Extractor {
     pub async fn extract<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         json_access_web_token_classic_form: &'a str,
         connection: &'a mut Connection
     ) -> Result<JsonAccessWebToken<'static>, ErrorAuditor> {
-        match SerializationFormResolver::deserialize(json_access_web_token_classic_form) {
+        match SerializationFormResolver::deserialize(environment_variable_resolver, json_access_web_token_classic_form) {
             Ok(json_access_web_token) => {
                 match ExpirationTimeResolver::is_expired(&json_access_web_token) {
                     Ok(is_expired) => {

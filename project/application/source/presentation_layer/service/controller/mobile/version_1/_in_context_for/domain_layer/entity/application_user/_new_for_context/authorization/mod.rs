@@ -25,6 +25,7 @@ use crate::domain_layer::error::entity_error::_component::_in_context_for::domai
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::Base as RequestDataCheckEmailForExisting;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::Base as RequestDataCheckNicknameForExisting;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::Base as RequestDataLogInByFirstStep;
@@ -115,7 +116,8 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 pub struct Authorization;
 
 impl Authorization {
-    pub async fn check_nickname_for_existing<T>(
+    pub async fn check_nickname_for_existing<'a, T>(
+        _environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
     ) -> Response<Body>
@@ -201,7 +203,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn check_nickname_for_existing_<T>(
+    pub async fn check_nickname_for_existing_<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
     ) -> Response<Body>
@@ -225,6 +228,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataCheckNicknameForExisting>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerCheckNicknameForExisting_::handle(
+                            environment_variable_resolver,
                             postgresql_connection_pool,
                             RequestDataCheckNicknameForExisting_::new(request_parts, request_data)
                         ).await {
@@ -283,7 +287,8 @@ impl Authorization {
         }
     }
 
-    pub async fn check_email_for_existing<T>(
+    pub async fn check_email_for_existing<'a, T>(
+        _environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
     ) -> Response<Body>
@@ -370,7 +375,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn check_email_for_existing_<T>(
+    pub async fn check_email_for_existing_<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
     ) -> Response<Body>
@@ -394,6 +400,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataCheckEmailForExisting>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerCheckEmailForExisting_::handle(
+                            environment_variable_resolver,
                             postgresql_connection_pool, 
                             RequestDataCheckEmailForExisting_::new(request_parts, request_data)
                         ).await {
@@ -452,7 +459,8 @@ impl Authorization {
         }
     }
 
-    pub async fn register_by_first_step<T>(
+    pub async fn register_by_first_step<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -474,7 +482,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataRegisterByFirstStep>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = ActionHandlerRegisterByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerRegisterByFirstStep::handle(
+                    environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
@@ -550,7 +560,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn register_by_first_step_<T>(
+    pub async fn register_by_first_step_<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -575,6 +586,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataRegisterByFirstStep>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerRegisterByFirstStep_::handle(
+                            environment_variable_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataRegisterByFirstStep_::new(request_parts, request_data)
@@ -634,7 +646,8 @@ impl Authorization {
         }
     }
 
-    pub async fn register_by_last_step<T>(
+    pub async fn register_by_last_step<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -656,7 +669,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataRegisterByLastStep>(bytes.chunk()) {
             Ok(request_data) => {
-                match ActionHandlerRegisterByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                match ActionHandlerRegisterByLastStep::handle(
+                    environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -795,7 +810,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn register_by_last_step_<T>(
+    pub async fn register_by_last_step_<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -820,6 +836,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataRegisterByLastStep>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerRegisterByLastStep_::handle(
+                            environment_variable_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataRegisterByLastStep_::new(request_parts, request_data)
@@ -879,7 +896,8 @@ impl Authorization {
         }
     }
 
-    pub async fn send_email_for_register(
+    pub async fn send_email_for_register<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
@@ -894,7 +912,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForRegister>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = ActionHandlerSendEmailForRegister::handle(redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerSendEmailForRegister::handle(
+                    environment_variable_resolver, redis_connection_pool, request_data
+                ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
@@ -957,7 +977,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn send_email_for_register_(
+    pub async fn send_email_for_register_<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
@@ -975,6 +996,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataSendEmailForRegister>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerSendEmailForRegister_::handle(
+                            environment_variable_resolver,
                             redis_connection_pool,
                             RequestDataSendEmailForRegister_::new(request_parts, request_data)
                         ).await {
@@ -1033,7 +1055,8 @@ impl Authorization {
         }
     }
 
-    pub async fn log_in_by_first_step<T>(
+    pub async fn log_in_by_first_step<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -1055,7 +1078,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogInByFirstStep>(bytes.chunk()) {
             Ok(request_data) => {
-                match ActionHandlerLogInByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                match ActionHandlerLogInByFirstStep::handle(
+                    environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -1123,7 +1148,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn log_in_by_first_step_<T>(
+    pub async fn log_in_by_first_step_<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -1148,6 +1174,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataLogInByFirstStep>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerLogInByFirstStep_::handle(
+                            environment_variable_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataLogInByFirstStep_::new(request_parts, request_data)
@@ -1207,7 +1234,8 @@ impl Authorization {
         }
     }
 
-    pub async fn log_in_by_last_step(
+    pub async fn log_in_by_last_step<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
@@ -1222,7 +1250,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogInByLastStep>(bytes.chunk()) {
             Ok(request_data) => {
-                match ActionHandlerLogInByLastStep::handle(redis_connection_pool, request_data).await {
+                match ActionHandlerLogInByLastStep::handle(
+                    environment_variable_resolver, redis_connection_pool, request_data
+                ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -1298,7 +1328,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn log_in_by_last_step_(
+    pub async fn log_in_by_last_step_<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
@@ -1316,6 +1347,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataLogInByLastStep>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerLogInByLastStep_::handle(
+                            environment_variable_resolver,
                             redis_connection_pool,
                             RequestDataLogInByLastStep_::new(request_parts, request_data)
                         ).await {
@@ -1374,7 +1406,8 @@ impl Authorization {
         }
     }
 
-    pub async fn send_email_for_log_in<T>(
+    pub async fn send_email_for_log_in<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -1396,7 +1429,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForLogIn>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = ActionHandlerSendEmailForLogIn::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerSendEmailForLogIn::handle(
+                    environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
@@ -1479,7 +1514,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn send_email_for_log_in_<T>(
+    pub async fn send_email_for_log_in_<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -1504,6 +1540,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataSendEmailForLogIn>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerSendEmailForLogIn_::handle(
+                            environment_variable_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataSendEmailForLogIn_::new(request_parts, request_data)
@@ -1563,7 +1600,8 @@ impl Authorization {
         }
     }
 
-    pub async fn refresh_json_access_web_token(
+    pub async fn refresh_json_access_web_token<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
@@ -1578,7 +1616,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataRefreshJsonAccessWebToken>(bytes.chunk()) {
             Ok(request_data) => {
-                match ActionHandlerRefreshJsonAccessWebToken::handle(redis_connection_pool, request_data).await {
+                match ActionHandlerRefreshJsonAccessWebToken::handle(
+                    environment_variable_resolver, redis_connection_pool, request_data
+                ).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -1661,7 +1701,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn refresh_json_access_web_token_(
+    pub async fn refresh_json_access_web_token_<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
@@ -1679,6 +1720,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataRefreshJsonAccessWebToken>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerRefreshJsonAccessWebToken_::handle(
+                            environment_variable_resolver,
                             redis_connection_pool,
                             RequestDataRefreshJsonAccessWebToken_::new(request_parts, request_data)
                         ).await {
@@ -1737,7 +1779,8 @@ impl Authorization {
         }
     }
 
-    pub async fn log_out_from_one_device(
+    pub async fn log_out_from_one_device<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
@@ -1752,7 +1795,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogOutFromOneDevice>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = ActionHandlerLogOutFromOneDevice::handle(redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerLogOutFromOneDevice::handle(
+                    environment_variable_resolver, redis_connection_pool, request_data
+                ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
@@ -1846,7 +1891,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn log_out_from_one_device_(
+    pub async fn log_out_from_one_device_<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
@@ -1864,6 +1910,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataLogOutFromOneDevice>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerLogOutFromOneDevice_::handle(
+                            environment_variable_resolver,
                             redis_connection_pool,
                             RequestDataLogOutFromOneDevice_::new(request_parts, request_data)
                         ).await {
@@ -1922,7 +1969,8 @@ impl Authorization {
         }
     }
 
-    pub async fn log_out_from_all_devices(
+    pub async fn log_out_from_all_devices<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
@@ -1937,7 +1985,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogOutFromAllDevices>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = ActionHandlerLogOutFromAllDevices::handle(redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerLogOutFromAllDevices::handle(
+                    environment_variable_resolver, redis_connection_pool, request_data
+                ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
@@ -2031,7 +2081,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn log_out_from_all_devices_(
+    pub async fn log_out_from_all_devices_<'a>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
@@ -2049,6 +2100,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataLogOutFromAllDevices>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerLogOutFromAllDevices_::handle(
+                            environment_variable_resolver,
                             redis_connection_pool,
                             RequestDataLogOutFromAllDevices_::new(request_parts, request_data)
                         ).await {
@@ -2107,7 +2159,8 @@ impl Authorization {
         }
     }
 
-    pub async fn reset_password_by_first_step<T>(
+    pub async fn reset_password_by_first_step<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -2129,7 +2182,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataResetPasswordByFirstStep>(bytes.chunk()) {
             Ok(request_data) => {
-                match ActionHandlerResetPasswordByFirstStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                match ActionHandlerResetPasswordByFirstStep::handle(
+                    environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                ).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -2195,7 +2250,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn reset_password_by_first_step_<T>(
+    pub async fn reset_password_by_first_step_<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -2220,6 +2276,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataResetPasswordByFirstStep>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerResetPasswordByFirstStep_::handle(
+                            environment_variable_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataResetPasswordByFirstStep_::new(request_parts, request_data)
@@ -2279,7 +2336,8 @@ impl Authorization {
         }
     }
 
-    pub async fn reset_password_by_last_step<T>(
+    pub async fn reset_password_by_last_step<'a, T>(
+        _environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -2410,7 +2468,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn reset_password_by_last_step_<T>(
+    pub async fn reset_password_by_last_step_<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -2435,6 +2494,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataResetPasswordByLastStep>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerResetPasswordByLastStep_::handle(
+                            environment_variable_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataResetPasswordByLastStep_::new(request_parts, request_data)
@@ -2494,7 +2554,8 @@ impl Authorization {
         }
     }
 
-    pub async fn send_email_for_reset_password<T>(
+    pub async fn send_email_for_reset_password<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -2516,7 +2577,9 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForResetPassword>(bytes.chunk()) {
             Ok(request_data) => {
-                if let Err(error) = ActionHandlerSendEmailForResetPassword::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+                if let Err(error) = ActionHandlerSendEmailForResetPassword::handle(
+                    environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError {ref entity_error} => {
                             match entity_error {
@@ -2599,7 +2662,8 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn send_email_for_reset_password_<T>(
+    pub async fn send_email_for_reset_password_<'a, T>(
+        environment_variable_resolver: &'a EnvironmentVariableResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -2624,6 +2688,7 @@ impl Authorization {
                 match serde_json::from_slice::<'_, RequestDataSendEmailForResetPassword>(bytes.chunk()) {
                     Ok(request_data) => {
                         match ActionHandlerSendEmailForResetPassword_::handle(
+                            environment_variable_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
                             RequestDataSendEmailForResetPassword_::new(request_parts, request_data)
