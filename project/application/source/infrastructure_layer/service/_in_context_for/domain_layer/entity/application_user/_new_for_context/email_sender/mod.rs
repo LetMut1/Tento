@@ -1,4 +1,3 @@
-use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender_trait::EmailSenderTrait;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::email_sender::EmailSender as BaseEmailSender;
@@ -6,14 +5,12 @@ use crate::infrastructure_layer::service::environment_variable_resolver::Environ
 
 pub struct EmailSender;
 
-impl EmailSenderTrait for EmailSender {     // TODO все &'static str в константы? Тогда пройтись по всему приложению и проверить, везде ли так.
-    type Error = ErrorAuditor;
-
-    fn send_application_user_log_in_token<'a>(
+impl EmailSender {     // TODO все &'static str в константы? Тогда пройтись по всему приложению и проверить, везде ли так.
+    pub fn send_application_user_log_in_token<'a>(
         environment_variable_resolver: &'a EnvironmentVariableResolver,
         application_user_log_in_token_value: &'a str,
         application_user_email: &'a str
-    ) -> Result<(), Self::Error> {
+    ) -> Result<(), ErrorAuditor> {
         if let Err(mut error) = BaseEmailSender::send(
             environment_variable_resolver,
             "Log in confirmation", "Your code: ".to_string() + application_user_log_in_token_value,
@@ -27,11 +24,11 @@ impl EmailSenderTrait for EmailSender {     // TODO все &'static str в ко�
         return Ok(());
     }
 
-    fn send_application_user_registration_confirmation_token<'a>(
+    pub fn send_application_user_registration_confirmation_token<'a>(
         environment_variable_resolver: &'a EnvironmentVariableResolver,
         application_user_registration_confirmation_token_value: &'a str,
         application_user_email: &'a str
-    ) -> Result<(), Self::Error> {
+    ) -> Result<(), ErrorAuditor> {
         if let Err(mut error) = BaseEmailSender::send(
             environment_variable_resolver,
             "Registration confirmation", 
@@ -46,11 +43,11 @@ impl EmailSenderTrait for EmailSender {     // TODO все &'static str в ко�
         return Ok(());
     }
 
-    fn send_application_user_reset_password_token<'a>(
+    pub fn send_application_user_reset_password_token<'a>(
         environment_variable_resolver: &'a EnvironmentVariableResolver,
         application_user_reset_password_token_value: &'a str,
         application_user_email: &'a str
-    ) -> Result<(), Self::Error> {
+    ) -> Result<(), ErrorAuditor> {
         if let Err(mut error) = BaseEmailSender::send(
             environment_variable_resolver,
             "Reset password confirmation",
