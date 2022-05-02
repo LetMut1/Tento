@@ -5,13 +5,15 @@ use crate::infrastructure_layer::error::error_auditor::_component::simple_backtr
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use regex::Regex;
 
-pub trait BaseTrait {
+pub struct Base;
+
+impl Base {
     const EMAIL_MAXIMUM_LENGTH: u16 = 320;
     const NICKNAME_MAXIMUM_LENGTH: u8 = 55;
     const PASSWORD_MINIMUM_LENGTH: u8 = 7;
     const PASSWORD_MAXIMUM_LENGTH: u8 = 65;
 
-    fn is_valid_email<'a>(          // TODO Перенести реализацию в инфраструктуру
+    pub fn is_valid_email<'a>(
         email: &'a str
     ) -> Result<bool, ErrorAuditor> {
         match Regex::new(r"\S+@\S+") {
@@ -29,22 +31,22 @@ pub trait BaseTrait {
         }
     }
 
-    fn is_valid_nickname<'a>(   // TODO Перенести реализацию в инфраструктуру
+    pub fn is_valid_nickname<'a>(
         nickname: &'a str
     ) -> bool {
         return nickname.chars().count() <= (Self::NICKNAME_MAXIMUM_LENGTH as usize)
             && !nickname.contains('@')
-            && !nickname.contains(' ')     // TODO Проверить символ табуляци TAB
+            && !nickname.contains(' ')       // TODO Проверить символ табуляци TAB            НАПИСАТЬ Через Регекс?
             && !nickname.is_empty();
     }
 
-    fn is_valid_password<'a>(       // TODO Перенести реализацию в инфраструктуру
+    pub fn is_valid_password<'a>(
         password: &'a str
     ) -> bool {
         let password_chars_count = password.chars().count();
 
-        return password_chars_count >= (Self::PASSWORD_MINIMUM_LENGTH as usize)
+        return password_chars_count >= (Self::PASSWORD_MINIMUM_LENGTH as usize)             // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
             && password_chars_count <= (Self::PASSWORD_MAXIMUM_LENGTH as usize)
             && !password.contains(' ');
-    }   // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
+    }
 }

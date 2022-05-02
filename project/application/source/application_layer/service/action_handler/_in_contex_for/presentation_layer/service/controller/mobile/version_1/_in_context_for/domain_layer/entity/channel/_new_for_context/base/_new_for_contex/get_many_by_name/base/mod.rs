@@ -1,7 +1,7 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
-use crate::domain_layer::service::validator::_in_context_for::domain_layer::entity::channel::_new_for_context::base_trait::BaseTrait as ChannelValidatorTrait;
+use crate::domain_layer::service::validator::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ChannelValidator;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
@@ -10,7 +10,6 @@ use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAudit
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::channel::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ChannelDataProviderPostgresql;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::extractor::Extractor;
 use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
-use crate::infrastructure_layer::service::validator::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ChannelValidator;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::base::Base as ResponseData;
 use std::clone::Clone;
