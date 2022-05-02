@@ -1,197 +1,92 @@
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::other_error::OtherError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
-use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
-use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
-use std::env;
+use std::net::SocketAddr;
 
-pub struct EnvironmentVariableResolver;
+pub struct EnvironmentVariableResolver {
+    is_production_environment: bool,
+    server_socket_address: SocketAddr,
+    logger_roller_log_file_name: String,
+    logger_log_file_name: String,
+    logger_encoder_pattern: String,
+    security_jrwt_encoding_private_key: String,
+    security_jawt_signature_encoding_private_key: String,
+    resource_postgresql_url: String,
+    resource_redis_url: String,
+    resource_email_server_socket_address: SocketAddr
+}
 
 impl EnvironmentVariableResolver {
-    pub const IS_PRODUCTION_KEY: &'static str = "IS_PRODUCTION";
-    pub const IS_PRODUCTION_VALUE_TRUE: &'static str = "t";
-    pub const IS_PRODUCTION_VALUE_FALSE: &'static str = "f";
-    const SERVER_SOCKET_ADDRESS_KEY: &'static str = "SERVER_SOCKET_ADDRESS";
-    const LOGGER_ROLLER_LOG_FILE_NAME_KEY: &'static str = "LOGGER_ROLLER_LOG_FILE_NAME";
-    const LOGGER_LOG_FILE_NAME_KEY: &'static str = "LOGGER_LOG_FILE_NAME";
-    const LOGGER_ENCODER_PATTERN_KEY: &'static str = "LOGGER_ENCODER_PATTERN";
-    const SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_JRWT_ENCODING_PRIVATE_KEY";
-    const SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY";
-    const RESOURCE_POSTGRESQL_URL_KEY: &'static str = "RESOURCE_POSTGRESQL_URL";
-    const RESOURCE_REDIS_URL_KEY: &'static str = "RESOURCE_REDIS_URL";
-    const RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY: &'static str = "RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS";
+    pub const SERVER_SOCKET_ADDRESS_KEY: &'static str = "SERVER_SOCKET_ADDRESS";
+    pub const LOGGER_ROLLER_LOG_FILE_NAME_KEY: &'static str = "LOGGER_ROLLER_LOG_FILE_NAME";
+    pub const LOGGER_LOG_FILE_NAME_KEY: &'static str = "LOGGER_LOG_FILE_NAME";
+    pub const LOGGER_ENCODER_PATTERN_KEY: &'static str = "LOGGER_ENCODER_PATTERN";
+    pub const SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_JRWT_ENCODING_PRIVATE_KEY";
+    pub const SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY";
+    pub const RESOURCE_POSTGRESQL_URL_KEY: &'static str = "RESOURCE_POSTGRESQL_URL";
+    pub const RESOURCE_REDIS_URL_KEY: &'static str = "RESOURCE_REDIS_URL";
+    pub const RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY: &'static str = "RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS";
 
-    pub fn is_production(
-    ) -> Result<bool, ErrorAuditor> {
-        match env::var(Self::IS_PRODUCTION_KEY) {
-            Ok(value) => {
-                if value.as_bytes() == Self::IS_PRODUCTION_VALUE_TRUE.as_bytes() {
-                    return Ok(true);
-                }
-        
-                return Ok(false);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+    pub fn new(
+        is_production_environment: bool,
+        server_socket_address: SocketAddr,
+        logger_roller_log_file_name: String,
+        logger_log_file_name: String,
+        logger_encoder_pattern: String,
+        security_jrwt_encoding_private_key: String,
+        security_jawt_signature_encoding_private_key: String,
+        resource_postgresql_url: String,
+        resource_redis_url: String,
+        resource_email_server_socket_address: SocketAddr
+    ) -> Self {
+        return Self {
+            is_production_environment,
+            server_socket_address,
+            logger_roller_log_file_name,
+            logger_log_file_name,
+            logger_encoder_pattern,
+            security_jrwt_encoding_private_key,
+            security_jawt_signature_encoding_private_key,
+            resource_postgresql_url,
+            resource_redis_url,
+            resource_email_server_socket_address
+        };
     }
 
-    pub fn get_server_socket_address(
-    ) -> Result<String, ErrorAuditor> {
-        match env::var(Self::SERVER_SOCKET_ADDRESS_KEY) {
-            Ok(value) => {
-                return Ok(value);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+    pub fn get_is_production_environment<'a>(&'a self) -> bool {
+        return self.is_production_environment;
     }
 
-    pub fn get_logger_roller_log_file_name(
-    ) -> Result<String, ErrorAuditor> {
-        match env::var(Self::LOGGER_ROLLER_LOG_FILE_NAME_KEY) {
-            Ok(value) => {
-                return Ok(value);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+    pub fn get_server_socket_address<'a>(&'a self) -> &'a SocketAddr {
+        return &self.server_socket_address;
     }
 
-    pub fn get_logger_log_file_name(
-    ) -> Result<String, ErrorAuditor> {
-        match env::var(Self::LOGGER_LOG_FILE_NAME_KEY) {
-            Ok(value) => {
-                return Ok(value);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+    pub fn get_logger_roller_log_file_name<'a>(&'a self) -> &'a str {
+        return self.logger_roller_log_file_name.as_str();
     }
 
-    pub fn get_logger_encoder_pattern(
-    ) -> Result<String, ErrorAuditor> {
-        match env::var(Self::LOGGER_ENCODER_PATTERN_KEY) {
-            Ok(value) => {
-                return Ok(value);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+    pub fn get_logger_log_file_name<'a>(&'a self) -> &'a str {
+        return self.logger_log_file_name.as_str();
     }
 
-    pub fn get_security_jrwt_encoding_private_key(
-    ) -> Result<String, ErrorAuditor> {
-        match env::var(Self::SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY) {
-            Ok(value) => {
-                return Ok(value);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+    pub fn get_logger_encoder_pattern<'a>(&'a self) -> &'a str {
+        return self.logger_encoder_pattern.as_str();
     }
 
-    pub fn get_security_jawt_signature_encoding_private_key(
-    ) -> Result<String, ErrorAuditor> {
-        match env::var(Self::SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY) {
-            Ok(value) => {
-                return Ok(value);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+    pub fn get_security_jrwt_encoding_private_key<'a>(&'a self) -> &'a str {
+        return self.security_jrwt_encoding_private_key.as_str();
     }
 
-    pub fn get_resource_postgresql_url(
-    ) -> Result<String, ErrorAuditor> {
-        match env::var(Self::RESOURCE_POSTGRESQL_URL_KEY) {
-            Ok(value) => {
-                return Ok(value);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+    pub fn get_security_jawt_signature_encoding_private_key<'a>(&'a self) -> &'a str {
+        return self.security_jawt_signature_encoding_private_key.as_str();
     }
 
-    pub fn get_resource_redis_url(
-    ) -> Result<String, ErrorAuditor> {
-        match env::var(Self::RESOURCE_REDIS_URL_KEY) {
-            Ok(value) => {
-                return Ok(value);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+    pub fn get_resource_postgresql_url<'a>(&'a self) -> &'a str {
+        return self.resource_postgresql_url.as_str();
     }
 
-    pub fn get_resource_email_server_socket_address(
-    ) -> Result<String, ErrorAuditor> {
-        match env::var(Self::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY) {
-            Ok(value) => {
-                return Ok(value);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {run_time_error: RunTimeError::OtherError {other_error: OtherError::new(error)}},
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+    pub fn get_resource_redis_url<'a>(&'a self) -> &'a str {
+        return self.resource_redis_url.as_str();
+    }
+
+    pub fn get_resource_email_server_socket_address<'a>(&'a self) -> &'a SocketAddr {
+        return &self.resource_email_server_socket_address;
     }
 }

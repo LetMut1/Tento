@@ -16,7 +16,7 @@ pub struct Encoder;
 impl Encoder {
     fn get_configured_hmac(
     ) -> Result<Hmac<Sha512>, ErrorAuditor> {
-        match EnvironmentVariableResolver::get_security_jrwt_encoding_private_key() {
+        match EnvironmentVariableResolver::get_security_jrwt_encoding_private_keyXXXDELETE() {
             Ok(security_jrwt_encoding_private_key) => {
                 return Ok(Hmac::new(Sha512::new(), security_jrwt_encoding_private_key.as_bytes()));
             }

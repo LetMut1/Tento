@@ -31,7 +31,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             .build() {
             Ok(email) => {
                 let smtp_client: SmtpClient;
-                match EnvironmentVariableResolver::is_production() {
+                match EnvironmentVariableResolver::is_productionXXXDELETE() {
                     Ok(is_production) => {
                         if is_production {
                             match SmtpClient::new_simple("TODO") {   // TODO
@@ -60,7 +60,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                                 }
                             }
                         } else {
-                            match EnvironmentVariableResolver::get_resource_email_server_socket_address() {
+                            match EnvironmentVariableResolver::get_resource_email_server_socket_addressXXXDELETE() {
                                 Ok(resource_email_server_socket_address) => {
                                     match SmtpClient::new(resource_email_server_socket_address.as_str(), ClientSecurity::None) {
                                         Ok(smtp_client_) => {
