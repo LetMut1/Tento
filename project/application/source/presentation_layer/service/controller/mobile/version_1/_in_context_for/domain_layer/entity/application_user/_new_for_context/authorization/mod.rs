@@ -115,6 +115,175 @@ use crate::presentation_layer::data_transfer_object::request_data::_in_context_f
 
 pub struct Authorization;
 
+pub mod message_pack_testing_purpose {
+    use crate::presentation_layer::service::response_creator::ResponseCreator;
+    use hyper::Body;
+    use hyper::Response;
+    use serde::Serialize;
+
+    #[derive(Serialize)]
+    enum ABC {
+        A,
+        B,
+        C
+    }
+    pub async fn abc_a(
+    ) -> Response<Body>{
+        match rmp_serde::to_vec(&ABC::A) {
+            Ok(data) => {
+                return ResponseCreator::create_ok(data);
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+    pub async fn abc_b(
+    ) -> Response<Body>{
+        match rmp_serde::to_vec(&ABC::B) {
+            Ok(data) => {
+                return ResponseCreator::create_ok(data);
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+    pub async fn abc_c(
+    ) -> Response<Body>{
+        match rmp_serde::to_vec(&ABC::C) {
+            Ok(data) => {
+                return ResponseCreator::create_ok(data);
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+
+    #[derive(Serialize)]
+    enum ABCInner {
+        A {
+            a: u8,
+            b: bool
+        },
+        B {
+            a: i64,
+            b: String
+        },
+        C {
+            a: f64,
+            b: bool
+        },
+    }
+    pub async fn abc_inner_a(
+    ) -> Response<Body>{
+        match rmp_serde::to_vec(&ABCInner::A {a: 255, b: false }) {
+            Ok(data) => {
+                return ResponseCreator::create_ok(data);
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+    pub async fn abc_inner_b(
+    ) -> Response<Body>{
+        match rmp_serde::to_vec(&ABCInner::B { a: -123321, b: "TODOo".to_string() }) {
+            Ok(data) => {
+                return ResponseCreator::create_ok(data);
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+    pub async fn abc_inner_c(
+    ) -> Response<Body>{
+        match rmp_serde::to_vec(&ABCInner::C { a: 0.00120045, b: true }) {
+            Ok(data) => {
+                return ResponseCreator::create_ok(data);
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    #[derive(Serialize)]
+    enum DEF {
+        D,
+        E,
+        F
+    }
+    #[derive(Serialize)]
+    enum GH {
+        G,
+        H
+    }
+    #[derive(Serialize)]
+    enum ABCDEFHG {
+        A {
+            def: DEF
+        },
+        B {
+            gh: GH
+        },
+    }
+    pub async fn abcdefgh_1(
+    ) -> Response<Body>{
+        match rmp_serde::to_vec(&ABCDEFHG::A { def: DEF::E }) {
+            Ok(data) => {
+                return ResponseCreator::create_ok(data);
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+    pub async fn abcdefgh_2(
+    ) -> Response<Body>{
+        match rmp_serde::to_vec(&ABCDEFHG::A { def: DEF::D }) {
+            Ok(data) => {
+                return ResponseCreator::create_ok(data);
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+    pub async fn abcdefgh_3(
+    ) -> Response<Body>{
+        match rmp_serde::to_vec(&ABCDEFHG::B { gh: GH::G }) {
+            Ok(data) => {
+                return ResponseCreator::create_ok(data);
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+}
+
 impl Authorization {
     pub async fn check_nickname_for_existing<'a, T>(
         _environment_variable_resolver: &'a EnvironmentVariableResolver,
