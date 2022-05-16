@@ -108,7 +108,7 @@ impl Base {
                                 
                                             return Err(
                                                 ErrorAuditor::new(
-                                                    ErrorAggregator::EntityError { entity_error: EntityError::JsonRefreshWebTokenError {json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound } },
+                                                    ErrorAggregator::EntityError { entity_error: EntityError::JsonRefreshWebTokenError { json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound } },
                                                     BacktracePart::new(line!(), file!(), None)
                                                 )
                                             );
@@ -133,7 +133,7 @@ impl Base {
                         
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::EntityError { entity_error: EntityError::JsonAccessWebTokenError {json_access_web_token_error: JsonAccessWebTokenError::NotExpired } },
+                                ErrorAggregator::EntityError { entity_error: EntityError::JsonAccessWebTokenError { json_access_web_token_error: JsonAccessWebTokenError::NotExpired } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
