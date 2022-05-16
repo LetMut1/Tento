@@ -1,3 +1,4 @@
+use redis::ConnectionInfo;
 use std::clone::Clone;
 use std::net::SocketAddr;
 use tokio_postgres::config::Config;
@@ -12,7 +13,7 @@ pub struct EnvironmentConfigurationResolver {
     security_jrwt_encoding_private_key: String,
     security_jawt_signature_encoding_private_key: String,
     resource_postgresql_configuration: Config,
-    resource_redis_url: String,
+    resource_redis_connection_info: ConnectionInfo,
     resource_email_server_socket_address: SocketAddr
 }
 
@@ -36,7 +37,7 @@ impl EnvironmentConfigurationResolver {
         security_jrwt_encoding_private_key: String,
         security_jawt_signature_encoding_private_key: String,
         resource_postgresql_configuration: Config,
-        resource_redis_url: String,
+        resource_redis_connection_info: ConnectionInfo,
         resource_email_server_socket_address: SocketAddr
     ) -> Self {
         return Self {
@@ -48,7 +49,7 @@ impl EnvironmentConfigurationResolver {
             security_jrwt_encoding_private_key,
             security_jawt_signature_encoding_private_key,
             resource_postgresql_configuration,
-            resource_redis_url,
+            resource_redis_connection_info,
             resource_email_server_socket_address
         };
     }
@@ -85,8 +86,8 @@ impl EnvironmentConfigurationResolver {
         return &self.resource_postgresql_configuration;
     }
 
-    pub fn get_resource_redis_url<'a>(&'a self) -> &'a str {
-        return self.resource_redis_url.as_str();
+    pub fn get_resource_redis_url<'a>(&'a self) -> &'a ConnectionInfo {
+        return &self.resource_redis_connection_info;
     }
 
     pub fn get_resource_email_server_socket_address<'a>(&'a self) -> &'a SocketAddr {
