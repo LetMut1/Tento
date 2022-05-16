@@ -1,6 +1,4 @@
 use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
-use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver_trait::SerializationFormResolverTrait;
-use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::signature_creator_trait::SignatureCreatorTrait;
 use crate::domain_layer::service::factory::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::_new_for_context::header_common::HeaderCommon;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::_new_for_context::payload_common::PayloadCommon;
@@ -9,18 +7,18 @@ use crate::infrastructure_layer::error::error_auditor::_component::error_aggrega
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::signature_creator::SignatureCreator;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use super::signature_creator::SignatureCreator;
 
 pub struct SerializationFormResolver;
 
-impl SerializationFormResolverTrait for SerializationFormResolver {
-    type Error = ErrorAuditor;
+impl SerializationFormResolver {
+    const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
-    fn serialize<'a>(
+    pub fn serialize<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         json_access_web_token: &'a JsonAccessWebToken<'_>
-    ) -> Result<String, Self::Error> {
+    ) -> Result<String, ErrorAuditor> {
         match serde_json::to_vec(&HeaderCommon::new(json_access_web_token)) {
             Ok(header_common_data) => {
                 let header = base64::encode_config(&header_common_data[..], base64::STANDARD);       // TODO TODO TODO base64::STANDARD - какого типа должно быть
@@ -56,10 +54,10 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
         }
     }
 
-    fn deserialize<'a>(
+    pub fn deserialize<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         json_access_web_token_classic_form: &'a str
-    ) -> Result<JsonAccessWebToken<'static>, Self::Error> {
+    ) -> Result<JsonAccessWebToken<'static>, ErrorAuditor> {
         let token_part_registry = json_access_web_token_classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
 
         if token_part_registry.len() == 3
@@ -112,4 +110,4 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
             )
         );
     }
-} 
+}
