@@ -32,7 +32,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             .build() {
             Ok(email) => {
                 let smtp_client: SmtpClient;
-                if environment_configuration_resolver.get_is_production_environment() {
+                if environment_configuration_resolver.is_production_environment() {
                     match SmtpClient::new_simple("TODO") {   // TODO                            НАСТРОИТЬ В Препроде!!!!!!!!!!!!!!!!!!!!!
                         Ok(smtp_client_) => {
                             smtp_client = smtp_client_.hello_name(ClientId::Domain("TODO".to_string())) // TODO

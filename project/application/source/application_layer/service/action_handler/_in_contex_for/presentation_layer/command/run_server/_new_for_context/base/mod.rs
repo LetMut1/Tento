@@ -28,7 +28,7 @@ use log4rs::append::rolling_file::policy::compound::roll::fixed_window::FixedWin
 use log4rs::append::rolling_file::policy::compound::trigger::size::SizeTrigger;
 use log4rs::append::rolling_file::RollingFileAppender;
 use log4rs::config::Appender;
-use log4rs::config::Config as LogConfig;
+use log4rs::config::Config as LogConfiguration;
 use log4rs::config::Root;
 use log4rs::encode::pattern::PatternEncoder;
 use redis::ConnectionInfo;
@@ -40,7 +40,7 @@ use std::net::SocketAddr;
 use std::net::ToSocketAddrs;
 use std::path::Path;
 use std::str::FromStr;
-use tokio_postgres::Config as PostgresqlConfig;
+use tokio_postgres::Config as PostgresqlConfiguration;
 use tokio_postgres::NoTls;
 use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
@@ -137,14 +137,16 @@ impl Base {
                     is_production_environment = false;
                 }
 
-                let server_socket_address: SocketAddr;
-                match env::var(EnvironmentConfigurationResolver::SERVER_SOCKET_ADDRESS_KEY) {
-                    Ok(server_socket_address_) => {
-                        match server_socket_address_.to_socket_addrs() {
-                            Ok(mut server_socket_address_registry) => {
-                                match server_socket_address_registry.next() {
-                                    Some(server_socket_address___) => {
-                                        server_socket_address = server_socket_address___;
+                let application_server_socket_address: SocketAddr;
+                match env::var(EnvironmentConfigurationResolver::APPLICATION_SERVER_SOCKET_ADDRESS_KEY) {
+                    Ok(application_server_socket_address_) => {
+                        match application_server_socket_address_.to_socket_addrs() {
+                            Ok(mut application_server_socket_address_registry) => {
+                                match application_server_socket_address_registry.next() {
+                                    Some(application_server_socket_address___) => {
+                                        application_server_socket_address = application_server_socket_address___;
+
+                                        env::remove_var(EnvironmentConfigurationResolver::APPLICATION_SERVER_SOCKET_ADDRESS_KEY);            // TODO TODO TODO TODO TODOenv::remove_var can PANIC. Подумать, что делать. Использовать другой крейт (toml), или написать свой парсер. Паника - всегжа плохо
                                     }
                                     None => {
                                         return Err(
@@ -165,8 +167,6 @@ impl Base {
                                 );
                             }
                         }
-                        
-                        env::remove_var(EnvironmentConfigurationResolver::SERVER_SOCKET_ADDRESS_KEY);            // TODO TODO TODO TODO TODOenv::remove_var can PANIC. Подумать, что делать. Использовать другой крейт (toml), или написать свой парсер. Паника - всегжа плохо
                     }
                     Err(error) => {
                         return Err(
@@ -263,12 +263,24 @@ impl Base {
                     }
                 }
 
-                let resource_postgresql_url: String;
+                let resource_postgresql_configuration: PostgresqlConfiguration;
                 match env::var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_URL_KEY) {
-                    Ok(resource_postgresql_url_) => {
-                        resource_postgresql_url = resource_postgresql_url_;
+                    Ok(resource_postgresql_url) => {
+                        match PostgresqlConfiguration::from_str(resource_postgresql_url.as_str()) {
+                            Ok(postgresql_configuration) => {
+                                resource_postgresql_configuration = postgresql_configuration;
 
-                        env::remove_var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_URL_KEY);
+                                env::remove_var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_URL_KEY);
+                            }
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        }
                     }
                     Err(error) => {
                         return Err(
@@ -305,6 +317,8 @@ impl Base {
                                 match resource_email_server_socket_address_registry.next() {
                                     Some(resource_email_server_socket_address___) => {
                                         resource_email_server_socket_address = resource_email_server_socket_address___;
+
+                                        env::remove_var(EnvironmentConfigurationResolver::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY);
                                     }
                                     None => {
                                         return Err(
@@ -325,8 +339,6 @@ impl Base {
                                 );
                             }
                         }
-
-                        env::remove_var(EnvironmentConfigurationResolver::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -341,13 +353,13 @@ impl Base {
                 return Ok(
                     EnvironmentConfigurationResolver::new(
                         is_production_environment,
-                        server_socket_address,
+                        application_server_socket_address,
                         logger_roller_log_file_name,
                         logger_log_file_name,
                         logger_encoder_pattern,
                         security_jrwt_encoding_private_key,
                         security_jawt_signature_encoding_private_key,
-                        resource_postgresql_url,
+                        resource_postgresql_configuration,
                         resource_redis_url,
                         resource_email_server_socket_address
                     )
@@ -386,7 +398,7 @@ impl Base {
                 
                         let root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);  // TODO TODO TODO FIlter
                 
-                        match LogConfig::builder()
+                        match LogConfiguration::builder()
                             .appender(appender)
                             .build(root) {
                             Ok(config) => {             
@@ -437,94 +449,86 @@ impl Base {
     async fn run_http_server(
         environment_configuration_resolver: EnvironmentConfigurationResolver
     ) -> Result<(), ErrorAuditor> {
-        match PostgresqlConfig::from_str(environment_configuration_resolver.get_resource_postgresql_url()) {
-            Ok(config) => {
-                let postgresql_connection_pool: PostgresqlConnectionPool;
-                if environment_configuration_resolver.get_is_production_environment() {
-                    todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-                } else {
-                    match Pool::builder()
-                        .build(PostgresqlConnectionManager::new(config, NoTls)).await {         // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-                        Ok(postgresql_connection_pool_) => {
-                            postgresql_connection_pool = PostgresqlConnectionPool::Development { postgresql_connection_pool: postgresql_connection_pool_ };
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
+        let postgresql_connection_pool: PostgresqlConnectionPool;
+        if environment_configuration_resolver.is_production_environment() {
+            todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+        } else {
+            match Pool::builder()
+                .build(
+                    PostgresqlConnectionManager::new(
+                        environment_configuration_resolver.get_resource_postgresql_configuration().clone(), NoTls
+                    )
+                ).await {         // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                Ok(postgresql_connection_pool_) => {
+                    postgresql_connection_pool = PostgresqlConnectionPool::Development { postgresql_connection_pool: postgresql_connection_pool_ };
                 }
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            }
+        }
 
-                match ConnectionInfo::from_str(environment_configuration_resolver.get_resource_redis_url()) {
-                    Ok(connection_info) => {
-                        match RedisConnectionManager::new(connection_info) {
-                            Ok(redis_connection_manager) => {
-                                match Pool::builder()      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-                                    .build(redis_connection_manager).await {
-                                    Ok(redis_connection_pool) => {
-                                        let builder = Server::bind(environment_configuration_resolver.get_server_socket_address());
+        match ConnectionInfo::from_str(environment_configuration_resolver.get_resource_redis_url()) {
+            Ok(connection_info) => {
+                match RedisConnectionManager::new(connection_info) {
+                    Ok(redis_connection_manager) => {
+                        match Pool::builder()      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                            .build(redis_connection_manager).await {
+                            Ok(redis_connection_pool) => {
+                                let builder = Server::bind(environment_configuration_resolver.get_application_server_socket_address());
 
-                                        // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
-                                        let service = make_service_fn(
-                                            move |_: &AddrStream| {
-                                                let environment_configuration_resolver_ = environment_configuration_resolver.clone();
+                                // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
+                                let service = make_service_fn(
+                                    move |_: &AddrStream| {
+                                        let environment_configuration_resolver_ = environment_configuration_resolver.clone();
 
-                                                let postgresql_connection_pool_ = postgresql_connection_pool.clone();
-                                    
-                                                let redis_connection_pool_ = redis_connection_pool.clone();
-                                    
-                                                async move {
-                                                    return Ok::<_, HyperError>(
-                                                        service_fn(move |requset| {
-                                                            let environment_configuration_resolver__ = environment_configuration_resolver_.clone();
+                                        let postgresql_connection_pool_ = postgresql_connection_pool.clone();
+                            
+                                        let redis_connection_pool_ = redis_connection_pool.clone();
+                            
+                                        async move {
+                                            return Ok::<_, HyperError>(
+                                                service_fn(move |requset| {
+                                                    let environment_configuration_resolver__ = environment_configuration_resolver_.clone();
 
-                                                            let postgresql_connection_pool__ = postgresql_connection_pool_.clone();
-                                        
-                                                            let redis_connection_pool__ = redis_connection_pool_.clone();
-                                        
-                                                            return async move {
-                                                                match postgresql_connection_pool__ {
-                                                                    PostgresqlConnectionPool::Development { postgresql_connection_pool } => {
-                                                                        return Ok::<_, HyperError>(Self::resolve(&environment_configuration_resolver__, requset, postgresql_connection_pool, redis_connection_pool__).await);
-                                                                    }
-                                                                }
-                                                            };
-                                                        })
-                                                    );
-                                                }
-                                            }
-                                        );
-                                        // TODO  TODO  TODO ------------------------------------------------------------------------------------------------------------------
+                                                    let postgresql_connection_pool__ = postgresql_connection_pool_.clone();
                                 
+                                                    let redis_connection_pool__ = redis_connection_pool_.clone();
                                 
-                                
-                                        if let Err(error) = builder       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
-                                            .serve(service)
-                                            .with_graceful_shutdown(Self::create_shutdown_signal())
-                                            .await {
-                                                return Err(
-                                                    ErrorAuditor::new(
-                                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                                                        BacktracePart::new(line!(), file!(), None)
-                                                    )
-                                                );
-                                            }
-                                
-                                        return Ok(());
+                                                    return async move {
+                                                        match postgresql_connection_pool__ {
+                                                            PostgresqlConnectionPool::Development { postgresql_connection_pool } => {
+                                                                return Ok::<_, HyperError>(Self::resolve(&environment_configuration_resolver__, requset, postgresql_connection_pool, redis_connection_pool__).await);
+                                                            }
+                                                        }
+                                                    };
+                                                })
+                                            );
+                                        }
                                     }
-                                    Err(error) => {
+                                );
+                                // TODO  TODO  TODO ------------------------------------------------------------------------------------------------------------------
+                        
+                        
+                        
+                                if let Err(error) = builder       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
+                                    .serve(service)
+                                    .with_graceful_shutdown(Self::create_shutdown_signal())
+                                    .await {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
+                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
                                     }
-                                }
+                        
+                                return Ok(());
                             }
                             Err(error) => {
                                 return Err(
@@ -549,7 +553,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

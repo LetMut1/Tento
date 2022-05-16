@@ -81,7 +81,7 @@ impl Channel {
         }
     }
 
-    pub fn get_is_private<'a>(
+    pub fn is_private<'a>(
         &'a self
     ) -> &'a bool {
         return &self.is_private;
