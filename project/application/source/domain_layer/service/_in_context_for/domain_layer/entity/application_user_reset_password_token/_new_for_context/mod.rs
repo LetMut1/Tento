@@ -1,2 +1,2 @@
-pub mod value_generator_trait;
-pub mod wrong_enter_tries_quantity_incrementor_trait;
+pub mod value_generator;
+pub mod wrong_enter_tries_quantity_incrementor;
