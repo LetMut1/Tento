@@ -22,7 +22,7 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
-use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
+use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::Base as ResponseData;
 
@@ -30,7 +30,7 @@ pub struct Base;
 
 impl Base {
     pub async fn handle<'a>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         redis_connection_pool: Pool<RedisConnectionManager>,        // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
         request_data: RequestData
     ) -> Result<ResponseData, ErrorAuditor> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
@@ -88,9 +88,9 @@ impl Base {
                         
                                         match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token_) {
                                             Ok(ref json_access_web_token) => {
-                                                match SerializationFormResolver::serialize(environment_variable_resolver, json_access_web_token) {
+                                                match SerializationFormResolver::serialize(environment_configuration_resolver, json_access_web_token) {
                                                     Ok(json_access_web_token_) => {
-                                                        match Encoder::encode(environment_variable_resolver, &json_refresh_web_token_) {
+                                                        match Encoder::encode(environment_configuration_resolver, &json_refresh_web_token_) {
                                                             Ok(json_refresh_web_token_) => {
                                                                 return Ok(ResponseData::new(json_access_web_token_, json_refresh_web_token_));
                                                             }

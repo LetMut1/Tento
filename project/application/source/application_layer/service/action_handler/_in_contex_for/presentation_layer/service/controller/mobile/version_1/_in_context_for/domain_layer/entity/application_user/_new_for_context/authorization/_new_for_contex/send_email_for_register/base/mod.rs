@@ -10,14 +10,14 @@ use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAudit
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenDataProviderRedis;
 use crate::infrastructure_layer::repository::state_manager::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenStateManagerRedis;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::email_sender::EmailSender;
-use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
+use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register::base::Base as RequestData;
 
 pub struct Base;
 
 impl Base {
     pub async fn handle<'a>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
     ) -> Result<(), ErrorAuditor> { // TODO  TODO  TODO  TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
@@ -41,7 +41,7 @@ impl Base {
                             }
             
                             if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
-                                environment_variable_resolver,
+                                environment_configuration_resolver,
                                 application_user_registration_confirmation_token_.get_value(),
                                 application_user_email.as_str()
                             ) {

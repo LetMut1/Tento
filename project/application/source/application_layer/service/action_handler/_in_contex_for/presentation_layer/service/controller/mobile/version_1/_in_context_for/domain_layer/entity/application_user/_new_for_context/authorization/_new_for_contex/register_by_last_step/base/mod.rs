@@ -27,7 +27,7 @@ use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity:
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
-use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
+use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::Base as RequestData;
 use crate::presentation_layer::data_transfer_object::response_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::Base as ResponseData;
 use std::clone::Clone;
@@ -41,7 +41,7 @@ pub struct Base;
 
 impl Base {
     pub async fn handle<'a, T>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         request_data: RequestData
@@ -112,9 +112,9 @@ impl Base {
                                                         
                                                                                         match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token) {
                                                                                             Ok(ref json_access_web_token) => {
-                                                                                                match SerializationFormResolver::serialize(environment_variable_resolver, json_access_web_token) {
+                                                                                                match SerializationFormResolver::serialize(environment_configuration_resolver, json_access_web_token) {
                                                                                                     Ok(json_access_web_token_) => {
-                                                                                                        match Encoder::encode(environment_variable_resolver, &json_refresh_web_token) {
+                                                                                                        match Encoder::encode(environment_configuration_resolver, &json_refresh_web_token) {
                                                                                                             Ok(json_refresh_web_token_) => {
                                                                                                                 return Ok(ResponseData::new(json_access_web_token_, json_refresh_web_token_));
                                                                                                             }

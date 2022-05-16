@@ -10,7 +10,7 @@ use crate::domain_layer::error::entity_error::_component::_in_context_for::domai
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
-use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
+use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::Base as RequestDataGetManyByCreatedAt;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::Base as RequestDataGetManyByIdRegistry;
 use crate::presentation_layer::data_transfer_object::request_data::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::Base as RequestDataGetManyByName;
@@ -34,7 +34,7 @@ pub struct Base;
 
 impl Base {
     pub async fn get_many_by_name<'a, T>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -57,7 +57,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyByName>(bytes.chunk()) {
             Ok(request_data) => {
                 match ActionHandlerGetManyByName::handle(
-                    environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
@@ -137,7 +137,7 @@ impl Base {
     }
 
     pub async fn get_many_by_created_at<'a, T>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -160,7 +160,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyByCreatedAt>(bytes.chunk()) {
             Ok(request_data) => {
                 match ActionHandlerGetManyByCreatedAt::handle(
-                    environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
@@ -240,7 +240,7 @@ impl Base {
     }
     
     pub async fn get_many_by_subscribers_quantity<'a, T>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -263,7 +263,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyBySubscribersQuantity>(bytes.chunk()) {
             Ok(request_data) => {
                 match ActionHandlerGetManyBySubscribersQuantity::handle(
-                    environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
@@ -343,7 +343,7 @@ impl Base {
     }
 
     pub async fn get_many_by_id_registry<'a, T>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -366,7 +366,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyByIdRegistry>(bytes.chunk()) {
             Ok(request_data) => {
                 match ActionHandlerGetManyByIdRegistry::handle(
-                    environment_variable_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {

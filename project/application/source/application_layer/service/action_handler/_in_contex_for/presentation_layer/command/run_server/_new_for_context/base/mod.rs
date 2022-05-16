@@ -9,7 +9,7 @@ use crate::infrastructure_layer::error::error_auditor::_component::error_aggrega
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
+use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as ControllerApplicationUserAuthorization;
 use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ControllerChannelBase;
 use crate::presentation_layer::service::controller::route_not_found::RouteNotFound as ControllerRouteNotFound;
@@ -37,6 +37,7 @@ use std::env;
 use std::marker::Send;
 use std::marker::Sync;
 use std::net::SocketAddr;
+use std::net::ToSocketAddrs;
 use std::path::Path;
 use std::str::FromStr;
 use tokio_postgres::Config as PostgresqlConfig;
@@ -57,13 +58,13 @@ impl Base {
         binary_file_path: String
     ) -> Result<(), ErrorAuditor> {
         match Self::load_environment_variable_registry(binary_file_path.as_str()) {
-            Ok(environment_variable_resolver) => {
-                if let Err(mut error) = Self::configure_log(&environment_variable_resolver) {
+            Ok(environment_configuration_resolver) => {
+                if let Err(mut error) = Self::configure_log(&environment_configuration_resolver) {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
         
                     return Err(error);
                 }
-                if let Err(mut error) = Self::run_http_server(environment_variable_resolver) {
+                if let Err(mut error) = Self::run_http_server(environment_configuration_resolver) {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
         
                     return Err(error);
@@ -84,7 +85,7 @@ impl Base {
 
     fn load_environment_variable_registry<'a>(
         binary_file_path: &'a str
-    ) -> Result<EnvironmentVariableResolver, ErrorAuditor> {
+    ) -> Result<EnvironmentConfigurationResolver, ErrorAuditor> {
         match Path::new(binary_file_path).parent() {
             Some(file_path) => {
                 let is_production_environment: bool;
@@ -137,11 +138,23 @@ impl Base {
                 }
 
                 let server_socket_address: SocketAddr;
-                match env::var(EnvironmentVariableResolver::SERVER_SOCKET_ADDRESS_KEY) {
+                match env::var(EnvironmentConfigurationResolver::SERVER_SOCKET_ADDRESS_KEY) {
                     Ok(server_socket_address_) => {
-                        match SocketAddr::from_str(server_socket_address_.as_str()) {
-                            Ok(server_socket_addres__) => {
-                                server_socket_address = server_socket_addres__;
+                        match server_socket_address_.to_socket_addrs() {
+                            Ok(mut server_socket_address_registry) => {
+                                match server_socket_address_registry.next() {
+                                    Some(server_socket_address___) => {
+                                        server_socket_address = server_socket_address___;
+                                    }
+                                    None => {
+                                        return Err(
+                                            ErrorAuditor::new(
+                                                ErrorAggregator::LogicError { logic_error: LogicError::new(false, "Invalid socket address.") },
+                                                BacktracePart::new(line!(), file!(), None)
+                                            )
+                                        );
+                                    }
+                                }
                             }
                             Err(error) => {
                                 return Err(
@@ -153,7 +166,7 @@ impl Base {
                             }
                         }
                         
-                        env::remove_var(EnvironmentVariableResolver::SERVER_SOCKET_ADDRESS_KEY);            // TODO TODO TODO TODO TODOenv::remove_var can PANIC. Подумать, что делать. Использовать другой крейт (toml), или написать свой парсер. Паника - всегжа плохо
+                        env::remove_var(EnvironmentConfigurationResolver::SERVER_SOCKET_ADDRESS_KEY);            // TODO TODO TODO TODO TODOenv::remove_var can PANIC. Подумать, что делать. Использовать другой крейт (toml), или написать свой парсер. Паника - всегжа плохо
                     }
                     Err(error) => {
                         return Err(
@@ -166,11 +179,11 @@ impl Base {
                 }
 
                 let logger_roller_log_file_name: String;
-                match env::var(EnvironmentVariableResolver::LOGGER_ROLLER_LOG_FILE_NAME_KEY) {
+                match env::var(EnvironmentConfigurationResolver::LOGGER_ROLLER_LOG_FILE_NAME_KEY) {
                     Ok(logger_roller_log_file_name_) => {
                         logger_roller_log_file_name = logger_roller_log_file_name_;
 
-                        env::remove_var(EnvironmentVariableResolver::LOGGER_ROLLER_LOG_FILE_NAME_KEY);
+                        env::remove_var(EnvironmentConfigurationResolver::LOGGER_ROLLER_LOG_FILE_NAME_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -183,11 +196,11 @@ impl Base {
                 }
 
                 let logger_log_file_name: String;
-                match env::var(EnvironmentVariableResolver::LOGGER_LOG_FILE_NAME_KEY) {
+                match env::var(EnvironmentConfigurationResolver::LOGGER_LOG_FILE_NAME_KEY) {
                     Ok(logger_log_file_name_) => {
                         logger_log_file_name = logger_log_file_name_;
 
-                        env::remove_var(EnvironmentVariableResolver::LOGGER_LOG_FILE_NAME_KEY);
+                        env::remove_var(EnvironmentConfigurationResolver::LOGGER_LOG_FILE_NAME_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -200,11 +213,11 @@ impl Base {
                 }
 
                 let logger_encoder_pattern: String;
-                match env::var(EnvironmentVariableResolver::LOGGER_ENCODER_PATTERN_KEY) {
+                match env::var(EnvironmentConfigurationResolver::LOGGER_ENCODER_PATTERN_KEY) {
                     Ok(logger_encoder_pattern_) => {
                         logger_encoder_pattern = logger_encoder_pattern_;
 
-                        env::remove_var(EnvironmentVariableResolver::LOGGER_ENCODER_PATTERN_KEY);
+                        env::remove_var(EnvironmentConfigurationResolver::LOGGER_ENCODER_PATTERN_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -217,11 +230,11 @@ impl Base {
                 }
 
                 let security_jrwt_encoding_private_key: String;
-                match env::var(EnvironmentVariableResolver::SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY) {
+                match env::var(EnvironmentConfigurationResolver::SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY) {
                     Ok(security_jrwt_encoding_private_key_) => {
                         security_jrwt_encoding_private_key = security_jrwt_encoding_private_key_;
 
-                        env::remove_var(EnvironmentVariableResolver::SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY);
+                        env::remove_var(EnvironmentConfigurationResolver::SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -234,11 +247,11 @@ impl Base {
                 }
 
                 let security_jawt_signature_encoding_private_key: String;
-                match env::var(EnvironmentVariableResolver::SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY) {
+                match env::var(EnvironmentConfigurationResolver::SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY) {
                     Ok(security_jawt_signature_encoding_private_key_) => {
                         security_jawt_signature_encoding_private_key = security_jawt_signature_encoding_private_key_;
 
-                        env::remove_var(EnvironmentVariableResolver::SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY);
+                        env::remove_var(EnvironmentConfigurationResolver::SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -251,11 +264,11 @@ impl Base {
                 }
 
                 let resource_postgresql_url: String;
-                match env::var(EnvironmentVariableResolver::RESOURCE_POSTGRESQL_URL_KEY) {
+                match env::var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_URL_KEY) {
                     Ok(resource_postgresql_url_) => {
                         resource_postgresql_url = resource_postgresql_url_;
 
-                        env::remove_var(EnvironmentVariableResolver::RESOURCE_POSTGRESQL_URL_KEY);
+                        env::remove_var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_URL_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -268,11 +281,11 @@ impl Base {
                 }
 
                 let resource_redis_url: String;
-                match env::var(EnvironmentVariableResolver::RESOURCE_REDIS_URL_KEY) {
+                match env::var(EnvironmentConfigurationResolver::RESOURCE_REDIS_URL_KEY) {
                     Ok(resource_redis_url_) => {
                         resource_redis_url = resource_redis_url_;
 
-                        env::remove_var(EnvironmentVariableResolver::RESOURCE_REDIS_URL_KEY);
+                        env::remove_var(EnvironmentConfigurationResolver::RESOURCE_REDIS_URL_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -285,11 +298,23 @@ impl Base {
                 }
 
                 let resource_email_server_socket_address: SocketAddr;
-                match env::var(EnvironmentVariableResolver::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY) {
+                match env::var(EnvironmentConfigurationResolver::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY) {
                     Ok(resource_email_server_socket_address_) => {
-                        match SocketAddr::from_str(resource_email_server_socket_address_.as_str()) {
-                            Ok(resource_email_server_socket_address___) => {
-                                resource_email_server_socket_address = resource_email_server_socket_address___;
+                        match resource_email_server_socket_address_.to_socket_addrs() {
+                            Ok(mut resource_email_server_socket_address_registry) => {
+                                match resource_email_server_socket_address_registry.next() {
+                                    Some(resource_email_server_socket_address___) => {
+                                        resource_email_server_socket_address = resource_email_server_socket_address___;
+                                    }
+                                    None => {
+                                        return Err(
+                                            ErrorAuditor::new(
+                                                ErrorAggregator::LogicError { logic_error: LogicError::new(false, "Invalid socket address.") },
+                                                BacktracePart::new(line!(), file!(), None)
+                                            )
+                                        );
+                                    }
+                                }
                             }
                             Err(error) => {
                                 return Err(
@@ -301,7 +326,7 @@ impl Base {
                             }
                         }
 
-                        env::remove_var(EnvironmentVariableResolver::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY);
+                        env::remove_var(EnvironmentConfigurationResolver::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -314,7 +339,7 @@ impl Base {
                 }
 
                 return Ok(
-                    EnvironmentVariableResolver::new(
+                    EnvironmentConfigurationResolver::new(
                         is_production_environment,
                         server_socket_address,
                         logger_roller_log_file_name,
@@ -340,17 +365,17 @@ impl Base {
     }
 
     fn configure_log<'a>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver
     ) -> Result<(), ErrorAuditor> {
         match FixedWindowRoller::builder()
             .base(1)
-            .build(environment_variable_resolver.get_logger_roller_log_file_name(), 10) {          // TODO 10 - КОНСТАНТА или енваронмент
+            .build(environment_configuration_resolver.get_logger_roller_log_file_name(), 10) {          // TODO 10 - КОНСТАНТА или енваронмент
             Ok(fixed_window_roller) => {
                 match RollingFileAppender::builder()
                     .append(true)
-                    .encoder(Box::new(PatternEncoder::new(environment_variable_resolver.get_logger_encoder_pattern())))
+                    .encoder(Box::new(PatternEncoder::new(environment_configuration_resolver.get_logger_encoder_pattern())))
                     .build(
-                        Path::new(environment_variable_resolver.get_logger_log_file_name()),                                                                                      // TODO Через Тип неопходимый, а не СТринг
+                        Path::new(environment_configuration_resolver.get_logger_log_file_name()),                                                                                      // TODO Через Тип неопходимый, а не СТринг
                         Box::new(CompoundPolicy::new(Box::new(SizeTrigger::new(50 * 1024 * 1024)), Box::new(fixed_window_roller)))
                     ) {
                     Ok(rolling_file_appender) => {
@@ -410,12 +435,12 @@ impl Base {
      // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     #[tokio::main]                      // TODO написать без макроса
     async fn run_http_server(
-        environment_variable_resolver: EnvironmentVariableResolver
+        environment_configuration_resolver: EnvironmentConfigurationResolver
     ) -> Result<(), ErrorAuditor> {
-        match PostgresqlConfig::from_str(environment_variable_resolver.get_resource_postgresql_url()) {
+        match PostgresqlConfig::from_str(environment_configuration_resolver.get_resource_postgresql_url()) {
             Ok(config) => {
                 let postgresql_connection_pool: PostgresqlConnectionPool;
-                if environment_variable_resolver.get_is_production_environment() {
+                if environment_configuration_resolver.get_is_production_environment() {
                     todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
                 } else {
                     match Pool::builder()
@@ -434,19 +459,19 @@ impl Base {
                     }
                 }
 
-                match ConnectionInfo::from_str(environment_variable_resolver.get_resource_redis_url()) {
+                match ConnectionInfo::from_str(environment_configuration_resolver.get_resource_redis_url()) {
                     Ok(connection_info) => {
                         match RedisConnectionManager::new(connection_info) {
                             Ok(redis_connection_manager) => {
                                 match Pool::builder()      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
                                     .build(redis_connection_manager).await {
                                     Ok(redis_connection_pool) => {
-                                        let builder = Server::bind(environment_variable_resolver.get_server_socket_address());
+                                        let builder = Server::bind(environment_configuration_resolver.get_server_socket_address());
 
                                         // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
                                         let service = make_service_fn(
                                             move |_: &AddrStream| {
-                                                let environment_variable_resolver_ = environment_variable_resolver.clone();
+                                                let environment_configuration_resolver_ = environment_configuration_resolver.clone();
 
                                                 let postgresql_connection_pool_ = postgresql_connection_pool.clone();
                                     
@@ -455,7 +480,7 @@ impl Base {
                                                 async move {
                                                     return Ok::<_, HyperError>(
                                                         service_fn(move |requset| {
-                                                            let environment_variable_resolver__ = environment_variable_resolver_.clone();
+                                                            let environment_configuration_resolver__ = environment_configuration_resolver_.clone();
 
                                                             let postgresql_connection_pool__ = postgresql_connection_pool_.clone();
                                         
@@ -464,7 +489,7 @@ impl Base {
                                                             return async move {
                                                                 match postgresql_connection_pool__ {
                                                                     PostgresqlConnectionPool::Development { postgresql_connection_pool } => {
-                                                                        return Ok::<_, HyperError>(Self::resolve(&environment_variable_resolver__, requset, postgresql_connection_pool, redis_connection_pool__).await);
+                                                                        return Ok::<_, HyperError>(Self::resolve(&environment_configuration_resolver__, requset, postgresql_connection_pool, redis_connection_pool__).await);
                                                                     }
                                                                 }
                                                             };
@@ -542,7 +567,7 @@ impl Base {
     }
 
     async fn resolve<'a, T>(                                                           // TODO TODO  TODO Пути через константы?
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>, 
         redis_connection_pool: Pool<RedisConnectionManager>
@@ -557,64 +582,64 @@ impl Base {
             // Area for existing routes with not authorized user.
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/au/cnfe", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::check_nickname_for_existing(environment_variable_resolver, request, postgresql_connection_pool).await;
+                return ControllerApplicationUserAuthorization::check_nickname_for_existing(environment_configuration_resolver, request, postgresql_connection_pool).await;
             }
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/au/cefe", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::check_email_for_existing(environment_variable_resolver, request, postgresql_connection_pool).await;
+                return ControllerApplicationUserAuthorization::check_email_for_existing(environment_configuration_resolver, request, postgresql_connection_pool).await;
             }
             ("/v1/m/au/rbfs", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::register_by_first_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::register_by_first_step(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/rbls", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::register_by_last_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::register_by_last_step(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/sefr", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::send_email_for_register(environment_variable_resolver, request, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::send_email_for_register(environment_configuration_resolver, request, redis_connection_pool).await;
             }
             ("/v1/m/au/libfs", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::log_in_by_first_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::log_in_by_first_step(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/libls", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::log_in_by_last_step(environment_variable_resolver, request, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::log_in_by_last_step(environment_configuration_resolver, request, redis_connection_pool).await;
             }
             ("/v1/m/au/sefli", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::send_email_for_log_in(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::send_email_for_log_in(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/rpbfs", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::reset_password_by_first_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::reset_password_by_first_step(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/rpbls", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::reset_password_by_last_step(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::reset_password_by_last_step(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/sefrp", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::send_email_for_reset_password(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::send_email_for_reset_password(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/v1/m/au/rjawt", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::refresh_json_access_web_token(environment_variable_resolver, request, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::refresh_json_access_web_token(environment_configuration_resolver, request, redis_connection_pool).await;
             }
             // Area for existing routes with authorized user.
             ("/v1/m/au/lofod", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::log_out_from_one_device(environment_variable_resolver, request, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::log_out_from_one_device(environment_configuration_resolver, request, redis_connection_pool).await;
             }
             ("/v1/m/au/lofad", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::log_out_from_all_devices(environment_variable_resolver, request, redis_connection_pool).await;
+                return ControllerApplicationUserAuthorization::log_out_from_all_devices(environment_configuration_resolver, request, redis_connection_pool).await;
             }
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbn", &Method::POST) => {
-                return ControllerChannelBase::get_many_by_name(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerChannelBase::get_many_by_name(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbca", &Method::POST) => {
-                return ControllerChannelBase::get_many_by_created_at(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerChannelBase::get_many_by_created_at(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbsq", &Method::POST) => {
-                return ControllerChannelBase::get_many_by_subscribers_quantity(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerChannelBase::get_many_by_subscribers_quantity(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             // GET functional. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbir", &Method::POST) => {
-                return ControllerChannelBase::get_many_by_id_registry(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                return ControllerChannelBase::get_many_by_id_registry(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
             ("/abc_a", &Method::POST) => {
                 return crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::
@@ -659,48 +684,48 @@ impl Base {
                     // Area for existing routes with not authorized user.
                     // GET functional. This is because there is a restriction on mobile frontend.
                     ("/v1/m/au/cnfe_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::check_nickname_for_existing_(environment_variable_resolver, request, postgresql_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::check_nickname_for_existing_(environment_configuration_resolver, request, postgresql_connection_pool).await;
                     }
                     // GET functional. This is because there is a restriction on mobile frontend.
                     ("/v1/m/au/cefe_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::check_email_for_existing_(environment_variable_resolver, request, postgresql_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::check_email_for_existing_(environment_configuration_resolver, request, postgresql_connection_pool).await;
                     }
                     ("/v1/m/au/rbfs_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::register_by_first_step_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::register_by_first_step_(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/rbls_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::register_by_last_step_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::register_by_last_step_(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/sefr_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::send_email_for_register_(environment_variable_resolver, request, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::send_email_for_register_(environment_configuration_resolver, request, redis_connection_pool).await;
                     }
                     ("/v1/m/au/libfs_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::log_in_by_first_step_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::log_in_by_first_step_(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/libls_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::log_in_by_last_step_(environment_variable_resolver, request, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::log_in_by_last_step_(environment_configuration_resolver, request, redis_connection_pool).await;
                     }
                     ("/v1/m/au/sefli_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::send_email_for_log_in_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::send_email_for_log_in_(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/rpbfs_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::reset_password_by_first_step_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::reset_password_by_first_step_(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/rpbls_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::reset_password_by_last_step_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::reset_password_by_last_step_(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/sefrp_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::send_email_for_reset_password_(environment_variable_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::send_email_for_reset_password_(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
                     }
                     ("/v1/m/au/rjawt_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::refresh_json_access_web_token_(environment_variable_resolver, request, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::refresh_json_access_web_token_(environment_configuration_resolver, request, redis_connection_pool).await;
                     }
                     // Area for existing routes with authorized user.
                     ("/v1/m/au/lofod_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::log_out_from_one_device_(environment_variable_resolver, request, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::log_out_from_one_device_(environment_configuration_resolver, request, redis_connection_pool).await;
                     }
                     ("/v1/m/au/lofad_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::log_out_from_all_devices_(environment_variable_resolver, request, redis_connection_pool).await;
+                        return ControllerApplicationUserAuthorization::log_out_from_all_devices_(environment_configuration_resolver, request, redis_connection_pool).await;
                     }
                     // Area for not existing routes.
                     _ => {}

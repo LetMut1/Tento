@@ -2,7 +2,7 @@ use std::clone::Clone;
 use std::net::SocketAddr;
 
 #[derive(Clone)]
-pub struct EnvironmentVariableResolver {
+pub struct EnvironmentConfigurationResolver {
     is_production_environment: bool,
     server_socket_address: SocketAddr,
     logger_roller_log_file_name: String,
@@ -15,7 +15,7 @@ pub struct EnvironmentVariableResolver {
     resource_email_server_socket_address: SocketAddr
 }
 
-impl EnvironmentVariableResolver {
+impl EnvironmentConfigurationResolver {
     pub const SERVER_SOCKET_ADDRESS_KEY: &'static str = "SERVER_SOCKET_ADDRESS";
     pub const LOGGER_ROLLER_LOG_FILE_NAME_KEY: &'static str = "LOGGER_ROLLER_LOG_FILE_NAME";
     pub const LOGGER_LOG_FILE_NAME_KEY: &'static str = "LOGGER_LOG_FILE_NAME";

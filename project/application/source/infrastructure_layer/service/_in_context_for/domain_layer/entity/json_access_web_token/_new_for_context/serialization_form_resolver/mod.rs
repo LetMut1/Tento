@@ -10,7 +10,7 @@ use crate::infrastructure_layer::error::error_auditor::_component::error_aggrega
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::signature_creator::SignatureCreator;
-use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
+use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 
 pub struct SerializationFormResolver;
 
@@ -18,7 +18,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
     type Error = ErrorAuditor;
 
     fn serialize<'a>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         json_access_web_token: &'a JsonAccessWebToken<'_>
     ) -> Result<String, Self::Error> {
         match serde_json::to_vec(&HeaderCommon::new(json_access_web_token)) {
@@ -29,7 +29,7 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
                     Ok(payload_data) => {
                         let payload = base64::encode_config(&payload_data[..], base64::STANDARD);
 
-                        let signature = SignatureCreator::create(environment_variable_resolver, header.as_str(), payload.as_str());
+                        let signature = SignatureCreator::create(environment_configuration_resolver, header.as_str(), payload.as_str());
 
                         let json_access_web_token_classic_form = header + Self::TOKEN_PARTS_SEPARATOR + payload.as_str() + Self::TOKEN_PARTS_SEPARATOR + signature.as_str();
         
@@ -57,13 +57,13 @@ impl SerializationFormResolverTrait for SerializationFormResolver {
     }
 
     fn deserialize<'a>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         json_access_web_token_classic_form: &'a str
     ) -> Result<JsonAccessWebToken<'static>, Self::Error> {
         let token_part_registry = json_access_web_token_classic_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR).collect::<Vec<&'_ str>>();
 
         if token_part_registry.len() == 3
-            && SignatureCreator::is_valid(environment_variable_resolver, token_part_registry[0], token_part_registry[1], token_part_registry[2]) {
+            && SignatureCreator::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1], token_part_registry[2]) {
             match base64::decode_config(token_part_registry[1].as_bytes(), base64::STANDARD) {
                 Ok(data) => {
                     match serde_json::from_slice::<'_, PayloadCommon<'static>>(&data[..]) {

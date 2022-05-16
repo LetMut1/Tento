@@ -4,7 +4,7 @@ use crate::infrastructure_layer::error::error_auditor::_component::error_aggrega
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::service::environment_variable_resolver::EnvironmentVariableResolver;
+use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use lettre_email::EmailBuilder;
 use lettre::ClientSecurity;
 use lettre::smtp::authentication::Credentials;
@@ -19,7 +19,7 @@ pub struct EmailSender;
 
 impl EmailSender {   // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
-        environment_variable_resolver: &'a EnvironmentVariableResolver,
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         subject: &'a str,
         body: String,
         to: &'a str
@@ -32,7 +32,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             .build() {
             Ok(email) => {
                 let smtp_client: SmtpClient;
-                if environment_variable_resolver.get_is_production_environment() {
+                if environment_configuration_resolver.get_is_production_environment() {
                     match SmtpClient::new_simple("TODO") {   // TODO                            НАСТРОИТЬ В Препроде!!!!!!!!!!!!!!!!!!!!!
                         Ok(smtp_client_) => {
                             smtp_client = smtp_client_.hello_name(ClientId::Domain("TODO".to_string())) // TODO
@@ -59,7 +59,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                         }
                     }
                 } else {
-                    match SmtpClient::new(*environment_variable_resolver.get_resource_email_server_socket_address(), ClientSecurity::None) {
+                    match SmtpClient::new(*environment_configuration_resolver.get_resource_email_server_socket_address(), ClientSecurity::None) {
                         Ok(smtp_client_) => {
                             smtp_client = smtp_client_;
                         }
