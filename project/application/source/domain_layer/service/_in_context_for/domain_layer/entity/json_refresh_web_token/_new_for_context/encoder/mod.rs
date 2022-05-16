@@ -1,5 +1,4 @@
 use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
-use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder_trait::EncoderTrait;
 use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder::_new_fro_context::common::Common;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
@@ -14,26 +13,16 @@ use crypto::sha2::Sha512;
 pub struct Encoder;
 
 impl Encoder {
-    fn get_configured_hmac<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-    ) -> Hmac<Sha512> {
-        return Hmac::new(
-            Sha512::new(),
-            environment_configuration_resolver.get_security_jrwt_encoding_private_key().as_bytes()
-        );
-    }
-}
-
-impl EncoderTrait for Encoder {
-    type Error = ErrorAuditor;
-
-    fn encode<'a>(
+    pub fn encode<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>
-    ) -> Result<String, Self::Error> {
+    ) -> Result<String, ErrorAuditor> {
         match serde_json::to_vec(&Common::new(json_refresh_web_token)) {
             Ok(data) => {
-                let mut hmac = Self::get_configured_hmac(environment_configuration_resolver);
+                let mut hmac = Hmac::new(
+                    Sha512::new(),
+                    environment_configuration_resolver.get_security_jrwt_encoding_private_key().as_bytes()
+                );
                 hmac.input(&data[..]);
 
                 return Ok(hex::encode(hmac.result().code()));   // TODO  TODO TODO time attac
@@ -49,11 +38,11 @@ impl EncoderTrait for Encoder {
         }
     }
 
-    fn is_valid<'a>(
+    pub fn is_valid<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>,
         json_refresh_web_token_hash: &'a str
-    ) -> Result<bool, Self::Error> {
+    ) -> Result<bool, ErrorAuditor> {
         match Self::encode(environment_configuration_resolver, json_refresh_web_token) {
             Ok(json_refresh_web_token_hash_) => {
                 return Ok(json_refresh_web_token_hash_.as_bytes() == json_refresh_web_token_hash.as_bytes());

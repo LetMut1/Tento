@@ -8,7 +8,7 @@ use redis::aio::Connection;
 
 pub struct RepositoryProxy;
 
-impl RepositoryProxy {
+impl RepositoryProxy {                                  // TODO после переноса токенов в бд разобраться, нужно ли это.
     pub async fn create<'a>(
         connection: &'a mut Connection,
         json_refresh_web_token: &'a JsonRefreshWebToken<'_>

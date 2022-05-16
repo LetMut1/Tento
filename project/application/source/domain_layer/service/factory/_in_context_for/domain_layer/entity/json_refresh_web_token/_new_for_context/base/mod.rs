@@ -1,7 +1,6 @@
 
 use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
-use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::obfuscation_value_generator_trait::ObfuscationValueGeneratorTrait;
-use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::obfuscation_value_generator::ObfuscationValueGenerator;
+use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::obfuscation_value_generator::ObfuscationValueGenerator;
 use std::borrow::Cow;
 use uuid::Uuid;
 
