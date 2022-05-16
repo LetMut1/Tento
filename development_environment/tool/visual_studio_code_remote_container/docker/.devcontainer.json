@@ -3,7 +3,7 @@
     "service": "rust_language",
     "workspaceFolder": "/_tento",
     "extensions": [
-		"matklad.rust-analyzer",
+		"rust-lang.rust-analyzer",
 		"ms-azuretools.vscode-docker",
 		"bungcip.better-toml",
 		"irongeek.vscode-env",
