@@ -1,2 +1,2 @@
-pub mod password_encoder_trait;
-pub mod password_hash_resolver_trait;
+pub mod password_encoder;
+pub mod password_hash_resolver;

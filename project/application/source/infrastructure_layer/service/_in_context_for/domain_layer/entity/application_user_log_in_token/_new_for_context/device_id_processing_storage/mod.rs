@@ -8,7 +8,7 @@ use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer:
 use redis::aio::Connection;
 use redis::AsyncCommands;
 
-pub struct DeviceIdProcessingStorage;
+pub struct DeviceIdProcessingStorage;       // УДАЛИТЬ, КОГДА СОХРАНение токенов будет в Постгресе
 
 impl DeviceIdProcessingStorage {
     const SEPARATOR: &'static str = ":";

@@ -1,10 +1,11 @@
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_encoder::PasswordEncoder;
-use super::password_encoder_trait::PasswordEncoderTrait;
+use super::password_encoder::PasswordEncoder;
 
-pub trait PasswordHashResolverTrait {
-    fn create<'a>(
+pub struct PasswordHashResolver;
+
+impl PasswordHashResolver {
+    pub fn create<'a>(
         password: &'a str
     ) -> Result<String, ErrorAuditor> {
         match PasswordEncoder::encode(password) {
@@ -19,7 +20,7 @@ pub trait PasswordHashResolverTrait {
         }
     }
 
-    fn is_valid<'a>(
+    pub fn is_valid<'a>(
         password: &'a str,
         password_hash: &'a str
     ) -> Result<bool, ErrorAuditor> {
