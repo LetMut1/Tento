@@ -580,11 +580,11 @@ impl Base {
     {
         match (request.uri().path(), request.method()) {
             // Area for existing routes with not authorized user.
-            // GET functional. This is because there is a restriction on mobile frontend.
+            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
             ("/v1/m/au/cnfe", &Method::POST) => {
                 return ControllerApplicationUserAuthorization::check_nickname_for_existing(environment_configuration_resolver, request, postgresql_connection_pool).await;
             }
-            // GET functional. This is because there is a restriction on mobile frontend.
+            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
             ("/v1/m/au/cefe", &Method::POST) => {
                 return ControllerApplicationUserAuthorization::check_email_for_existing(environment_configuration_resolver, request, postgresql_connection_pool).await;
             }
@@ -625,19 +625,19 @@ impl Base {
             ("/v1/m/au/lofad", &Method::POST) => {
                 return ControllerApplicationUserAuthorization::log_out_from_all_devices(environment_configuration_resolver, request, redis_connection_pool).await;
             }
-            // GET functional. This is because there is a restriction on mobile frontend.
+            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbn", &Method::POST) => {
                 return ControllerChannelBase::get_many_by_name(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
-            // GET functional. This is because there is a restriction on mobile frontend.
+            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbca", &Method::POST) => {
                 return ControllerChannelBase::get_many_by_created_at(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
-            // GET functional. This is because there is a restriction on mobile frontend.
+            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbsq", &Method::POST) => {
                 return ControllerChannelBase::get_many_by_subscribers_quantity(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
-            // GET functional. This is because there is a restriction on mobile frontend.
+            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbir", &Method::POST) => {
                 return ControllerChannelBase::get_many_by_id_registry(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
@@ -682,11 +682,11 @@ impl Base {
                 #[cfg(feature="facilitate_non_automatic_functional_testing")]
                 match (request.uri().path(), request.method()) {
                     // Area for existing routes with not authorized user.
-                    // GET functional. This is because there is a restriction on mobile frontend.
+                    // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
                     ("/v1/m/au/cnfe_", &Method::POST) => {
                         return ControllerApplicationUserAuthorization::check_nickname_for_existing_(environment_configuration_resolver, request, postgresql_connection_pool).await;
                     }
-                    // GET functional. This is because there is a restriction on mobile frontend.
+                    // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
                     ("/v1/m/au/cefe_", &Method::POST) => {
                         return ControllerApplicationUserAuthorization::check_email_for_existing_(environment_configuration_resolver, request, postgresql_connection_pool).await;
                     }
