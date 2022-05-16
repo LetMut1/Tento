@@ -57,7 +57,7 @@ impl Base {
     pub fn handle(
         binary_file_path: String
     ) -> Result<(), ErrorAuditor> {
-        match Self::load_environment_variable_registry(binary_file_path.as_str()) {
+        match Self::load_environment_configuration_registry(binary_file_path.as_str()) {
             Ok(environment_configuration_resolver) => {
                 if let Err(mut error) = Self::configure_log(&environment_configuration_resolver) {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -83,7 +83,7 @@ impl Base {
         }
     }
 
-    fn load_environment_variable_registry<'a>(
+    fn load_environment_configuration_registry<'a>(
         binary_file_path: &'a str
     ) -> Result<EnvironmentConfigurationResolver, ErrorAuditor> {
         match Path::new(binary_file_path).parent() {
