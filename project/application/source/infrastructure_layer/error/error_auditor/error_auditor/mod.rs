@@ -42,7 +42,7 @@ impl ErrorAuditor {
 impl Display for ErrorAuditor {
     fn fmt<'a, 'b>(
         &'a self,
-        formatter: &'b mut Formatter<'_>
+        _formatter: &'b mut Formatter<'_>
     ) -> Result {
         return Ok(());
     }

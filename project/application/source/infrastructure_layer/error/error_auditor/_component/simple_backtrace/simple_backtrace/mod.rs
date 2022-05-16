@@ -30,7 +30,7 @@ impl SimpleBacktrace {
 impl Display for SimpleBacktrace {
     fn fmt<'a, 'b>(
         &'a self,
-        formatter: &'b mut Formatter<'_>
+        _formatter: &'b mut Formatter<'_>
     ) -> Result {
         return Ok(());
     }

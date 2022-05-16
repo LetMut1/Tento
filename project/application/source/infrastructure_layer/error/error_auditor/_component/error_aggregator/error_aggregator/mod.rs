@@ -23,7 +23,7 @@ pub enum ErrorAggregator {
 impl Display for ErrorAggregator {
     fn fmt<'a, 'b>(
         &'a self,
-        formatter: &'b mut Formatter<'_>
+        _formatter: &'b mut Formatter<'_>
     ) -> Result {
         return Ok(());
     }
