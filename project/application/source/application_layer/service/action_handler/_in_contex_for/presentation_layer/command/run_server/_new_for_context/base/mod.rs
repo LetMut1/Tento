@@ -55,9 +55,9 @@ impl Base {
     const DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
     pub fn handle(
-        binary_file_path: String
+        binary_file_path: &'static str
     ) -> Result<(), ErrorAuditor> {
-        match Self::load_environment_configuration_registry(binary_file_path.as_str()) {
+        match Self::load_environment_configuration_registry(binary_file_path) {
             Ok(environment_configuration_resolver) => {
                 if let Err(mut error) = Self::configure_log(&environment_configuration_resolver) {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

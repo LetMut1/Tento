@@ -4,7 +4,7 @@ use application::application_layer::service::action_handler::_in_contex_for::pre
 
 fn main(
 ) -> () {
-    if let Err(error) = Base::handle(std::file!().to_string()) {
+    if let Err(error) = Base::handle(std::file!()) {
         println!("{}", error);
     }
 
