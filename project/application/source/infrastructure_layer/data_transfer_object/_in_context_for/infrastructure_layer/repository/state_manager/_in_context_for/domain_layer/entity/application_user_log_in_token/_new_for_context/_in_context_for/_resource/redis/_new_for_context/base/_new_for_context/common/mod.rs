@@ -3,7 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::Cow;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 pub struct Common<'a> {
     application_user_log_in_token_value: Cow<'a, str>,
     application_user_log_in_token_wrong_enter_tries_quantity: u8

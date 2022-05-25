@@ -3,7 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::Cow;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 pub struct Common<'a> {
     json_access_web_token_id: Cow<'a, str>,
     application_user_id: i64,

@@ -1,7 +1,7 @@
 use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use serde::Serialize;
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize)]
 pub struct HeaderCommon<'a> {
     json_access_web_token_header_type: &'a str,
 }

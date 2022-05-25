@@ -2,7 +2,7 @@ use crate::domain_layer::entity::json_refresh_web_token::JsonRefreshWebToken;
 use serde::Serialize;
 use std::borrow::Cow;
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize)]
 pub struct Common<'a> {
     json_access_web_token_id: Cow<'a, str>,
     application_user_id: i64,
