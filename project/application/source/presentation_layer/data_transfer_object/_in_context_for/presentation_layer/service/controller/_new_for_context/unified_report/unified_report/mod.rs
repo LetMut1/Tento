@@ -6,7 +6,7 @@ use serde::Deserialize;
 
 #[derive(Serialize)]
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
-pub enum EndpointResponse<S>
+pub enum UnifiedReport<S>
 where
     S: Serialize
 {
@@ -21,7 +21,7 @@ where
     }
 }
 
-impl<S> EndpointResponse<S>
+impl<S> UnifiedReport<S>
 where
     S: Serialize
 {

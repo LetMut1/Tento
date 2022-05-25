@@ -15,7 +15,7 @@ use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::presentation_layer::service::_in_context_for::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::endpoint_response::_new_for_context::endpoint_response_creator::EndpointResponseCreator;
+use crate::presentation_layer::service::unified_report_creator::UnifiedReportCreator;
 use crate::presentation_layer::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::service::response_creator::ResponseCreator;
 use hyper::Body;
@@ -60,7 +60,7 @@ impl Base {
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -78,7 +78,7 @@ impl Base {
                                     &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                         match json_access_web_token_error {
                                             &JsonAccessWebTokenError::AlreadyExpired => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                 )) {
                                                     Ok(data) => {
@@ -92,7 +92,7 @@ impl Base {
                                                 }
                                             }
                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
@@ -163,7 +163,7 @@ impl Base {
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -181,7 +181,7 @@ impl Base {
                                     &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                         match json_access_web_token_error {
                                             &JsonAccessWebTokenError::AlreadyExpired => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                 )) {
                                                     Ok(data) => {
@@ -195,7 +195,7 @@ impl Base {
                                                 }
                                             }
                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
@@ -266,7 +266,7 @@ impl Base {
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -284,7 +284,7 @@ impl Base {
                                     &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                         match json_access_web_token_error {
                                             &JsonAccessWebTokenError::AlreadyExpired => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                 )) {
                                                     Ok(data) => {
@@ -298,7 +298,7 @@ impl Base {
                                                 }
                                             }
                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
@@ -369,7 +369,7 @@ impl Base {
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -387,7 +387,7 @@ impl Base {
                                     &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                         match json_access_web_token_error {
                                             &JsonAccessWebTokenError::AlreadyExpired => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                 )) {
                                                     Ok(data) => {
@@ -401,7 +401,7 @@ impl Base {
                                                 }
                                             }
                                             &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {

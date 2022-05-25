@@ -40,7 +40,7 @@ use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::presentation_layer::service::_in_context_for::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::endpoint_response::_new_for_context::endpoint_response_creator::EndpointResponseCreator;
+use crate::presentation_layer::service::unified_report_creator::UnifiedReportCreator;
 use crate::presentation_layer::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::service::response_creator::ResponseCreator;
 use hyper::Body;
@@ -309,7 +309,7 @@ impl Authorization {
             Ok(request_data) => {
                 match ActionHandlerCheckNicknameForExisting::handle(postgresql_connection_pool, request_data).await {
                     Ok(response_data) => {
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -327,7 +327,7 @@ impl Authorization {
                                     &EntityError::ApplicationUserError { ref application_user_error } => {
                                         match application_user_error {
                                             &ApplicationUserError::InvalidNickname => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
                                                 )) {
                                                     Ok(data) => {
@@ -408,8 +408,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -480,7 +480,7 @@ impl Authorization {
             Ok(request_data) => {
                 match ActionHandlerCheckEmailForExisting::handle(postgresql_connection_pool, request_data).await {
                     Ok(response_data) => {
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -498,7 +498,7 @@ impl Authorization {
                                     &EntityError::ApplicationUserError { ref application_user_error } => {
                                         match application_user_error {
                                             &ApplicationUserError::InvalidEmail => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
                                                 )) {
                                                     Ok(data) => {
@@ -580,8 +580,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -660,7 +660,7 @@ impl Authorization {
                                 &EntityError::ApplicationUserError { ref application_user_error } => {
                                     match application_user_error {
                                         &ApplicationUserError::EmailAlreadyExist => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
                                             )) {
                                                 Ok(data) => {
@@ -674,7 +674,7 @@ impl Authorization {
                                             }
                                         }
                                         &ApplicationUserError::InvalidEmail => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL
                                             )) {
                                                 Ok(data) => {
@@ -709,7 +709,7 @@ impl Authorization {
                     }
                 }
         
-                match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
+                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     }
@@ -767,8 +767,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -842,7 +842,7 @@ impl Authorization {
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -860,7 +860,7 @@ impl Authorization {
                                     &EntityError::ApplicationUserError { ref application_user_error } => {
                                         match application_user_error {
                                             &ApplicationUserError::EmailAlreadyExist => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
                                                 )) {
                                                     Ok(data) => {
@@ -874,7 +874,7 @@ impl Authorization {
                                                 }
                                             }
                                             &ApplicationUserError::InvalidNickname => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME
                                                 )) {
                                                     Ok(data) => {
@@ -888,7 +888,7 @@ impl Authorization {
                                                 }
                                             }
                                             &ApplicationUserError::InvalidPassword => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
                                                 )) {
                                                     Ok(data) => {
@@ -902,7 +902,7 @@ impl Authorization {
                                                 }
                                             }
                                             &ApplicationUserError::NicknameAlreadyExist => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST
                                                 )) {
                                                     Ok(data) => {
@@ -923,7 +923,7 @@ impl Authorization {
                                     &EntityError::ApplicationUserRegistrationConfirmationTokenError { ref application_user_registration_confirmation_token_error } => {
                                         match application_user_registration_confirmation_token_error {
                                             &ApplicationUserRegistrationConfirmationTokenError::NotFound => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
                                                 )) {
                                                     Ok(data) => {
@@ -937,7 +937,7 @@ impl Authorization {
                                                 }
                                             }
                                             &ApplicationUserRegistrationConfirmationTokenError::InvalidValue => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE
                                                 )) {
                                                     Ok(data) => {
@@ -1017,8 +1017,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -1090,7 +1090,7 @@ impl Authorization {
                                 &EntityError::ApplicationUserRegistrationConfirmationTokenError { ref application_user_registration_confirmation_token_error } => {
                                     match application_user_registration_confirmation_token_error {
                                         &ApplicationUserRegistrationConfirmationTokenError::NotFound => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
                                             )) {
                                                 Ok(data) => {
@@ -1126,7 +1126,7 @@ impl Authorization {
                     }
                 }
     
-                match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
+                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     }
@@ -1176,8 +1176,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -1251,7 +1251,7 @@ impl Authorization {
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -1272,7 +1272,7 @@ impl Authorization {
                                             &ApplicationUserError::InvalidPassword |
                                             &ApplicationUserError::NotFound |
                                             &ApplicationUserError::WrongPassword => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
                                                 )) {
                                                     Ok(data) => {
@@ -1355,8 +1355,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -1423,7 +1423,7 @@ impl Authorization {
                     environment_configuration_resolver, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => { 
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -1441,7 +1441,7 @@ impl Authorization {
                                     &EntityError::ApplicationUserLogInTokenError { ref application_user_log_in_token_error } => {
                                         match application_user_log_in_token_error {
                                             &ApplicationUserLogInTokenError::NotFound => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
                                                 )) {
                                                     Ok(data) => {
@@ -1455,7 +1455,7 @@ impl Authorization {
                                                 }
                                             }
                                             &ApplicationUserLogInTokenError::InvalidValue => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE
                                                 )) {
                                                     Ok(data) => {
@@ -1527,8 +1527,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -1607,7 +1607,7 @@ impl Authorization {
                                 &EntityError::ApplicationUserError { ref application_user_error } => {
                                     match application_user_error {
                                         &ApplicationUserError::NotFound => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
                                             )) {
                                                 Ok(data) => {
@@ -1628,7 +1628,7 @@ impl Authorization {
                                 &EntityError::ApplicationUserLogInTokenError { ref application_user_log_in_token_error } => {
                                     match application_user_log_in_token_error {
                                         &ApplicationUserLogInTokenError::NotFound => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
                                             )) {
                                                 Ok(data) => {
@@ -1663,7 +1663,7 @@ impl Authorization {
                     }
                 }
         
-                match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
+                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     }
@@ -1721,8 +1721,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -1789,7 +1789,7 @@ impl Authorization {
                     environment_configuration_resolver, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => {
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -1807,7 +1807,7 @@ impl Authorization {
                                     &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                         match json_access_web_token_error {
                                             &JsonAccessWebTokenError::NotExpired => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED
                                                 )) {
                                                     Ok(data) => {
@@ -1828,7 +1828,7 @@ impl Authorization {
                                     &EntityError::JsonRefreshWebTokenError { ref json_refresh_web_token_error } => {
                                         match json_refresh_web_token_error {
                                             &JsonRefreshWebTokenError::NotFound => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
                                                 )) {
                                                     Ok(data) => {
@@ -1900,8 +1900,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -1973,7 +1973,7 @@ impl Authorization {
                                 &EntityError::JsonRefreshWebTokenError { ref json_refresh_web_token_error } => {
                                     match json_refresh_web_token_error {
                                         &JsonRefreshWebTokenError::NotFound => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND
                                             )) {
                                                 Ok(data) => {
@@ -1991,7 +1991,7 @@ impl Authorization {
                                 &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                     match json_access_web_token_error {
                                         &JsonAccessWebTokenError::AlreadyExpired => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                             )) {
                                                 Ok(data) => {
@@ -2005,7 +2005,7 @@ impl Authorization {
                                             }
                                         }
                                         &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                             )) {
                                                 Ok(data) => {
@@ -2040,7 +2040,7 @@ impl Authorization {
                     }
                 }
                 
-                match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
+                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     }
@@ -2090,8 +2090,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -2163,7 +2163,7 @@ impl Authorization {
                                 &EntityError::JsonRefreshWebTokenError { ref json_refresh_web_token_error } => {
                                     match json_refresh_web_token_error {
                                         &JsonRefreshWebTokenError::NotFound => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND 
                                             )) {
                                                 Ok(data) => {
@@ -2181,7 +2181,7 @@ impl Authorization {
                                 &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
                                     match json_access_web_token_error {
                                         &JsonAccessWebTokenError::AlreadyExpired => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                             )) {
                                                 Ok(data) => {
@@ -2195,7 +2195,7 @@ impl Authorization {
                                             }
                                         }
                                         &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                             )) {
                                                 Ok(data) => {
@@ -2230,7 +2230,7 @@ impl Authorization {
                     }
                 }
                 
-                match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
+                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     }
@@ -2280,8 +2280,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -2355,7 +2355,7 @@ impl Authorization {
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
                 ).await {
                     Ok(response_data) => {
-                        match rmp_serde::to_vec(&EndpointResponseCreator::create_with_data(response_data)) {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
                                 return ResponseCreator::create_ok(data);
                             }
@@ -2373,7 +2373,7 @@ impl Authorization {
                                     &EntityError::ApplicationUserError { ref application_user_error } => {
                                         match application_user_error {
                                             &ApplicationUserError::NotFound => {
-                                                match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                     CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
                                                 )) {
                                                     Ok(data) => {
@@ -2457,8 +2457,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data{
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -2535,7 +2535,7 @@ impl Authorization {
                                 &EntityError::ApplicationUserError { ref application_user_error } => {
                                     match application_user_error {
                                         &ApplicationUserError::NotFound => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
                                             )) {
                                                 Ok(data) => {
@@ -2549,7 +2549,7 @@ impl Authorization {
                                             }
                                         }
                                         &ApplicationUserError::InvalidPassword => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD
                                             )) {
                                                 Ok(data) => {
@@ -2571,7 +2571,7 @@ impl Authorization {
                                 &EntityError::ApplicationUserResetPasswordTokenError { ref application_user_reset_password_token_error } => {
                                     match application_user_reset_password_token_error {
                                         &ApplicationUserResetPasswordTokenError::InvalidValue => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
                                             )) {
                                                 Ok(data) => {
@@ -2585,7 +2585,7 @@ impl Authorization {
                                             }
                                         }
                                         &ApplicationUserResetPasswordTokenError::NotFound => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
                                             )) {
                                                 Ok(data) => {
@@ -2617,7 +2617,7 @@ impl Authorization {
                     }
                 }
 
-                match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
+                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     }
@@ -2675,8 +2675,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }
@@ -2755,7 +2755,7 @@ impl Authorization {
                                 &EntityError::ApplicationUserError { ref application_user_error } => {
                                     match application_user_error {
                                         &ApplicationUserError::NotFound => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND
                                             )) {
                                                 Ok(data) => {
@@ -2776,7 +2776,7 @@ impl Authorization {
                                 &EntityError::ApplicationUserResetPasswordTokenError { ref application_user_reset_password_token_error } => {
                                     match application_user_reset_password_token_error {
                                         &ApplicationUserResetPasswordTokenError::NotFound => {
-                                            match rmp_serde::to_vec(&EndpointResponseCreator::create_with_error_code(
+                                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
                                                 CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
                                             )) {
                                                 Ok(data) => {
@@ -2811,7 +2811,7 @@ impl Authorization {
                     }
                 }
         
-                match rmp_serde::to_vec(&EndpointResponseCreator::create_without_data()) {
+                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                     Ok(data) => {
                         return ResponseCreator::create_ok(data);
                     }
@@ -2869,8 +2869,8 @@ impl Authorization {
                                 ) = response_data.into_inner();
 
                                 match convertible_data {
-                                    Some(endpoint_response) => {
-                                        match serde_json::to_vec(&endpoint_response) {
+                                    Some(unified_report) => {
+                                        match serde_json::to_vec(&unified_report) {
                                             Ok(data) => {
                                                 return Response::from_parts(response_parts, Body::from(data));
                                             }

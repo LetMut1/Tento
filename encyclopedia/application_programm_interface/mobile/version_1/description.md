@@ -21,7 +21,7 @@
  ```
  - The permanent general structure of the each response with `HTTP status code` equal to `200` looks like:
 ```
-enum EndpointResponse<S>
+enum UnifiedReport<S>
 {
     Data {
         data: Data<S>

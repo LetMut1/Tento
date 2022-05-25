@@ -9,7 +9,7 @@ use crate::infrastructure_layer::error::error_auditor::_component::error_aggrega
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::endpoint_response::endpoint_response::EndpointResponse;
+use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::unified_report::unified_report::UnifiedReport;
 use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization;
 use http::header;
 use http::HeaderValue;
@@ -61,9 +61,9 @@ impl Base {
         if response_parts.status == StatusCode::OK {
             match to_bytes(body).await {
                 Ok(bytes) => {
-                    match rmp_serde::from_read_ref::<'_, [u8], EndpointResponse<()>>(bytes.chunk()) {
-                        Ok(endpoint_response) => {
-                            response_data = ResponseData::new(response_parts, Some(endpoint_response));
+                    match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<()>>(bytes.chunk()) {
+                        Ok(unified_report) => {
+                            response_data = ResponseData::new(response_parts, Some(unified_report));
                         }
                         Err(error) => {
                             return Err(
