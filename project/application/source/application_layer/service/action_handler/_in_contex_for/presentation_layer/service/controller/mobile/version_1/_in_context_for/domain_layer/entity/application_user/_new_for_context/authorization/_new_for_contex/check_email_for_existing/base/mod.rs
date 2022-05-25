@@ -1,6 +1,6 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8::Pool;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::_new_for_context::base::Base as RequestData;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data_transfer_object::response_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::_new_for_context::base::Base as ResponseData;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
@@ -23,7 +23,7 @@ pub struct Base;
 impl Base {
     pub async fn handle<T>(
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        request_data: RequestData
+        action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ResponseData, ErrorAuditor>
     where 
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -31,7 +31,7 @@ impl Base {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_email = request_data.into_inner();
+        let application_user_email = action_handler_incoming_data.into_inner();
 
         match ApplicationUserValidator::is_valid_email(application_user_email.as_str()) {
             Ok(is_valid_email) => {

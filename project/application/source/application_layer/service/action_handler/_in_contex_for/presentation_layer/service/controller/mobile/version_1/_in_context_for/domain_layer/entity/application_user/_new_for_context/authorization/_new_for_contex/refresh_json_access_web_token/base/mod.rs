@@ -1,6 +1,6 @@
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::_new_for_context::base::Base as RequestData;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data_transfer_object::response_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::_new_for_context::base::Base as ResponseData;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
@@ -25,12 +25,12 @@ impl Base {
     pub async fn handle<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        request_data: RequestData
+        action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ResponseData, ErrorAuditor> {
         let (
             json_access_web_token, 
             json_refresh_web_token
-        ) = request_data.into_inner();
+        ) = action_handler_incoming_data.into_inner();
 
         match SerializationFormResolver::deserialize(environment_configuration_resolver, json_access_web_token.as_str()) {
             Ok(json_access_web_token_) => {

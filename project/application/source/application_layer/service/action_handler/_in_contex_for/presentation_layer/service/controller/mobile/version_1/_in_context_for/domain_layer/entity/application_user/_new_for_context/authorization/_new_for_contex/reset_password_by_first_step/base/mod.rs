@@ -1,7 +1,7 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::_new_for_context::base::Base as RequestData;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data_transfer_object::response_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::_new_for_context::base::Base as ResponseData;
 use crate::domain_layer::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
@@ -32,7 +32,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        request_data: RequestData
+        action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ResponseData, ErrorAuditor>
     where 
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -40,7 +40,7 @@ impl Base {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_email = request_data.into_inner();
+        let application_user_email = action_handler_incoming_data.into_inner();
 
         match postgresql_connection_pool.get().await {
             Ok(mut postgresql_pooled_connection) => {

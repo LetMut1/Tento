@@ -1,6 +1,6 @@
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices::base::_new_for_context::base::Base as RequestData;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::domain_layer::entity::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
@@ -20,13 +20,13 @@ impl Base {
     pub async fn handle<'a>(             // TODO TODO TODO УДАляются ли АккессТокены все при массовом разлогине? Если не удаляются, можно просто при Ектракте АккессТокена использовать проверку на наличие рефреша, если нет, значит произошел разлогин.
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        request_data: RequestData
+        action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<(), ErrorAuditor> {
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
                 let connection = &mut *redis_pooled_connection;
 
-                let json_access_web_token = request_data.into_inner();
+                let json_access_web_token = action_handler_incoming_data.into_inner();
                 match Extractor::extract(environment_configuration_resolver, json_access_web_token.as_str(), connection).await {
                     Ok(json_access_web_token_) => {
                         match RepositoryProxy::get_by_application_user_id(connection, json_access_web_token_.get_application_user_id()).await {

@@ -1,7 +1,7 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step::base::_new_for_context::base::Base as RequestData;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::domain_layer::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
 use crate::domain_layer::error::entity_error::entity_error::EntityError;
@@ -31,7 +31,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        request_data: RequestData
+        action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<(), ErrorAuditor>
     where 
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -39,7 +39,7 @@ impl Base {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_email = request_data.into_inner();
+        let application_user_email = action_handler_incoming_data.into_inner();
         
         match ApplicationUserValidator::is_valid_email(application_user_email.as_str()) {
             Ok(is_valid_email) => {

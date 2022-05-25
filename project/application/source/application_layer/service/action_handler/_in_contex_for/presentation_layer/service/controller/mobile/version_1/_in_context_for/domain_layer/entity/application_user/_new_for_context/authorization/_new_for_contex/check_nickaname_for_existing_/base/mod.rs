@@ -1,7 +1,7 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::_new_for_context::base::Base as RequestData;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data_transfer_object::response_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::_new_for_context::base::Base as ResponseData;
 use crate::application_layer::data_transfer_object::response_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::_new_for_context::base::Base as ResponseDataCheckNicknameForExisting;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::other_error::OtherError;
@@ -32,7 +32,7 @@ impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        request_data: RequestData
+        action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ResponseData, ErrorAuditor>
     where 
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -43,7 +43,7 @@ impl Base {
         let (
             mut request_parts,
             convertible_data
-        ) = request_data.into_inner();
+        ) = action_handler_incoming_data.into_inner();
 
         let mut data: Vec<u8> = vec![];
         if let Err(error) = rmp_serde::encode::write(&mut data, &convertible_data) {

@@ -1,7 +1,7 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_new_for_context::base::Base as RequestData;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data_transfer_object::response_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_new_for_context::base::base::Base as ResponseData;
 use crate::domain_layer::service::validator::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ChannelValidator;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
@@ -28,7 +28,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        request_data: RequestData
+        action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ResponseData, ErrorAuditor>
     where 
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -41,7 +41,7 @@ impl Base {
             channel_name,
             requery_channel_name,
             mut limit
-        ) = request_data.into_inner();
+        ) = action_handler_incoming_data.into_inner();
 
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {

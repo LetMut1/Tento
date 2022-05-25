@@ -2,20 +2,20 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::_new_for_context::base::Base as RequestDataCheckEmailForExisting;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::_new_for_context::base::Base as RequestDataCheckNicknameForExisting;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as RequestDataLogInByFirstStep;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::_new_for_context::base::Base as RequestDataLogInByLastStep;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices::base::_new_for_context::base::Base as RequestDataLogOutFromAllDevices;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_one_device::base::_new_for_context::base::Base as RequestDataLogOutFromOneDevice;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::_new_for_context::base::Base as RequestDataRefreshJsonAccessWebToken;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step::base::_new_for_context::base::Base as RequestDataRegisterByFirstStep;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::_new_for_context::base::Base as RequestDataRegisterByLastStep;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::_new_for_context::base::Base as RequestDataResetPasswordByFirstStep;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step::base::_new_for_context::base::Base as RequestDataResetPasswordByLastStep;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_log_in::base::_new_for_context::base::Base as RequestDataSendEmailForLogIn;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register::base::_new_for_context::base::Base as RequestDataSendEmailForRegister;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_reset_password::base::_new_for_context::base::Base as RequestDataSendEmailForResetPassword;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckEmailForExisting;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckNicknameForExisting;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogInByFirstStep;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogInByLastStep;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogOutFromAllDevices;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_one_device::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogOutFromOneDevice;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::_new_for_context::base::Base as ActionHandlerIncomingDataRefreshJsonAccessWebToken;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataRegisterByFirstStep;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataRegisterByLastStep;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordByFirstStep;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordByLastStep;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_log_in::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForLogIn;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForRegister;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_reset_password::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForResetPassword;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Base as ActionHandlerCheckEmailForExisting;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing::base::Base as ActionHandlerCheckNicknameForExisting;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step::base::Base as ActionHandlerLogInByFirstStep;
@@ -57,33 +57,33 @@ use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing_::base::_new_for_context::base::Base as RequestDataCheckEmailForExisting_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing_::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckEmailForExisting_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::_new_for_context::base::Base as RequestDataCheckNicknameForExisting_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckNicknameForExisting_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step_::base::_new_for_context::base::Base as RequestDataLogInByFirstStep_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogInByFirstStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step_::base::_new_for_context::base::Base as RequestDataLogInByLastStep_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogInByLastStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_one_device_::base::_new_for_context::base::Base as RequestDataLogOutFromOneDevice_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_one_device_::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogOutFromOneDevice_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices_::base::_new_for_context::base::Base as RequestDataLogOutFromAllDevices_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices_::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogOutFromAllDevices_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token_::base::_new_for_context::base::Base as RequestDataRefreshJsonAccessWebToken_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token_::base::_new_for_context::base::Base as ActionHandlerIncomingDataRefreshJsonAccessWebToken_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step_::base::_new_for_context::base::Base as RequestDataRegisterByFirstStep_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataRegisterByFirstStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step_::base::_new_for_context::base::Base as RequestDataRegisterByLastStep_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataRegisterByLastStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step_::base::_new_for_context::base::Base as RequestDataResetPasswordByFirstStep_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordByFirstStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step_::base::_new_for_context::base::Base as RequestDataResetPasswordByLastStep_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordByLastStep_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_log_in_::base::_new_for_context::base::Base as RequestDataSendEmailForLogIn_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_log_in_::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForLogIn_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register_::base::_new_for_context::base::Base as RequestDataSendEmailForRegister_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register_::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForRegister_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_reset_password_::base::_new_for_context::base::Base as RequestDataSendEmailForResetPassword_;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_reset_password_::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForResetPassword_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as ActionHandlerCheckNicknameForExisting_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
@@ -305,9 +305,9 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataCheckNicknameForExisting>(bytes.chunk()) {
-            Ok(request_data) => {
-                match ActionHandlerCheckNicknameForExisting::handle(postgresql_connection_pool, request_data).await {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataCheckNicknameForExisting>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
+                match ActionHandlerCheckNicknameForExisting::handle(postgresql_connection_pool, action_handler_incoming_data).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -394,12 +394,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataCheckNicknameForExisting>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataCheckNicknameForExisting>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerCheckNicknameForExisting_::handle(
                             environment_configuration_resolver,
                             postgresql_connection_pool,
-                            RequestDataCheckNicknameForExisting_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataCheckNicknameForExisting_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -476,9 +476,9 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
         
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataCheckEmailForExisting>(bytes.chunk()) {
-            Ok(request_data) => {
-                match ActionHandlerCheckEmailForExisting::handle(postgresql_connection_pool, request_data).await {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataCheckEmailForExisting>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
+                match ActionHandlerCheckEmailForExisting::handle(postgresql_connection_pool, action_handler_incoming_data).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
@@ -566,12 +566,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataCheckEmailForExisting>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataCheckEmailForExisting>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerCheckEmailForExisting_::handle(
                             environment_configuration_resolver,
                             postgresql_connection_pool, 
-                            RequestDataCheckEmailForExisting_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataCheckEmailForExisting_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -649,10 +649,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataRegisterByFirstStep>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRegisterByFirstStep>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 if let Err(error) = ActionHandlerRegisterByFirstStep::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError { ref entity_error } => {
@@ -752,13 +752,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataRegisterByFirstStep>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataRegisterByFirstStep>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerRegisterByFirstStep_::handle(
                             environment_configuration_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataRegisterByFirstStep_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataRegisterByFirstStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -836,10 +836,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataRegisterByLastStep>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRegisterByLastStep>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 match ActionHandlerRegisterByLastStep::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
@@ -1002,13 +1002,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataRegisterByLastStep>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataRegisterByLastStep>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerRegisterByLastStep_::handle(
                             environment_configuration_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataRegisterByLastStep_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataRegisterByLastStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -1079,10 +1079,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForRegister>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForRegister>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 if let Err(error) = ActionHandlerSendEmailForRegister::handle(
-                    environment_configuration_resolver, redis_connection_pool, request_data
+                    environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError { ref entity_error } => {
@@ -1162,12 +1162,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataSendEmailForRegister>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForRegister>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerSendEmailForRegister_::handle(
                             environment_configuration_resolver,
                             redis_connection_pool,
-                            RequestDataSendEmailForRegister_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataSendEmailForRegister_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -1245,10 +1245,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogInByFirstStep>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogInByFirstStep>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 match ActionHandlerLogInByFirstStep::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
@@ -1340,13 +1340,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataLogInByFirstStep>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogInByFirstStep>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerLogInByFirstStep_::handle(
                             environment_configuration_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataLogInByFirstStep_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataLogInByFirstStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -1417,10 +1417,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogInByLastStep>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogInByLastStep>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 match ActionHandlerLogInByLastStep::handle(
-                    environment_configuration_resolver, redis_connection_pool, request_data
+                    environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
@@ -1513,12 +1513,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataLogInByLastStep>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogInByLastStep>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerLogInByLastStep_::handle(
                             environment_configuration_resolver,
                             redis_connection_pool,
-                            RequestDataLogInByLastStep_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataLogInByLastStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -1596,10 +1596,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForLogIn>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForLogIn>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 if let Err(error) = ActionHandlerSendEmailForLogIn::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError { ref entity_error } => {
@@ -1706,13 +1706,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataSendEmailForLogIn>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForLogIn>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerSendEmailForLogIn_::handle(
                             environment_configuration_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataSendEmailForLogIn_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataSendEmailForLogIn_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -1783,10 +1783,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataRefreshJsonAccessWebToken>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRefreshJsonAccessWebToken>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 match ActionHandlerRefreshJsonAccessWebToken::handle(
-                    environment_configuration_resolver, redis_connection_pool, request_data
+                    environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
@@ -1886,12 +1886,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataRefreshJsonAccessWebToken>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataRefreshJsonAccessWebToken>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerRefreshJsonAccessWebToken_::handle(
                             environment_configuration_resolver,
                             redis_connection_pool,
-                            RequestDataRefreshJsonAccessWebToken_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataRefreshJsonAccessWebToken_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -1962,10 +1962,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogOutFromOneDevice>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogOutFromOneDevice>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 if let Err(error) = ActionHandlerLogOutFromOneDevice::handle(
-                    environment_configuration_resolver, redis_connection_pool, request_data
+                    environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError { ref entity_error } => {
@@ -2076,12 +2076,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataLogOutFromOneDevice>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogOutFromOneDevice>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerLogOutFromOneDevice_::handle(
                             environment_configuration_resolver,
                             redis_connection_pool,
-                            RequestDataLogOutFromOneDevice_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataLogOutFromOneDevice_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -2152,10 +2152,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataLogOutFromAllDevices>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogOutFromAllDevices>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 if let Err(error) = ActionHandlerLogOutFromAllDevices::handle(
-                    environment_configuration_resolver, redis_connection_pool, request_data
+                    environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError { ref entity_error } => {
@@ -2266,12 +2266,12 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataLogOutFromAllDevices>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogOutFromAllDevices>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerLogOutFromAllDevices_::handle(
                             environment_configuration_resolver,
                             redis_connection_pool,
-                            RequestDataLogOutFromAllDevices_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataLogOutFromAllDevices_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -2349,10 +2349,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataResetPasswordByFirstStep>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataResetPasswordByFirstStep>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 match ActionHandlerResetPasswordByFirstStep::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(response_data) => {
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
@@ -2442,13 +2442,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataResetPasswordByFirstStep>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataResetPasswordByFirstStep>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerResetPasswordByFirstStep_::handle(
                             environment_configuration_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataResetPasswordByFirstStep_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataResetPasswordByFirstStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -2526,9 +2526,9 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataResetPasswordByLastStep>(bytes.chunk()) {
-            Ok(request_data) => {
-                if let Err(error) = ActionHandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, request_data).await {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataResetPasswordByLastStep>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
+                if let Err(error) = ActionHandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError { ref entity_error } => {
                             match entity_error {
@@ -2660,13 +2660,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataResetPasswordByLastStep>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataResetPasswordByLastStep>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerResetPasswordByLastStep_::handle(
                             environment_configuration_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataResetPasswordByLastStep_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataResetPasswordByLastStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (
@@ -2744,10 +2744,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataSendEmailForResetPassword>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForResetPassword>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 if let Err(error) = ActionHandlerSendEmailForResetPassword::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     match error.get_error_aggregator() {
                         &ErrorAggregator::EntityError { ref entity_error } => {
@@ -2854,13 +2854,13 @@ impl Authorization {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, RequestDataSendEmailForResetPassword>(bytes.chunk()) {
-                    Ok(request_data) => {
+                match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForResetPassword>(bytes.chunk()) {
+                    Ok(action_handler_incoming_data) => {
                         match ActionHandlerSendEmailForResetPassword_::handle(
                             environment_configuration_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            RequestDataSendEmailForResetPassword_::new(request_parts, request_data)
+                            ActionHandlerIncomingDataSendEmailForResetPassword_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(response_data) => {
                                 let (

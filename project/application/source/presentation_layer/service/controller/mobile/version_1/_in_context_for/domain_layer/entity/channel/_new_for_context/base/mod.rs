@@ -2,10 +2,10 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::_new_for_context::base::Base as RequestDataGetManyByCreatedAt;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::_new_for_context::base::Base as RequestDataGetManyByIdRegistry;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_new_for_context::base::Base as RequestDataGetManyByName;
-use crate::application_layer::data_transfer_object::request_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::_new_for_context::base::Base as RequestDataGetManyBySubscribersQuantity;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::_new_for_context::base::Base as ActionHandlerIncomingDataGetManyByCreatedAt;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::_new_for_context::base::Base as ActionHandlerIncomingDataGetManyByIdRegistry;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_new_for_context::base::Base as ActionHandlerIncomingDataGetManyByName;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::_new_for_context::base::Base as ActionHandlerIncomingDataGetManyBySubscribersQuantity;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_created_at::base::Base as ActionHandlerGetManyByCreatedAt;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_id_registry::base::Base as ActionHandlerGetManyByIdRegistry;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_name::base::Base as ActionHandlerGetManyByName;
@@ -54,10 +54,10 @@ impl Base {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
         
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyByName>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyByName>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyByName::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
@@ -157,10 +157,10 @@ impl Base {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyByCreatedAt>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyByCreatedAt>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyByCreatedAt::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
@@ -260,10 +260,10 @@ impl Base {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyBySubscribersQuantity>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyBySubscribersQuantity>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyBySubscribersQuantity::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
@@ -363,10 +363,10 @@ impl Base {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], RequestDataGetManyByIdRegistry>(bytes.chunk()) {
-            Ok(request_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyByIdRegistry>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyByIdRegistry::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, request_data
+                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
