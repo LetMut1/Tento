@@ -1,7 +1,6 @@
 use serde::Deserialize;
-use serde::Serialize;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Deserialize)]
 pub struct Base {
     json_access_web_token: String,
     channel_subscribers_quantity: Option<i64>,

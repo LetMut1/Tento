@@ -1,7 +1,6 @@
 // use serde::Deserialize;
-// use serde::Serialize;
 
-// #[derive(Serialize, Deserialize)]
+// #[derive(Deserialize)]
 // pub struct Base {
 //     channel_id: i64,
 // }

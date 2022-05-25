@@ -4,8 +4,8 @@ use super::_component::data::Data;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use serde::Deserialize;
 
-#[derive(Serialize)]
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
 pub enum UnifiedReport<S>
 where
     S: Serialize
