@@ -308,8 +308,8 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataCheckNicknameForExisting>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerCheckNicknameForExisting::handle(postgresql_connection_pool, action_handler_incoming_data).await {
-                    Ok(response_data) => {
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }
@@ -401,11 +401,11 @@ impl Authorization {
                             postgresql_connection_pool,
                             ActionHandlerIncomingDataCheckNicknameForExisting_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -479,8 +479,8 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataCheckEmailForExisting>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerCheckEmailForExisting::handle(postgresql_connection_pool, action_handler_incoming_data).await {
-                    Ok(response_data) => {
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }
@@ -573,11 +573,11 @@ impl Authorization {
                             postgresql_connection_pool, 
                             ActionHandlerIncomingDataCheckEmailForExisting_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -760,11 +760,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataRegisterByFirstStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -841,8 +841,8 @@ impl Authorization {
                 match ActionHandlerRegisterByLastStep::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => { 
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }
@@ -1010,11 +1010,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataRegisterByLastStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -1169,11 +1169,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataSendEmailForRegister_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -1250,8 +1250,8 @@ impl Authorization {
                 match ActionHandlerLogInByFirstStep::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => { 
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }
@@ -1348,11 +1348,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataLogInByFirstStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -1422,8 +1422,8 @@ impl Authorization {
                 match ActionHandlerLogInByLastStep::handle(
                     environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => { 
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }
@@ -1520,11 +1520,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataLogInByLastStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -1714,11 +1714,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataSendEmailForLogIn_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -1788,8 +1788,8 @@ impl Authorization {
                 match ActionHandlerRefreshJsonAccessWebToken::handle(
                     environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(response_data) => {
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }
@@ -1893,11 +1893,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataRefreshJsonAccessWebToken_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -2083,11 +2083,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataLogOutFromOneDevice_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -2273,11 +2273,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataLogOutFromAllDevices_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -2354,8 +2354,8 @@ impl Authorization {
                 match ActionHandlerResetPasswordByFirstStep::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(response_data) => {
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => {
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }
@@ -2450,11 +2450,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataResetPasswordByFirstStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data{
                                     Some(unified_report) => {
@@ -2668,11 +2668,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataResetPasswordByLastStep_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {
@@ -2862,11 +2862,11 @@ impl Authorization {
                             redis_connection_pool,
                             ActionHandlerIncomingDataSendEmailForResetPassword_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(response_data) => {
+                            Ok(action_handler_outcoming_data) => {
                                 let (
                                     response_parts,
                                     convertible_data
-                                ) = response_data.into_inner();
+                                ) = action_handler_outcoming_data.into_inner();
 
                                 match convertible_data {
                                     Some(unified_report) => {

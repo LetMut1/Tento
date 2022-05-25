@@ -59,8 +59,8 @@ impl Base {
                 match ActionHandlerGetManyByName::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => { 
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }
@@ -162,8 +162,8 @@ impl Base {
                 match ActionHandlerGetManyByCreatedAt::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => { 
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }
@@ -265,8 +265,8 @@ impl Base {
                 match ActionHandlerGetManyBySubscribersQuantity::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => { 
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }
@@ -368,8 +368,8 @@ impl Base {
                 match ActionHandlerGetManyByIdRegistry::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(response_data) => { 
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
+                    Ok(action_handler_outcoming_data) => { 
+                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
                             Ok(data) => {
                                 return ActionResponseCreator::create_ok(data);
                             }

@@ -2,7 +2,7 @@ use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register_::base::_new_for_context::base::Base as ActionHandlerIncomingData;
-use crate::application_layer::data_transfer_object::response_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register_::base::_new_for_context::base::Base as ResponseData;
+use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register_::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
@@ -26,7 +26,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
-    ) -> Result<ResponseData, ErrorAuditor> {
+    ) -> Result<ActionHandlerOutcomingData, ErrorAuditor> {
         let (
             mut request_parts,
             convertible_data
@@ -51,7 +51,7 @@ impl Base {
         
         let response = Authorization::send_email_for_register(environment_configuration_resolver, request, redis_connection_pool).await;
 
-        let response_data: ResponseData;
+        let action_handler_outcoming_data: ActionHandlerOutcomingData;
 
         let (
             response_parts,
@@ -63,7 +63,7 @@ impl Base {
                 Ok(bytes) => {
                     match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<()>>(bytes.chunk()) {
                         Ok(unified_report) => {
-                            response_data = ResponseData::new(response_parts, Some(unified_report));
+                            action_handler_outcoming_data = ActionHandlerOutcomingData::new(response_parts, Some(unified_report));
                         }
                         Err(error) => {
                             return Err(
@@ -85,9 +85,9 @@ impl Base {
                 }
             }
         } else {
-            response_data = ResponseData::new(response_parts, None);
+            action_handler_outcoming_data = ActionHandlerOutcomingData::new(response_parts, None);
         }
 
-        return Ok(response_data);
+        return Ok(action_handler_outcoming_data);
     }
 }
