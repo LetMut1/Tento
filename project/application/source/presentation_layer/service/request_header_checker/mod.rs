@@ -1,7 +1,7 @@
 use http::header;
 use hyper::Body;
 use hyper::Request;
-use super::response_creator::ResponseCreator;
+use super::action_response_creator::ActionResponseCreator;
 
 pub struct RequestHeaderChecker;
 
@@ -12,7 +12,7 @@ impl RequestHeaderChecker {
         let header_map = request.headers();
         match header_map.get(header::CONTENT_TYPE) {
             Some(header_value) => {
-                if *header_value != ResponseCreator::HEADER_VALUE_CONTENT_TYPE {
+                if *header_value != ActionResponseCreator::HEADER_VALUE_CONTENT_TYPE {
                     return false;
                 }
             }
@@ -22,7 +22,7 @@ impl RequestHeaderChecker {
         }
         match header_map.get(header::X_CONTENT_TYPE_OPTIONS) {
             Some(header_value) => {
-                if *header_value != ResponseCreator::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS {
+                if *header_value != ActionResponseCreator::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS {
                     return false;
                 }
             }

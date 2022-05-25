@@ -1,4 +1,4 @@
-use crate::presentation_layer::service::response_creator::ResponseCreator;
+use crate::presentation_layer::service::action_response_creator::ActionResponseCreator;
 use hyper::Body;
 use hyper::Response;
 
@@ -7,6 +7,6 @@ pub struct RouteNotFound;
 impl RouteNotFound {
     pub async fn not_found(
     ) -> Response<Body> {
-        return ResponseCreator::create_not_found();
+        return ActionResponseCreator::create_not_found();
     }
 }

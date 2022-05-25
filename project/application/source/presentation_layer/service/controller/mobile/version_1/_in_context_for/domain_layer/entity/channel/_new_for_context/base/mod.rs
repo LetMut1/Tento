@@ -17,7 +17,7 @@ use crate::infrastructure_layer::error::error_auditor::_component::error_aggrega
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::service::unified_report_creator::UnifiedReportCreator;
 use crate::presentation_layer::service::request_header_checker::RequestHeaderChecker;
-use crate::presentation_layer::service::response_creator::ResponseCreator;
+use crate::presentation_layer::service::action_response_creator::ActionResponseCreator;
 use hyper::Body;
 use hyper::body::HttpBody;
 use hyper::Request;
@@ -46,7 +46,7 @@ impl Base {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         if !RequestHeaderChecker::is_valid(&request) {
-            return ResponseCreator::create_bad_request();
+            return ActionResponseCreator::create_bad_request();
         }
         
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
@@ -62,12 +62,12 @@ impl Base {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+                                return ActionResponseCreator::create_ok(data);
                             }
                             Err(error) => {
                                 // log::error!("{}", ErrorAuditor::from(error));
         
-                                return ResponseCreator::create_internal_server_error();
+                                return ActionResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -82,12 +82,12 @@ impl Base {
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                 )) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ActionResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
                                             }
@@ -96,12 +96,12 @@ impl Base {
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ActionResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
                                             }
@@ -116,13 +116,13 @@ impl Base {
                                 }
                             }
                             &ErrorAggregator::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
+                                return ActionResponseCreator::create_bad_request();
                             }
                             &ErrorAggregator::LogicError { logic_error: _ } |
                             &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
-                                return ResponseCreator::create_internal_server_error();
+                                return ActionResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -131,7 +131,7 @@ impl Base {
             Err(error) => {
                 // log::error!("{}", ErrorAuditor::from(error));
 
-                return ResponseCreator::create_internal_server_error();
+                return ActionResponseCreator::create_internal_server_error();
             }
         }
     }
@@ -149,7 +149,7 @@ impl Base {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         if !RequestHeaderChecker::is_valid(&request) {
-            return ResponseCreator::create_bad_request();
+            return ActionResponseCreator::create_bad_request();
         }
         
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
@@ -165,12 +165,12 @@ impl Base {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+                                return ActionResponseCreator::create_ok(data);
                             }
                             Err(error) => {
                                 // log::error!("{}", ErrorAuditor::from(error));
         
-                                return ResponseCreator::create_internal_server_error();
+                                return ActionResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -185,12 +185,12 @@ impl Base {
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                 )) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ActionResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
                                             }
@@ -199,12 +199,12 @@ impl Base {
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ActionResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
                                             }
@@ -219,13 +219,13 @@ impl Base {
                                 }
                             }
                             &ErrorAggregator::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
+                                return ActionResponseCreator::create_bad_request();
                             }
                             &ErrorAggregator::LogicError { logic_error: _ } |
                             &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
-                                return ResponseCreator::create_internal_server_error();
+                                return ActionResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -234,7 +234,7 @@ impl Base {
             Err(error) => {
                 // log::error!("{}", ErrorAuditor::from(error));
 
-                return ResponseCreator::create_internal_server_error();
+                return ActionResponseCreator::create_internal_server_error();
             }
         }
     }
@@ -252,7 +252,7 @@ impl Base {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         if !RequestHeaderChecker::is_valid(&request) {
-            return ResponseCreator::create_bad_request();
+            return ActionResponseCreator::create_bad_request();
         }
         
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
@@ -268,12 +268,12 @@ impl Base {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+                                return ActionResponseCreator::create_ok(data);
                             }
                             Err(error) => {
                                 // log::error!("{}", ErrorAuditor::from(error));
         
-                                return ResponseCreator::create_internal_server_error();
+                                return ActionResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -288,12 +288,12 @@ impl Base {
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                 )) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ActionResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
                                             }
@@ -302,12 +302,12 @@ impl Base {
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ActionResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
                                             }
@@ -322,13 +322,13 @@ impl Base {
                                 }
                             }
                             &ErrorAggregator::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
+                                return ActionResponseCreator::create_bad_request();
                             }
                             &ErrorAggregator::LogicError { logic_error: _ } |
                             &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
-                                return ResponseCreator::create_internal_server_error();
+                                return ActionResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -337,7 +337,7 @@ impl Base {
             Err(error) => {
                 // log::error!("{}", ErrorAuditor::from(error));
 
-                return ResponseCreator::create_internal_server_error();
+                return ActionResponseCreator::create_internal_server_error();
             }
         }
     }
@@ -355,7 +355,7 @@ impl Base {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         if !RequestHeaderChecker::is_valid(&request) {
-            return ResponseCreator::create_bad_request();
+            return ActionResponseCreator::create_bad_request();
         }
         
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
@@ -371,12 +371,12 @@ impl Base {
                     Ok(response_data) => { 
                         match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(response_data)) {
                             Ok(data) => {
-                                return ResponseCreator::create_ok(data);
+                                return ActionResponseCreator::create_ok(data);
                             }
                             Err(error) => {
                                 // log::error!("{}", ErrorAuditor::from(error));
         
-                                return ResponseCreator::create_internal_server_error();
+                                return ActionResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -391,12 +391,12 @@ impl Base {
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
                                                 )) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ActionResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
                                             }
@@ -405,12 +405,12 @@ impl Base {
                                                     CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
                                                 )) {
                                                     Ok(data) => {
-                                                        return ResponseCreator::create_ok(data);
+                                                        return ActionResponseCreator::create_ok(data);
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
                                 
-                                                        return ResponseCreator::create_internal_server_error();
+                                                        return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
                                             }
@@ -425,13 +425,13 @@ impl Base {
                                 }
                             }
                             &ErrorAggregator::InvalidArgumentError => {
-                                return ResponseCreator::create_bad_request();
+                                return ActionResponseCreator::create_bad_request();
                             }
                             &ErrorAggregator::LogicError { logic_error: _ } |
                             &ErrorAggregator::RunTimeError { run_time_error: _ } => {
                                 log::error!("{}", error);
         
-                                return ResponseCreator::create_internal_server_error();
+                                return ActionResponseCreator::create_internal_server_error();
                             }
                         }
                     }
@@ -440,7 +440,7 @@ impl Base {
             Err(error) => {
                 // log::error!("{}", ErrorAuditor::from(error));
 
-                return ResponseCreator::create_internal_server_error();
+                return ActionResponseCreator::create_internal_server_error();
             }
         }
     }

@@ -7,9 +7,9 @@ use hyper::Response;
 use hyper::StatusCode;
 use std::convert::From;
 
-pub struct ResponseCreator;
+pub struct ActionResponseCreator;
 
-impl ResponseCreator {
+impl ActionResponseCreator {
     pub const HEADER_VALUE_CONTENT_TYPE: HeaderValue = HeaderValue::from_static("application/octet-stream");        // TODO В файл с константами
     pub const HEADER_VALUE_X_CONTENT_TYPE_OPTIONS: HeaderValue =  HeaderValue::from_static("nosniff");        // TODO В файл с константами
 
