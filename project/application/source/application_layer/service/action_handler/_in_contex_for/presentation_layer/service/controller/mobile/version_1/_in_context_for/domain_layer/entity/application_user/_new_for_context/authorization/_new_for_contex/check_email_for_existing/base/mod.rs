@@ -25,7 +25,7 @@ impl Base {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerOutcomingData, ErrorAuditor>
-    where 
+    where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
