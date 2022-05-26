@@ -1,6 +1,9 @@
 use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::unified_report::unified_report::UnifiedReport;
 use serde::Serialize;
 
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use serde::Deserialize;
+
 pub struct UnifiedReportCreator;
 
 impl UnifiedReportCreator {
@@ -8,7 +11,10 @@ impl UnifiedReportCreator {
     ) -> UnifiedReport<()> {
         return UnifiedReport::new_without_data();
     }
+}
 
+#[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
+impl UnifiedReportCreator {
     pub fn create_with_data<S>(
         data: S
     ) -> UnifiedReport<S>
@@ -18,14 +24,24 @@ impl UnifiedReportCreator {
         return UnifiedReport::new_with_data(data);
     }
 
-    #[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
     pub fn create_with_error_code(
         error_code: &'static str
     ) -> UnifiedReport<()> {
         return UnifiedReport::new_with_error_code(error_code)
     }
+}
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+impl UnifiedReportCreator {
+    pub fn create_with_data<S>(
+        data: S
+    ) -> UnifiedReport<S>
+    where
+        S: Serialize + for<'de> Deserialize<'de>
+    {
+        return UnifiedReport::new_with_data(data);
+    }
+
     pub fn create_with_error_code(
         error_code: &'static str
     ) -> UnifiedReport<()> {

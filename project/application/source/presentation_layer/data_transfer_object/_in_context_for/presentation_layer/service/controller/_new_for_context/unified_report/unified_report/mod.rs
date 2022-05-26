@@ -4,32 +4,31 @@ use super::_component::data::Data;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use serde::Deserialize;
 
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
 #[derive(Serialize)]
 pub enum UnifiedReport<S>
-where
-    S: Serialize
 {
     Data {
         data: Data<S>
     },
     ErrorCode {
-        #[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
         error_code: &'static str,
-        #[cfg(feature="facilitate_non_automatic_functional_testing")]
-        error_code: String
     }
 }
 
 impl<S> UnifiedReport<S>
-where
-    S: Serialize
 {
     pub fn new_without_data(
     ) -> Self {
         return Self::Data { data: Data::Empty };
     }
+}
 
+#[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
+impl<S> UnifiedReport<S>
+where
+    S: Serialize
+{
     pub fn new_with_data(
         data: S
     ) -> Self {
@@ -37,9 +36,36 @@ where
     }
 
     pub fn new_with_error_code(
-        #[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
         error_code: &'static str,
-        #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    ) -> Self {
+        return Self::ErrorCode { error_code };
+    }
+}
+
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[derive(Serialize, Deserialize)]
+pub enum UnifiedReport<S>
+{
+    Data {
+        data: Data<S>
+    },
+    ErrorCode {
+        error_code: String
+    }
+}
+
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+impl<S> UnifiedReport<S>
+where
+    S: Serialize + for<'de> Deserialize<'de>
+{
+    pub fn new_with_data(
+        data: S
+    ) -> Self {
+        return Self::Data { data: Data::Filled { data } };
+    }
+
+    pub fn new_with_error_code(
         error_code: String
     ) -> Self {
         return Self::ErrorCode { error_code };
