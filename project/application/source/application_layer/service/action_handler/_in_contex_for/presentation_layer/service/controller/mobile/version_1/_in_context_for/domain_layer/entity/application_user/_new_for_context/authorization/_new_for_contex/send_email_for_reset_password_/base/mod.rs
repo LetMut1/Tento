@@ -26,7 +26,6 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
-
 pub struct Base;
 
 impl Base {
