@@ -10,6 +10,9 @@ impl RequestHeaderChecker {
         request: &'a Request<Body>
     ) -> bool {
         let header_map = request.headers();
+        if let None = header_map.get(header::USER_AGENT) {
+            return false;
+        }
         match header_map.get(header::CONTENT_TYPE) {
             Some(header_value) => {
                 if *header_value != ActionResponseCreator::HEADER_VALUE_CONTENT_TYPE {

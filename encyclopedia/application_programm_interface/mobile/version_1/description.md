@@ -2,9 +2,10 @@
  - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
  - Every request should contain this `HTTP header`s: 
  ```
- content-type: application/octet-stream
- content-length: _
- x-content-type-options: nosniff
+ - user-agent: ... (https://www.scientiamobile.com/correctly-form-user-agents-for-mobile-apps/)
+ - content-type: application/octet-stream
+ - content-length: ...
+ - x-content-type-options: nosniff
  ```
  - Values of variable for ``order``ing looks like:
 ```

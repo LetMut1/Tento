@@ -569,8 +569,8 @@ impl Base {
 
         return ();
     }
-
-    async fn resolve<'a, T>(                                                           // TODO TODO  TODO Пути через константы?
+    
+    async fn resolve<'a, T>(   // TODO Можно ли пробростить ЛОггер как объект? Нужно ли?  (Лог4рс делает так, чтобы все крееты, на основе этого лога могли писать в общий лог) // TODO TODO  TODO Пути через константы?
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>, 
