@@ -17,31 +17,25 @@
  - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
  - Every response should contain this `HTTP header`s: 
  ```
- content-type: application/octet-stream
- x-content-type-options: nosniff
+ - content-type: application/octet-stream
+ - x-content-type-options: nosniff
+ - content-length: ...
  ```
  - The permanent general structure of the each response with `HTTP status code` equal to `200` looks like:
 ```
-enum UnifiedReport<S>
+struct UnifiedReport<S>
 {
-    Data {
-        data: Data<S>
-    }
-    ErrorCode {
-        error_code: String
-    }
+    data: Option<Data<S>>,
+    user_error_code: Option<&'static str>
 }
 
-enum Data<S>
+struct Data<S>
 {
-    Empty,
-    Filled {
-        data: S
-    }
+    data: Option<S>
 }
 ```
-- `Result data` structures written under each API endpoint will be nested in the `data` field in the `enum Data<S>`.
-- Existing values for `error_code` can be founded here:
+- `Result data` structures written under each API endpoint will be nested in the `data` field in the `struct Data<S>`.
+- Existing values for `user_error_code` can be founded here:
 ```
 /project/application/source/domain_layer/service/_in_context_for/domain_layer/error/_new_for_context/communication_code_storage/mod.rs
 ```
@@ -51,7 +45,7 @@ enum Data<S>
 
 # Area for authorized application user. API:
  - Every endpoint at this area requires an existing of `json access webtoken`
- - Response of every endpoint at this area can contain `error_code` equals to 
+ - Response of EVERY endpoint at this area can contain `user_error_code` equals to 
  ```
   - enjsacweto03
   - enjsacweto05
