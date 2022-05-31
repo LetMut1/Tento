@@ -645,42 +645,6 @@ impl Base {
             ("/v1/m/c/gmbir", &Method::POST) => {
                 return ControllerChannelBase::get_many_by_id_registry(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
             }
-            ("/abc_a", &Method::POST) => {
-                return crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::
-                _new_for_context::authorization::message_pack_testing_purpose::abc_a().await;
-            }
-            ("/abc_b", &Method::POST) => {
-                return crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::
-                _new_for_context::authorization::message_pack_testing_purpose::abc_b().await;
-            }
-            ("/abc_c", &Method::POST) => {
-                return crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::
-                _new_for_context::authorization::message_pack_testing_purpose::abc_c().await;
-            }
-            ("/abc_inner_a", &Method::POST) => {
-                return crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::
-                _new_for_context::authorization::message_pack_testing_purpose::abc_inner_a().await;
-            }
-            ("/abc_inner_b", &Method::POST) => {
-                return crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::
-                _new_for_context::authorization::message_pack_testing_purpose::abc_inner_b().await;
-            }
-            ("/abc_inner_c", &Method::POST) => {
-                return crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::
-                _new_for_context::authorization::message_pack_testing_purpose::abc_inner_c().await;
-            }
-            ("/abcdefgh_1", &Method::POST) => {
-                return crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::
-                _new_for_context::authorization::message_pack_testing_purpose::abcdefgh_1().await;
-            }
-            ("/abcdefgh_2", &Method::POST) => {
-                return crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::
-                _new_for_context::authorization::message_pack_testing_purpose::abcdefgh_2().await;
-            }
-            ("/abcdefgh_3", &Method::POST) => {
-                return crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::
-                _new_for_context::authorization::message_pack_testing_purpose::abcdefgh_3().await;
-            }
             // Area for not existing routes.
             _ => {
                 #[cfg(feature="facilitate_non_automatic_functional_testing")]
