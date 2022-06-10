@@ -32,10 +32,10 @@ impl ErrorAuditor {
         return ();
     }
 
-    pub fn get_error_aggregator<'a>(
-        &'a self
-    ) -> &'a ErrorAggregator {
-        return &self.error_aggregator;
+    pub fn get_error_aggregator(
+        self
+    ) -> ErrorAggregator {
+        return self.error_aggregator;
     }
 }
 

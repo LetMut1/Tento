@@ -73,14 +73,14 @@ impl Base {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError { ref entity_error } => {
+                            ErrorAggregator::EntityError { entity_error } => {
                                 match entity_error {
-                                    &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
+                                    EntityError::JsonAccessWebTokenError { json_access_web_token_error } => {
                                         match json_access_web_token_error {
-                                            &JsonAccessWebTokenError::AlreadyExpired => {
-                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
-                                                    CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
-                                                )) {
+                                            JsonAccessWebTokenError::AlreadyExpired => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
+                                                ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
                                                     }
@@ -91,10 +91,10 @@ impl Base {
                                                     }
                                                 }
                                             }
-                                            &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
-                                                    CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
-                                                )) {
+                                            JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
+                                                ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
                                                     }
@@ -106,21 +106,21 @@ impl Base {
                                                 }
                                             }
                                             _ => {
-                                                unreachable!("{}", error);
+                                                unreachable!("TODO");
                                             }
                                         }
                                     }
                                     _ => {
-                                        unreachable!("{}", error);
+                                        unreachable!("TODO");
                                     }
                                 }
                             }
-                            &ErrorAggregator::InvalidArgumentError => {
+                            ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError { logic_error: _ } |
-                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                                log::error!("{}", error);
+                            ErrorAggregator::LogicError { logic_error: _ } |
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
         
                                 return ActionResponseCreator::create_internal_server_error();
                             }
@@ -176,14 +176,14 @@ impl Base {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError { ref entity_error } => {
+                            ErrorAggregator::EntityError { entity_error } => {
                                 match entity_error {
-                                    &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
+                                    EntityError::JsonAccessWebTokenError { json_access_web_token_error } => {
                                         match json_access_web_token_error {
-                                            &JsonAccessWebTokenError::AlreadyExpired => {
-                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
-                                                    CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
-                                                )) {
+                                            JsonAccessWebTokenError::AlreadyExpired => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
+                                                ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
                                                     }
@@ -194,10 +194,10 @@ impl Base {
                                                     }
                                                 }
                                             }
-                                            &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
-                                                    CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
-                                                )) {
+                                            JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
+                                                ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
                                                     }
@@ -209,21 +209,21 @@ impl Base {
                                                 }
                                             }
                                             _ => {
-                                                unreachable!("{}", error);
+                                                unreachable!("TODO");
                                             }
                                         }
                                     }
                                     _ => {
-                                        unreachable!("{}", error);
+                                        unreachable!("TODO");
                                     }
                                 }
                             }
-                            &ErrorAggregator::InvalidArgumentError => {
+                            ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError { logic_error: _ } |
-                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                                log::error!("{}", error);
+                            ErrorAggregator::LogicError { logic_error: _ } |
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
         
                                 return ActionResponseCreator::create_internal_server_error();
                             }
@@ -279,14 +279,14 @@ impl Base {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError { ref entity_error } => {
+                            ErrorAggregator::EntityError { entity_error } => {
                                 match entity_error {
-                                    &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
+                                    EntityError::JsonAccessWebTokenError { json_access_web_token_error } => {
                                         match json_access_web_token_error {
-                                            &JsonAccessWebTokenError::AlreadyExpired => {
-                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
-                                                    CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
-                                                )) {
+                                            JsonAccessWebTokenError::AlreadyExpired => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
+                                                ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
                                                     }
@@ -297,10 +297,10 @@ impl Base {
                                                     }
                                                 }
                                             }
-                                            &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
-                                                    CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
-                                                )) {
+                                            JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
+                                                ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
                                                     }
@@ -312,21 +312,21 @@ impl Base {
                                                 }
                                             }
                                             _ => {
-                                                unreachable!("{}", error);
+                                                unreachable!("TODO");
                                             }
                                         }
                                     }
                                     _ => {
-                                        unreachable!("{}", error);
+                                        unreachable!("TODO");
                                     }
                                 }
                             }
-                            &ErrorAggregator::InvalidArgumentError => {
+                            ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError { logic_error: _ } |
-                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                                log::error!("{}", error);
+                            ErrorAggregator::LogicError { logic_error: _ } |
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
         
                                 return ActionResponseCreator::create_internal_server_error();
                             }
@@ -382,14 +382,14 @@ impl Base {
                     }
                     Err(error) => {
                         match error.get_error_aggregator() {
-                            &ErrorAggregator::EntityError { ref entity_error } => {
+                            ErrorAggregator::EntityError { entity_error } => {
                                 match entity_error {
-                                    &EntityError::JsonAccessWebTokenError { ref json_access_web_token_error } => {
+                                    EntityError::JsonAccessWebTokenError { json_access_web_token_error } => {
                                         match json_access_web_token_error {
-                                            &JsonAccessWebTokenError::AlreadyExpired => {
-                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
-                                                    CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED
-                                                )) {
+                                            JsonAccessWebTokenError::AlreadyExpired => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
+                                                ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
                                                     }
@@ -400,10 +400,10 @@ impl Base {
                                                     }
                                                 }
                                             }
-                                            &JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_error_code(
-                                                    CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST
-                                                )) {
+                                            JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
+                                                ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
                                                     }
@@ -415,21 +415,21 @@ impl Base {
                                                 }
                                             }
                                             _ => {
-                                                unreachable!("{}", error);
+                                                unreachable!("TODO");
                                             }
                                         }
                                     }
                                     _ => {
-                                        unreachable!("{}", error);
+                                        unreachable!("TODO");
                                     }
                                 }
                             }
-                            &ErrorAggregator::InvalidArgumentError => {
+                            ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            &ErrorAggregator::LogicError { logic_error: _ } |
-                            &ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                                log::error!("{}", error);
+                            ErrorAggregator::LogicError { logic_error: _ } |
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
         
                                 return ActionResponseCreator::create_internal_server_error();
                             }
