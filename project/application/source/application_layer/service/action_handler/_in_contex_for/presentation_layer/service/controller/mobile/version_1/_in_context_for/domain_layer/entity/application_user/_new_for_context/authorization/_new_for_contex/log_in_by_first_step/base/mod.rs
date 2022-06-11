@@ -3,10 +3,10 @@ use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_workflow_event::ApplicationUserWorkflowEvent;
 use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::entity::application_user::ApplicationUser;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
-use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::value_generator::ValueGenerator;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
 use crate::domain_layer::service::validator::_in_context_for::domain_layer::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
@@ -36,7 +36,7 @@ impl Base {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
-    ) -> Result<ActionHandlerOutcomingData, ErrorAuditor>
+    ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -65,12 +65,7 @@ impl Base {
                                                 application_user = application_user__;
                                             }
                                             None => {
-                                                return Err(
-                                                    ErrorAuditor::new(
-                                                        ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::NotFound } },
-                                                        BacktracePart::new(line!(), file!(), None)
-                                                    )
-                                                );
+                                                return Ok(ActionHandlerResult::new_with_application_user_workflow_event(ApplicationUserWorkflowEvent::NotFound));
                                             }
                                         }
                                     }
@@ -89,12 +84,7 @@ impl Base {
                                                     application_user = application_user__;
                                                 }
                                                 None => {
-                                                    return Err(
-                                                        ErrorAuditor::new(
-                                                            ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::NotFound } },
-                                                            BacktracePart::new(line!(), file!(), None)
-                                                        )
-                                                    );
+                                                    return Ok(ActionHandlerResult::new_with_application_user_workflow_event(ApplicationUserWorkflowEvent::NotFound));
                                                 }
                                             }
                                         }
@@ -105,12 +95,7 @@ impl Base {
                                         }
                                     }
                                 } else {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::InvalidNickname } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
+                                    return Ok(ActionHandlerResult::new_with_application_user_workflow_event(ApplicationUserWorkflowEvent::InvalidNickname));
                                 }
                             }
                         }
@@ -183,7 +168,7 @@ impl Base {
                                                     return Err(error);
                                                 }
                 
-                                                return Ok(ActionHandlerOutcomingData::new(application_user_id));
+                                                return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(application_user_id)));
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -203,12 +188,7 @@ impl Base {
                                 }
                             }
         
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::WrongPassword } },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
+                            return Ok(ActionHandlerResult::new_with_application_user_workflow_event(ApplicationUserWorkflowEvent::WrongPassword));
                         }
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -228,11 +208,6 @@ impl Base {
             }
         }
 
-        return Err(
-            ErrorAuditor::new(
-                ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::InvalidPassword } },
-                BacktracePart::new(line!(), file!(), None)
-            )
-        );
+        return Ok(ActionHandlerResult::new_with_application_user_workflow_event(ApplicationUserWorkflowEvent::InvalidPassword));
     }
 }

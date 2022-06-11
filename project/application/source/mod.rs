@@ -1,4 +1,3 @@
-extern crate anyhow;
 extern crate argon2;
 extern crate base64;
 extern crate bb8_postgres;

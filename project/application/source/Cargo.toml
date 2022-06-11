@@ -17,8 +17,7 @@ edition = "2021"
 crate-type = ["lib"]
 required-features = []
 
-[dependencies]                                                                          #  TODO  TODO TODO TODO Разобарться, где нужны default фичи
-anyhow = {version = "^1.0", default-features = true, features = [], optional = false}   # Todo delete after Error refactoring
+[dependencies]         #  TODO  TODO TODO TODO Разобарться, где нужны default фичи
 base64 = {version = "^0.13", default-features = true, features = [], optional = false}
 bb8 = {version = "^0.7", default-features = true, features = [], optional = false}
 bb8-postgres = {version = "^0.7", default-features = true, features = [], optional = false}

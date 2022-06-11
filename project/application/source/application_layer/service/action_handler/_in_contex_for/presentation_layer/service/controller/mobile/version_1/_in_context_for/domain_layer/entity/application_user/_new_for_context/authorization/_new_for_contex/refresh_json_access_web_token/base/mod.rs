@@ -1,10 +1,10 @@
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_event::JsonAccessWebTokenWorkflowEvent;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_workflow_event::JsonRefreshWebTokenWorkflowEvent;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
-use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
@@ -26,7 +26,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
-    ) -> Result<ActionHandlerOutcomingData, ErrorAuditor> {
+    ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor> {
         let (
             json_access_web_token, 
             json_refresh_web_token
@@ -63,7 +63,7 @@ impl Base {
                                                                         Ok(new_json_access_web_token_) => {
                                                                             match Encoder::encode(environment_configuration_resolver, &json_refresh_web_token__) {
                                                                                 Ok(new_json_refresh_web_token) => {
-                                                                                    return Ok(ActionHandlerOutcomingData::new(new_json_access_web_token_, new_json_refresh_web_token));
+                                                                                    return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(new_json_access_web_token_, new_json_refresh_web_token)));
                                                                                 }
                                                                                 Err(mut error) => {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -102,12 +102,7 @@ impl Base {
                                                 }
                                             }
                                 
-                                            return Err(
-                                                ErrorAuditor::new(
-                                                    ErrorAggregator::EntityError { entity_error: EntityError::JsonRefreshWebTokenError { json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound } },
-                                                    BacktracePart::new(line!(), file!(), None)
-                                                )
-                                            );
+                                            return Ok(ActionHandlerResult::new_with_json_refresh_web_token_workflow_event(JsonRefreshWebTokenWorkflowEvent::NotFound));
                                         }
                                         Err(mut error) => {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -127,12 +122,7 @@ impl Base {
                             }
                         }
                         
-                        return Err(
-                            ErrorAuditor::new(
-                                ErrorAggregator::EntityError { entity_error: EntityError::JsonAccessWebTokenError { json_access_web_token_error: JsonAccessWebTokenError::NotExpired } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
+                        return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_event(JsonAccessWebTokenWorkflowEvent::NotExpired));
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

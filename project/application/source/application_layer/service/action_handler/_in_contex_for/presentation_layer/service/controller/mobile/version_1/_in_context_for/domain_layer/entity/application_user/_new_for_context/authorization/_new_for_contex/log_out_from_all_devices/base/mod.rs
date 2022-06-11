@@ -1,9 +1,9 @@
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_workflow_event::JsonRefreshWebTokenWorkflowEvent;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::domain_layer::entity::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
-use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
@@ -21,7 +21,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<ActionHandlerResult<()>, ErrorAuditor> {
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
                 let connection = &mut *redis_pooled_connection;
@@ -46,15 +46,10 @@ impl Base {
                                         }
                                     }
                                     
-                                    return Ok(());
+                                    return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
                                 }
                         
-                                return Err(
-                                    ErrorAuditor::new(
-                                        ErrorAggregator::EntityError { entity_error: EntityError::JsonRefreshWebTokenError { json_refresh_web_token_error: JsonRefreshWebTokenError::NotFound } },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
+                                return Ok(ActionHandlerResult::new_with_json_refresh_web_token_workflow_event(JsonRefreshWebTokenWorkflowEvent::NotFound));
                             }
                             Err(mut error) => {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

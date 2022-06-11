@@ -2,6 +2,14 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_workflow_event::ApplicationUserLogInTokenWorkflowEvent;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_workflow_event::ApplicationUserRegistrationConfirmationTokenWorkflowEvent;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_workflow_event::ApplicationUserResetPasswordTokenWorkflowEvent;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_workflow_event::ApplicationUserWorkflowEvent;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_event::JsonAccessWebTokenWorkflowEvent;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_workflow_event::JsonRefreshWebTokenWorkflowEvent;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::entity_workflow_event::EntityWorkflowEvent;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckEmailForExisting;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckNicknameForExisting;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogInByFirstStep;
@@ -30,13 +38,6 @@ use crate::application_layer::service::action_handler::_in_contex_for::presentat
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as ActionHandlerSendEmailForLogIn;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Base as ActionHandlerSendEmailForRegister;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Base as ActionHandlerSendEmailForResetPassword;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_error::ApplicationUserResetPasswordTokenError;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_error::JsonAccessWebTokenError;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_error::JsonRefreshWebTokenError;
-use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
 use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -139,25 +140,25 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataCheckNicknameForExisting>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerCheckNicknameForExisting::handle(postgresql_connection_pool, action_handler_incoming_data).await {
-                    Ok(action_handler_outcoming_data) => {
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
-                            Ok(data) => {
-                                return ActionResponseCreator::create_ok(data);
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
-                            Err(error) => {
-                                // log::error!("{}", ErrorAuditor::from(error));
-        
-                                return ActionResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::EntityError { entity_error } => {
-                                match entity_error {
-                                    EntityError::ApplicationUserError { application_user_error } => {
-                                        match application_user_error {
-                                            ApplicationUserError::InvalidNickname => {
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
+                                        match application_user_workflow_event {
+                                            ApplicationUserWorkflowEvent::InvalidNickname => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME)
                                                 ) {
@@ -181,6 +182,10 @@ impl Authorization {
                                     }
                                 }
                             }
+                        }
+                    }
+                    Err(error) => {
+                        match error.get_error_aggregator() {
                             ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
@@ -258,7 +263,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -310,25 +314,25 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataCheckEmailForExisting>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerCheckEmailForExisting::handle(postgresql_connection_pool, action_handler_incoming_data).await {
-                    Ok(action_handler_outcoming_data) => {
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
-                            Ok(data) => {
-                                return ActionResponseCreator::create_ok(data);
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
-                            Err(error) => {
-                                // log::error!("{}", ErrorAuditor::from(error));
-        
-                                return ActionResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::EntityError { entity_error } => {
-                                match entity_error {
-                                    EntityError::ApplicationUserError { application_user_error } => {
-                                        match application_user_error {
-                                            ApplicationUserError::InvalidEmail => {
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
+                                        match application_user_workflow_event{
+                                            ApplicationUserWorkflowEvent::InvalidEmail => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL)
                                                 ) {
@@ -352,6 +356,10 @@ impl Authorization {
                                     }
                                 }
                             }
+                        }
+                    }
+                    Err(error) => {
+                        match error.get_error_aggregator() {
                             ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
@@ -430,7 +438,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }

@@ -1,13 +1,13 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_workflow_event::ApplicationUserRegistrationConfirmationTokenWorkflowEvent;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_workflow_event::ApplicationUserWorkflowEvent;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::domain_layer::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::domain_layer::entity::application_user::ApplicationUser;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_error::ApplicationUserRegistrationConfirmationTokenError;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_error::ApplicationUserError;
-use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
@@ -41,7 +41,7 @@ impl Base {
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
-    ) -> Result<ActionHandlerOutcomingData, ErrorAuditor>
+    ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -112,7 +112,7 @@ impl Base {
                                                                                                     Ok(json_access_web_token_) => {
                                                                                                         match Encoder::encode(environment_configuration_resolver, &json_refresh_web_token) {
                                                                                                             Ok(json_refresh_web_token_) => {
-                                                                                                                return Ok(ActionHandlerOutcomingData::new(json_access_web_token_, json_refresh_web_token_));
+                                                                                                                return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(json_access_web_token_, json_refresh_web_token_)));
                                                                                                             }
                                                                                                             Err(mut error) => {
                                                                                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -170,20 +170,10 @@ impl Base {
                                                                         }
                                                                     }
                                                                     
-                                                                    return Err(
-                                                                        ErrorAuditor::new(
-                                                                            ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserRegistrationConfirmationTokenError { application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::InvalidValue } },
-                                                                            BacktracePart::new(line!(), file!(), None)
-                                                                        )
-                                                                    );
+                                                                    return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_event(ApplicationUserRegistrationConfirmationTokenWorkflowEvent::InvalidValue));
                                                                 }
                                         
-                                                                return Err(
-                                                                    ErrorAuditor::new(
-                                                                        ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserRegistrationConfirmationTokenError { application_user_registration_confirmation_token_error: ApplicationUserRegistrationConfirmationTokenError::NotFound } },
-                                                                        BacktracePart::new(line!(), file!(), None)
-                                                                    )
-                                                                );
+                                                                return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_event(ApplicationUserRegistrationConfirmationTokenWorkflowEvent::NotFound));
                                                             }
                                                             Err(mut error) => {
                                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -203,12 +193,7 @@ impl Base {
                                                 }
                                             }
                         
-                                            return Err(
-                                                ErrorAuditor::new(
-                                                    ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::EmailAlreadyExist } },
-                                                    BacktracePart::new(line!(), file!(), None)
-                                                )
-                                            );
+                                            return Ok(ActionHandlerResult::new_with_application_user_workflow_event(ApplicationUserWorkflowEvent::EmailAlreadyExist));
                                         }
                                         Err(mut error) => {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -218,12 +203,7 @@ impl Base {
                                     }
                                 }
                                 
-                                return Err(
-                                    ErrorAuditor::new(
-                                        ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::NicknameAlreadyExist } },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
+                                return Ok(ActionHandlerResult::new_with_application_user_workflow_event(ApplicationUserWorkflowEvent::NicknameAlreadyExist));
                             }
                             Err(mut error) => {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -243,19 +223,9 @@ impl Base {
                 }
             }
 
-            return Err(
-                ErrorAuditor::new(
-                    ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::InvalidNickname } },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
+            return Ok(ActionHandlerResult::new_with_application_user_workflow_event(ApplicationUserWorkflowEvent::InvalidNickname));
         }
 
-        return Err(
-            ErrorAuditor::new(
-                ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserError { application_user_error: ApplicationUserError::InvalidPassword } },
-                BacktracePart::new(line!(), file!(), None)
-            )
-        );
+        return Ok(ActionHandlerResult::new_with_application_user_workflow_event(ApplicationUserWorkflowEvent::InvalidPassword));
     }
 }

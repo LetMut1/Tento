@@ -1,11 +1,11 @@
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_workflow_event::ApplicationUserLogInTokenWorkflowEvent;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::domain_layer::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::entity::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
-use crate::domain_layer::error::entity_error::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_error::ApplicationUserLogInTokenError;
-use crate::domain_layer::error::entity_error::entity_error::EntityError;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
@@ -30,7 +30,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         redis_connection_pool: Pool<RedisConnectionManager>,        // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
         action_handler_incoming_data: ActionHandlerIncomingData
-    ) -> Result<ActionHandlerOutcomingData, ErrorAuditor> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
+    ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor> {   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let (
             application_user_id,
             application_user_log_in_token_device_id,  // TODO ПРоверить все входящие значения application_user_log_in_token_device_id нв формат. Формата может не быть. Нужно определиться, есть ли формат, напримре, UUID
@@ -89,7 +89,7 @@ impl Base {
                                                     Ok(json_access_web_token_) => {
                                                         match Encoder::encode(environment_configuration_resolver, &json_refresh_web_token_) {
                                                             Ok(json_refresh_web_token_) => {
-                                                                return Ok(ActionHandlerOutcomingData::new(json_access_web_token_, json_refresh_web_token_));
+                                                                return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(json_access_web_token_, json_refresh_web_token_)));
                                                             }
                                                             Err(mut error) => {
                                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -140,20 +140,10 @@ impl Base {
                                 }
                             }
                             
-                            return Err(
-                                ErrorAuditor::new(
-                                    ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserLogInTokenError { application_user_log_in_token_error: ApplicationUserLogInTokenError::InvalidValue } },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
+                            return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_event(ApplicationUserLogInTokenWorkflowEvent::InvalidValue));
                         }
                 
-                        return Err(
-                            ErrorAuditor::new(
-                                ErrorAggregator::EntityError { entity_error: EntityError::ApplicationUserLogInTokenError { application_user_log_in_token_error: ApplicationUserLogInTokenError::NotFound } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
+                        return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_event(ApplicationUserLogInTokenWorkflowEvent::NotFound));
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
