@@ -401,76 +401,77 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataCheckEmailForExisting>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerCheckEmailForExisting_::handle(
-                            environment_configuration_resolver,
-                            postgresql_connection_pool, 
-                            ActionHandlerIncomingDataCheckEmailForExisting_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataCheckEmailForExisting>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerCheckEmailForExisting_::handle(
+        //                     environment_configuration_resolver,
+        //                     postgresql_connection_pool, 
+        //                     ActionHandlerIncomingDataCheckEmailForExisting_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn register_by_first_step<'a, T>(
@@ -593,77 +594,78 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataRegisterByFirstStep>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerRegisterByFirstStep_::handle(
-                            environment_configuration_resolver,
-                            postgresql_connection_pool,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataRegisterByFirstStep_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataRegisterByFirstStep>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerRegisterByFirstStep_::handle(
+        //                     environment_configuration_resolver,
+        //                     postgresql_connection_pool,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataRegisterByFirstStep_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn register_by_last_step<'a, T>(
@@ -846,77 +848,78 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataRegisterByLastStep>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerRegisterByLastStep_::handle(
-                            environment_configuration_resolver,
-                            postgresql_connection_pool,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataRegisterByLastStep_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataRegisterByLastStep>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerRegisterByLastStep_::handle(
+        //                     environment_configuration_resolver,
+        //                     postgresql_connection_pool,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataRegisterByLastStep_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn send_email_for_register<'a>(
@@ -1012,76 +1015,77 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForRegister>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerSendEmailForRegister_::handle(
-                            environment_configuration_resolver,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataSendEmailForRegister_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForRegister>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerSendEmailForRegister_::handle(
+        //                     environment_configuration_resolver,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataSendEmailForRegister_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn log_in_by_first_step<'a, T>(
@@ -1193,77 +1197,78 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogInByFirstStep>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerLogInByFirstStep_::handle(
-                            environment_configuration_resolver,
-                            postgresql_connection_pool,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataLogInByFirstStep_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogInByFirstStep>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerLogInByFirstStep_::handle(
+        //                     environment_configuration_resolver,
+        //                     postgresql_connection_pool,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataLogInByFirstStep_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn log_in_by_last_step<'a>(
@@ -1369,76 +1374,77 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogInByLastStep>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerLogInByLastStep_::handle(
-                            environment_configuration_resolver,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataLogInByLastStep_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogInByLastStep>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerLogInByLastStep_::handle(
+        //                     environment_configuration_resolver,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataLogInByLastStep_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn send_email_for_log_in<'a, T>(
@@ -1568,77 +1574,78 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForLogIn>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerSendEmailForLogIn_::handle(
-                            environment_configuration_resolver,
-                            postgresql_connection_pool,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataSendEmailForLogIn_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForLogIn>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerSendEmailForLogIn_::handle(
+        //                     environment_configuration_resolver,
+        //                     postgresql_connection_pool,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataSendEmailForLogIn_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn refresh_json_access_web_token<'a>(
@@ -1751,76 +1758,77 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataRefreshJsonAccessWebToken>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerRefreshJsonAccessWebToken_::handle(
-                            environment_configuration_resolver,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataRefreshJsonAccessWebToken_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataRefreshJsonAccessWebToken>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerRefreshJsonAccessWebToken_::handle(
+        //                     environment_configuration_resolver,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataRefreshJsonAccessWebToken_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn log_out_from_one_device<'a>(
@@ -1947,76 +1955,77 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogOutFromOneDevice>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerLogOutFromOneDevice_::handle(
-                            environment_configuration_resolver,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataLogOutFromOneDevice_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogOutFromOneDevice>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerLogOutFromOneDevice_::handle(
+        //                     environment_configuration_resolver,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataLogOutFromOneDevice_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn log_out_from_all_devices<'a>(
@@ -2143,76 +2152,77 @@ impl Authorization {
         request: Request<Body>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body> {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogOutFromAllDevices>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerLogOutFromAllDevices_::handle(
-                            environment_configuration_resolver,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataLogOutFromAllDevices_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogOutFromAllDevices>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerLogOutFromAllDevices_::handle(
+        //                     environment_configuration_resolver,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataLogOutFromAllDevices_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn reset_password_by_first_step<'a, T>(
@@ -2322,77 +2332,78 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataResetPasswordByFirstStep>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerResetPasswordByFirstStep_::handle(
-                            environment_configuration_resolver,
-                            postgresql_connection_pool,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataResetPasswordByFirstStep_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataResetPasswordByFirstStep>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerResetPasswordByFirstStep_::handle(
+        //                     environment_configuration_resolver,
+        //                     postgresql_connection_pool,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataResetPasswordByFirstStep_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data{
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data{
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn reset_password_by_last_step<'a, T>(
@@ -2546,77 +2557,78 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataResetPasswordByLastStep>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerResetPasswordByLastStep_::handle(
-                            environment_configuration_resolver,
-                            postgresql_connection_pool,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataResetPasswordByLastStep_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataResetPasswordByLastStep>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerResetPasswordByLastStep_::handle(
+        //                     environment_configuration_resolver,
+        //                     postgresql_connection_pool,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataResetPasswordByLastStep_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 
     pub async fn send_email_for_reset_password<'a, T>(
@@ -2746,76 +2758,77 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
+        todo!();
+        // if !RequestHeaderChecker::is_valid(&request) {
+        //     return ActionResponseCreator::create_bad_request();
+        // }
         
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
+        // let (
+        //     request_parts,
+        //     body
+        // ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForResetPassword>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerSendEmailForResetPassword_::handle(
-                            environment_configuration_resolver,
-                            postgresql_connection_pool,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataSendEmailForResetPassword_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
+        // match to_bytes(body).await {
+        //     Ok(bytes) => {
+        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForResetPassword>(bytes.chunk()) {
+        //             Ok(action_handler_incoming_data) => {
+        //                 match ActionHandlerSendEmailForResetPassword_::handle(
+        //                     environment_configuration_resolver,
+        //                     postgresql_connection_pool,
+        //                     redis_connection_pool,
+        //                     ActionHandlerIncomingDataSendEmailForResetPassword_::new(request_parts, action_handler_incoming_data)
+        //                 ).await {
+        //                     Ok(action_handler_outcoming_data) => {
+        //                         let (
+        //                             response_parts,
+        //                             convertible_data
+        //                         ) = action_handler_outcoming_data.into_inner();
 
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
-                                            }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
+        //                         match convertible_data {
+        //                             Some(unified_report) => {
+        //                                 match serde_json::to_vec(&unified_report) {
+        //                                     Ok(data) => {
+        //                                         return Response::from_parts(response_parts, Body::from(data));
+        //                                     }
+        //                                     Err(error) => {
+        //                                         // log::error!("{}", ErrorAuditor::from(error));
                         
-                                                return ActionResponseCreator::create_internal_server_error();
-                                            }
-                                        }
-                                    }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+        //                                         return ActionResponseCreator::create_internal_server_error();
+        //                                     }
+        //                                 }
+        //                             }
+        //                             None => {
+        //                                 return Response::from_parts(response_parts, Body::empty());
+        //                             }
+        //                         }
+        //                     }
+        //                     Err(error) => {
+        //                         match error.get_base_error() {
+        //                             BaseError::InvalidArgumentError => {
+        //                                 unreachable!("TODO");
+        //                             }
+        //                             BaseError::LogicError { logic_error: _ } |
+        //                             BaseError::RunTimeError { run_time_error: _ } => {
+        //                                 // log::error!("{}", error);
                 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+        //                                 return ActionResponseCreator::create_internal_server_error();
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             Err(error) => {
+        //                 // log::error!("{}", ErrorAuditor::from(error));
         
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        //                 return ActionResponseCreator::create_internal_server_error();
+        //             }
+        //         }
+        //     }
+        //     Err(error) => {
+        //         // log::error!("{}", ErrorAuditor::from(error));
 
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        //         return ActionResponseCreator::create_internal_server_error();
+        //     }
+        // }
     }
 }
