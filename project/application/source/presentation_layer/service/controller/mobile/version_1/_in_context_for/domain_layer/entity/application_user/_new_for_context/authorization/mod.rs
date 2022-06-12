@@ -3,13 +3,13 @@ use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
 use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
-use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_workflow_event::ApplicationUserLogInTokenWorkflowEvent;
-use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_workflow_event::ApplicationUserRegistrationConfirmationTokenWorkflowEvent;
-use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_workflow_event::ApplicationUserResetPasswordTokenWorkflowEvent;
-use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_workflow_event::ApplicationUserWorkflowEvent;
-use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_event::JsonAccessWebTokenWorkflowEvent;
-use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_workflow_event::JsonRefreshWebTokenWorkflowEvent;
-use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::entity_workflow_event::EntityWorkflowEvent;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_workflow_exception::ApplicationUserLogInTokenWorkflowException;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_workflow_exception::ApplicationUserRegistrationConfirmationTokenWorkflowException;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_workflow_exception::ApplicationUserResetPasswordTokenWorkflowException;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_workflow_exception::ApplicationUserWorkflowException;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_exception::JsonAccessWebTokenWorkflowException;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_workflow_exception::JsonRefreshWebTokenWorkflowException;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_exception::entity_workflow_exception::EntityWorkflowException;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckEmailForExisting;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckNicknameForExisting;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogInByFirstStep;
@@ -154,11 +154,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
-                                        match application_user_workflow_event {
-                                            ApplicationUserWorkflowEvent::InvalidNickname => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception {
+                                            ApplicationUserWorkflowException::InvalidNickname => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME)
                                                 ) {
@@ -328,11 +328,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
-                                        match application_user_workflow_event{
-                                            ApplicationUserWorkflowEvent::InvalidEmail => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception{
+                                            ApplicationUserWorkflowException::InvalidEmail => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL)
                                                 ) {
@@ -506,11 +506,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
-                                        match application_user_workflow_event {
-                                            ApplicationUserWorkflowEvent::EmailAlreadyExist => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception {
+                                            ApplicationUserWorkflowException::EmailAlreadyExist => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST)
                                                 ) {
@@ -524,7 +524,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserWorkflowEvent::InvalidEmail => {
+                                            ApplicationUserWorkflowException::InvalidEmail => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL)
                                                 ) {
@@ -699,11 +699,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
-                                        match application_user_workflow_event {
-                                            ApplicationUserWorkflowEvent::EmailAlreadyExist => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception {
+                                            ApplicationUserWorkflowException::EmailAlreadyExist => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST)
                                                 ) {
@@ -717,7 +717,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserWorkflowEvent::InvalidNickname => {
+                                            ApplicationUserWorkflowException::InvalidNickname => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME)
                                                 ) {
@@ -731,7 +731,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserWorkflowEvent::InvalidPassword => {
+                                            ApplicationUserWorkflowException::InvalidPassword => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD)
                                                 ) {
@@ -745,7 +745,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserWorkflowEvent::NicknameAlreadyExist => {
+                                            ApplicationUserWorkflowException::NicknameAlreadyExist => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST)
                                                 ) {
@@ -764,9 +764,9 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    EntityWorkflowEvent::ApplicationUserRegistrationConfirmationTokenWorkflowEvent { application_user_registration_confirmation_token_workflow_event } => {
-                                        match application_user_registration_confirmation_token_workflow_event {
-                                            ApplicationUserRegistrationConfirmationTokenWorkflowEvent::NotFound => {
+                                    EntityWorkflowException::ApplicationUserRegistrationConfirmationTokenWorkflowException { application_user_registration_confirmation_token_workflow_exception } => {
+                                        match application_user_registration_confirmation_token_workflow_exception {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
                                                 ) {
@@ -780,7 +780,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserRegistrationConfirmationTokenWorkflowEvent::InvalidValue => {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::InvalidValue => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE)
                                                 ) {
@@ -945,11 +945,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserRegistrationConfirmationTokenWorkflowEvent { application_user_registration_confirmation_token_workflow_event } => {
-                                        match application_user_registration_confirmation_token_workflow_event {
-                                            ApplicationUserRegistrationConfirmationTokenWorkflowEvent::NotFound => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserRegistrationConfirmationTokenWorkflowException { application_user_registration_confirmation_token_workflow_exception } => {
+                                        match application_user_registration_confirmation_token_workflow_exception {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
                                                 ) {
@@ -1117,14 +1117,14 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
-                                        match application_user_workflow_event {
-                                            ApplicationUserWorkflowEvent::InvalidNickname |
-                                            ApplicationUserWorkflowEvent::InvalidPassword |
-                                            ApplicationUserWorkflowEvent::NotFound |
-                                            ApplicationUserWorkflowEvent::WrongPassword => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception {
+                                            ApplicationUserWorkflowException::InvalidNickname |
+                                            ApplicationUserWorkflowException::InvalidPassword |
+                                            ApplicationUserWorkflowException::NotFound |
+                                            ApplicationUserWorkflowException::WrongPassword => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD)
                                                 ) {
@@ -1292,11 +1292,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserLogInTokenWorkflowEvent { application_user_log_in_token_workflow_event } => {
-                                        match application_user_log_in_token_workflow_event {
-                                            ApplicationUserLogInTokenWorkflowEvent::NotFound => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserLogInTokenWorkflowException { application_user_log_in_token_workflow_exception } => {
+                                        match application_user_log_in_token_workflow_exception {
+                                            ApplicationUserLogInTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND)
                                                 ) {
@@ -1310,7 +1310,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserLogInTokenWorkflowEvent::InvalidValue => {
+                                            ApplicationUserLogInTokenWorkflowException::InvalidValue => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE)
                                                 ) {
@@ -1474,11 +1474,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
-                                        match application_user_workflow_event {
-                                            ApplicationUserWorkflowEvent::NotFound => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception {
+                                            ApplicationUserWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND)
                                                 ) {
@@ -1497,9 +1497,9 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    EntityWorkflowEvent::ApplicationUserLogInTokenWorkflowEvent { application_user_log_in_token_workflow_event } => {
-                                        match application_user_log_in_token_workflow_event {
-                                            ApplicationUserLogInTokenWorkflowEvent::NotFound => {
+                                    EntityWorkflowException::ApplicationUserLogInTokenWorkflowException { application_user_log_in_token_workflow_exception } => {
+                                        match application_user_log_in_token_workflow_exception {
+                                            ApplicationUserLogInTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND)
                                                 ) {
@@ -1667,11 +1667,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } => {
-                                        match json_access_web_token_workflow_event {
-                                            JsonAccessWebTokenWorkflowEvent::NotExpired => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } => {
+                                        match json_access_web_token_workflow_exception {
+                                            JsonAccessWebTokenWorkflowException::NotExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED)
                                                 ) {
@@ -1690,9 +1690,9 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    EntityWorkflowEvent::JsonRefreshWebTokenWorkflowEvent { json_refresh_web_token_workflow_event } => {
-                                        match json_refresh_web_token_workflow_event {
-                                            JsonRefreshWebTokenWorkflowEvent::NotFound => {
+                                    EntityWorkflowException::JsonRefreshWebTokenWorkflowException { json_refresh_web_token_workflow_exception } => {
+                                        match json_refresh_web_token_workflow_exception {
+                                            JsonRefreshWebTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
                                                 ) {
@@ -1849,11 +1849,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::JsonRefreshWebTokenWorkflowEvent { json_refresh_web_token_workflow_event } => {
-                                        match json_refresh_web_token_workflow_event {
-                                            JsonRefreshWebTokenWorkflowEvent::NotFound => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::JsonRefreshWebTokenWorkflowException { json_refresh_web_token_workflow_exception } => {
+                                        match json_refresh_web_token_workflow_exception {
+                                            JsonRefreshWebTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
                                                 ) {
@@ -1869,9 +1869,9 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } => {
-                                        match json_access_web_token_workflow_event {
-                                            JsonAccessWebTokenWorkflowEvent::AlreadyExpired => {
+                                    EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } => {
+                                        match json_access_web_token_workflow_exception {
+                                            JsonAccessWebTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
                                                 ) {
@@ -1885,7 +1885,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            JsonAccessWebTokenWorkflowEvent::InJsonAccessWebTokenBlackList => {
+                                            JsonAccessWebTokenWorkflowException::InJsonAccessWebTokenBlackList => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
                                                 ) {
@@ -2045,11 +2045,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::JsonRefreshWebTokenWorkflowEvent { json_refresh_web_token_workflow_event } => {
-                                        match json_refresh_web_token_workflow_event {
-                                            JsonRefreshWebTokenWorkflowEvent::NotFound => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::JsonRefreshWebTokenWorkflowException { json_refresh_web_token_workflow_exception } => {
+                                        match json_refresh_web_token_workflow_exception {
+                                            JsonRefreshWebTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
                                                 ) {
@@ -2065,9 +2065,9 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } => {
-                                        match json_access_web_token_workflow_event {
-                                            JsonAccessWebTokenWorkflowEvent::AlreadyExpired => {
+                                    EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } => {
+                                        match json_access_web_token_workflow_exception {
+                                            JsonAccessWebTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
                                                 ) {
@@ -2081,7 +2081,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            JsonAccessWebTokenWorkflowEvent::InJsonAccessWebTokenBlackList => {
+                                            JsonAccessWebTokenWorkflowException::InJsonAccessWebTokenBlackList => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
                                                 ) {
@@ -2248,11 +2248,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
-                                        match application_user_workflow_event {
-                                            ApplicationUserWorkflowEvent::NotFound => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception {
+                                            ApplicationUserWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND)
                                                 ) {
@@ -2426,11 +2426,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
-                                        match application_user_workflow_event {
-                                            ApplicationUserWorkflowEvent::NotFound => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception {
+                                            ApplicationUserWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE)
                                                 ) {
@@ -2444,7 +2444,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserWorkflowEvent::InvalidPassword => {
+                                            ApplicationUserWorkflowException::InvalidPassword => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD)
                                                 ) {
@@ -2464,9 +2464,9 @@ impl Authorization {
             
                                         }
                                     }
-                                    EntityWorkflowEvent::ApplicationUserResetPasswordTokenWorkflowEvent { application_user_reset_password_token_workflow_event } => {
-                                        match application_user_reset_password_token_workflow_event {
-                                            ApplicationUserResetPasswordTokenWorkflowEvent::InvalidValue => {
+                                    EntityWorkflowException::ApplicationUserResetPasswordTokenWorkflowException { application_user_reset_password_token_workflow_exception } => {
+                                        match application_user_reset_password_token_workflow_exception {
+                                            ApplicationUserResetPasswordTokenWorkflowException::InvalidValue => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE)
                                                 ) {
@@ -2480,7 +2480,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserResetPasswordTokenWorkflowEvent::NotFound => {
+                                            ApplicationUserResetPasswordTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND)
                                                 ) {
@@ -2652,11 +2652,11 @@ impl Authorization {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
-                                        match application_user_workflow_event {
-                                            ApplicationUserWorkflowEvent::NotFound => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception {
+                                            ApplicationUserWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND)
                                                 ) {
@@ -2675,9 +2675,9 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    EntityWorkflowEvent::ApplicationUserResetPasswordTokenWorkflowEvent { application_user_reset_password_token_workflow_event } => {
-                                        match application_user_reset_password_token_workflow_event {
-                                            ApplicationUserResetPasswordTokenWorkflowEvent::NotFound => {
+                                    EntityWorkflowException::ApplicationUserResetPasswordTokenWorkflowException { application_user_reset_password_token_workflow_exception } => {
+                                        match application_user_reset_password_token_workflow_exception {
+                                            ApplicationUserResetPasswordTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND)
                                                 ) {

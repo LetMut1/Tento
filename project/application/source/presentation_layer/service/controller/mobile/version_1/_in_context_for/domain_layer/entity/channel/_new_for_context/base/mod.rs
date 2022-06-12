@@ -3,8 +3,8 @@ use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
 use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
-use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_event::JsonAccessWebTokenWorkflowEvent;
-use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_event::entity_workflow_event::EntityWorkflowEvent;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_exception::JsonAccessWebTokenWorkflowException;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_exception::entity_workflow_exception::EntityWorkflowException;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::_new_for_context::base::Base as ActionHandlerIncomingDataGetManyByCreatedAt;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::_new_for_context::base::Base as ActionHandlerIncomingDataGetManyByIdRegistry;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_new_for_context::base::Base as ActionHandlerIncomingDataGetManyByName;
@@ -74,11 +74,11 @@ impl Base {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } => {
-                                        match json_access_web_token_workflow_event {
-                                            JsonAccessWebTokenWorkflowEvent::AlreadyExpired => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } => {
+                                        match json_access_web_token_workflow_exception {
+                                            JsonAccessWebTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
                                                 ) {
@@ -92,7 +92,7 @@ impl Base {
                                                     }
                                                 }
                                             }
-                                            JsonAccessWebTokenWorkflowEvent::InJsonAccessWebTokenBlackList => {
+                                            JsonAccessWebTokenWorkflowException::InJsonAccessWebTokenBlackList => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
                                                 ) {
@@ -181,11 +181,11 @@ impl Base {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } => {
-                                        match json_access_web_token_workflow_event {
-                                            JsonAccessWebTokenWorkflowEvent::AlreadyExpired => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } => {
+                                        match json_access_web_token_workflow_exception {
+                                            JsonAccessWebTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
                                                 ) {
@@ -199,7 +199,7 @@ impl Base {
                                                     }
                                                 }
                                             }
-                                            JsonAccessWebTokenWorkflowEvent::InJsonAccessWebTokenBlackList => {
+                                            JsonAccessWebTokenWorkflowException::InJsonAccessWebTokenBlackList => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
                                                 ) {
@@ -288,11 +288,11 @@ impl Base {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } => {
-                                        match json_access_web_token_workflow_event {
-                                            JsonAccessWebTokenWorkflowEvent::AlreadyExpired => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } => {
+                                        match json_access_web_token_workflow_exception {
+                                            JsonAccessWebTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
                                                 ) {
@@ -306,7 +306,7 @@ impl Base {
                                                     }
                                                 }
                                             }
-                                            JsonAccessWebTokenWorkflowEvent::InJsonAccessWebTokenBlackList => {
+                                            JsonAccessWebTokenWorkflowException::InJsonAccessWebTokenBlackList => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
                                                 ) {
@@ -395,11 +395,11 @@ impl Base {
                                     }
                                 }
                             }
-                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
-                                match entity_workflow_event {
-                                    EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } => {
-                                        match json_access_web_token_workflow_event {
-                                            JsonAccessWebTokenWorkflowEvent::AlreadyExpired => {
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } => {
+                                        match json_access_web_token_workflow_exception {
+                                            JsonAccessWebTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
                                                 ) {
@@ -413,7 +413,7 @@ impl Base {
                                                     }
                                                 }
                                             }
-                                            JsonAccessWebTokenWorkflowEvent::InJsonAccessWebTokenBlackList => {
+                                            JsonAccessWebTokenWorkflowException::InJsonAccessWebTokenBlackList => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
                                                 ) {

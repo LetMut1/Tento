@@ -1,11 +1,11 @@
 use serde::Serialize;
-use super::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_workflow_event::ApplicationUserLogInTokenWorkflowEvent;
-use super::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_workflow_event::ApplicationUserRegistrationConfirmationTokenWorkflowEvent;
-use super::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_workflow_event::ApplicationUserResetPasswordTokenWorkflowEvent;
-use super::entity_workflow_event::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_workflow_event::ApplicationUserWorkflowEvent;
-use super::entity_workflow_event::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_event::JsonAccessWebTokenWorkflowEvent;
-use super::entity_workflow_event::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_workflow_event::JsonRefreshWebTokenWorkflowEvent;
-use super::entity_workflow_event::entity_workflow_event::EntityWorkflowEvent;
+use super::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_workflow_exception::ApplicationUserLogInTokenWorkflowException;
+use super::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_workflow_exception::ApplicationUserRegistrationConfirmationTokenWorkflowException;
+use super::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_workflow_exception::ApplicationUserResetPasswordTokenWorkflowException;
+use super::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::application_user::_new_for_context::application_user_workflow_exception::ApplicationUserWorkflowException;
+use super::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_exception::JsonAccessWebTokenWorkflowException;
+use super::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_workflow_exception::JsonRefreshWebTokenWorkflowException;
+use super::entity_workflow_exception::entity_workflow_exception::EntityWorkflowException;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use serde::Deserialize;
@@ -14,46 +14,46 @@ pub enum ActionHandlerResult<T> {
     ActionHandlerOutcomingData {
         action_handler_outcoming_data: T
     },
-    EntityWorkflowEvent {
-        entity_workflow_event: EntityWorkflowEvent
+    EntityWorkflowException {
+        entity_workflow_exception: EntityWorkflowException
     }
 }
 
 impl<T> ActionHandlerResult<T> {
-    pub fn new_with_application_user_workflow_event(
-        application_user_workflow_event: ApplicationUserWorkflowEvent
+    pub fn new_with_application_user_workflow_exception(
+        application_user_workflow_exception: ApplicationUserWorkflowException
     ) -> Self {
-        return Self::EntityWorkflowEvent { entity_workflow_event: EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } };
+        return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } };
     }
 
-    pub fn new_with_application_user_log_in_token_workflow_event(
-        application_user_log_in_token_workflow_event: ApplicationUserLogInTokenWorkflowEvent
+    pub fn new_with_application_user_log_in_token_workflow_exception(
+        application_user_log_in_token_workflow_exception: ApplicationUserLogInTokenWorkflowException
     ) -> Self {
-        return Self::EntityWorkflowEvent { entity_workflow_event: EntityWorkflowEvent::ApplicationUserLogInTokenWorkflowEvent { application_user_log_in_token_workflow_event } };
+        return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::ApplicationUserLogInTokenWorkflowException { application_user_log_in_token_workflow_exception } };
     }
 
-    pub fn new_with_application_user_registration_confirmation_token_workflow_event(
-        application_user_registration_confirmation_token_workflow_event: ApplicationUserRegistrationConfirmationTokenWorkflowEvent
+    pub fn new_with_application_user_registration_confirmation_token_workflow_exception(
+        application_user_registration_confirmation_token_workflow_exception: ApplicationUserRegistrationConfirmationTokenWorkflowException
     ) -> Self {
-        return Self::EntityWorkflowEvent { entity_workflow_event: EntityWorkflowEvent::ApplicationUserRegistrationConfirmationTokenWorkflowEvent { application_user_registration_confirmation_token_workflow_event } };
+        return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::ApplicationUserRegistrationConfirmationTokenWorkflowException { application_user_registration_confirmation_token_workflow_exception } };
     }
 
-    pub fn new_with_application_user_reset_password_token_workflow_event(
-        application_user_reset_password_token_workflow_event: ApplicationUserResetPasswordTokenWorkflowEvent
+    pub fn new_with_application_user_reset_password_token_workflow_exception(
+        application_user_reset_password_token_workflow_exception: ApplicationUserResetPasswordTokenWorkflowException
     ) -> Self {
-        return Self::EntityWorkflowEvent { entity_workflow_event: EntityWorkflowEvent::ApplicationUserResetPasswordTokenWorkflowEvent { application_user_reset_password_token_workflow_event } };
+        return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::ApplicationUserResetPasswordTokenWorkflowException { application_user_reset_password_token_workflow_exception } };
     }
 
-    pub fn new_with_json_access_web_token_workflow_event(
-        json_access_web_token_workflow_event: JsonAccessWebTokenWorkflowEvent
+    pub fn new_with_json_access_web_token_workflow_exception(
+        json_access_web_token_workflow_exception: JsonAccessWebTokenWorkflowException
     ) -> Self {
-        return Self::EntityWorkflowEvent { entity_workflow_event: EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } };
+        return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } };
     }
 
-    pub fn new_with_json_refresh_web_token_workflow_event(
-        json_refresh_web_token_workflow_event: JsonRefreshWebTokenWorkflowEvent
+    pub fn new_with_json_refresh_web_token_workflow_exception(
+        json_refresh_web_token_workflow_exception: JsonRefreshWebTokenWorkflowException
     ) -> Self {
-        return Self::EntityWorkflowEvent { entity_workflow_event: EntityWorkflowEvent::JsonRefreshWebTokenWorkflowEvent { json_refresh_web_token_workflow_event } };
+        return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::JsonRefreshWebTokenWorkflowException { json_refresh_web_token_workflow_exception } };
     }
 }
 
