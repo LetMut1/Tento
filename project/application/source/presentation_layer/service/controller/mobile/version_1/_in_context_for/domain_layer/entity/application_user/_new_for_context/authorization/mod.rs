@@ -43,10 +43,11 @@ use crate::infrastructure_layer::error::error_auditor::_component::base_error::b
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::service::action_response_creator::ActionResponseCreator;
 use crate::presentation_layer::service::request_header_checker::RequestHeaderChecker;
+use crate::presentation_layer::service::request_response_data_encoding_protocol_wrapper::RequestResponseDataEncodingProtocolWrapper;
 use crate::presentation_layer::service::unified_report_creator::UnifiedReportCreator;
 use hyper::Body;
 use hyper::body::HttpBody;
-use hyper::body::to_bytes;
+use hyper::body::to_bytes;      // TODO почему не использую этот метод для получения байт?
 use hyper::Request;
 use hyper::Response;
 use std::clone::Clone;
@@ -221,84 +222,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
-
-        let (
-            request_parts,
-            body
-        ) = request.into_parts();
-
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataCheckNicknameForExisting>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerCheckNicknameForExisting_::handle(
-                            environment_configuration_resolver,
-                            postgresql_connection_pool,
-                            redis_connection_pool,
-                            ActionHandlerIncomingDataCheckNicknameForExisting_::new(request_parts, action_handler_incoming_data)
-                        ).await {
-                            Ok(action_handler_result) => {
-                                match action_handler_result {
-                                    ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                        let (
-                                            response_parts,
-                                            convertible_data
-                                        ) = action_handler_outcoming_data.into_inner();
-        
-                                        match convertible_data {
-                                            Some(unified_report) => {
-                                                match serde_json::to_vec(&unified_report) {
-                                                    Ok(data) => {
-                                                        return Response::from_parts(response_parts, Body::from(data));
-                                                    }
-                                                    Err(error) => {
-                                                        // log::error!("{}", ErrorAuditor::from(error));
-                                
-                                                        return ActionResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            }
-                                            None => {
-                                                return Response::from_parts(response_parts, Body::empty());
-                                            }
-                                        }
-                                    }
-                                    ActionHandlerResult::EntityWorkflowException { entity_workflow_exception: _ } => {
-                                        unreachable!("TODO");
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
-                
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
-        
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
-
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::check_nickname_for_existing
+        ).await;
     }
 
     pub async fn check_email_for_existing<'a, T>(
