@@ -1,4 +1,5 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
 use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
@@ -33,6 +34,7 @@ impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
@@ -63,7 +65,7 @@ impl Base {
 
         let request = Request::from_parts(request_parts, Body::from(data));
         
-        let response = Authorization::check_nickname_for_existing(environment_configuration_resolver, request, postgresql_connection_pool).await;
+        let response = Authorization::check_nickname_for_existing(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
 
         let action_handler_outcoming_data: ActionHandlerOutcomingData;
 

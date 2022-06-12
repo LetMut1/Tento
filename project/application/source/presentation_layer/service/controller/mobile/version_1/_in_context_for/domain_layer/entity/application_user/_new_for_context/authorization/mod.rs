@@ -120,7 +120,8 @@ impl Authorization {
     pub async fn check_nickname_for_existing<'a, T>(
         _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -211,7 +212,8 @@ impl Authorization {
     pub async fn check_nickname_for_existing_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -235,6 +237,7 @@ impl Authorization {
                         match ActionHandlerCheckNicknameForExisting_::handle(
                             environment_configuration_resolver,
                             postgresql_connection_pool,
+                            redis_connection_pool,
                             ActionHandlerIncomingDataCheckNicknameForExisting_::new(request_parts, action_handler_incoming_data)
                         ).await {
                             Ok(action_handler_result) => {
@@ -301,7 +304,8 @@ impl Authorization {
     pub async fn check_email_for_existing<'a, T>(
         _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -393,7 +397,8 @@ impl Authorization {
     pub async fn check_email_for_existing_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -922,11 +927,18 @@ impl Authorization {
         // }
     }
 
-    pub async fn send_email_for_register<'a>(
+    pub async fn send_email_for_register<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
+        _postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
         }
@@ -1010,11 +1022,18 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn send_email_for_register_<'a>(
+    pub async fn send_email_for_register_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         todo!();
         // if !RequestHeaderChecker::is_valid(&request) {
         //     return ActionResponseCreator::create_bad_request();
@@ -1271,11 +1290,18 @@ impl Authorization {
         // }
     }
 
-    pub async fn log_in_by_last_step<'a>(
+    pub async fn log_in_by_last_step<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
+        _postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
         }
@@ -1369,11 +1395,18 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn log_in_by_last_step_<'a>(
+    pub async fn log_in_by_last_step_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         todo!();
         // if !RequestHeaderChecker::is_valid(&request) {
         //     return ActionResponseCreator::create_bad_request();
@@ -1648,11 +1681,18 @@ impl Authorization {
         // }
     }
 
-    pub async fn refresh_json_access_web_token<'a>(
+    pub async fn refresh_json_access_web_token<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
+        _postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
         }
@@ -1753,11 +1793,18 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn refresh_json_access_web_token_<'a>(
+    pub async fn refresh_json_access_web_token_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         todo!();
         // if !RequestHeaderChecker::is_valid(&request) {
         //     return ActionResponseCreator::create_bad_request();
@@ -1831,11 +1878,18 @@ impl Authorization {
         // }
     }
 
-    pub async fn log_out_from_one_device<'a>(
+    pub async fn log_out_from_one_device<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
+        _postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
         }
@@ -1950,11 +2004,18 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn log_out_from_one_device_<'a>(
+    pub async fn log_out_from_one_device_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         todo!();
         // if !RequestHeaderChecker::is_valid(&request) {
         //     return ActionResponseCreator::create_bad_request();
@@ -2028,11 +2089,18 @@ impl Authorization {
         // }
     }
 
-    pub async fn log_out_from_all_devices<'a>(
+    pub async fn log_out_from_all_devices<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
+        _postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
         }
@@ -2147,11 +2215,18 @@ impl Authorization {
     }
 
     #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn log_out_from_all_devices_<'a>(
+    pub async fn log_out_from_all_devices_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
+        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body> {
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
         todo!();
         // if !RequestHeaderChecker::is_valid(&request) {
         //     return ActionResponseCreator::create_bad_request();

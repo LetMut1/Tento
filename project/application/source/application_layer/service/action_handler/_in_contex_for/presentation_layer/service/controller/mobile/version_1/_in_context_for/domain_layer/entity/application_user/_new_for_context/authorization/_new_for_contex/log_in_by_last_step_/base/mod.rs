@@ -29,67 +29,68 @@ impl Base {
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor> {
-        let (
-            mut request_parts,
-            convertible_data
-        ) = action_handler_incoming_data.into_inner();
+        todo!();
+        // let (
+        //     mut request_parts,
+        //     convertible_data
+        // ) = action_handler_incoming_data.into_inner();
 
-        let mut data: Vec<u8> = vec![];
-        if let Err(error) = rmp_serde::encode::write(&mut data, &convertible_data) {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
+        // let mut data: Vec<u8> = vec![];
+        // if let Err(error) = rmp_serde::encode::write(&mut data, &convertible_data) {
+        //     return Err(
+        //         ErrorAuditor::new(
+        //             BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+        //             BacktracePart::new(line!(), file!(), None)
+        //         )
+        //     );
+        // }
 
-        let mut header_map = request_parts.headers;
-        header_map.remove(header::CONTENT_LENGTH);
-        header_map.append(header::CONTENT_LENGTH, HeaderValue::from(data.len() as u64));
-        request_parts.headers = header_map;
+        // let mut header_map = request_parts.headers;
+        // header_map.remove(header::CONTENT_LENGTH);
+        // header_map.append(header::CONTENT_LENGTH, HeaderValue::from(data.len() as u64));
+        // request_parts.headers = header_map;
 
-        let request = Request::from_parts(request_parts, Body::from(data));
+        // let request = Request::from_parts(request_parts, Body::from(data));
         
-        let response = Authorization::log_in_by_last_step(environment_configuration_resolver, request, redis_connection_pool).await;
+        // let response = Authorization::log_in_by_last_step(environment_configuration_resolver, request, redis_connection_pool).await;
 
-        let action_handler_outcoming_data: ActionHandlerOutcomingData;
+        // let action_handler_outcoming_data: ActionHandlerOutcomingData;
 
-        let (
-            response_parts,
-            body
-        ) = response.into_parts();
+        // let (
+        //     response_parts,
+        //     body
+        // ) = response.into_parts();
 
-        if response_parts.status == StatusCode::OK {
-            match to_bytes(body).await {
-                Ok(bytes) => {
-                    match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<ActionHandlerOutcomingDataLogInByLastStep>>(bytes.chunk()) {
-                        Ok(unified_report) => {
-                            action_handler_outcoming_data = ActionHandlerOutcomingData::new(response_parts, Some(unified_report));
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-                }
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            }
-        } else {
-            action_handler_outcoming_data = ActionHandlerOutcomingData::new(response_parts, None);
-        }
+        // if response_parts.status == StatusCode::OK {
+        //     match to_bytes(body).await {
+        //         Ok(bytes) => {
+        //             match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<ActionHandlerOutcomingDataLogInByLastStep>>(bytes.chunk()) {
+        //                 Ok(unified_report) => {
+        //                     action_handler_outcoming_data = ActionHandlerOutcomingData::new(response_parts, Some(unified_report));
+        //                 }
+        //                 Err(error) => {
+        //                     return Err(
+        //                         ErrorAuditor::new(
+        //                             BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+        //                             BacktracePart::new(line!(), file!(), None)
+        //                         )
+        //                     );
+        //                 }
+        //             }
+        //         }
+        //         Err(error) => {
+        //             return Err(
+        //                 ErrorAuditor::new(
+        //                     BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+        //                     BacktracePart::new(line!(), file!(), None)
+        //                 )
+        //             );
+        //         }
+        //     }
+        // } else {
+        //     action_handler_outcoming_data = ActionHandlerOutcomingData::new(response_parts, None);
+        // }
 
-        return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(action_handler_outcoming_data));
+        // return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(action_handler_outcoming_data));
     }
 }
