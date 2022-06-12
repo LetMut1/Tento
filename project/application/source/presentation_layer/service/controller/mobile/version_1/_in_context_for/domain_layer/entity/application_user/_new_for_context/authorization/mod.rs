@@ -489,72 +489,79 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRegisterByFirstStep>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
-                if let Err(error) = ActionHandlerRegisterByFirstStep::handle(
+                match ActionHandlerRegisterByFirstStep::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    match error.get_error_aggregator() {
-                        ErrorAggregator::EntityError { entity_error } => {
-                            match entity_error {
-                                EntityError::ApplicationUserError { application_user_error } => {
-                                    match application_user_error {
-                                        ApplicationUserError::EmailAlreadyExist => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserError::InvalidEmail => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
                                     }
                                 }
-                                _ => {
-                                    unreachable!("TODO");
+                            }
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
+                                        match application_user_workflow_event {
+                                            ApplicationUserWorkflowEvent::EmailAlreadyExist => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            ApplicationUserWorkflowEvent::InvalidEmail => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_EMAIL)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
+                                        }
+                                    }
+                                    _ => {
+                                        unreachable!("TODO");
+                                    }
                                 }
                             }
                         }
-                        ErrorAggregator::InvalidArgumentError => {
-                            return ActionResponseCreator::create_bad_request();
-                        }
-                        ErrorAggregator::LogicError { logic_error: _ } | 
-                        ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                            // log::error!("{}", error);
-        
-                            return ActionResponseCreator::create_internal_server_error();
-                        }
-                    }
-                }
-        
-                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
-                    Ok(data) => {
-                        return ActionResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
-
-                        return ActionResponseCreator::create_internal_server_error();
+                        match error.get_error_aggregator() {
+                            ErrorAggregator::InvalidArgumentError => {
+                                return ActionResponseCreator::create_bad_request();
+                            }
+                            ErrorAggregator::LogicError { logic_error: _ } | 
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
+            
+                                return ActionResponseCreator::create_internal_server_error();
+                            }
+                        }
                     }
                 }
             }
@@ -624,7 +631,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -679,25 +685,25 @@ impl Authorization {
                 match ActionHandlerRegisterByLastStep::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(action_handler_outcoming_data) => { 
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
-                            Ok(data) => {
-                                return ActionResponseCreator::create_ok(data);
+                    Ok(action_handler_result) => { 
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
-                            Err(error) => {
-                                // log::error!("{}", ErrorAuditor::from(error));
-        
-                                return ActionResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::EntityError { entity_error } => {
-                                match entity_error {
-                                    EntityError::ApplicationUserError { application_user_error } => {
-                                        match application_user_error {
-                                            ApplicationUserError::EmailAlreadyExist => {
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
+                                        match application_user_workflow_event {
+                                            ApplicationUserWorkflowEvent::EmailAlreadyExist => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST)
                                                 ) {
@@ -711,7 +717,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserError::InvalidNickname => {
+                                            ApplicationUserWorkflowEvent::InvalidNickname => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_NICKNAME)
                                                 ) {
@@ -725,7 +731,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserError::InvalidPassword => {
+                                            ApplicationUserWorkflowEvent::InvalidPassword => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD)
                                                 ) {
@@ -739,7 +745,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserError::NicknameAlreadyExist => {
+                                            ApplicationUserWorkflowEvent::NicknameAlreadyExist => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST)
                                                 ) {
@@ -758,9 +764,9 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    EntityError::ApplicationUserRegistrationConfirmationTokenError { application_user_registration_confirmation_token_error } => {
-                                        match application_user_registration_confirmation_token_error {
-                                            ApplicationUserRegistrationConfirmationTokenError::NotFound => {
+                                    EntityWorkflowEvent::ApplicationUserRegistrationConfirmationTokenWorkflowEvent { application_user_registration_confirmation_token_workflow_event } => {
+                                        match application_user_registration_confirmation_token_workflow_event {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowEvent::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
                                                 ) {
@@ -774,7 +780,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserRegistrationConfirmationTokenError::InvalidValue => {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowEvent::InvalidValue => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE)
                                                 ) {
@@ -795,6 +801,10 @@ impl Authorization {
                                     }
                                 }
                             }
+                        }
+                    }
+                    Err(error) => {
+                        match error.get_error_aggregator() {
                             ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
@@ -874,7 +884,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -919,59 +928,66 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForRegister>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
-                if let Err(error) = ActionHandlerSendEmailForRegister::handle(
+                match ActionHandlerSendEmailForRegister::handle(
                     environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    match error.get_error_aggregator() {
-                        ErrorAggregator::EntityError { entity_error } => {
-                            match entity_error {
-                                EntityError::ApplicationUserRegistrationConfirmationTokenError { application_user_registration_confirmation_token_error } => {
-                                    match application_user_registration_confirmation_token_error {
-                                        ApplicationUserRegistrationConfirmationTokenError::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
-        
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
                                     }
                                 }
-                                _ => {
-                                    unreachable!("TODO");
+                            }
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserRegistrationConfirmationTokenWorkflowEvent { application_user_registration_confirmation_token_workflow_event } => {
+                                        match application_user_registration_confirmation_token_workflow_event {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowEvent::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
+            
+                                        }
+                                    }
+                                    _ => {
+                                        unreachable!("TODO");
+                                    }
                                 }
                             }
                         }
-                        ErrorAggregator::InvalidArgumentError => {
-                            return ActionResponseCreator::create_bad_request();
-                        }
-                        ErrorAggregator::LogicError { logic_error: _ } |
-                        ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                            // log::error!("{}", error);
-        
-                            return ActionResponseCreator::create_internal_server_error();
-                        }
-                    }
-                }
-    
-                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
-                    Ok(data) => {
-                        return ActionResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
-
-                        return ActionResponseCreator::create_internal_server_error();
+                        match error.get_error_aggregator() {
+                            ErrorAggregator::InvalidArgumentError => {
+                                return ActionResponseCreator::create_bad_request();
+                            }
+                            ErrorAggregator::LogicError { logic_error: _ } |
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
+            
+                                return ActionResponseCreator::create_internal_server_error();
+                            }
+                        }
                     }
                 }
             }
@@ -1033,7 +1049,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -1088,28 +1103,28 @@ impl Authorization {
                 match ActionHandlerLogInByFirstStep::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(action_handler_outcoming_data) => { 
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
-                            Ok(data) => {
-                                return ActionResponseCreator::create_ok(data);
+                    Ok(action_handler_result) => { 
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
-                            Err(error) => {
-                                // log::error!("{}", ErrorAuditor::from(error));
-        
-                                return ActionResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::EntityError { entity_error } => {
-                                match entity_error {
-                                    EntityError::ApplicationUserError { application_user_error } => {
-                                        match application_user_error {
-                                            ApplicationUserError::InvalidNickname |
-                                            ApplicationUserError::InvalidPassword |
-                                            ApplicationUserError::NotFound |
-                                            ApplicationUserError::WrongPassword => {
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
+                                        match application_user_workflow_event {
+                                            ApplicationUserWorkflowEvent::InvalidNickname |
+                                            ApplicationUserWorkflowEvent::InvalidPassword |
+                                            ApplicationUserWorkflowEvent::NotFound |
+                                            ApplicationUserWorkflowEvent::WrongPassword => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD)
                                                 ) {
@@ -1133,6 +1148,10 @@ impl Authorization {
                                     }
                                 }
                             }
+                        }
+                    }
+                    Err(error) => {
+                        match error.get_error_aggregator() {
                             ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
@@ -1212,7 +1231,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -1260,25 +1278,25 @@ impl Authorization {
                 match ActionHandlerLogInByLastStep::handle(
                     environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(action_handler_outcoming_data) => { 
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
-                            Ok(data) => {
-                                return ActionResponseCreator::create_ok(data);
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
-                            Err(error) => {
-                                // log::error!("{}", ErrorAuditor::from(error));
-        
-                                return ActionResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::EntityError { entity_error } => {
-                                match entity_error {
-                                    EntityError::ApplicationUserLogInTokenError { application_user_log_in_token_error } => {
-                                        match application_user_log_in_token_error {
-                                            ApplicationUserLogInTokenError::NotFound => {
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserLogInTokenWorkflowEvent { application_user_log_in_token_workflow_event } => {
+                                        match application_user_log_in_token_workflow_event {
+                                            ApplicationUserLogInTokenWorkflowEvent::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND)
                                                 ) {
@@ -1292,7 +1310,7 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserLogInTokenError::InvalidValue => {
+                                            ApplicationUserLogInTokenWorkflowEvent::InvalidValue => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE)
                                                 ) {
@@ -1313,6 +1331,10 @@ impl Authorization {
                                     }
                                 }
                             }
+                        }
+                    }
+                    Err(error) => {
+                        match error.get_error_aggregator() {
                             ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
@@ -1384,7 +1406,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -1436,79 +1457,86 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForLogIn>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
-                if let Err(error) = ActionHandlerSendEmailForLogIn::handle(
+                match ActionHandlerSendEmailForLogIn::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    match error.get_error_aggregator() {
-                        ErrorAggregator::EntityError { entity_error } => {
-                            match entity_error {
-                                EntityError::ApplicationUserError { application_user_error } => {
-                                    match application_user_error {
-                                        ApplicationUserError::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
                                     }
                                 }
-                                EntityError::ApplicationUserLogInTokenError { application_user_log_in_token_error } => {
-                                    match application_user_log_in_token_error {
-                                        ApplicationUserLogInTokenError::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
+                            }
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
+                                        match application_user_workflow_event {
+                                            ApplicationUserWorkflowEvent::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
                                                 }
                                             }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
                                         }
                                     }
-                                }
-                                _ => {
-                                    unreachable!("TODO");
+                                    EntityWorkflowEvent::ApplicationUserLogInTokenWorkflowEvent { application_user_log_in_token_workflow_event } => {
+                                        match application_user_log_in_token_workflow_event {
+                                            ApplicationUserLogInTokenWorkflowEvent::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
+                                        }
+                                    }
+                                    _ => {
+                                        unreachable!("TODO");
+                                    }
                                 }
                             }
                         }
-                        ErrorAggregator::InvalidArgumentError => {
-                            return ActionResponseCreator::create_bad_request();
-                        }
-                        ErrorAggregator::LogicError { logic_error: _ } |
-                        ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                            // log::error!("{}", error);
-        
-                            return ActionResponseCreator::create_internal_server_error();
-                        }
-                    }
-                }
-        
-                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
-                    Ok(data) => {
-                        return ActionResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
-
-                        return ActionResponseCreator::create_internal_server_error();
+                        match error.get_error_aggregator() {
+                            ErrorAggregator::InvalidArgumentError => {
+                                return ActionResponseCreator::create_bad_request();
+                            }
+                            ErrorAggregator::LogicError { logic_error: _ } |
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
+            
+                                return ActionResponseCreator::create_internal_server_error();
+                            }
+                        }
                     }
                 }
             }
@@ -1578,7 +1606,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -1626,25 +1653,25 @@ impl Authorization {
                 match ActionHandlerRefreshJsonAccessWebToken::handle(
                     environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(action_handler_outcoming_data) => {
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
-                            Ok(data) => {
-                                return ActionResponseCreator::create_ok(data);
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
-                            Err(error) => {
-                                // log::error!("{}", ErrorAuditor::from(error));
-        
-                                return ActionResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::EntityError { entity_error } => {
-                                match entity_error {
-                                    EntityError::JsonAccessWebTokenError { json_access_web_token_error } => {
-                                        match json_access_web_token_error {
-                                            JsonAccessWebTokenError::NotExpired => {
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } => {
+                                        match json_access_web_token_workflow_event {
+                                            JsonAccessWebTokenWorkflowEvent::NotExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED)
                                                 ) {
@@ -1663,9 +1690,9 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    EntityError::JsonRefreshWebTokenError { json_refresh_web_token_error } => {
-                                        match json_refresh_web_token_error {
-                                            JsonRefreshWebTokenError::NotFound => {
+                                    EntityWorkflowEvent::JsonRefreshWebTokenWorkflowEvent { json_refresh_web_token_workflow_event } => {
+                                        match json_refresh_web_token_workflow_event {
+                                            JsonRefreshWebTokenWorkflowEvent::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
                                                 ) {
@@ -1686,6 +1713,10 @@ impl Authorization {
                                     }
                                 }
                             }
+                        }
+                    }
+                    Err(error) => {
+                        match error.get_error_aggregator() {
                             ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
@@ -1757,7 +1788,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -1802,90 +1832,97 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogOutFromOneDevice>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
-                if let Err(error) = ActionHandlerLogOutFromOneDevice::handle(
+                match ActionHandlerLogOutFromOneDevice::handle(
                     environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    match error.get_error_aggregator() {
-                        ErrorAggregator::EntityError { entity_error } => {
-                            match entity_error {
-                                EntityError::JsonRefreshWebTokenError { json_refresh_web_token_error } => {
-                                    match json_refresh_web_token_error {
-                                        JsonRefreshWebTokenError::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::JsonRefreshWebTokenWorkflowEvent { json_refresh_web_token_workflow_event } => {
+                                        match json_refresh_web_token_workflow_event {
+                                            JsonRefreshWebTokenWorkflowEvent::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                                EntityError::JsonAccessWebTokenError { json_access_web_token_error } => {
-                                    match json_access_web_token_error {
-                                        JsonAccessWebTokenError::AlreadyExpired => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
+                                    EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } => {
+                                        match json_access_web_token_workflow_event {
+                                            JsonAccessWebTokenWorkflowEvent::AlreadyExpired => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
                                                 }
                                             }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
+                                            JsonAccessWebTokenWorkflowEvent::InJsonAccessWebTokenBlackList => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
                                         }
                                     }
-                                }
-                                _ => {
-                                    unreachable!("TODO");
+                                    _ => {
+                                        unreachable!("TODO");
+                                    }
                                 }
                             }
                         }
-                        ErrorAggregator::InvalidArgumentError => {
-                            return ActionResponseCreator::create_bad_request();
-                        }
-                        ErrorAggregator::LogicError { logic_error: _ } |
-                        ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                            // log::error!("{}", error);
-
-                            return ActionResponseCreator::create_internal_server_error();
-                        }
-                    }
-                }
-                
-                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
-                    Ok(data) => {
-                        return ActionResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
-
-                        return ActionResponseCreator::create_internal_server_error();
+                        match error.get_error_aggregator() {
+                            ErrorAggregator::InvalidArgumentError => {
+                                return ActionResponseCreator::create_bad_request();
+                            }
+                            ErrorAggregator::LogicError { logic_error: _ } |
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
+    
+                                return ActionResponseCreator::create_internal_server_error();
+                            }
+                        }
                     }
                 }
             }
@@ -1947,7 +1984,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -1992,90 +2028,97 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogOutFromAllDevices>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
-                if let Err(error) = ActionHandlerLogOutFromAllDevices::handle(
+                match ActionHandlerLogOutFromAllDevices::handle(
                     environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    match error.get_error_aggregator() {
-                        ErrorAggregator::EntityError { entity_error } => {
-                            match entity_error {
-                                EntityError::JsonRefreshWebTokenError { json_refresh_web_token_error } => {
-                                    match json_refresh_web_token_error {
-                                        JsonRefreshWebTokenError::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::JsonRefreshWebTokenWorkflowEvent { json_refresh_web_token_workflow_event } => {
+                                        match json_refresh_web_token_workflow_event {
+                                            JsonRefreshWebTokenWorkflowEvent::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                                EntityError::JsonAccessWebTokenError { json_access_web_token_error } => {
-                                    match json_access_web_token_error {
-                                        JsonAccessWebTokenError::AlreadyExpired => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        JsonAccessWebTokenError::InJsonAccessWebTokenBlackList => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
+                                    EntityWorkflowEvent::JsonAccessWebTokenWorkflowEvent { json_access_web_token_workflow_event } => {
+                                        match json_access_web_token_workflow_event {
+                                            JsonAccessWebTokenWorkflowEvent::AlreadyExpired => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
                                                 }
                                             }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
+                                            JsonAccessWebTokenWorkflowEvent::InJsonAccessWebTokenBlackList => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
                                         }
                                     }
-                                }
-                                _ => {
-                                    unreachable!("TODO");
+                                    _ => {
+                                        unreachable!("TODO");
+                                    }
                                 }
                             }
                         }
-                        ErrorAggregator::InvalidArgumentError => {
-                            return ActionResponseCreator::create_bad_request();
-                        }
-                        ErrorAggregator::LogicError { logic_error: _ } |
-                        ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                            // log::error!("{}", error);
-
-                            return ActionResponseCreator::create_internal_server_error();
-                        }
-                    }
-                }
-                
-                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
-                    Ok(data) => {
-                        return ActionResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
-
-                        return ActionResponseCreator::create_internal_server_error();
+                        match error.get_error_aggregator() {
+                            ErrorAggregator::InvalidArgumentError => {
+                                return ActionResponseCreator::create_bad_request();
+                            }
+                            ErrorAggregator::LogicError { logic_error: _ } |
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
+    
+                                return ActionResponseCreator::create_internal_server_error();
+                            }
+                        }
                     }
                 }
             }
@@ -2137,7 +2180,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -2192,25 +2234,25 @@ impl Authorization {
                 match ActionHandlerResetPasswordByFirstStep::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(action_handler_outcoming_data) => {
-                        match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
-                            Ok(data) => {
-                                return ActionResponseCreator::create_ok(data);
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
                             }
-                            Err(error) => {
-                                // log::error!("{}", ErrorAuditor::from(error));
-        
-                                return ActionResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::EntityError { entity_error } => {
-                                match entity_error {
-                                    EntityError::ApplicationUserError { application_user_error } => {
-                                        match application_user_error {
-                                            ApplicationUserError::NotFound => {
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
+                                        match application_user_workflow_event {
+                                            ApplicationUserWorkflowEvent::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND)
                                                 ) {
@@ -2235,6 +2277,10 @@ impl Authorization {
                                     }
                                 }
                             }
+                        }
+                    }
+                    Err(error) => {
+                        match error.get_error_aggregator() {
                             ErrorAggregator::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
@@ -2314,7 +2360,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -2366,103 +2411,110 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataResetPasswordByLastStep>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
-                if let Err(error) = ActionHandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data).await {
-                    match error.get_error_aggregator() {
-                        ErrorAggregator::EntityError { entity_error } => {
-                            match entity_error {
-                                EntityError::ApplicationUserError { application_user_error } => {
-                                    match application_user_error {
-                                        ApplicationUserError::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserError::InvalidPassword => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
-        
+                match ActionHandlerResetPasswordByLastStep::handle(postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data).await {
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
                                     }
                                 }
-                                EntityError::ApplicationUserResetPasswordTokenError { application_user_reset_password_token_error } => {
-                                    match application_user_reset_password_token_error {
-                                        ApplicationUserResetPasswordTokenError::InvalidValue => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
+                            }
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
+                                        match application_user_workflow_event {
+                                            ApplicationUserWorkflowEvent::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
                                                 }
                                             }
-                                        }
-                                        ApplicationUserResetPasswordTokenError::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
+                                            ApplicationUserWorkflowEvent::InvalidPassword => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_INVALID_PASSWORD)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
                                                 }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
+            
+                                        }
+                                    }
+                                    EntityWorkflowEvent::ApplicationUserResetPasswordTokenWorkflowEvent { application_user_reset_password_token_workflow_event } => {
+                                        match application_user_reset_password_token_workflow_event {
+                                            ApplicationUserResetPasswordTokenWorkflowEvent::InvalidValue => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            ApplicationUserResetPasswordTokenWorkflowEvent::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                                _ => {
-                                    unreachable!("TODO");
+                                    _ => {
+                                        unreachable!("TODO");
+                                    }
                                 }
                             }
                         }
-                        ErrorAggregator::InvalidArgumentError => {
-                            return ActionResponseCreator::create_bad_request();
-                        }
-                        ErrorAggregator::LogicError { logic_error: _ } |
-                        ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                            // log::error!("{}", error);
-        
-                            return ActionResponseCreator::create_internal_server_error();
-                        }
-                    }
-                }
-
-                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
-                    Ok(data) => {
-                        return ActionResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
-
-                        return ActionResponseCreator::create_internal_server_error();
+                        match error.get_error_aggregator() {
+                            ErrorAggregator::InvalidArgumentError => {
+                                return ActionResponseCreator::create_bad_request();
+                            }
+                            ErrorAggregator::LogicError { logic_error: _ } |
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
+            
+                                return ActionResponseCreator::create_internal_server_error();
+                            }
+                        }
                     }
                 }
             }
@@ -2532,7 +2584,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
@@ -2584,79 +2635,86 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForResetPassword>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
-                if let Err(error) = ActionHandlerSendEmailForResetPassword::handle(
+                match ActionHandlerSendEmailForResetPassword::handle(
                     environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    match error.get_error_aggregator() {
-                        ErrorAggregator::EntityError { entity_error } => {
-                            match entity_error {
-                                EntityError::ApplicationUserError { application_user_error } => {
-                                    match application_user_error {
-                                        ApplicationUserError::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
                                     }
                                 }
-                                EntityError::ApplicationUserResetPasswordTokenError { application_user_reset_password_token_error } => {
-                                    match application_user_reset_password_token_error {
-                                        ApplicationUserResetPasswordTokenError::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-                            
-                                                    return ActionResponseCreator::create_internal_server_error();
+                            }
+                            ActionHandlerResult::EntityWorkflowEvent { entity_workflow_event } => {
+                                match entity_workflow_event {
+                                    EntityWorkflowEvent::ApplicationUserWorkflowEvent { application_user_workflow_event } => {
+                                        match application_user_workflow_event {
+                                            ApplicationUserWorkflowEvent::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
                                                 }
                                             }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
                                         }
                                     }
-                                }
-                                _ => {
-                                    unreachable!("TODO");
+                                    EntityWorkflowEvent::ApplicationUserResetPasswordTokenWorkflowEvent { application_user_reset_password_token_workflow_event } => {
+                                        match application_user_reset_password_token_workflow_event {
+                                            ApplicationUserResetPasswordTokenWorkflowEvent::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
+                                        }
+                                    }
+                                    _ => {
+                                        unreachable!("TODO");
+                                    }
                                 }
                             }
                         }
-                        ErrorAggregator::InvalidArgumentError => {
-                            return ActionResponseCreator::create_bad_request();
-                        }
-                        ErrorAggregator::LogicError { logic_error: _ } |
-                        ErrorAggregator::RunTimeError { run_time_error: _ } => {
-                            // log::error!("{}", error);
-        
-                            return ActionResponseCreator::create_internal_server_error();
-                        }
-                    }
-                }
-        
-                match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
-                    Ok(data) => {
-                        return ActionResponseCreator::create_ok(data);
                     }
                     Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
-
-                        return ActionResponseCreator::create_internal_server_error();
+                        match error.get_error_aggregator() {
+                            ErrorAggregator::InvalidArgumentError => {
+                                return ActionResponseCreator::create_bad_request();
+                            }
+                            ErrorAggregator::LogicError { logic_error: _ } |
+                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
+            
+                                return ActionResponseCreator::create_internal_server_error();
+                            }
+                        }
                     }
                 }
             }
@@ -2726,7 +2784,6 @@ impl Authorization {
                             }
                             Err(error) => {
                                 match error.get_error_aggregator() {
-                                    ErrorAggregator::EntityError { entity_error: _ } |
                                     ErrorAggregator::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
