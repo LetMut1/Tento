@@ -3,9 +3,8 @@ use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
 use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::_new_for_context::base::Base as ActionHandlerIncomingData;
-use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
-use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::_new_for_context::base::Base as ActionHandlerOutcomingDataCheckNicknameForExisting;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::_new_for_context::request_response_data_encoding_protocol_wrapper::_new_for_context::base::Base as ActionHandlerIncomingData;
+use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::_new_for_context::request_response_data_encoding_protocol_wrapper::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
@@ -13,7 +12,6 @@ use crate::infrastructure_layer::error::error_auditor::_component::simple_backtr
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::unified_report::unified_report::UnifiedReport;
-use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization;
 use http::header;
 use http::HeaderValue;
 use http::StatusCode;
@@ -21,6 +19,8 @@ use hyper::Body;
 use hyper::body::to_bytes;
 use hyper::Request;
 use hyper::Response;
+use serde::Deserialize;
+use serde::Serialize;
 use std::clone::Clone;
 use std::convert::From;
 use std::future::Future;
@@ -33,25 +33,27 @@ use tokio_postgres::tls::TlsConnect;
 pub struct RequestResponseDataEncodingProtocolWrapper;
 
 impl RequestResponseDataEncodingProtocolWrapper {
-    pub async fn handle<'a, 'b, T, FO, F>(
+    pub async fn handle<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        action_handler_incoming_data: ActionHandlerIncomingData,
+        action_handler_incoming_data: ActionHandlerIncomingData<AHID>,
         wrapped_action: FO
-    ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
+    ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData<AHOD>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         FO: FnOnce(
-            &'b EnvironmentConfigurationResolver,
+            &'a EnvironmentConfigurationResolver,
             Request<Body>,
             Pool<PostgresqlConnectionManager<T>>,
             Pool<RedisConnectionManager>
         ) -> F,
-        F : Future<Output = Response<Body>>
+        F : Future<Output = Response<Body>>,
+        AHID: Serialize + for<'de> Deserialize<'de>,
+        AHOD: Serialize + for<'de> Deserialize<'de>
     {
         let (
             mut request_parts,
@@ -75,9 +77,9 @@ impl RequestResponseDataEncodingProtocolWrapper {
 
         let request = Request::from_parts(request_parts, Body::from(data));
         
-        let response = Authorization::check_nickname_for_existing(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+        let response = wrapped_action(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
 
-        let action_handler_outcoming_data: ActionHandlerOutcomingData;
+        let action_handler_outcoming_data: ActionHandlerOutcomingData<AHOD>;
 
         let (
             response_parts,
@@ -87,7 +89,7 @@ impl RequestResponseDataEncodingProtocolWrapper {
         if response_parts.status == StatusCode::OK {
             match to_bytes(body).await {
                 Ok(bytes) => {
-                    match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<ActionHandlerOutcomingDataCheckNicknameForExisting>>(bytes.chunk()) {
+                    match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<AHOD>>(bytes.chunk()) {
                         Ok(unified_report) => {
                             action_handler_outcoming_data = ActionHandlerOutcomingData::new(response_parts, Some(unified_report));
                         }

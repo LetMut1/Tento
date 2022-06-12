@@ -3,6 +3,8 @@ use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
 use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::_new_for_context::request_response_data_encoding_protocol_wrapper::_new_for_context::base::Base as ActionHandlerIncomingData;
+use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::_new_for_context::request_response_data_encoding_protocol_wrapper::RequestResponseDataEncodingProtocolWrapper as RequestResponseDataEncodingProtocolWrapperActionHandler;
 use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use hyper::Body;
@@ -10,6 +12,8 @@ use hyper::body::HttpBody;
 use hyper::body::to_bytes;
 use hyper::Request;
 use hyper::Response;
+use serde::Deserialize;
+use serde::Serialize;
 use std::clone::Clone;
 use std::convert::From;
 use std::future::Future;
@@ -21,14 +25,11 @@ use super::request_header_checker::RequestHeaderChecker;
 use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as ActionHandlerCheckNicknameForExisting_;
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckNicknameForExisting_;
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckNicknameForExisting;
 
 pub struct RequestResponseDataEncodingProtocolWrapper;
 
 impl RequestResponseDataEncodingProtocolWrapper {
-    pub async fn wrap_to_json<'a, 'b, T, FO, F>(
+    pub async fn wrap_to_json<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
@@ -41,12 +42,14 @@ impl RequestResponseDataEncodingProtocolWrapper {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         FO: FnOnce(
-            &'b EnvironmentConfigurationResolver,
+            &'a EnvironmentConfigurationResolver,
             Request<Body>,
             Pool<PostgresqlConnectionManager<T>>,
             Pool<RedisConnectionManager>
         ) -> F,
-        F : Future<Output = Response<Body>>
+        F : Future<Output = Response<Body>>,
+        AHID: Serialize + for<'de> Deserialize<'de>,
+        AHOD: Serialize + for<'de> Deserialize<'de>
     {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
@@ -59,13 +62,14 @@ impl RequestResponseDataEncodingProtocolWrapper {
 
         match to_bytes(body).await {
             Ok(bytes) => {
-                match serde_json::from_slice::<'_, ActionHandlerIncomingDataCheckNicknameForExisting>(bytes.chunk()) {
-                    Ok(action_handler_incoming_data) => {
-                        match ActionHandlerCheckNicknameForExisting_::handle(
+                match serde_json::from_slice::<'_, AHID>(bytes.chunk()) {
+                    Ok(wrapped_action_handler_incoming_data) => {
+                        match RequestResponseDataEncodingProtocolWrapperActionHandler::handle::<'_, _, _, _, AHID, AHOD>(
                             environment_configuration_resolver,
                             postgresql_connection_pool,
                             redis_connection_pool,
-                            ActionHandlerIncomingDataCheckNicknameForExisting_::new(request_parts, action_handler_incoming_data)
+                            ActionHandlerIncomingData::new(request_parts, wrapped_action_handler_incoming_data),
+                            wrapped_action
                         ).await {
                             Ok(action_handler_result) => {
                                 match action_handler_result {

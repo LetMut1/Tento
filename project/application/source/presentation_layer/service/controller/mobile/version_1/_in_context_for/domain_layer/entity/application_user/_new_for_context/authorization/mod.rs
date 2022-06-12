@@ -43,7 +43,6 @@ use crate::infrastructure_layer::error::error_auditor::_component::base_error::b
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::service::action_response_creator::ActionResponseCreator;
 use crate::presentation_layer::service::request_header_checker::RequestHeaderChecker;
-use crate::presentation_layer::service::request_response_data_encoding_protocol_wrapper::RequestResponseDataEncodingProtocolWrapper;
 use crate::presentation_layer::service::unified_report_creator::UnifiedReportCreator;
 use hyper::Body;
 use hyper::body::HttpBody;
@@ -59,6 +58,26 @@ use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::presentation_layer::service::request_response_data_encoding_protocol_wrapper::RequestResponseDataEncodingProtocolWrapper;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing::base::_new_for_context::base::Base as ActionHandlerOutcomingDataCheckNicknameForExisting;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::_new_for_context::base::Base as ActionHandlerOutcomingDataCheckEmailForExisting;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::_new_for_context::base::Base as ActionHandlerOutcomingDataRegisterByLastStep;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerOutcomingDataLogInByFirstStep;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::_new_for_context::base::Base as ActionHandlerOutcomingDataLogInByLastStep;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::_new_for_context::base::Base as ActionHandlerOutcomingDataRefreshJsonAccessWebToken;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::_new_for_context::base::Base as ActionHandlerOutcomingDataResetPasswordByFirstStep;
+
+
+
+
+
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing_::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckEmailForExisting_;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckNicknameForExisting_;
@@ -222,7 +241,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataCheckNicknameForExisting, ActionHandlerOutcomingDataCheckNicknameForExisting>(
             environment_configuration_resolver,
             request,
             postgresql_connection_pool,
@@ -336,77 +355,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataCheckEmailForExisting>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerCheckEmailForExisting_::handle(
-        //                     environment_configuration_resolver,
-        //                     postgresql_connection_pool, 
-        //                     ActionHandlerIncomingDataCheckEmailForExisting_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataCheckEmailForExisting, ActionHandlerOutcomingDataCheckEmailForExisting>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::check_email_for_existing
+        ).await;
     }
 
     pub async fn register_by_first_step<'a, T>(
@@ -529,78 +484,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataRegisterByFirstStep>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerRegisterByFirstStep_::handle(
-        //                     environment_configuration_resolver,
-        //                     postgresql_connection_pool,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataRegisterByFirstStep_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataRegisterByFirstStep, ()>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::register_by_first_step
+        ).await;
     }
 
     pub async fn register_by_last_step<'a, T>(
@@ -783,78 +673,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataRegisterByLastStep>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerRegisterByLastStep_::handle(
-        //                     environment_configuration_resolver,
-        //                     postgresql_connection_pool,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataRegisterByLastStep_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataRegisterByLastStep, ActionHandlerOutcomingDataRegisterByLastStep>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::register_by_last_step
+        ).await;
     }
 
     pub async fn send_email_for_register<'a, T>(
@@ -964,77 +789,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForRegister>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerSendEmailForRegister_::handle(
-        //                     environment_configuration_resolver,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataSendEmailForRegister_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataSendEmailForRegister, ()>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::send_email_for_register
+        ).await;
     }
 
     pub async fn log_in_by_first_step<'a, T>(
@@ -1146,78 +907,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogInByFirstStep>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerLogInByFirstStep_::handle(
-        //                     environment_configuration_resolver,
-        //                     postgresql_connection_pool,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataLogInByFirstStep_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataLogInByFirstStep, ActionHandlerOutcomingDataLogInByFirstStep>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::log_in_by_first_step
+        ).await;
     }
 
     pub async fn log_in_by_last_step<'a, T>(
@@ -1337,77 +1033,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogInByLastStep>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerLogInByLastStep_::handle(
-        //                     environment_configuration_resolver,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataLogInByLastStep_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataLogInByLastStep, ActionHandlerOutcomingDataLogInByLastStep>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::log_in_by_last_step
+        ).await;
     }
 
     pub async fn send_email_for_log_in<'a, T>(
@@ -1537,78 +1169,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForLogIn>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerSendEmailForLogIn_::handle(
-        //                     environment_configuration_resolver,
-        //                     postgresql_connection_pool,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataSendEmailForLogIn_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataSendEmailForLogIn, ()>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::send_email_for_log_in
+        ).await;
     }
 
     pub async fn refresh_json_access_web_token<'a, T>(
@@ -1735,77 +1302,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataRefreshJsonAccessWebToken>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerRefreshJsonAccessWebToken_::handle(
-        //                     environment_configuration_resolver,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataRefreshJsonAccessWebToken_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataRefreshJsonAccessWebToken, ActionHandlerOutcomingDataRefreshJsonAccessWebToken>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::refresh_json_access_web_token
+        ).await;
     }
 
     pub async fn log_out_from_one_device<'a, T>(
@@ -1946,77 +1449,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogOutFromOneDevice>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerLogOutFromOneDevice_::handle(
-        //                     environment_configuration_resolver,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataLogOutFromOneDevice_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataLogOutFromOneDevice, ()>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::log_out_from_one_device
+        ).await;
     }
 
     pub async fn log_out_from_all_devices<'a, T>(
@@ -2157,77 +1596,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataLogOutFromAllDevices>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerLogOutFromAllDevices_::handle(
-        //                     environment_configuration_resolver,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataLogOutFromAllDevices_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataLogOutFromAllDevices, ()>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::log_out_from_all_devices
+        ).await;
     }
 
     pub async fn reset_password_by_first_step<'a, T>(
@@ -2337,78 +1712,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataResetPasswordByFirstStep>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerResetPasswordByFirstStep_::handle(
-        //                     environment_configuration_resolver,
-        //                     postgresql_connection_pool,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataResetPasswordByFirstStep_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data{
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataResetPasswordByFirstStep, ActionHandlerOutcomingDataResetPasswordByFirstStep>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::reset_password_by_first_step
+        ).await;
     }
 
     pub async fn reset_password_by_last_step<'a, T>(
@@ -2562,78 +1872,13 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataResetPasswordByLastStep>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerResetPasswordByLastStep_::handle(
-        //                     environment_configuration_resolver,
-        //                     postgresql_connection_pool,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataResetPasswordByLastStep_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataResetPasswordByLastStep, ()>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::reset_password_by_last_step
+        ).await;
     }
 
     pub async fn send_email_for_reset_password<'a, T>(
@@ -2763,77 +2008,12 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // if !RequestHeaderChecker::is_valid(&request) {
-        //     return ActionResponseCreator::create_bad_request();
-        // }
-        
-        // let (
-        //     request_parts,
-        //     body
-        // ) = request.into_parts();
-
-        // match to_bytes(body).await {
-        //     Ok(bytes) => {
-        //         match serde_json::from_slice::<'_, ActionHandlerIncomingDataSendEmailForResetPassword>(bytes.chunk()) {
-        //             Ok(action_handler_incoming_data) => {
-        //                 match ActionHandlerSendEmailForResetPassword_::handle(
-        //                     environment_configuration_resolver,
-        //                     postgresql_connection_pool,
-        //                     redis_connection_pool,
-        //                     ActionHandlerIncomingDataSendEmailForResetPassword_::new(request_parts, action_handler_incoming_data)
-        //                 ).await {
-        //                     Ok(action_handler_outcoming_data) => {
-        //                         let (
-        //                             response_parts,
-        //                             convertible_data
-        //                         ) = action_handler_outcoming_data.into_inner();
-
-        //                         match convertible_data {
-        //                             Some(unified_report) => {
-        //                                 match serde_json::to_vec(&unified_report) {
-        //                                     Ok(data) => {
-        //                                         return Response::from_parts(response_parts, Body::from(data));
-        //                                     }
-        //                                     Err(error) => {
-        //                                         // log::error!("{}", ErrorAuditor::from(error));
-                        
-        //                                         return ActionResponseCreator::create_internal_server_error();
-        //                                     }
-        //                                 }
-        //                             }
-        //                             None => {
-        //                                 return Response::from_parts(response_parts, Body::empty());
-        //                             }
-        //                         }
-        //                     }
-        //                     Err(error) => {
-        //                         match error.get_base_error() {
-        //                             BaseError::InvalidArgumentError => {
-        //                                 unreachable!("TODO");
-        //                             }
-        //                             BaseError::LogicError { logic_error: _ } |
-        //                             BaseError::RunTimeError { run_time_error: _ } => {
-        //                                 // log::error!("{}", error);
-                
-        //                                 return ActionResponseCreator::create_internal_server_error();
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             Err(error) => {
-        //                 // log::error!("{}", ErrorAuditor::from(error));
-        
-        //                 return ActionResponseCreator::create_internal_server_error();
-        //             }
-        //         }
-        //     }
-        //     Err(error) => {
-        //         // log::error!("{}", ErrorAuditor::from(error));
-
-        //         return ActionResponseCreator::create_internal_server_error();
-        //     }
-        // }
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataSendEmailForResetPassword, ()>(
+            environment_configuration_resolver,
+            request,
+            postgresql_connection_pool,
+            redis_connection_pool,
+            Self::send_email_for_reset_password
+        ).await;
     }
 }
