@@ -30,15 +30,15 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
-pub struct RequestResponseDataEncodingProtocolWrapper;
+pub struct ActionRaoundParameterExtractor;
 
-impl RequestResponseDataEncodingProtocolWrapper {
+impl ActionRaoundParameterExtractor {
     pub async fn handle<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData<AHID>,
-        wrapped_action: FO
+        action: FO
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData<AHOD>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -77,7 +77,7 @@ impl RequestResponseDataEncodingProtocolWrapper {
 
         let request = Request::from_parts(request_parts, Body::from(data));
         
-        let response = wrapped_action(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+        let response = action(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
 
         let action_handler_outcoming_data: ActionHandlerOutcomingData<AHOD>;
 
