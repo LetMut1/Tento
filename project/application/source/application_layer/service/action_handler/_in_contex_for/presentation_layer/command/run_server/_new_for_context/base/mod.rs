@@ -2,11 +2,11 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use crate::_code_optimization::PostgresqlConnectionPool;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::logic_error::LogicError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::other_error::OtherError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::logic_error::LogicError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::_component::other_error::OtherError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -75,7 +75,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -95,7 +95,7 @@ impl Base {
                     if let Err(error) = dotenv::from_path(production_environment_file_path_buffer.as_path()) {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -108,7 +108,7 @@ impl Base {
                         if let Err(error) = dotenv::from_path(development_local_environment_file_path_buffer.as_path()) {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -119,7 +119,7 @@ impl Base {
                             if let Err(error) = dotenv::from_path(development_environment_file_path_buffer.as_path()) {
                                 return Err(
                                     ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -127,7 +127,7 @@ impl Base {
                         } else {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::LogicError { logic_error: LogicError::new(false, "Any ....env files does not exist.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "Any ....env files does not exist.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -151,7 +151,7 @@ impl Base {
                                     None => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::LogicError { logic_error: LogicError::new(false, "Invalid socket address.") },
+                                                BaseError::LogicError { logic_error: LogicError::new(false, "Invalid socket address.") },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -161,7 +161,7 @@ impl Base {
                             Err(error) => {
                                 return Err(
                                     ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -171,7 +171,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -188,7 +188,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -205,7 +205,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -222,7 +222,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -239,7 +239,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -256,7 +256,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -275,7 +275,7 @@ impl Base {
                             Err(error) => {
                                 return Err(
                                     ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -285,7 +285,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -304,7 +304,7 @@ impl Base {
                             Err(error) => {
                                 return Err(
                                     ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -314,7 +314,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -335,7 +335,7 @@ impl Base {
                                     None => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::LogicError { logic_error: LogicError::new(false, "Invalid socket address.") },
+                                                BaseError::LogicError { logic_error: LogicError::new(false, "Invalid socket address.") },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -345,7 +345,7 @@ impl Base {
                             Err(error) => {
                                 return Err(
                                     ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -355,7 +355,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -380,7 +380,7 @@ impl Base {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::LogicError { logic_error: LogicError::new(false, "The directory does not exist.") },
+                        BaseError::LogicError { logic_error: LogicError::new(false, "The directory does not exist.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -417,7 +417,7 @@ impl Base {
                                 if let Err(error) = log4rs::init_config(config) {
                                     return Err(
                                         ErrorAuditor::new(
-                                            ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                            BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                             BacktracePart::new(line!(), file!(), None)
                                         )
                                     );
@@ -428,7 +428,7 @@ impl Base {
                             Err(error) => {
                                 return Err(
                                     ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -438,7 +438,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -448,7 +448,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error.root_cause()) } },
+                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error.root_cause()) } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -477,7 +477,7 @@ impl Base {
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
-                            ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                             BacktracePart::new(line!(), file!(), None)
                         )
                     );
@@ -532,7 +532,7 @@ impl Base {
                             .await {
                                 return Err(
                                     ErrorAuditor::new(
-                                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -543,7 +543,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -553,7 +553,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

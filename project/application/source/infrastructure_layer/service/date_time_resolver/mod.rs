@@ -1,10 +1,10 @@
 use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::logic_error::LogicError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::other_error::OtherError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::logic_error::LogicError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::_component::other_error::OtherError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 
@@ -23,7 +23,7 @@ impl DateTimeResolver {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -49,7 +49,7 @@ impl DateTimeResolver {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::LogicError { logic_error: LogicError::new(false, "Too big date must not be added.") },
+                        BaseError::LogicError { logic_error: LogicError::new(false, "Too big date must not be added.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

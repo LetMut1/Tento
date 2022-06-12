@@ -2,23 +2,23 @@ use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
-use super::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use super::_component::base_error::base_error::BaseError;
 use super::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use super::_component::simple_backtrace::simple_backtrace::SimpleBacktrace;
 
 #[derive(Debug)]
 pub struct ErrorAuditor {
-    error_aggregator: ErrorAggregator,
+    base_error: BaseError,
     simple_backtrace: SimpleBacktrace
 }
 
 impl ErrorAuditor {
     pub fn new(
-        error_aggregator: ErrorAggregator,
+        base_error: BaseError,
         backtrace_part: BacktracePart
     ) -> Self {
         return Self {
-            error_aggregator,
+            base_error,
             simple_backtrace: SimpleBacktrace::new(backtrace_part)
         };
     }
@@ -32,10 +32,10 @@ impl ErrorAuditor {
         return ();
     }
 
-    pub fn get_error_aggregator(
+    pub fn get_base_error(
         self
-    ) -> ErrorAggregator {
-        return self.error_aggregator;
+    ) -> BaseError {
+        return self.base_error;
     }
 }
 

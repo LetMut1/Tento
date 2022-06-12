@@ -39,11 +39,11 @@ use crate::application_layer::service::action_handler::_in_contex_for::presentat
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Base as ActionHandlerSendEmailForRegister;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Base as ActionHandlerSendEmailForResetPassword;
 use crate::domain_layer::service::_in_context_for::domain_layer::error::_new_for_context::communication_code_storage::CommunicationCodeStorage;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::presentation_layer::service::unified_report_creator::UnifiedReportCreator;
-use crate::presentation_layer::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::service::action_response_creator::ActionResponseCreator;
+use crate::presentation_layer::service::request_header_checker::RequestHeaderChecker;
+use crate::presentation_layer::service::unified_report_creator::UnifiedReportCreator;
 use hyper::Body;
 use hyper::body::HttpBody;
 use hyper::body::to_bytes;
@@ -185,12 +185,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
         
                                 return ActionResponseCreator::create_internal_server_error();
@@ -262,12 +262,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -359,12 +359,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
         
                                 return ActionResponseCreator::create_internal_server_error();
@@ -437,12 +437,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -551,12 +551,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } | 
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } | 
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
             
                                 return ActionResponseCreator::create_internal_server_error();
@@ -630,12 +630,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -804,12 +804,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
         
                                 return ActionResponseCreator::create_internal_server_error();
@@ -883,12 +883,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -977,12 +977,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
             
                                 return ActionResponseCreator::create_internal_server_error();
@@ -1048,12 +1048,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -1151,12 +1151,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
             
                                 return ActionResponseCreator::create_internal_server_error();
@@ -1230,12 +1230,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -1334,12 +1334,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
         
                                 return ActionResponseCreator::create_internal_server_error();
@@ -1405,12 +1405,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -1526,12 +1526,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
             
                                 return ActionResponseCreator::create_internal_server_error();
@@ -1605,12 +1605,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -1716,12 +1716,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
         
                                 return ActionResponseCreator::create_internal_server_error();
@@ -1787,12 +1787,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -1912,12 +1912,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
     
                                 return ActionResponseCreator::create_internal_server_error();
@@ -1983,12 +1983,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -2108,12 +2108,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
     
                                 return ActionResponseCreator::create_internal_server_error();
@@ -2179,12 +2179,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -2280,12 +2280,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
             
                                 return ActionResponseCreator::create_internal_server_error();
@@ -2359,12 +2359,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -2504,12 +2504,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
             
                                 return ActionResponseCreator::create_internal_server_error();
@@ -2583,12 +2583,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();
@@ -2704,12 +2704,12 @@ impl Authorization {
                         }
                     }
                     Err(error) => {
-                        match error.get_error_aggregator() {
-                            ErrorAggregator::InvalidArgumentError => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
                                 return ActionResponseCreator::create_bad_request();
                             }
-                            ErrorAggregator::LogicError { logic_error: _ } |
-                            ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
             
                                 return ActionResponseCreator::create_internal_server_error();
@@ -2783,12 +2783,12 @@ impl Authorization {
                                 }
                             }
                             Err(error) => {
-                                match error.get_error_aggregator() {
-                                    ErrorAggregator::InvalidArgumentError => {
+                                match error.get_base_error() {
+                                    BaseError::InvalidArgumentError => {
                                         unreachable!("TODO");
                                     }
-                                    ErrorAggregator::LogicError { logic_error: _ } |
-                                    ErrorAggregator::RunTimeError { run_time_error: _ } => {
+                                    BaseError::LogicError { logic_error: _ } |
+                                    BaseError::RunTimeError { run_time_error: _ } => {
                                         // log::error!("{}", error);
                 
                                         return ActionResponseCreator::create_internal_server_error();

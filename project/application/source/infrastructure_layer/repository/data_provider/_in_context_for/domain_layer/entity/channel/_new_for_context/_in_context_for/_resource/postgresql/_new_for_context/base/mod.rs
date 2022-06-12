@@ -2,9 +2,9 @@ use crate::application_layer::data_transfer_object::action_handler_outcoming_dat
 use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_id_registry::base::_new_for_context::base::_component::channel::Channel as ActionHandlerOutcomingDataGetManyByIdRegistryChannel;
 use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_new_for_context::base::_component::channel::Channel as ActionHandlerOutcomingDataGetManyByNameChannel;
 use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::_new_for_context::base::_component::channel::Channel as ActionHandlerOutcomingDataGetManyBySubscribersQuantityChannel;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::_in_context_for::infrastructure_layer::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::order_convention_resolver::OrderConventionResolver;
@@ -102,7 +102,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -117,7 +117,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -132,7 +132,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -147,7 +147,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -162,7 +162,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -177,7 +177,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -192,7 +192,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -207,7 +207,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -222,7 +222,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -252,7 +252,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -262,7 +262,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -306,7 +306,7 @@ impl Base {
                 } else {
                     return Err(
                         ErrorAuditor::new(
-                            ErrorAggregator::InvalidArgumentError,
+                            BaseError::InvalidArgumentError,
                             BacktracePart::new(line!(), file!(), None)
                         )
                     );
@@ -368,7 +368,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -383,7 +383,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -398,7 +398,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -413,7 +413,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -428,7 +428,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -443,7 +443,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -458,7 +458,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -473,7 +473,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -488,7 +488,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -518,7 +518,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -528,7 +528,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -565,7 +565,7 @@ impl Base {
                 } else {
                     return Err(
                         ErrorAuditor::new(
-                            ErrorAggregator::InvalidArgumentError,
+                            BaseError::InvalidArgumentError,
                             BacktracePart::new(line!(), file!(), None)
                         )
                     );
@@ -627,7 +627,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -642,7 +642,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -665,7 +665,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -675,7 +675,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -725,7 +725,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -740,7 +740,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -755,7 +755,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -770,7 +770,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -785,7 +785,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -800,7 +800,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -815,7 +815,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -830,7 +830,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -845,7 +845,7 @@ impl Base {
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
-                                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                                 BacktracePart::new(line!(), file!(), None)
                                             )
                                         );
@@ -875,7 +875,7 @@ impl Base {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -885,7 +885,7 @@ impl Base {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

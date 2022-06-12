@@ -1,7 +1,7 @@
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::_component::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::_component::run_time_error::run_time_error::RunTimeError;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::_component::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -44,7 +44,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                         Err(error) => {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError {
+                                    BaseError::RunTimeError {
                                         run_time_error: RunTimeError::ResourceError {
                                             resource_error: ResourceError::EmailServerError {
                                                 email_server_error: EmailServerError::SmtpError {
@@ -66,7 +66,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                         Err(error) => {
                             return Err(
                                 ErrorAuditor::new(
-                                    ErrorAggregator::RunTimeError {
+                                    BaseError::RunTimeError {
                                         run_time_error: RunTimeError::ResourceError {
                                             resource_error: ResourceError::EmailServerError {
                                                 email_server_error: EmailServerError::SmtpError {
@@ -84,7 +84,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                 if let Err(error) = smtp_client.transport().send(email.into()) {
                     return Err(
                         ErrorAuditor::new(
-                            ErrorAggregator::RunTimeError {
+                            BaseError::RunTimeError {
                                 run_time_error: RunTimeError::ResourceError {
                                     resource_error: ResourceError::EmailServerError {
                                         email_server_error: EmailServerError::SmtpError {
@@ -103,7 +103,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        ErrorAggregator::RunTimeError {
+                        BaseError::RunTimeError {
                             run_time_error: RunTimeError::ResourceError {
                                 resource_error: ResourceError::EmailServerError {
                                     email_server_error: EmailServerError::EmailError {

@@ -1,5 +1,5 @@
 pub struct OrderConventionResolver;
-use crate::infrastructure_layer::error::error_auditor::_component::error_aggregator::error_aggregator::ErrorAggregator;
+use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 
@@ -41,7 +41,7 @@ impl OrderConventionResolver {
 
         return Err(
             ErrorAuditor::new(
-                ErrorAggregator::InvalidArgumentError,
+                BaseError::InvalidArgumentError,
                 BacktracePart::new(line!(), file!(), None)
             )
         );
