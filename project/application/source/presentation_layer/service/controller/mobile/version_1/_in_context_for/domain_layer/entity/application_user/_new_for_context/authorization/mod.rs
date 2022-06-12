@@ -74,66 +74,6 @@ use crate::application_layer::data_transfer_object::action_handler_outcoming_dat
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::_new_for_context::base::Base as ActionHandlerOutcomingDataResetPasswordByFirstStep;
 
-
-
-
-
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing_::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckEmailForExisting_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::check_nickname_for_existing_::base::_new_for_context::base::Base as ActionHandlerIncomingDataCheckNicknameForExisting_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogInByFirstStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogInByLastStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_one_device_::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogOutFromOneDevice_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices_::base::_new_for_context::base::Base as ActionHandlerIncomingDataLogOutFromAllDevices_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token_::base::_new_for_context::base::Base as ActionHandlerIncomingDataRefreshJsonAccessWebToken_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataRegisterByFirstStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataRegisterByLastStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordByFirstStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step_::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordByLastStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_log_in_::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForLogIn_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register_::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForRegister_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_reset_password_::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForResetPassword_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickaname_for_existing_::base::Base as ActionHandlerCheckNicknameForExisting_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing_::base::Base as ActionHandlerCheckEmailForExisting_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step_::base::Base as ActionHandlerLogInByFirstStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step_::base::Base as ActionHandlerLogInByLastStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices_::base::Base as ActionHandlerLogOutFromAllDevices_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_one_device_::base::Base as ActionHandlerLogOutFromOneDevice_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token_::base::Base as ActionHandlerRefreshJsonAccessWebToken_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step_::base::Base as ActionHandlerRegisterByFirstStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step_::base::Base as ActionHandlerRegisterByLastStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step_::base::Base as ActionHandlerResetPasswordByFirstStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step_::base::Base as ActionHandlerResetPasswordByLastStep_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in_::base::Base as ActionHandlerSendEmailForLogIn_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register_::base::Base as ActionHandlerSendEmailForRegister_;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password_::base::Base as ActionHandlerSendEmailForResetPassword_;
-
 pub struct Authorization;
 
 impl Authorization {
