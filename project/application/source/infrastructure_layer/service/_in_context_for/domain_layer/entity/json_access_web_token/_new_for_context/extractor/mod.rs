@@ -1,7 +1,6 @@
-use crate::domain_layer::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
-use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
+use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::extractor::_new_for_context::result::Result as ExtractorResult;
 use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::repository::data_provider::_in_context_for::domain_layer::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonAccessWebTokenBlackListDataProviderRedis;
@@ -15,53 +14,42 @@ impl Extractor {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         json_access_web_token_classic_form: &'a str,
         connection: &'a mut Connection
-    ) -> Result<JsonAccessWebToken<'static>, ErrorAuditor> {
-        todo!();
-        // match SerializationFormResolver::deserialize(environment_configuration_resolver, json_access_web_token_classic_form) {
-        //     Ok(json_access_web_token) => {
-        //         match ExpirationTimeResolver::is_expired(&json_access_web_token) {
-        //             Ok(is_expired) => {
-        //                 if !is_expired {
-        //                     match JsonAccessWebTokenBlackListDataProviderRedis::is_exist_by_json_access_token_id(connection, json_access_web_token.get_id()).await {
-        //                         Ok(is_exist_by_json_access_token_id) => {
-        //                             if !is_exist_by_json_access_token_id {
-        //                                 return Ok(json_access_web_token);
-        //                             }
+    ) -> Result<ExtractorResult, ErrorAuditor> {
+        match SerializationFormResolver::deserialize(environment_configuration_resolver, json_access_web_token_classic_form) {
+            Ok(json_access_web_token) => {
+                match ExpirationTimeResolver::is_expired(&json_access_web_token) {
+                    Ok(is_expired) => {
+                        if !is_expired {
+                            match JsonAccessWebTokenBlackListDataProviderRedis::is_exist_by_json_access_token_id(connection, json_access_web_token.get_id()).await {
+                                Ok(is_exist_by_json_access_token_id) => {
+                                    if !is_exist_by_json_access_token_id {
+                                        return Ok(ExtractorResult::JsonAccessWebToken { json_access_web_token });
+                                    }
                         
-        //                             return Err(
-        //                                 ErrorAuditor::new(
-        //                                     ErrorAggregator::EntityError { entity_error: EntityError::JsonAccessWebTokenError { json_access_web_token_error: JsonAccessWebTokenError::InJsonAccessWebTokenBlackList } },
-        //                                     BacktracePart::new(line!(), file!(), None)
-        //                                 )
-        //                             );
-        //                         }
-        //                         Err(mut error) => {
-        //                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                    return Ok(ExtractorResult::JsonAccessWebTokenInJsonAccessWebTokenBlackList);
+                                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                     
-        //                             return Err(error);
-        //                         }
-        //                     }
-        //                 }
+                                    return Err(error);
+                                }
+                            }
+                        }
                 
-        //                 return Err(
-        //                     ErrorAuditor::new(
-        //                         ErrorAggregator::EntityError { entity_error: EntityError::JsonAccessWebTokenError { json_access_web_token_error: JsonAccessWebTokenError::AlreadyExpired } },
-        //                         BacktracePart::new(line!(), file!(), None)
-        //                     )
-        //                 );
-        //             }
-        //             Err(mut error) => {
-        //                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        return Ok(ExtractorResult::JsonAccessWebTokenAlreadyExpired);
+                    }
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
         
-        //                 return Err(error);
-        //             }
-        //         }
-        //     }
-        //     Err(mut error) => {
-        //         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        return Err(error);
+                    }
+                }
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-        //         return Err(error);
-        //     }
-        // }
+                return Err(error);
+            }
+        }
     }
 }

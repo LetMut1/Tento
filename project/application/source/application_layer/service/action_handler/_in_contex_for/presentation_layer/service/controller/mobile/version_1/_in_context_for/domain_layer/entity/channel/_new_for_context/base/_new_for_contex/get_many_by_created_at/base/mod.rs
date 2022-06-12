@@ -2,8 +2,10 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_exception::JsonAccessWebTokenWorkflowException;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::_new_for_context::get_many_by_created_at::base::_new_for_context::base::base::Base as ActionHandlerOutcomingData;
+use crate::infrastructure_layer::data_transfer_object::_in_context_for::infrastructure_layer::service::_in_context_for::domain_layer::entity::json_access_web_token::_new_for_context::extractor::_new_for_context::result::Result as ExtractorResult;
 use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
@@ -48,53 +50,63 @@ impl Base {
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
                 match Extractor::extract(environment_configuration_resolver, json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
-                    Ok(_json_access_web_token_) => {
-                        if let Some(ref channel_created_at_) = channel_created_at {
-                            if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        BaseError::InvalidArgumentError,
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
-                            }
-                        }
-                
-                        if !OrderConventionResolver::can_convert(order) {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::InvalidArgumentError,
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                
-                        if limit <= 0 || limit > Self::LIMIT {
-                            limit = Self::LIMIT;
-                        }
-        
-                        match postgresql_connection_pool.get().await {
-                            Ok(mut postgresql_pooled_connection) => {
-                                match ChannelDataProviderPostgresql::per_request_2(
-                                    &mut *postgresql_pooled_connection, &channel_created_at, order, limit as i16
-                                ).await {
-                                    Ok(channel_registry) => {
-                                        return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(channel_registry)));
+                    Ok(result) => {
+                        match result {
+                            ExtractorResult::JsonAccessWebToken { json_access_web_token: _ } => {
+                                if let Some(ref channel_created_at_) = channel_created_at {
+                                    if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
+                                        return Err(
+                                            ErrorAuditor::new(
+                                                BaseError::InvalidArgumentError,
+                                                BacktracePart::new(line!(), file!(), None)
+                                            )
+                                        );
                                     }
-                                    Err(mut error) => {
-                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                }
                         
-                                        return Err(error);
+                                if !OrderConventionResolver::can_convert(order) {
+                                    return Err(
+                                        ErrorAuditor::new(
+                                            BaseError::InvalidArgumentError,
+                                            BacktracePart::new(line!(), file!(), None)
+                                        )
+                                    );
+                                }
+                        
+                                if limit <= 0 || limit > Self::LIMIT {
+                                    limit = Self::LIMIT;
+                                }
+                
+                                match postgresql_connection_pool.get().await {
+                                    Ok(mut postgresql_pooled_connection) => {
+                                        match ChannelDataProviderPostgresql::per_request_2(
+                                            &mut *postgresql_pooled_connection, &channel_created_at, order, limit as i16
+                                        ).await {
+                                            Ok(channel_registry) => {
+                                                return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(channel_registry)));
+                                            }
+                                            Err(mut error) => {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                
+                                                return Err(error);
+                                            }
+                                        }
+                                    }
+                                    Err(error) => {
+                                        return Err(
+                                            ErrorAuditor::new(
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                                                BacktracePart::new(line!(), file!(), None)
+                                            )
+                                        );
                                     }
                                 }
                             }
-                            Err(error) => {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
+                            ExtractorResult::JsonAccessWebTokenAlreadyExpired => {
+                                return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(JsonAccessWebTokenWorkflowException::AlreadyExpired));
+                            }
+                            ExtractorResult::JsonAccessWebTokenInJsonAccessWebTokenBlackList => {
+                                return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(JsonAccessWebTokenWorkflowException::InJsonAccessWebTokenBlackList));
                             }
                         }
                     }

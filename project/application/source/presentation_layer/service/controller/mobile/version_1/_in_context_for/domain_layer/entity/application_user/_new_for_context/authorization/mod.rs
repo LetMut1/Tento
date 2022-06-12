@@ -1293,24 +1293,6 @@ impl Authorization {
                             }
                             ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
                                 match entity_workflow_exception {
-                                    EntityWorkflowException::JsonRefreshWebTokenWorkflowException { json_refresh_web_token_workflow_exception } => {
-                                        match json_refresh_web_token_workflow_exception {
-                                            JsonRefreshWebTokenWorkflowException::NotFound => {
-                                                match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
-                                                ) {
-                                                    Ok(data) => {
-                                                        return ActionResponseCreator::create_ok(data);
-                                                    }
-                                                    Err(error) => {
-                                                        // log::error!("{}", ErrorAuditor::from(error));
-                                
-                                                        return ActionResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
                                     EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } => {
                                         match json_access_web_token_workflow_exception {
                                             JsonAccessWebTokenWorkflowException::AlreadyExpired => {
@@ -1343,6 +1325,24 @@ impl Authorization {
                                             }
                                             _ => {
                                                 unreachable!("TODO");
+                                            }
+                                        }
+                                    }
+                                    EntityWorkflowException::JsonRefreshWebTokenWorkflowException { json_refresh_web_token_workflow_exception } => {
+                                        match json_refresh_web_token_workflow_exception {
+                                            JsonRefreshWebTokenWorkflowException::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -1440,24 +1440,6 @@ impl Authorization {
                             }
                             ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
                                 match entity_workflow_exception {
-                                    EntityWorkflowException::JsonRefreshWebTokenWorkflowException { json_refresh_web_token_workflow_exception } => {
-                                        match json_refresh_web_token_workflow_exception {
-                                            JsonRefreshWebTokenWorkflowException::NotFound => {
-                                                match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
-                                                ) {
-                                                    Ok(data) => {
-                                                        return ActionResponseCreator::create_ok(data);
-                                                    }
-                                                    Err(error) => {
-                                                        // log::error!("{}", ErrorAuditor::from(error));
-                                
-                                                        return ActionResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
                                     EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } => {
                                         match json_access_web_token_workflow_exception {
                                             JsonAccessWebTokenWorkflowException::AlreadyExpired => {
@@ -1490,6 +1472,24 @@ impl Authorization {
                                             }
                                             _ => {
                                                 unreachable!("TODO");
+                                            }
+                                        }
+                                    }
+                                    EntityWorkflowException::JsonRefreshWebTokenWorkflowException { json_refresh_web_token_workflow_exception } => {
+                                        match json_refresh_web_token_workflow_exception {
+                                            JsonRefreshWebTokenWorkflowException::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeStorage::ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
                                             }
                                         }
                                     }
