@@ -237,27 +237,34 @@ impl Authorization {
                             postgresql_connection_pool,
                             ActionHandlerIncomingDataCheckNicknameForExisting_::new(request_parts, action_handler_incoming_data)
                         ).await {
-                            Ok(action_handler_outcoming_data) => {
-                                let (
-                                    response_parts,
-                                    convertible_data
-                                ) = action_handler_outcoming_data.into_inner();
-
-                                match convertible_data {
-                                    Some(unified_report) => {
-                                        match serde_json::to_vec(&unified_report) {
-                                            Ok(data) => {
-                                                return Response::from_parts(response_parts, Body::from(data));
+                            Ok(action_handler_result) => {
+                                match action_handler_result {
+                                    ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                        let (
+                                            response_parts,
+                                            convertible_data
+                                        ) = action_handler_outcoming_data.into_inner();
+        
+                                        match convertible_data {
+                                            Some(unified_report) => {
+                                                match serde_json::to_vec(&unified_report) {
+                                                    Ok(data) => {
+                                                        return Response::from_parts(response_parts, Body::from(data));
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
                                             }
-                                            Err(error) => {
-                                                // log::error!("{}", ErrorAuditor::from(error));
-                        
-                                                return ActionResponseCreator::create_internal_server_error();
+                                            None => {
+                                                return Response::from_parts(response_parts, Body::empty());
                                             }
                                         }
                                     }
-                                    None => {
-                                        return Response::from_parts(response_parts, Body::empty());
+                                    ActionHandlerResult::EntityWorkflowException { entity_workflow_exception: _ } => {
+                                        unreachable!("TODO");
                                     }
                                 }
                             }
