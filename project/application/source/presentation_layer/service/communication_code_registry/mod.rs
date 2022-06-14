@@ -1,6 +1,6 @@
-pub struct CommunicationCodeStorage;
+pub struct CommunicationCodeRegistry;
 
-impl CommunicationCodeStorage {
+impl CommunicationCodeRegistry {
     pub const ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST: &'static str = "enapus01";
     pub const ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST: &'static str = "enapus02";
     pub const ENTITY_APPLICATION_USER_NOT_FOUND: &'static str = "enapus03";
