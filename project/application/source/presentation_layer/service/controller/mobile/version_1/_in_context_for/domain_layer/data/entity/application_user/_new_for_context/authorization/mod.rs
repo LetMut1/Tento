@@ -38,7 +38,7 @@ use crate::application_layer::service::action_handler::_in_contex_for::presentat
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as ActionHandlerSendEmailForLogIn;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Base as ActionHandlerSendEmailForRegister;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Base as ActionHandlerSendEmailForResetPassword;
-use crate::infrastructure_layer::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
+use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::service::action_response_creator::ActionResponseCreator;
 use crate::presentation_layer::service::communication_code_registry::CommunicationCodeRegistry;

@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use hyper::Body;
 use hyper::Request;
 use hyper::Response;

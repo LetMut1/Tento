@@ -1,7 +1,7 @@
 pub struct OrderConventionResolver;
-use crate::infrastructure_layer::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
-use crate::infrastructure_layer::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
-use crate::infrastructure_layer::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
+use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 
 impl OrderConventionResolver {
     const ASC: &'static str = "ASC";
