@@ -1,7 +1,7 @@
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::service::email_sender::EmailSender as BaseEmailSender;
-use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::email_sender::EmailSender as BaseEmailSender;
+use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 
 pub struct EmailSender;
 
