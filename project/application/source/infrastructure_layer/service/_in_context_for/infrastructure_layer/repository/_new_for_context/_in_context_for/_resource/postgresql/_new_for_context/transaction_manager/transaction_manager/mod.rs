@@ -1,8 +1,8 @@
-use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
-use crate::infrastructure_layer::error::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
-use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
-use crate::infrastructure_layer::error::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
-use crate::infrastructure_layer::error::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
+use crate::infrastructure_layer::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use super::_component::transaction_isolation_level::TransactionIsolationLevel;
 use tokio_postgres::Client as Connection;
 

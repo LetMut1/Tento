@@ -5,7 +5,7 @@ use bytes::Buf;
 use crate::application_layer::data_transfer_object::_in_context_for::application_layer::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::service::action_handler::_in_context_for::presentation_layer::service::controller::_new_for_context::action_round_parameter_extractor::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::service::action_handler::_in_contex_for::presentation_layer::service::controller::_new_for_context::action_round_parameter_extractor::ActionRaoundParameterExtractor;
-use crate::infrastructure_layer::error::error_auditor::_component::base_error::base_error::BaseError;
+use crate::infrastructure_layer::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use hyper::Body;
 use hyper::body::HttpBody;
