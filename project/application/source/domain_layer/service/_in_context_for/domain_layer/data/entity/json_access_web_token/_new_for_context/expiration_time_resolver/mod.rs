@@ -1,0 +1,24 @@
+use chrono::Utc;
+use crate::domain_layer::data::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
+use crate::infrastructure_layer::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::service::date_time_resolver::DateTimeResolver;
+
+pub struct  ExpirationTimeResolver;
+
+impl ExpirationTimeResolver {
+    pub fn is_expired<'a>(
+        json_access_web_token: &'a JsonAccessWebToken<'_>
+    ) -> Result<bool, ErrorAuditor> {
+        match DateTimeResolver::create_chrono_date_time_utc(json_access_web_token.get_expiration_time()) {
+            Ok(ref date_time) => {
+                return Ok(!DateTimeResolver::is_greater_or_equal_than(date_time, &Utc::now()));
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+                return Err(error);
+            }
+        }
+    }
+}

@@ -1,2 +1,2 @@
-pub mod entity;
+pub mod data;
 pub mod error;

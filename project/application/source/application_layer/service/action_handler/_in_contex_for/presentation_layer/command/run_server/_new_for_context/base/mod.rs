@@ -10,8 +10,8 @@ use crate::infrastructure_layer::data_transfer_object::error_auditor::_component
 use crate::infrastructure_layer::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::application_user::_new_for_context::authorization::Authorization as ControllerApplicationUserAuthorization;
-use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::entity::channel::_new_for_context::base::Base as ControllerChannelBase;
+use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::Authorization as ControllerApplicationUserAuthorization;
+use crate::presentation_layer::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::Base as ControllerChannelBase;
 use crate::presentation_layer::service::controller::route_not_found::RouteNotFound as ControllerRouteNotFound;
 use hyper::Body;
 use hyper::Error as HyperError;
