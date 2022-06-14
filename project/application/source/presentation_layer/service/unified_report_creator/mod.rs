@@ -1,4 +1,4 @@
-use crate::presentation_layer::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::unified_report::unified_report::UnifiedReport;
+use crate::presentation_layer::data::data_transfer_object::_in_context_for::presentation_layer::service::controller::_new_for_context::unified_report::unified_report::UnifiedReport;
 use serde::Serialize;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
