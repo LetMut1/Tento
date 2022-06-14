@@ -1,3 +1,3 @@
-pub mod data_transfer_object;
+pub mod data;
 pub mod entity;
 pub mod service;
