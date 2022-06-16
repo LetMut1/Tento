@@ -26,7 +26,8 @@ pub struct Base;
 impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<()>, ErrorAuditor>
@@ -45,10 +46,10 @@ impl Base {
                 ).await {
                     Ok(application_user_reset_password_token) => {
                         if let Some(application_user_reset_password_token_) = application_user_reset_password_token {
-                            match postgresql_connection_pool.get().await {
-                                Ok(mut postgresql_pooled_connection) => {
+                            match postgresql_core_connection_pool.get().await {
+                                Ok(mut postgresql_core_pooled_connection) => {
                                     match ApplicationUserDataProviderPostgresql::find_by_id(
-                                        &mut *postgresql_pooled_connection,
+                                        &mut *postgresql_core_pooled_connection,
                                         application_user_id
                                     ).await {
                                         Ok(application_user) => {

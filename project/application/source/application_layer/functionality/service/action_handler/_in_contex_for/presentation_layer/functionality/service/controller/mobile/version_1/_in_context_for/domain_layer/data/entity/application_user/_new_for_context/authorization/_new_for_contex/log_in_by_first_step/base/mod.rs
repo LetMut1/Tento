@@ -33,7 +33,8 @@ pub struct Base;
 impl Base {
     pub async fn handle<'a, T>(      // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
@@ -50,15 +51,15 @@ impl Base {
         ) = action_handler_incoming_data.into_inner();
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
-            match postgresql_connection_pool.get().await {
-                Ok(mut postgresql_pooled_connection) => {
-                    let postgresql_connection = &mut *postgresql_pooled_connection;
+            match postgresql_core_connection_pool.get().await {
+                Ok(mut postgresql_core_pooled_connection) => {
+                    let postgresql_core_connection = &mut *postgresql_core_pooled_connection;
 
                     let application_user: ApplicationUser;
                     match ApplicationUserValidator::is_valid_email(application_user_email_or_application_user_nickname.as_str()) {
                         Ok(is_valid_email) => {
                             if is_valid_email {
-                                match ApplicationUserDataProviderPostgresql::find_by_email(postgresql_connection, application_user_email_or_application_user_nickname.as_str()).await {
+                                match ApplicationUserDataProviderPostgresql::find_by_email(postgresql_core_connection, application_user_email_or_application_user_nickname.as_str()).await {
                                     Ok(application_user_) => {
                                         match application_user_ {
                                             Some(application_user__) => {
@@ -77,7 +78,7 @@ impl Base {
                                 }
                             } else {
                                 if ApplicationUserValidator::is_valid_nickname(application_user_email_or_application_user_nickname.as_str()) {
-                                    match ApplicationUserDataProviderPostgresql::find_by_nickname(postgresql_connection, application_user_email_or_application_user_nickname.as_str()).await {
+                                    match ApplicationUserDataProviderPostgresql::find_by_nickname(postgresql_core_connection, application_user_email_or_application_user_nickname.as_str()).await {
                                         Ok(application_user_) => {
                                             match application_user_ {
                                                 Some(application_user__) => {

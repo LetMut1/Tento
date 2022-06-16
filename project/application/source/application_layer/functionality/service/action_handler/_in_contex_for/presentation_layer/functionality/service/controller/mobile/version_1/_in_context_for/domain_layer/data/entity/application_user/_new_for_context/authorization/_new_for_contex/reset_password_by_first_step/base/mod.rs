@@ -30,7 +30,8 @@ pub struct Base;
 impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
@@ -42,10 +43,10 @@ impl Base {
     {
         let application_user_email = action_handler_incoming_data.into_inner();
 
-        match postgresql_connection_pool.get().await {
-            Ok(mut postgresql_pooled_connection) => {
+        match postgresql_core_connection_pool.get().await {
+            Ok(mut postgresql_core_pooled_connection) => {
                 match ApplicationUserDataProviderPostgresql::find_by_email(
-                    &mut *postgresql_pooled_connection, application_user_email.as_str()
+                    &mut *postgresql_core_pooled_connection, application_user_email.as_str()
                 ).await {
                     Ok(application_user) => {
                         if let Some(application_user_) = application_user {

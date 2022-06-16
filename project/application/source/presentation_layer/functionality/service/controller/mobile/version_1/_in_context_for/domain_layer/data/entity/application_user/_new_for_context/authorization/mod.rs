@@ -314,7 +314,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -335,7 +335,7 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRegisterByFirstStep>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerRegisterByFirstStep::handle(
-                    environment_configuration_resolver, postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -446,7 +446,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -467,7 +467,7 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRegisterByLastStep>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerRegisterByLastStep::handle(
-                    environment_configuration_resolver, postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => { 
                         match action_handler_result {
@@ -637,7 +637,7 @@ impl Authorization {
     pub async fn send_email_for_register<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
@@ -757,7 +757,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -778,7 +778,7 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogInByFirstStep>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerLogInByFirstStep::handle(
-                    environment_configuration_resolver, postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => { 
                         match action_handler_result {
@@ -1007,7 +1007,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1028,7 +1028,7 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForLogIn>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerSendEmailForLogIn::handle(
-                    environment_configuration_resolver, postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1582,7 +1582,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1603,7 +1603,7 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataResetPasswordByFirstStep>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerResetPasswordByFirstStep::handle(
-                    environment_configuration_resolver, postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1701,7 +1701,7 @@ impl Authorization {
         _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1721,7 +1721,7 @@ impl Authorization {
 
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataResetPasswordByLastStep>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
-                match ActionHandlerResetPasswordByLastStep::handle(postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data).await {
+                match ActionHandlerResetPasswordByLastStep::handle(postgresql_core_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
                             ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
@@ -1864,7 +1864,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1885,7 +1885,7 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForResetPassword>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerSendEmailForResetPassword::handle(
-                    environment_configuration_resolver, postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {

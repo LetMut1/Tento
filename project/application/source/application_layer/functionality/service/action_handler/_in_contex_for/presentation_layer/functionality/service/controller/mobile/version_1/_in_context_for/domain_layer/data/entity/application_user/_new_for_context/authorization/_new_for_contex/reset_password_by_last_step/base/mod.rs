@@ -30,7 +30,8 @@ pub struct Base;
 
 impl Base {
     pub async fn handle<T>(
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<()>, ErrorAuditor>
@@ -57,11 +58,11 @@ impl Base {
                         Ok(application_user_reset_password_token) => {
                             if let Some(mut application_user_reset_password_token_) = application_user_reset_password_token {
                                 if application_user_reset_password_token_.get_value()== application_user_reset_password_token_value.as_str() {
-                                    match postgresql_connection_pool.get().await {
-                                        Ok(mut postgresql_pooled_connection) => {
-                                            let postgresql_connection = &mut *postgresql_pooled_connection;
+                                    match postgresql_core_connection_pool.get().await {
+                                        Ok(mut postgresql_core_pooled_connection) => {
+                                            let postgresql_core_connection = &mut *postgresql_core_pooled_connection;
         
-                                            match ApplicationUserDataProviderPostgresql::find_by_id(postgresql_connection, application_user_id).await {
+                                            match ApplicationUserDataProviderPostgresql::find_by_id(postgresql_core_connection, application_user_id).await {
                                                 Ok(application_user) => {
                                                     if let Some(mut application_user_) = application_user {
                                                         match PasswordHashResolver::create(application_user_password.as_str()) {
@@ -70,7 +71,7 @@ impl Base {
                         
                                                                 match UpdateResolverApplicationUser::new(false, false, true) {
                                                                     Ok(update_resolver_application_user) => {
-                                                                        if let Err(mut error) = ApplicationUserStateManagerPostgresql::update(postgresql_connection, &application_user_, update_resolver_application_user).await {
+                                                                        if let Err(mut error) = ApplicationUserStateManagerPostgresql::update(postgresql_core_connection, &application_user_, update_resolver_application_user).await {
                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 
                                                                             return Err(error);

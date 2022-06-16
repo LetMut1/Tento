@@ -38,7 +38,8 @@ pub struct Base;
 impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
@@ -58,14 +59,14 @@ impl Base {
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
             if ApplicationUserValidator::is_valid_nickname(application_user_nickname.as_str()) {
-                match postgresql_connection_pool.get().await {
-                    Ok(mut postgresql_pooled_connection) => {
-                        let postgresql_connection = &mut *postgresql_pooled_connection;
+                match postgresql_core_connection_pool.get().await {
+                    Ok(mut postgresql_core_pooled_connection) => {
+                        let postgresql_core_connection = &mut *postgresql_core_pooled_connection;
 
-                        match ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(postgresql_connection, application_user_nickname.as_str()).await {
+                        match ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(postgresql_core_connection, application_user_nickname.as_str()).await {
                             Ok(is_exist_by_nickname) => {
                                 if !is_exist_by_nickname {
-                                    match ApplicationUserDataProviderPostgresql::is_exist_by_email(postgresql_connection, application_user_email.as_str()).await {
+                                    match ApplicationUserDataProviderPostgresql::is_exist_by_email(postgresql_core_connection, application_user_email.as_str()).await {
                                         Ok(is_exist_by_email) => {
                                             if !is_exist_by_email {
                                                 match redis_connection_pool.get().await {
@@ -94,7 +95,7 @@ impl Base {
                                                                                     chrono::Utc::now().to_rfc2822() // TODO  Delete. Все Часы делаются через БД.
                                                                                 );
                                                                                 
-                                                                                match ApplicationUserStateManagerPostgresql::create(postgresql_connection, &application_user).await {
+                                                                                match ApplicationUserStateManagerPostgresql::create(postgresql_core_connection, &application_user).await {
                                                                                     Ok(application_user_id) => {
                                                                                         let json_refresh_web_token = JsonRefreshWebTokenFactory::create_from_id_registry(
                                                                                             application_user_id, application_user_log_in_token_device_id.as_str()

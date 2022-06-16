@@ -30,7 +30,8 @@ impl Base {
 
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
@@ -66,10 +67,10 @@ impl Base {
                                     );
                                 }
                         
-                                match postgresql_connection_pool.get().await {
-                                    Ok(mut postgresql_pooled_connection) => {
+                                match postgresql_core_connection_pool.get().await {
+                                    Ok(mut postgresql_core_pooled_connection) => {
                                         match ChannelDataProviderPostgresql::per_request_3(
-                                            &mut *postgresql_pooled_connection, channel_subscribers_quantity, order, limit
+                                            &mut *postgresql_core_pooled_connection, channel_subscribers_quantity, order, limit
                                         ).await {
                                             Ok(channel_registry) => {
                                                 return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(channel_registry)));
