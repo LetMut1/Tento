@@ -25,7 +25,6 @@ extern crate tokio_postgres;
 extern crate tokio;
 extern crate uuid;
 
-pub mod _code_optimization;
 pub mod _resource;
 pub mod application_layer;
 pub mod domain_layer;

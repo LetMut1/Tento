@@ -1,7 +1,7 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
-use crate::_code_optimization::PostgresqlConnectionPool;
+use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::command_handler::_in_contex_for::presentation_layer::command::run_server::_new_for_context::base::_new_for_context::postgresql_connection_pool_workflow_type_aggregator::PostgresqlConnectionPoolWorkflowTypeAggregator;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
@@ -491,7 +491,7 @@ impl Base {
     async fn run_http_server(
         environment_configuration_resolver: EnvironmentConfigurationResolver
     ) -> Result<(), ErrorAuditor> {
-        let postgresql_connection_pool: PostgresqlConnectionPool;
+        let postgresql_connection_pool: PostgresqlConnectionPoolWorkflowTypeAggregator;
         if environment_configuration_resolver.is_production_environment() {
             todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
         } else {
@@ -535,7 +535,7 @@ impl Base {
                 }
             }
 
-            postgresql_connection_pool = PostgresqlConnectionPool::LocalDevelopment { postgresql_core_connection_pool, postgresql_authorization_connection_pool };
+            postgresql_connection_pool = PostgresqlConnectionPoolWorkflowTypeAggregator::LocalDevelopment { postgresql_core_connection_pool, postgresql_authorization_connection_pool };
         }
 
         match RedisConnectionManager::new(environment_configuration_resolver.get_resource_redis_url().clone()) {
@@ -565,7 +565,7 @@ impl Base {
                         
                                             return async move {
                                                 match postgresql_connection_pool__ {
-                                                    PostgresqlConnectionPool::LocalDevelopment { postgresql_core_connection_pool, postgresql_authorization_connection_pool } => {
+                                                    PostgresqlConnectionPoolWorkflowTypeAggregator::LocalDevelopment { postgresql_core_connection_pool, postgresql_authorization_connection_pool } => {
                                                         return Ok::<_, HyperError>(Self::resolve(&environment_configuration_resolver__, requset, postgresql_core_connection_pool, redis_connection_pool__).await);
                                                     }
                                                 }
