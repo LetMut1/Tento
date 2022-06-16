@@ -38,6 +38,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -145,6 +146,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -252,6 +254,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -359,6 +362,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where

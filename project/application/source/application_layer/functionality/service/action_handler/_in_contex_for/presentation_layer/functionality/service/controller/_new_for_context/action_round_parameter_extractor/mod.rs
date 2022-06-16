@@ -35,7 +35,8 @@ pub struct ActionRaoundParameterExtractor;
 impl ActionRaoundParameterExtractor {
     pub async fn handle<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData<AHID>,
         action: FO
@@ -48,6 +49,7 @@ impl ActionRaoundParameterExtractor {
         FO: FnOnce(
             &'a EnvironmentConfigurationResolver,
             Request<Body>,
+            Pool<PostgresqlConnectionManager<T>>,
             Pool<PostgresqlConnectionManager<T>>,
             Pool<RedisConnectionManager>
         ) -> F,
@@ -77,7 +79,9 @@ impl ActionRaoundParameterExtractor {
 
         let request = Request::from_parts(request_parts, Body::from(data));
         
-        let response = action(environment_configuration_resolver, request, postgresql_connection_pool, redis_connection_pool).await;
+        let response = action(
+            environment_configuration_resolver, request, postgresql_core_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool
+        ).await;
 
         let action_handler_outcoming_data: ActionHandlerOutcomingData<AHOD>;
 

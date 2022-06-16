@@ -81,6 +81,7 @@ impl Authorization {
         _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -173,6 +174,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -185,6 +187,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::check_nickname_for_existing
         ).await;
@@ -194,6 +197,7 @@ impl Authorization {
         _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -287,6 +291,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -299,6 +304,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::check_email_for_existing
         ).await;
@@ -308,6 +314,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -416,6 +423,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -428,6 +436,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::register_by_first_step
         ).await;
@@ -437,6 +446,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -605,6 +615,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -617,6 +628,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::register_by_last_step
         ).await;
@@ -625,7 +637,8 @@ impl Authorization {
     pub async fn send_email_for_register<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        _postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -721,6 +734,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -733,6 +747,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::send_email_for_register
         ).await;
@@ -742,6 +757,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -839,6 +855,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -851,6 +868,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::log_in_by_first_step
         ).await;
@@ -860,6 +878,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         _postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -965,6 +984,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -977,6 +997,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::log_in_by_last_step
         ).await;
@@ -986,6 +1007,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1101,6 +1123,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1113,6 +1136,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::send_email_for_log_in
         ).await;
@@ -1122,6 +1146,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         _postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1234,6 +1259,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1246,6 +1272,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::refresh_json_access_web_token
         ).await;
@@ -1255,6 +1282,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         _postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1381,6 +1409,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1393,6 +1422,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::log_out_from_one_device
         ).await;
@@ -1402,6 +1432,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         _postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1528,6 +1559,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1540,6 +1572,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::log_out_from_all_devices
         ).await;
@@ -1549,6 +1582,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1644,6 +1678,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1656,6 +1691,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::reset_password_by_first_step
         ).await;
@@ -1665,6 +1701,7 @@ impl Authorization {
         _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1804,6 +1841,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1816,6 +1854,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::reset_password_by_last_step
         ).await;
@@ -1825,6 +1864,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1940,6 +1980,7 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -1952,6 +1993,7 @@ impl Authorization {
             environment_configuration_resolver,
             request,
             postgresql_core_connection_pool,
+            postgresql_authorization_connection_pool,
             redis_connection_pool,
             Self::send_email_for_reset_password
         ).await;
