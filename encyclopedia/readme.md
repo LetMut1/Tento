@@ -1,5 +1,8 @@
 # Migration:
 ## Postgresql:
 ```
-diesel database reset --database-url=postgres://root:password@postgresql/tento --migration-dir=/_tento/project/migration/postgresql/core/
+TODO УБРАТЬ ДИзель до деплоя на продакшн! Написать свое, или найти готовый.
+
+diesel database reset --database-url=postgres://root:password@postgresql_core/tento --migration-dir=/_tento/project/migration/postgresql/core/
+diesel database reset --database-url=postgres://root:password@postgresql_authorization/tento --migration-dir=/_tento/project/migration/postgresql/authorization/
 ```

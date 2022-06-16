@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-    postgresql:
-        container_name: tento_postgresql
+    postgresql_core:
+        container_name: tento_postgresql_core
         build:
             context: ./service/postgresql
             dockerfile: dockerfile
@@ -13,7 +13,21 @@ services:
             POSTGRES_PASSWORD: 'password'
             POSTGRES_DB: 'tento'
         volumes:
-            - postgresql_data:/var/lib/postgresql/data
+            - postgresql_core_data:/var/lib/postgresql/data
+        restart: always
+    postgresql_authorization:
+        container_name: tento_postgresql_authorization
+        build:
+            context: ./service/postgresql
+            dockerfile: dockerfile
+        environment:
+            PGDATA: '/var/lib/postgresql/data'
+            POSTGRES_HOST_AUTH_METHOD: 'md5'
+            POSTGRES_USER: 'root'
+            POSTGRES_PASSWORD: 'password'
+            POSTGRES_DB: 'tento'
+        volumes:
+            - postgresql_authorization_data:/var/lib/postgresql/data
         restart: always
     redis:
         container_name: tento_redis
@@ -39,7 +53,9 @@ services:
         restart: always
 
 volumes:
-    postgresql_data:
+    postgresql_core_data:
+        driver: local
+    postgresql_authorization_data:
         driver: local
 
 networks:

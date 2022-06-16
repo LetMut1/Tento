@@ -52,7 +52,7 @@ pub struct Base;
 impl Base {
     const PRODUCTION_ENVIRONMENT_FILE_NAME: &'static str = "production.env";  // TODO Посмотреть, какие есть еще лучшие форматы аналоги .env (Может, Томл?)
     const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.env";
-    const DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
+    const LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
     pub fn handle(
         binary_file_path: &'static str
@@ -103,7 +103,7 @@ impl Base {
 
                     is_production_environment = true;
                 } else {
-                    let development_local_environment_file_path_buffer = file_path.join(Path::new(Self::DEVELOPMENT_LOCAL_ENVIRONMENT_FILE_NAME));
+                    let development_local_environment_file_path_buffer = file_path.join(Path::new(Self::LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME));
                     if development_local_environment_file_path_buffer.exists() {
                         if let Err(error) = dotenv::from_path(development_local_environment_file_path_buffer.as_path()) {
                             return Err(
@@ -263,14 +263,43 @@ impl Base {
                     }
                 }
 
-                let resource_postgresql_configuration: PostgresqlConfiguration;
-                match env::var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_URL_KEY) {
-                    Ok(resource_postgresql_url) => {
-                        match PostgresqlConfiguration::from_str(resource_postgresql_url.as_str()) {
+                let resource_postgresql_core_configuration: PostgresqlConfiguration;
+                match env::var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_CORE_URL_KEY) {
+                    Ok(resource_postgresql_core_url) => {
+                        match PostgresqlConfiguration::from_str(resource_postgresql_core_url.as_str()) {
                             Ok(postgresql_configuration) => {
-                                resource_postgresql_configuration = postgresql_configuration;
+                                resource_postgresql_core_configuration = postgresql_configuration;
 
-                                env::remove_var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_URL_KEY);
+                                env::remove_var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_CORE_URL_KEY);
+                            }
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        }
+                    }
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                }
+
+                let resource_postgresql_authorization_configuration: PostgresqlConfiguration;
+                match env::var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_AUTHORIZATION_URL_KEY) {
+                    Ok(resource_postgresql_authorization_url) => {
+                        match PostgresqlConfiguration::from_str(resource_postgresql_authorization_url.as_str()) {
+                            Ok(postgresql_configuration) => {
+                                resource_postgresql_authorization_configuration = postgresql_configuration;
+
+                                env::remove_var(EnvironmentConfigurationResolver::RESOURCE_POSTGRESQL_AUTHORIZATION_URL_KEY);
                             }
                             Err(error) => {
                                 return Err(
@@ -371,7 +400,8 @@ impl Base {
                         logger_encoder_pattern,
                         security_jrwt_encoding_private_key,
                         security_jawt_signature_encoding_private_key,
-                        resource_postgresql_configuration,
+                        resource_postgresql_core_configuration,
+                        resource_postgresql_authorization_configuration,
                         resource_redis_connection_info,
                         resource_email_server_socket_address
                     )
@@ -465,14 +495,15 @@ impl Base {
         if environment_configuration_resolver.is_production_environment() {
             todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
         } else {
+            let postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>;
             match Pool::builder()
                 .build(
                     PostgresqlConnectionManager::new(
-                        environment_configuration_resolver.get_resource_postgresql_configuration().clone(), NoTls
+                        environment_configuration_resolver.get_resource_postgresql_core_configuration().clone(), NoTls
                     )
                 ).await {         // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-                Ok(postgresql_connection_pool_) => {
-                    postgresql_connection_pool = PostgresqlConnectionPool::Development { postgresql_connection_pool: postgresql_connection_pool_ };
+                Ok(postgresql_core_connection_pool_) => {
+                    postgresql_core_connection_pool = postgresql_core_connection_pool_;
                 }
                 Err(error) => {
                     return Err(
@@ -483,6 +514,28 @@ impl Base {
                     );
                 }
             }
+
+            let postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>;
+            match Pool::builder()
+                .build(
+                    PostgresqlConnectionManager::new(
+                        environment_configuration_resolver.get_resource_postgresql_authorization_configuration().clone(), NoTls
+                    )
+                ).await {         // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                Ok(postgresql_authorization_connection_pool_) => {
+                    postgresql_authorization_connection_pool = postgresql_authorization_connection_pool_;
+                }
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            }
+
+            postgresql_connection_pool = PostgresqlConnectionPool::LocalDevelopment { postgresql_core_connection_pool, postgresql_authorization_connection_pool };
         }
 
         match RedisConnectionManager::new(environment_configuration_resolver.get_resource_redis_url().clone()) {
@@ -512,8 +565,8 @@ impl Base {
                         
                                             return async move {
                                                 match postgresql_connection_pool__ {
-                                                    PostgresqlConnectionPool::Development { postgresql_connection_pool } => {
-                                                        return Ok::<_, HyperError>(Self::resolve(&environment_configuration_resolver__, requset, postgresql_connection_pool, redis_connection_pool__).await);
+                                                    PostgresqlConnectionPool::LocalDevelopment { postgresql_core_connection_pool, postgresql_authorization_connection_pool } => {
+                                                        return Ok::<_, HyperError>(Self::resolve(&environment_configuration_resolver__, requset, postgresql_core_connection_pool, redis_connection_pool__).await);
                                                     }
                                                 }
                                             };

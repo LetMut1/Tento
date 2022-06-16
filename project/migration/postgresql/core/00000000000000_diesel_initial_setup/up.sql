@@ -1,1 +1,1 @@
-SELECT 'This is a stub';
+SELECT 'This is a stub.';

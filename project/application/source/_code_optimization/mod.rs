@@ -5,7 +5,8 @@ use tokio_postgres::NoTls;
 
 #[derive(Clone)]
 pub enum PostgresqlConnectionPool {
-    Development {
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
+    LocalDevelopment {
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
     }
 }
