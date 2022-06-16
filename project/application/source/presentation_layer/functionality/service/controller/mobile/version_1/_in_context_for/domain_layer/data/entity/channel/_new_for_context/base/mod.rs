@@ -37,7 +37,7 @@ impl Base {
     pub async fn get_many_by_name<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -58,7 +58,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyByName>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyByName::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => { 
                         match action_handler_result {
@@ -144,7 +144,7 @@ impl Base {
     pub async fn get_many_by_created_at<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -165,7 +165,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyByCreatedAt>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyByCreatedAt::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => { 
                         match action_handler_result {
@@ -251,7 +251,7 @@ impl Base {
     pub async fn get_many_by_subscribers_quantity<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -272,7 +272,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyBySubscribersQuantity>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyBySubscribersQuantity::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => { 
                         match action_handler_result {
@@ -358,7 +358,7 @@ impl Base {
     pub async fn get_many_by_id_registry<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -379,7 +379,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyByIdRegistry>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyByIdRegistry::handle(
-                    environment_configuration_resolver, postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => { 
                         match action_handler_result {
