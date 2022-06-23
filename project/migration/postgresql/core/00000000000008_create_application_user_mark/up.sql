@@ -3,7 +3,7 @@ CREATE TABLE public.channel_feed_publication_mark (
     channel_feed_publication_id BIGINT,
     application_user_id BIGINT,
     type SMALLINT
-) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
+) WITH (oids = false, fillfactor = 90, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel_feed_publication_mark1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel_feed_publication_mark.id;

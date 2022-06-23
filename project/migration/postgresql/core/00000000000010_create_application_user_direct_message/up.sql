@@ -1,7 +1,7 @@
 CREATE TABLE public.application_user_direct_message ( 
     id BIGINT,
     list_of_members JSONB
-) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
+) WITH (oids = false, fillfactor = 90, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.application_user_direct_message1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.application_user_direct_message.id;

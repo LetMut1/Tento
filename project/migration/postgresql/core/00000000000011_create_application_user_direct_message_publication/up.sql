@@ -5,7 +5,7 @@ CREATE TABLE public.application_user_direct_message_publication (
     channel_feed_publication_id BIGINT,
     channel_feed_publication_reaction_id BIGINT,
     created_at TIMESTAMP(6) WITH TIME ZONE
-) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
+) WITH (oids = false, fillfactor = 90, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.application_user_direct_message_publication1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.application_user_direct_message_publication.id;

@@ -7,7 +7,7 @@ use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_com
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::_in_context_for::infrastructure_layer::functionality::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use crate::infrastructure_layer::functionality::service::counter_u8::CounterU8;
-use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as UpdateResolverApplicationUser;
+use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as UpdateResolver;
 use tokio_postgres::Client as Connection;
 use tokio_postgres::types::Type;
 
@@ -15,7 +15,7 @@ pub struct Base;
 
 impl Base {
     pub async fn create<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         application_user: &'a ApplicationUser
     ) -> Result<i64, ErrorAuditor> {
         let email = application_user.get_email();
@@ -52,9 +52,9 @@ impl Base {
             .add_parameter(&password_hash, Type::TEXT)
             .add_parameter(&created_at, Type::TEXT);
 
-        match connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(
@@ -105,9 +105,9 @@ impl Base {
     }
 
     pub async fn update<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         application_user: &'a ApplicationUser,
-        update_resolver: UpdateResolverApplicationUser
+        update_resolver: UpdateResolver
     ) -> Result<(), ErrorAuditor> {
         let application_user_id: i64;
         match application_user.get_id() {
@@ -339,9 +339,9 @@ impl Base {
             }
         }
 
-        match connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(

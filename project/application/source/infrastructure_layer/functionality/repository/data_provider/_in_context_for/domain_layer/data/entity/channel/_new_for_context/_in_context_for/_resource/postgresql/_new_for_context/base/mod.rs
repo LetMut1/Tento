@@ -17,7 +17,7 @@ pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТей
                     // TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
 impl Base {
     pub async fn per_request_1<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         name: &'a str,
         requery_name: &'a Option<String>,
         limit: i16
@@ -88,9 +88,9 @@ impl Base {
 
         let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyByNameChannel> = vec![];
 
-        match connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {
@@ -271,7 +271,7 @@ impl Base {
     }
 
     pub async fn per_request_2<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         created_at: &'a Option<String>,
         order: i8,
         limit: i16
@@ -354,9 +354,9 @@ impl Base {
 
         let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyByCreatedAtChannel> = vec![];
 
-        match connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {
@@ -537,7 +537,7 @@ impl Base {
     }
 
     pub async fn per_request_3<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         subscribers_quantity: Option<i64>,
         order: i8,
         limit: i16
@@ -613,9 +613,9 @@ impl Base {
 
         let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyBySubscribersQuantityChannel> = vec![];
 
-        match connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {
@@ -684,7 +684,7 @@ impl Base {
     }
 
     pub async fn per_request_4<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         id_registry: &'a Vec<i64>
     ) -> Result<Option<Vec<ActionHandlerOutcomingDataGetManyByIdRegistryChannel>>, ErrorAuditor> {
         if id_registry.is_empty() {
@@ -711,9 +711,9 @@ impl Base {
 
         let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyByIdRegistryChannel> = vec![];
 
-        match connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {

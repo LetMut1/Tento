@@ -1,10 +1,7 @@
-use std::marker::PhantomData;
-
 pub struct ApplicationUser {
     id: Option<i64>,
     email: String,
     nickname: String,
-    password: PhantomData<()>,
     password_hash: String,
     created_at: String
 }
@@ -21,7 +18,6 @@ impl ApplicationUser {
             id,
             email,
             nickname,
-            password: PhantomData,
             password_hash,
             created_at 
         };

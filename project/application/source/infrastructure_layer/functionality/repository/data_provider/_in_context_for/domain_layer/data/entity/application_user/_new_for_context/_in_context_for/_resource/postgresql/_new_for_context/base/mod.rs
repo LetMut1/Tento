@@ -12,7 +12,7 @@ pub struct Base;
 
 impl Base {
     pub async fn is_exist_by_nickanme<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         nickname: &'a str
     ) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -25,9 +25,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::TEXT);
 
-        match connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Ok(false);
@@ -57,7 +57,7 @@ impl Base {
     }
 
     pub async fn is_exist_by_email<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         email: &'a str
     ) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -70,9 +70,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
 
-        match connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Ok(false);
@@ -102,7 +102,7 @@ impl Base {
     }
 
     pub async fn find_by_email<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         email: &'a str
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -119,9 +119,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
 
-        match connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             let id: i64;
@@ -199,15 +199,17 @@ impl Base {
                                 }
                             }
 
-                            return Ok(Some(
-                                ApplicationUser::new(
-                                    Some(id),
-                                    email,
-                                    nickname,
-                                    password_hash,
-                                    created_at,
+                            return Ok(
+                                Some(
+                                    ApplicationUser::new(
+                                        Some(id),
+                                        email,
+                                        nickname,
+                                        password_hash,
+                                        created_at,
+                                    )
                                 )
-                            ));
+                            );
                         }
         
                         return Ok(None);
@@ -234,7 +236,7 @@ impl Base {
     }
 
     pub async fn find_by_nickname<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         nickname: &'a str
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -251,9 +253,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::TEXT);
 
-        match connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             let id: i64;
@@ -331,15 +333,17 @@ impl Base {
                                 }
                             }
 
-                            return Ok(Some(
-                                ApplicationUser::new(
-                                    Some(id),
-                                    email,
-                                    nickname,
-                                    password_hash,
-                                    created_at,
+                            return Ok(
+                                Some(
+                                    ApplicationUser::new(
+                                        Some(id),
+                                        email,
+                                        nickname,
+                                        password_hash,
+                                        created_at,
+                                    )
                                 )
-                            ));
+                            );
                         }
         
                         return Ok(None);
@@ -366,7 +370,7 @@ impl Base {
     }
 
     pub async fn find_by_id<'a>(
-        connection: &'a mut Connection,
+        core_connection: &'a mut Connection,
         id: i64
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -383,9 +387,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&id, Type::INT8);
 
-        match connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             let id: i64;
@@ -463,15 +467,17 @@ impl Base {
                                 }
                             }
 
-                            return Ok(Some(
-                                ApplicationUser::new(
-                                    Some(id),
-                                    email,
-                                    nickname,
-                                    password_hash,
-                                    created_at,
+                            return Ok(
+                                Some(
+                                    ApplicationUser::new(
+                                        Some(id),
+                                        email,
+                                        nickname,
+                                        password_hash,
+                                        created_at,
+                                    )
                                 )
-                            ));
+                            );
                         }
         
                         return Ok(None);

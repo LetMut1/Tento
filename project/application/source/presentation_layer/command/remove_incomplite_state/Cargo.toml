@@ -1,0 +1,20 @@
+[package]
+name = "remove_incomplite_state"
+version = "0.1.0"
+authors = ["zda"]
+edition = "2021"
+
+[[bin]]
+name = "remove_incomplite_state"
+path = "./mod.rs"
+test = true
+doctest = true
+bench = true
+doc = true
+proc-macro = false
+harness = true
+edition = "2021"
+required-features = []
+
+[dependencies]
+application = { path = "./../../..", package = "application", version = "0.1.0", default-features = true, features = [], optional = false }

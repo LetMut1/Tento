@@ -8,7 +8,6 @@ use crate::application_layer::functionality::service::action_handler::_in_contex
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use hyper::Body;
-use hyper::body::HttpBody;
 use hyper::body::to_bytes;
 use hyper::Request;
 use hyper::Response;

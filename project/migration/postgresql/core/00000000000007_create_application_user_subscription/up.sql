@@ -2,7 +2,7 @@ CREATE TABLE public.application_user_subscription (
     id BIGINT,
     publisher_application_user_id BIGINT,
     subscriber_application_user_id BIGINT
-) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
+) WITH (oids = false, fillfactor = 90, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.application_user_subscription1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.application_user_subscription.id;

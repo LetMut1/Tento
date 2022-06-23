@@ -18,7 +18,7 @@ use crate::infrastructure_layer::functionality::repository::data_provider::_in_c
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserResetPasswordTokenStateManagerRedis;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserStateManagerPostgresql;
-use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as UpdateResolverApplicationUser;
+use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as UpdateResolver;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -69,7 +69,7 @@ impl Base {
                                                             Ok(password_hash) => {
                                                                 application_user_.set_password_hash(password_hash);
                         
-                                                                match UpdateResolverApplicationUser::new(false, false, true) {
+                                                                match UpdateResolver::new(false, false, true) {
                                                                     Ok(update_resolver_application_user) => {
                                                                         if let Err(mut error) = ApplicationUserStateManagerPostgresql::update(postgresql_core_connection, &application_user_, update_resolver_application_user).await {
                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

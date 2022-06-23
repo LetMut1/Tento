@@ -2,11 +2,13 @@
 resolver = "2"
 members = [
     "./source",
-    "./source/presentation_layer/command/run_server"
+    "./source/presentation_layer/command/run_server",
+    "./source/presentation_layer/command/remove_incomplite_state"
 ]
 default-members = [
     "./source",
-    "./source/presentation_layer/command/run_server"
+    "./source/presentation_layer/command/run_server",
+    "./source/presentation_layer/command/remove_incomplite_state"
 ]
 
 [profile.dev]

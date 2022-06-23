@@ -3,7 +3,7 @@ CREATE TABLE public.channel_subscription (
     channel_id BIGINT,
     application_user_id BIGINT,
     created_at TIMESTAMP(6) WITH TIME ZONE
-) WITH (oids = false, fillfactor = 100, autovacuum_enabled = true);
+) WITH (oids = false, fillfactor = 90, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel_subscription1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
 START WITH 1 CACHE 1 NO CYCLE OWNED BY public.channel_subscription.id;

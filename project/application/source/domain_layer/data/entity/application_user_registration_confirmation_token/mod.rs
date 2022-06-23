@@ -1,7 +1,8 @@
 pub struct ApplicationUserRegistrationConfirmationToken<'a> {
     application_user_email: &'a str,
     value: String,
-    wrong_enter_tries_quantity: u8
+    wrong_enter_tries_quantity: u8,
+    created_at: Option<String>
 }
 
 impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
@@ -11,12 +12,14 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
     pub fn new(
         application_user_email: &'a str,
         value: String,
-        wrong_enter_tries_quantity: u8
+        wrong_enter_tries_quantity: u8,
+        created_at: Option<String>
     ) -> Self {
         return Self {
             application_user_email,
             value,
-            wrong_enter_tries_quantity
+            wrong_enter_tries_quantity,
+            created_at
         };
     }
     
@@ -36,6 +39,12 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         &'b self
     ) -> u8 {
         return self.wrong_enter_tries_quantity;
+    }
+
+    pub fn get_created_at<'b>(
+        &'b self
+    ) -> &'b str {
+       todo!() // TODO 
     }
 
     pub fn set_wrong_enter_tries_quantity<'b>(
