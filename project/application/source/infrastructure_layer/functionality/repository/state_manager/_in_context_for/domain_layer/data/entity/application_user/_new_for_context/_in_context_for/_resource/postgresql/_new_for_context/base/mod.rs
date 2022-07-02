@@ -15,7 +15,7 @@ pub struct Base;
 
 impl Base {
     pub async fn create<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         application_user: &'a ApplicationUser
     ) -> Result<i64, ErrorAuditor> {
         let email = application_user.get_email();
@@ -105,7 +105,7 @@ impl Base {
     }
 
     pub async fn update<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         application_user: &'a ApplicationUser,
         update_resolver: UpdateResolver
     ) -> Result<(), ErrorAuditor> {

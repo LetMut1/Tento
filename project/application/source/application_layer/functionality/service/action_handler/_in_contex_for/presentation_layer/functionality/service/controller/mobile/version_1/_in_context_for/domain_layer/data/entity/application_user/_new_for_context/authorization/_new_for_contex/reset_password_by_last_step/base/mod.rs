@@ -59,8 +59,8 @@ impl Base {
                             if let Some(mut application_user_reset_password_token_) = application_user_reset_password_token {
                                 if application_user_reset_password_token_.get_value()== application_user_reset_password_token_value.as_str() {
                                     match postgresql_core_connection_pool.get().await {
-                                        Ok(mut postgresql_core_pooled_connection) => {
-                                            let postgresql_core_connection = &mut *postgresql_core_pooled_connection;
+                                        Ok(postgresql_core_pooled_connection) => {
+                                            let postgresql_core_connection = &*postgresql_core_pooled_connection;
         
                                             match ApplicationUserDataProviderPostgresql::find_by_id(postgresql_core_connection, application_user_id).await {
                                                 Ok(application_user) => {

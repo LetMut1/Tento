@@ -45,15 +45,15 @@ impl Base {
             Ok(is_valid_email) => {
                 if is_valid_email {
                     match postgresql_core_connection_pool.get().await {
-                        Ok(mut postgresql_core_pooled_connection) => {
+                        Ok(postgresql_core_pooled_connection) => {
                             match ApplicationUserDataProviderPostgresql::is_exist_by_email(
-                                &mut *postgresql_core_pooled_connection, application_user_email.as_str()
+                                &*postgresql_core_pooled_connection, application_user_email.as_str()
                             ).await {
                                 Ok(is_exist_by_email) => {
                                     if !is_exist_by_email {
                                         match postgresql_authorization_connection_pool.get().await {
-                                            Ok(mut postgresql_authorization_pooled_connection) => {
-                                                let postgresql_authorization_connection = &mut *postgresql_authorization_pooled_connection;
+                                            Ok(postgresql_authorization_pooled_connection) => {
+                                                let postgresql_authorization_connection = &*postgresql_authorization_pooled_connection;
                 
                                                 match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_by_application_user_email(
                                                     postgresql_authorization_connection, application_user_email.as_str()

@@ -52,8 +52,8 @@ impl Base {
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
             match postgresql_core_connection_pool.get().await {
-                Ok(mut postgresql_core_pooled_connection) => {
-                    let postgresql_core_connection = &mut *postgresql_core_pooled_connection;
+                Ok(postgresql_core_pooled_connection) => {
+                    let postgresql_core_connection = &*postgresql_core_pooled_connection;
 
                     let application_user: ApplicationUser;
                     match ApplicationUserValidator::is_valid_email(application_user_email_or_application_user_nickname.as_str()) {

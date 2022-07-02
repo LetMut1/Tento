@@ -17,7 +17,7 @@ pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТей
                     // TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
 impl Base {
     pub async fn per_request_1<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         name: &'a str,
         requery_name: &'a Option<String>,
         limit: i16
@@ -271,7 +271,7 @@ impl Base {
     }
 
     pub async fn per_request_2<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         created_at: &'a Option<String>,
         order: i8,
         limit: i16
@@ -537,7 +537,7 @@ impl Base {
     }
 
     pub async fn per_request_3<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         subscribers_quantity: Option<i64>,
         order: i8,
         limit: i16
@@ -684,7 +684,7 @@ impl Base {
     }
 
     pub async fn per_request_4<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         id_registry: &'a Vec<i64>
     ) -> Result<Option<Vec<ActionHandlerOutcomingDataGetManyByIdRegistryChannel>>, ErrorAuditor> {
         if id_registry.is_empty() {

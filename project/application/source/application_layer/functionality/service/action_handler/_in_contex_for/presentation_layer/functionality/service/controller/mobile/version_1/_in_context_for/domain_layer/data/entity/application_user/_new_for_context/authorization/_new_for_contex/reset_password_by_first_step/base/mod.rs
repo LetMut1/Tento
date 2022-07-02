@@ -44,9 +44,9 @@ impl Base {
         let application_user_email = action_handler_incoming_data.into_inner();
 
         match postgresql_core_connection_pool.get().await {
-            Ok(mut postgresql_core_pooled_connection) => {
+            Ok(postgresql_core_pooled_connection) => {
                 match ApplicationUserDataProviderPostgresql::find_by_email(
-                    &mut *postgresql_core_pooled_connection, application_user_email.as_str()
+                    &*postgresql_core_pooled_connection, application_user_email.as_str()
                 ).await {
                     Ok(application_user) => {
                         if let Some(application_user_) = application_user {

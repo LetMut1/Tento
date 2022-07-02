@@ -68,9 +68,9 @@ impl Base {
                                 }
                         
                                 match postgresql_core_connection_pool.get().await {
-                                    Ok(mut postgresql_core_pooled_connection) => {
+                                    Ok(postgresql_core_pooled_connection) => {
                                         match ChannelDataProviderPostgresql::per_request_3(
-                                            &mut *postgresql_core_pooled_connection, channel_subscribers_quantity, order, limit
+                                            &*postgresql_core_pooled_connection, channel_subscribers_quantity, order, limit
                                         ).await {
                                             Ok(channel_registry) => {
                                                 return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(channel_registry)));

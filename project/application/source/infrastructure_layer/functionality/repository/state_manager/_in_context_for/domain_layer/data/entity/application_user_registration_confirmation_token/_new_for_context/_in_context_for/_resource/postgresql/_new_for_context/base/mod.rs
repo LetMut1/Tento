@@ -15,7 +15,7 @@ pub struct Base;
 
 impl Base {
     pub async fn create<'a>(
-        authorization_connection: &'a mut Connection,
+        authorization_connection: &'a Connection,
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), ErrorAuditor> {
         let applicaion_user_email = application_user_registration_confirmation_token.get_application_user_email();
@@ -83,7 +83,7 @@ impl Base {
     }
 
     pub async fn delete<'a>(
-        authorization_connection: &'a mut Connection,
+        authorization_connection: &'a Connection,
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), ErrorAuditor> {
         let applicaion_user_email = application_user_registration_confirmation_token.get_application_user_email();
@@ -154,7 +154,7 @@ impl Base {
     }
 
     pub async fn update<'a>(
-        authorization_connection: &'a mut Connection,
+        authorization_connection: &'a Connection,
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>,
         update_resolver: UpdateResolver
     ) -> Result<(), ErrorAuditor> {

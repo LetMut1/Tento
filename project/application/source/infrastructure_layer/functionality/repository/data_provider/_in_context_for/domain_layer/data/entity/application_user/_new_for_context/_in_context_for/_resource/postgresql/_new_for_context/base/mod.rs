@@ -12,7 +12,7 @@ pub struct Base;
 
 impl Base {
     pub async fn is_exist_by_nickanme<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         nickname: &'a str
     ) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -57,7 +57,7 @@ impl Base {
     }
 
     pub async fn is_exist_by_email<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         email: &'a str
     ) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -102,7 +102,7 @@ impl Base {
     }
 
     pub async fn find_by_email<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         email: &'a str
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -236,7 +236,7 @@ impl Base {
     }
 
     pub async fn find_by_nickname<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         nickname: &'a str
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -370,7 +370,7 @@ impl Base {
     }
 
     pub async fn find_by_id<'a>(
-        core_connection: &'a mut Connection,
+        core_connection: &'a Connection,
         id: i64
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();

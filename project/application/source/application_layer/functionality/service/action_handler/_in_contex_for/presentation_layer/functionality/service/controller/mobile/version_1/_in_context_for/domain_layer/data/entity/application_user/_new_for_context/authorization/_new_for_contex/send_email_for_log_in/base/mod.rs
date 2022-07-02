@@ -51,9 +51,9 @@ impl Base {
                     Ok(application_user_log_in_token) => {
                         if let Some(application_user_log_in_token_) = application_user_log_in_token {
                             match postgresql_core_connection_pool.get().await {
-                                Ok(mut postgresql_core_pooled_connection) => {
+                                Ok(postgresql_core_pooled_connection) => {
                                     match ApplicationUserDataProviderPostgresql::find_by_id(
-                                        &mut *postgresql_core_pooled_connection,
+                                        &*postgresql_core_pooled_connection,
                                         application_user_id
                                     ).await {
                                         Ok(application_user) => {

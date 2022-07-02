@@ -13,7 +13,7 @@ pub struct Base;
 
 impl Base {
     pub async fn find_by_application_user_email<'a>(
-        authorization_connection: &'a mut Connection,
+        authorization_connection: &'a Connection,
         application_user_email: &'a str
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
