@@ -25,7 +25,7 @@ pub struct Base;
 impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<()>, ErrorAuditor>
     where
@@ -36,19 +36,19 @@ impl Base {
     { // TODO  TODO  TODO  TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let application_user_email = action_handler_incoming_data.into_inner();
 
-        match postgresql_authorization_connection_pool.get().await {
-            Ok(postgresql_authorization_pooled_connection) => {
-                let postgresql_authorization_connection = &*postgresql_authorization_pooled_connection;
+        match authorization_postgresql_connection_pool.get().await {
+            Ok(authorization_postgresql_pooled_connection) => {
+                let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
                 match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_by_application_user_email(
-                    postgresql_authorization_connection, application_user_email.as_str()
+                    authorization_postgresql_connection, application_user_email.as_str()
                 ).await {
                     Ok(application_user_registration_confirmation_token) => {
                         if let Some(application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
                             match UpdateResolver::new(false, true) {
                                 Ok(update_resolver) => {
                                     if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                        postgresql_authorization_connection, &application_user_registration_confirmation_token_, update_resolver
+                                        authorization_postgresql_connection, &application_user_registration_confirmation_token_, update_resolver
                                     ).await {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                 

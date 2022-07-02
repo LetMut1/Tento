@@ -34,7 +34,7 @@ impl Base {
     pub async fn handle<'a, T>(      // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>

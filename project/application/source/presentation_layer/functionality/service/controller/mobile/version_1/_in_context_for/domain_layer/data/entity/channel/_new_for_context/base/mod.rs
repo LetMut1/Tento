@@ -38,7 +38,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -59,7 +59,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyByName>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyByName::handle(
-                    environment_configuration_resolver, core_postgresql_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => { 
                         match action_handler_result {
@@ -146,7 +146,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -167,7 +167,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyByCreatedAt>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyByCreatedAt::handle(
-                    environment_configuration_resolver, core_postgresql_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => { 
                         match action_handler_result {
@@ -254,7 +254,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -275,7 +275,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyBySubscribersQuantity>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyBySubscribersQuantity::handle(
-                    environment_configuration_resolver, core_postgresql_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => { 
                         match action_handler_result {
@@ -362,7 +362,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
@@ -383,7 +383,7 @@ impl Base {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyByIdRegistry>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyByIdRegistry::handle(
-                    environment_configuration_resolver, core_postgresql_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => { 
                         match action_handler_result {

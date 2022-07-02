@@ -7,6 +7,6 @@ use tokio_postgres::NoTls;
 pub enum PostgresqlConnectionPoolWorkflowTypeAggregator {
     LocalDevelopment {
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
-        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
     }
 }

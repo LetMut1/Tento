@@ -15,8 +15,8 @@ services:
         volumes:
             - core_postgresql_data:/var/lib/postgresql/data
         restart: always
-    postgresql_authorization:
-        container_name: tento_postgresql_authorization
+    authorization_postgresql:
+        container_name: tento_authorization_postgresql
         build:
             context: ./service/postgresql
             dockerfile: dockerfile
@@ -27,7 +27,7 @@ services:
             POSTGRES_PASSWORD: 'password'
             POSTGRES_DB: 'tento'
         volumes:
-            - postgresql_authorization_data:/var/lib/postgresql/data
+            - authorization_postgresql_data:/var/lib/postgresql/data
         restart: always
     redis:
         container_name: tento_redis
@@ -55,7 +55,7 @@ services:
 volumes:
     core_postgresql_data:
         driver: local
-    postgresql_authorization_data:
+    authorization_postgresql_data:
         driver: local
 
 networks:

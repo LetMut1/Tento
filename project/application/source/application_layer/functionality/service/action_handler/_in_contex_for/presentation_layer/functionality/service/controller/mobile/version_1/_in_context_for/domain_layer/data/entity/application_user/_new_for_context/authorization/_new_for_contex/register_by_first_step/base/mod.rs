@@ -30,7 +30,7 @@ impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<()>, ErrorAuditor>
     where
@@ -51,12 +51,12 @@ impl Base {
                             ).await {
                                 Ok(is_exist_by_email) => {
                                     if !is_exist_by_email {
-                                        match postgresql_authorization_connection_pool.get().await {
-                                            Ok(postgresql_authorization_pooled_connection) => {
-                                                let postgresql_authorization_connection = &*postgresql_authorization_pooled_connection;
+                                        match authorization_postgresql_connection_pool.get().await {
+                                            Ok(authorization_postgresql_pooled_connection) => {
+                                                let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
                 
                                                 match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_by_application_user_email(
-                                                    postgresql_authorization_connection, application_user_email.as_str()
+                                                    authorization_postgresql_connection, application_user_email.as_str()
                                                 ).await {
                                                     Ok(application_user_registration_confirmation_token_) => {
                                                         let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;
@@ -68,7 +68,7 @@ impl Base {
                                                                 match UpdateResolver::new(false, true) {
                                                                     Ok(update_resolver) => {
                                                                         if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                            postgresql_authorization_connection, &application_user_registration_confirmation_token, update_resolver
+                                                                            authorization_postgresql_connection, &application_user_registration_confirmation_token, update_resolver
                                                                         ).await {
                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                     
@@ -91,7 +91,7 @@ impl Base {
                                                                     );
                                         
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::create(
-                                                                    postgresql_authorization_connection, &application_user_registration_confirmation_token
+                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                             

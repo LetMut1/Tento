@@ -32,7 +32,7 @@ impl RequestResponseDataEncodingProtocolWrapper {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         wrapped_action: FO
     ) -> Response<Body>
@@ -68,7 +68,7 @@ impl RequestResponseDataEncodingProtocolWrapper {
                         match ActionRaoundParameterExtractor::handle::<'_, _, _, _, AHID, AHOD>(
                             environment_configuration_resolver,
                             core_postgresql_connection_pool,
-                            postgresql_authorization_connection_pool,
+                            authorization_postgresql_connection_pool,
                             redis_connection_pool,
                             ActionHandlerIncomingData::new(request_parts, wrapped_action_handler_incoming_data),
                             wrapped_action
