@@ -29,7 +29,7 @@ pub struct Base;
 impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<()>, ErrorAuditor>
@@ -44,10 +44,10 @@ impl Base {
         match ApplicationUserValidator::is_valid_email(application_user_email.as_str()) {
             Ok(is_valid_email) => {
                 if is_valid_email {
-                    match postgresql_core_connection_pool.get().await {
-                        Ok(postgresql_core_pooled_connection) => {
+                    match core_postgresql_connection_pool.get().await {
+                        Ok(core_postgresql_pooled_connection) => {
                             match ApplicationUserDataProviderPostgresql::is_exist_by_email(
-                                &*postgresql_core_pooled_connection, application_user_email.as_str()
+                                &*core_postgresql_pooled_connection, application_user_email.as_str()
                             ).await {
                                 Ok(is_exist_by_email) => {
                                     if !is_exist_by_email {

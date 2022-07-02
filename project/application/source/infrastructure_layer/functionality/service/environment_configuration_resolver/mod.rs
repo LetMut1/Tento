@@ -12,7 +12,7 @@ pub struct EnvironmentConfigurationResolver {
     logger_encoder_pattern: String,
     security_jrwt_encoding_private_key: String,
     security_jawt_signature_encoding_private_key: String,
-    resource_postgresql_core_configuration: Config,
+    resource_core_postgresql_configuration: Config,
     resource_postgresql_authorization_configuration: Config,
     resource_redis_connection_info: ConnectionInfo,
     resource_email_server_socket_address: SocketAddr
@@ -25,7 +25,7 @@ impl EnvironmentConfigurationResolver {
     pub const LOGGER_ENCODER_PATTERN_KEY: &'static str = "LOGGER_ENCODER_PATTERN";
     pub const SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_JRWT_ENCODING_PRIVATE_KEY";
     pub const SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY";
-    pub const RESOURCE_POSTGRESQL_CORE_URL_KEY: &'static str = "RESOURCE_POSTGRESQL_CORE_URL";
+    pub const RESOURCE_CORE_POSTGRESQL_URL_KEY: &'static str = "RESOURCE_CORE_POSTGRESQL_URL";
     pub const RESOURCE_POSTGRESQL_AUTHORIZATION_URL_KEY: &'static str = "RESOURCE_POSTGRESQL_AUTHORIZATION_URL";
     pub const RESOURCE_REDIS_URL_KEY: &'static str = "RESOURCE_REDIS_URL";
     pub const RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY: &'static str = "RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS";
@@ -38,7 +38,7 @@ impl EnvironmentConfigurationResolver {
         logger_encoder_pattern: String,
         security_jrwt_encoding_private_key: String,
         security_jawt_signature_encoding_private_key: String,
-        resource_postgresql_core_configuration: Config,
+        resource_core_postgresql_configuration: Config,
         resource_postgresql_authorization_configuration: Config,
         resource_redis_connection_info: ConnectionInfo,
         resource_email_server_socket_address: SocketAddr
@@ -51,7 +51,7 @@ impl EnvironmentConfigurationResolver {
             logger_encoder_pattern,
             security_jrwt_encoding_private_key,
             security_jawt_signature_encoding_private_key,
-            resource_postgresql_core_configuration,
+            resource_core_postgresql_configuration,
             resource_postgresql_authorization_configuration,
             resource_redis_connection_info,
             resource_email_server_socket_address
@@ -86,8 +86,8 @@ impl EnvironmentConfigurationResolver {
         return self.security_jawt_signature_encoding_private_key.as_str();
     }
 
-    pub fn get_resource_postgresql_core_configuration<'a>(&'a self) -> &'a Config {
-        return &self.resource_postgresql_core_configuration;
+    pub fn get_resource_core_postgresql_configuration<'a>(&'a self) -> &'a Config {
+        return &self.resource_core_postgresql_configuration;
     }
 
     pub fn get_resource_postgresql_authorization_configuration<'a>(&'a self) -> &'a Config {

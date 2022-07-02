@@ -31,7 +31,7 @@ impl RequestResponseDataEncodingProtocolWrapper {
     pub async fn wrap_to_json<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         wrapped_action: FO
@@ -67,7 +67,7 @@ impl RequestResponseDataEncodingProtocolWrapper {
                     Ok(wrapped_action_handler_incoming_data) => {
                         match ActionRaoundParameterExtractor::handle::<'_, _, _, _, AHID, AHOD>(
                             environment_configuration_resolver,
-                            postgresql_core_connection_pool,
+                            core_postgresql_connection_pool,
                             postgresql_authorization_connection_pool,
                             redis_connection_pool,
                             ActionHandlerIncomingData::new(request_parts, wrapped_action_handler_incoming_data),

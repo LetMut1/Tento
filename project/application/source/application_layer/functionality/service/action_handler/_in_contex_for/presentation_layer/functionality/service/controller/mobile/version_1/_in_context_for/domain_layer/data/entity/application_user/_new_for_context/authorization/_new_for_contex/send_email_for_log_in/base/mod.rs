@@ -26,7 +26,7 @@ pub struct Base;
 impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
@@ -50,10 +50,10 @@ impl Base {
                 ).await {
                     Ok(application_user_log_in_token) => {
                         if let Some(application_user_log_in_token_) = application_user_log_in_token {
-                            match postgresql_core_connection_pool.get().await {
-                                Ok(postgresql_core_pooled_connection) => {
+                            match core_postgresql_connection_pool.get().await {
+                                Ok(core_postgresql_pooled_connection) => {
                                     match ApplicationUserDataProviderPostgresql::find_by_id(
-                                        &*postgresql_core_pooled_connection,
+                                        &*core_postgresql_pooled_connection,
                                         application_user_id
                                     ).await {
                                         Ok(application_user) => {

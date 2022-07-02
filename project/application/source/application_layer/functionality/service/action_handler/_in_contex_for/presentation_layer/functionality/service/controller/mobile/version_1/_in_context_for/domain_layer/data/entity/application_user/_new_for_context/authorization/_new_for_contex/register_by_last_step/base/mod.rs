@@ -39,7 +39,7 @@ pub struct Base;
 impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
@@ -60,14 +60,14 @@ impl Base {
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
             if ApplicationUserValidator::is_valid_nickname(application_user_nickname.as_str()) {
-                match postgresql_core_connection_pool.get().await {
-                    Ok(postgresql_core_pooled_connection) => {
-                        let postgresql_core_connection = &*postgresql_core_pooled_connection;
+                match core_postgresql_connection_pool.get().await {
+                    Ok(core_postgresql_pooled_connection) => {
+                        let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
-                        match ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(postgresql_core_connection, application_user_nickname.as_str()).await {
+                        match ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(core_postgresql_connection, application_user_nickname.as_str()).await {
                             Ok(is_exist_by_nickname) => {
                                 if !is_exist_by_nickname {
-                                    match ApplicationUserDataProviderPostgresql::is_exist_by_email(postgresql_core_connection, application_user_email.as_str()).await {
+                                    match ApplicationUserDataProviderPostgresql::is_exist_by_email(core_postgresql_connection, application_user_email.as_str()).await {
                                         Ok(is_exist_by_email) => {
                                             if !is_exist_by_email {
                                                 match postgresql_authorization_connection_pool.get().await {
@@ -98,7 +98,7 @@ impl Base {
                                                                                     chrono::Utc::now().to_rfc2822() // TODO  Delete. Все Часы делаются через БД.
                                                                                 );
                                                                                 
-                                                                                match ApplicationUserStateManagerPostgresql::create(postgresql_core_connection, &application_user).await {
+                                                                                match ApplicationUserStateManagerPostgresql::create(core_postgresql_connection, &application_user).await {
                                                                                     Ok(application_user_id) => {
                                                                                         let json_refresh_web_token = JsonRefreshWebTokenFactory::create_from_id_registry(
                                                                                             application_user_id, application_user_log_in_token_device_id.as_str()
@@ -180,7 +180,7 @@ impl Base {
                                                                         }
                                                                     } else {
                                                                         if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::delete(
-                                                                            postgresql_core_connection, &application_user_registration_confirmation_token_).await {
+                                                                            core_postgresql_connection, &application_user_registration_confirmation_token_).await {
                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 
                                                                             return Err(error);
