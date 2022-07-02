@@ -7,6 +7,7 @@ use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_com
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::_in_context_for::infrastructure_layer::functionality::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use crate::infrastructure_layer::functionality::service::counter_u8::CounterU8;
+use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as UpdateResolver;
 use tokio_postgres::Client as Connection;
 use tokio_postgres::types::Type;
 
@@ -155,31 +156,11 @@ impl Base {
     pub async fn update<'a>(
         authorization_connection: &'a mut Connection,
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>,
-
-
-        // TODO !!!!!!!!!!!!!!!!
         update_resolver: UpdateResolver
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id: i64;
-        match application_user.get_id() {
-            Some(application_user_id_) => {
-                application_user_id = application_user_id_;
-            }
-            None => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "The application_user_id should exist.") },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+        let application_user_email = application_user_registration_confirmation_token.get_application_user_email();
 
-        let email = application_user.get_email();
-
-        let nickanme = application_user.get_nickname();
-
-        let password_hash = application_user.get_password_hash();
+        let wrong_enter_tries_quantity = application_user_registration_confirmation_token.get_wrong_enter_tries_quantity() as i16;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -189,8 +170,8 @@ impl Base {
 
         let mut column_name_registry_description: Option<String> = None;
         let mut column_value_registry_description: Option<String> = None;
-        if update_resolver.is_update_email() {
-            column_name_registry_description = Some("email".to_string());
+        if update_resolver.is_update_wrong_enter_tries_quantity() {
+            column_name_registry_description = Some("wrong_enter_tries_quantity".to_string());
 
             match counter_u8.get_next() {
                 Ok(counter_) => {
@@ -206,12 +187,12 @@ impl Base {
                 "$".to_string() + counter_u8_value.to_string().as_str()
             );
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(&wrong_enter_tries_quantity, Type::INT2);
         }
-        if update_resolver.is_update_nickname() {
+        if update_resolver.is_update_created_at() {
             match column_name_registry_description {
                 Some(mut column_name_registry_description_) => {
-                    column_name_registry_description_ = column_name_registry_description_ + ", nickname";
+                    column_name_registry_description_ = column_name_registry_description_ + ", created_at";
                     
                     column_name_registry_description = Some(column_name_registry_description_);
 
@@ -231,12 +212,12 @@ impl Base {
 
                             column_value_registry_description = Some(column_value_registry_description_);
 
-                            prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
+                            prepared_statemant_parameter_convertation_resolver.add_parameter(&"DEFAULT", Type::TEXT);
                         }
                         None => {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUserRegistrationConfirmationToken update.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -244,13 +225,13 @@ impl Base {
                     }
                 }
                 None => {
-                    column_name_registry_description = Some("nickname".to_string());
+                    column_name_registry_description = Some("created_at".to_string());
 
                     match column_value_registry_description {
                         Some(_) => {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser update.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUserRegistrationConfirmationToken update.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -268,73 +249,7 @@ impl Base {
                             }
                             column_value_registry_description = Some("$".to_string() + counter_u8_value.to_string().as_str());
 
-                            prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
-                        }
-                    }
-                }
-            }
-        }
-        if update_resolver.is_update_password_hash() {
-            match column_name_registry_description {
-                Some(mut column_name_registry_description_) => {
-                    column_name_registry_description_ = column_name_registry_description_ + ", password_hash";
-
-                    column_name_registry_description = Some(column_name_registry_description_);
-
-                    match column_value_registry_description {
-                        Some(mut column_value_registry_description_) => {
-                            match counter_u8.get_next() {
-                                Ok(counter_) => {
-                                    counter_u8_value = counter_;
-                                }
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
-                                    return Err(error);
-                                }
-                            }
-                            column_value_registry_description_ = column_value_registry_description_+ ", $" + counter_u8_value.to_string().as_str();
-
-                            column_value_registry_description = Some(column_value_registry_description_);
-
-                            prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
-                        }
-                        None => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-                }
-                None => {
-                    column_name_registry_description = Some("password_hash".to_string());
-
-                    match column_value_registry_description {
-                        Some(_) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser update.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                        None => {
-                            match counter_u8.get_next() {
-                                Ok(counter_) => {
-                                    counter_u8_value = counter_;
-                                }
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
-                                    return Err(error);
-                                }
-                            }
-                            column_value_registry_description = Some("$".to_string() + counter_u8_value.to_string().as_str());
-
-                            prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
+                            prepared_statemant_parameter_convertation_resolver.add_parameter(&"DEFAULT", Type::TEXT);
                         }
                     }
                 }
@@ -357,18 +272,18 @@ impl Base {
                             }
                         }
                         query = 
-                            "UPDATE ONLY public.application_user AS au \
+                            "UPDATE ONLY public.application_user_registration_confirmation_token AS aurct \
                             SET ("
                             .to_string()
                             + column_name_registry_description_.as_str()
                             + ") = ROW("
                             + column_value_registry_description_.as_str()
                             + ") \
-                            WHERE au.id = $" + counter_u8_value.to_string().as_str()
+                            WHERE aurct.application_user_email = $" + counter_u8_value.to_string().as_str()
                             + " RETURNING \
-                                au.id AS i;";
+                                aurct.application_user_email AS aue;";
                         
-                        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
+                        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
                     }
                     None => {
                         return Err(
@@ -390,9 +305,9 @@ impl Base {
             }
         }
 
-        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match authorization_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(

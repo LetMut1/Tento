@@ -16,6 +16,7 @@ use crate::infrastructure_layer::functionality::repository::data_provider::_in_c
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as UpdateResolver;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -64,12 +65,21 @@ impl Base {
                                                             Some(application_user_registration_confirmation_token__) => {
                                                                 application_user_registration_confirmation_token = application_user_registration_confirmation_token__;
                                         
-                                                                if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update_created_at(
-                                                                    postgresql_authorization_connection, &application_user_registration_confirmation_token
-                                                                ).await {
-                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
-                                                                    return Err(error);
+                                                                match UpdateResolver::new(false, true) {
+                                                                    Ok(update_resolver) => {
+                                                                        if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
+                                                                            postgresql_authorization_connection, &application_user_registration_confirmation_token, update_resolver
+                                                                        ).await {
+                                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                    
+                                                                            return Err(error);
+                                                                        }
+                                                                    }
+                                                                    Err(mut error) => {
+                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                        
+                                                                        return Err(error);
+                                                                    }
                                                                 }
                                                             }
                                                             None => {

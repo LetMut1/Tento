@@ -26,6 +26,7 @@ use crate::infrastructure_layer::functionality::repository::state_manager::_in_c
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserStateManagerPostgresql;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy; // TODO не удалять до удаляния самого ервиса
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as UpdateResolver;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -161,13 +162,25 @@ impl Base {
                                                                     }
                                         
                                                                     if application_user_registration_confirmation_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                                                                        if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::create(redis_connection, &application_user_registration_confirmation_token_).await {
-                                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                
-                                                                            return Err(error);
+                                                                        match UpdateResolver::new(true, false) {
+                                                                            Ok(update_resolver) => {
+                                                                                if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
+                                                                                    postgresql_authorization_connection, &application_user_registration_confirmation_token_, update_resolver
+                                                                                ).await {
+                                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                            
+                                                                                    return Err(error);
+                                                                                }
+                                                                            }
+                                                                            Err(mut error) => {
+                                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                                
+                                                                                return Err(error);
+                                                                            }
                                                                         }
                                                                     } else {
-                                                                        if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerRedis::delete(redis_connection, &application_user_registration_confirmation_token_).await {
+                                                                        if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::delete(
+                                                                            postgresql_core_connection, &application_user_registration_confirmation_token_).await {
                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 
                                                                             return Err(error);
