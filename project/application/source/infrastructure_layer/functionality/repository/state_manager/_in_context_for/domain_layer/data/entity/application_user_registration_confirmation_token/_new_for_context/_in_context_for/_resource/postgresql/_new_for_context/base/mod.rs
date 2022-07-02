@@ -81,11 +81,11 @@ impl Base {
         }
     }
 
-    pub async fn update_created_at<'a>(
+    pub async fn delete<'a>(
         authorization_connection: &'a mut Connection,
-        application_user_registration_confrimation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
+        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), ErrorAuditor> {
-        let application_user_email = application_user_registration_confrimation_token.get_application_user_email();
+        let applicaion_user_email = application_user_registration_confirmation_token.get_application_user_email();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -105,20 +105,16 @@ impl Base {
                 return Err(error);
             }
         }
-        query = 
-            "UPDATE ONLY public.application_user_registration_confirmation_token AS aurct \
-            SET ( \
-                created_at \
-            ) = ROW( \
-                DEFAULT \
-            ) \
+
+        let query = 
+            "DELETE FROM ONLY public.application_user_registration_confirmation_token AS aurct \
             WHERE aurct.application_user_email = $"
             .to_string()
             + counter_u8_value.to_string().as_str()
             + " RETURNING \
                 1::SMALLINT;";
-        
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&applicaion_user_email, Type::TEXT);
 
         match authorization_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
             Ok(ref statement) => {
@@ -127,7 +123,281 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationConfirmationToken can not be updated in Postgesql database.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationConfirmationToken can not be deleted from Postgesql database.") },
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+
+                        return Ok(());
+                    }
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
+    }
+
+    pub async fn update<'a>(
+        authorization_connection: &'a mut Connection,
+        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>,
+
+
+        // TODO !!!!!!!!!!!!!!!!
+        update_resolver: UpdateResolver
+    ) -> Result<(), ErrorAuditor> {
+        let application_user_id: i64;
+        match application_user.get_id() {
+            Some(application_user_id_) => {
+                application_user_id = application_user_id_;
+            }
+            None => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::LogicError { logic_error: LogicError::new(false, "The application_user_id should exist.") },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
+
+        let email = application_user.get_email();
+
+        let nickanme = application_user.get_nickname();
+
+        let password_hash = application_user.get_password_hash();
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let mut counter_u8 = CounterU8::new();
+
+        let mut counter_u8_value: u8;
+
+        let mut column_name_registry_description: Option<String> = None;
+        let mut column_value_registry_description: Option<String> = None;
+        if update_resolver.is_update_email() {
+            column_name_registry_description = Some("email".to_string());
+
+            match counter_u8.get_next() {
+                Ok(counter_) => {
+                    counter_u8_value = counter_;
+                }
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+                    return Err(error);
+                }
+            }
+            column_value_registry_description = Some(
+                "$".to_string() + counter_u8_value.to_string().as_str()
+            );
+
+            prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
+        }
+        if update_resolver.is_update_nickname() {
+            match column_name_registry_description {
+                Some(mut column_name_registry_description_) => {
+                    column_name_registry_description_ = column_name_registry_description_ + ", nickname";
+                    
+                    column_name_registry_description = Some(column_name_registry_description_);
+
+                    match column_value_registry_description {
+                        Some(mut column_value_registry_description_) => {
+                            match counter_u8.get_next() {
+                                Ok(counter_) => {
+                                    counter_u8_value = counter_;
+                                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
+                            }
+                            column_value_registry_description_ = column_value_registry_description_+ ", $" + counter_u8_value.to_string().as_str();
+
+                            column_value_registry_description = Some(column_value_registry_description_);
+
+                            prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
+                        }
+                        None => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.") },
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                    }
+                }
+                None => {
+                    column_name_registry_description = Some("nickname".to_string());
+
+                    match column_value_registry_description {
+                        Some(_) => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser update.") },
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                        None => {
+                            match counter_u8.get_next() {
+                                Ok(counter_) => {
+                                    counter_u8_value = counter_;
+                                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
+                            }
+                            column_value_registry_description = Some("$".to_string() + counter_u8_value.to_string().as_str());
+
+                            prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
+                        }
+                    }
+                }
+            }
+        }
+        if update_resolver.is_update_password_hash() {
+            match column_name_registry_description {
+                Some(mut column_name_registry_description_) => {
+                    column_name_registry_description_ = column_name_registry_description_ + ", password_hash";
+
+                    column_name_registry_description = Some(column_name_registry_description_);
+
+                    match column_value_registry_description {
+                        Some(mut column_value_registry_description_) => {
+                            match counter_u8.get_next() {
+                                Ok(counter_) => {
+                                    counter_u8_value = counter_;
+                                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
+                            }
+                            column_value_registry_description_ = column_value_registry_description_+ ", $" + counter_u8_value.to_string().as_str();
+
+                            column_value_registry_description = Some(column_value_registry_description_);
+
+                            prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
+                        }
+                        None => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.") },
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                    }
+                }
+                None => {
+                    column_name_registry_description = Some("password_hash".to_string());
+
+                    match column_value_registry_description {
+                        Some(_) => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUser update.") },
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                        None => {
+                            match counter_u8.get_next() {
+                                Ok(counter_) => {
+                                    counter_u8_value = counter_;
+                                }
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    
+                                    return Err(error);
+                                }
+                            }
+                            column_value_registry_description = Some("$".to_string() + counter_u8_value.to_string().as_str());
+
+                            prepared_statemant_parameter_convertation_resolver.add_parameter(&password_hash, Type::TEXT);
+                        }
+                    }
+                }
+            }
+        }
+
+        let query: String;
+        match column_name_registry_description {
+            Some(column_name_registry_description_) => {
+                match column_value_registry_description {
+                    Some(column_value_registry_description_) => {
+                        match counter_u8.get_next() {
+                            Ok(counter_) => {
+                                counter_u8_value = counter_;
+                            }
+                            Err(mut error) => {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                
+                                return Err(error);
+                            }
+                        }
+                        query = 
+                            "UPDATE ONLY public.application_user AS au \
+                            SET ("
+                            .to_string()
+                            + column_name_registry_description_.as_str()
+                            + ") = ROW("
+                            + column_value_registry_description_.as_str()
+                            + ") \
+                            WHERE au.id = $" + counter_u8_value.to_string().as_str()
+                            + " RETURNING \
+                                au.id AS i;";
+                        
+                        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
+                    }
+                    None => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.") },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                }
+            }
+            None => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::LogicError { logic_error: LogicError::new(true, "The columns name description should exist for ApplicationUser update.") },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
+
+        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+            Ok(ref statement) => {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                    Ok(row_registry) => {
+                        if row_registry.is_empty() {
+                            return Err(
+                                ErrorAuditor::new(
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgesql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );

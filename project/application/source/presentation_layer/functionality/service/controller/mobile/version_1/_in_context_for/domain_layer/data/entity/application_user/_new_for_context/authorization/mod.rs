@@ -335,7 +335,7 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRegisterByFirstStep>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerRegisterByFirstStep::handle(
-                    environment_configuration_resolver, postgresql_core_connection_pool, postgresql_authorization_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_core_connection_pool, postgresql_authorization_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -638,8 +638,8 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         _postgresql_core_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: Pool<RedisConnectionManager>
+        postgresql_authorization_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -659,7 +659,7 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForRegister>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerSendEmailForRegister::handle(
-                    environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, postgresql_authorization_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {

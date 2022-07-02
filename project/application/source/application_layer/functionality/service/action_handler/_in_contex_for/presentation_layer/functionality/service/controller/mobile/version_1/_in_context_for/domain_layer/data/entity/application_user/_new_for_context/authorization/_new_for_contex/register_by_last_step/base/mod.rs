@@ -20,11 +20,11 @@ use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_com
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenDataProviderRedis;
+use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenStateManagerRedis;
+use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserStateManagerPostgresql;
-use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;
+use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy; // TODO не удалять до удаляния самого ервиса
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use std::clone::Clone;
 use std::marker::Send;
@@ -69,19 +69,21 @@ impl Base {
                                     match ApplicationUserDataProviderPostgresql::is_exist_by_email(postgresql_core_connection, application_user_email.as_str()).await {
                                         Ok(is_exist_by_email) => {
                                             if !is_exist_by_email {
-                                                match redis_connection_pool.get().await {
-                                                    Ok(mut redis_pooled_connection) => {
-                                                        let redis_connection = &mut *redis_pooled_connection;
+                                                match postgresql_authorization_connection_pool.get().await {
+                                                    Ok(mut postgresql_authorization_pooled_connection) => {
+                                                        let postgresql_authorization_connection = &mut *postgresql_authorization_pooled_connection;
                 
-                                                        match ApplicationUserRegistrationConfirmationTokenDataProviderRedis::find_by_application_user_email(
-                                                            redis_connection, application_user_email.as_str()
+                                                        match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_by_application_user_email(
+                                                            postgresql_authorization_connection, application_user_email.as_str()
                                                         ).await {
                                                             Ok(application_user_registration_confirmation_token) => {
                                                                 if let Some(mut application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
                                                                     if application_user_registration_confirmation_token_.get_value() == application_user_registration_confirmation_token_value.as_str() {
                                                                         match PasswordHashResolver::create(application_user_password.as_str()) {
                                                                             Ok(application_user_password_hash) => {
-                                                                                if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerRedis::delete(redis_connection, &application_user_registration_confirmation_token_).await {
+                                                                                if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::delete(
+                                                                                    postgresql_authorization_connection, &application_user_registration_confirmation_token_
+                                                                                ).await {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 
                                                                                     return Err(error);
@@ -101,11 +103,12 @@ impl Base {
                                                                                             application_user_id, application_user_log_in_token_device_id.as_str()
                                                                                         );
                                                         
-                                                                                        if let Err(mut error) = RepositoryProxy::create(redis_connection, &json_refresh_web_token).await {
-                                                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                                                        // TODO TODO TODO 
+                                                                                        // if let Err(mut error) = RepositoryProxy::create(redis_connection, &json_refresh_web_token).await {
+                                                                                        //     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                         
-                                                                                            return Err(error);
-                                                                                        }
+                                                                                        //     return Err(error);
+                                                                                        // }
                                                         
                                                                                         match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token) {
                                                                                             Ok(ref json_access_web_token) => {
@@ -158,7 +161,7 @@ impl Base {
                                                                     }
                                         
                                                                     if application_user_registration_confirmation_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                                                                        if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerRedis::create(redis_connection, &application_user_registration_confirmation_token_).await {
+                                                                        if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::create(redis_connection, &application_user_registration_confirmation_token_).await {
                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 
                                                                             return Err(error);
@@ -186,7 +189,7 @@ impl Base {
                                                     Err(error) => {
                                                         return Err(
                                                             ErrorAuditor::new(
-                                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolRedisError { bb8_redis_error: error } } },
+                                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
                                                                 BacktracePart::new(line!(), file!(), None)
                                                             )
                                                         );
