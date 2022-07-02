@@ -168,11 +168,8 @@ impl Base {
 
         let mut counter_u8_value: u8;
 
-        let mut column_name_registry_description: Option<String> = None;
-        let mut column_value_registry_description: Option<String> = None;
+        let mut column_name_for_value_registry: Option<(String, String)> = None;
         if update_resolver.is_update_wrong_enter_tries_quantity() {
-            column_name_registry_description = Some("wrong_enter_tries_quantity".to_string());
-
             match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter_u8_value = counter_;
@@ -183,122 +180,95 @@ impl Base {
                     return Err(error);
                 }
             }
-            column_value_registry_description = Some(
-                "$".to_string() + counter_u8_value.to_string().as_str()
+
+            column_name_for_value_registry = Some(
+                (
+                    "wrong_enter_tries_quantity".to_string(),
+                    "$".to_string() + counter_u8_value.to_string().as_str()
+                )
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(&wrong_enter_tries_quantity, Type::INT2);
         }
         if update_resolver.is_update_created_at() {
-            match column_name_registry_description {
-                Some(mut column_name_registry_description_) => {
-                    column_name_registry_description_ = column_name_registry_description_ + ", created_at";
-                    
-                    column_name_registry_description = Some(column_name_registry_description_);
-
-                    match column_value_registry_description {
-                        Some(mut column_value_registry_description_) => {
-                            match counter_u8.get_next() {
-                                Ok(counter_) => {
-                                    counter_u8_value = counter_;
-                                }
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
-                                    return Err(error);
-                                }
-                            }
-                            column_value_registry_description_ = column_value_registry_description_+ ", $" + counter_u8_value.to_string().as_str();
-
-                            column_value_registry_description = Some(column_value_registry_description_);
-
-                            prepared_statemant_parameter_convertation_resolver.add_parameter(&"DEFAULT", Type::TEXT);
+            match column_name_for_value_registry {
+                Some((mut column_name_registry, mut column_value_registry)) => {
+                    match counter_u8.get_next() {
+                        Ok(counter_) => {
+                            counter_u8_value = counter_;
                         }
-                        None => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUserRegistrationConfirmationToken update.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
+                        Err(mut error) => {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            
+                            return Err(error);
                         }
                     }
+
+                    column_name_registry = column_name_registry + ", created_at";
+                    column_value_registry = column_value_registry + ", $" + counter_u8_value.to_string().as_str();
+
+                    column_name_for_value_registry = Some(
+                        (
+                            column_name_registry,
+                            column_value_registry
+                        )
+                    );
                 }
                 None => {
-                    column_name_registry_description = Some("created_at".to_string());
-
-                    match column_value_registry_description {
-                        Some(_) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should not exist for ApplicationUserRegistrationConfirmationToken update.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
+                    match counter_u8.get_next() {
+                        Ok(counter_) => {
+                            counter_u8_value = counter_;
                         }
-                        None => {
-                            match counter_u8.get_next() {
-                                Ok(counter_) => {
-                                    counter_u8_value = counter_;
-                                }
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
-                                    return Err(error);
-                                }
-                            }
-                            column_value_registry_description = Some("$".to_string() + counter_u8_value.to_string().as_str());
-
-                            prepared_statemant_parameter_convertation_resolver.add_parameter(&"DEFAULT", Type::TEXT);
+                        Err(mut error) => {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            
+                            return Err(error);
                         }
                     }
+
+                    column_name_for_value_registry = Some(
+                        (
+                            "created_at".to_string(),
+                            "$".to_string() + counter_u8_value.to_string().as_str()
+                        )
+                    );
                 }
             }
+
+            prepared_statemant_parameter_convertation_resolver.add_parameter(&"DEFAULT", Type::TEXT);
         }
 
         let query: String;
-        match column_name_registry_description {
-            Some(column_name_registry_description_) => {
-                match column_value_registry_description {
-                    Some(column_value_registry_description_) => {
-                        match counter_u8.get_next() {
-                            Ok(counter_) => {
-                                counter_u8_value = counter_;
-                            }
-                            Err(mut error) => {
-                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                
-                                return Err(error);
-                            }
-                        }
-                        query = 
-                            "UPDATE ONLY public.application_user_registration_confirmation_token AS aurct \
-                            SET ("
-                            .to_string()
-                            + column_name_registry_description_.as_str()
-                            + ") = ROW("
-                            + column_value_registry_description_.as_str()
-                            + ") \
-                            WHERE aurct.application_user_email = $" + counter_u8_value.to_string().as_str()
-                            + " RETURNING \
-                                aurct.application_user_email AS aue;";
-                        
-                        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+        match column_name_for_value_registry {
+            Some((column_name_registry, column_value_registry)) => {
+                match counter_u8.get_next() {
+                    Ok(counter_) => {
+                        counter_u8_value = counter_;
                     }
-                    None => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::LogicError { logic_error: LogicError::new(true, "The columns value description should exist for ApplicationUser update.") },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        
+                        return Err(error);
                     }
                 }
+                query = 
+                    "UPDATE ONLY public.application_user_registration_confirmation_token AS aurct \
+                    SET ("
+                    .to_string()
+                    + column_name_registry.as_str()
+                    + ") = ROW("
+                    + column_value_registry.as_str()
+                    + ") \
+                    WHERE aurct.application_user_email = $" + counter_u8_value.to_string().as_str()
+                    + " RETURNING \
+                        aurct.application_user_email AS aue;";
+                
+                prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
             }
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(true, "The columns name description should exist for ApplicationUser update.") },
+                        BaseError::LogicError { logic_error: LogicError::new(true, "The column_name_for_value_registry should exist for ApplicationUserRegistrationConfirmationToken update.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -312,7 +282,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgesql database.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationConfirmation can not be updated in Postgesql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
