@@ -46,9 +46,9 @@ impl Base {
             .add_parameter(&value, Type::TEXT)
             .add_parameter(&wrong_enter_tries_quantity, Type::INT2);
 
-        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match authorization_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
             Ok(ref statement) => {
-                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match authorization_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(
@@ -117,9 +117,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&applicaion_user_email, Type::TEXT);
 
-        match authorization_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match authorization_connection.prepare_typed(query.as_str(), &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
             Ok(ref statement) => {
-                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match authorization_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(
@@ -305,9 +305,9 @@ impl Base {
             }
         }
 
-        match authorization_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()).await {
+        match authorization_connection.prepare_typed(query.as_str(), &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
             Ok(ref statement) => {
-                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()).await {
+                match authorization_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(
