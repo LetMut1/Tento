@@ -10,7 +10,7 @@ pub struct TransactionManager;
 
 impl TransactionManager {
     pub async fn start_transaction<'a>(
-        connection: &'a mut Connection,
+        connection: &'a Connection,
         transaction_isolation_level: TransactionIsolationLevel
     ) -> Result<Self, ErrorAuditor> {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
@@ -50,7 +50,7 @@ impl TransactionManager {
 
     pub async fn commit_transaction<'a>(
         self,
-        connection: &'a mut Connection
+        connection: &'a Connection
     ) -> Result<(), ErrorAuditor> {
         let query = "COMMIT;";
 
@@ -68,7 +68,7 @@ impl TransactionManager {
 
     pub async fn rollback_transaction<'a>(
         self,
-        connection: &'a mut Connection
+        connection: &'a Connection
     ) -> Result<(), ErrorAuditor> {
         let query = "ROLLBACK;";
 
