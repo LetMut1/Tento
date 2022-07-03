@@ -162,21 +162,12 @@ impl Base {
                                                                     }
                                         
                                                                     if application_user_registration_confirmation_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                                                                        match UpdateResolver::new(true, false) {
-                                                                            Ok(update_resolver) => {
-                                                                                if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token_, update_resolver
-                                                                                ).await {
-                                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                            
-                                                                                    return Err(error);
-                                                                                }
-                                                                            }
-                                                                            Err(mut error) => {
-                                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                                
-                                                                                return Err(error);
-                                                                            }
+                                                                        if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
+                                                                            authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(true, false)
+                                                                        ).await {
+                                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                    
+                                                                            return Err(error);
                                                                         }
                                                                     } else {
                                                                         if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::delete(

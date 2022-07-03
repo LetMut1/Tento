@@ -191,19 +191,19 @@ impl Base {
             prepared_statemant_parameter_convertation_resolver.add_parameter(&wrong_enter_tries_quantity, Type::INT2);
         }
         if update_resolver.is_update_created_at() {
+            match counter_u8.get_next() {
+                Ok(counter_) => {
+                    counter_u8_value = counter_;
+                }
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+                    return Err(error);
+                }
+            }
+
             match column_name_for_value_registry {
                 Some((mut column_name_registry, mut column_value_registry)) => {
-                    match counter_u8.get_next() {
-                        Ok(counter_) => {
-                            counter_u8_value = counter_;
-                        }
-                        Err(mut error) => {
-                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-            
-                            return Err(error);
-                        }
-                    }
-
                     column_name_registry = column_name_registry + ", created_at";
                     column_value_registry = column_value_registry + ", $" + counter_u8_value.to_string().as_str();
 
@@ -215,17 +215,6 @@ impl Base {
                     );
                 }
                 None => {
-                    match counter_u8.get_next() {
-                        Ok(counter_) => {
-                            counter_u8_value = counter_;
-                        }
-                        Err(mut error) => {
-                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-            
-                            return Err(error);
-                        }
-                    }
-
                     column_name_for_value_registry = Some(
                         (
                             "created_at".to_string(),
@@ -251,6 +240,7 @@ impl Base {
                         return Err(error);
                     }
                 }
+                
                 query = 
                     "UPDATE ONLY public.application_user_registration_confirmation_token AS aurct \
                     SET ("
@@ -268,7 +258,7 @@ impl Base {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(true, "The column_name_for_value_registry should exist for ApplicationUserRegistrationConfirmationToken update.") },
+                        BaseError::LogicError { logic_error: LogicError::new(false, "There are no values to update.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

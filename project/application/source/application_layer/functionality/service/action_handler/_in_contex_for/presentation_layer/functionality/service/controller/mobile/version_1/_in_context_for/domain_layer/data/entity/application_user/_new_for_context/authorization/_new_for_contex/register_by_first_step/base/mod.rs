@@ -65,21 +65,12 @@ impl Base {
                                                             Some(application_user_registration_confirmation_token__) => {
                                                                 application_user_registration_confirmation_token = application_user_registration_confirmation_token__;
                                         
-                                                                match UpdateResolver::new(false, true) {
-                                                                    Ok(update_resolver) => {
-                                                                        if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                            authorization_postgresql_connection, &application_user_registration_confirmation_token, update_resolver
-                                                                        ).await {
-                                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                    
-                                                                            return Err(error);
-                                                                        }
-                                                                    }
-                                                                    Err(mut error) => {
-                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                        
-                                                                        return Err(error);
-                                                                    }
+                                                                if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
+                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token, UpdateResolver::new(false, true)
+                                                                ).await {
+                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                            
+                                                                    return Err(error);
                                                                 }
                                                             }
                                                             None => {

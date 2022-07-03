@@ -45,21 +45,12 @@ impl Base {
                 ).await {
                     Ok(application_user_registration_confirmation_token) => {
                         if let Some(application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
-                            match UpdateResolver::new(false, true) {
-                                Ok(update_resolver) => {
-                                    if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                        authorization_postgresql_connection, &application_user_registration_confirmation_token_, update_resolver
-                                    ).await {
-                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                
-                                        return Err(error);
-                                    }
-                                }
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
-                                    return Err(error);
-                                }
+                            if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
+                                authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(false, true)
+                            ).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        
+                                return Err(error);
                             }
             
                             if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(

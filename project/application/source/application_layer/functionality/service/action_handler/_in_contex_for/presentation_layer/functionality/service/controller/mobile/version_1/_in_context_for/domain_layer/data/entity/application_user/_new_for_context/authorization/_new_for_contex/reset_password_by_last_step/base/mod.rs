@@ -69,28 +69,19 @@ impl Base {
                                                             Ok(password_hash) => {
                                                                 application_user_.set_password_hash(password_hash);
                         
-                                                                match UpdateResolver::new(false, false, true) {
-                                                                    Ok(update_resolver_application_user) => {
-                                                                        if let Err(mut error) = ApplicationUserStateManagerPostgresql::update(core_postgresql_connection, &application_user_, update_resolver_application_user).await {
-                                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                
-                                                                            return Err(error);
-                                                                        }
-                                
-                                                                        if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerRedis::delete(redis_connection, &application_user_reset_password_token_).await {
-                                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                
-                                                                            return Err(error);
-                                                                        }
+                                                                if let Err(mut error) = ApplicationUserStateManagerPostgresql::update(core_postgresql_connection, &application_user_, UpdateResolver::new(false, false, true)).await {
+                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                         
-                                                                        return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
-                                                                    }
-                                                                    Err(mut error) => {
-                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                        
-                                                                        return Err(error);
-                                                                    }
+                                                                    return Err(error);
                                                                 }
+                        
+                                                                if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerRedis::delete(redis_connection, &application_user_reset_password_token_).await {
+                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                        
+                                                                    return Err(error);
+                                                                }
+                                
+                                                                return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
                                                             }
                                                             Err(mut error) => {
                                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
