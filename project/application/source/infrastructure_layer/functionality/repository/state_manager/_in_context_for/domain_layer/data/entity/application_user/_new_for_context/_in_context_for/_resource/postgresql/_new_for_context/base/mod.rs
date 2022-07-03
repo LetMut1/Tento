@@ -80,7 +80,6 @@ impl Base {
                             }
                         }
 
-                
                         return Ok(id);
                     }
                     Err(error) => {

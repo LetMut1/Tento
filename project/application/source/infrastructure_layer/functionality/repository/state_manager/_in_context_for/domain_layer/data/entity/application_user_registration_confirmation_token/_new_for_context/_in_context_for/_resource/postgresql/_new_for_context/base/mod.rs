@@ -94,8 +94,6 @@ impl Base {
 
         let counter_u8_value: u8;
 
-        let query: String;
-
         match counter_u8.get_next() {
             Ok(counter_) => {
                 counter_u8_value = counter_;
