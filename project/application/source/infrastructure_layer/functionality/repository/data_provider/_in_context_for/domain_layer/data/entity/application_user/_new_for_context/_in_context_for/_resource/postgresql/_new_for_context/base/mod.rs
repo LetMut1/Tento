@@ -23,7 +23,7 @@ impl Base {
             FROM public.application_user au \
             WHERE au.nickname = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::VARCHAR);
 
         match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
             Ok(ref statement) => {
@@ -68,7 +68,7 @@ impl Base {
             FROM public.application_user au \
             WHERE au.email = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::VARCHAR);
 
         match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
             Ok(ref statement) => {
@@ -116,7 +116,7 @@ impl Base {
             FROM public.application_user au \
             WHERE au.email = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::VARCHAR);
 
         match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
             Ok(ref statement) => {
@@ -234,7 +234,7 @@ impl Base {
             FROM public.application_user au \
             WHERE au.nickname = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::VARCHAR);
 
         match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
             Ok(ref statement) => {

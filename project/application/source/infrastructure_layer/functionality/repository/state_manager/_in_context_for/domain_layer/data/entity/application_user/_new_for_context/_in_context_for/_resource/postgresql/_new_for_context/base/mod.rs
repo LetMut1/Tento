@@ -47,8 +47,8 @@ impl Base {
                 au.id AS i;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&email, Type::TEXT)
-            .add_parameter(&nickanme, Type::TEXT)
+            .add_parameter(&email, Type::VARCHAR)
+            .add_parameter(&nickanme, Type::VARCHAR)
             .add_parameter(&password_hash, Type::TEXT)
             .add_parameter(&created_at, Type::TEXT);
 
@@ -155,7 +155,7 @@ impl Base {
                 )
             );
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::TEXT);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::VARCHAR);
         }
         if update_resolver.is_update_nickname() {
             match counter_u8.get_next() {
@@ -191,7 +191,7 @@ impl Base {
                 }
             }
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::TEXT);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::VARCHAR);
         }
         if update_resolver.is_update_password_hash() {
             match counter_u8.get_next() {

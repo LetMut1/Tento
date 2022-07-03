@@ -49,7 +49,7 @@ impl Base {
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&applicaion_user_id, Type::INT8)
             .add_parameter(&device_id, Type::TEXT)
-            .add_parameter(&value, Type::TEXT)
+            .add_parameter(&value, Type::VARCHAR)
             .add_parameter(&wrong_enter_tries_quantity, Type::INT2);
 
         match authorization_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {

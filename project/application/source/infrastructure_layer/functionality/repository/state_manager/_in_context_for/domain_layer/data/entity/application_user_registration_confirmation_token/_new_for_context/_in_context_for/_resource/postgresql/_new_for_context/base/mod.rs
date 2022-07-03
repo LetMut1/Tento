@@ -43,8 +43,8 @@ impl Base {
                 1::SMALLINT;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&applicaion_user_email, Type::TEXT)
-            .add_parameter(&value, Type::TEXT)
+            .add_parameter(&applicaion_user_email, Type::VARCHAR)
+            .add_parameter(&value, Type::VARCHAR)
             .add_parameter(&wrong_enter_tries_quantity, Type::INT2);
 
         match authorization_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
@@ -97,7 +97,7 @@ impl Base {
             RETURNING \
                 1::SMALLINT;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&applicaion_user_email, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&applicaion_user_email, Type::VARCHAR);
 
         match authorization_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
             Ok(ref statement) => {
@@ -235,7 +235,7 @@ impl Base {
                     + " RETURNING \
                         aurct.application_user_email AS aue;";
                 
-                prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+                prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::VARCHAR);
             }
             None => {
                 return Err(

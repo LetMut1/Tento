@@ -26,7 +26,7 @@ impl Base {
             FROM public.application_user_registration_confirmation_token aurct \
             WHERE aurct.application_user_email = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::VARCHAR);
 
         match authorization_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
             Ok(ref statement) => {

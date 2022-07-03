@@ -37,6 +37,7 @@ impl Base {
                 return Err(error);
             }
         }
+        
         let mut query = 
             "SELECT \
                 c.id AS i, \
