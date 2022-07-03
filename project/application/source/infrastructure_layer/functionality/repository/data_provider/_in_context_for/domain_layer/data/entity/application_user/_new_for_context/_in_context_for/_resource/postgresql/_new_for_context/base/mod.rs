@@ -103,14 +103,13 @@ impl Base {
 
     pub async fn find_by_email<'a>(
         core_connection: &'a Connection,
-        email: &'a str
+        email: String
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 
             "SELECT \
                 au.id AS i, \
-                au.email AS e, \
                 au.nickname AS n, \
                 au.password_hash AS ph, \
                 au.created_at::TEXT AS ca \
@@ -139,23 +138,8 @@ impl Base {
                                 }
                             }
 
-                            let email: String;
-                            match row_registry[0].try_get::<'_, usize, String>(1) {
-                                Ok(email_) => {
-                                    email = email_;
-                                }
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            }
-
                             let nickname: String;
-                            match row_registry[0].try_get::<'_, usize, String>(2) {
+                            match row_registry[0].try_get::<'_, usize, String>(1) {
                                 Ok(nickname_) => {
                                     nickname = nickname_;
                                 }
@@ -170,7 +154,7 @@ impl Base {
                             }
 
                             let password_hash: String;
-                            match row_registry[0].try_get::<'_, usize, String>(3) {
+                            match row_registry[0].try_get::<'_, usize, String>(2) {
                                 Ok(password_hash_) => {
                                     password_hash = password_hash_;
                                 }
@@ -185,7 +169,7 @@ impl Base {
                             }
 
                             let created_at: String;
-                            match row_registry[0].try_get::<'_, usize, String>(4) {
+                            match row_registry[0].try_get::<'_, usize, String>(3) {
                                 Ok(created_at_) => {
                                     created_at = created_at_;
                                 }
@@ -237,7 +221,7 @@ impl Base {
 
     pub async fn find_by_nickname<'a>(
         core_connection: &'a Connection,
-        nickname: &'a str
+        nickname: String
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -245,7 +229,6 @@ impl Base {
             "SELECT \
                 au.id AS i, \
                 au.email AS e, \
-                au.nickname AS n, \
                 au.password_hash AS ph, \
                 au.created_at::TEXT AS ca \
             FROM public.application_user au \
@@ -288,23 +271,8 @@ impl Base {
                                 }
                             }
 
-                            let nickname: String;
-                            match row_registry[0].try_get::<'_, usize, String>(2) {
-                                Ok(nickname_) => {
-                                    nickname = nickname_;
-                                }
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            }
-
                             let password_hash: String;
-                            match row_registry[0].try_get::<'_, usize, String>(3) {
+                            match row_registry[0].try_get::<'_, usize, String>(2) {
                                 Ok(password_hash_) => {
                                     password_hash = password_hash_;
                                 }
@@ -319,7 +287,7 @@ impl Base {
                             }
 
                             let created_at: String;
-                            match row_registry[0].try_get::<'_, usize, String>(4) {
+                            match row_registry[0].try_get::<'_, usize, String>(3) {
                                 Ok(created_at_) => {
                                     created_at = created_at_;
                                 }
@@ -377,7 +345,6 @@ impl Base {
 
         let query = 
             "SELECT \
-                au.id AS i, \
                 au.email AS e, \
                 au.nickname AS n, \
                 au.password_hash AS ph, \
@@ -392,23 +359,8 @@ impl Base {
                 match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            let id: i64;
-                            match row_registry[0].try_get::<'_, usize, i64>(0) {
-                                Ok(id_) => {
-                                    id = id_;
-                                }
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            }
-
                             let email: String;
-                            match row_registry[0].try_get::<'_, usize, String>(1) {
+                            match row_registry[0].try_get::<'_, usize, String>(0) {
                                 Ok(email_) => {
                                     email = email_;
                                 }
@@ -423,7 +375,7 @@ impl Base {
                             }
 
                             let nickname: String;
-                            match row_registry[0].try_get::<'_, usize, String>(2) {
+                            match row_registry[0].try_get::<'_, usize, String>(1) {
                                 Ok(nickname_) => {
                                     nickname = nickname_;
                                 }
@@ -438,7 +390,7 @@ impl Base {
                             }
 
                             let password_hash: String;
-                            match row_registry[0].try_get::<'_, usize, String>(3) {
+                            match row_registry[0].try_get::<'_, usize, String>(2) {
                                 Ok(password_hash_) => {
                                     password_hash = password_hash_;
                                 }
@@ -453,7 +405,7 @@ impl Base {
                             }
 
                             let created_at: String;
-                            match row_registry[0].try_get::<'_, usize, String>(4) {
+                            match row_registry[0].try_get::<'_, usize, String>(3) {
                                 Ok(created_at_) => {
                                     created_at = created_at_;
                                 }

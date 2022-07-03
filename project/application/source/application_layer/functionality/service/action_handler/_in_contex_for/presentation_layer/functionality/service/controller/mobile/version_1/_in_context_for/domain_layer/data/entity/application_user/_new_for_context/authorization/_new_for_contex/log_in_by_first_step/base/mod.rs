@@ -60,7 +60,7 @@ impl Base {
                     match ApplicationUserValidator::is_valid_email(application_user_email_or_application_user_nickname.as_str()) {
                         Ok(is_valid_email) => {
                             if is_valid_email {
-                                match ApplicationUserDataProviderPostgresql::find_by_email(core_postgresql_connection, application_user_email_or_application_user_nickname.as_str()).await {
+                                match ApplicationUserDataProviderPostgresql::find_by_email(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
                                     Ok(application_user_) => {
                                         match application_user_ {
                                             Some(application_user__) => {
@@ -79,7 +79,7 @@ impl Base {
                                 }
                             } else {
                                 if ApplicationUserValidator::is_valid_nickname(application_user_email_or_application_user_nickname.as_str()) {
-                                    match ApplicationUserDataProviderPostgresql::find_by_nickname(core_postgresql_connection, application_user_email_or_application_user_nickname.as_str()).await {
+                                    match ApplicationUserDataProviderPostgresql::find_by_nickname(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
                                         Ok(application_user_) => {
                                             match application_user_ {
                                                 Some(application_user__) => {
