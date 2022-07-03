@@ -1,3 +1,2 @@
-pub mod application_user_log_in_token;
 pub mod application_user_reset_password_token;
 pub mod json_refresh_web_token;

@@ -1,6 +1,6 @@
 pub struct StorageKeyResolver;
 
-impl StorageKeyResolver {
+impl StorageKeyResolver {                                           // TODO УДалить или закомментировать при переходе на Постгер
     const PREFIX_1: &'static str = "1:";
     const PREFIX_2: &'static str = "2:"; 
     const PREFIX_3: &'static str = "3:";
