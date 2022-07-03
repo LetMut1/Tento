@@ -33,7 +33,8 @@ impl Base {
                                     application_user_id,
                                     device_id,
                                     application_user_log_in_token_value.into_owned(),
-                                    application_user_log_in_token_wrong_enter_tries_quantity
+                                    application_user_log_in_token_wrong_enter_tries_quantity,
+                                    None
                                 );
                 
                                 return Ok(Some(application_user_log_in_token));

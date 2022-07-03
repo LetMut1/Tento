@@ -17,4 +17,4 @@ ALTER COLUMN value SET NOT NULL,
 ALTER COLUMN wrong_enter_tries_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
-ADD CONSTRAINT application_user_registration_confirmation_token3 PRIMARY KEY USING INDEX application_user_registration_confirmation_token1;
+ADD CONSTRAINT application_user_registration_confirmation_token3 UNIQUE USING INDEX application_user_registration_confirmation_token1;

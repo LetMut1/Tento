@@ -150,7 +150,8 @@ impl Base {
                                                             application_user_id,
                                                             application_user_log_in_token_device_id.as_str(),
                                                             ValueGenerator::generate(),
-                                                            0
+                                                            0,
+                                                            None
                                                         );
                 
                                                         if let Err(mut error) = ApplicationUserLogInTokenStateManagerRedis::create(redis_connection, &application_user_log_in_token).await {

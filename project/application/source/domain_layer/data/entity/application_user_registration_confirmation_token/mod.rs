@@ -2,7 +2,7 @@ pub struct ApplicationUserRegistrationConfirmationToken<'a> {
     application_user_email: &'a str,
     value: String,
     wrong_enter_tries_quantity: u8,
-    created_at: Option<String>
+    _created_at: Option<String>
 }
 
 impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
@@ -19,7 +19,7 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
             application_user_email,
             value,
             wrong_enter_tries_quantity,
-            created_at
+            _created_at: created_at
         };
     }
     

@@ -2,7 +2,8 @@ pub struct ApplicationUserLogInToken<'a> {
     application_user_id: i64,
     device_id: &'a str,
     value: String,
-    wrong_enter_tries_quantity: u8
+    wrong_enter_tries_quantity: u8,
+    _created_at: Option<String>
 }
 
 impl<'a> ApplicationUserLogInToken<'a> {
@@ -13,13 +14,15 @@ impl<'a> ApplicationUserLogInToken<'a> {
         application_user_id: i64,
         device_id: &'a str,
         value: String,
-        wrong_enter_tries_quantity: u8
+        wrong_enter_tries_quantity: u8,
+        created_at: Option<String>
     ) -> Self {
         return Self {
             application_user_id,
             device_id,
             value,
-            wrong_enter_tries_quantity
+            wrong_enter_tries_quantity,
+            _created_at: created_at
         };
     }
 
