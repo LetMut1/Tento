@@ -14,13 +14,13 @@ impl Base {
         };
     }
 
-    pub fn is_update_wrong_enter_tries_quantity<'a>(
+    pub fn get_update_wrong_enter_tries_quantity<'a>(
         &'a self
     ) -> bool {
         return self.update_wrong_enter_tries_quantity;
     }
 
-    pub fn is_update_created_at<'a>(
+    pub fn get_update_created_at<'a>(
         &'a self
     ) -> bool {
         return self.update_created_at;

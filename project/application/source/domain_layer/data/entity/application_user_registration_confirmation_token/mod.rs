@@ -2,6 +2,7 @@ pub struct ApplicationUserRegistrationConfirmationToken<'a> {
     application_user_email: &'a str,
     value: String,
     wrong_enter_tries_quantity: u8,
+    is_approved: bool,
     _created_at: Option<String>
 }
 
@@ -13,12 +14,14 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         application_user_email: &'a str,
         value: String,
         wrong_enter_tries_quantity: u8,
+        is_approved: bool,
         created_at: Option<String>
     ) -> Self {
         return Self {
             application_user_email,
             value,
             wrong_enter_tries_quantity,
+            is_approved,
             _created_at: created_at
         };
     }
@@ -39,6 +42,12 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         &'b self
     ) -> u8 {
         return self.wrong_enter_tries_quantity;
+    }
+
+    pub fn get_is_approved<'b>(
+        &'b self
+    ) -> bool {
+        return self.is_approved;
     }
 
     pub fn get_created_at<'b>(

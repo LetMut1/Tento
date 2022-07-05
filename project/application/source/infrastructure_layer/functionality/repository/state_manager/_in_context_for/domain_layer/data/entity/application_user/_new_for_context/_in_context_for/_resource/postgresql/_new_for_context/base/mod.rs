@@ -59,7 +59,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgesql database.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgresql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -136,7 +136,7 @@ impl Base {
         let mut counter_u8_value: u8;
 
         let mut column_name_for_value_registry: Option<(String, String)> = None;
-        if update_resolver.is_update_email() {
+        if update_resolver.get_update_email() {
             match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter_u8_value = counter_;
@@ -157,7 +157,7 @@ impl Base {
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::VARCHAR);
         }
-        if update_resolver.is_update_nickname() {
+        if update_resolver.get_update_nickname() {
             match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter_u8_value = counter_;
@@ -193,7 +193,7 @@ impl Base {
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(&nickanme, Type::VARCHAR);
         }
-        if update_resolver.is_update_password_hash() {
+        if update_resolver.get_update_password_hash() {
             match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter_u8_value = counter_;
@@ -275,7 +275,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgesql database.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgresql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );

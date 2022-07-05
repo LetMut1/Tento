@@ -46,7 +46,7 @@ impl Base {
                     Ok(application_user_registration_confirmation_token) => {
                         if let Some(application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
                             if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(false, true)
+                                authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(false, false, true)
                             ).await {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
         

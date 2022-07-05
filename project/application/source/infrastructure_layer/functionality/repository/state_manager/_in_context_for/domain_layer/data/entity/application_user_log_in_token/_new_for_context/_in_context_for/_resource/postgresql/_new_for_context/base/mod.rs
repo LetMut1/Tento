@@ -59,7 +59,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserLogInToken can not be inserted into Postgesql database.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserLogInToken can not be inserted into Postgresql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -111,7 +111,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserLogInToken can not be deleted from Postgesql database.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserLogInToken can not be deleted from Postgresql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -158,7 +158,7 @@ impl Base {
         let mut counter_u8_value: u8;
 
         let mut column_name_for_value_registry: Option<(String, String)> = None;
-        if update_resolver.is_update_wrong_enter_tries_quantity() {
+        if update_resolver.get_update_wrong_enter_tries_quantity() {
             match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter_u8_value = counter_;
@@ -179,7 +179,7 @@ impl Base {
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(&wrong_enter_tries_quantity, Type::INT2);
         }
-        if update_resolver.is_update_created_at() {
+        if update_resolver.get_update_created_at() {
             match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter_u8_value = counter_;
@@ -277,7 +277,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserLogInToken can not be updated in Postgesql database.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserLogInToken can not be updated in Postgresql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );

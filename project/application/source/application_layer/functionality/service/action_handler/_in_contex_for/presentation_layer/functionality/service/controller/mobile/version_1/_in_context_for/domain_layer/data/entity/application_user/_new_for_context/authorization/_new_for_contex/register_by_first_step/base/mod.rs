@@ -66,7 +66,7 @@ impl Base {
                                                                 application_user_registration_confirmation_token = application_user_registration_confirmation_token__;
                                         
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token, UpdateResolver::new(false, true)
+                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token, UpdateResolver::new(false, false, true)
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                             
@@ -78,6 +78,7 @@ impl Base {
                                                                         application_user_email.as_str(),
                                                                         ValueGenerator::generate(),
                                                                         0,
+                                                                        false,
                                                                         None
                                                                     );
                                         
