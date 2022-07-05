@@ -50,12 +50,6 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         return self.is_approved;
     }
 
-    pub fn get_created_at<'b>(
-        &'b self
-    ) -> &'b str {
-       todo!() // TODO 
-    }
-
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
         wrong_enter_tries_quantity: u8

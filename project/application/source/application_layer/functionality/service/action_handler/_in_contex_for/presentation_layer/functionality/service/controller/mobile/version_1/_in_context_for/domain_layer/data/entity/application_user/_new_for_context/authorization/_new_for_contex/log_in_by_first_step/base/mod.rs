@@ -139,7 +139,7 @@ impl Base {
                                                         application_user_log_in_token = application_user_log_in_token__;
                 
                                                         if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::update(
-                                                            authorization_postgresql_connection, &application_user_log_in_token, UpdateResolver::new(false, true)
+                                                            authorization_postgresql_connection, &application_user_log_in_token, UpdateResolver::new(false, false, true)
                                                         ).await {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
             
@@ -152,6 +152,7 @@ impl Base {
                                                             application_user_log_in_token_device_id.as_str(),
                                                             ValueGenerator::generate(),
                                                             0,
+                                                            false,
                                                             None
                                                         );
                 
