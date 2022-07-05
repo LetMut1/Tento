@@ -75,7 +75,7 @@ impl Base {
                                                                 }
                         
                                                                 if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::delete(
-                                                                    authorization_postgresql_connection, &application_user_reset_password_token_
+                                                                    authorization_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                         
@@ -128,7 +128,7 @@ impl Base {
                                     }
                                 } else {
                                     if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::delete(
-                                        authorization_postgresql_connection, &application_user_reset_password_token_
+                                        authorization_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
                                     ).await {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 

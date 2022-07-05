@@ -85,10 +85,8 @@ impl Base {
 
     pub async fn delete<'a>(
         authorization_connection: &'a Connection,
-        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken
+        applicaion_user_id: i64
     ) -> Result<(), ErrorAuditor> {
-        let applicaion_user_id = application_user_reset_password_token.get_application_user_id();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 

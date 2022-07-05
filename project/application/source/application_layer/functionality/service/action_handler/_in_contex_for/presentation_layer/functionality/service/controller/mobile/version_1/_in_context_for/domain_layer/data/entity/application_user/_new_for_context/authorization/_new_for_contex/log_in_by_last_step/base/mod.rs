@@ -91,7 +91,7 @@ impl Base {
                                                 );
                                                 
                                                 if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::delete(
-                                                    authorization_postgresql_connection, &application_user_log_in_token_
+                                                    authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                                                 ).await {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                 
@@ -157,7 +157,7 @@ impl Base {
                                         }
                                     } else {
                                         if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::delete(
-                                            authorization_postgresql_connection, &application_user_log_in_token_
+                                            authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                                         ).await {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                 

@@ -90,20 +90,18 @@ impl Base {
 
     pub async fn delete<'a>(
         authorization_connection: &'a Connection,
-        application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
+        application_user_id: i64,
+        device_id: &'a str
     ) -> Result<(), ErrorAuditor> {
-        let applicaion_user_id = application_user_log_in_token.get_application_user_id();
-
-        let device_id = application_user_log_in_token.get_device_id();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 
             "DELETE FROM ONLY public.application_user_log_in_token AS aulit \
-            WHERE aulit.application_user_id = $1 AND aulit.device_id = $2 RETURNING \
+            WHERE aulit.application_user_id = $1 AND aulit.device_id = $2 \
+            RETURNING \
                 1::SMALLINT;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&applicaion_user_id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
         prepared_statemant_parameter_convertation_resolver.add_parameter(&device_id, Type::TEXT);
 
         match authorization_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {

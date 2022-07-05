@@ -85,10 +85,8 @@ impl Base {
 
     pub async fn delete<'a>(
         authorization_connection: &'a Connection,
-        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
+        applicaion_user_email: &'a str
     ) -> Result<(), ErrorAuditor> {
-        let applicaion_user_email = application_user_registration_confirmation_token.get_application_user_email();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 

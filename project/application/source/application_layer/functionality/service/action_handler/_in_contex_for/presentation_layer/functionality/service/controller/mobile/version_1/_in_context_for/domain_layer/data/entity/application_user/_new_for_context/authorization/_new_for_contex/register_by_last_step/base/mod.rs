@@ -83,7 +83,7 @@ impl Base {
                                                                         match PasswordHashResolver::create(application_user_password.as_str()) {
                                                                             Ok(application_user_password_hash) => {
                                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::delete(
-                                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token_
+                                                                                    authorization_postgresql_connection, application_user_registration_confirmation_token_.get_application_user_email()
                                                                                 ).await {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 
@@ -171,7 +171,8 @@ impl Base {
                                                                         }
                                                                     } else {
                                                                         if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::delete(
-                                                                            core_postgresql_connection, &application_user_registration_confirmation_token_).await {
+                                                                            core_postgresql_connection, application_user_registration_confirmation_token_.get_application_user_email()
+                                                                        ).await {
                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                 
                                                                             return Err(error);
