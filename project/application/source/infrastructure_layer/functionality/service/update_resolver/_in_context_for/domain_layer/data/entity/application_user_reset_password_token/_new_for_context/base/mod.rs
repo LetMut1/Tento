@@ -1,15 +1,18 @@
 pub struct Base {
     update_wrong_enter_tries_quantity: bool,
+    update_is_approved: bool,
     update_created_at: bool
 }
 
 impl Base {
     pub fn new(
         update_wrong_enter_tries_quantity: bool,
+        update_is_approved: bool,
         update_created_at: bool
     ) -> Self {
         return Self {
             update_created_at,
+            update_is_approved,
             update_wrong_enter_tries_quantity
         };
     }
@@ -18,6 +21,12 @@ impl Base {
         &'a self
     ) -> bool {
         return self.update_wrong_enter_tries_quantity;
+    }
+
+    pub fn get_update_is_approved<'a>(
+        &'a self
+    ) -> bool {
+        return self.update_is_approved;
     }
 
     pub fn get_update_created_at<'a>(

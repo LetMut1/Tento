@@ -2,6 +2,7 @@ pub struct ApplicationUserResetPasswordToken {
     application_user_id: i64,
     value: String,
     wrong_enter_tries_quantity: u8,
+    is_approved: bool,
     _created_at: Option<String>
 }
 
@@ -13,12 +14,14 @@ impl ApplicationUserResetPasswordToken {
         application_user_id: i64,
         value: String,
         wrong_enter_tries_quantity: u8,
+        is_approved: bool,
         created_at: Option<String>
     ) -> Self {
         return Self {
             application_user_id,
             value,
             wrong_enter_tries_quantity,
+            is_approved,
             _created_at: created_at
         };
     }
@@ -39,6 +42,12 @@ impl ApplicationUserResetPasswordToken {
         &'a self
     ) -> u8 {
         return self.wrong_enter_tries_quantity;
+    }
+
+    pub fn get_is_approved<'b>(
+        &'b self
+    ) -> bool {
+        return self.is_approved;
     }
 
     pub fn set_wrong_enter_tries_quantity<'a>(
