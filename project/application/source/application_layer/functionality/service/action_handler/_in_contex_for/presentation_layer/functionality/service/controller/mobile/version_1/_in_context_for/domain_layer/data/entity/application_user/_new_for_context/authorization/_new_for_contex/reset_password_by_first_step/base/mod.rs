@@ -13,11 +13,12 @@ use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_com
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserResetPasswordTokenDataProviderRedis;
+use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserResetPasswordTokenStateManagerRedis;
+use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenStateManagerPostgresql;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::base::Base as UpdateResolver;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -32,7 +33,6 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
@@ -65,18 +65,22 @@ impl Base {
                                 }
                             }
                 
-                            match redis_connection_pool.get().await {
-                                Ok(mut redis_pooled_connection) => {
-                                    let redis_connection = &mut *redis_pooled_connection;
+                            match authorization_postgresql_connection_pool.get().await {
+                                Ok(authorization_postgresql_pooled_connection) => {
+                                    let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-                                    match ApplicationUserResetPasswordTokenDataProviderRedis::find_by_application_user_id(redis_connection, application_user_id).await {
+                                    match ApplicationUserResetPasswordTokenDataProviderPostgresql::find_by_application_user_id(
+                                        authorization_postgresql_connection, application_user_id
+                                    ).await {
                                         Ok(application_user_reset_password_token_) => {
                                             let application_user_reset_password_token: ApplicationUserResetPasswordToken;
                                             match application_user_reset_password_token_ {
                                                 Some(application_user_reset_password_token__) => {
                                                     application_user_reset_password_token = application_user_reset_password_token__;
                                 
-                                                    if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerRedis::update_expiration_time(redis_connection, &application_user_reset_password_token).await {
+                                                    if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::update(
+                                                        authorization_postgresql_connection, &application_user_reset_password_token, UpdateResolver::new(false, true)
+                                                    ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                 
                                                         return Err(error);
@@ -86,10 +90,13 @@ impl Base {
                                                     application_user_reset_password_token = ApplicationUserResetPasswordToken::new(
                                                         application_user_id,
                                                         ValueGenerator::generate(),
-                                                        0
+                                                        0,
+                                                        None
                                                     );
                                 
-                                                    if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerRedis::create(redis_connection, &application_user_reset_password_token).await {
+                                                    if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::create(
+                                                        authorization_postgresql_connection, &application_user_reset_password_token
+                                                    ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                 
                                                         return Err(error);
@@ -117,7 +124,7 @@ impl Base {
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolRedisError { bb8_redis_error: error } } },
+                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
                                             BacktracePart::new(line!(), file!(), None)
                                         )
                                     );

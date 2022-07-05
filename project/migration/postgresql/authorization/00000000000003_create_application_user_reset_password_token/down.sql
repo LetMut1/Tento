@@ -1,0 +1,1 @@
+DROP TABLE public.application_user_reset_password_token;

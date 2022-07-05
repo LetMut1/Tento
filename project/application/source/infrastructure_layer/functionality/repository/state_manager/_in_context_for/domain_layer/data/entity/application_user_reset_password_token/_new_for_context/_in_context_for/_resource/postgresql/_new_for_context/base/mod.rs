@@ -1,4 +1,4 @@
-use crate::domain_layer::data::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -7,7 +7,7 @@ use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_com
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::_in_context_for::infrastructure_layer::functionality::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use crate::infrastructure_layer::functionality::service::counter_u8::CounterU8;
-use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as UpdateResolver;
+use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::base::Base as UpdateResolver;
 use tokio_postgres::Client as Connection;
 use tokio_postgres::types::Type;
 
@@ -16,19 +16,19 @@ pub struct Base;
 impl Base {
     pub async fn create<'a>(
         authorization_connection: &'a Connection,
-        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
+        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken
     ) -> Result<(), ErrorAuditor> {
-        let applicaion_user_email = application_user_registration_confirmation_token.get_application_user_email();
+        let applicaion_user_id = application_user_reset_password_token.get_application_user_id();
 
-        let value = application_user_registration_confirmation_token.get_value();
+        let value = application_user_reset_password_token.get_value();
 
-        let wrong_enter_tries_quantity = application_user_registration_confirmation_token.get_wrong_enter_tries_quantity() as i16;
+        let wrong_enter_tries_quantity = application_user_reset_password_token.get_wrong_enter_tries_quantity() as i16;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 
-            "INSERT INTO public.application_user_registration_confirmation_token AS aurct ( \
-                applicaion_user_email, \
+            "INSERT INTO public.application_user_reset_password_token AS aurpt ( \
+                application_user_id, \
                 value, \
                 wrong_enter_tries_quantity, \
                 created_at \
@@ -43,7 +43,7 @@ impl Base {
                 1::SMALLINT;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&applicaion_user_email, Type::VARCHAR)
+            .add_parameter(&applicaion_user_id, Type::INT8)
             .add_parameter(&value, Type::VARCHAR)
             .add_parameter(&wrong_enter_tries_quantity, Type::INT2);
 
@@ -54,7 +54,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationConfirmationToken can not be inserted into Postgesql database.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserResetPasswordToken can not be inserted into Postgesql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -85,19 +85,19 @@ impl Base {
 
     pub async fn delete<'a>(
         authorization_connection: &'a Connection,
-        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
+        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken
     ) -> Result<(), ErrorAuditor> {
-        let applicaion_user_email = application_user_registration_confirmation_token.get_application_user_email();
+        let applicaion_user_id = application_user_reset_password_token.get_application_user_id();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 
-            "DELETE FROM ONLY public.application_user_registration_confirmation_token AS aurct \
-            WHERE aurct.application_user_email = $1 \
+            "DELETE FROM ONLY public.application_user_reset_password_token AS aurpt \
+            WHERE aurpt.application_user_id = $1 \
             RETURNING \
                 1::SMALLINT;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&applicaion_user_email, Type::VARCHAR);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&applicaion_user_id, Type::VARCHAR);
 
         match authorization_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
             Ok(ref statement) => {
@@ -106,7 +106,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationConfirmationToken can not be deleted from Postgesql database.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserResetPasswordToken can not be deleted from Postgesql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
@@ -137,12 +137,12 @@ impl Base {
 
     pub async fn update<'a>(
         authorization_connection: &'a Connection,
-        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>,
+        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken,
         update_resolver: UpdateResolver
     ) -> Result<(), ErrorAuditor> {
-        let application_user_email = application_user_registration_confirmation_token.get_application_user_email();
+        let application_user_id = application_user_reset_password_token.get_application_user_id();
 
-        let wrong_enter_tries_quantity = application_user_registration_confirmation_token.get_wrong_enter_tries_quantity() as i16;
+        let wrong_enter_tries_quantity = application_user_reset_password_token.get_wrong_enter_tries_quantity() as i16;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -224,18 +224,18 @@ impl Base {
                 }
                 
                 query = 
-                    "UPDATE ONLY public.application_user_registration_confirmation_token AS aurct \
+                    "UPDATE ONLY public.application_user_reset_password_token AS aurpt \
                     SET ("
                     .to_string()
                     + column_name_registry.as_str()
                     + ") = ROW("
                     + column_value_registry.as_str()
                     + ") \
-                    WHERE aurct.application_user_email = $" + counter_u8_value.to_string().as_str()
+                    WHERE aurpt.application_user_id = $" + counter_u8_value.to_string().as_str()
                     + " RETURNING \
-                        aurct.application_user_email AS aue;";
+                        aurpt.application_user_id AS aui;";
                 
-                prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::VARCHAR);
+                prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
             }
             None => {
                 return Err(
@@ -254,7 +254,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationConfirmationToken can not be updated in Postgesql database.") },
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserResetPasswordToken can not be updated in Postgesql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );
