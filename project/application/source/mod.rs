@@ -16,6 +16,7 @@ extern crate lettre_email;
 extern crate lettre;
 extern crate log;
 extern crate log4rs;
+extern crate rand;
 extern crate redis;
 extern crate regex;
 extern crate rmp_serde;

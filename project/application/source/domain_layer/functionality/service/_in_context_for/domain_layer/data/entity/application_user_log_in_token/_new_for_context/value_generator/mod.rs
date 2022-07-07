@@ -1,10 +1,10 @@
-use uuid::Uuid;
+use crate::infrastructure_layer::functionality::service::number_row_generator::NumberRowGenerator;
 
 pub struct ValueGenerator;
 
 impl ValueGenerator {
     pub fn generate(
     ) -> String {
-        return Uuid::new_v4().to_string();
+        return NumberRowGenerator::generate_row_with_6_numbers();
     }
 }

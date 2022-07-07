@@ -34,6 +34,7 @@ lettre = { version = "^0.9", default-features = true, features = [], optional = 
 lettre_email = { version = "^0.9", default-features = true, features = [], optional = false }
 log = { version = "^0.4", default-features = true, features = [], optional = false }
 log4rs = { version = "^1.0", default-features = true, features = ["all_components"], optional = false }
+rand = { version = "^0.8.5", default-features = true, features = [], optional = false }
 redis = { version = "^0.21", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp"], optional = false }
 regex = { version = "^1.4", default-features = true, features = [], optional = false }
 rmp-serde = { version = "^0.15", default-features = true, features = [], optional = false }
