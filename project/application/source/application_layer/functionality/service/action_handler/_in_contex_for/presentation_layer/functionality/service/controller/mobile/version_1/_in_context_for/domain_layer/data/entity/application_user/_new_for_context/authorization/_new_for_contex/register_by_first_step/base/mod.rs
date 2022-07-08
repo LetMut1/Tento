@@ -5,7 +5,7 @@ use crate::application_layer::data::data_transfer_object::_in_context_for::appli
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::domain_layer::data::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::value_generator::ValueGenerator;
-use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
+use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
@@ -41,7 +41,7 @@ impl Base {
     {
         let application_user_email = action_handler_incoming_data.into_inner();
         
-        match ApplicationUserValidator::is_valid_email(application_user_email.as_str()) {
+        match Validator::is_valid_email(application_user_email.as_str()) {
             Ok(is_valid_email) => {
                 if is_valid_email {
                     match core_postgresql_connection_pool.get().await {
@@ -64,13 +64,22 @@ impl Base {
                                                         match application_user_registration_confirmation_token_ {
                                                             Some(application_user_registration_confirmation_token__) => {
                                                                 application_user_registration_confirmation_token = application_user_registration_confirmation_token__;
-                                        
-                                                                if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token, UpdateResolver::new(false, false, true)
-                                                                ).await {
-                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
-                                                                    return Err(error);
+                                                                if !application_user_registration_confirmation_token.get_is_approved() {
+                                                                    if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
+                                                                        authorization_postgresql_connection, &application_user_registration_confirmation_token, UpdateResolver::new(false, false, true)
+                                                                    ).await {
+                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                
+                                                                        return Err(error);
+                                                                    }
+                                                                } else {
+                                                                    // TODO Delete and create in transaction -> Через Апдейт поле токена
+                                                                    // Либо выше, либо сразу Ок, и сразу на фронте ведем на 3 фазу
+
+                                                                    // ТУДУ проверить обрабоку исключений в исправленных методах
+
+                                                                    // TODO AURCT Подумать над 1 шагом. Закончить со 2 шагом. Изменить 3 шаг в контексте добавления аппруведа.
+                                                                    todo!()
                                                                 }
                                                             }
                                                             None => {

@@ -57,9 +57,9 @@ impl Base {
             .add_parameter(&wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&is_approved, Type::BOOL);
 
-        match authorization_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match authorization_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(
@@ -109,9 +109,9 @@ impl Base {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
         prepared_statemant_parameter_convertation_resolver.add_parameter(&device_id, Type::TEXT);
 
-        match authorization_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match authorization_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(
@@ -313,9 +313,9 @@ impl Base {
             }
         }
 
-        match authorization_connection.prepare_typed(query.as_str(), &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match authorization_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match authorization_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(

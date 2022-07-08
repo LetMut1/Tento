@@ -25,9 +25,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::VARCHAR);
 
-        match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Ok(false);
@@ -70,9 +70,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::VARCHAR);
 
-        match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Ok(false);
@@ -118,9 +118,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::VARCHAR);
 
-        match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             let id: i64;
@@ -236,9 +236,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::VARCHAR);
 
-        match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             let id: i64;
@@ -354,9 +354,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&id, Type::INT8);
 
-        match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             let email: String;

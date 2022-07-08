@@ -52,9 +52,9 @@ impl Base {
             .add_parameter(&password_hash, Type::TEXT)
             .add_parameter(&created_at, Type::TEXT);
 
-        match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(
@@ -268,9 +268,9 @@ impl Base {
             }
         }
 
-        match core_connection.prepare_typed(query.as_str(), &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if row_registry.is_empty() {
                             return Err(

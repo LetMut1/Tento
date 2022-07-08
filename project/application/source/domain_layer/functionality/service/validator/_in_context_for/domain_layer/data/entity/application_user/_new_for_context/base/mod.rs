@@ -18,7 +18,10 @@ impl Base {
     ) -> Result<bool, ErrorAuditor> {
         match Regex::new(r"\S+@\S+") {
             Ok(regex) => {
-                return Ok(regex.is_match(email) && email.chars().count() <= (Self::EMAIL_MAXIMUM_LENGTH as usize))
+                return Ok(
+                    regex.is_match(email)
+                        && email.chars().count() <= (Self::EMAIL_MAXIMUM_LENGTH as usize)
+                );
             }
             Err(error) => {
                 return Err(

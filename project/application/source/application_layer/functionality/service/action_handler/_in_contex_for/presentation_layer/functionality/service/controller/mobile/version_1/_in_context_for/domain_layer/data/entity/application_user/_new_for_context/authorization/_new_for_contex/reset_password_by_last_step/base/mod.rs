@@ -7,7 +7,7 @@ use crate::application_layer::data::data_transfer_object::action_handler_incomin
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
-use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
+use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
@@ -45,7 +45,7 @@ impl Base {
             application_user_reset_password_token_value
         ) = action_handler_incoming_data.into_inner();
 
-        if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
+        if Validator::is_valid_password(application_user_password.as_str()) {
             match authorization_postgresql_connection_pool.get().await {
                 Ok(authorization_postgresql_pooled_connection) => {
                     let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;

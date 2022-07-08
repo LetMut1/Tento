@@ -26,7 +26,7 @@
 struct UnifiedReport<S>
 {
     data: Option<Data<S>>,
-    user_error_code: Option<&'static str>
+    communication_code: Option<&'static str>
 }
 
 struct Data<S>
@@ -35,7 +35,7 @@ struct Data<S>
 }
 ```
 - `Result data` structures written under each API endpoint will be nested in the `data` field in the `struct Data<S>`.
-- Existing values for `user_error_code` can be founded here:
+- Existing values for `communication_code` can be founded here:
 ```
 /project/application/source/presentation_layer/functionality/service/communication_code_registry/mod.rs
 ```
@@ -45,7 +45,7 @@ struct Data<S>
 
 # Area for authorized application user. API:
  - Every endpoint at this area requires an existing of `json access webtoken`
- - Response of EVERY endpoint at this area can contain `user_error_code` equals to 
+ - Response of EVERY endpoint at this area can contain `communication_code` equals to 
  ```
   - enjsacweto03
   - enjsacweto05

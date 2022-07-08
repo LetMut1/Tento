@@ -22,7 +22,7 @@ impl Base {
             Ok(data) => {
                 match data {
                     Some(data_) => {
-                        match rmp_serde::from_read_ref::<'_, [u8], Common<'static>>(&data_[..]) {
+                        match rmp_serde::from_read_ref::<'_, [u8], Common<'static>>(data_.as_slice()) {
                             Ok(common) => {
                                 let (
                                     json_access_web_token_id,

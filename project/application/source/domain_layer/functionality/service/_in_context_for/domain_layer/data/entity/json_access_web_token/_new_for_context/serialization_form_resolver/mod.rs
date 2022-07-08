@@ -21,11 +21,11 @@ impl SerializationFormResolver {
     ) -> Result<String, ErrorAuditor> {
         match serde_json::to_vec(&HeaderCommon::new(json_access_web_token)) {
             Ok(header_common_data) => {
-                let header = base64::encode_config(&header_common_data[..], base64::STANDARD);       // TODO TODO TODO base64::STANDARD - какого типа должно быть
+                let header = base64::encode_config(header_common_data.as_slice(), base64::STANDARD);       // TODO TODO TODO base64::STANDARD - какого типа должно быть
 
                 match serde_json::to_vec(&PayloadCommon::new(json_access_web_token)) {
                     Ok(payload_data) => {
-                        let payload = base64::encode_config(&payload_data[..], base64::STANDARD);
+                        let payload = base64::encode_config(payload_data.as_slice(), base64::STANDARD);
 
                         let signature = SignatureCreator::create(environment_configuration_resolver, header.as_str(), payload.as_str());
 
@@ -64,7 +64,7 @@ impl SerializationFormResolver {
             && SignatureCreator::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1], token_part_registry[2]) {
             match base64::decode_config(token_part_registry[1].as_bytes(), base64::STANDARD) {
                 Ok(data) => {
-                    match serde_json::from_slice::<'_, PayloadCommon<'static>>(&data[..]) {
+                    match serde_json::from_slice::<'_, PayloadCommon<'static>>(data.as_slice()) {
                         Ok(payload_common) => {
                             let (
                                 json_access_web_token_id,

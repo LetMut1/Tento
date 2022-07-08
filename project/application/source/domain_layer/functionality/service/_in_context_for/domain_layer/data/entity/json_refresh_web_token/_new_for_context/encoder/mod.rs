@@ -23,7 +23,7 @@ impl Encoder {
                     Sha512::new(),
                     environment_configuration_resolver.get_security_jrwt_encoding_private_key().as_bytes()
                 );
-                hmac.input(&data[..]);
+                hmac.input(data.as_slice());
 
                 return Ok(hex::encode(hmac.result().code()));   // TODO  TODO TODO time attac
             }

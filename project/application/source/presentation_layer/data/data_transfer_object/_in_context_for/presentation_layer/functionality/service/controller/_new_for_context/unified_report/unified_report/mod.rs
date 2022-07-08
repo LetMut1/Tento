@@ -14,7 +14,7 @@ use serde::Deserialize;
 //         data: Data<S>
 //     },
 //     ErrorCode {
-//         user_error_code: &'static str,
+//         communication_code: &'static str,
 //     }
 // }
 
@@ -23,7 +23,7 @@ use serde::Deserialize;
 pub struct UnifiedReport<S>
 {
     data: Option<Data<S>>,
-    user_error_code: Option<&'static str>
+    communication_code: Option<&'static str>
 }
 
 #[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
@@ -35,7 +35,7 @@ where
     ) -> Self {
         return Self {
             data: Some(Data::new(None)),
-            user_error_code: None
+            communication_code: None
         };
     }
 
@@ -44,7 +44,7 @@ where
     ) -> Self {
         return Self {
             data: Some(Data::new(Some(data))),
-            user_error_code: None
+            communication_code: None
         };
     }
 
@@ -53,7 +53,7 @@ where
     ) -> Self {
         return Self {
             data: None,
-            user_error_code: Some(error_code)
+            communication_code: Some(error_code)
         };
     }
 }
@@ -63,7 +63,7 @@ where
 pub struct UnifiedReport<S>
 {
     data: Option<Data<S>>,
-    user_error_code: Option<String>
+    communication_code: Option<String>
 }
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
@@ -75,7 +75,7 @@ where
     ) -> Self {
         return Self {
             data: Some(Data::new(None)),
-            user_error_code: None
+            communication_code: None
         };
     }
 
@@ -84,7 +84,7 @@ where
     ) -> Self {
         return Self {
             data: Some(Data::new(Some(data))),
-            user_error_code: None
+            communication_code: None
         };
     }
 
@@ -93,7 +93,7 @@ where
     ) -> Self {
         return Self {
             data: None,
-            user_error_code: Some(error_code)
+            communication_code: Some(error_code)
         };
     }
 }

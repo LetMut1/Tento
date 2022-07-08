@@ -8,7 +8,7 @@ use crate::domain_layer::data::entity::application_user_log_in_token::Applicatio
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::value_generator::ValueGenerator;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
-use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
+use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -49,13 +49,13 @@ impl Base {
             application_user_password
         ) = action_handler_incoming_data.into_inner();
 
-        if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
+        if Validator::is_valid_password(application_user_password.as_str()) {
             match core_postgresql_connection_pool.get().await {
                 Ok(core_postgresql_pooled_connection) => {
                     let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
                     let application_user: ApplicationUser;
-                    match ApplicationUserValidator::is_valid_email(application_user_email_or_application_user_nickname.as_str()) {
+                    match Validator::is_valid_email(application_user_email_or_application_user_nickname.as_str()) {
                         Ok(is_valid_email) => {
                             if is_valid_email {
                                 match ApplicationUserDataProviderPostgresql::find_by_email(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
@@ -76,7 +76,7 @@ impl Base {
                                     }
                                 }
                             } else {
-                                if ApplicationUserValidator::is_valid_nickname(application_user_email_or_application_user_nickname.as_str()) {
+                                if Validator::is_valid_nickname(application_user_email_or_application_user_nickname.as_str()) {
                                     match ApplicationUserDataProviderPostgresql::find_by_nickname(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
                                         Ok(application_user_) => {
                                             match application_user_ {

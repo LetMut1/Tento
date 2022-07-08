@@ -29,9 +29,9 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
-        match authorization_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match authorization_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             let value: String;

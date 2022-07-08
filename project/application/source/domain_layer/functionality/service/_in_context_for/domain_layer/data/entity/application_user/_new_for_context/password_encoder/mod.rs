@@ -14,7 +14,7 @@ impl PasswordEncoder {      // TODO отрабатывает за 320 млсек
     ) -> Result<String, ErrorAuditor> {
         let config = Config::default();
 
-        match argon2::hash_encoded(password.as_bytes(), Uuid::new_v4().as_bytes(), &config) {
+        match argon2::hash_encoded(password.as_bytes(), Uuid::new_v4().as_bytes().as_slice(), &config) {
             Ok(value) => {
                 return Ok(value);
             }

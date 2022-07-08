@@ -89,9 +89,9 @@ impl Base {
 
         let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyByNameChannel> = vec![];
 
-        match core_connection.prepare_typed(query.as_str(), &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {
@@ -355,9 +355,9 @@ impl Base {
 
         let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyByCreatedAtChannel> = vec![];
 
-        match core_connection.prepare_typed(query.as_str(), &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {
@@ -614,9 +614,9 @@ impl Base {
 
         let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyBySubscribersQuantityChannel> = vec![];
 
-        match core_connection.prepare_typed(query.as_str(), &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {
@@ -712,9 +712,9 @@ impl Base {
 
         let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyByIdRegistryChannel> = vec![];
 
-        match core_connection.prepare_typed(query, &prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()[..]).await {
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
-                match core_connection.query(statement, &prepared_statemant_parameter_convertation_resolver.get_parameter_registry()[..]).await {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {

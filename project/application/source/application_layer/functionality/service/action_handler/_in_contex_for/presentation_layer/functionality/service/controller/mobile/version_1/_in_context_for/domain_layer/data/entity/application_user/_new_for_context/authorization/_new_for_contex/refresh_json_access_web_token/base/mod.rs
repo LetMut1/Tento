@@ -48,7 +48,7 @@ impl Base {
                                             if let Some(mut json_refresh_web_token__) = json_refresh_web_token_ {
                                                 match Encoder::is_valid(environment_configuration_resolver, &json_refresh_web_token__, json_refresh_web_token.as_str()) {
                                                     Ok(is_valid) => {
-                                                        if is_valid && json_access_web_token_.get_id().as_bytes()[..] == json_refresh_web_token__.get_json_access_web_token_id().as_bytes()[..] {
+                                                        if is_valid && json_access_web_token_.get_id().as_bytes() == json_refresh_web_token__.get_json_access_web_token_id().as_bytes() {
                                                             Refresher::refresh(&mut json_refresh_web_token__);
                                         
                                                             if let Err(mut error) = RepositoryProxy::update(connection, &json_refresh_web_token__).await {

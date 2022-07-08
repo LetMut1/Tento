@@ -5,7 +5,7 @@ use crate::application_layer::data::data_transfer_object::_in_context_for::appli
 use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_exception::JsonAccessWebTokenWorkflowException;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_context::get_many_by_name::base::_new_for_context::base::base::Base as ActionHandlerOutcomingData;
-use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::Base as ChannelValidator;
+use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::extractor::_new_for_context::result::Result as ExtractorResult;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -57,7 +57,7 @@ impl Base {
                                     limit = Self::LIMIT;
                                 }
                                 
-                                if !ChannelValidator::is_valid_name(channel_name.as_str()) {
+                                if !Validator::is_valid_name(channel_name.as_str()) {
                                     return Err(
                                         ErrorAuditor::new(
                                             BaseError::InvalidArgumentError,
@@ -66,7 +66,7 @@ impl Base {
                                     );
                                 }
                                 if let Some(ref requery_channel_name_) = requery_channel_name {
-                                    if !ChannelValidator::is_valid_name(requery_channel_name_.as_str()) {
+                                    if !Validator::is_valid_name(requery_channel_name_.as_str()) {
                                         return Err(
                                             ErrorAuditor::new(
                                                 BaseError::InvalidArgumentError,

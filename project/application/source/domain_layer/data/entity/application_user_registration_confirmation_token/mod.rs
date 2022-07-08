@@ -8,7 +8,7 @@ pub struct ApplicationUserRegistrationConfirmationToken<'a> {
 
 impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: u16 = 60 * 3;
-    pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: u8 = 10;
+    pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: u8 = 5;
 
     pub fn new(
         application_user_email: &'a str,
@@ -55,6 +55,15 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         wrong_enter_tries_quantity: u8
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
+
+        return self;
+    }
+
+    pub fn set_is_approved<'b>(
+        &'b mut self,
+        is_approved: bool
+    ) -> &'b mut Self {
+        self.is_approved = is_approved;
 
         return self;
     }
