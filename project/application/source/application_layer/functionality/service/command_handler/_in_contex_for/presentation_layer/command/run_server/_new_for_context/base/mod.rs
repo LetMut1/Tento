@@ -665,6 +665,11 @@ impl Base {
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
+            ("/v1/m/au/rbss", &Method::POST) => {
+                return ControllerApplicationUserAuthorization::register_by_second_step(
+                    environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
+                ).await;
+            }
             ("/v1/m/au/rbls", &Method::POST) => {
                 return ControllerApplicationUserAuthorization::register_by_last_step(
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
@@ -779,6 +784,11 @@ impl Base {
                     }
                     ("/v1/m/au/libfs_", &Method::POST) => {
                         return ControllerApplicationUserAuthorization::log_in_by_first_step_(
+                            environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
+                        ).await;
+                    }
+                    ("/v1/m/au/rbss_", &Method::POST) => {
+                        return ControllerApplicationUserAuthorization::register_by_second_step_(
                             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }

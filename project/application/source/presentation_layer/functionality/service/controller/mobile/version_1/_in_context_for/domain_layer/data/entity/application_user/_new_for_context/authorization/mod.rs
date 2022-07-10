@@ -19,6 +19,7 @@ use crate::application_layer::data::data_transfer_object::action_handler_incomin
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::_new_for_context::base::Base as ActionHandlerIncomingDataRefreshJsonAccessWebToken;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataRegisterByFirstStep;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataRegisterByLastStep;
+use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_second_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataRegisterBySecondStep;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordByFirstStep;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordByLastStep;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_log_in::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForLogIn;
@@ -33,6 +34,7 @@ use crate::application_layer::functionality::service::action_handler::_in_contex
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_json_access_web_token::base::Base as ActionHandlerRefreshJsonAccessWebToken;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step::base::Base as ActionHandlerRegisterByFirstStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Base as ActionHandlerRegisterByLastStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_second_step::base::Base as ActionHandlerRegisterBySecondStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Base as ActionHandlerResetPasswordByFirstStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step::base::Base as ActionHandlerResetPasswordByLastStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as ActionHandlerSendEmailForLogIn;
@@ -65,6 +67,8 @@ use crate::application_layer::data::data_transfer_object::action_handler_outcomi
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::check_email_for_existing::base::_new_for_context::base::Base as ActionHandlerOutcomingDataCheckEmailForExisting;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::_new_for_context::base::Base as ActionHandlerOutcomingDataRegisterByLastStep;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_second_step::base::_new_for_context::base::Base as ActionHandlerOutcomingDataRegisterBySecondStep;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerOutcomingDataLogInByFirstStep;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
@@ -443,6 +447,159 @@ impl Authorization {
             authorization_postgresql_connection_pool,
             redis_connection_pool,
             Self::register_by_first_step
+        ).await;
+    }
+
+    pub async fn register_by_second_step<'a, T>(
+        _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        request: Request<Body>,
+        _core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ActionResponseCreator::create_bad_request();
+        }
+        
+        //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
+        // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
+        // https://github.com/hyperium/hyper/issues/2004
+        let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
+
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRegisterBySecondStep>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
+                match ActionHandlerRegisterBySecondStep::handle(
+                    authorization_postgresql_connection_pool, action_handler_incoming_data
+                ).await {
+                    Ok(action_handler_result) => { 
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception {
+                                            ApplicationUserWorkflowException::InvalidEmail => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_EMAIL)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
+                                        }
+                                    }
+                                    EntityWorkflowException::ApplicationUserRegistrationConfirmationTokenWorkflowException { application_user_registration_confirmation_token_workflow_exception } => {
+                                        match application_user_registration_confirmation_token_workflow_exception {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::InvalidValue => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
+                                        }
+                                    }
+                                    _ => {
+                                        unreachable!("TODO");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Err(error) => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
+                                return ActionResponseCreator::create_bad_request();
+                            }
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
+        
+                                return ActionResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    }
+                }
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ActionResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn register_by_second_step_<'a, T>(
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        request: Request<Body>,
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataRegisterBySecondStep, ActionHandlerOutcomingDataRegisterBySecondStep>(
+            environment_configuration_resolver,
+            request,
+            core_postgresql_connection_pool,
+            authorization_postgresql_connection_pool,
+            redis_connection_pool,
+            Self::register_by_second_step
         ).await;
     }
 

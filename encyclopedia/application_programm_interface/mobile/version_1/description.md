@@ -50,7 +50,7 @@ struct Data<S>
   - enjsacweto03
   - enjsacweto05
  ```
- - ## /v1/m/au/lofod POST
+ - ## /v1/m/au/lofod (log_out_from_one_device) POST
 ```
 Deauthorizes application user from one device.
 
@@ -65,7 +65,7 @@ Error codes:
 - enjsreweto02
 
 ```
- - ## /v1/m/au/lofad POST
+ - ## /v1/m/au/lofad (log_out_from_all_devices) POST
 ```
 Deauthorizes application user from all devices.
 
@@ -80,7 +80,7 @@ Error codes:
 - enjsreweto02
 ```
 # Area for not authorized application user. API:
- - ## /v1/m/au/cnfe POST (GET functional)
+ - ## /v1/m/au/cnfe (check_nickname_for_existing) POST (GET functional)
 ```
 Checks application user nickname for existing.
 
@@ -97,7 +97,7 @@ struct Base {
 Error codes:
 - enapus06
 ```
- - ## /v1/m/au/cefe POST (GET functional)
+ - ## /v1/m/au/cefe (check_email_for_existing) POST (GET functional)
 ```
 Checks application user email for existing.
 
@@ -114,7 +114,7 @@ struct Base {
 Error codes:
 - enapus05
 ```
- - ## /v1/m/au/rbfs POST
+ - ## /v1/m/au/rbfs (register_by_first_step) POST
 ```
 Registers application user for the first step and sends email to user.
 
@@ -129,7 +129,28 @@ Error codes:
 - enapus01
 - enapus05
 ```
- - ## /v1/m/au/rbls POST
+- ## /v1/m/au/rbss (register_by_second_step) POST
+```
+Registers application user for the second step through token value approving.
+
+Request data:
+struct Base {
+    application_user_email: String,
+    application_user_registration_confirmation_token_value: String
+}
+
+Result data:
+struct Base {
+    application_user_registration_confirmation_token_is_approved: bool
+}
+
+Error codes:
+- enapus05
+- enapusrecoto02
+- enapusrecoto03
+```
+
+ - ## /v1/m/au/rbls (register_by_last_step) POST
 ```
 Registers application user for the last step.
 
@@ -158,7 +179,7 @@ Error codes:
 - enapusrecoto04
 - enapusrecoto05
 ```
- - ## /v1/m/au/sefr POST
+ - ## /v1/m/au/sefr (send_email_for_register) POST
 ```
 Sends email for register. (Should be used only if the user does not receive an email.)
 
@@ -172,7 +193,7 @@ Result data is absent.
 Error codes:
 - enapusrecoto02
 ```
- - ## /v1/m/au/libfs POST
+ - ## /v1/m/au/libfs (log_in_by_first_step) POST
 ```
 Authorizes application user for the firs step and send email to user.
 
@@ -191,7 +212,7 @@ struct Base {
 Error codes:
 - enapus04
 ```
- - ## /v1/m/au/libls POST
+ - ## /v1/m/au/libls (log_in_by_last_step) POST
 ```
 Authorizes application user for the last step.
 
@@ -212,7 +233,7 @@ Error codes:
 - enapuslointo02
 - enapuslointo03
 ```
- - ## /v1/m/au/sefli POST
+ - ## /v1/m/au/sefli (send_email_for_log_in) POST
 ```
 Sends email for log in. (Should be used only if the user does not receive an email.)
 
@@ -228,7 +249,7 @@ Error codes:
 - enapus03
 - enapuslointo02
 ```
- - ## /v1/m/au/rpbfs POST
+ - ## /v1/m/au/rpbfs (reset_password_by_first_step) POST
 ```
 Resets application user password for the first step and send email to user.
 
@@ -245,7 +266,7 @@ struct Base {
 Error codes:
 - enapus03
 ```
- - ## /v1/m/au/rpbls POST
+ - ## /v1/m/au/rpbls (reset_password_by_last_step) POST
 ```
 Resets application user password for the last step.
 
@@ -263,7 +284,7 @@ Error codes:
 - enapusrepato03
 - enapus07
 ```
- - ## /v1/m/au/sefrp POST
+ - ## /v1/m/au/sefrp (send_email_for_reset_password) POST
 ```
 Sends email for reset password.  (Should be used only if the user does not receive an email.)
 
@@ -278,7 +299,7 @@ Error codes:
 - enapus03
 - enapusrepato02
 ```
- - ## /v1/m/au/rjawt POST
+ - ## /v1/m/au/rjawt (refresh_json_access_web_token) POST
 ```
 Refreshs json access web token.
 
