@@ -554,6 +554,20 @@ impl Authorization {
                                     }
                                     EntityWorkflowException::ApplicationUserRegistrationConfirmationTokenWorkflowException { application_user_registration_confirmation_token_workflow_exception } => {
                                         match application_user_registration_confirmation_token_workflow_exception {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::InvalidValue => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
                                             ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
@@ -568,9 +582,23 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::InvalidValue => {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::WrongValue => {
                                                 match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE)
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_WRONG_VALUE)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::IsNotApproved => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_IS_NOT_APPROVED)
                                                 ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);

@@ -50,6 +50,15 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         return self.is_approved;
     }
 
+    pub fn set_value<'b>(
+        &'b mut self,
+        value: String
+    ) -> &'b mut Self {
+        self.value = value;
+
+        return self;
+    }
+
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
         wrong_enter_tries_quantity: u8

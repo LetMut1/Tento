@@ -11,6 +11,8 @@ impl CommunicationCodeRegistry {
 
     pub const ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND: &'static str = "enapusrecoto02";
     pub const ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE: &'static str = "enapusrecoto03";
+    pub const ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_WRONG_VALUE: &'static str = "enapusrecoto04";
+    pub const ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_IS_NOT_APPROVED: &'static str = "enapusrecoto05";
 
     pub const ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND: &'static str = "enapuslointo02";
     pub const ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE: &'static str = "enapuslointo03";

@@ -155,6 +155,8 @@ Error codes:
 - enapus07
 - enapusrecoto02
 - enapusrecoto03
+- enapusrecoto04
+- enapusrecoto05
 ```
  - ## /v1/m/au/sefr POST
 ```

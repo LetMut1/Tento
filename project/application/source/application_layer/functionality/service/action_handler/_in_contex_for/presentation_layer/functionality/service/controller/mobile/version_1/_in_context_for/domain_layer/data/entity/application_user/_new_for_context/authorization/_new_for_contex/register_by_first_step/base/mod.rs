@@ -59,27 +59,24 @@ impl Base {
                                                     authorization_postgresql_connection, application_user_email.as_str()
                                                 ).await {
                                                     Ok(application_user_registration_confirmation_token_) => {
-                                                        let application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;
+                                                        let mut application_user_registration_confirmation_token: ApplicationUserRegistrationConfirmationToken<'_>;
 
                                                         match application_user_registration_confirmation_token_ {
                                                             Some(application_user_registration_confirmation_token__) => {
                                                                 application_user_registration_confirmation_token = application_user_registration_confirmation_token__;
-                                                                if !application_user_registration_confirmation_token.get_is_approved() {
-                                                                    if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                        authorization_postgresql_connection, &application_user_registration_confirmation_token, UpdateResolver::new(false, false, true)
-                                                                    ).await {
-                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                
-                                                                        return Err(error);
-                                                                    }
-                                                                } else {
-                                                                    // TODO Delete and create in transaction -> Через Апдейт поле токена
-                                                                    // Либо выше, либо сразу Ок, и сразу на фронте ведем на 3 фазу
+                                                                if application_user_registration_confirmation_token.get_is_approved() {
+                                                                    application_user_registration_confirmation_token
+                                                                        .set_value(ValueGenerator::generate())
+                                                                        .set_wrong_enter_tries_quantity(0)
+                                                                        .set_is_approved(false);
+                                                                }
 
-                                                                    // ТУДУ проверить обрабоку исключений в исправленных методах
-
-                                                                    // TODO AURCT Подумать над 1 шагом. Закончить со 2 шагом. Изменить 3 шаг в контексте добавления аппруведа.
-                                                                    todo!()
+                                                                if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
+                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token, UpdateResolver::new(false, false, true)
+                                                                ).await {
+                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                            
+                                                                    return Err(error);
                                                                 }
                                                             }
                                                             None => {

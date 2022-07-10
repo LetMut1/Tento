@@ -1,4 +1,6 @@
 pub enum ApplicationUserRegistrationConfirmationTokenWorkflowException {
     InvalidValue,
-    NotFound
+    IsNotApproved,
+    NotFound,
+    WrongValue
 }
