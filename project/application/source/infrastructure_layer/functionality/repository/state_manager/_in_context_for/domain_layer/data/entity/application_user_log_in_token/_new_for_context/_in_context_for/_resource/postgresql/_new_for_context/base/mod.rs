@@ -154,6 +154,8 @@ impl Base {
 
         let devcie_id = application_user_log_in_token.get_device_id();
 
+        let value = application_user_log_in_token.get_value();
+
         let wrong_enter_tries_quantity = application_user_log_in_token.get_wrong_enter_tries_quantity() as i16;
 
         let is_approved = application_user_log_in_token.get_is_approved();
@@ -165,7 +167,7 @@ impl Base {
         let mut counter_u8_value: u8;
 
         let mut column_name_for_value_registry: Option<(String, String)> = None;
-        if update_resolver.get_update_wrong_enter_tries_quantity() {
+        if update_resolver.get_update_value() {
             match counter_u8.get_next() {
                 Ok(counter_) => {
                     counter_u8_value = counter_;
@@ -179,10 +181,46 @@ impl Base {
 
             column_name_for_value_registry = Some(
                 (
-                    "wrong_enter_tries_quantity".to_string(),
+                    "value".to_string(),
                     "$".to_string() + counter_u8_value.to_string().as_str()
                 )
             );
+
+            prepared_statemant_parameter_convertation_resolver.add_parameter(&value, Type::TEXT);
+        }
+        if update_resolver.get_update_wrong_enter_tries_quantity() {
+            match counter_u8.get_next() {
+                Ok(counter_) => {
+                    counter_u8_value = counter_;
+                }
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+    
+                    return Err(error);
+                }
+            }
+
+            match column_name_for_value_registry {
+                Some((mut column_name_registry, mut column_value_registry)) => {
+                    column_name_registry = column_name_registry + ", wrong_enter_tries_quantity";
+                    column_value_registry = column_value_registry + ", $" + counter_u8_value.to_string().as_str();
+
+                    column_name_for_value_registry = Some(
+                        (
+                            column_name_registry,
+                            column_value_registry
+                        )
+                    );
+                }
+                None => {
+                    column_name_for_value_registry = Some(
+                        (
+                            "wrong_enter_tries_quantity".to_string(),
+                            "$".to_string() + counter_u8_value.to_string().as_str()
+                        )
+                    );
+                }
+            }
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(&wrong_enter_tries_quantity, Type::INT2);
         }

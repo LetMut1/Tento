@@ -78,7 +78,7 @@ impl Base {
                                                     application_user_reset_password_token = application_user_reset_password_token__;
                                 
                                                     if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::update(
-                                                        authorization_postgresql_connection, &application_user_reset_password_token, UpdateResolver::new(false, false, true)
+                                                        authorization_postgresql_connection, &application_user_reset_password_token, UpdateResolver::new(false, false, false, true)
                                                     ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                 

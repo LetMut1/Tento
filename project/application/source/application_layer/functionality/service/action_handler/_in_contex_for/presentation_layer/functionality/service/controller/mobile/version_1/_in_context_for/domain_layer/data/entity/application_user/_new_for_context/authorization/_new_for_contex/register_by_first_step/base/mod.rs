@@ -64,15 +64,21 @@ impl Base {
                                                         match application_user_registration_confirmation_token_ {
                                                             Some(application_user_registration_confirmation_token__) => {
                                                                 application_user_registration_confirmation_token = application_user_registration_confirmation_token__;
+
+                                                                let update_resolver: UpdateResolver;
                                                                 if application_user_registration_confirmation_token.get_is_approved() {
                                                                     application_user_registration_confirmation_token
                                                                         .set_value(ValueGenerator::generate())
                                                                         .set_wrong_enter_tries_quantity(0)
                                                                         .set_is_approved(false);
+
+                                                                    update_resolver = UpdateResolver::new(true, true, true, true);
+                                                                } else {
+                                                                    update_resolver = UpdateResolver::new(false, false, false, true);
                                                                 }
 
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token, UpdateResolver::new(false, false, true)
+                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token, update_resolver
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                             

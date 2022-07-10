@@ -149,7 +149,7 @@ impl Base {
                         
                                     if application_user_log_in_token_.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                         if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::update(
-                                            authorization_postgresql_connection, &application_user_log_in_token_, UpdateResolver::new(true, false, false)
+                                            authorization_postgresql_connection, &application_user_log_in_token_, UpdateResolver::new(false, true, false, false)
                                         ).await {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                 
