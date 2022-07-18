@@ -3,7 +3,6 @@ pub struct ApplicationUserLogInToken<'a> {
     device_id: &'a str,
     value: String,
     wrong_enter_tries_quantity: u8,
-    is_approved: bool,
     _created_at: Option<String>
 }
 
@@ -16,7 +15,6 @@ impl<'a> ApplicationUserLogInToken<'a> {
         device_id: &'a str,
         value: String,
         wrong_enter_tries_quantity: u8,
-        is_approved: bool,
         created_at: Option<String>
     ) -> Self {
         return Self {
@@ -24,7 +22,6 @@ impl<'a> ApplicationUserLogInToken<'a> {
             device_id,
             value,
             wrong_enter_tries_quantity,
-            is_approved,
             _created_at: created_at
         };
     }
@@ -53,12 +50,6 @@ impl<'a> ApplicationUserLogInToken<'a> {
         return self.wrong_enter_tries_quantity;
     }
 
-    pub fn get_is_approved<'b>(
-        &'b self
-    ) -> bool {
-        return self.is_approved;
-    }
-
     pub fn set_value<'b>(
         &'b mut self,
         value: String
@@ -73,15 +64,6 @@ impl<'a> ApplicationUserLogInToken<'a> {
         wrong_enter_tries_quantity: u8
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
-
-        return self;
-    }
-
-    pub fn set_is_approved<'b>(
-        &'b mut self,
-        is_approved: bool
-    ) -> &'b mut Self {
-        self.is_approved = is_approved;
 
         return self;
     }

@@ -23,7 +23,6 @@ impl Base {
             "SELECT \
                 aulit.value AS v, \
                 aulit.wrong_enter_tries_quantity AS wetq, \
-                aulit.is_approved AS ia, \
                 aulit.created_at::TEXT AS ca \
             FROM public.application_user_log_in_token aulit \
             WHERE aulit.application_user_id = $1 AND aulit.device_id = $2;";
@@ -75,23 +74,8 @@ impl Base {
                                 }
                             }
 
-                            let is_approved: bool;
-                            match row_registry[0].try_get::<'_, usize, bool>(2) {
-                                Ok(is_approved_) => {
-                                    is_approved = is_approved_;
-                                }
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            }
-
                             let created_at: String;
-                            match row_registry[0].try_get::<'_, usize, String>(3) {
+                            match row_registry[0].try_get::<'_, usize, String>(2) {
                                 Ok(created_at_) => {
                                     created_at = created_at_;
                                 }
@@ -112,7 +96,6 @@ impl Base {
                                         device_id,
                                         value,
                                         wrong_enter_tries_quantity,
-                                        is_approved,
                                         Some(created_at)
                                     )
                                 )

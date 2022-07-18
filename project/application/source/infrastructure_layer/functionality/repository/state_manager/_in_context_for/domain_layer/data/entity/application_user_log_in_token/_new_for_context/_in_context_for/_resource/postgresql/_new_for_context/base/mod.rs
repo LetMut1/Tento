@@ -26,8 +26,6 @@ impl Base {
 
         let wrong_enter_tries_quantity = application_user_log_in_token.get_wrong_enter_tries_quantity() as i16;
 
-        let is_approved = application_user_log_in_token.get_is_approved();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = 
@@ -36,14 +34,12 @@ impl Base {
                 device_id, \
                 value, \
                 wrong_enter_tries_quantity, \
-                is_approved, \
                 created_at \
             ) VALUES ( \
                 $1, \
                 $2, \
                 $3, \
                 $4, \
-                $5, \
                 DEFAULT \
             ) \
             ON CONFLICT DO NOTHING \
@@ -54,8 +50,7 @@ impl Base {
             .add_parameter(&applicaion_user_id, Type::INT8)
             .add_parameter(&device_id, Type::TEXT)
             .add_parameter(&value, Type::VARCHAR)
-            .add_parameter(&wrong_enter_tries_quantity, Type::INT2)
-            .add_parameter(&is_approved, Type::BOOL);
+            .add_parameter(&wrong_enter_tries_quantity, Type::INT2);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -158,8 +153,6 @@ impl Base {
 
         let wrong_enter_tries_quantity = application_user_log_in_token.get_wrong_enter_tries_quantity() as i16;
 
-        let is_approved = application_user_log_in_token.get_is_approved();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter_u8 = CounterU8::new();
@@ -223,42 +216,6 @@ impl Base {
             }
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(&wrong_enter_tries_quantity, Type::INT2);
-        }
-        if update_resolver.get_update_is_approved() {
-            match counter_u8.get_next() {
-                Ok(counter_) => {
-                    counter_u8_value = counter_;
-                }
-                Err(mut error) => {
-                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
-                    return Err(error);
-                }
-            }
-
-            match column_name_for_value_registry {
-                Some((mut column_name_registry, mut column_value_registry)) => {
-                    column_name_registry = column_name_registry + ", is_approved";
-                    column_value_registry = column_value_registry + ", $" + counter_u8_value.to_string().as_str();
-
-                    column_name_for_value_registry = Some(
-                        (
-                            column_name_registry,
-                            column_value_registry
-                        )
-                    );
-                }
-                None => {
-                    column_name_for_value_registry = Some(
-                        (
-                            "is_approved".to_string(),
-                            "$".to_string() + counter_u8_value.to_string().as_str()
-                        )
-                    );
-                }
-            }
-
-            prepared_statemant_parameter_convertation_resolver.add_parameter(&is_approved, Type::BOOL);
         }
         if update_resolver.get_update_created_at() {
             match counter_u8.get_next() {

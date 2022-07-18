@@ -109,7 +109,7 @@ impl Base {
                     match PasswordHashResolver::is_valid(application_user_password.as_str(), application_user.get_password_hash()) {
                         Ok(is_valid) => {
                             if is_valid {
-                                let mut application_user_log_in_token: ApplicationUserLogInToken<'_>;
+                                let application_user_log_in_token: ApplicationUserLogInToken<'_>;
         
                                 let application_user_id: i64;
                                 match application_user.get_id() {
@@ -137,12 +137,9 @@ impl Base {
                                                 match application_user_log_in_token_ {
                                                     Some(application_user_log_in_token__) => {
                                                         application_user_log_in_token = application_user_log_in_token__;
-                                                        if application_user_log_in_token.get_is_approved() {
-                                                            // TODO
-                                                        }
-                
+
                                                         if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::update(
-                                                            authorization_postgresql_connection, &application_user_log_in_token, UpdateResolver::new(false, false, false, true)
+                                                            authorization_postgresql_connection, &application_user_log_in_token, UpdateResolver::new(false, false, true)
                                                         ).await {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
             
@@ -155,7 +152,6 @@ impl Base {
                                                             application_user_log_in_token_device_id.as_str(),
                                                             ValueGenerator::generate(),
                                                             0,
-                                                            false,
                                                             None
                                                         );
                 
