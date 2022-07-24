@@ -22,6 +22,7 @@ use crate::application_layer::data::data_transfer_object::action_handler_incomin
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_second_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataRegisterBySecondStep;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordByFirstStep;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_last_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordByLastStep;
+use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_second_step::base::_new_for_context::base::Base as ActionHandlerIncomingDataResetPasswordBySecondStep;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_log_in::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForLogIn;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForRegister;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_reset_password::base::_new_for_context::base::Base as ActionHandlerIncomingDataSendEmailForResetPassword;
@@ -37,6 +38,7 @@ use crate::application_layer::functionality::service::action_handler::_in_contex
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_second_step::base::Base as ActionHandlerRegisterBySecondStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Base as ActionHandlerResetPasswordByFirstStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step::base::Base as ActionHandlerResetPasswordByLastStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_second_step::base::Base as ActionHandlerResetPasswordBySecondStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as ActionHandlerSendEmailForLogIn;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Base as ActionHandlerSendEmailForRegister;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Base as ActionHandlerSendEmailForResetPassword;
@@ -77,6 +79,8 @@ use crate::application_layer::data::data_transfer_object::action_handler_outcomi
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_json_access_web_token::base::_new_for_context::base::Base as ActionHandlerOutcomingDataRefreshJsonAccessWebToken;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_first_step::base::_new_for_context::base::Base as ActionHandlerOutcomingDataResetPasswordByFirstStep;
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_second_step::base::_new_for_context::base::Base as ActionHandlerOutcomingDataResetPasswordBySecondStep;
 
 pub struct Authorization;
 
@@ -544,6 +548,20 @@ impl Authorization {
                                                     }
                                                 }
                                             }
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::AlreadyApproved => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_ALREADY_APPROVED)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
                                             _ => {
                                                 unreachable!("TODO");
                                             }
@@ -739,6 +757,20 @@ impl Authorization {
                                                     }
                                                 }
                                             }
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::IsNotApproved => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_IS_NOT_APPROVED)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
                                             ApplicationUserRegistrationConfirmationTokenWorkflowException::WrongValue => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_WRONG_VALUE)
@@ -753,19 +785,8 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::IsNotApproved => {
-                                                match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_IS_NOT_APPROVED)
-                                                ) {
-                                                    Ok(data) => {
-                                                        return ActionResponseCreator::create_ok(data);
-                                                    }
-                                                    Err(error) => {
-                                                        // log::error!("{}", ErrorAuditor::from(error));
-                                
-                                                        return ActionResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
+                                            _ => {
+                                                unreachable!("TODO");
                                             }
                                         }
                                     }
@@ -1886,6 +1907,152 @@ impl Authorization {
         ).await;
     }
 
+    pub async fn reset_password_by_second_step<'a, T>(
+        _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        request: Request<Body>,
+        _core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ActionResponseCreator::create_bad_request();
+        }
+        
+        //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
+        // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
+        // https://github.com/hyperium/hyper/issues/2004
+        let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
+
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataResetPasswordBySecondStep>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
+                match ActionHandlerResetPasswordBySecondStep::handle(
+                    authorization_postgresql_connection_pool, action_handler_incoming_data
+                ).await {
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserResetPasswordTokenWorkflowException { application_user_reset_password_token_workflow_exception } => {
+                                        match application_user_reset_password_token_workflow_exception {
+                                            ApplicationUserResetPasswordTokenWorkflowException::InvalidValue => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            ApplicationUserResetPasswordTokenWorkflowException::NotFound => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            ApplicationUserResetPasswordTokenWorkflowException::AlreadyApproved => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_ALREADY_APPROVED)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
+                                        }
+                                    }
+                                    _ => {
+                                        unreachable!("TODO");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Err(error) => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
+                                return ActionResponseCreator::create_bad_request();
+                            }
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
+            
+                                return ActionResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    }
+                }
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ActionResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn reset_password_by_second_step_<'a, T>(
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        request: Request<Body>,
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataResetPasswordBySecondStep, ActionHandlerOutcomingDataResetPasswordBySecondStep>(
+            environment_configuration_resolver,
+            request,
+            core_postgresql_connection_pool,
+            authorization_postgresql_connection_pool,
+            redis_connection_pool,
+            Self::reset_password_by_second_step
+        ).await;
+    }
+
     pub async fn reset_password_by_last_step<'a, T>(
         _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -1933,7 +2100,7 @@ impl Authorization {
                                         match application_user_workflow_exception {
                                             ApplicationUserWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE)
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_NOT_FOUND)
                                                 ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
@@ -1994,6 +2161,37 @@ impl Authorization {
                                                         return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
+                                            }
+                                            ApplicationUserResetPasswordTokenWorkflowException::IsNotApproved => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_IS_NOT_APPROVED)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            ApplicationUserResetPasswordTokenWorkflowException::WrongValue => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_WRONG_VALUE)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
                                             }
                                         }
                                     }

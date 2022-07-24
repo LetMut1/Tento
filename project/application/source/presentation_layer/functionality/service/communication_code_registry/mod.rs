@@ -13,12 +13,16 @@ impl CommunicationCodeRegistry {
     pub const ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE: &'static str = "enapusrecoto03";
     pub const ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_WRONG_VALUE: &'static str = "enapusrecoto04";
     pub const ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_IS_NOT_APPROVED: &'static str = "enapusrecoto05";
+    pub const ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_ALREADY_APPROVED: &'static str = "enapusrecoto06";
 
     pub const ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND: &'static str = "enapuslointo02";
     pub const ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE: &'static str = "enapuslointo03";
 
     pub const ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND: &'static str = "enapusrepato02";
     pub const ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE: &'static str = "enapusrepato03";
+    pub const ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_WRONG_VALUE: &'static str = "enapusrepato04";
+    pub const ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_IS_NOT_APPROVED: &'static str = "enapusrepato05";
+    pub const ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_ALREADY_APPROVED: &'static str = "enapusrepato06";
 
     pub const ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED: &'static str = "enjsacweto03";
     pub const ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED: &'static str = "enjsacweto04";

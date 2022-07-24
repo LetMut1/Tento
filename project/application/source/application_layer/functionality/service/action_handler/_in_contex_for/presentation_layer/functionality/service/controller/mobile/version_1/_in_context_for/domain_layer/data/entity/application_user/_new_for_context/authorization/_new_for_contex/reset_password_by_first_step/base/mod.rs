@@ -72,16 +72,28 @@ impl Base {
                                         authorization_postgresql_connection, application_user_id
                                     ).await {
                                         Ok(application_user_reset_password_token_) => {
-                                            let application_user_reset_password_token: ApplicationUserResetPasswordToken;
+                                            let mut application_user_reset_password_token: ApplicationUserResetPasswordToken;
                                             match application_user_reset_password_token_ {
                                                 Some(application_user_reset_password_token__) => {
                                                     application_user_reset_password_token = application_user_reset_password_token__;
                                 
+                                                    let update_resolver: UpdateResolver;
+                                                    if application_user_reset_password_token.get_is_approved() {
+                                                        application_user_reset_password_token
+                                                            .set_value(ValueGenerator::generate())
+                                                            .set_wrong_enter_tries_quantity(0)
+                                                            .set_is_approved(false);
+
+                                                        update_resolver = UpdateResolver::new(true, true, true, true);
+                                                    } else {
+                                                        update_resolver = UpdateResolver::new(false, false, false, true);
+                                                    }
+
                                                     if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::update(
-                                                        authorization_postgresql_connection, &application_user_reset_password_token, UpdateResolver::new(false, false, false, true)
+                                                        authorization_postgresql_connection, &application_user_reset_password_token, update_resolver
                                                     ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                
+                                
                                                         return Err(error);
                                                     }
                                                 }

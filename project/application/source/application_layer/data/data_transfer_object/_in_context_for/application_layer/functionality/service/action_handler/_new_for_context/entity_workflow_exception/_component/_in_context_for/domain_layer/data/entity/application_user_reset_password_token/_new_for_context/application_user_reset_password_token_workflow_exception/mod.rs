@@ -1,4 +1,7 @@
 pub enum ApplicationUserResetPasswordTokenWorkflowException {
+    AlreadyApproved,
     InvalidValue,
-    NotFound
+    IsNotApproved,
+    NotFound,
+    WrongValue
 }

@@ -700,6 +700,11 @@ impl Base {
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
+            ("/v1/m/au/rpbss", &Method::POST) => {
+                return ControllerApplicationUserAuthorization::reset_password_by_second_step(
+                    environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
+                ).await;
+            }
             ("/v1/m/au/rpbls", &Method::POST) => {
                 return ControllerApplicationUserAuthorization::reset_password_by_last_step(
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
@@ -804,6 +809,11 @@ impl Base {
                     }
                     ("/v1/m/au/rpbfs_", &Method::POST) => {
                         return ControllerApplicationUserAuthorization::reset_password_by_first_step_(
+                            environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
+                        ).await;
+                    }
+                    ("/v1/m/au/rpbss_", &Method::POST) => {
+                        return ControllerApplicationUserAuthorization::reset_password_by_second_step_(
                             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }

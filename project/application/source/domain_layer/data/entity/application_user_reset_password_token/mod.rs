@@ -50,11 +50,29 @@ impl ApplicationUserResetPasswordToken {
         return self.is_approved;
     }
 
+    pub fn set_value<'b>(
+        &'b mut self,
+        value: String
+    ) -> &'b mut Self {
+        self.value = value;
+
+        return self;
+    }
+
     pub fn set_wrong_enter_tries_quantity<'a>(
         &'a mut self,
         wrong_enter_tries_quantity: u8
     ) -> &'a mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
+
+        return self;
+    }
+
+    pub fn set_is_approved<'b>(
+        &'b mut self,
+        is_approved: bool
+    ) -> &'b mut Self {
+        self.is_approved = is_approved;
 
         return self;
     }

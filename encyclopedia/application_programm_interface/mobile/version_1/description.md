@@ -148,6 +148,7 @@ Error codes:
 - enapus05
 - enapusrecoto02
 - enapusrecoto03
+- enapusrecoto06
 ```
 
  - ## /v1/m/au/rbls (register_by_last_step) POST
@@ -266,6 +267,26 @@ struct Base {
 Error codes:
 - enapus03
 ```
+ - ## /v1/m/au/rpbss (reset_password_by_second_step) POST
+```
+Resets application user password for the second step through token value approving.
+
+Request data:
+struct Base {
+    application_user_id: i64,
+    application_user_reset_password_token_value: String
+}
+
+Result data:
+struct Base {
+    application_user_reset_password_token_is_approved: bool
+}
+
+Error codes:
+- enapusrepato02
+- enapusrepato03
+- enapusrepato06
+```
  - ## /v1/m/au/rpbls (reset_password_by_last_step) POST
 ```
 Resets application user password for the last step.
@@ -280,9 +301,12 @@ struct Base {
 Result data is absent.
 
 Error codes:
+- enapus03
+- enapus07
 - enapusrepato02
 - enapusrepato03
-- enapus07
+- enapusrepato04
+- enapusrepato05
 ```
  - ## /v1/m/au/sefrp (send_email_for_reset_password) POST
 ```
