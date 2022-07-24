@@ -50,25 +50,29 @@ impl Base {
                             ).await {
                                 Ok(application_user_registration_confirmation_token) => {
                                     if let Some(application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
-                                        if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                            authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(false, false, false, true)
-                                        ).await {
-                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
-                                            return Err(error);
-                                        }
+                                        if !application_user_registration_confirmation_token_.get_is_approved() {
+                                            if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
+                                                authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(false, false, false, true)
+                                            ).await {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                         
-                                        if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
-                                            environment_configuration_resolver,
-                                            application_user_registration_confirmation_token_.get_value(),
-                                            application_user_email.as_str()
-                                        ) {
-                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                return Err(error);
+                                            }
                             
-                                            return Err(error);
-                                        }
+                                            if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
+                                                environment_configuration_resolver,
+                                                application_user_registration_confirmation_token_.get_value(),
+                                                application_user_email.as_str()
+                                            ) {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                 
-                                        return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
+                                                return Err(error);
+                                            }
+                                    
+                                            return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
+                                        }
+
+                                        return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::AlreadyApproved));
                                     }
                     
                                     return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound));

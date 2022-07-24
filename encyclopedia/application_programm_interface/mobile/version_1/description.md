@@ -195,6 +195,7 @@ Result data is absent.
 Error codes:
 - enapus05
 - enapusrecoto02
+- enapusrecoto06
 ```
  - ## /v1/m/au/libfs (log_in_by_first_step) POST
 ```
@@ -326,6 +327,7 @@ Result data is absent.
 Error codes:
 - enapus03
 - enapusrepato02
+- enapusrepato06
 ```
  - ## /v1/m/au/rjawt (refresh_json_access_web_token) POST
 ```
