@@ -80,23 +80,6 @@ Error codes:
 - enjsreweto02
 ```
 # Area for not authorized application user. API:
- - ## /v1/m/au/cnfe (check_nickname_for_existing) POST (GET functional)
-```
-Checks application user nickname for existing.
-
-Request data:
-struct Base {
-    application_user_nickname: String
-}
-
-Result data:
-struct Base {
-    result: bool
-}
-
-Error codes:
-- enapus06
-```
  - ## /v1/m/au/cefe (check_email_for_existing) POST (GET functional)
 ```
 Checks application user email for existing.
@@ -113,6 +96,23 @@ struct Base {
 
 Error codes:
 - enapus05
+```
+ - ## /v1/m/au/cnfe (check_nickname_for_existing) POST (GET functional)
+```
+Checks application user nickname for existing.
+
+Request data:
+struct Base {
+    application_user_nickname: String
+}
+
+Result data:
+struct Base {
+    result: bool
+}
+
+Error codes:
+- enapus06
 ```
  - ## /v1/m/au/rbfs (register_by_first_step) POST
 ```

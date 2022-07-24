@@ -85,124 +85,6 @@ use crate::application_layer::data::data_transfer_object::action_handler_outcomi
 pub struct Authorization;
 
 impl Authorization {
-    pub async fn check_nickname_for_existing<'a, T>(
-        _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        request: Request<Body>,
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-    {
-        if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
-        }
-
-        //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
-        // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
-        // https://github.com/hyperium/hyper/issues/2004
-        let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
-
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataCheckNicknameForExisting>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
-                match ActionHandlerCheckNicknameForExisting::handle(
-                    core_postgresql_connection_pool, action_handler_incoming_data
-                ).await {
-                    Ok(action_handler_result) => {
-                        match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
-                                    Ok(data) => {
-                                        return ActionResponseCreator::create_ok(data);
-                                    }
-                                    Err(error) => {
-                                        // log::error!("{}", ErrorAuditor::from(error));
-                
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
-                                match entity_workflow_exception {
-                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
-                                        match application_user_workflow_exception {
-                                            ApplicationUserWorkflowException::InvalidNickname => {
-                                                match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_NICKNAME)
-                                                ) {
-                                                    Ok(data) => {
-                                                        return ActionResponseCreator::create_ok(data);
-                                                    }
-                                                    Err(error) => {
-                                                        // log::error!("{}", ErrorAuditor::from(error));
-                                
-                                                        return ActionResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            }
-                                            _ => {
-                                                unreachable!("TODO");
-                                            }
-                                        }
-                                    }
-                                    _ => {
-                                        unreachable!("TODO");
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Err(error) => {
-                        match error.get_base_error() {
-                            BaseError::InvalidArgumentError => {
-                                return ActionResponseCreator::create_bad_request();
-                            }
-                            BaseError::LogicError { logic_error: _ } |
-                            BaseError::RunTimeError { run_time_error: _ } => {
-                                // log::error!("{}", error);
-        
-                                return ActionResponseCreator::create_internal_server_error();
-                            }
-                        }
-                    }
-                }
-            }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
-
-                return ActionResponseCreator::create_internal_server_error();
-            }
-        }
-    }
-
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
-    pub async fn check_nickname_for_existing_<'a, T>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        request: Request<Body>,
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: Pool<RedisConnectionManager>
-    ) -> Response<Body>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-    {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataCheckNicknameForExisting, ActionHandlerOutcomingDataCheckNicknameForExisting>(
-            environment_configuration_resolver,
-            request,
-            core_postgresql_connection_pool,
-            authorization_postgresql_connection_pool,
-            redis_connection_pool,
-            Self::check_nickname_for_existing
-        ).await;
-    }
-
     pub async fn check_email_for_existing<'a, T>(
         _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -322,6 +204,124 @@ impl Authorization {
         ).await;
     }
 
+    pub async fn check_nickname_for_existing<'a, T>(
+        _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        request: Request<Body>,
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        if !RequestHeaderChecker::is_valid(&request) {
+            return ActionResponseCreator::create_bad_request();
+        }
+
+        //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
+        // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
+        // https://github.com/hyperium/hyper/issues/2004
+        let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
+
+        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataCheckNicknameForExisting>(bytes.chunk()) {
+            Ok(action_handler_incoming_data) => {
+                match ActionHandlerCheckNicknameForExisting::handle(
+                    core_postgresql_connection_pool, action_handler_incoming_data
+                ).await {
+                    Ok(action_handler_result) => {
+                        match action_handler_result {
+                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                                    Ok(data) => {
+                                        return ActionResponseCreator::create_ok(data);
+                                    }
+                                    Err(error) => {
+                                        // log::error!("{}", ErrorAuditor::from(error));
+                
+                                        return ActionResponseCreator::create_internal_server_error();
+                                    }
+                                }
+                            }
+                            ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                                match entity_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
+                                        match application_user_workflow_exception {
+                                            ApplicationUserWorkflowException::InvalidNickname => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_NICKNAME)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+                                
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            _ => {
+                                                unreachable!("TODO");
+                                            }
+                                        }
+                                    }
+                                    _ => {
+                                        unreachable!("TODO");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Err(error) => {
+                        match error.get_base_error() {
+                            BaseError::InvalidArgumentError => {
+                                return ActionResponseCreator::create_bad_request();
+                            }
+                            BaseError::LogicError { logic_error: _ } |
+                            BaseError::RunTimeError { run_time_error: _ } => {
+                                // log::error!("{}", error);
+        
+                                return ActionResponseCreator::create_internal_server_error();
+                            }
+                        }
+                    }
+                }
+            }
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ActionResponseCreator::create_internal_server_error();
+            }
+        }
+    }
+
+    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    pub async fn check_nickname_for_existing_<'a, T>(
+        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        request: Request<Body>,
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: Pool<RedisConnectionManager>
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataCheckNicknameForExisting, ActionHandlerOutcomingDataCheckNicknameForExisting>(
+            environment_configuration_resolver,
+            request,
+            core_postgresql_connection_pool,
+            authorization_postgresql_connection_pool,
+            redis_connection_pool,
+            Self::check_nickname_for_existing
+        ).await;
+    }
+
     pub async fn register_by_first_step<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -367,9 +367,9 @@ impl Authorization {
                                 match entity_workflow_exception {
                                     EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
                                         match application_user_workflow_exception {
-                                            ApplicationUserWorkflowException::EmailAlreadyExist => {
+                                            ApplicationUserWorkflowException::InvalidEmail => {
                                                 match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST)
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_EMAIL)
                                                 ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
@@ -381,9 +381,9 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserWorkflowException::InvalidEmail => {
+                                            ApplicationUserWorkflowException::EmailAlreadyExist => {
                                                 match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_EMAIL)
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST)
                                                 ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
@@ -1896,9 +1896,9 @@ impl Authorization {
                                 match entity_workflow_exception {
                                     EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
                                         match application_user_workflow_exception {
-                                            ApplicationUserWorkflowException::NotFound => {
+                                            ApplicationUserWorkflowException::InvalidEmail => {
                                                 match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_NOT_FOUND)
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_EMAIL)
                                                 ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
@@ -1910,9 +1910,9 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserWorkflowException::InvalidEmail => {
+                                            ApplicationUserWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_EMAIL)
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_NOT_FOUND)
                                                 ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
@@ -2175,9 +2175,9 @@ impl Authorization {
                                 match entity_workflow_exception {
                                     EntityWorkflowException::ApplicationUserWorkflowException { application_user_workflow_exception } => {
                                         match application_user_workflow_exception {
-                                            ApplicationUserWorkflowException::NotFound => {
+                                            ApplicationUserWorkflowException::InvalidPassword => {
                                                 match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_NOT_FOUND)
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_PASSWORD)
                                                 ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
@@ -2189,9 +2189,9 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserWorkflowException::InvalidPassword => {
+                                            ApplicationUserWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_PASSWORD)
+                                                    &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_NOT_FOUND)
                                                 ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);
