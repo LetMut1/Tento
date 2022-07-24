@@ -17,6 +17,7 @@ impl CommunicationCodeRegistry {
 
     pub const ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND: &'static str = "enapuslointo02";
     pub const ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE: &'static str = "enapuslointo03";
+    pub const ENTITY_APPLICATION_USER_LOG_IN_TOKEN_WRONG_VALUE: &'static str = "enapuslointo04";
 
     pub const ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND: &'static str = "enapusrepato02";
     pub const ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE: &'static str = "enapusrepato03";

@@ -1,4 +1,5 @@
 pub enum ApplicationUserLogInTokenWorkflowException {
     InvalidValue,
-    NotFound
+    NotFound,
+    WrongValue
 }

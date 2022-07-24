@@ -173,6 +173,7 @@ struct Base {
 Error codes:
 - enapus01
 - enapus02
+- enapus05
 - enapus06
 - enapus07
 - enapusrecoto02
@@ -192,6 +193,7 @@ struct Base {
 Result data is absent.
 
 Error codes:
+- enapus05
 - enapusrecoto02
 ```
  - ## /v1/m/au/libfs (log_in_by_first_step) POST
@@ -233,6 +235,7 @@ struct Base {
 Error codes:
 - enapuslointo02
 - enapuslointo03
+- enapuslointo04
 ```
  - ## /v1/m/au/sefli (send_email_for_log_in) POST
 ```
@@ -266,6 +269,7 @@ struct Base {
 
 Error codes:
 - enapus03
+- enapus05
 ```
  - ## /v1/m/au/rpbss (reset_password_by_second_step) POST
 ```
