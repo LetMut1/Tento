@@ -26,7 +26,7 @@
 struct UnifiedReport<S>
 {
     data: Option<Data<S>>,
-    communication_code: Option<&'static str>
+    communication_code: Option<String>
 }
 
 struct Data<S>
