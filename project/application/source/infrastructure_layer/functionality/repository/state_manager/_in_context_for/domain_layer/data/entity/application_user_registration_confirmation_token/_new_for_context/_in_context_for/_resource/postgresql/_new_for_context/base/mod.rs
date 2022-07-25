@@ -18,7 +18,7 @@ impl Base {
         authorization_connection: &'a Connection,
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<(), ErrorAuditor> {
-        let applicaion_user_email = application_user_registration_confirmation_token.get_application_user_email();
+        let application_user_email = application_user_registration_confirmation_token.get_application_user_email();
 
         let value = application_user_registration_confirmation_token.get_value();
 
@@ -30,7 +30,7 @@ impl Base {
 
         let query = 
             "INSERT INTO public.application_user_registration_confirmation_token AS aurct ( \
-                applicaion_user_email, \
+                application_user_email, \
                 value, \
                 wrong_enter_tries_quantity, \
                 is_approved, \
@@ -47,7 +47,7 @@ impl Base {
                 1::SMALLINT;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&applicaion_user_email, Type::VARCHAR)
+            .add_parameter(&application_user_email, Type::VARCHAR)
             .add_parameter(&value, Type::VARCHAR)
             .add_parameter(&wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&is_approved, Type::BOOL);
@@ -90,7 +90,7 @@ impl Base {
 
     pub async fn delete<'a>(
         authorization_connection: &'a Connection,
-        applicaion_user_email: &'a str
+        application_user_email: &'a str
     ) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -100,7 +100,7 @@ impl Base {
             RETURNING \
                 1::SMALLINT;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&applicaion_user_email, Type::VARCHAR);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::VARCHAR);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {

@@ -18,7 +18,7 @@ impl Base {
         authorization_connection: &'a Connection,
         application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
     ) -> Result<(), ErrorAuditor> {
-        let applicaion_user_id = application_user_log_in_token.get_application_user_id();
+        let application_user_id = application_user_log_in_token.get_application_user_id();
 
         let device_id = application_user_log_in_token.get_device_id();
 
@@ -30,7 +30,7 @@ impl Base {
 
         let query = 
             "INSERT INTO public.application_user_log_in_token AS aulit ( \
-                applicaion_user_id, \
+                application_user_id, \
                 device_id, \
                 value, \
                 wrong_enter_tries_quantity, \
@@ -47,7 +47,7 @@ impl Base {
                 1::SMALLINT;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&applicaion_user_id, Type::INT8)
+            .add_parameter(&application_user_id, Type::INT8)
             .add_parameter(&device_id, Type::TEXT)
             .add_parameter(&value, Type::VARCHAR)
             .add_parameter(&wrong_enter_tries_quantity, Type::INT2);
