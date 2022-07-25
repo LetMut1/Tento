@@ -72,13 +72,10 @@ impl Base {
         
                 return Ok(());
             }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
             }
         }
     }
