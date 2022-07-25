@@ -72,7 +72,9 @@ impl Base {
                                                                             Ok(password_hash) => {
                                                                                 application_user_.set_password_hash(password_hash);
                                         
-                                                                                if let Err(mut error) = ApplicationUserStateManagerPostgresql::update(core_postgresql_connection, &application_user_, UpdateResolver::new(false, false, true)).await {
+                                                                                if let Err(mut error) = ApplicationUserStateManagerPostgresql::update(
+                                                                                    core_postgresql_connection, &application_user_, UpdateResolver::new(false, false, true)
+                                                                                ).await {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                                         
                                                                                     return Err(error);
