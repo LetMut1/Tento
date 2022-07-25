@@ -252,21 +252,10 @@ impl Base {
             prepared_statemant_parameter_convertation_resolver.add_parameter(&is_approved, Type::BOOL);
         }
         if update_resolver.get_update_created_at() {
-            match counter_u8.get_next() {
-                Ok(counter_) => {
-                    counter_u8_value = counter_;
-                }
-                Err(mut error) => {
-                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
-                    return Err(error);
-                }
-            }
-
             match column_name_for_value_registry {
                 Some((mut column_name_registry, mut column_value_registry)) => {
                     column_name_registry = column_name_registry + ", created_at";
-                    column_value_registry = column_value_registry + ", $" + counter_u8_value.to_string().as_str();
+                    column_value_registry = column_value_registry + ", DEFAULT";
 
                     column_name_for_value_registry = Some(
                         (
@@ -279,13 +268,11 @@ impl Base {
                     column_name_for_value_registry = Some(
                         (
                             "created_at".to_string(),
-                            "$".to_string() + counter_u8_value.to_string().as_str()
+                            "DEFAULT".to_string()
                         )
                     );
                 }
             }
-
-            prepared_statemant_parameter_convertation_resolver.add_parameter(&"DEFAULT", Type::TEXT);
         }
 
         let query: String;
