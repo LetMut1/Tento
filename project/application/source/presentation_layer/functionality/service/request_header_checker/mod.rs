@@ -15,7 +15,7 @@ impl RequestHeaderChecker {
         }
         match header_map.get(header::CONTENT_TYPE) {
             Some(header_value) => {
-                if *header_value != ActionResponseCreator::HEADER_VALUE_CONTENT_TYPE {
+                if header_value.as_bytes() != ActionResponseCreator::HEADER_VALUE_CONTENT_TYPE.as_bytes() {
                     return false;
                 }
             }
@@ -25,7 +25,7 @@ impl RequestHeaderChecker {
         }
         match header_map.get(header::X_CONTENT_TYPE_OPTIONS) {
             Some(header_value) => {
-                if *header_value != ActionResponseCreator::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS {
+                if header_value.as_bytes() != ActionResponseCreator::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS.as_bytes() {
                     return false;
                 }
             }

@@ -10,16 +10,16 @@ use std::convert::From;
 pub struct ActionResponseCreator;
 
 impl ActionResponseCreator {
-    pub const HEADER_VALUE_CONTENT_TYPE: HeaderValue = HeaderValue::from_static("application/octet-stream");        // TODO В файл с константами
-    pub const HEADER_VALUE_X_CONTENT_TYPE_OPTIONS: HeaderValue =  HeaderValue::from_static("nosniff");        // TODO В файл с константами
+    pub const HEADER_VALUE_CONTENT_TYPE: &'static str = "application/octet-stream";        // TODO В файл с константами
+    pub const HEADER_VALUE_X_CONTENT_TYPE_OPTIONS: &'static str = "nosniff";        // TODO В файл с константами
 
     fn create(                          // TODO Посмотреть, что за дефолтные ответ. НАстроить необходимое
         status_code: StatusCode,
         data: Option<Vec<u8>>
     ) -> Response<Body> {
         let mut header_map = HeaderMap::new();
-        header_map.append(header::CONTENT_TYPE, Self::HEADER_VALUE_CONTENT_TYPE);
-        header_map.append(header::X_CONTENT_TYPE_OPTIONS, Self::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS);
+        header_map.append(header::CONTENT_TYPE, HeaderValue::from_static(Self::HEADER_VALUE_CONTENT_TYPE));
+        header_map.append(header::X_CONTENT_TYPE_OPTIONS, HeaderValue::from_static(Self::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS));
 
         let mut parts = Response::new(()).into_parts().0;
         parts.status = status_code;

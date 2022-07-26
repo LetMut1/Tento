@@ -1,3 +1,6 @@
+#![allow(clippy::needless_return)]
+#![allow(clippy::unused_unit)]
+
 extern crate application;
 
 use application::application_layer::functionality::service::command_handler::_in_contex_for::presentation_layer::command::run_server::_new_for_context::base::Base;

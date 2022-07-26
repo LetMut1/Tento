@@ -6,7 +6,7 @@ edition = "2021"
 
 [lib]
 name = "application"
-path = "./mod.rs"
+path = "./lib.rs"
 test = true
 doctest = true
 bench = true

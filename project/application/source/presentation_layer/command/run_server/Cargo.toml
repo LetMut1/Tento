@@ -6,7 +6,7 @@ edition = "2021"
 
 [[bin]]
 name = "run_server"
-path = "./mod.rs"
+path = "./main.rs"
 test = true
 doctest = true
 bench = true

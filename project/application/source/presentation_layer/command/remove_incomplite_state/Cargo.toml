@@ -6,7 +6,7 @@ edition = "2021"
 
 [[bin]]
 name = "remove_incomplite_state"
-path = "./mod.rs"
+path = "./main.rs"
 test = true
 doctest = true
 bench = true
