@@ -20,6 +20,7 @@ extern crate rand;
 extern crate redis;
 extern crate regex;
 extern crate rmp_serde;
+extern crate serde_json;    // TODO только для тестирования
 extern crate serde;
 extern crate tokio_postgres;
 extern crate tokio;

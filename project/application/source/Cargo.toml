@@ -45,8 +45,8 @@ tokio = { version = "^1.16", default-features = true, features = ["full"], optio
 tokio-postgres = { version = "^0.7", default-features = true, features = [], optional = false }
 uuid = { version = "^0.8", default-features = true, features = ["v4"], optional = false }
 
-serde_json = { version = "^1.0", default-features = true, features = [], optional = true }
+serde_json = { version = "^1.0", default-features = true, features = [], optional = false }     # TODO  optional = true  + facilitate_non_automatic_functional_testing = ["dep:serde_json"]
 
 [features]
 default = []
-facilitate_non_automatic_functional_testing = ["dep:serde_json"]
+facilitate_non_automatic_functional_testing = []
