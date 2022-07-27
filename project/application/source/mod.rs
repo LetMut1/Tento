@@ -1,9 +1,3 @@
-#![allow(clippy::collapsible_match)]
-#![allow(clippy::needless_lifetimes)]
-#![allow(clippy::needless_return)]
-#![allow(clippy::redundant_pattern_matching)]
-#![allow(clippy::unused_unit)]
-
 extern crate argon2;
 extern crate base64;
 extern crate bb8_postgres;
