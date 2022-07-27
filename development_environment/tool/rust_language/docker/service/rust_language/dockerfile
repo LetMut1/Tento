@@ -5,12 +5,13 @@ mkdir -p /_tento && \
 # For VSCode extensions {
 # For "rust-lang.rust-analyzer" extension {
 rustup component add \
-    rust-src \
+    rust-src && \
 # For "rust-lang.rust-analyzer" extension }
 # For VSCode extensions }
+rustup default stable && \
+rustup component add \
     clippy \
     rustfmt && \
-rustup default stable && \
 apt-get update && \
                              # TODO TODO TODO для чего pkg-config, libssl-dev? МОжно ли без них?
 apt-get install -y \
