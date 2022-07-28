@@ -95,11 +95,8 @@ impl Base {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {
-                                let channel_id: i64;
-                                match row.try_get::<'_, usize, i64>(0) {
-                                    Ok(channel_id_) => {
-                                        channel_id = channel_id_;
-                                    }
+                                let channel_id = match row.try_get::<'_, usize, i64>(0) {
+                                    Ok(channel_id_) => channel_id_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -108,13 +105,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_name: String;
-                                match row.try_get::<'_, usize, String>(1) {
-                                    Ok(channel_name_) => {
-                                        channel_name = channel_name_;
-                                    }
+                                let channel_name = match row.try_get::<'_, usize, String>(1) {
+                                    Ok(channel_name_) => channel_name_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -123,13 +117,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_personalization_image_path: String;
-                                match row.try_get::<'_, usize, String>(1) {
-                                    Ok(channel_personalization_image_path_) => {
-                                        channel_personalization_image_path = channel_personalization_image_path_;
-                                    }
+                                let channel_personalization_image_path = match row.try_get::<'_, usize, String>(1) {
+                                    Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -138,13 +129,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_subscribers_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(3) {
-                                    Ok(channel_subscribers_quantity_) => {
-                                        channel_subscribers_quantity = channel_subscribers_quantity_;
-                                    }
+                                let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(3) {
+                                    Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -153,13 +141,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_public_marks_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(4) {
-                                    Ok(channel_public_marks_quantity_) => {
-                                        channel_public_marks_quantity = channel_public_marks_quantity_;
-                                    }
+                                let channel_public_marks_quantity = match row.try_get::<'_, usize, i64>(4) {
+                                    Ok(channel_public_marks_quantity_) => channel_public_marks_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -168,13 +153,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_hidden_marks_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(5) {
-                                    Ok(channel_hidden_marks_quantity_) => {
-                                        channel_hidden_marks_quantity = channel_hidden_marks_quantity_;
-                                    }
+                                let channel_hidden_marks_quantity = match row.try_get::<'_, usize, i64>(5) {
+                                    Ok(channel_hidden_marks_quantity_) => channel_hidden_marks_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -183,13 +165,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_reactions_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(6) {
-                                    Ok(channel_reactions_quantity_) => {
-                                        channel_reactions_quantity = channel_reactions_quantity_;
-                                    }
+                                let channel_reactions_quantity = match row.try_get::<'_, usize, i64>(6) {
+                                    Ok(channel_reactions_quantity_) => channel_reactions_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -198,13 +177,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_viewing_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(7) {
-                                    Ok(channel_viewing_quantity_) => {
-                                        channel_viewing_quantity = channel_viewing_quantity_;
-                                    }
+                                let channel_viewing_quantity = match row.try_get::<'_, usize, i64>(7) {
+                                    Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -213,13 +189,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_created_at: String;
-                                match row.try_get::<'_, usize, String>(8) {
-                                    Ok(channel_created_at_) => {
-                                        channel_created_at = channel_created_at_;
-                                    }
+                                let channel_created_at = match row.try_get::<'_, usize, String>(8) {
+                                    Ok(channel_created_at_) => channel_created_at_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -228,7 +201,7 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
                                 let channel = ActionHandlerOutcomingDataGetManyByNameChannel::new(
                                     channel_id,
@@ -328,20 +301,17 @@ impl Base {
             prepared_statemant_parameter_convertation_resolver.add_parameter(created_at_, Type::TEXT);
         }
 
-        let order_: &'static str;
-        match counter_u8.get_next() {
-            Ok(counter_) => {
-                counter_u8_value = counter_;
-            }
+        let order_ = match OrderConventionResolver::convert(order) {
+            Ok(order__) => order__,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
-        }
-        match OrderConventionResolver::convert(order) {
-            Ok(order__) => {
-                order_ = order__;
+        };
+        match counter_u8.get_next() {
+            Ok(counter_) => {
+                counter_u8_value = counter_;
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -361,11 +331,8 @@ impl Base {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {
-                                let channel_id: i64;
-                                match row.try_get::<'_, usize, i64>(0) {
-                                    Ok(channel_id_) => {
-                                        channel_id = channel_id_;
-                                    }
+                                let channel_id = match row.try_get::<'_, usize, i64>(0) {
+                                    Ok(channel_id_) => channel_id_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -374,13 +341,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_name: String;
-                                match row.try_get::<'_, usize, String>(1) {
-                                    Ok(channel_name_) => {
-                                        channel_name = channel_name_;
-                                    }
+                                let channel_name = match row.try_get::<'_, usize, String>(1) {
+                                    Ok(channel_name_) => channel_name_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -389,13 +353,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_personalization_image_path: String;
-                                match row.try_get::<'_, usize, String>(1) {
-                                    Ok(channel_personalization_image_path_) => {
-                                        channel_personalization_image_path = channel_personalization_image_path_;
-                                    }
+                                let channel_personalization_image_path = match row.try_get::<'_, usize, String>(1) {
+                                    Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -404,13 +365,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_subscribers_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(3) {
-                                    Ok(channel_subscribers_quantity_) => {
-                                        channel_subscribers_quantity = channel_subscribers_quantity_;
-                                    }
+                                let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(3) {
+                                    Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -419,13 +377,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_public_marks_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(4) {
-                                    Ok(channel_public_marks_quantity_) => {
-                                        channel_public_marks_quantity = channel_public_marks_quantity_;
-                                    }
+                                let channel_public_marks_quantity = match row.try_get::<'_, usize, i64>(4) {
+                                    Ok(channel_public_marks_quantity_) => channel_public_marks_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -434,13 +389,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_hidden_marks_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(5) {
-                                    Ok(channel_hidden_marks_quantity_) => {
-                                        channel_hidden_marks_quantity = channel_hidden_marks_quantity_;
-                                    }
+                                let channel_hidden_marks_quantity = match row.try_get::<'_, usize, i64>(5) {
+                                    Ok(channel_hidden_marks_quantity_) => channel_hidden_marks_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -449,13 +401,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_reactions_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(6) {
-                                    Ok(channel_reactions_quantity_) => {
-                                        channel_reactions_quantity = channel_reactions_quantity_;
-                                    }
+                                let channel_reactions_quantity = match row.try_get::<'_, usize, i64>(6) {
+                                    Ok(channel_reactions_quantity_) => channel_reactions_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -464,13 +413,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_viewing_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(7) {
-                                    Ok(channel_viewing_quantity_) => {
-                                        channel_viewing_quantity = channel_viewing_quantity_;
-                                    }
+                                let channel_viewing_quantity = match row.try_get::<'_, usize, i64>(7) {
+                                    Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -479,13 +425,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_created_at: String;
-                                match row.try_get::<'_, usize, String>(8) {
-                                    Ok(channel_created_at_) => {
-                                        channel_created_at = channel_created_at_;
-                                    }
+                                let channel_created_at = match row.try_get::<'_, usize, String>(8) {
+                                    Ok(channel_created_at_) => channel_created_at_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -494,7 +437,7 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
                                 let channel = ActionHandlerOutcomingDataGetManyByCreatedAtChannel::new(
                                     channel_id,
@@ -587,20 +530,17 @@ impl Base {
             prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity_, Type::INT8);
         }
 
-        let order_: &'static str;
-        match counter_u8.get_next() {
-            Ok(counter_) => {
-                counter_u8_value = counter_;
-            }
+        let order_ = match OrderConventionResolver::convert(order) {
+            Ok(order__) => order__,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
-        }
-        match OrderConventionResolver::convert(order) {
-            Ok(order__) => {
-                order_ = order__;
+        };
+        match counter_u8.get_next() {
+            Ok(counter_) => {
+                counter_u8_value = counter_;
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -620,11 +560,8 @@ impl Base {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {
-                                let channel_id: i64;
-                                match row.try_get::<'_, usize, i64>(0) {
-                                    Ok(channel_id_) => {
-                                        channel_id = channel_id_;
-                                    }
+                                let channel_id = match row.try_get::<'_, usize, i64>(0) {
+                                    Ok(channel_id_) => channel_id_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -633,13 +570,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_subscribers_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(1) {
-                                    Ok(channel_subscribers_quantity_) => {
-                                        channel_subscribers_quantity = channel_subscribers_quantity_;
-                                    }
+                                let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(1) {
+                                    Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -648,7 +582,7 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
                                 let channel = ActionHandlerOutcomingDataGetManyBySubscribersQuantityChannel::new(
                                     channel_id,
@@ -718,11 +652,8 @@ impl Base {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
                             '_a: for row in row_registry.iter() {
-                                let channel_id: i64;
-                                match row.try_get::<'_, usize, i64>(0) {
-                                    Ok(channel_id_) => {
-                                        channel_id = channel_id_;
-                                    }
+                                let channel_id = match row.try_get::<'_, usize, i64>(0) {
+                                    Ok(channel_id_) => channel_id_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -731,13 +662,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_name: String;
-                                match row.try_get::<'_, usize, String>(1) {
-                                    Ok(channel_name_) => {
-                                        channel_name = channel_name_;
-                                    }
+                                let channel_name = match row.try_get::<'_, usize, String>(1) {
+                                    Ok(channel_name_) => channel_name_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -746,13 +674,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_personalization_image_path: String;
-                                match row.try_get::<'_, usize, String>(1) {
-                                    Ok(channel_personalization_image_path_) => {
-                                        channel_personalization_image_path = channel_personalization_image_path_;
-                                    }
+                                let channel_personalization_image_path =  match row.try_get::<'_, usize, String>(1) {
+                                    Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -761,13 +686,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_subscribers_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(3) {
-                                    Ok(channel_subscribers_quantity_) => {
-                                        channel_subscribers_quantity = channel_subscribers_quantity_;
-                                    }
+                                let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(3) {
+                                    Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -776,13 +698,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_public_marks_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(4) {
-                                    Ok(channel_public_marks_quantity_) => {
-                                        channel_public_marks_quantity = channel_public_marks_quantity_;
-                                    }
+                                let channel_public_marks_quantity = match row.try_get::<'_, usize, i64>(4) {
+                                    Ok(channel_public_marks_quantity_) => channel_public_marks_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -791,13 +710,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_hidden_marks_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(5) {
-                                    Ok(channel_hidden_marks_quantity_) => {
-                                        channel_hidden_marks_quantity = channel_hidden_marks_quantity_;
-                                    }
+                                let channel_hidden_marks_quantity = match row.try_get::<'_, usize, i64>(5) {
+                                    Ok(channel_hidden_marks_quantity_) => channel_hidden_marks_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -806,13 +722,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_reactions_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(6) {
-                                    Ok(channel_reactions_quantity_) => {
-                                        channel_reactions_quantity = channel_reactions_quantity_;
-                                    }
+                                let channel_reactions_quantity = match row.try_get::<'_, usize, i64>(6) {
+                                    Ok(channel_reactions_quantity_) => channel_reactions_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -821,13 +734,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_viewing_quantity: i64;
-                                match row.try_get::<'_, usize, i64>(7) {
-                                    Ok(channel_viewing_quantity_) => {
-                                        channel_viewing_quantity = channel_viewing_quantity_;
-                                    }
+                                let channel_viewing_quantity = match row.try_get::<'_, usize, i64>(7) {
+                                    Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -836,13 +746,10 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
-                                let channel_created_at: String;
-                                match row.try_get::<'_, usize, String>(8) {
-                                    Ok(channel_created_at_) => {
-                                        channel_created_at = channel_created_at_;
-                                    }
+                                let channel_created_at: String = match row.try_get::<'_, usize, String>(8) {
+                                    Ok(channel_created_at_) => channel_created_at_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -851,7 +758,7 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
 
                                 let channel = ActionHandlerOutcomingDataGetManyByIdRegistryChannel::new(
                                     channel_id,

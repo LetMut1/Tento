@@ -65,11 +65,8 @@ impl Base {
                             );
                         }
 
-                        let id: i64;
-                        match row_registry[0].try_get::<'_, usize, i64>(0) {
-                            Ok(id_) => {
-                                id = id_;
-                            }
+                        let id = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                            Ok(id_) => id_,
                             Err(error) => {
                                 return Err(
                                     ErrorAuditor::new(
@@ -78,7 +75,7 @@ impl Base {
                                     )
                                 );
                             }
-                        }
+                        };
 
                         return Ok(id);
                     }
