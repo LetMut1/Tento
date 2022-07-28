@@ -109,13 +109,8 @@ impl Base {
                     match PasswordHashResolver::is_valid(application_user_password.as_str(), application_user.get_password_hash()) {
                         Ok(is_valid) => {
                             if is_valid {
-                                let application_user_log_in_token: ApplicationUserLogInToken<'_>;
-        
-                                let application_user_id: i64;
-                                match application_user.get_id() {
-                                    Some(application_user_id_) => {
-                                        application_user_id = application_user_id_;
-                                    }
+                                let application_user_id = match application_user.get_id() {
+                                    Some(application_user_id_) => application_user_id_,
                                     None => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -124,12 +119,13 @@ impl Base {
                                             )
                                         );
                                     }
-                                }
+                                };
         
                                 match authorization_postgresql_connection_pool.get().await {
                                     Ok(authorization_postgresql_pooled_connection) => {
                                         let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
         
+                                        let application_user_log_in_token: ApplicationUserLogInToken<'_>;
                                         match ApplicationUserLogInTokenDataProviderPostgresql::find_by_application_user_id_and_device_id(
                                             authorization_postgresql_connection, application_user_id, application_user_log_in_token_device_id.as_str()
                                         ).await {

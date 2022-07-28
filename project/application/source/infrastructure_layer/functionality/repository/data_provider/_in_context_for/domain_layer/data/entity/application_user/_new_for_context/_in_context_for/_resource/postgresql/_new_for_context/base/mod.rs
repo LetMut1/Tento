@@ -123,11 +123,8 @@ impl Base {
                 match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            let id: i64;
-                            match row_registry[0].try_get::<'_, usize, i64>(0) {
-                                Ok(id_) => {
-                                    id = id_;
-                                }
+                            let id = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                                Ok(id_) => id_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -136,13 +133,10 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let nickname: String;
-                            match row_registry[0].try_get::<'_, usize, String>(1) {
-                                Ok(nickname_) => {
-                                    nickname = nickname_;
-                                }
+                            let nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
+                                Ok(nickname_) => nickname_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -151,13 +145,10 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let password_hash: String;
-                            match row_registry[0].try_get::<'_, usize, String>(2) {
-                                Ok(password_hash_) => {
-                                    password_hash = password_hash_;
-                                }
+                            let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
+                                Ok(password_hash_) => password_hash_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -166,13 +157,10 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let created_at: String;
-                            match row_registry[0].try_get::<'_, usize, String>(3) {
-                                Ok(created_at_) => {
-                                    created_at = created_at_;
-                                }
+                            let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+                                Ok(created_at_) => created_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -181,7 +169,7 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
                             return Ok(
                                 Some(
@@ -241,11 +229,8 @@ impl Base {
                 match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            let id: i64;
-                            match row_registry[0].try_get::<'_, usize, i64>(0) {
-                                Ok(id_) => {
-                                    id = id_;
-                                }
+                            let id = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                                Ok(id_) => id_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -254,13 +239,10 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let email: String;
-                            match row_registry[0].try_get::<'_, usize, String>(1) {
-                                Ok(email_) => {
-                                    email = email_;
-                                }
+                            let email = match row_registry[0].try_get::<'_, usize, String>(1) {
+                                Ok(email_) => email_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -269,13 +251,10 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let password_hash: String;
-                            match row_registry[0].try_get::<'_, usize, String>(2) {
-                                Ok(password_hash_) => {
-                                    password_hash = password_hash_;
-                                }
+                            let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
+                                Ok(password_hash_) => password_hash_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -284,13 +263,10 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let created_at: String;
-                            match row_registry[0].try_get::<'_, usize, String>(3) {
-                                Ok(created_at_) => {
-                                    created_at = created_at_;
-                                }
+                            let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+                                Ok(created_at_) => created_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -299,7 +275,7 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
                             return Ok(
                                 Some(
@@ -359,11 +335,8 @@ impl Base {
                 match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            let email: String;
-                            match row_registry[0].try_get::<'_, usize, String>(0) {
-                                Ok(email_) => {
-                                    email = email_;
-                                }
+                            let email = match row_registry[0].try_get::<'_, usize, String>(0) {
+                                Ok(email_) => email_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -372,13 +345,10 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let nickname: String;
-                            match row_registry[0].try_get::<'_, usize, String>(1) {
-                                Ok(nickname_) => {
-                                    nickname = nickname_;
-                                }
+                            let nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
+                                Ok(nickname_) => nickname_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -387,13 +357,10 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let password_hash: String;
-                            match row_registry[0].try_get::<'_, usize, String>(2) {
-                                Ok(password_hash_) => {
-                                    password_hash = password_hash_;
-                                }
+                            let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
+                                Ok(password_hash_) => password_hash_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -402,13 +369,10 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let created_at: String;
-                            match row_registry[0].try_get::<'_, usize, String>(3) {
-                                Ok(created_at_) => {
-                                    created_at = created_at_;
-                                }
+                            let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+                                Ok(created_at_) => created_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -417,7 +381,7 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
                             return Ok(
                                 Some(

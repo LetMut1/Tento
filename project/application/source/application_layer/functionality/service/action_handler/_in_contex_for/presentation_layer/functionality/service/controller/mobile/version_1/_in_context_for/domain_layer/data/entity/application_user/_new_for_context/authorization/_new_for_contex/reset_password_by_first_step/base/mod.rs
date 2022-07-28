@@ -53,11 +53,8 @@ impl Base {
                             ).await {
                                 Ok(application_user) => {
                                     if let Some(application_user_) = application_user {
-                                        let application_user_id: i64;
-                                        match application_user_.get_id() {
-                                            Some(application_user_id_) => {
-                                                application_user_id = application_user_id_;
-                                            }
+                                        let application_user_id = match application_user_.get_id() {
+                                            Some(application_user_id_) => application_user_id_,
                                             None => {
                                                 return Err(
                                                     ErrorAuditor::new(
@@ -66,7 +63,7 @@ impl Base {
                                                     )
                                                 );
                                             }
-                                        }
+                                        };
                             
                                         match authorization_postgresql_connection_pool.get().await {
                                             Ok(authorization_postgresql_pooled_connection) => {

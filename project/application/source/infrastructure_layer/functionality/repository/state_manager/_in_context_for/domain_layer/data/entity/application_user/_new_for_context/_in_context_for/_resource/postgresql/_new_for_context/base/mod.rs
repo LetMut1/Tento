@@ -108,11 +108,8 @@ impl Base {
         application_user: &'a ApplicationUser,
         update_resolver: UpdateResolver
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id: i64;
-        match application_user.get_id() {
-            Some(application_user_id_) => {
-                application_user_id = application_user_id_;
-            }
+        let application_user_id = match application_user.get_id() {
+            Some(application_user_id_) => application_user_id_,
             None => {
                 return Err(
                     ErrorAuditor::new(
@@ -121,7 +118,7 @@ impl Base {
                     )
                 );
             }
-        }
+        };
 
         let email = application_user.get_email();
 

@@ -26,15 +26,10 @@ impl ActionResponseCreator {
         parts.version = Version::HTTP_2;
         parts.headers = header_map;
         
-        let body: Body;
-        match data {
-            Some(data_) => {
-                body = Body::from(data_);
-            }
-            None => {
-                body = Body::empty()
-            }
-        }
+        let body = match data {
+            Some(data_) => Body::from(data_),
+            None => Body::empty()
+        };
 
         return Response::from_parts(parts, body);
     }

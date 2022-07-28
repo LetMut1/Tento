@@ -35,11 +35,8 @@ impl Base {
                 match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            let value: String;
-                            match row_registry[0].try_get::<'_, usize, String>(0) {
-                                Ok(value_) => {
-                                    value = value_;
-                                }
+                            let value = match row_registry[0].try_get::<'_, usize, String>(0) {
+                                Ok(value_) => value_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -48,15 +45,12 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let wrong_enter_tries_quantity: u8;
-                            match row_registry[0].try_get::<'_, usize, i16>(1) {
+                            let wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
                                 Ok(wrong_enter_tries_quantity_) => {
                                     match IntegerTypeConverter::convert_i16_to_u8(wrong_enter_tries_quantity_) {
-                                        Ok(wrong_enter_tries_quantity__) => {
-                                            wrong_enter_tries_quantity = wrong_enter_tries_quantity__;
-                                        }
+                                        Ok(wrong_enter_tries_quantity__) => wrong_enter_tries_quantity__,
                                         Err(mut error) => {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                             
@@ -72,13 +66,10 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
-                            let created_at: String;
-                            match row_registry[0].try_get::<'_, usize, String>(2) {
-                                Ok(created_at_) => {
-                                    created_at = created_at_;
-                                }
+                            let created_at = match row_registry[0].try_get::<'_, usize, String>(2) {
+                                Ok(created_at_) => created_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -87,7 +78,7 @@ impl Base {
                                         )
                                     );
                                 }
-                            }
+                            };
 
                             return Ok(
                                 Some(
