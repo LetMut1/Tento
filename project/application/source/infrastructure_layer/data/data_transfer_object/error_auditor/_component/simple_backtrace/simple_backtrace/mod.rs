@@ -1,6 +1,3 @@
-use std::fmt::Display;
-use std::fmt::Formatter;
-use std::fmt::Result;
 use super::_component::backtrace_part::BacktracePart;
 
 #[derive(Debug)]
@@ -24,14 +21,5 @@ impl SimpleBacktrace {
         self.backtrace_part_registry.push(backtrace_part);
 
         return ();
-    }
-}
-
-impl Display for SimpleBacktrace {
-    fn fmt<'a, 'b>(
-        &'a self,
-        _formatter: &'b mut Formatter<'_>
-    ) -> Result {
-        return Ok(());
     }
 }
