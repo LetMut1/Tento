@@ -21,7 +21,7 @@ impl StorageKeyResolver {                                           // TODO УД
         return Self::PREFIX_2.to_string() + application_user_id.to_string().as_str()  + ":" + application_user_log_in_token_device_id;
     }
 
-    pub fn get_3<'a>(
+    pub fn get_3(
         application_user_id: i64,
     ) -> String {
         return Self::PREFIX_3.to_string() + application_user_id.to_string().as_str();
@@ -40,7 +40,7 @@ impl StorageKeyResolver {                                           // TODO УД
         return Self::PREFIX_5.to_string() + application_user_id.to_string().as_str() + ":" + application_user_log_in_token_device_id;
     }
 
-    pub fn get_6<'a>(
+    pub fn get_6(
         application_user_id: i64
     ) -> String {
         return Self::PREFIX_6.to_string() + application_user_id.to_string().as_str();

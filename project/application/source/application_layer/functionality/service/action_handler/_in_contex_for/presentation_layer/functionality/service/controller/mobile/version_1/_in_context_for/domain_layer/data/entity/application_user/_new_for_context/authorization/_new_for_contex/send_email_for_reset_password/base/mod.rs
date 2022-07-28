@@ -53,7 +53,7 @@ impl Base {
                                             Ok(application_user) => {
                                                 if let Some(application_user_) = application_user {
                                                     if let Err(mut error) = EmailSender::send_application_user_reset_password_token(
-                                                        environment_configuration_resolver, &application_user_reset_password_token_.get_value(), application_user_.get_email()
+                                                        environment_configuration_resolver, application_user_reset_password_token_.get_value(), application_user_.get_email()
                                                     ) {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
                                         

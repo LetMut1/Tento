@@ -54,7 +54,7 @@ impl Base {
                     Ok(result) => {
                         match result {
                             ExtractorResult::JsonAccessWebToken { json_access_web_token: _ } => {
-                                if limit < Self::LIMIT_MINIMUM_VALUE || limit > Self::LIMIT_MAXIMUM_VALUE {
+                                if !(Self::LIMIT_MINIMUM_VALUE..=Self::LIMIT_MAXIMUM_VALUE).contains(&limit) {
                                     limit = Self::LIMIT_MINIMUM_VALUE;
                                 }
                         

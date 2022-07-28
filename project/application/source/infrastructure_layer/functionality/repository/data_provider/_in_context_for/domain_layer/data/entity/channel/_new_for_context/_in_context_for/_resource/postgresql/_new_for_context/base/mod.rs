@@ -300,10 +300,10 @@ impl Base {
 
         if let Some(created_at_) = created_at {
             if OrderConventionResolver::is_asc(order) {
-                query = query + " AND c.created_at > $";
+                query += " AND c.created_at > $";
             } else {
                 if OrderConventionResolver::is_desc(order) {
-                    query = query + " AND c.created_at < $";
+                    query += " AND c.created_at < $";
                 } else {
                     return Err(
                         ErrorAuditor::new(
@@ -559,10 +559,10 @@ impl Base {
 
         if let Some(ref subscribers_quantity_) = subscribers_quantity {
             if OrderConventionResolver::is_asc(order) {
-                query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($";
+                query += " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($";
             } else {
                 if OrderConventionResolver::is_desc(order) {
-                    query = query + " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) < public.limit_channel_subscribers_quantity($";
+                    query += " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) < public.limit_channel_subscribers_quantity($";
                 } else {
                     return Err(
                         ErrorAuditor::new(

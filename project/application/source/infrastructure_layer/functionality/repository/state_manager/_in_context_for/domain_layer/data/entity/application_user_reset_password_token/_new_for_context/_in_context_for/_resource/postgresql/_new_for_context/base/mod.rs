@@ -193,7 +193,7 @@ impl Base {
 
             match column_name_for_value_registry {
                 Some((mut column_name_registry, mut column_value_registry)) => {
-                    column_name_registry = column_name_registry + ", wrong_enter_tries_quantity";
+                    column_name_registry += ", wrong_enter_tries_quantity";
                     column_value_registry = column_value_registry + ", $" + counter_u8_value.to_string().as_str();
 
                     column_name_for_value_registry = Some(
@@ -229,7 +229,7 @@ impl Base {
 
             match column_name_for_value_registry {
                 Some((mut column_name_registry, mut column_value_registry)) => {
-                    column_name_registry = column_name_registry + ", is_approved";
+                    column_name_registry += ", is_approved";
                     column_value_registry = column_value_registry + ", $" + counter_u8_value.to_string().as_str();
 
                     column_name_for_value_registry = Some(
@@ -254,8 +254,8 @@ impl Base {
         if update_resolver.get_update_created_at() {
             match column_name_for_value_registry {
                 Some((mut column_name_registry, mut column_value_registry)) => {
-                    column_name_registry = column_name_registry + ", created_at";
-                    column_value_registry = column_value_registry + ", DEFAULT";
+                    column_name_registry += ", created_at";
+                    column_value_registry += ", DEFAULT";
 
                     column_name_for_value_registry = Some(
                         (

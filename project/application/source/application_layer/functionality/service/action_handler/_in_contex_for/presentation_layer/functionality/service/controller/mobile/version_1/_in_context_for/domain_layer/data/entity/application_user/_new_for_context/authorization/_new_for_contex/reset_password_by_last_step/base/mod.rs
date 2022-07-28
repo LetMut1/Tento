@@ -46,7 +46,7 @@ impl Base {
             application_user_reset_password_token_value
         ) = action_handler_incoming_data.into_inner();
 
-        match ApplicationUserResetPasswordTokenValidator::is_valid_value(&application_user_reset_password_token_value.as_str()) {
+        match ApplicationUserResetPasswordTokenValidator::is_valid_value(application_user_reset_password_token_value.as_str()) {
             Ok(is_valid_value) => {
                 if is_valid_value {
                     if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {

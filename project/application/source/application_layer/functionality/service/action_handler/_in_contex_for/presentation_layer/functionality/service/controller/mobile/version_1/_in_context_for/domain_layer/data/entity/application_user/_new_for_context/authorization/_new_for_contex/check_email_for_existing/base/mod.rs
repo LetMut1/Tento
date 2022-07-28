@@ -37,9 +37,9 @@ impl Base {
             Ok(is_valid_email) => {
                 if is_valid_email {
                     match postgresql_connection_pool.get().await {
-                        Ok(mut pooled_connection) => {
+                        Ok(pooled_connection) => {
                             match ApplicationUserDataProviderPostgresql::is_exist_by_email(
-                                &mut *pooled_connection, application_user_email.as_str()
+                                &*pooled_connection, application_user_email.as_str()
                             ).await {
                                 Ok(result) => {
                                     return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(result)));

@@ -57,7 +57,7 @@ impl DateTimeResolver {
         };
     }
     
-    pub fn add_interval_from_now<'a>(
+    pub fn add_interval_from_now(
         quantity_of_minutes: i64
     ) -> Result<String, ErrorAuditor> {
         return Self::add_interval_from(&Utc::now(), quantity_of_minutes)

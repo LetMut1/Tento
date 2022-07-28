@@ -50,7 +50,7 @@ impl Base {
                     Ok(result) => {
                         match result {
                             ExtractorResult::JsonAccessWebToken { json_access_web_token: _ } => {
-                                if channel_id_registry.len() == 0 || channel_id_registry.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
+                                if channel_id_registry.is_empty() || channel_id_registry.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
                                     return Err(
                                         ErrorAuditor::new(
                                             BaseError::InvalidArgumentError,

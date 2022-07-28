@@ -26,7 +26,7 @@ impl CounterU8 {
                 )
             );
         }
-        self.counter = self.counter + 1;
+        self.counter += 1;
 
         return Ok(self.counter);
     }

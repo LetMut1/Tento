@@ -16,22 +16,22 @@ impl TransactionManager {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
         match transaction_isolation_level {
             TransactionIsolationLevel::ReadCommitted => {
-                query = query + " READ COMMITTED, READ WRITE, NOT DEFERRABLE;";
+                query += " READ COMMITTED, READ WRITE, NOT DEFERRABLE;";
             }
             TransactionIsolationLevel::RepeatableRead => {
-                query = query + " REPEATABLE READ, READ WRITE, NOT DEFERRABLE;";
+                query += " REPEATABLE READ, READ WRITE, NOT DEFERRABLE;";
             }
             TransactionIsolationLevel::Serializable { read_only, deferrable } => {
-                query = query + " SERIALIZABLE,";
+                query += " SERIALIZABLE,";
                 if read_only {
-                    query = query + " READ ONLY,";
+                    query += " READ ONLY,";
                 } else {
-                    query = query + " READ WRITE,";
+                    query += " READ WRITE,";
                 }
                 if deferrable {
-                    query = query + " DEFERRABLE;";
+                    query += " DEFERRABLE;";
                 } else {
-                    query = query + " NOT DEFERRABLE;";
+                    query += " NOT DEFERRABLE;";
                 }
             }
         }

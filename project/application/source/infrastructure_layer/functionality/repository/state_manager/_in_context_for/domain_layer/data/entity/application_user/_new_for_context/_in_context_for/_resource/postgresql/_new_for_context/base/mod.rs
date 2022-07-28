@@ -171,7 +171,7 @@ impl Base {
 
             match column_name_for_value_registry {
                 Some((mut column_name_registry, mut column_value_registry)) => {
-                    column_name_registry = column_name_registry + ", nickname";
+                    column_name_registry += ", nickname";
                     column_value_registry = column_value_registry + ", $" + counter_u8_value.to_string().as_str();
 
                     column_name_for_value_registry = Some(
@@ -207,7 +207,7 @@ impl Base {
 
             match column_name_for_value_registry {
                 Some((mut column_name_registry, mut column_value_registry)) => {
-                    column_name_registry = column_name_registry + ", password_hash";
+                    column_name_registry += ", password_hash";
                     column_value_registry = column_value_registry + ", $" + counter_u8_value.to_string().as_str();
 
                     column_name_for_value_registry = Some(

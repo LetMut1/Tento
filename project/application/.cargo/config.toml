@@ -1,8 +1,13 @@
 [target.x86_64-unknown-linux-gnu]
 rustflags = [
+    "-Aclippy::collapsible_else_if",
     "-Aclippy::collapsible_match",
+    "-Aclippy::module_inception",
     "-Aclippy::needless_lifetimes",
     "-Aclippy::needless_return",
+    "-Aclippy::new_without_default",
     "-Aclippy::redundant_pattern_matching",
+    "-Aclippy::too_many_arguments",
+    "-Aclippy::unnecessary_cast",
     "-Aclippy::unused_unit"
 ]
