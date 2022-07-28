@@ -77,18 +77,17 @@ impl Base {
                                                         match application_user_reset_password_token_ {
                                                             Some(application_user_reset_password_token__) => {
                                                                 application_user_reset_password_token = application_user_reset_password_token__;
-                                            
-                                                                let update_resolver: UpdateResolver;
-                                                                if application_user_reset_password_token.get_is_approved() {
+
+                                                                let update_resolver = if application_user_reset_password_token.get_is_approved() {
                                                                     application_user_reset_password_token
                                                                         .set_value(ValueGenerator::generate())
                                                                         .set_wrong_enter_tries_quantity(0)
                                                                         .set_is_approved(false);
 
-                                                                    update_resolver = UpdateResolver::new(true, true, true, true);
+                                                                    UpdateResolver::new(true, true, true, true)
                                                                 } else {
-                                                                    update_resolver = UpdateResolver::new(false, false, false, true);
-                                                                }
+                                                                    UpdateResolver::new(false, false, false, true)
+                                                                };
 
                                                                 if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::update(
                                                                     authorization_postgresql_connection, &application_user_reset_password_token, update_resolver
