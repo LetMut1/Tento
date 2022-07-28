@@ -85,10 +85,9 @@ impl Base {
     ) -> Result<EnvironmentConfigurationResolver, ErrorAuditor> {
         match Path::new(binary_file_path).parent() {
             Some(file_path) => {
-                let is_production_environment: bool;
-
                 let production_environment_file_path_buffer = file_path.join(Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME));
-                if production_environment_file_path_buffer.exists() {
+
+                let is_production_environment = if production_environment_file_path_buffer.exists() {
                     if let Err(error) = dotenv::from_path(production_environment_file_path_buffer.as_path()) {
                         return Err(
                             ErrorAuditor::new(
@@ -98,7 +97,7 @@ impl Base {
                         );
                     }
 
-                    is_production_environment = true;
+                    true
                 } else {
                     let development_local_environment_file_path_buffer = file_path.join(Path::new(Self::LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME));
                     if development_local_environment_file_path_buffer.exists() {
@@ -131,8 +130,8 @@ impl Base {
                         }
                     }
 
-                    is_production_environment = false;
-                }
+                    false
+                };
 
                 let application_server_socket_address: SocketAddr;
                 match env::var(EnvironmentConfigurationResolver::APPLICATION_SERVER_SOCKET_ADDRESS_KEY) {
@@ -492,16 +491,13 @@ impl Base {
         if environment_configuration_resolver.is_production_environment() {
             todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
         } else {
-            let core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>;
-            match Pool::builder()
+            let core_postgresql_connection_pool = match Pool::builder()
                 .build(
                     PostgresqlConnectionManager::new(
                         environment_configuration_resolver.get_resource_core_postgresql_configuration().clone(), NoTls
                     )
                 ).await {         // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-                Ok(core_postgresql_connection_pool_) => {
-                    core_postgresql_connection_pool = core_postgresql_connection_pool_;
-                }
+                Ok(core_postgresql_connection_pool_) => core_postgresql_connection_pool_,
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -510,18 +506,15 @@ impl Base {
                         )
                     );
                 }
-            }
+            };
 
-            let authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>;
-            match Pool::builder()
+            let authorization_postgresql_connection_pool = match Pool::builder()
                 .build(
                     PostgresqlConnectionManager::new(
                         environment_configuration_resolver.get_resource_authorization_postgresql_configuration().clone(), NoTls
                     )
                 ).await {         // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-                Ok(authorization_postgresql_connection_pool_) => {
-                    authorization_postgresql_connection_pool = authorization_postgresql_connection_pool_;
-                }
+                Ok(authorization_postgresql_connection_pool_) => authorization_postgresql_connection_pool_,
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -530,7 +523,7 @@ impl Base {
                         )
                     );
                 }
-            }
+            };
 
             postgresql_connection_pool = PostgresqlConnectionPoolWorkflowTypeAggregator::LocalDevelopment { core_postgresql_connection_pool, authorization_postgresql_connection_pool };
         }
