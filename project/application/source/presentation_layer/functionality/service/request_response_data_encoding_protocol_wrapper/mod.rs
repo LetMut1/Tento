@@ -48,7 +48,7 @@ impl RequestResponseDataEncodingProtocolWrapper {
             Pool<PostgresqlConnectionManager<T>>,
             Pool<RedisConnectionManager>
         ) -> F,
-        F : Future<Output = Response<Body>>,
+        F: Future<Output = Response<Body>>,
         AHID: Serialize + for<'de> Deserialize<'de>,
         AHOD: Serialize + for<'de> Deserialize<'de>
     {
