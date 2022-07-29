@@ -1,0 +1,38 @@
+version: '3.8'
+
+services: 
+    rust_stable:
+        container_name: tento_rust_stable
+        build:
+            context: ./service/rust_stable/
+            dockerfile: dockerfile
+        environment: 
+            USER: ${USER}
+        volumes:
+            - ./../../../../:/_tento
+        ports:
+            - 80:80
+        working_dir: /_tento
+        restart: always
+        tty: true
+        init: true
+    rust_nightly:
+        container_name: tento_rust_nightly
+        build:
+            context: ./service/rust_nightly/
+            dockerfile: dockerfile
+        environment: 
+            USER: ${USER}
+        volumes:
+            - ./../../../../:/_tento
+        ports:
+            - 81:80
+        working_dir: /_tento
+        restart: always
+        tty: true
+        init: true
+
+networks:
+    default:
+        name: resource
+        driver: bridge

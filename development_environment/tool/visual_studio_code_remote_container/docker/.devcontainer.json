@@ -1,6 +1,6 @@
 {
-    "dockerComposeFile": "./../../rust_language/docker/docker-compose.yaml",
-    "service": "rust_language",
+    "dockerComposeFile": "./../../rust/docker/docker-compose.yaml",
+    "service": "rust_stable",
     "workspaceFolder": "/_tento",
     "extensions": [
 		"rust-lang.rust-analyzer",
