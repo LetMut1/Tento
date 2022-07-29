@@ -7,9 +7,10 @@
 		"ms-azuretools.vscode-docker",
 		"bungcip.better-toml",
 		"irongeek.vscode-env",
-		"ue.alphabetical-sorter"
+		"ue.alphabetical-sorter",
+		"shardulm94.trailing-spaces"
     ],
-    "settings": { 
+    "settings": {
 		"terminal.integrated.shell.linux": "/bin/bash",
 		"files.watcherExclude": {
 			"**/target/**": true
