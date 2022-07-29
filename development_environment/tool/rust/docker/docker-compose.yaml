@@ -1,12 +1,12 @@
 version: '3.8'
 
-services: 
-    rust_stable:
-        container_name: tento_rust_stable
+services:
+    rust_stable_toolchain:
+        container_name: tento_rust_stable_toolchain
         build:
-            context: ./service/rust_stable/
+            context: ./service/rust_stable_toolchain/
             dockerfile: dockerfile
-        environment: 
+        environment:
             USER: ${USER}
         volumes:
             - ./../../../../:/_tento
@@ -16,12 +16,12 @@ services:
         restart: always
         tty: true
         init: true
-    rust_nightly:
-        container_name: tento_rust_nightly
+    rust_nightly_toolchain:
+        container_name: tento_rust_nightly_toolchain
         build:
-            context: ./service/rust_nightly/
+            context: ./service/rust_nightly_toolchain/
             dockerfile: dockerfile
-        environment: 
+        environment:
             USER: ${USER}
         volumes:
             - ./../../../../:/_tento
