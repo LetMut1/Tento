@@ -43,7 +43,7 @@ impl Base {
             json_access_web_token,
             channel_id_registry
         ) = action_handler_incoming_data.into_inner();
-        
+
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
                 match Extractor::extract(environment_configuration_resolver, json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
@@ -58,7 +58,7 @@ impl Base {
                                         )
                                     );
                                 }
-                        
+
                                 match core_postgresql_connection_pool.get().await {
                                     Ok(core_postgresql_pooled_connection) => {
                                         match ChannelDataProviderPostgresql::per_request_4(
@@ -69,7 +69,7 @@ impl Base {
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                
+
                                                 return Err(error);
                                             }
                                         }
@@ -94,7 +94,7 @@ impl Base {
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                         return Err(error);
                     }
                 }

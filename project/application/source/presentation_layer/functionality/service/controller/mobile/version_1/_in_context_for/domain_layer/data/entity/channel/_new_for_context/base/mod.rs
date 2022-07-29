@@ -70,18 +70,18 @@ impl Base {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
         }
-        
+
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
-        
+
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataGetManyByName>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerGetManyByName::handle(
                     environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(action_handler_result) => { 
+                    Ok(action_handler_result) => {
                         match action_handler_result {
                             ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
@@ -90,7 +90,7 @@ impl Base {
                                     }
                                     Err(error) => {
                                         // log::error!("{}", ErrorAuditor::from(error));
-                
+
                                         return ActionResponseCreator::create_internal_server_error();
                                     }
                                 }
@@ -108,7 +108,7 @@ impl Base {
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
-                                
+
                                                         return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
@@ -122,7 +122,7 @@ impl Base {
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
-                                
+
                                                         return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
@@ -147,7 +147,7 @@ impl Base {
                             BaseError::LogicError { logic_error: _ } |
                             BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
-        
+
                                 return ActionResponseCreator::create_internal_server_error();
                             }
                         }
@@ -178,7 +178,7 @@ impl Base {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
         }
-        
+
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -189,7 +189,7 @@ impl Base {
                 match ActionHandlerGetManyByCreatedAt::handle(
                     environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(action_handler_result) => { 
+                    Ok(action_handler_result) => {
                         match action_handler_result {
                             ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
@@ -198,7 +198,7 @@ impl Base {
                                     }
                                     Err(error) => {
                                         // log::error!("{}", ErrorAuditor::from(error));
-                
+
                                         return ActionResponseCreator::create_internal_server_error();
                                     }
                                 }
@@ -216,7 +216,7 @@ impl Base {
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
-                                
+
                                                         return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
@@ -230,7 +230,7 @@ impl Base {
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
-                                
+
                                                         return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
@@ -255,7 +255,7 @@ impl Base {
                             BaseError::LogicError { logic_error: _ } |
                             BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
-        
+
                                 return ActionResponseCreator::create_internal_server_error();
                             }
                         }
@@ -269,7 +269,7 @@ impl Base {
             }
         }
     }
-    
+
     pub async fn get_many_by_subscribers_quantity<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -286,7 +286,7 @@ impl Base {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
         }
-        
+
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -297,7 +297,7 @@ impl Base {
                 match ActionHandlerGetManyBySubscribersQuantity::handle(
                     environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(action_handler_result) => { 
+                    Ok(action_handler_result) => {
                         match action_handler_result {
                             ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
@@ -306,7 +306,7 @@ impl Base {
                                     }
                                     Err(error) => {
                                         // log::error!("{}", ErrorAuditor::from(error));
-                
+
                                         return ActionResponseCreator::create_internal_server_error();
                                     }
                                 }
@@ -324,7 +324,7 @@ impl Base {
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
-                                
+
                                                         return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
@@ -338,7 +338,7 @@ impl Base {
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
-                                
+
                                                         return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
@@ -363,7 +363,7 @@ impl Base {
                             BaseError::LogicError { logic_error: _ } |
                             BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
-        
+
                                 return ActionResponseCreator::create_internal_server_error();
                             }
                         }
@@ -394,7 +394,7 @@ impl Base {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
         }
-        
+
         //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
         // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
         // https://github.com/hyperium/hyper/issues/2004
@@ -405,7 +405,7 @@ impl Base {
                 match ActionHandlerGetManyByIdRegistry::handle(
                     environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
                 ).await {
-                    Ok(action_handler_result) => { 
+                    Ok(action_handler_result) => {
                         match action_handler_result {
                             ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
@@ -414,7 +414,7 @@ impl Base {
                                     }
                                     Err(error) => {
                                         // log::error!("{}", ErrorAuditor::from(error));
-                
+
                                         return ActionResponseCreator::create_internal_server_error();
                                     }
                                 }
@@ -432,7 +432,7 @@ impl Base {
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
-                                
+
                                                         return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
@@ -446,7 +446,7 @@ impl Base {
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
-                                
+
                                                         return ActionResponseCreator::create_internal_server_error();
                                                     }
                                                 }
@@ -471,7 +471,7 @@ impl Base {
                             BaseError::LogicError { logic_error: _ } |
                             BaseError::RunTimeError { run_time_error: _ } => {
                                 // log::error!("{}", error);
-        
+
                                 return ActionResponseCreator::create_internal_server_error();
                             }
                         }

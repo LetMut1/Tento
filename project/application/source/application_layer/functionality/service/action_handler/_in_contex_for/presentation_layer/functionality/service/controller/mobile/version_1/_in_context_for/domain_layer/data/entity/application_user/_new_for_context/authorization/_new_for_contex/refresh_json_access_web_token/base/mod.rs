@@ -28,7 +28,7 @@ impl Base {
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor> {
         let (
-            json_access_web_token, 
+            json_access_web_token,
             json_refresh_web_token
         ) = action_handler_incoming_data.into_inner();
 
@@ -40,7 +40,7 @@ impl Base {
                             match redis_connection_pool.get().await {
                                 Ok(mut redis_pooled_connection) => {
                                     let connection = &mut *redis_pooled_connection;
-                
+
                                     match JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
                                         connection, json_access_web_token_.get_application_user_id(), json_access_web_token_.get_application_user_log_in_token_device_id()
                                     ).await {
@@ -50,13 +50,13 @@ impl Base {
                                                     Ok(is_valid) => {
                                                         if is_valid && json_access_web_token_.get_id().as_bytes() == json_refresh_web_token__.get_json_access_web_token_id().as_bytes() {
                                                             Refresher::refresh(&mut json_refresh_web_token__);
-                                        
+
                                                             if let Err(mut error) = RepositoryProxy::update(connection, &json_refresh_web_token__).await {
                                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                        
+
                                                                 return Err(error);
                                                             }
-                                        
+
                                                             match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token__) {
                                                                 Ok(ref new_json_access_web_token) => {
                                                                     match SerializationFormResolver::serialize(environment_configuration_resolver, new_json_access_web_token) {
@@ -67,26 +67,26 @@ impl Base {
                                                                                 }
                                                                                 Err(mut error) => {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                                    
+
                                                                                     return Err(error);
                                                                                 }
                                                                             }
                                                                         }
                                                                         Err(mut error) => {
                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                            
+
                                                                             return Err(error);
                                                                         }
                                                                     }
                                                                 }
                                                                 Err(mut error) => {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                    
+
                                                                     return Err(error);
                                                                 }
                                                             }
                                                         }
-                                        
+
                                                         return Err(
                                                             ErrorAuditor::new(
                                                                 BaseError::InvalidArgumentError,
@@ -96,17 +96,17 @@ impl Base {
                                                     }
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                        
+
                                                         return Err(error);
                                                     }
                                                 }
                                             }
-                                
+
                                             return Ok(ActionHandlerResult::new_with_json_refresh_web_token_workflow_exception(JsonRefreshWebTokenWorkflowException::NotFound));
                                         }
                                         Err(mut error) => {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
+
                                             return Err(error);
                                         }
                                     }
@@ -121,12 +121,12 @@ impl Base {
                                 }
                             }
                         }
-                        
+
                         return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(JsonAccessWebTokenWorkflowException::NotExpired));
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                         return Err(error);
                     }
                 }

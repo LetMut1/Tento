@@ -11,7 +11,7 @@ fn main(
     return ();
 }
 
-// TODO УДалять из БД состояние с вышедшим сроком экспирации: 
+// TODO УДалять из БД состояние с вышедшим сроком экспирации:
     // ApplicationUserRegistrationConfirmationToken
     // ApplicationUserLogInToken
     // ApplicationUserResetPasswordToken

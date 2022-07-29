@@ -44,8 +44,8 @@ impl Base {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let (
-            application_user_log_in_token_device_id, 
-            application_user_email_or_application_user_nickname, 
+            application_user_log_in_token_device_id,
+            application_user_email_or_application_user_nickname,
             application_user_password
         ) = action_handler_incoming_data.into_inner();
 
@@ -71,7 +71,7 @@ impl Base {
                                     }
                                     Err(mut error) => {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                        
+
                                         return Err(error);
                                     }
                                 }
@@ -90,7 +90,7 @@ impl Base {
                                         }
                                         Err(mut error) => {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
+
                                             return Err(error);
                                         }
                                     }
@@ -101,7 +101,7 @@ impl Base {
                         }
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-            
+
                             return Err(error);
                         }
                     }
@@ -120,11 +120,11 @@ impl Base {
                                         );
                                     }
                                 };
-        
+
                                 match authorization_postgresql_connection_pool.get().await {
                                     Ok(authorization_postgresql_pooled_connection) => {
                                         let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
-        
+
                                         let application_user_log_in_token: ApplicationUserLogInToken<'_>;
                                         match ApplicationUserLogInTokenDataProviderPostgresql::find_by_application_user_id_and_device_id(
                                             authorization_postgresql_connection, application_user_id, application_user_log_in_token_device_id.as_str()
@@ -138,7 +138,7 @@ impl Base {
                                                             authorization_postgresql_connection, &application_user_log_in_token, UpdateResolver::new(false, false, true)
                                                         ).await {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-            
+
                                                             return Err(error);
                                                         }
                                                     }
@@ -150,30 +150,30 @@ impl Base {
                                                             0,
                                                             None
                                                         );
-                
+
                                                         if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::create(
                                                             authorization_postgresql_connection, &application_user_log_in_token
                                                         ).await {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-            
+
                                                             return Err(error);
                                                         }
                                                     }
                                                 }
-                
+
                                                 if let Err(mut error) = EmailSender::send_application_user_log_in_token(
                                                     environment_configuration_resolver, application_user_log_in_token.get_value(), application_user.get_email()
                                                 ) {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                    
+
                                                     return Err(error);
                                                 }
-                
+
                                                 return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(application_user_id)));
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                
+
                                                 return Err(error);
                                             }
                                         }
@@ -188,12 +188,12 @@ impl Base {
                                     }
                                 }
                             }
-        
+
                             return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::WrongPassword));
                         }
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-            
+
                             return Err(error);
                         }
                     }

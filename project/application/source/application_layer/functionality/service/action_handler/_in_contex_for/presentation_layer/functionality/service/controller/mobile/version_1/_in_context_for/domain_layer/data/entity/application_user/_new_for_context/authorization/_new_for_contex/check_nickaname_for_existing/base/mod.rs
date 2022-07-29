@@ -44,7 +44,7 @@ impl Base {
                         }
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-            
+
                             return Err(error);
                         }
                     }

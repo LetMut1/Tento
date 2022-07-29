@@ -56,7 +56,7 @@ impl Base {
                                 if limit <= 0 || limit > Self::LIMIT {
                                     limit = Self::LIMIT;
                                 }
-                                
+
                                 if !Validator::is_valid_name(channel_name.as_str()) {
                                     return Err(
                                         ErrorAuditor::new(
@@ -75,7 +75,7 @@ impl Base {
                                         );
                                     }
                                 }
-                
+
                                 match core_postgresql_connection_pool.get().await {
                                     Ok(core_postgresql_pooled_connection) => {
                                         match ChannelDataProviderPostgresql::per_request_1(
@@ -86,7 +86,7 @@ impl Base {
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                
+
                                                 return Err(error);
                                             }
                                         }
@@ -111,7 +111,7 @@ impl Base {
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                         return Err(error);
                     }
                 }

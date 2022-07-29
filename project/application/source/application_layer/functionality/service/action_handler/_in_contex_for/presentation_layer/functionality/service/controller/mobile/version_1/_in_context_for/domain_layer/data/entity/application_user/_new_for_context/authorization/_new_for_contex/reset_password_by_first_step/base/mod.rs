@@ -64,7 +64,7 @@ impl Base {
                                                 );
                                             }
                                         };
-                            
+
                                         match authorization_postgresql_connection_pool.get().await {
                                             Ok(authorization_postgresql_pooled_connection) => {
                                                 let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
@@ -93,7 +93,7 @@ impl Base {
                                                                     authorization_postgresql_connection, &application_user_reset_password_token, update_resolver
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                                     return Err(error);
                                                                 }
                                                             }
@@ -105,30 +105,30 @@ impl Base {
                                                                     false,
                                                                     None
                                                                 );
-                                            
+
                                                                 if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::create(
                                                                     authorization_postgresql_connection, &application_user_reset_password_token
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
+
                                                                     return Err(error);
                                                                 }
                                                             }
                                                         }
-                                            
+
                                                         if let Err(mut error) = EmailSender::send_application_user_reset_password_token(
                                                             environment_configuration_resolver, application_user_reset_password_token.get_value(), application_user_.get_email()
                                                         ) {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                             return Err(error);
                                                         }
-                                            
+
                                                         return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(application_user_id)));
                                                     }
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                
+
                                                         return Err(error);
                                                     }
                                                 }
@@ -143,12 +143,12 @@ impl Base {
                                             }
                                         }
                                     }
-                            
+
                                     return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::NotFound));
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
+
                                     return Err(error);
                                 }
                             }

@@ -60,7 +60,7 @@ impl Base {
                                                     authorization_postgresql_connection, &application_user_reset_password_token_, UpdateResolver::new(false, false, true, true)
                                                 ).await {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
+
                                                     return Err(error);
                                                 }
 
@@ -68,16 +68,16 @@ impl Base {
                                             } else {
                                                 if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_reset_password_token_) {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                    
+
                                                     return Err(error);
                                                 }
-                    
+
                                                 if application_user_reset_password_token_.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                                     if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::update(
                                                         authorization_postgresql_connection, &application_user_reset_password_token_, UpdateResolver::new(false, true, false, false)
                                                     ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                
+
                                                         return Err(error);
                                                     }
                                                 } else {
@@ -85,11 +85,11 @@ impl Base {
                                                         authorization_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
                                                     ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
+
                                                         return Err(error);
                                                     }
                                                 }
-                                                
+
                                                 return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(false)));
                                             }
                                         }
@@ -101,7 +101,7 @@ impl Base {
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
+
                                     return Err(error);
                                 }
                             }

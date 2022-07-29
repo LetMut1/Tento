@@ -44,7 +44,7 @@ impl Base {
                     match authorization_postgresql_connection_pool.get().await {
                         Ok(authorization_postgresql_pooled_connection) => {
                             let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
-            
+
                             match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_by_application_user_email(
                                 authorization_postgresql_connection, application_user_email.as_str()
                             ).await {
@@ -55,31 +55,31 @@ impl Base {
                                                 authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(false, false, false, true)
                                             ).await {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                        
+
                                                 return Err(error);
                                             }
-                            
+
                                             if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
                                                 environment_configuration_resolver,
                                                 application_user_registration_confirmation_token_.get_value(),
                                                 application_user_email.as_str()
                                             ) {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                
+
                                                 return Err(error);
                                             }
-                                    
+
                                             return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
                                         }
 
                                         return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::AlreadyApproved));
                                     }
-                    
+
                                     return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound));
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
+
                                     return Err(error);
                                 }
                             }

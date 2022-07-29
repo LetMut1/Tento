@@ -41,24 +41,24 @@ impl Base {
                                         if let Some(json_refresh_web_token_) = json_refresh_web_token {
                                             if let Err(mut error) = RepositoryProxy::delete(connection, &json_refresh_web_token_).await {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                        
+
                                                 return Err(error);
                                             }
-                                
+
                                             if let Err(mut error) = JsonAccessWebTokenBlackListStateManagerRedis::create(connection, &JsonAccessWebTokenBlackList::new(json_access_web_token_.get_id())).await {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                        
+
                                                 return Err(error);
                                             }
-                                
+
                                             return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
                                         }
-                                
+
                                         return Ok(ActionHandlerResult::new_with_json_refresh_web_token_workflow_exception(JsonRefreshWebTokenWorkflowException::NotFound));
                                     }
                                     Err(mut error) => {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                        
+
                                         return Err(error);
                                     }
                                 }
@@ -73,7 +73,7 @@ impl Base {
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                         return Err(error);
                     }
                 }

@@ -41,7 +41,7 @@ impl Base {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     { // TODO  !!!!! Это ресет для пользователя, забывшего пароль. НО также нужно сделать АККУРАТНО ресетпассворд для залогиневшегося пользователя с повторной отправкой старого пароля !!!!!!!!!
         let (
-            application_user_id, 
+            application_user_id,
             application_user_password,
             application_user_reset_password_token_value
         ) = action_handler_incoming_data.into_inner();
@@ -64,45 +64,45 @@ impl Base {
                                                     match core_postgresql_connection_pool.get().await {
                                                         Ok(core_postgresql_pooled_connection) => {
                                                             let core_postgresql_connection = &*core_postgresql_pooled_connection;
-                        
+
                                                             match ApplicationUserDataProviderPostgresql::find_by_id(core_postgresql_connection, application_user_id).await {
                                                                 Ok(application_user) => {
                                                                     if let Some(mut application_user_) = application_user {
                                                                         match PasswordHashResolver::create(application_user_password.as_str()) {
                                                                             Ok(password_hash) => {
                                                                                 application_user_.set_password_hash(password_hash);
-                                        
+
                                                                                 if let Err(mut error) = ApplicationUserStateManagerPostgresql::update(
                                                                                     core_postgresql_connection, &application_user_, UpdateResolver::new(false, false, true)
                                                                                 ).await {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                        
+
                                                                                     return Err(error);
                                                                                 }
-                                        
+
                                                                                 if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::delete(
                                                                                     authorization_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
                                                                                 ).await {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                        
+
                                                                                     return Err(error);
                                                                                 }
-                                                
+
                                                                                 return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
                                                                             }
                                                                             Err(mut error) => {
                                                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                                
+
                                                                                 return Err(error);
                                                                             }
                                                                         }
                                                                     }
-                                        
+
                                                                     return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::NotFound));
                                                                 }
                                                                 Err(mut error) => {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                    
+
                                                                     return Err(error);
                                                                 }
                                                             }
@@ -117,19 +117,19 @@ impl Base {
                                                         }
                                                     }
                                                 }
-                        
+
                                                 if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_reset_password_token_) {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                    
+
                                                     return Err(error);
                                                 }
-                        
+
                                                 if application_user_reset_password_token_.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                                     if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::create(
                                                         authorization_postgresql_connection, &application_user_reset_password_token_
                                                     ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                                
+
                                                         return Err(error);
                                                     }
                                                 } else {
@@ -137,22 +137,22 @@ impl Base {
                                                         authorization_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
                                                     ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                                
+
                                                         return Err(error);
                                                     }
                                                 }
-                        
+
                                                 return Ok(ActionHandlerResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordTokenWorkflowException::WrongValue));
                                             }
 
                                             return Ok(ActionHandlerResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordTokenWorkflowException::IsNotApproved));
                                         }
-                    
+
                                         return Ok(ActionHandlerResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordTokenWorkflowException::NotFound));
                                     }
                                     Err(mut error) => {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                        
+
                                         return Err(error);
                                     }
                                 }
@@ -175,7 +175,7 @@ impl Base {
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
                 return Err(error);
             }
         }

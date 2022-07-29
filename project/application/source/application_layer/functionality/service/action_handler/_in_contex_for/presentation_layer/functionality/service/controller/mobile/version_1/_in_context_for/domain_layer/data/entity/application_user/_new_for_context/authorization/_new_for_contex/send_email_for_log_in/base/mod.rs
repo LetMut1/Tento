@@ -36,7 +36,7 @@ impl Base {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     { // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         let (
-            application_user_log_in_token_device_id, 
+            application_user_log_in_token_device_id,
             application_user_id
         ) = action_handler_incoming_data.into_inner();
 
@@ -58,18 +58,18 @@ impl Base {
                                                    environment_configuration_resolver, application_user_log_in_token_.get_value(), application_user_.get_email()
                                                 ) {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                    
+
                                                     return Err(error);
                                                 }
-                                
+
                                                 return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
                                             }
-                                
+
                                             return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::NotFound));
                                         }
                                         Err(mut error) => {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
+
                                             return Err(error);
                                         }
                                     }
@@ -84,12 +84,12 @@ impl Base {
                                 }
                             }
                         }
-                
+
                         return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::NotFound));
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                         return Err(error);
                     }
                 }

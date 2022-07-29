@@ -40,7 +40,7 @@ impl Base {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let application_user_email = action_handler_incoming_data.into_inner();
-        
+
         match Validator::is_valid_email(application_user_email.as_str()) {
             Ok(is_valid_email) => {
                 if is_valid_email {
@@ -54,7 +54,7 @@ impl Base {
                                         match authorization_postgresql_connection_pool.get().await {
                                             Ok(authorization_postgresql_pooled_connection) => {
                                                 let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
-                
+
                                                 match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_by_application_user_email(
                                                     authorization_postgresql_connection, application_user_email.as_str()
                                                 ).await {
@@ -80,7 +80,7 @@ impl Base {
                                                                     authorization_postgresql_connection, &application_user_registration_confirmation_token, update_resolver
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                                     return Err(error);
                                                                 }
                                                             }
@@ -92,32 +92,32 @@ impl Base {
                                                                         false,
                                                                         None
                                                                     );
-                                        
+
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::create(
                                                                     authorization_postgresql_connection, &application_user_registration_confirmation_token
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                                     return Err(error);
                                                                 }
                                                             }
                                                         }
-                                                        
+
                                                         if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
                                                             environment_configuration_resolver,
                                                             application_user_registration_confirmation_token.get_value(),
                                                             application_user_email.as_str()
                                                         ) {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                             return Err(error);
                                                         }
-                                        
+
                                                         return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
                                                     }
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                        
+
                                                         return Err(error);
                                                     }
                                                 }
@@ -132,12 +132,12 @@ impl Base {
                                             }
                                         }
                                     }
-                                        
+
                                     return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::EmailAlreadyExist));
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
+
                                     return Err(error);
                                 }
                             }
@@ -152,7 +152,7 @@ impl Base {
                         }
                     }
                 }
-                
+
                 return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::InvalidEmail));
             }
             Err(mut error) => {

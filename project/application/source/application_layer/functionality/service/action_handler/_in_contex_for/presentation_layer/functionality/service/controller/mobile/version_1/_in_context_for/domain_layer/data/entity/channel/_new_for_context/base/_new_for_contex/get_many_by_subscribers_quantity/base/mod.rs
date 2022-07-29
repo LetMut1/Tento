@@ -57,7 +57,7 @@ impl Base {
                                 if !(Self::LIMIT_MINIMUM_VALUE..=Self::LIMIT_MAXIMUM_VALUE).contains(&limit) {
                                     limit = Self::LIMIT_MINIMUM_VALUE;
                                 }
-                        
+
                                 if !OrderConventionResolver::can_convert(order) {
                                     return Err(
                                         ErrorAuditor::new(
@@ -66,7 +66,7 @@ impl Base {
                                         )
                                     );
                                 }
-                        
+
                                 match core_postgresql_connection_pool.get().await {
                                     Ok(core_postgresql_pooled_connection) => {
                                         match ChannelDataProviderPostgresql::per_request_3(
@@ -77,7 +77,7 @@ impl Base {
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                
+
                                                 return Err(error);
                                             }
                                         }
@@ -102,7 +102,7 @@ impl Base {
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                         return Err(error);
                     }
                 }

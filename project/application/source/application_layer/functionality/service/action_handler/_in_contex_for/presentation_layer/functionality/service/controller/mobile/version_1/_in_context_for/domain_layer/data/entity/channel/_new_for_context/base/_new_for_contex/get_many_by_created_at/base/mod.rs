@@ -64,7 +64,7 @@ impl Base {
                                         );
                                     }
                                 }
-                        
+
                                 if !OrderConventionResolver::can_convert(order) {
                                     return Err(
                                         ErrorAuditor::new(
@@ -73,11 +73,11 @@ impl Base {
                                         )
                                     );
                                 }
-                        
+
                                 if limit <= 0 || limit > Self::LIMIT {
                                     limit = Self::LIMIT;
                                 }
-                
+
                                 match core_postgresql_connection_pool.get().await {
                                     Ok(core_postgresql_pooled_connection) => {
                                         match ChannelDataProviderPostgresql::per_request_2(
@@ -88,7 +88,7 @@ impl Base {
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                
+
                                                 return Err(error);
                                             }
                                         }
@@ -113,7 +113,7 @@ impl Base {
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                         return Err(error);
                     }
                 }

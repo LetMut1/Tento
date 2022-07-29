@@ -7,8 +7,7 @@
 		"ms-azuretools.vscode-docker",
 		"bungcip.better-toml",
 		"irongeek.vscode-env",
-		"ue.alphabetical-sorter",
-		"shardulm94.trailing-spaces"
+		"ue.alphabetical-sorter"
     ],
     "settings": {
 		"terminal.integrated.shell.linux": "/bin/bash",

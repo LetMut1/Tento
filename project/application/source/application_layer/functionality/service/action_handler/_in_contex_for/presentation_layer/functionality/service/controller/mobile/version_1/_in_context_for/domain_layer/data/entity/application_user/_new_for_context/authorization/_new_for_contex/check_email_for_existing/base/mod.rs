@@ -46,7 +46,7 @@ impl Base {
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
+
                                     return Err(error);
                                 }
                             }
@@ -61,7 +61,7 @@ impl Base {
                         }
                     }
                 }
-                
+
                 return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::InvalidEmail));
             }
             Err(mut error) => {

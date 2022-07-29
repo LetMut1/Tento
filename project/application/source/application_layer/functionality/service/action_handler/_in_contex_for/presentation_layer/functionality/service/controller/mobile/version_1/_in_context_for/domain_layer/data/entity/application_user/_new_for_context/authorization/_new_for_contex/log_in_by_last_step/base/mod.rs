@@ -59,11 +59,11 @@ impl Base {
                     match redis_connection_pool.get().await {
                         Ok(mut pooled_connection) => {
                             let redis_connection = &mut *pooled_connection;
-            
+
                             match authorization_postgresql_connection_pool.get().await {
                                 Ok(authorization_postgresql_pooled_connection) => {
                                     let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
-            
+
                                     match ApplicationUserLogInTokenDataProviderPostgresql::find_by_application_user_id_and_device_id(
                                         authorization_postgresql_connection, application_user_id, application_user_log_in_token_device_id.as_str()
                                     ).await {
@@ -79,35 +79,35 @@ impl Base {
                                                                     redis_connection, &JsonAccessWebTokenBlackList::new(json_refresh_web_token_.get_json_access_web_token_id())
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                                     return Err(error);
                                                                 }
-                                            
+
                                                                 if let Err(mut error) = RepositoryProxy::delete(redis_connection, &json_refresh_web_token_).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                                     return Err(error);
                                                                 }
                                                             }
-                                            
+
                                                             let json_refresh_web_token_ = JsonRefreshWebTokenFactory::create_from_id_registry(
                                                                 application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                                                             );
-                                                            
+
                                                             if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::delete(
                                                                 authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                                                             ).await {
                                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                                 return Err(error);
                                                             }
-                                            
+
                                                             if let Err(mut error) = RepositoryProxy::create(redis_connection, &json_refresh_web_token_).await {
                                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                                 return Err(error);
                                                             }
-                                            
+
                                                             match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token_) {
                                                                 Ok(ref json_access_web_token) => {
                                                                     match SerializationFormResolver::serialize(environment_configuration_resolver, json_access_web_token) {
@@ -118,45 +118,45 @@ impl Base {
                                                                                 }
                                                                                 Err(mut error) => {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                                    
+
                                                                                     return Err(error);
                                                                                 }
                                                                             }
                                                                         }
                                                                         Err(mut error) => {
                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                            
+
                                                                             return Err(error);
                                                                         }
                                                                     }
                                                                 }
                                                                 Err(mut error) => {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                                    
+
                                                                     return Err(error);
                                                                 }
                                                             }
                                                         }
                                                         Err(mut error) => {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                             return Err(error);
                                                         }
                                                     }
                                                 }
-                                    
+
                                                 if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token_) {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                    
+
                                                     return Err(error);
                                                 }
-                                    
+
                                                 if application_user_log_in_token_.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                                     if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::update(
                                                         authorization_postgresql_connection, &application_user_log_in_token_, UpdateResolver::new(false, true, false)
                                                     ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                         return Err(error);
                                                     }
                                                 } else {
@@ -164,19 +164,19 @@ impl Base {
                                                         authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                                                     ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                                            
+
                                                         return Err(error);
                                                     }
                                                 }
-                                                
+
                                                 return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::WrongValue));
                                             }
-                                    
+
                                             return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::NotFound));
                                         }
                                         Err(mut error) => {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
+
                                             return Err(error);
                                         }
                                     }

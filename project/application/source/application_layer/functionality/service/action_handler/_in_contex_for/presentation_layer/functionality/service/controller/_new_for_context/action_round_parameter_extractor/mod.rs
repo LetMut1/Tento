@@ -78,7 +78,7 @@ impl ActionRaoundParameterExtractor {
         request_parts.headers = header_map;
 
         let request = Request::from_parts(request_parts, Body::from(data));
-        
+
         let response = action(
             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
         ).await;

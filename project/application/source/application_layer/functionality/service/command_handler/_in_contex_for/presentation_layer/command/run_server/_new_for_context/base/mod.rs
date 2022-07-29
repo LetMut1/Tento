@@ -61,15 +61,15 @@ impl Base {
             Ok(environment_configuration_resolver) => {
                 if let Err(mut error) = Self::configure_log(&environment_configuration_resolver) {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                     return Err(error);
                 }
                 if let Err(mut error) = Self::run_http_server(environment_configuration_resolver) {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                     return Err(error);
                 }
-        
+
                 return Ok(());
             }
             Err(mut error) => {
@@ -430,16 +430,16 @@ impl Base {
                     ) {
                     Ok(rolling_file_appender) => {
                         let rolling_file_appender_name = "rfa";            // TODO  TODO  Const или Енваронмент
-        
+
                         let appender = Appender::builder()
                             .build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
-                
+
                         let root = Root::builder().appender(rolling_file_appender_name.to_string()).build(LevelFilter::Trace);  // TODO TODO TODO FIlter
-                
+
                         match LogConfiguration::builder()
                             .appender(appender)
                             .build(root) {
-                            Ok(config) => {             
+                            Ok(config) => {
                                 if let Err(error) = log4rs::init_config(config) {
                                     return Err(
                                         ErrorAuditor::new(
@@ -448,7 +448,7 @@ impl Base {
                                         )
                                     );
                                 }
-                        
+
                                 return Ok(());
                             }
                             Err(error) => {
@@ -541,18 +541,18 @@ impl Base {
                                 let environment_configuration_resolver_ = environment_configuration_resolver.clone();
 
                                 let postgresql_connection_pool_ = postgresql_connection_pool.clone();
-                    
+
                                 let redis_connection_pool_ = redis_connection_pool.clone();
-                    
+
                                 async move {
                                     return Ok::<_, HyperError>(
                                         service_fn(move |requset| {
                                             let environment_configuration_resolver__ = environment_configuration_resolver_.clone();
 
                                             let postgresql_connection_pool__ = postgresql_connection_pool_.clone();
-                        
+
                                             let redis_connection_pool__ = redis_connection_pool_.clone();
-                        
+
                                             return async move {
                                                 match postgresql_connection_pool__ {
                                                     PostgresqlConnectionPoolWorkflowTypeAggregator::LocalDevelopment {
@@ -576,9 +576,9 @@ impl Base {
                             }
                         );
                         // TODO  TODO  TODO ------------------------------------------------------------------------------------------------------------------
-                
-                
-                
+
+
+
                         if let Err(error) = builder       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
                             .serve(service)
                             .with_graceful_shutdown(Self::create_shutdown_signal())
@@ -590,7 +590,7 @@ impl Base {
                                     )
                                 );
                             }
-                
+
                         return Ok(());
                     }
                     Err(error) => {
@@ -622,12 +622,12 @@ impl Base {
 
         return ();
     }
-    
+
     async fn resolve<'a, T>(   // TODO Можно ли пробростить ЛОггер как объект? Нужно ли?  (Лог4рс делает так, чтобы все крееты, на основе этого лога могли писать в общий лог) // TODO TODO  TODO Пути через константы?
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>, 
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>, 
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
