@@ -25,22 +25,22 @@ impl Extractor {
                                     if !is_exist_by_json_access_token_id {
                                         return Ok(ExtractorResult::JsonAccessWebToken { json_access_web_token });
                                     }
-                        
+
                                     return Ok(ExtractorResult::JsonAccessWebTokenInJsonAccessWebTokenBlackList);
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                    
+
                                     return Err(error);
                                 }
                             }
                         }
-                
+
                         return Ok(ExtractorResult::JsonAccessWebTokenAlreadyExpired);
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                         return Err(error);
                     }
                 }

@@ -21,7 +21,7 @@ impl RepositoryProxy {                                  // TODO после пе�
                     Some(mut application_user_log_in_token_device_id_registry_) => {
                         if !application_user_log_in_token_device_id_registry_.contains(&application_user_log_in_token_device_id) {
                             application_user_log_in_token_device_id_registry_.push(application_user_log_in_token_device_id);
-        
+
                             if let Err(mut error) = DeviceIdProcessingStorage::update(
                                 connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry_
                             ).await {
@@ -47,13 +47,13 @@ impl RepositoryProxy {                                  // TODO после пе�
                         }
                     }
                 }
-                  
+
                 if let Err(mut error) = JsonRefreshWebTokenStateManagerRedis::create(connection, json_refresh_web_token).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                     return Err(error);
                 }
-        
+
                 return Ok(());
             }
             Err(mut error) => {
@@ -97,38 +97,38 @@ impl RepositoryProxy {                                  // TODO после пе�
             Ok(application_user_log_in_token_device_id_registry) => {
                 if let Some(mut application_user_log_in_token_device_id_registry_) = application_user_log_in_token_device_id_registry {
                     let application_user_log_in_token_device_id = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
-        
+
                     let mut aplication_user_log_in_token_device_id_index: Option<usize> = None;
-        
+
                     'b: for (index, application_user_log_in_token_device_id_) in application_user_log_in_token_device_id_registry_.iter().enumerate() {
                         if *application_user_log_in_token_device_id_ == application_user_log_in_token_device_id {
                             aplication_user_log_in_token_device_id_index = Some(index);
-        
+
                             break 'b;
                         }
                     }
-        
+
                     if let Some(aplication_user_log_in_token_device_id_index_) = aplication_user_log_in_token_device_id_index {
                         application_user_log_in_token_device_id_registry_.remove(aplication_user_log_in_token_device_id_index_);
-        
+
                         if !application_user_log_in_token_device_id_registry_.is_empty() {
                             if let Err(mut error) = DeviceIdProcessingStorage::update(
                                 connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry_
                             ).await {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                                 return Err(error);
                             }
                         } else {
                             if let Err(mut error) = DeviceIdProcessingStorage::delete(connection, json_refresh_web_token.get_application_user_id()).await {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                                 return Err(error);
                             }
                         }
                     }
                 }
-        
+
                 return Ok(());
             }
             Err(mut error) => {
@@ -154,12 +154,12 @@ impl RepositoryProxy {                                  // TODO после пе�
                         }
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-            
+
                             return Err(error);
                         }
                     }
                 }
-        
+
                 return Ok(None);
             }
             Err(mut error) => {
