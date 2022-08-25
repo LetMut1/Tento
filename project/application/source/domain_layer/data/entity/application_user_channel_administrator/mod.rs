@@ -1,5 +1,5 @@
 pub struct ApplicationUserChannelAdministrator {
-    id: Option<i64>,
+    id: i64,
     email: String,
     nickname: String,
     password_hash: String,
@@ -8,7 +8,7 @@ pub struct ApplicationUserChannelAdministrator {
 
 impl ApplicationUserChannelAdministrator {
     pub fn new(
-        id: Option<i64>,
+        id: i64,
         email: String,
         nickname: String,
         password_hash: String,
@@ -19,13 +19,13 @@ impl ApplicationUserChannelAdministrator {
             email,
             nickname,
             password_hash,
-            created_at 
+            created_at
         };
     }
 
     pub fn get_id<'a>(
         &'a self
-    ) -> Option<i64> {
+    ) -> i64 {
         return self.id;
     }
 

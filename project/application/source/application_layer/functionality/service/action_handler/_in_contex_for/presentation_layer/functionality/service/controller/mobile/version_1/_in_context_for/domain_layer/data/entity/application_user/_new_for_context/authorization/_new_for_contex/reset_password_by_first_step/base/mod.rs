@@ -91,8 +91,7 @@ impl Base {
                                                                     application_user_id,
                                                                     ValueGenerator::generate(),
                                                                     0,
-                                                                    false,
-                                                                    None
+                                                                    false
                                                                 );
 
                                                                 if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::create(

@@ -1,5 +1,5 @@
 pub struct ChannelFeedPublicationReaction {
-    id: Option<i64>,
+    id: i64,
     channel_feed_publication_id: i64,
     application_user_id: i64,
     content_type: u8,
@@ -10,7 +10,7 @@ pub struct ChannelFeedPublicationReaction {
 
 impl ChannelFeedPublicationReaction {
     pub fn new(
-        id: Option<i64>,
+        id: i64,
         channel_feed_publication_id: i64,
         application_user_id: i64,
         content_type: u8,
@@ -31,7 +31,7 @@ impl ChannelFeedPublicationReaction {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> Option<i64> {
+    ) -> i64 {
         return self.id;
     }
 

@@ -137,8 +137,7 @@ impl Base {
                                                             application_user_id,
                                                             application_user_log_in_token_device_id.as_str(),
                                                             ValueGenerator::generate(),
-                                                            0,
-                                                            None
+                                                            0
                                                         );
 
                                                         if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::create(

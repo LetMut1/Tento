@@ -19,7 +19,7 @@ impl Base {
     ) -> Result<Option<ApplicationUserLogInToken<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = 
+        let query =
             "SELECT \
                 aulit.value AS v, \
                 aulit.wrong_enter_tries_quantity AS wetq, \
@@ -53,7 +53,7 @@ impl Base {
                                         Ok(wrong_enter_tries_quantity__) => wrong_enter_tries_quantity__,
                                         Err(mut error) => {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
+
                                             return Err(error);
                                         }
                                     }
@@ -86,13 +86,12 @@ impl Base {
                                         application_user_id,
                                         device_id,
                                         value,
-                                        wrong_enter_tries_quantity,
-                                        Some(created_at)
+                                        wrong_enter_tries_quantity
                                     )
                                 )
                             );
                         }
-        
+
                         return Ok(None);
                     }
                     Err(error) => {

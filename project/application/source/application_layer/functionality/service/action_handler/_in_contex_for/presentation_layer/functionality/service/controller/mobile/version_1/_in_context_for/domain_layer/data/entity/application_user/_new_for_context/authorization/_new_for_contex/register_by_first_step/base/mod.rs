@@ -89,8 +89,7 @@ impl Base {
                                                                         application_user_email.as_str(),
                                                                         ValueGenerator::generate(),
                                                                         0,
-                                                                        false,
-                                                                        None
+                                                                        false
                                                                     );
 
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::create(

@@ -1,11 +1,11 @@
 pub struct ApplicationUserDirectMessage {
-    id: Option<i64>,
+    id: i64,
     list_of_members: String
 }
 
 impl ApplicationUserDirectMessage {
     pub fn new(
-        id: Option<i64>,
+        id: i64,
         list_of_members: String
     ) -> Self {
         return Self {
@@ -16,7 +16,7 @@ impl ApplicationUserDirectMessage {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> Option<i64> {
+    ) -> i64 {
         return self.id;
     }
 

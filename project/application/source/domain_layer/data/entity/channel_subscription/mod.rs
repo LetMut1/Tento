@@ -1,5 +1,5 @@
 pub struct ChannelSubscription {
-    id: Option<i64>,
+    id: i64,
     channel_id: i64,
     application_user_id: i64,
     created_at: String
@@ -7,7 +7,7 @@ pub struct ChannelSubscription {
 
 impl ChannelSubscription {
     pub fn new(
-        id: Option<i64>,
+        id: i64,
         channel_id: i64,
         application_user_id: i64,
         created_at: String
@@ -22,7 +22,7 @@ impl ChannelSubscription {
 
     pub fn get_id<'a>(
         &'a self
-    ) -> Option<i64> {
+    ) -> i64 {
         return self.id;
     }
 

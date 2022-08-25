@@ -1,9 +1,11 @@
+use std::marker::PhantomData;
+
 pub struct ApplicationUserResetPasswordToken {
     application_user_id: i64,
     value: String,
     wrong_enter_tries_quantity: u8,
     is_approved: bool,
-    _created_at: Option<String>
+    _created_at: PhantomData<String>
 }
 
 impl ApplicationUserResetPasswordToken {
@@ -15,14 +17,13 @@ impl ApplicationUserResetPasswordToken {
         value: String,
         wrong_enter_tries_quantity: u8,
         is_approved: bool,
-        created_at: Option<String>
     ) -> Self {
         return Self {
             application_user_id,
             value,
             wrong_enter_tries_quantity,
             is_approved,
-            _created_at: created_at
+            _created_at: PhantomData
         };
     }
 

@@ -1,9 +1,11 @@
+use std::marker::PhantomData;
+
 pub struct ApplicationUserLogInToken<'a> {
     application_user_id: i64,
     device_id: &'a str,
     value: String,
     wrong_enter_tries_quantity: u8,
-    _created_at: Option<String>
+    _created_at: PhantomData<String>
 }
 
 impl<'a> ApplicationUserLogInToken<'a> {
@@ -15,14 +17,13 @@ impl<'a> ApplicationUserLogInToken<'a> {
         device_id: &'a str,
         value: String,
         wrong_enter_tries_quantity: u8,
-        created_at: Option<String>
     ) -> Self {
         return Self {
             application_user_id,
             device_id,
             value,
             wrong_enter_tries_quantity,
-            _created_at: created_at
+            _created_at: PhantomData
         };
     }
 

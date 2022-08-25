@@ -1,9 +1,11 @@
+use std::marker::PhantomData;
+
 pub struct ApplicationUserRegistrationConfirmationToken<'a> {
     application_user_email: &'a str,
     value: String,
     wrong_enter_tries_quantity: u8,
     is_approved: bool,
-    _created_at: Option<String>
+    _created_at: PhantomData<String>
 }
 
 impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
@@ -15,17 +17,16 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         value: String,
         wrong_enter_tries_quantity: u8,
         is_approved: bool,
-        created_at: Option<String>
     ) -> Self {
         return Self {
             application_user_email,
             value,
             wrong_enter_tries_quantity,
             is_approved,
-            _created_at: created_at
+            _created_at: PhantomData
         };
     }
-    
+
     pub fn get_application_user_email<'b>(
         &'b self
     ) -> &'a str {

@@ -18,7 +18,7 @@ impl Base {
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = 
+        let query =
             "SELECT \
                 aurct.value AS v, \
                 aurct.wrong_enter_tries_quantity AS wetq, \
@@ -52,7 +52,7 @@ impl Base {
                                         Ok(wrong_enter_tries_quantity__) => wrong_enter_tries_quantity__,
                                         Err(mut error) => {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-                            
+
                                             return Err(error);
                                         }
                                     }
@@ -97,13 +97,12 @@ impl Base {
                                         application_user_email,
                                         value,
                                         wrong_enter_tries_quantity,
-                                        is_approved,
-                                        Some(created_at)
+                                        is_approved
                                     )
                                 )
                             );
                         }
-        
+
                         return Ok(None);
                     }
                     Err(error) => {
