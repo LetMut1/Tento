@@ -1,4 +1,4 @@
-CREATE TABLE public.application_user ( 
+CREATE TABLE public.application_user (
     id BIGINT,
     email CHARACTER VARYING(320),
     nickname CHARACTER VARYING(55),
@@ -25,8 +25,9 @@ ALTER COLUMN email SET NOT NULL,
 ALTER COLUMN nickname SET NOT NULL,
 ALTER COLUMN password_hash SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
+ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT application_user5 PRIMARY KEY USING INDEX application_user2,
 ADD CONSTRAINT application_user6 UNIQUE USING INDEX application_user3,
 ADD CONSTRAINT application_user7 UNIQUE USING INDEX application_user4;
-    
+
 -- // TODO нужно ли ДатаПоследнегоВхода-Выхода. По идее, да. Но это нагруза на Бд. С другой стороны, видимость пользтвателелй и активноти. Подумать, что нужно еще

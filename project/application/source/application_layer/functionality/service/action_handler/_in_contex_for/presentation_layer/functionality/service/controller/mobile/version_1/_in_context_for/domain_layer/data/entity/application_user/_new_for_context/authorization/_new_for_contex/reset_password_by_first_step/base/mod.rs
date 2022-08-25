@@ -7,7 +7,6 @@ use crate::application_layer::data::data_transfer_object::action_handler_outcomi
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::value_generator::ValueGenerator;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as Validator;
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
@@ -53,17 +52,7 @@ impl Base {
                             ).await {
                                 Ok(application_user) => {
                                     if let Some(application_user_) = application_user {
-                                        let application_user_id = match application_user_.get_id() {
-                                            Some(application_user_id_) => application_user_id_,
-                                            None => {
-                                                return Err(
-                                                    ErrorAuditor::new(
-                                                        BaseError::LogicError { logic_error: LogicError::new(false, "Application_user_id should exist") },
-                                                        BacktracePart::new(line!(), file!(), None)
-                                                    )
-                                                );
-                                            }
-                                        };
+                                        let application_user_id = application_user_.get_id();
 
                                         match authorization_postgresql_connection_pool.get().await {
                                             Ok(authorization_postgresql_pooled_connection) => {

@@ -1,4 +1,4 @@
-CREATE TABLE public.application_user_registration_confirmation_token ( 
+CREATE TABLE public.application_user_registration_confirmation_token (
     application_user_email CHARACTER VARYING(320),
     value CHARACTER VARYING(6),
     wrong_enter_tries_quantity SMALLINT,

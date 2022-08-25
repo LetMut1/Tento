@@ -109,17 +109,7 @@ impl Base {
                     match PasswordHashResolver::is_valid(application_user_password.as_str(), application_user.get_password_hash()) {
                         Ok(is_valid) => {
                             if is_valid {
-                                let application_user_id = match application_user.get_id() {
-                                    Some(application_user_id_) => application_user_id_,
-                                    None => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::LogicError { logic_error: LogicError::new(false, "Application_user_id should exist") },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
+                                let application_user_id = application_user.get_id();
 
                                 match authorization_postgresql_connection_pool.get().await {
                                     Ok(authorization_postgresql_pooled_connection) => {

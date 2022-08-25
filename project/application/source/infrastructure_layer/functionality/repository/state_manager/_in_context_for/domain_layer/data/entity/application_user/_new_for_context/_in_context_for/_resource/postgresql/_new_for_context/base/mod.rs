@@ -1,4 +1,5 @@
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
+use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::_new_for_context::insert::Insert;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -16,19 +17,17 @@ pub struct Base;
 impl Base {
     pub async fn create<'a>(
         core_connection: &'a Connection,
-        application_user: &'a ApplicationUser
+        insert: Insert
     ) -> Result<i64, ErrorAuditor> {
-        let email = application_user.get_email();
-
-        let nickanme = application_user.get_nickname();
-
-        let password_hash = application_user.get_password_hash();
-
-        let created_at = application_user.get_created_at();
+        let (
+            email,
+            nickanme,
+            password_hash
+        ) = insert.into_inner();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = 
+        let query =
             "INSERT INTO public.application_user AS au ( \
                 id, \
                 email, \
@@ -40,7 +39,7 @@ impl Base {
                 $1, \
                 $2, \
                 $3, \
-                $4::TIMESTAMP(6) WITH TIME ZONE \
+                DEFAULT \
             ) \
             ON CONFLICT DO NOTHING \
             RETURNING \
@@ -49,8 +48,7 @@ impl Base {
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&email, Type::VARCHAR)
             .add_parameter(&nickanme, Type::VARCHAR)
-            .add_parameter(&password_hash, Type::TEXT)
-            .add_parameter(&created_at, Type::TEXT);
+            .add_parameter(&password_hash, Type::TEXT);
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -105,17 +103,7 @@ impl Base {
         application_user: &'a ApplicationUser,
         update_resolver: UpdateResolver
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = match application_user.get_id() {
-            Some(application_user_id_) => application_user_id_,
-            None => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "The application_user_id should exist.") },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
+        let application_user_id = application_user.get_id();
 
         let email = application_user.get_email();
 
@@ -137,7 +125,7 @@ impl Base {
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
                     return Err(error);
                 }
             }
@@ -158,7 +146,7 @@ impl Base {
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
                     return Err(error);
                 }
             }
@@ -194,7 +182,7 @@ impl Base {
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
                     return Err(error);
                 }
             }
@@ -233,12 +221,12 @@ impl Base {
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-        
+
                         return Err(error);
                     }
                 }
-                
-                query = 
+
+                query =
                     "UPDATE ONLY public.application_user AS au \
                     SET ("
                     .to_string()
@@ -249,7 +237,7 @@ impl Base {
                     WHERE au.id = $" + counter_u8_value.to_string().as_str()
                     + " RETURNING \
                         au.id AS i;";
-                        
+
                     prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
             }
             None => {
@@ -274,7 +262,7 @@ impl Base {
                                 )
                             );
                         }
-                
+
                         return Ok(());
                     }
                     Err(error) => {

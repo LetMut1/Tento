@@ -17,7 +17,7 @@ impl Base {
     ) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = 
+        let query =
             "SELECT \
                 au.id AS i \
             FROM public.application_user au \
@@ -32,7 +32,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Ok(false);
                         }
-        
+
                         return Ok(true);
                     }
                     Err(error) => {
@@ -62,7 +62,7 @@ impl Base {
     ) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = 
+        let query =
             "SELECT \
                 au.id AS i \
             FROM public.application_user au \
@@ -77,7 +77,7 @@ impl Base {
                         if row_registry.is_empty() {
                             return Ok(false);
                         }
-                
+
                         return Ok(true);
                     }
                     Err(error) => {
@@ -107,7 +107,7 @@ impl Base {
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = 
+        let query =
             "SELECT \
                 au.id AS i, \
                 au.nickname AS n, \
@@ -174,7 +174,7 @@ impl Base {
                             return Ok(
                                 Some(
                                     ApplicationUser::new(
-                                        Some(id),
+                                        id,
                                         email,
                                         nickname,
                                         password_hash,
@@ -183,7 +183,7 @@ impl Base {
                                 )
                             );
                         }
-        
+
                         return Ok(None);
                     }
                     Err(error) => {
@@ -213,7 +213,7 @@ impl Base {
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = 
+        let query =
             "SELECT \
                 au.id AS i, \
                 au.email AS e, \
@@ -280,7 +280,7 @@ impl Base {
                             return Ok(
                                 Some(
                                     ApplicationUser::new(
-                                        Some(id),
+                                        id,
                                         email,
                                         nickname,
                                         password_hash,
@@ -289,7 +289,7 @@ impl Base {
                                 )
                             );
                         }
-        
+
                         return Ok(None);
                     }
                     Err(error) => {
@@ -319,7 +319,7 @@ impl Base {
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = 
+        let query =
             "SELECT \
                 au.email AS e, \
                 au.nickname AS n, \
@@ -386,7 +386,7 @@ impl Base {
                             return Ok(
                                 Some(
                                     ApplicationUser::new(
-                                        Some(id),
+                                        id,
                                         email,
                                         nickname,
                                         password_hash,
@@ -395,7 +395,7 @@ impl Base {
                                 )
                             );
                         }
-        
+
                         return Ok(None);
                     }
                     Err(error) => {
