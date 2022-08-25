@@ -1,6 +1,6 @@
 # Request standards:
  - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
- - Every request should contain this `HTTP header`s: 
+ - Every request should contain this `HTTP header`s:
  ```
  - user-agent: ... (https://www.scientiamobile.com/correctly-form-user-agents-for-mobile-apps/)
  - content-type: application/octet-stream
@@ -15,7 +15,7 @@
 
 # Response standards:
  - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
- - Every response should contain this `HTTP header`s: 
+ - Every response should contain this `HTTP header`s:
  ```
  - content-type: application/octet-stream
  - x-content-type-options: nosniff
@@ -45,7 +45,7 @@ struct Data<S>
 
 # Area for authorized application user. API:
  - Every endpoint at this area requires an existing of `json access webtoken`
- - Response of EVERY endpoint at this area can contain `communication_code` equals to 
+ - Response of EVERY endpoint at this area can contain `communication_code` equals to
  ```
   - enjsacweto03
   - enjsacweto05
@@ -348,7 +348,7 @@ struct Base {
 Error codes:
 - enjsacweto04
 - enjsreweto02
-``` 
+```
 <!-- ## /v1/m/a/c/gmbn GET
 Returns Channel registry by Channel Name.
 ### Request Query parameters:
