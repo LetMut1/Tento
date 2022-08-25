@@ -1,4 +1,4 @@
-CREATE TABLE public.channel_feed_publication ( 
+CREATE TABLE public.channel_feed_publication (
     id BIGINT,
     channel_id BIGINT,
     application_user_channel_administrator_id BIGINT,
@@ -11,7 +11,7 @@ CREATE TABLE public.channel_feed_publication (
     viewing_quantity BIGINT,
     status SMALLINT,            -- // TODO  Создан, удален (добавятся, возможно, еще). СДелано, чтобы можно было удалять с S3 через команду на кроне
     visible_from TIMESTAMP(6) WITH TIME ZONE,
-    delete_on TIMESTAMP(6) WITH TIME ZONE,      -- // TODO Написать команду для удаления 
+    delete_on TIMESTAMP(6) WITH TIME ZONE,      -- // TODO Написать команду для удаления
     created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
@@ -42,6 +42,7 @@ ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN status SET NOT NULL,
 ALTER COLUMN visible_from SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
+ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel_feed_publication5 PRIMARY KEY USING INDEX channel_feed_publication2,
 ADD CONSTRAINT channel_feed_publication6 FOREIGN KEY (channel_id)
 REFERENCES public.channel(id) ON DELETE RESTRICT,

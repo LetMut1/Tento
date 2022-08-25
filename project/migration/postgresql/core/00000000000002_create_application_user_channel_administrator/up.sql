@@ -5,7 +5,7 @@
 
 -- TODO ПОКА ЧТО ЭТО ПРОСТО СТАБ РАДИ СУЩЕСТВОВАНИЯ СУЩНОСТИ, чтобы можно сделать FK на id.
 
-CREATE TABLE public.application_user_channel_administrator ( 
+CREATE TABLE public.application_user_channel_administrator (
     id BIGINT
     -- email CHARACTER VARYING(320),
     -- nickname CHARACTER VARYING(55),
@@ -27,6 +27,7 @@ ALTER COLUMN id SET DEFAULT nextval('public.application_user_channel_administrat
 -- ALTER COLUMN nickname SET NOT NULL,
 -- ALTER COLUMN password_hash SET NOT NULL,
 -- ALTER COLUMN created_at SET NOT NULL,
+-- ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT application_user_channel_administrator3 PRIMARY KEY USING INDEX application_user_channel_administrator2;
 -- ADD CONSTRAINT application_user_channel_administrator__email__unique_constraint UNIQUE USING INDEX application_user_channel_administrator__email__unique_index,
 -- ADD CONSTRAINT application_user_channel_administrator__nickname__unique_constraint UNIQUE USING INDEX application_user_channel_administrator__nickname__unique_index;

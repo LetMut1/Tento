@@ -1,4 +1,4 @@
-CREATE TABLE public.channel_direct_message_publication ( 
+CREATE TABLE public.channel_direct_message_publication (
     id BIGINT,
     channel_id BIGINT,
     application_user_channel_administrator_id BIGINT,
@@ -35,6 +35,7 @@ ALTER COLUMN status SET NOT NULL,
 ALTER COLUMN visible_from SET NOT NULL,
 ALTER COLUMN delete_on SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
+ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel_direct_message_publication5 PRIMARY KEY USING INDEX channel_direct_message_publication2,
 ADD CONSTRAINT channel_direct_message_publication6 FOREIGN KEY (channel_id)
 REFERENCES public.channel(id) ON DELETE RESTRICT,
