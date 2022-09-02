@@ -1,31 +1,3 @@
-extern crate argon2;
-extern crate base64;
-extern crate bb8_postgres;
-extern crate bb8_redis;
-extern crate bb8;
-extern crate bytes;
-extern crate chrono;
-extern crate crypto;
-extern crate dotenv;
-extern crate futures_util;
-extern crate futures;
-extern crate hex;
-extern crate http;
-extern crate hyper;
-extern crate lettre_email;
-extern crate lettre;
-extern crate log;
-extern crate log4rs;
-extern crate rand;
-extern crate redis;
-extern crate regex;
-extern crate rmp_serde;
-extern crate serde_json;    // TODO только для тестирования
-extern crate serde;
-extern crate tokio_postgres;
-extern crate tokio;
-extern crate uuid;
-
 pub mod _resource;
 pub mod application_layer;
 pub mod domain_layer;
