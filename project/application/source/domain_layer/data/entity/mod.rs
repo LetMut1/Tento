@@ -1,4 +1,5 @@
 pub mod application_user_access_refresh_token;
+pub mod application_user_access_token_black_list;
 pub mod application_user_access_token;
 pub mod application_user_channel_administrator;
 pub mod application_user_direct_message_publication;
