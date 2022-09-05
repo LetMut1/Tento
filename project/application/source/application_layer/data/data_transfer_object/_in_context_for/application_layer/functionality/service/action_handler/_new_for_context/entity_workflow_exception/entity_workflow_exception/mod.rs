@@ -2,8 +2,8 @@ use super::_component::_in_context_for::domain_layer::data::entity::application_
 use super::_component::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_workflow_exception::ApplicationUserRegistrationConfirmationTokenWorkflowException;
 use super::_component::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_workflow_exception::ApplicationUserResetPasswordTokenWorkflowException;
 use super::_component::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::application_user_workflow_exception::ApplicationUserWorkflowException;
-use super::_component::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_exception::JsonAccessWebTokenWorkflowException;
-use super::_component::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_workflow_exception::JsonRefreshWebTokenWorkflowException;
+use super::_component::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::application_user_access_token_workflow_exception::ApplicationUserAccessTokenWorkflowException;
+use super::_component::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::application_user_access_refresh_token_workflow_exception::ApplicationUserAccessRefreshTokenWorkflowException;
 
 pub enum EntityWorkflowException {
     ApplicationUserWorkflowException {
@@ -19,9 +19,9 @@ pub enum EntityWorkflowException {
         application_user_reset_password_token_workflow_exception: ApplicationUserResetPasswordTokenWorkflowException
     },
     JsonAccessWebTokenWorkflowException {
-        json_access_web_token_workflow_exception: JsonAccessWebTokenWorkflowException
+        json_access_web_token_workflow_exception: ApplicationUserAccessTokenWorkflowException
     },
     JsonRefreshWebTokenWorkflowException {
-        json_refresh_web_token_workflow_exception: JsonRefreshWebTokenWorkflowException
+        json_refresh_web_token_workflow_exception: ApplicationUserAccessRefreshTokenWorkflowException
     }
 }
