@@ -6,8 +6,8 @@ use serde::Serialize;
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
 #[derive(Deserialize)]
 pub struct Base {
-    json_access_web_token: String,
-    json_refresh_web_token: String
+    application_user_access_token_web_form: String,
+    application_user_access_refresh_token_web_form: String
 }
 
 impl Base {
@@ -15,8 +15,8 @@ impl Base {
         self
     ) -> (String, String) {
         return (
-            self.json_access_web_token, 
-            self.json_refresh_web_token
+            self.application_user_access_token_web_form,
+            self.application_user_access_refresh_token_web_form
         );
     }
 }

@@ -2,7 +2,7 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Base {
-    json_access_web_token: String,
+    application_user_access_token_web_form: String,
     channel_created_at:  Option<String>,
     order: i8,
     limit: i8
@@ -13,7 +13,7 @@ impl Base {
         self
     ) -> (String, Option<String>, i8, i8) {
         return (
-            self.json_access_web_token,
+            self.application_user_access_token_web_form,
             self.channel_created_at,
             self.order,
             self.limit

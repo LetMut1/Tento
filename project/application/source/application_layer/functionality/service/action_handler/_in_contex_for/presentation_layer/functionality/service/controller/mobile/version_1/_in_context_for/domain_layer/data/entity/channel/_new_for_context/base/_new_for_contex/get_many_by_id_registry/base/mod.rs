@@ -40,13 +40,13 @@ impl Base {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let (
-            json_access_web_token,
+            application_user_access_token_web_form,
             channel_id_registry
         ) = action_handler_incoming_data.into_inner();
 
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
-                match Extractor::extract(environment_configuration_resolver, json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
+                match Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str(), &mut *redis_pooled_connection).await {
                     Ok(result) => {
                         match result {
                             ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {

@@ -2,7 +2,7 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Base {
-    json_access_web_token: String,
+    application_user_access_token_web_form: String,
     channel_id_registry: Vec<i64>,
 }
 
@@ -11,7 +11,7 @@ impl Base {
         self
     ) -> (String, Vec<i64>) {
         return (
-            self.json_access_web_token,
+            self.application_user_access_token_web_form,
             self.channel_id_registry,
         );
     }

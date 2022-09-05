@@ -6,18 +6,18 @@ use serde::Deserialize;
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 pub struct Base {
-    json_access_web_token: String,
-    json_refresh_web_token: String
+    application_user_access_token_web_form: String,
+    application_user_access_refresh_token_web_form: String
 }
 
 impl Base {
     pub fn new(
-        json_access_web_token: String,
-        json_refresh_web_token: String
+        application_user_access_token_web_form: String,
+        application_user_access_refresh_token_web_form: String
     ) -> Self {
         return Self {
-            json_access_web_token,
-            json_refresh_web_token
+            application_user_access_token_web_form,
+            application_user_access_refresh_token_web_form
         };
     }
 }

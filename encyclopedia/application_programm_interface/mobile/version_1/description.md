@@ -44,7 +44,7 @@ struct Data<S>
 <br/><br/>
 
 # Area for authorized application user. API:
- - Every endpoint at this area requires an existing of `json access webtoken`
+ - Every endpoint at this area requires an existing of `access token`
  - Response of EVERY endpoint at this area can contain `communication_code` equals to
  ```
   - enjsacweto03
@@ -56,7 +56,7 @@ Deauthorizes application user from one device.
 
 Request data:
 struct Base {
-    json_access_web_token: String
+    application_user_access_token_web_form: String
 }
 
 Result data is absent.
@@ -71,7 +71,7 @@ Deauthorizes application user from all devices.
 
 Request data:
 struct Base {
-    json_access_web_token: String
+    application_user_access_token_web_form: String
 }
 
 Result data is absent.
@@ -166,8 +166,8 @@ struct Base {
 
 Result data:
 struct Base {
-    json_access_web_token: String,
-    json_refresh_web_token: String
+    application_user_access_token_web_form: String,
+    application_user_access_refresh_token_web_form: String
 }
 
 Error codes:
@@ -229,8 +229,8 @@ struct Base {
 
 Result data:
 struct Base {
-    json_access_web_token: String,
-    json_refresh_web_token: String
+    application_user_access_token_web_form: String,
+    application_user_access_refresh_token_web_form: String
 }
 
 Error codes:
@@ -335,14 +335,14 @@ Refreshs json access web token.
 
 Request data:
 struct Base {
-    json_access_web_token: String,
-    json_refresh_web_token: String
+    application_user_access_token_web_form: String,
+    application_user_access_refresh_token_web_form: String
 }
 
 Result data:
 struct Base {
-    json_access_web_token: String,
-    json_refresh_web_token: String
+    application_user_access_token_web_form: String,
+    application_user_access_refresh_token_web_form: String
 }
 
 Error codes:

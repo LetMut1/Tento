@@ -42,7 +42,7 @@ impl Base {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let (
-            json_access_web_token,
+            application_user_access_token_web_form,
             channel_subscribers_quantity,       // TODO // TODO // TODO // TODO // TODO  не нужно ли проверять на >=0 ?
             order,
             mut limit
@@ -50,7 +50,7 @@ impl Base {
 
         match redis_connection_pool.get().await {
             Ok(mut redis_pooled_connection) => {
-                match Extractor::extract(environment_configuration_resolver, json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
+                match Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str(), &mut *redis_pooled_connection).await {
                     Ok(result) => {
                         match result {
                             ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {
