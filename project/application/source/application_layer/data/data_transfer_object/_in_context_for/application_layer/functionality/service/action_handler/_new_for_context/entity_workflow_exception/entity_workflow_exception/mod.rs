@@ -18,10 +18,10 @@ pub enum EntityWorkflowException {
     ApplicationUserResetPasswordTokenWorkflowException {
         application_user_reset_password_token_workflow_exception: ApplicationUserResetPasswordTokenWorkflowException
     },
-    JsonAccessWebTokenWorkflowException {
-        json_access_web_token_workflow_exception: ApplicationUserAccessTokenWorkflowException
+    ApplicationUserAccessTokenWorkflowException {
+        application_user_access_token_workflow_exception: ApplicationUserAccessTokenWorkflowException
     },
-    JsonRefreshWebTokenWorkflowException {
-        json_refresh_web_token_workflow_exception: ApplicationUserAccessRefreshTokenWorkflowException
+    ApplicationUserAccessRefreshTokenWorkflowException {
+        application_user_access_refresh_token_workflow_exception: ApplicationUserAccessRefreshTokenWorkflowException
     }
 }

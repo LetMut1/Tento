@@ -102,7 +102,7 @@ impl Base {
                                                 }
                                             }
 
-                                            return Ok(ActionHandlerResult::new_with_json_refresh_web_token_workflow_exception(ApplicationUserAccessRefreshTokenWorkflowException::NotFound));
+                                            return Ok(ActionHandlerResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshTokenWorkflowException::NotFound));
                                         }
                                         Err(mut error) => {
                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -122,7 +122,7 @@ impl Base {
                             }
                         }
 
-                        return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::NotExpired));
+                        return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::NotExpired));
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

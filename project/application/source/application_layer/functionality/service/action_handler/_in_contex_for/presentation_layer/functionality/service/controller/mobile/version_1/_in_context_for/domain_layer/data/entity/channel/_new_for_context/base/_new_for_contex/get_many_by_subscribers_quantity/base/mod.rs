@@ -93,10 +93,10 @@ impl Base {
                                 }
                             }
                             ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                                return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::AlreadyExpired));
+                                return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::AlreadyExpired));
                             }
                             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                                return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::InApplicationUserAccessTokenBlackList));
+                                return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::InApplicationUserAccessTokenBlackList));
                             }
                         }
                     }

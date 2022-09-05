@@ -46,15 +46,15 @@ impl<T> ActionHandlerResult<T> {
         return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::ApplicationUserResetPasswordTokenWorkflowException { application_user_reset_password_token_workflow_exception } };
     }
 
-    pub fn new_with_json_access_web_token_workflow_exception(
-        json_access_web_token_workflow_exception: ApplicationUserAccessTokenWorkflowException
+    pub fn new_with_application_user_access_token_workflow_exception(
+        application_user_access_token_workflow_exception: ApplicationUserAccessTokenWorkflowException
     ) -> Self {
-        return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::JsonAccessWebTokenWorkflowException { json_access_web_token_workflow_exception } };
+        return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::ApplicationUserAccessTokenWorkflowException { application_user_access_token_workflow_exception } };
     }
 
-    pub fn new_with_json_refresh_web_token_workflow_exception(
-        json_refresh_web_token_workflow_exception: ApplicationUserAccessRefreshTokenWorkflowException
+    pub fn new_with_application_user_access_refresh_token_workflow_exception(
+        application_user_access_refresh_token_workflow_exception: ApplicationUserAccessRefreshTokenWorkflowException
     ) -> Self {
-        return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::JsonRefreshWebTokenWorkflowException { json_refresh_web_token_workflow_exception } };
+        return Self::EntityWorkflowException { entity_workflow_exception: EntityWorkflowException::ApplicationUserAccessRefreshTokenWorkflowException { application_user_access_refresh_token_workflow_exception } };
     }
 }
