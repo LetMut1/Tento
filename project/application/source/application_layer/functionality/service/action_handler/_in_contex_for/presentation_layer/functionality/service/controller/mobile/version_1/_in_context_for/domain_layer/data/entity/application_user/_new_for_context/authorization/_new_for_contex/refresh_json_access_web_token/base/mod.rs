@@ -28,13 +28,13 @@ impl Base {
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor> {
         let (
-            json_access_web_token,
-            json_refresh_web_token
+            application_user_access_token_web_form,
+            application_user_access_refresh_token_web_form
         ) = action_handler_incoming_data.into_inner();
 
-        match SerializationFormResolver::deserialize(environment_configuration_resolver, json_access_web_token.as_str()) {
-            Ok(json_access_web_token_) => {
-                match ExpirationTimeResolver::is_expired(&json_access_web_token_) {
+        match SerializationFormResolver::deserialize(environment_configuration_resolver, application_user_access_token_web_form.as_str()) {
+            Ok(application_user_access_token) => {
+                match ExpirationTimeResolver::is_expired(&application_user_access_token) {
                     Ok(is_expired) => {
                         if is_expired {        // TODO TODO TODO TODO СДелать интервал, когда можео менять. На 3 часа раньше, чем срок экспирации, например
                             match redis_connection_pool.get().await {
@@ -42,28 +42,28 @@ impl Base {
                                     let connection = &mut *redis_pooled_connection;
 
                                     match JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
-                                        connection, json_access_web_token_.get_application_user_id(), json_access_web_token_.get_application_user_log_in_token_device_id()
+                                        connection, application_user_access_token.get_application_user_id(), application_user_access_token.get_application_user_log_in_token_device_id()
                                     ).await {
-                                        Ok(json_refresh_web_token_) => {
-                                            if let Some(mut json_refresh_web_token__) = json_refresh_web_token_ {
-                                                match Encoder::is_valid(environment_configuration_resolver, &json_refresh_web_token__, json_refresh_web_token.as_str()) {
+                                        Ok(application_user_access_refresh_token) => {
+                                            if let Some(mut application_user_access_refresh_token_) = application_user_access_refresh_token {
+                                                match Encoder::is_valid(environment_configuration_resolver, &application_user_access_refresh_token_, application_user_access_refresh_token_web_form.as_str()) {
                                                     Ok(is_valid) => {
-                                                        if is_valid && json_access_web_token_.get_id().as_bytes() == json_refresh_web_token__.get_json_access_web_token_id().as_bytes() {
-                                                            Refresher::refresh(&mut json_refresh_web_token__);
+                                                        if is_valid && application_user_access_token.get_id().as_bytes() == application_user_access_refresh_token_.get_application_user_access_token_id().as_bytes() {
+                                                            Refresher::refresh(&mut application_user_access_refresh_token_);
 
-                                                            if let Err(mut error) = RepositoryProxy::update(connection, &json_refresh_web_token__).await {
+                                                            if let Err(mut error) = RepositoryProxy::update(connection, &application_user_access_refresh_token_).await {
                                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                                 return Err(error);
                                                             }
 
-                                                            match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token__) {
-                                                                Ok(ref new_json_access_web_token) => {
-                                                                    match SerializationFormResolver::serialize(environment_configuration_resolver, new_json_access_web_token) {
-                                                                        Ok(new_json_access_web_token_) => {
-                                                                            match Encoder::encode(environment_configuration_resolver, &json_refresh_web_token__) {
-                                                                                Ok(new_json_refresh_web_token) => {
-                                                                                    return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(new_json_access_web_token_, new_json_refresh_web_token)));
+                                                            match JsonAccessWebTokenFactory::create_from_application_user_access_refresh_token(&application_user_access_refresh_token_) {
+                                                                Ok(ref new_application_user_access_token) => {
+                                                                    match SerializationFormResolver::serialize(environment_configuration_resolver, new_application_user_access_token) {
+                                                                        Ok(new_application_user_access_token_) => {
+                                                                            match Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
+                                                                                Ok(new_application_user_access_refresh_token) => {
+                                                                                    return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(new_application_user_access_token_, new_application_user_access_refresh_token)));
                                                                                 }
                                                                                 Err(mut error) => {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

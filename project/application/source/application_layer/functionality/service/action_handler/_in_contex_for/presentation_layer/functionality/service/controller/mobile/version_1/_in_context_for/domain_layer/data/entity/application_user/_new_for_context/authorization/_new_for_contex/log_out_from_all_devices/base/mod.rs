@@ -4,7 +4,7 @@ use crate::application_layer::data::data_transfer_object::_in_context_for::appli
 use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::json_access_web_token_workflow_exception::JsonAccessWebTokenWorkflowException;
 use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::json_refresh_web_token_workflow_exception::JsonRefreshWebTokenWorkflowException;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::log_out_from_all_devices::base::_new_for_context::base::Base as ActionHandlerIncomingData;
-use crate::domain_layer::data::entity::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
+use crate::domain_layer::data::entity::application_user_access_token_black_list::ApplicationUserAccessTokenBlackList;
 use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::extractor::_new_for_context::result::Result as ExtractorResult;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -28,22 +28,24 @@ impl Base {
             Ok(mut redis_pooled_connection) => {
                 let connection = &mut *redis_pooled_connection;
 
-                let json_access_web_token = action_handler_incoming_data.into_inner();
-                match Extractor::extract(environment_configuration_resolver, json_access_web_token.as_str(), connection).await {
+                let application_user_access_token_web_form = action_handler_incoming_data.into_inner();
+                match Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str(), connection).await {
                     Ok(result) => {
                         match result {
-                            ExtractorResult::JsonAccessWebToken { json_access_web_token: json_access_web_token_ } => {
-                                match RepositoryProxy::get_by_application_user_id(connection, json_access_web_token_.get_application_user_id()).await {
-                                    Ok(json_refresh_web_token_registry) => {
-                                        if let Some(json_refresh_web_token_registry_) = json_refresh_web_token_registry {
-                                            '_a: for json_refresh_web_token in json_refresh_web_token_registry_.iter() {
-                                                if let Err(mut error) = RepositoryProxy::delete(connection, json_refresh_web_token).await {
+                            ExtractorResult::ApplicationUserAccessToken { application_user_access_token } => {
+                                match RepositoryProxy::get_by_application_user_id(connection, application_user_access_token.get_application_user_id()).await {
+                                    Ok(application_user_access_refresh_token_registry) => {
+                                        if let Some(application_user_access_refresh_token_registry_) = application_user_access_refresh_token_registry {
+                                            '_a: for application_user_access_refresh_token in application_user_access_refresh_token_registry_.iter() {
+                                                if let Err(mut error) = RepositoryProxy::delete(connection, application_user_access_refresh_token).await {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                     return Err(error);
                                                 }
 
-                                                if let Err(mut error) = JsonAccessWebTokenBlackListStateManagerRedis::create(connection, &JsonAccessWebTokenBlackList::new(json_access_web_token_.get_id())).await {
+                                                if let Err(mut error) = JsonAccessWebTokenBlackListStateManagerRedis::create(
+                                                    connection, &ApplicationUserAccessTokenBlackList::new(application_user_access_token.get_id())
+                                                ).await {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                     return Err(error);
@@ -62,10 +64,10 @@ impl Base {
                                     }
                                 }
                             }
-                            ExtractorResult::JsonAccessWebTokenAlreadyExpired => {
+                            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                                 return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(JsonAccessWebTokenWorkflowException::AlreadyExpired));
                             }
-                            ExtractorResult::JsonAccessWebTokenInJsonAccessWebTokenBlackList => {
+                            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                                 return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(JsonAccessWebTokenWorkflowException::InJsonAccessWebTokenBlackList));
                             }
                         }

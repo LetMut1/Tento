@@ -1,7 +1,10 @@
+use serde::Serialize;
+use serde::Deserialize;
 use std::borrow::Cow;
 
+#[derive(Serialize, Deserialize)]
 pub struct ApplicationUserAccessRefreshToken<'a> {
-    application_user_access_token: String,
+    application_user_access_token_id: String,
     application_user_id: i64,
     application_user_log_in_token_device_id: Cow<'a, str>,
     obfuscation_value: String,
@@ -12,23 +15,23 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: u16 = 60 * 24 * 30;
 
     pub fn new(
-        application_user_access_token: String,
+        application_user_access_token_id: String,
         application_user_id: i64,
         application_user_log_in_token_device_id: Cow<'a, str>,
         obfuscation_value: String
     ) -> Self {
         return Self {
-            application_user_access_token,
+            application_user_access_token_id,
             application_user_id,
             application_user_log_in_token_device_id,
             obfuscation_value
         };
     }
 
-    pub fn get_application_user_access_token<'b>(
+    pub fn get_application_user_access_token_id<'b>(
         &'b self
     ) -> &'b str {
-        return self.application_user_access_token.as_str();
+        return self.application_user_access_token_id.as_str();
     }
 
     pub fn get_application_user_id<'b>(

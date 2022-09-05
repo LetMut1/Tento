@@ -1,4 +1,4 @@
-use crate::domain_layer::data::entity::json_refresh_web_token::JsonRefreshWebToken;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
@@ -14,14 +14,14 @@ impl DeviceIdProcessingStorage {
     const SEPARATOR: &'static str = ":";
 
     pub async fn create<'a>(
-        connection: &'a mut Connection, 
+        connection: &'a mut Connection,
         application_user_id: i64,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), ErrorAuditor> {
         if let Err(error) = connection.set_ex::<String, String, ()>(
-            StorageKeyResolver::get_6(application_user_id), 
+            StorageKeyResolver::get_6(application_user_id),
             application_user_log_in_token_device_id_registry.join(Self::SEPARATOR),
-            (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
+            (ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -35,13 +35,13 @@ impl DeviceIdProcessingStorage {
     }
 
     pub async fn update<'a>(
-        connection: &'a mut Connection, 
+        connection: &'a mut Connection,
         application_user_id: i64,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<(), ErrorAuditor> {
         if let Err(mut error) = Self::create(connection, application_user_id, application_user_log_in_token_device_id_registry).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
             return Err(error);
         }
 
@@ -62,7 +62,7 @@ impl DeviceIdProcessingStorage {
                 )
             );
         }
-        
+
         return Ok(());
     }
 
@@ -72,7 +72,7 @@ impl DeviceIdProcessingStorage {
     ) -> Result<(), ErrorAuditor> {
         if let Err(error) = connection.expire::<String, ()>(
             StorageKeyResolver::get_6(application_user_id),
-            (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
+            (ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -95,14 +95,14 @@ impl DeviceIdProcessingStorage {
             Ok(application_user_log_in_token_device_id_sequence) => {
                 if let Some(application_user_log_in_token_device_id_sequence_) = application_user_log_in_token_device_id_sequence {
                     let mut application_user_log_in_token_device_id_registry: Vec<String> = vec![];
-        
+
                     '_a: for application_user_log_in_token_device_id in application_user_log_in_token_device_id_sequence_.split::<'_, &'_ str>(Self::SEPARATOR) {
                         application_user_log_in_token_device_id_registry.push(application_user_log_in_token_device_id.to_string());
                     }
-        
+
                     return Ok(Some(application_user_log_in_token_device_id_registry));
                 }
-                
+
                 return Ok(None);
             }
             Err(error) => {

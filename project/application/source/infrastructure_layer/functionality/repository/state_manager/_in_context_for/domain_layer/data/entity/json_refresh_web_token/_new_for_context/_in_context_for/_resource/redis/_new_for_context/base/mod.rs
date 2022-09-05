@@ -1,5 +1,4 @@
-use crate::domain_layer::data::entity::json_refresh_web_token::JsonRefreshWebToken;
-use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::_new_for_context::common::Common;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -16,16 +15,16 @@ pub struct Base;
 impl Base {
     pub async fn create<'a>(
         connection: &'a mut Connection,
-        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
+        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<(), ErrorAuditor> {
-        match rmp_serde::to_vec(&Common::new(json_refresh_web_token)) {
+        match rmp_serde::to_vec(application_user_access_refresh_token) {
             Ok(data) => {
                 if let Err(error) = connection.set_ex::<String, Vec<u8>, ()>(
                     StorageKeyResolver::get_5(
-                        json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
-                    ), 
+                        application_user_access_refresh_token.get_application_user_id(), application_user_access_refresh_token.get_application_user_log_in_token_device_id()
+                    ),
                     data,
-                    (JsonRefreshWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
+                    (ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as usize) * (60 as usize)
                 ).await {
                     return Err(
                         ErrorAuditor::new(
@@ -34,7 +33,7 @@ impl Base {
                         )
                     );
                 }
-        
+
                 return Ok(());
             }
             Err(error) => {
@@ -50,11 +49,11 @@ impl Base {
 
     pub async fn update<'a>(
         connection: &'a mut Connection,
-        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
+        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<(), ErrorAuditor> {
-        if let Err(mut error) = Self::create(connection, json_refresh_web_token).await {
+        if let Err(mut error) = Self::create(connection, application_user_access_refresh_token).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
             return Err(error);
         }
 
@@ -63,11 +62,11 @@ impl Base {
 
     pub async fn delete<'a>(
         connection: &'a mut Connection,
-        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
+        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<(), ErrorAuditor> {
         if let Err(error) = connection.del::<String, ()>(
             StorageKeyResolver::get_5(
-                json_refresh_web_token.get_application_user_id(), json_refresh_web_token.get_application_user_log_in_token_device_id()
+                application_user_access_refresh_token.get_application_user_id(), application_user_access_refresh_token.get_application_user_log_in_token_device_id()
             )
         ).await {
             return Err(
@@ -77,7 +76,7 @@ impl Base {
                 )
             );
         }
-        
+
         return Ok(());
     }
 }

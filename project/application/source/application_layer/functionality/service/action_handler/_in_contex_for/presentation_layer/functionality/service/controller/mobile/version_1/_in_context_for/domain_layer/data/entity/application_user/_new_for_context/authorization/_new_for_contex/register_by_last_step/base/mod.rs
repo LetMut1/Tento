@@ -115,7 +115,7 @@ impl Base {
                                                                                                                     //     return Err(error);
                                                                                                                     // }
 
-                                                                                                                    match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token) {
+                                                                                                                    match JsonAccessWebTokenFactory::create_from_application_user_access_refresh_token(&json_refresh_web_token) {
                                                                                                                         Ok(ref json_access_web_token) => {
                                                                                                                             match SerializationFormResolver::serialize(environment_configuration_resolver, json_access_web_token) {
                                                                                                                                 Ok(json_access_web_token_) => {

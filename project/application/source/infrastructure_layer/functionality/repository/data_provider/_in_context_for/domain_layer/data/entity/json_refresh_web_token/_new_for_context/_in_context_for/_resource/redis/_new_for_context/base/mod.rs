@@ -1,5 +1,4 @@
-use crate::domain_layer::data::entity::json_refresh_web_token::JsonRefreshWebToken;
-use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::_new_for_context::common::Common;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -14,31 +13,17 @@ pub struct Base;
 
 impl Base {
     pub async fn find_by_application_user_id_and_application_user_log_in_token_device_id<'a>(
-        connection: &'a mut Connection, 
-        application_user_id: i64, 
+        connection: &'a mut Connection,
+        application_user_id: i64,
         application_user_log_in_token_device_id: &'a str,
-    ) -> Result<Option<JsonRefreshWebToken<'static>>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserAccessRefreshToken<'static>>, ErrorAuditor> {
         match connection.get::<String, Option<Vec<u8>>>(StorageKeyResolver::get_5(application_user_id, application_user_log_in_token_device_id)).await {
             Ok(data) => {
                 match data {
                     Some(data_) => {
-                        match rmp_serde::from_read_ref::<'_, [u8], Common<'static>>(data_.as_slice()) {
-                            Ok(common) => {
-                                let (
-                                    json_access_web_token_id,
-                                    application_user_id,
-                                    application_user_log_in_token_device_id,
-                                    json_refresh_web_token_obfuscation_value
-                                ) = common.into_inner();
-                        
-                                let json_refresh_web_token = JsonRefreshWebToken::new(
-                                    json_access_web_token_id.into_owned(),
-                                    application_user_id,
-                                    application_user_log_in_token_device_id,
-                                    json_refresh_web_token_obfuscation_value.into_owned()
-                                );
-                
-                                return Ok(Some(json_refresh_web_token));
+                        match rmp_serde::from_read_ref::<'_, [u8], ApplicationUserAccessRefreshToken<'static>>(data_.as_slice()) {
+                            Ok(application_user_refresh_token) => {
+                                return Ok(Some(application_user_refresh_token));
                             }
                             Err(error) => {
                                 return Err(
@@ -67,11 +52,11 @@ impl Base {
     }
 
     pub async fn find_by_application_user_id_and_application_user_log_in_token_device_id_registry<'a>(
-        connection: &'a mut Connection, 
-        application_user_id: i64, 
+        connection: &'a mut Connection,
+        application_user_id: i64,
         application_user_log_in_token_device_id_registry: Vec<String>
-    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, ErrorAuditor> {
-        let mut json_refresh_web_token_registry: Vec<JsonRefreshWebToken<'_>> = vec![];
+    ) -> Result<Option<Vec<ApplicationUserAccessRefreshToken<'static>>>, ErrorAuditor> {
+        let mut json_refresh_web_token_registry: Vec<ApplicationUserAccessRefreshToken<'_>> = vec![];
 
         '_a: for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
             match Self::find_by_application_user_id_and_application_user_log_in_token_device_id(
@@ -84,7 +69,7 @@ impl Base {
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
                     return Err(error);
                 }
             }

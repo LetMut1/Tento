@@ -8,24 +8,22 @@ pub struct SignatureCreator;
 impl SignatureCreator {
     pub fn create<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        header: &'a str,
-        payload: &'a str
+        application_user_access_token_serialized: &'a str
     ) -> String {
         let mut hmac = Hmac::new(
             Sha512::new(),
             environment_configuration_resolver.get_security_jawt_signature_encoding_private_key().as_bytes()
         );
-        hmac.input((header.to_string() + payload).as_bytes());
+        hmac.input(application_user_access_token_serialized.as_bytes());
 
         return hex::encode(hmac.result().code());   // TODO TIme attack
     }
 
     pub fn is_valid<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        header: &'a str,
-        payload: &'a str,
-        signature: &'a str
+        application_user_access_token_serialized: &'a str,
+        application_user_access_token_signature: &'a str
     ) -> bool {
-        return Self::create(environment_configuration_resolver, header, payload).as_bytes() == signature.as_bytes();
+        return Self::create(environment_configuration_resolver, application_user_access_token_serialized).as_bytes() == application_user_access_token_signature.as_bytes();
     }
 }

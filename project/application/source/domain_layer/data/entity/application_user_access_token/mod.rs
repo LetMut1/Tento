@@ -1,5 +1,8 @@
+use serde::Deserialize;
+use serde::Serialize;
 use std::borrow::Cow;
 
+#[derive(Serialize, Deserialize)]
 pub struct ApplicationUserAccessToken<'a> {
     id: Cow<'a, str>,
     application_user_id: i64,

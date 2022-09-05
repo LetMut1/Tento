@@ -5,8 +5,8 @@ use crate::application_layer::data::data_transfer_object::_in_context_for::appli
 use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_workflow_exception::ApplicationUserLogInTokenWorkflowException;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
+use crate::domain_layer::data::entity::application_user_access_token_black_list::ApplicationUserAccessTokenBlackList;
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::domain_layer::data::entity::json_access_web_token_black_list::JsonAccessWebTokenBlackList;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
@@ -73,24 +73,24 @@ impl Base {
                                                     match JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
                                                         redis_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                                                     ).await {
-                                                        Ok(json_refresh_web_token) => {
-                                                            if let Some(json_refresh_web_token_) = json_refresh_web_token {
+                                                        Ok(application_user_access_refresh_token) => {
+                                                            if let Some(application_user_access_refresh_token_) = application_user_access_refresh_token {
                                                                 if let Err(mut error) = JsonAccessWebTokenBlackListStateManagerRedis::create(
-                                                                    redis_connection, &JsonAccessWebTokenBlackList::new(json_refresh_web_token_.get_json_access_web_token_id())
+                                                                    redis_connection, &ApplicationUserAccessTokenBlackList::new(application_user_access_refresh_token_.get_application_user_access_token_id())
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                                     return Err(error);
                                                                 }
 
-                                                                if let Err(mut error) = RepositoryProxy::delete(redis_connection, &json_refresh_web_token_).await {
+                                                                if let Err(mut error) = RepositoryProxy::delete(redis_connection, &application_user_access_refresh_token_).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                                     return Err(error);
                                                                 }
                                                             }
 
-                                                            let json_refresh_web_token_ = JsonRefreshWebTokenFactory::create_from_id_registry(
+                                                            let application_user_access_refresh_token_ = JsonRefreshWebTokenFactory::create_from_id_registry(
                                                                 application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                                                             );
 
@@ -102,19 +102,19 @@ impl Base {
                                                                 return Err(error);
                                                             }
 
-                                                            if let Err(mut error) = RepositoryProxy::create(redis_connection, &json_refresh_web_token_).await {
+                                                            if let Err(mut error) = RepositoryProxy::create(redis_connection, &application_user_access_refresh_token_).await {
                                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                                 return Err(error);
                                                             }
 
-                                                            match JsonAccessWebTokenFactory::create_from_json_refresh_web_token(&json_refresh_web_token_) {
-                                                                Ok(ref json_access_web_token) => {
-                                                                    match SerializationFormResolver::serialize(environment_configuration_resolver, json_access_web_token) {
-                                                                        Ok(json_access_web_token_) => {
-                                                                            match Encoder::encode(environment_configuration_resolver, &json_refresh_web_token_) {
-                                                                                Ok(json_refresh_web_token_) => {
-                                                                                    return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(json_access_web_token_, json_refresh_web_token_)));
+                                                            match JsonAccessWebTokenFactory::create_from_application_user_access_refresh_token(&application_user_access_refresh_token_) {
+                                                                Ok(ref application_user_access_token) => {
+                                                                    match SerializationFormResolver::serialize(environment_configuration_resolver, application_user_access_token) {
+                                                                        Ok(application_user_access_token_) => {
+                                                                            match Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
+                                                                                Ok(application_user_access_refresh_token_) => {
+                                                                                    return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(application_user_access_token_, application_user_access_refresh_token_)));
                                                                                 }
                                                                                 Err(mut error) => {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

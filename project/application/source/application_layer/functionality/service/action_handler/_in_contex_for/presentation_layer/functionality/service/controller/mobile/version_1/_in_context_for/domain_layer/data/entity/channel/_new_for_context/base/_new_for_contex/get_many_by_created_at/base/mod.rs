@@ -53,7 +53,7 @@ impl Base {
                 match Extractor::extract(environment_configuration_resolver, json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
                     Ok(result) => {
                         match result {
-                            ExtractorResult::JsonAccessWebToken { json_access_web_token: _ } => {
+                            ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {
                                 if let Some(ref channel_created_at_) = channel_created_at {
                                     if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
                                         return Err(
@@ -103,10 +103,10 @@ impl Base {
                                     }
                                 }
                             }
-                            ExtractorResult::JsonAccessWebTokenAlreadyExpired => {
+                            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                                 return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(JsonAccessWebTokenWorkflowException::AlreadyExpired));
                             }
-                            ExtractorResult::JsonAccessWebTokenInJsonAccessWebTokenBlackList => {
+                            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                                 return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(JsonAccessWebTokenWorkflowException::InJsonAccessWebTokenBlackList));
                             }
                         }

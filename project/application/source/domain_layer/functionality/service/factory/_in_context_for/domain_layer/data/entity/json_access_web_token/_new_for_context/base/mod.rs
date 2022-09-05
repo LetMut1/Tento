@@ -1,6 +1,5 @@
-use crate::domain_layer::data::entity::json_access_web_token::_component::payload::Payload;
-use crate::domain_layer::data::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
-use crate::domain_layer::data::entity::json_refresh_web_token::JsonRefreshWebToken;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
@@ -9,35 +8,17 @@ use std::borrow::Cow;
 pub struct Base;
 
 impl Base {
-    pub fn create<'a>(
-        json_access_web_token_id: Cow<'a, str>,
-        application_user_id: i64,
-        application_user_log_in_token_device_id: Cow<'a, str>,
-        expiration_time: String
-    ) -> JsonAccessWebToken<'a> {
-        return JsonAccessWebToken::new(
-            Payload::new(
-                json_access_web_token_id,
-                application_user_id,
-                application_user_log_in_token_device_id,
-                expiration_time
-            )
-        );
-    }
-
-    pub fn create_from_json_refresh_web_token<'a>(
-        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
-    ) -> Result<JsonAccessWebToken<'a>, ErrorAuditor> {
-        match DateTimeResolver::add_interval_from_now(JsonAccessWebToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
+    pub fn create_from_application_user_access_refresh_token<'a>(
+        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
+    ) -> Result<ApplicationUserAccessToken<'a>, ErrorAuditor> {
+        match DateTimeResolver::add_interval_from_now(ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
             Ok(expiration_time) => {
                 return Ok(
-                    JsonAccessWebToken::new(
-                        Payload::new(
-                            Cow::Borrowed(json_refresh_web_token.get_json_access_web_token_id()),
-                            json_refresh_web_token.get_application_user_id(),
-                            Cow::Borrowed(json_refresh_web_token.get_application_user_log_in_token_device_id()),
-                            expiration_time
-                        )
+                    ApplicationUserAccessToken::new(
+                        Cow::Borrowed(application_user_access_refresh_token.get_application_user_access_token_id()),
+                        application_user_access_refresh_token.get_application_user_id(),
+                        Cow::Borrowed(application_user_access_refresh_token.get_application_user_log_in_token_device_id()),
+                        expiration_time
                     )
                 );
             }

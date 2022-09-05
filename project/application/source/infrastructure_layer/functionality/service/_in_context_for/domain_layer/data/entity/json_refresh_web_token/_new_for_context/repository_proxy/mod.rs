@@ -1,4 +1,4 @@
-use crate::domain_layer::data::entity::json_refresh_web_token::JsonRefreshWebToken;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
@@ -11,11 +11,11 @@ pub struct RepositoryProxy;
 impl RepositoryProxy {                                  // TODO после переноса токенов в бд разобраться, нужно ли это.
     pub async fn create<'a>(
         connection: &'a mut Connection,
-        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
+        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<(), ErrorAuditor> {
-        let application_user_log_in_token_device_id = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
+        let application_user_log_in_token_device_id = application_user_access_refresh_token.get_application_user_log_in_token_device_id().to_string();
 
-        match DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id()).await {
+        match DeviceIdProcessingStorage::get(connection, application_user_access_refresh_token.get_application_user_id()).await {
             Ok(application_user_log_in_token_device_id_registry) => {
                 match application_user_log_in_token_device_id_registry {
                     Some(mut application_user_log_in_token_device_id_registry_) => {
@@ -23,14 +23,14 @@ impl RepositoryProxy {                                  // TODO после пе�
                             application_user_log_in_token_device_id_registry_.push(application_user_log_in_token_device_id);
 
                             if let Err(mut error) = DeviceIdProcessingStorage::update(
-                                connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry_
+                                connection, application_user_access_refresh_token.get_application_user_id(), application_user_log_in_token_device_id_registry_
                             ).await {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 return Err(error);
                             }
                         } else {
-                            if let Err(mut error) = DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id()).await {
+                            if let Err(mut error) = DeviceIdProcessingStorage::update_expiration_time(connection, application_user_access_refresh_token.get_application_user_id()).await {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 return Err(error);
@@ -39,7 +39,7 @@ impl RepositoryProxy {                                  // TODO после пе�
                     }
                     None => {
                         if let Err(mut error) = DeviceIdProcessingStorage::create(
-                            connection, json_refresh_web_token.get_application_user_id(), vec![application_user_log_in_token_device_id]
+                            connection, application_user_access_refresh_token.get_application_user_id(), vec![application_user_log_in_token_device_id]
                         ).await {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -48,7 +48,7 @@ impl RepositoryProxy {                                  // TODO после пе�
                     }
                 }
 
-                if let Err(mut error) = JsonRefreshWebTokenStateManagerRedis::create(connection, json_refresh_web_token).await {
+                if let Err(mut error) = JsonRefreshWebTokenStateManagerRedis::create(connection, application_user_access_refresh_token).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                     return Err(error);
@@ -66,15 +66,15 @@ impl RepositoryProxy {                                  // TODO после пе�
 
     pub async fn update<'a>(
         connection: &'a mut Connection,
-        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
+        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<(), ErrorAuditor> {
-        if let Err(mut error) = DeviceIdProcessingStorage::update_expiration_time(connection, json_refresh_web_token.get_application_user_id()).await {
+        if let Err(mut error) = DeviceIdProcessingStorage::update_expiration_time(connection, application_user_access_refresh_token.get_application_user_id()).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
         }
 
-        if let Err(mut error) = JsonRefreshWebTokenStateManagerRedis::update(connection, json_refresh_web_token).await {
+        if let Err(mut error) = JsonRefreshWebTokenStateManagerRedis::update(connection, application_user_access_refresh_token).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
@@ -85,18 +85,18 @@ impl RepositoryProxy {                                  // TODO после пе�
 
     pub async fn delete<'a>(
         connection: &'a mut Connection,
-        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
+        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<(), ErrorAuditor> {
-        if let Err(mut error) = JsonRefreshWebTokenStateManagerRedis::delete(connection, json_refresh_web_token).await {
+        if let Err(mut error) = JsonRefreshWebTokenStateManagerRedis::delete(connection, application_user_access_refresh_token).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
         }
 
-        match DeviceIdProcessingStorage::get(connection, json_refresh_web_token.get_application_user_id()).await {
+        match DeviceIdProcessingStorage::get(connection, application_user_access_refresh_token.get_application_user_id()).await {
             Ok(application_user_log_in_token_device_id_registry) => {
                 if let Some(mut application_user_log_in_token_device_id_registry_) = application_user_log_in_token_device_id_registry {
-                    let application_user_log_in_token_device_id = json_refresh_web_token.get_application_user_log_in_token_device_id().to_string();
+                    let application_user_log_in_token_device_id = application_user_access_refresh_token.get_application_user_log_in_token_device_id().to_string();
 
                     let mut aplication_user_log_in_token_device_id_index: Option<usize> = None;
 
@@ -113,14 +113,14 @@ impl RepositoryProxy {                                  // TODO после пе�
 
                         if !application_user_log_in_token_device_id_registry_.is_empty() {
                             if let Err(mut error) = DeviceIdProcessingStorage::update(
-                                connection, json_refresh_web_token.get_application_user_id(), application_user_log_in_token_device_id_registry_
+                                connection, application_user_access_refresh_token.get_application_user_id(), application_user_log_in_token_device_id_registry_
                             ).await {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 return Err(error);
                             }
                         } else {
-                            if let Err(mut error) = DeviceIdProcessingStorage::delete(connection, json_refresh_web_token.get_application_user_id()).await {
+                            if let Err(mut error) = DeviceIdProcessingStorage::delete(connection, application_user_access_refresh_token.get_application_user_id()).await {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 return Err(error);
@@ -142,7 +142,7 @@ impl RepositoryProxy {                                  // TODO после пе�
     pub async fn get_by_application_user_id<'a>(
         connection: &'a mut Connection,
         application_user_id: i64
-    ) -> Result<Option<Vec<JsonRefreshWebToken<'static>>>, ErrorAuditor> {
+    ) -> Result<Option<Vec<ApplicationUserAccessRefreshToken<'static>>>, ErrorAuditor> {
         match DeviceIdProcessingStorage::get(connection, application_user_id).await {
             Ok(application_user_log_in_token_device_id_registry) => {
                 if let Some(application_user_log_in_token_device_id_registry_) = application_user_log_in_token_device_id_registry {

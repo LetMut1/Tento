@@ -1,5 +1,4 @@
-use crate::domain_layer::data::data_transfer_object::_in_context_for::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::encoder::_new_fro_context::common::Common;
-use crate::domain_layer::data::entity::json_refresh_web_token::JsonRefreshWebToken;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
@@ -15,9 +14,9 @@ pub struct Encoder;
 impl Encoder {
     pub fn encode<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        json_refresh_web_token: &'a JsonRefreshWebToken<'_>
+        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<String, ErrorAuditor> {
-        match serde_json::to_vec(&Common::new(json_refresh_web_token)) {
+        match serde_json::to_vec(application_user_access_refresh_token) {
             Ok(data) => {
                 let mut hmac = Hmac::new(
                     Sha512::new(),
@@ -40,12 +39,12 @@ impl Encoder {
 
     pub fn is_valid<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        json_refresh_web_token: &'a JsonRefreshWebToken<'_>,
-        json_refresh_web_token_hash: &'a str
+        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
+        application_user_access_refresh_token_web_form: &'a str
     ) -> Result<bool, ErrorAuditor> {
-        match Self::encode(environment_configuration_resolver, json_refresh_web_token) {
-            Ok(json_refresh_web_token_hash_) => {
-                return Ok(json_refresh_web_token_hash_.as_bytes() == json_refresh_web_token_hash.as_bytes());
+        match Self::encode(environment_configuration_resolver, application_user_access_refresh_token) {
+            Ok(application_user_access_refresh_token_web_form_) => {
+                return Ok(application_user_access_refresh_token_web_form_.as_bytes() == application_user_access_refresh_token_web_form.as_bytes());
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

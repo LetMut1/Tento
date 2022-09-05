@@ -53,7 +53,7 @@ impl Base {
                 match Extractor::extract(environment_configuration_resolver, json_access_web_token.as_str(), &mut *redis_pooled_connection).await {
                     Ok(result) => {
                         match result {
-                            ExtractorResult::JsonAccessWebToken { json_access_web_token: _ } => {
+                            ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {
                                 if !(Self::LIMIT_MINIMUM_VALUE..=Self::LIMIT_MAXIMUM_VALUE).contains(&limit) {
                                     limit = Self::LIMIT_MINIMUM_VALUE;
                                 }
@@ -92,10 +92,10 @@ impl Base {
                                     }
                                 }
                             }
-                            ExtractorResult::JsonAccessWebTokenAlreadyExpired => {
+                            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                                 return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(JsonAccessWebTokenWorkflowException::AlreadyExpired));
                             }
-                            ExtractorResult::JsonAccessWebTokenInJsonAccessWebTokenBlackList => {
+                            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                                 return Ok(ActionHandlerResult::new_with_json_access_web_token_workflow_exception(JsonAccessWebTokenWorkflowException::InJsonAccessWebTokenBlackList));
                             }
                         }

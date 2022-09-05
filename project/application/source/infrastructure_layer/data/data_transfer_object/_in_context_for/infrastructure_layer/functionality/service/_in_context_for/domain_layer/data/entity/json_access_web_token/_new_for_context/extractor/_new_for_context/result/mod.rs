@@ -1,9 +1,9 @@
-use crate::domain_layer::data::entity::json_access_web_token::json_access_web_token::JsonAccessWebToken;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 
 pub enum Result {
-    JsonAccessWebToken {
-        json_access_web_token: JsonAccessWebToken<'static>
+    ApplicationUserAccessToken {
+        application_user_access_token: ApplicationUserAccessToken<'static>
     },
-    JsonAccessWebTokenAlreadyExpired,
-    JsonAccessWebTokenInJsonAccessWebTokenBlackList
+    ApplicationUserAccessTokenAlreadyExpired,
+    ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList
 }
