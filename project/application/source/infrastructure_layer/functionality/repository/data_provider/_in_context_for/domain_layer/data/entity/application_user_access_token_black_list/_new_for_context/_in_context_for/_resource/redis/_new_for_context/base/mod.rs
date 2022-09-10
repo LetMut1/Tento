@@ -10,11 +10,11 @@ use redis::AsyncCommands;
 pub struct Base;
 
 impl Base {
-    pub async fn is_exist_by_json_access_token_id<'a>(
+    pub async fn is_exist_by_application_user_access_token_id<'a>(
         connection: &'a mut Connection,
-        json_access_web_token_id: &'a str
+        application_user_access_token_id: &'a str
     ) -> Result<bool, ErrorAuditor> {
-        match connection.exists::<String, bool>(StorageKeyResolver::get_4(json_access_web_token_id)).await {
+        match connection.exists::<String, bool>(StorageKeyResolver::get_4(application_user_access_token_id)).await {
             Ok(result) => {
                 return Ok(result);
             }

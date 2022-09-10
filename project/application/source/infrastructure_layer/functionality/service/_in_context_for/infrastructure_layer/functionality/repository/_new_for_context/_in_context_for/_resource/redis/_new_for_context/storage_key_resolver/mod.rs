@@ -2,7 +2,7 @@ pub struct StorageKeyResolver;
 
 impl StorageKeyResolver {                                           // TODO УДалить или закомментировать при переходе на Постгер
     const PREFIX_1: &'static str = "1:";
-    const PREFIX_2: &'static str = "2:"; 
+    const PREFIX_2: &'static str = "2:";
     const PREFIX_3: &'static str = "3:";
     const PREFIX_4: &'static str = "4:";
     const PREFIX_5: &'static str = "5:";
@@ -28,9 +28,9 @@ impl StorageKeyResolver {                                           // TODO УД
     }
 
     pub fn get_4<'a>(
-        json_access_web_token_id: &'a str
+        application_user_access_token_id: &'a str
     ) -> String {
-        return Self::PREFIX_4.to_string() + json_access_web_token_id;
+        return Self::PREFIX_4.to_string() + application_user_access_token_id;
     }
 
     pub fn get_5<'a>(

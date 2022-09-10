@@ -47,8 +47,8 @@ struct Data<S>
  - Every endpoint at this area requires an existing of `access token`
  - Response of EVERY endpoint at this area can contain `communication_code` equals to
  ```
-  - enjsacweto03
-  - enjsacweto05
+  - ENTITY_APPLICATION_USER_ACCESS_TOKEN_ALREADY_EXPIRED
+  - ENTITY_APPLICATION_USER_ACCESS_TOKEN_IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
  ```
  - ## /v1/m/au/lofod (log_out_from_one_device) POST
 ```
@@ -61,8 +61,8 @@ struct Base {
 
 Result data is absent.
 
-Error codes:
-- enjsreweto02
+Communication codes:
+- ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_NOT_FOUND
 
 ```
  - ## /v1/m/au/lofad (log_out_from_all_devices) POST
@@ -76,8 +76,8 @@ struct Base {
 
 Result data is absent.
 
-Error codes:
-- enjsreweto02
+Communication codes:
+- ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_NOT_FOUND
 ```
 # Area for not authorized application user. API:
  - ## /v1/m/au/cefe (check_email_for_existing) POST (GET functional)
@@ -94,8 +94,8 @@ struct Base {
     result: bool
 }
 
-Error codes:
-- enapus05
+Communication codes:
+- ENTITY_APPLICATION_USER_INVALID_EMAIL
 ```
  - ## /v1/m/au/cnfe (check_nickname_for_existing) POST (GET functional)
 ```
@@ -111,8 +111,8 @@ struct Base {
     result: bool
 }
 
-Error codes:
-- enapus06
+Communication codes:
+- ENTITY_APPLICATION_USER_INVALID_NICKNAME
 ```
  - ## /v1/m/au/rbfs (register_by_first_step) POST
 ```
@@ -125,9 +125,9 @@ struct Base {
 
 Result data is absent.
 
-Error codes:
-- enapus01
-- enapus05
+Communication codes:
+- ENTITY_APPLICATION_USER_INVALID_EMAIL
+- ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
 ```
 - ## /v1/m/au/rbss (register_by_second_step) POST
 ```
@@ -144,11 +144,11 @@ struct Base {
     application_user_registration_confirmation_token_is_approved: bool
 }
 
-Error codes:
-- enapus05
-- enapusrecoto02
-- enapusrecoto03
-- enapusrecoto06
+Communication codes:
+- ENTITY_APPLICATION_USER_INVALID_EMAIL
+- ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE
+- ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
+- ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_ALREADY_APPROVED
 ```
 
  - ## /v1/m/au/rbls (register_by_last_step) POST
@@ -170,16 +170,16 @@ struct Base {
     application_user_access_refresh_token_web_form: String
 }
 
-Error codes:
-- enapus01
-- enapus02
-- enapus05
-- enapus06
-- enapus07
-- enapusrecoto02
-- enapusrecoto03
-- enapusrecoto04
-- enapusrecoto05
+Communication codes:
+- ENTITY_APPLICATION_USER_INVALID_PASSWORD
+- ENTITY_APPLICATION_USER_INVALID_NICKNAME
+- ENTITY_APPLICATION_USER_INVALID_EMAIL
+- ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST
+- ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST
+- ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE
+- ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
+- ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_IS_NOT_APPROVED
+- ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_WRONG_VALUE
 ```
  - ## /v1/m/au/sefr (send_email_for_register) POST
 ```
@@ -192,10 +192,10 @@ struct Base {
 
 Result data is absent.
 
-Error codes:
-- enapus05
-- enapusrecoto02
-- enapusrecoto06
+Communication codes:
+- ENTITY_APPLICATION_USER_INVALID_EMAIL
+- ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND
+- ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_ALREADY_APPROVED
 ```
  - ## /v1/m/au/libfs (log_in_by_first_step) POST
 ```
@@ -213,8 +213,8 @@ struct Base {
     application_user_id: i64
 }
 
-Error codes:
-- enapus04
+Communication codes:
+- ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
 ```
  - ## /v1/m/au/libls (log_in_by_last_step) POST
 ```
@@ -233,10 +233,10 @@ struct Base {
     application_user_access_refresh_token_web_form: String
 }
 
-Error codes:
-- enapuslointo02
-- enapuslointo03
-- enapuslointo04
+Communication codes:
+- ENTITY_APPLICATION_USER_LOG_IN_TOKEN_INVALID_VALUE
+- ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
+- ENTITY_APPLICATION_USER_LOG_IN_TOKEN_WRONG_VALUE
 ```
  - ## /v1/m/au/sefli (send_email_for_log_in) POST
 ```
@@ -250,9 +250,9 @@ struct Base {
 
 Result data is absent.
 
-Error codes:
-- enapus03
-- enapuslointo02
+Communication codes:
+- ENTITY_APPLICATION_USER_NOT_FOUND
+- ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND
 ```
  - ## /v1/m/au/rpbfs (reset_password_by_first_step) POST
 ```
@@ -268,9 +268,9 @@ struct Base {
     application_user_id: i64
 }
 
-Error codes:
-- enapus03
-- enapus05
+Communication codes:
+- ENTITY_APPLICATION_USER_INVALID_EMAIL
+- ENTITY_APPLICATION_USER_NOT_FOUND
 ```
  - ## /v1/m/au/rpbss (reset_password_by_second_step) POST
 ```
@@ -287,10 +287,10 @@ struct Base {
     application_user_reset_password_token_is_approved: bool
 }
 
-Error codes:
-- enapusrepato02
-- enapusrepato03
-- enapusrepato06
+Communication codes:
+- ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
+- ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
+- ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_ALREADY_APPROVED
 ```
  - ## /v1/m/au/rpbls (reset_password_by_last_step) POST
 ```
@@ -305,13 +305,13 @@ struct Base {
 
 Result data is absent.
 
-Error codes:
-- enapus03
-- enapus07
-- enapusrepato02
-- enapusrepato03
-- enapusrepato04
-- enapusrepato05
+Communication codes:
+- ENTITY_APPLICATION_USER_INVALID_PASSWORD
+- ENTITY_APPLICATION_USER_NOT_FOUND
+- ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE
+- ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
+- ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_IS_NOT_APPROVED
+- ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_WRONG_VALUE
 ```
  - ## /v1/m/au/sefrp (send_email_for_reset_password) POST
 ```
@@ -324,10 +324,10 @@ struct Base {
 
 Result data is absent.
 
-Error codes:
-- enapus03
-- enapusrepato02
-- enapusrepato06
+Communication codes:
+- ENTITY_APPLICATION_USER_NOT_FOUND
+- ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND
+- ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_ALREADY_APPROVED
 ```
  - ## /v1/m/au/rauat (refresh_application_user_access_token) POST
 ```
@@ -345,9 +345,9 @@ struct Base {
     application_user_access_refresh_token_web_form: String
 }
 
-Error codes:
-- enjsacweto04
-- enjsreweto02
+Communication codes:
+- ENTITY_APPLICATION_USER_ACCESS_TOKEN_NOT_EXPIRED
+- ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_NOT_FOUND
 ```
 <!-- ## /v1/m/a/c/gmbn GET
 Returns Channel registry by Channel Name.

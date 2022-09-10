@@ -25,9 +25,9 @@ impl CommunicationCodeRegistry {
     pub const ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_IS_NOT_APPROVED: &'static str = "enapusrepato05";
     pub const ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_ALREADY_APPROVED: &'static str = "enapusrepato06";
 
-    pub const ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED: &'static str = "enjsacweto03";
-    pub const ENTITY_JSON_ACCESS_WEB_TOKEN_NOT_EXPIRED: &'static str = "enjsacweto04";
-    pub const ENTITY_JSON_ACCESS_WEB_TOKEN_IN_JSON_ACCESS_WEB_TOKEN_BLACK_LIST: &'static str = "enjsacweto05";
+    pub const ENTITY_APPLICATION_USER_ACCESS_TOKEN_ALREADY_EXPIRED: &'static str = "enapusacto03";
+    pub const ENTITY_APPLICATION_USER_ACCESS_TOKEN_NOT_EXPIRED: &'static str = "enapusacto04";
+    pub const ENTITY_APPLICATION_USER_ACCESS_TOKEN_IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST: &'static str = "enapusacto05";
 
-    pub const ENTITY_JSON_REFRESH_WEB_TOKEN_NOT_FOUND: &'static str = "enjsreweto02";
+    pub const ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_NOT_FOUND: &'static str = "enapusacreto02";
 }

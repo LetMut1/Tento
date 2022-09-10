@@ -9,7 +9,6 @@ use crate::infrastructure_layer::functionality::service::_in_context_for::infras
 use redis::aio::Connection;
 use redis::AsyncCommands;
 
-/// Should only be used in use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy.
 pub struct Base;
 
 impl Base {

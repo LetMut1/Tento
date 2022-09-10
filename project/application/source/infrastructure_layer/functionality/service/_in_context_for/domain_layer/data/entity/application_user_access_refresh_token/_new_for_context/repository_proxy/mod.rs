@@ -1,8 +1,8 @@
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenStateManagerRedis;
+use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserAccessRefreshTokenDataProviderRedis;
+use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserAccessRefreshTokenStateManagerRedis;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::device_id_processing_storage::DeviceIdProcessingStorage;
 use redis::aio::Connection;
 
@@ -48,7 +48,7 @@ impl RepositoryProxy {                                  // TODO после пе�
                     }
                 }
 
-                if let Err(mut error) = JsonRefreshWebTokenStateManagerRedis::create(connection, application_user_access_refresh_token).await {
+                if let Err(mut error) = ApplicationUserAccessRefreshTokenStateManagerRedis::create(connection, application_user_access_refresh_token).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                     return Err(error);
@@ -74,7 +74,7 @@ impl RepositoryProxy {                                  // TODO после пе�
             return Err(error);
         }
 
-        if let Err(mut error) = JsonRefreshWebTokenStateManagerRedis::update(connection, application_user_access_refresh_token).await {
+        if let Err(mut error) = ApplicationUserAccessRefreshTokenStateManagerRedis::update(connection, application_user_access_refresh_token).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
@@ -87,7 +87,7 @@ impl RepositoryProxy {                                  // TODO после пе�
         connection: &'a mut Connection,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<(), ErrorAuditor> {
-        if let Err(mut error) = JsonRefreshWebTokenStateManagerRedis::delete(connection, application_user_access_refresh_token).await {
+        if let Err(mut error) = ApplicationUserAccessRefreshTokenStateManagerRedis::delete(connection, application_user_access_refresh_token).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
@@ -146,11 +146,11 @@ impl RepositoryProxy {                                  // TODO после пе�
         match DeviceIdProcessingStorage::get(connection, application_user_id).await {
             Ok(application_user_log_in_token_device_id_registry) => {
                 if let Some(application_user_log_in_token_device_id_registry_) = application_user_log_in_token_device_id_registry {
-                    match JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id_registry(
+                    match ApplicationUserAccessRefreshTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id_registry(
                         connection, application_user_id, application_user_log_in_token_device_id_registry_
                     ).await {
-                        Ok(json_refresh_web_token) => {
-                            return Ok(json_refresh_web_token);
+                        Ok(application_user_access_refresh_token) => {
+                            return Ok(application_user_access_refresh_token);
                         }
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
