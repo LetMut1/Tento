@@ -16,25 +16,22 @@ impl SerializationFormResolver {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>
     ) -> Result<String, ErrorAuditor> {
-        match serde_json::to_vec(application_user_access_token) {
-            Ok(application_user_access_token_serialized) => {
-                let application_user_access_token_serialized_ = base64::encode_config(application_user_access_token_serialized.as_slice(), base64::STANDARD);
-
-                let application_user_access_token_signature = SignatureCreator::create(environment_configuration_resolver, application_user_access_token_serialized_.as_str());
-
-                let application_user_access_token_web_form = application_user_access_token_serialized_ + Self::TOKEN_PARTS_SEPARATOR + application_user_access_token_signature.as_str();
-
-                return Ok(application_user_access_token_web_form);
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
+        let mut data: Vec<u8> = vec![];
+        if let Err(error) = rmp_serde::encode::write(&mut data, application_user_access_token) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
         }
+        let application_user_access_token_serialized = base64::encode_config(data.as_slice(), base64::STANDARD);  // TODO TODO TODO TODO TODO Можно ли здесь использовать Бэйс64 на байтф мессаджПака?
+
+        let application_user_access_token_signature = SignatureCreator::create(environment_configuration_resolver, application_user_access_token_serialized.as_str());
+
+        let application_user_access_token_web_form = application_user_access_token_serialized + Self::TOKEN_PARTS_SEPARATOR + application_user_access_token_signature.as_str();
+
+        return Ok(application_user_access_token_web_form);
     }
 
     pub fn deserialize<'a>(
@@ -49,7 +46,7 @@ impl SerializationFormResolver {
             && SignatureCreator::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
             match base64::decode_config(token_part_registry[0].as_bytes(), base64::STANDARD) {
                 Ok(data) => {
-                    match serde_json::from_slice::<'_, ApplicationUserAccessToken<'static>>(data.as_slice()) {
+                    match rmp_serde::from_read_ref::<'_, [u8], ApplicationUserAccessToken<'static>>(data.as_slice()) {
                         Ok(application_user_access_token) => {
                             return Ok(application_user_access_token);
                         }

@@ -16,25 +16,25 @@ impl Encoder {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<String, ErrorAuditor> {
-        match serde_json::to_vec(application_user_access_refresh_token) {
-            Ok(data) => {
-                let mut hmac = Hmac::new(
-                    Sha512::new(),
-                    environment_configuration_resolver.get_security_auart_encoding_private_key().as_bytes()
-                );
-                hmac.input(data.as_slice());
-
-                return Ok(hex::encode(hmac.result().code()));   // TODO  TODO TODO time attac
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
+        let mut data: Vec<u8> = vec![];
+        if let Err(error) = rmp_serde::encode::write(&mut data, application_user_access_refresh_token) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
         }
+
+        let mut hmac = Hmac::new(
+            Sha512::new(),
+            environment_configuration_resolver.get_security_auart_encoding_private_key().as_bytes()
+        );
+        hmac.input(data.as_slice());
+
+        let application_user_access_refresh_token_web_form = hex::encode(hmac.result().code());     // TODO  TODO TODO time attac// TODO TODO TODO TODO TODO Валидно ли кодирует ХЕКС, если это Байты МессаджПака?
+
+        return Ok(application_user_access_refresh_token_web_form);
     }
 
     pub fn is_valid<'a>(
