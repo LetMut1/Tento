@@ -12,7 +12,7 @@ impl SignatureCreator {
     ) -> String {
         let mut hmac = Hmac::new(
             Sha512::new(),
-            environment_configuration_resolver.get_security_jawt_signature_encoding_private_key().as_bytes()
+            environment_configuration_resolver.get_security_auat_signature_encoding_private_key().as_bytes()
         );
         hmac.input(application_user_access_token_serialized.as_bytes());
 

@@ -20,7 +20,7 @@ impl Encoder {
             Ok(data) => {
                 let mut hmac = Hmac::new(
                     Sha512::new(),
-                    environment_configuration_resolver.get_security_jrwt_encoding_private_key().as_bytes()
+                    environment_configuration_resolver.get_security_auart_encoding_private_key().as_bytes()
                 );
                 hmac.input(data.as_slice());
 

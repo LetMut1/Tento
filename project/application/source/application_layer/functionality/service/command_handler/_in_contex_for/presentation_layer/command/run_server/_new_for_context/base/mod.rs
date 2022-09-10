@@ -225,12 +225,12 @@ impl Base {
                     }
                 }
 
-                let security_jrwt_encoding_private_key: String;
-                match env::var(EnvironmentConfigurationResolver::SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY) {
-                    Ok(security_jrwt_encoding_private_key_) => {
-                        security_jrwt_encoding_private_key = security_jrwt_encoding_private_key_;
+                let security_auart_encoding_private_key: String;
+                match env::var(EnvironmentConfigurationResolver::SECURITY_AUART_ENCODING_PRIVATE_KEY_KEY) {
+                    Ok(security_auart_encoding_private_key_) => {
+                        security_auart_encoding_private_key = security_auart_encoding_private_key_;
 
-                        env::remove_var(EnvironmentConfigurationResolver::SECURITY_JRWT_ENCODING_PRIVATE_KEY_KEY);
+                        env::remove_var(EnvironmentConfigurationResolver::SECURITY_AUART_ENCODING_PRIVATE_KEY_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -242,12 +242,12 @@ impl Base {
                     }
                 }
 
-                let security_jawt_signature_encoding_private_key: String;
-                match env::var(EnvironmentConfigurationResolver::SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY) {
-                    Ok(security_jawt_signature_encoding_private_key_) => {
-                        security_jawt_signature_encoding_private_key = security_jawt_signature_encoding_private_key_;
+                let security_auat_signature_encoding_private_key: String;
+                match env::var(EnvironmentConfigurationResolver::SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY) {
+                    Ok(security_auat_signature_encoding_private_key_) => {
+                        security_auat_signature_encoding_private_key = security_auat_signature_encoding_private_key_;
 
-                        env::remove_var(EnvironmentConfigurationResolver::SECURITY_JAWT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY);
+                        env::remove_var(EnvironmentConfigurationResolver::SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY);
                     }
                     Err(error) => {
                         return Err(
@@ -394,8 +394,8 @@ impl Base {
                         logger_roller_log_file_name,
                         logger_log_file_name,
                         logger_encoder_pattern,
-                        security_jrwt_encoding_private_key,
-                        security_jawt_signature_encoding_private_key,
+                        security_auart_encoding_private_key,
+                        security_auat_signature_encoding_private_key,
                         resource_core_postgresql_configuration,
                         resource_authorization_postgresql_configuration,
                         resource_redis_connection_info,
