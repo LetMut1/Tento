@@ -7,21 +7,21 @@ use crate::application_layer::data::data_transfer_object::action_handler_incomin
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_last_step::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::domain_layer::data::entity::application_user_access_token_black_list::ApplicationUserAccessTokenBlackList;
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::encoder::Encoder;
-use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
-use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
+use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::base::Base as ApplicationUserAccessRefreshTokenFactory;
+use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::base::Base as ApplicationUserAccessTokenFactory;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserAccessRefreshTokenDataProviderRedis;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserLogInTokenDataProviderPostgresql;
-use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
+use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserAccessTokenBlackListStateManagerRedis;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserLogInTokenStateManagerPostgresql;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonAccessWebTokenBlackListStateManagerRedis;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::repository_proxy::RepositoryProxy;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::base::Base as UpdateResolver;
@@ -70,12 +70,12 @@ impl Base {
                                         Ok(application_user_log_in_token) => {
                                             if let Some(mut application_user_log_in_token_) = application_user_log_in_token {
                                                 if application_user_log_in_token_.get_value() == application_user_log_in_token_value.as_str() {
-                                                    match JsonRefreshWebTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
+                                                    match ApplicationUserAccessRefreshTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
                                                         redis_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                                                     ).await {
                                                         Ok(application_user_access_refresh_token) => {
                                                             if let Some(application_user_access_refresh_token_) = application_user_access_refresh_token {
-                                                                if let Err(mut error) = JsonAccessWebTokenBlackListStateManagerRedis::create(
+                                                                if let Err(mut error) = ApplicationUserAccessTokenBlackListStateManagerRedis::create(
                                                                     redis_connection, &ApplicationUserAccessTokenBlackList::new(application_user_access_refresh_token_.get_application_user_access_token_id())
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -90,7 +90,7 @@ impl Base {
                                                                 }
                                                             }
 
-                                                            let application_user_access_refresh_token_ = JsonRefreshWebTokenFactory::create_from_id_registry(
+                                                            let application_user_access_refresh_token_ = ApplicationUserAccessRefreshTokenFactory::create_from_id_registry(
                                                                 application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                                                             );
 
@@ -108,7 +108,7 @@ impl Base {
                                                                 return Err(error);
                                                             }
 
-                                                            match JsonAccessWebTokenFactory::create_from_application_user_access_refresh_token(&application_user_access_refresh_token_) {
+                                                            match ApplicationUserAccessTokenFactory::create_from_application_user_access_refresh_token(&application_user_access_refresh_token_) {
                                                                 Ok(ref application_user_access_token) => {
                                                                     match SerializationFormResolver::serialize(environment_configuration_resolver, application_user_access_token) {
                                                                         Ok(application_user_access_token_) => {
