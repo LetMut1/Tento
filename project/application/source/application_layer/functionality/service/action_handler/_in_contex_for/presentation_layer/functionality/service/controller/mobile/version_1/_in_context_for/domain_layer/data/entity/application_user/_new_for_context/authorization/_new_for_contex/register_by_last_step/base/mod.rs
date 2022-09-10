@@ -6,12 +6,12 @@ use crate::application_layer::data::data_transfer_object::_in_context_for::appli
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_last_step::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::domain_layer::data::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::encoder::Encoder;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::encoder::Encoder;
-use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
-use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
+use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::base::Base as ApplicationUserAccessRefreshTokenFactory;
+use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::base::Base as ApplicationUserAccessTokenFactory;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenValidator;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
 use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::_new_for_context::insert::Insert;
@@ -104,7 +104,7 @@ impl Base {
 
                                                                                                             match ApplicationUserStateManagerPostgresql::create(core_postgresql_connection, insert).await {
                                                                                                                 Ok(application_user_id) => {
-                                                                                                                    let json_refresh_web_token = JsonRefreshWebTokenFactory::create_from_id_registry(
+                                                                                                                    let application_user_access_refresh_token = ApplicationUserAccessRefreshTokenFactory::create_from_id_registry(
                                                                                                                         application_user_id, application_user_log_in_token_device_id.as_str()
                                                                                                                     );
 
@@ -115,13 +115,13 @@ impl Base {
                                                                                                                     //     return Err(error);
                                                                                                                     // }
 
-                                                                                                                    match JsonAccessWebTokenFactory::create_from_application_user_access_refresh_token(&json_refresh_web_token) {
-                                                                                                                        Ok(ref json_access_web_token) => {
-                                                                                                                            match SerializationFormResolver::serialize(environment_configuration_resolver, json_access_web_token) {
-                                                                                                                                Ok(json_access_web_token_) => {
-                                                                                                                                    match Encoder::encode(environment_configuration_resolver, &json_refresh_web_token) {
-                                                                                                                                        Ok(json_refresh_web_token_) => {
-                                                                                                                                            return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(json_access_web_token_, json_refresh_web_token_)));
+                                                                                                                    match ApplicationUserAccessTokenFactory::create_from_application_user_access_refresh_token(&application_user_access_refresh_token) {
+                                                                                                                        Ok(ref application_user_access_token) => {
+                                                                                                                            match SerializationFormResolver::serialize(environment_configuration_resolver, application_user_access_token) {
+                                                                                                                                Ok(application_user_access_token_web_form) => {
+                                                                                                                                    match Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token) {
+                                                                                                                                        Ok(application_user_access_refresh_token_web_form) => {
+                                                                                                                                            return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(application_user_access_token_web_form, application_user_access_refresh_token_web_form)));
                                                                                                                                         }
                                                                                                                                         Err(mut error) => {
                                                                                                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
