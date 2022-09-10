@@ -1,1 +1,1 @@
-pub mod json_access_web_token;
+pub mod application_user_access_token;
