@@ -97,8 +97,8 @@ impl Base {
                             }
                             ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
                                 match entity_workflow_exception {
-                                    EntityWorkflowException::ApplicationUserAccessTokenWorkflowException { application_user_access_token_workflow_exception: json_access_web_token_workflow_exception } => {
-                                        match json_access_web_token_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserAccessTokenWorkflowException { application_user_access_token_workflow_exception } => {
+                                        match application_user_access_token_workflow_exception {
                                             ApplicationUserAccessTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
@@ -205,8 +205,8 @@ impl Base {
                             }
                             ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
                                 match entity_workflow_exception {
-                                    EntityWorkflowException::ApplicationUserAccessTokenWorkflowException { application_user_access_token_workflow_exception: json_access_web_token_workflow_exception } => {
-                                        match json_access_web_token_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserAccessTokenWorkflowException { application_user_access_token_workflow_exception } => {
+                                        match application_user_access_token_workflow_exception {
                                             ApplicationUserAccessTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
@@ -313,8 +313,8 @@ impl Base {
                             }
                             ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
                                 match entity_workflow_exception {
-                                    EntityWorkflowException::ApplicationUserAccessTokenWorkflowException { application_user_access_token_workflow_exception: json_access_web_token_workflow_exception } => {
-                                        match json_access_web_token_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserAccessTokenWorkflowException { application_user_access_token_workflow_exception } => {
+                                        match application_user_access_token_workflow_exception {
                                             ApplicationUserAccessTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
@@ -421,8 +421,8 @@ impl Base {
                             }
                             ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
                                 match entity_workflow_exception {
-                                    EntityWorkflowException::ApplicationUserAccessTokenWorkflowException { application_user_access_token_workflow_exception: json_access_web_token_workflow_exception } => {
-                                        match json_access_web_token_workflow_exception {
+                                    EntityWorkflowException::ApplicationUserAccessTokenWorkflowException { application_user_access_token_workflow_exception } => {
+                                        match application_user_access_token_workflow_exception {
                                             ApplicationUserAccessTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_JSON_ACCESS_WEB_TOKEN_ALREADY_EXPIRED)
