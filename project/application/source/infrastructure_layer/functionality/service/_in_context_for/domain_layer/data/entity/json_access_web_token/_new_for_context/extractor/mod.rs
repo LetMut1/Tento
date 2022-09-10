@@ -1,5 +1,5 @@
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::extractor::_new_for_context::result::Result as ExtractorResult;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;

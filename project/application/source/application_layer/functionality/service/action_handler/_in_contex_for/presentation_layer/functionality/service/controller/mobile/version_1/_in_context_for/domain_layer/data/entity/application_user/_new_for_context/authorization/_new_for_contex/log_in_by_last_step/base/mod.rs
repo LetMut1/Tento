@@ -8,10 +8,10 @@ use crate::application_layer::data::data_transfer_object::action_handler_outcomi
 use crate::domain_layer::data::entity::application_user_access_token_black_list::ApplicationUserAccessTokenBlackList;
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
-use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
-use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::encoder::Encoder;
+use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
+use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -19,7 +19,7 @@ use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_com
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserLogInTokenDataProviderPostgresql;
-use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
+use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonRefreshWebTokenDataProviderRedis;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserLogInTokenStateManagerPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::json_access_web_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonAccessWebTokenBlackListStateManagerRedis;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::repository_proxy::RepositoryProxy;

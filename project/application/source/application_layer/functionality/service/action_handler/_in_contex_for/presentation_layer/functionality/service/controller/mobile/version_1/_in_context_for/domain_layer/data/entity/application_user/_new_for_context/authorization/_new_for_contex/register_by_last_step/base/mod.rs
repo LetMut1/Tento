@@ -8,10 +8,10 @@ use crate::application_layer::data::data_transfer_object::action_handler_outcomi
 use crate::domain_layer::data::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::encoder::Encoder;
-use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::json_access_web_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
-use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::json_refresh_web_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::encoder::Encoder;
+use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::base::Base as JsonAccessWebTokenFactory;
+use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::base::Base as JsonRefreshWebTokenFactory;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenValidator;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
 use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::_new_for_context::insert::Insert;
