@@ -56,15 +56,15 @@ impl Base {
         application_user_id: i64,
         application_user_log_in_token_device_id_registry: Vec<String>
     ) -> Result<Option<Vec<ApplicationUserAccessRefreshToken<'static>>>, ErrorAuditor> {
-        let mut json_refresh_web_token_registry: Vec<ApplicationUserAccessRefreshToken<'_>> = vec![];
+        let mut application_user_access_refresh_token_registry: Vec<ApplicationUserAccessRefreshToken<'_>> = vec![];
 
         '_a: for application_user_log_in_token_device_id in application_user_log_in_token_device_id_registry.into_iter() {
             match Self::find_by_application_user_id_and_application_user_log_in_token_device_id(
                 connection, application_user_id, application_user_log_in_token_device_id.as_str()
             ).await {
-                Ok(json_refresh_web_token) => {
-                    if let Some(json_refresh_web_token_) = json_refresh_web_token {
-                        json_refresh_web_token_registry.push(json_refresh_web_token_);
+                Ok(application_user_access_refresh_token) => {
+                    if let Some(application_user_access_refresh_token_) = application_user_access_refresh_token {
+                        application_user_access_refresh_token_registry.push(application_user_access_refresh_token_);
                     }
                 }
                 Err(mut error) => {
@@ -75,8 +75,8 @@ impl Base {
             }
         }
 
-        if !json_refresh_web_token_registry.is_empty() {
-            return Ok(Some(json_refresh_web_token_registry));
+        if !application_user_access_refresh_token_registry.is_empty() {
+            return Ok(Some(application_user_access_refresh_token_registry));
         }
 
         return Ok(None);

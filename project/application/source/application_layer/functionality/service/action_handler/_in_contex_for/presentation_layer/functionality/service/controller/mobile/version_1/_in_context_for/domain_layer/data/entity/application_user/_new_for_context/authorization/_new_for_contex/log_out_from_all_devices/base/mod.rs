@@ -11,9 +11,9 @@ use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_com
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as JsonAccessWebTokenBlackListStateManagerRedis;
-use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::extractor::Extractor;
+use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_token_black_list::_new_for_context::_in_context_for::_resource::redis::_new_for_context::base::Base as ApplicationUserAccessTokenBlackListStateManagerRedis;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::repository_proxy::RepositoryProxy;
+use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::extractor::Extractor;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 
 pub struct Base;
@@ -43,7 +43,7 @@ impl Base {
                                                     return Err(error);
                                                 }
 
-                                                if let Err(mut error) = JsonAccessWebTokenBlackListStateManagerRedis::create(
+                                                if let Err(mut error) = ApplicationUserAccessTokenBlackListStateManagerRedis::create(
                                                     connection, &ApplicationUserAccessTokenBlackList::new(application_user_access_token.get_id())
                                                 ).await {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

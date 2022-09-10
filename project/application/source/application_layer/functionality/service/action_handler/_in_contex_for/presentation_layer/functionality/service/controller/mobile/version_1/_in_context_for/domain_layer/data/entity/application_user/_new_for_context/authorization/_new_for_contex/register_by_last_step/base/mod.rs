@@ -109,7 +109,7 @@ impl Base {
                                                                                                                     );
 
                                                                                                                     // TODO TODO TODO
-                                                                                                                    // if let Err(mut error) = RepositoryProxy::create(redis_connection, &json_refresh_web_token).await {
+                                                                                                                    // if let Err(mut error) = RepositoryProxy::create(redis_connection, &j_s_o_n_refresh_web_token).await {
                                                                                                                     //     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                                                                                     //     return Err(error);
