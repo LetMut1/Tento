@@ -329,9 +329,9 @@ Error codes:
 - enapusrepato02
 - enapusrepato06
 ```
- - ## /v1/m/au/rjawt (refresh_json_access_web_token) POST
+ - ## /v1/m/au/rauat (refresh_application_user_access_token) POST
 ```
-Refreshs json access web token.
+Refreshs application user access token.
 
 Request data:
 struct Base {

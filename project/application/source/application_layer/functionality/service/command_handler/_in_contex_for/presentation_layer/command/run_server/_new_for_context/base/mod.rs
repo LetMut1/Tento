@@ -705,8 +705,8 @@ impl Base {
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/rjawt", &Method::POST) => {
-                return ControllerApplicationUserAuthorization::refresh_json_access_web_token(
+            ("/v1/m/au/rauat", &Method::POST) => {
+                return ControllerApplicationUserAuthorization::refresh_application_user_access_token(
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -817,8 +817,8 @@ impl Base {
                             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/rjawt_", &Method::POST) => {
-                        return ControllerApplicationUserAuthorization::refresh_json_access_web_token_(
+                    ("/v1/m/au/rauat_", &Method::POST) => {
+                        return ControllerApplicationUserAuthorization::refresh_application_user_access_token_(
                             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
