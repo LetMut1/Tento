@@ -3,6 +3,7 @@ use bb8::Pool;
 use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::application_user_workflow_exception::ApplicationUserWorkflowException;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::register_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
+use crate::domain_layer::data::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::value_generator::ValueGenerator;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as Validator;
@@ -16,8 +17,8 @@ use crate::infrastructure_layer::functionality::repository::data_provider::_in_c
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::email_sender::EmailSender;
+use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as UpdateResolver;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -62,6 +63,15 @@ impl Base {
                                                     Ok(application_user_registration_confirmation_token) => {
                                                         let application_user_registration_confirmation_token = match application_user_registration_confirmation_token {
                                                             Some(mut application_user_registration_confirmation_token_) => {
+                                                                let created_at = match DateTimeResolver::add_interval_from_now_formated(ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
+                                                                    Ok(creatad_at_) => creatad_at_,
+                                                                    Err(mut error) => {
+                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                                        return Err(error);
+                                                                    }
+                                                                };
+
                                                                 let is_expired = match ExpirationTimeResolver::is_expired(&application_user_registration_confirmation_token_) {
                                                                     Ok(is_expired_) => is_expired_,
                                                                     Err(mut error) => {
@@ -71,19 +81,18 @@ impl Base {
                                                                     }
                                                                 };
 
-                                                                let update_resolver = if is_expired || application_user_registration_confirmation_token_.get_is_approved() {
+                                                                if is_expired || application_user_registration_confirmation_token_.get_is_approved() {
                                                                     application_user_registration_confirmation_token_
                                                                         .set_value(ValueGenerator::generate())
                                                                         .set_wrong_enter_tries_quantity(0)
-                                                                        .set_is_approved(false);
-
-                                                                    UpdateResolver::new(true, true, true, true)
+                                                                        .set_is_approved(false)
+                                                                        .set_created_at(created_at);
                                                                 } else {
-                                                                    UpdateResolver::new(false, false, false, true)
+                                                                    application_user_registration_confirmation_token_.set_created_at(created_at);
                                                                 };
 
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token_, update_resolver
+                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token_
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

@@ -8,7 +8,7 @@ pub struct ApplicationUserAccessRefreshToken<'a> {
     application_user_id: i64,
     application_user_log_in_token_device_id: Cow<'a, str>,
     obfuscation_value: String,
-    // expiration_time: String      // TODO TODO ДОБАВИТЬ ИЛИ же created_at и количество минут на экспирацию
+    // expires_at: String      // TODO TODO ДОБАВИТЬ ИЛИ же created_at и количество минут на экспирацию
 }
 
 impl<'a> ApplicationUserAccessRefreshToken<'a> {

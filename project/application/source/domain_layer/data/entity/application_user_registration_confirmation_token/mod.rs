@@ -82,4 +82,13 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
 
         return self;
     }
+
+    pub fn set_created_at<'b>(
+        &'b mut self,
+        created_at: String
+    ) -> &'b mut Self {
+        self.created_at = created_at;
+
+        return self;
+    }
 }

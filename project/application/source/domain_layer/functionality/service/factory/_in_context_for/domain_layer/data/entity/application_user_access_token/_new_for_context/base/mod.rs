@@ -12,13 +12,13 @@ impl Base {
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<ApplicationUserAccessToken<'a>, ErrorAuditor> {
         match DateTimeResolver::add_interval_from_now_formated(ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
-            Ok(expiration_time) => {
+            Ok(expires_at) => {
                 return Ok(
                     ApplicationUserAccessToken::new(
                         Cow::Borrowed(application_user_access_refresh_token.get_application_user_access_token_id()),
                         application_user_access_refresh_token.get_application_user_id(),
                         Cow::Borrowed(application_user_access_refresh_token.get_application_user_log_in_token_device_id()),
-                        expiration_time
+                        expires_at
                     )
                 );
             }

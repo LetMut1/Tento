@@ -8,7 +8,7 @@ pub struct ApplicationUserAccessToken<'a> {
     application_user_id: i64,
     application_user_log_in_token_device_id: Cow<'a, str>,
     // obfuscation_value: String,       // TODO Все равно добавить сюда. Проверить еще раз
-    expiration_time: String
+    expires_at: String
 }
 
 impl<'a> ApplicationUserAccessToken<'a> {
@@ -18,13 +18,13 @@ impl<'a> ApplicationUserAccessToken<'a> {
         id: Cow<'a, str>,
         application_user_id: i64,
         application_user_log_in_token_device_id: Cow<'a, str>,
-        expiration_time: String
+        expires_at: String
     ) -> Self {
         return Self {
             id,
             application_user_id,
             application_user_log_in_token_device_id,
-            expiration_time
+            expires_at
         };
     }
 
@@ -46,9 +46,9 @@ impl<'a> ApplicationUserAccessToken<'a> {
         return self.application_user_log_in_token_device_id.as_ref();
     }
 
-    pub fn get_expiration_time<'b>(
+    pub fn get_expires_at<'b>(
         &'b self
     ) -> &'b str {
-        return self.expiration_time.as_str();
+        return self.expires_at.as_str();
     }
 }

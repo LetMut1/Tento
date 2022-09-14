@@ -17,7 +17,6 @@ use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_com
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql;
-use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as UpdateResolver;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -72,7 +71,7 @@ impl Base {
                                                                 application_user_registration_confirmation_token_.set_is_approved(true);
 
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(false, false, true, true)
+                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token_
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -89,7 +88,7 @@ impl Base {
 
                                                                 if application_user_registration_confirmation_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationConfirmationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                                                     if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                        authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(false, true, false, false)
+                                                                        authorization_postgresql_connection, &application_user_registration_confirmation_token_
                                                                     ).await {
                                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

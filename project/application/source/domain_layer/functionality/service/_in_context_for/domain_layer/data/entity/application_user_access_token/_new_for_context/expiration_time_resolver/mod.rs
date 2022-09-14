@@ -10,7 +10,7 @@ impl ExpirationTimeResolver {
     pub fn is_expired<'a>(
         application_user_access_token: &'a ApplicationUserAccessToken<'_>
     ) -> Result<bool, ErrorAuditor> {
-        match DateTimeResolver::create_chrono_date_time_utc(application_user_access_token.get_expiration_time()) {
+        match DateTimeResolver::create_chrono_date_time_utc(application_user_access_token.get_expires_at()) {
             Ok(ref date_time) => {
                 return Ok(!DateTimeResolver::is_greater_or_equal_than(date_time, &Utc::now()));
             }
