@@ -97,7 +97,8 @@ impl Base {
                                         application_user_email,
                                         value,
                                         wrong_enter_tries_quantity,
-                                        is_approved
+                                        is_approved,
+                                        created_at
                                     )
                                 )
                             );

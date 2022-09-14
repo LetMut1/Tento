@@ -11,7 +11,7 @@ impl Base {
     pub fn create_from_application_user_access_refresh_token<'a>(
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<ApplicationUserAccessToken<'a>, ErrorAuditor> {
-        match DateTimeResolver::add_interval_from_now(ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
+        match DateTimeResolver::add_interval_from_now_formated(ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
             Ok(expiration_time) => {
                 return Ok(
                     ApplicationUserAccessToken::new(

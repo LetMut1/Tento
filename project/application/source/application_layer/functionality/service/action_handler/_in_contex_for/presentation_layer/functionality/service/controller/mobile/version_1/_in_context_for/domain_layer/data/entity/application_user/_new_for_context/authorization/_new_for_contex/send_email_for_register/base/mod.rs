@@ -4,6 +4,7 @@ use crate::application_layer::data::data_transfer_object::_in_context_for::appli
 use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::application_user_registration_confirmation_token_workflow_exception::ApplicationUserRegistrationConfirmationTokenWorkflowException;
 use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::application_user_workflow_exception::ApplicationUserWorkflowException;
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::send_email_for_register::base::_new_for_context::base::Base as ActionHandlerIncomingData;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -50,29 +51,39 @@ impl Base {
                             ).await {
                                 Ok(application_user_registration_confirmation_token) => {
                                     if let Some(application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
-                                        if !application_user_registration_confirmation_token_.get_is_approved() {
-                                            if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(false, false, false, true)
-                                            ).await {
+                                        let is_expired = match ExpirationTimeResolver::is_expired(&application_user_registration_confirmation_token_) {
+                                            Ok(is_expired_) => is_expired_,
+                                            Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                 return Err(error);
                                             }
+                                        };
+                                        if !is_expired {
+                                            if !application_user_registration_confirmation_token_.get_is_approved() {
+                                                if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
+                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token_, UpdateResolver::new(false, false, false, true)
+                                                ).await {
+                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                            if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
-                                                environment_configuration_resolver,
-                                                application_user_registration_confirmation_token_.get_value(),
-                                                application_user_email.as_str()
-                                            ) {
-                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                    return Err(error);
+                                                }
 
-                                                return Err(error);
+                                                if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
+                                                    environment_configuration_resolver,
+                                                    application_user_registration_confirmation_token_.get_value(),
+                                                    application_user_email.as_str()
+                                                ) {
+                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                    return Err(error);
+                                                }
+
+                                                return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
                                             }
 
-                                            return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
+                                            return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::AlreadyApproved));
                                         }
-
-                                        return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::AlreadyApproved));
                                     }
 
                                     return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound));

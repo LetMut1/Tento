@@ -17,8 +17,8 @@ impl DateTimeResolver {
         date_time: &'a str
     ) -> Result<DateTime<Utc>, ErrorAuditor> {
         match DateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT) {
-            Ok(date_time) => {
-                return Ok(date_time.with_timezone(&Utc));
+            Ok(date_time_) => {
+                return Ok(date_time_.with_timezone(&Utc));
             }
             Err(error) => {
                 return Err(
@@ -41,10 +41,10 @@ impl DateTimeResolver {
     pub fn add_interval_from<'a>(
         date_time: &'a DateTime<Utc>,
         quantity_of_minutes: i64
-    ) -> Result<String, ErrorAuditor> {
+    ) -> Result<DateTime<Utc>, ErrorAuditor> {
         match date_time.checked_add_signed(Duration::minutes(quantity_of_minutes)) {
-            Some(date_time) => {
-                return Ok(date_time.format(Self::TIMESTAMP_FORMAT).to_string());
+            Some(date_time_) => {
+                return Ok(date_time_);
             }
             None => {
                 return Err(
@@ -56,11 +56,20 @@ impl DateTimeResolver {
             }
         };
     }
-    
-    pub fn add_interval_from_now(
+
+    pub fn add_interval_from_now_formated(
         quantity_of_minutes: i64
     ) -> Result<String, ErrorAuditor> {
-        return Self::add_interval_from(&Utc::now(), quantity_of_minutes)
+        match Self::add_interval_from(&Utc::now(), quantity_of_minutes) {
+            Ok(date_time) => {
+                return Ok(date_time.format(Self::TIMESTAMP_FORMAT).to_string())
+            }
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        }
     }
 
     pub fn is_valid_timestamp<'a>(
