@@ -63,8 +63,8 @@ impl Base {
                                                     Ok(application_user_registration_confirmation_token) => {
                                                         let application_user_registration_confirmation_token = match application_user_registration_confirmation_token {
                                                             Some(mut application_user_registration_confirmation_token_) => {
-                                                                let created_at = match DateTimeResolver::add_interval_from_now_formated(ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
-                                                                    Ok(creatad_at_) => creatad_at_,
+                                                                let expires_at = match DateTimeResolver::add_interval_from_now_formated(ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
+                                                                    Ok(expires_at_) => expires_at_,
                                                                     Err(mut error) => {
                                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -86,9 +86,9 @@ impl Base {
                                                                         .set_value(ValueGenerator::generate())
                                                                         .set_wrong_enter_tries_quantity(0)
                                                                         .set_is_approved(false)
-                                                                        .set_created_at(created_at);
+                                                                        .set_expires_at(expires_at);
                                                                 } else {
-                                                                    application_user_registration_confirmation_token_.set_created_at(created_at);
+                                                                    application_user_registration_confirmation_token_.set_expires_at(expires_at);
                                                                 };
 
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(

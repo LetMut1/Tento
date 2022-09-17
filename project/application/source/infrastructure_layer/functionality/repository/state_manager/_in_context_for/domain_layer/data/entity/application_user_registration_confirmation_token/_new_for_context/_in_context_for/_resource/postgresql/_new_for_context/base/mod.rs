@@ -23,7 +23,10 @@ impl Base {
             wrong_enter_tries_quantity,
             is_approved
         ) = insert.into_inner();
+
         let wrong_enter_tries_quantity_ = wrong_enter_tries_quantity as i16;
+
+        let quantity_of_minute_for_expiration = ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -33,31 +36,32 @@ impl Base {
                 value, \
                 wrong_enter_tries_quantity, \
                 is_approved, \
-                created_at \
+                expires_at \
             ) VALUES ( \
                 $1, \
                 $2, \
                 $3, \
                 $4, \
-                DEFAULT \
+                current_timestamp(6) + INTERVAL '$5 MINUTE' \
             ) \
             ON CONFLICT DO NOTHING \
             RETURNING \
-                aurct.created_at::TEXT AS ca;";
+                aurct.expires_at::TEXT AS ea;";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&application_user_email, Type::VARCHAR)
             .add_parameter(&value, Type::VARCHAR)
             .add_parameter(&wrong_enter_tries_quantity_, Type::INT2)
-            .add_parameter(&is_approved, Type::BOOL);
+            .add_parameter(&is_approved, Type::BOOL)
+            .add_parameter(&quantity_of_minute_for_expiration, Type::INT2);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
                 match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            let created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-                                Ok(created_at_) => created_at_,
+                            let expires_at = match row_registry[0].try_get::<'_, usize, String>(0) {
+                                Ok(expires_at_) => expires_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -73,7 +77,7 @@ impl Base {
                                 value,
                                 wrong_enter_tries_quantity,
                                 is_approved,
-                                created_at
+                                expires_at
                             );
 
                             return Ok(application_user_registration_confirmation_token);
@@ -169,7 +173,9 @@ impl Base {
 
         let is_approved = application_user_registration_confirmation_token.get_is_approved();
 
-        let created_at = application_user_registration_confirmation_token.get_created_at();
+        let expires_at = application_user_registration_confirmation_token.get_expires_at();
+
+        let quantity_of_minute_for_expiration = ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -179,13 +185,13 @@ impl Base {
             value, \
             wrong_enter_tries_quantity, \
             is_approved, \
-            created_at \
+            expires_at \
         ) VALUES ( \
             $1, \
             $2, \
             $3, \
             $4, \
-            DEFAULT \
+            current_timestamp(6) + INTERVAL '$5 MINUTE' \
         ) \
         ON CONFLICT ON CONSTRAINT application_user_registration_confirmation_token3 DO \
         UPDATE ONLY public.application_user_registration_confirmation_token AS aurct \
@@ -193,14 +199,14 @@ impl Base {
             value, \
             wrong_enter_tries_quantity, \
             is_approved, \
-            created_at \
+            expires_at \
         ) = ROW( \
-            $5, \
             $6, \
             $7, \
-            $8::TIMESTAMP(6) WITH TIME ZONE \
+            $8, \
+            $9::TIMESTAMP(6) WITH TIME ZONE \
         ) \
-        WHERE aurct.application_user_email = $9 \
+        WHERE aurct.application_user_email = $10 \
         RETURNING \
             aurct.application_user_email AS aue;";
 
@@ -209,12 +215,12 @@ impl Base {
         .add_parameter(&value, Type::VARCHAR)
         .add_parameter(&wrong_enter_tries_quantity, Type::INT2)
         .add_parameter(&is_approved, Type::BOOL)
+        .add_parameter(&quantity_of_minute_for_expiration, Type::INT2)
         .add_parameter(&value, Type::VARCHAR)
         .add_parameter(&wrong_enter_tries_quantity, Type::INT2)
         .add_parameter(&is_approved, Type::BOOL)
-        .add_parameter(&created_at, Type::VARCHAR)
+        .add_parameter(&expires_at, Type::VARCHAR)
         .add_parameter(&application_user_email, Type::VARCHAR);
-
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {

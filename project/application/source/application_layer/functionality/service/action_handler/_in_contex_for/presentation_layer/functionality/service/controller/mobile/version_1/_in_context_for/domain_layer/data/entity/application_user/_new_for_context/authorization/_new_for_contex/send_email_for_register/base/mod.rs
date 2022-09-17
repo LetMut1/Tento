@@ -62,8 +62,8 @@ impl Base {
                                         };
                                         if !is_expired {
                                             if !application_user_registration_confirmation_token_.get_is_approved() {
-                                                let created_at = match DateTimeResolver::add_interval_from_now_formated(ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
-                                                    Ok(creatad_at_) => creatad_at_,
+                                                let expires_at = match DateTimeResolver::add_interval_from_now_formated(ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
+                                                    Ok(expires_at_) => expires_at_,
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -71,7 +71,7 @@ impl Base {
                                                     }
                                                 };
 
-                                                application_user_registration_confirmation_token_.set_created_at(created_at);
+                                                application_user_registration_confirmation_token_.set_expires_at(expires_at);
 
                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
                                                     authorization_postgresql_connection, &application_user_registration_confirmation_token_

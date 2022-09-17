@@ -10,18 +10,9 @@ impl ExpirationTimeResolver {
     pub fn is_expired<'a>(
         application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
     ) -> Result<bool, ErrorAuditor> {
-        match DateTimeResolver::create_chrono_date_time_utc(application_user_registration_confirmation_token.get_created_at()) {
+        match DateTimeResolver::create_chrono_date_time_utc(application_user_registration_confirmation_token.get_expires_at()) {
             Ok(ref date_time) => {
-                let date_time_ = match DateTimeResolver::add_interval_from(date_time, ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
-                    Ok(date_time__) => date_time__,
-                    Err(mut error) => {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        return Err(error);
-                    }
-                };
-
-                return Ok(!DateTimeResolver::is_greater_or_equal_than(&date_time_, &Utc::now()));
+                return Ok(!DateTimeResolver::is_greater_or_equal_than(date_time, &Utc::now()));
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

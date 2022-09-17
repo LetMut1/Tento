@@ -23,7 +23,7 @@ impl Base {
                 aurct.value AS v, \
                 aurct.wrong_enter_tries_quantity AS wetq, \
                 aurct.is_approved AS ia, \
-                aurct.created_at::TEXT AS ca \
+                aurct.expires_at::TEXT AS ea \
             FROM public.application_user_registration_confirmation_token aurct \
             WHERE aurct.application_user_email = $1;";
 
@@ -79,8 +79,8 @@ impl Base {
                                 }
                             };
 
-                            let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-                                Ok(created_at_) => created_at_,
+                            let expires_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+                                Ok(expires_at_) => expires_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -98,7 +98,7 @@ impl Base {
                                         value,
                                         wrong_enter_tries_quantity,
                                         is_approved,
-                                        created_at
+                                        expires_at
                                     )
                                 )
                             );
