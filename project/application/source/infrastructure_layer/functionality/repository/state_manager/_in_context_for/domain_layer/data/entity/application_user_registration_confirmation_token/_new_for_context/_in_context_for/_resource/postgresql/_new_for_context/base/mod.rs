@@ -194,8 +194,7 @@ impl Base {
             current_timestamp(6) + INTERVAL '$5 MINUTE' \
         ) \
         ON CONFLICT ON CONSTRAINT application_user_registration_confirmation_token3 DO \
-        UPDATE ONLY public.application_user_registration_confirmation_token AS aurct \
-        SET ( \
+        UPDATE SET ( \
             value, \
             wrong_enter_tries_quantity, \
             is_approved, \
