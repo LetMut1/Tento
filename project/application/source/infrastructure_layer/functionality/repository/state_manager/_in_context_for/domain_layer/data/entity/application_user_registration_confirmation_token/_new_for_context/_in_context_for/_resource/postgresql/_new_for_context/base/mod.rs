@@ -42,7 +42,7 @@ impl Base {
                 $2, \
                 $3, \
                 $4, \
-                current_timestamp(6) + INTERVAL '$5 MINUTE' \
+                current_timestamp(6) + (INTERVAL '1 MINUTE' * $5)::INTERVAL \
             ) \
             ON CONFLICT DO NOTHING \
             RETURNING \
