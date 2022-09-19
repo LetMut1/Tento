@@ -23,7 +23,7 @@ impl Base {
             "SELECT \
                 aulit.value AS v, \
                 aulit.wrong_enter_tries_quantity AS wetq, \
-                aulit.created_at::TEXT AS ca \
+                aulit.expires_at::TEXT AS ca \
             FROM public.application_user_log_in_token aulit \
             WHERE aulit.application_user_id = $1 AND aulit.device_id = $2;";
 
@@ -68,8 +68,8 @@ impl Base {
                                 }
                             };
 
-                            let created_at = match row_registry[0].try_get::<'_, usize, String>(2) {
-                                Ok(created_at_) => created_at_,
+                            let expires_at = match row_registry[0].try_get::<'_, usize, String>(2) {
+                                Ok(expires_at_) => expires_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -86,7 +86,8 @@ impl Base {
                                         application_user_id,
                                         device_id,
                                         value,
-                                        wrong_enter_tries_quantity
+                                        wrong_enter_tries_quantity,
+                                        expires_at
                                     )
                                 )
                             );

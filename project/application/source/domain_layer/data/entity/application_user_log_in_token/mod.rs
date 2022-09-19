@@ -1,11 +1,9 @@
-use std::marker::PhantomData;
-
 pub struct ApplicationUserLogInToken<'a> {
     application_user_id: i64,
     device_id: &'a str,
     value: String,
     wrong_enter_tries_quantity: u8,
-    _created_at: PhantomData<String>
+    expires_at: String
 }
 
 impl<'a> ApplicationUserLogInToken<'a> {
@@ -17,13 +15,14 @@ impl<'a> ApplicationUserLogInToken<'a> {
         device_id: &'a str,
         value: String,
         wrong_enter_tries_quantity: u8,
+        expires_at: String
     ) -> Self {
         return Self {
             application_user_id,
             device_id,
             value,
             wrong_enter_tries_quantity,
-            _created_at: PhantomData
+            expires_at
         };
     }
 
@@ -51,6 +50,12 @@ impl<'a> ApplicationUserLogInToken<'a> {
         return self.wrong_enter_tries_quantity;
     }
 
+    pub fn get_expires_at<'b>(
+        &'b self
+    ) -> &'b str {
+        return self.expires_at.as_str();
+    }
+
     pub fn set_value<'b>(
         &'b mut self,
         value: String
@@ -65,6 +70,15 @@ impl<'a> ApplicationUserLogInToken<'a> {
         wrong_enter_tries_quantity: u8
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
+
+        return self;
+    }
+
+    pub fn set_expires_at<'b>(
+        &'b mut self,
+        expires_at: String
+    ) -> &'b mut Self {
+        self.expires_at = expires_at;
 
         return self;
     }

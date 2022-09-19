@@ -210,16 +210,16 @@ impl Base {
             aurct.application_user_email AS aue;";
 
         prepared_statemant_parameter_convertation_resolver
-        .add_parameter(&application_user_email, Type::VARCHAR)
-        .add_parameter(&value, Type::VARCHAR)
-        .add_parameter(&wrong_enter_tries_quantity, Type::INT2)
-        .add_parameter(&is_approved, Type::BOOL)
-        .add_parameter(&quantity_of_minute_for_expiration, Type::INT2)
-        .add_parameter(&value, Type::VARCHAR)
-        .add_parameter(&wrong_enter_tries_quantity, Type::INT2)
-        .add_parameter(&is_approved, Type::BOOL)
-        .add_parameter(&expires_at, Type::VARCHAR)
-        .add_parameter(&application_user_email, Type::VARCHAR);
+            .add_parameter(&application_user_email, Type::VARCHAR)
+            .add_parameter(&value, Type::VARCHAR)
+            .add_parameter(&wrong_enter_tries_quantity, Type::INT2)
+            .add_parameter(&is_approved, Type::BOOL)
+            .add_parameter(&quantity_of_minute_for_expiration, Type::INT2)
+            .add_parameter(&value, Type::VARCHAR)
+            .add_parameter(&wrong_enter_tries_quantity, Type::INT2)
+            .add_parameter(&is_approved, Type::BOOL)
+            .add_parameter(&expires_at, Type::VARCHAR)
+            .add_parameter(&application_user_email, Type::VARCHAR);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {

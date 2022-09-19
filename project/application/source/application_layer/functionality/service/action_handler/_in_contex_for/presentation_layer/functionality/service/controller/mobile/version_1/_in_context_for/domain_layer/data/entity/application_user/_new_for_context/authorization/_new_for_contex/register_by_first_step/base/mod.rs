@@ -60,9 +60,9 @@ impl Base {
                                                 match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_by_application_user_email(
                                                     authorization_postgresql_connection, application_user_email.as_str()
                                                 ).await {
-                                                    Ok(application_user_registration_confirmation_token) => {
-                                                        let application_user_registration_confirmation_token = match application_user_registration_confirmation_token {
-                                                            Some(mut application_user_registration_confirmation_token_) => {
+                                                    Ok(application_user_registration_confirmation_token_) => {
+                                                        let application_user_registration_confirmation_token = match application_user_registration_confirmation_token_ {
+                                                            Some(mut application_user_registration_confirmation_token__) => {
                                                                 let expires_at = match DateTimeResolver::add_interval_from_now_formated(ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
                                                                     Ok(expires_at_) => expires_at_,
                                                                     Err(mut error) => {
@@ -72,7 +72,7 @@ impl Base {
                                                                     }
                                                                 };
 
-                                                                let is_expired = match ExpirationTimeResolver::is_expired(&application_user_registration_confirmation_token_) {
+                                                                let is_expired = match ExpirationTimeResolver::is_expired(&application_user_registration_confirmation_token__) {
                                                                     Ok(is_expired_) => is_expired_,
                                                                     Err(mut error) => {
                                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -81,25 +81,25 @@ impl Base {
                                                                     }
                                                                 };
 
-                                                                if is_expired || application_user_registration_confirmation_token_.get_is_approved() {
-                                                                    application_user_registration_confirmation_token_
+                                                                if is_expired || application_user_registration_confirmation_token__.get_is_approved() {
+                                                                    application_user_registration_confirmation_token__
                                                                         .set_value(ValueGenerator::generate())
                                                                         .set_wrong_enter_tries_quantity(0)
                                                                         .set_is_approved(false)
                                                                         .set_expires_at(expires_at);
                                                                 } else {
-                                                                    application_user_registration_confirmation_token_.set_expires_at(expires_at);
+                                                                    application_user_registration_confirmation_token__.set_expires_at(expires_at);
                                                                 };
 
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
-                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token_
+                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token__
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                                     return Err(error);
                                                                 }
 
-                                                                application_user_registration_confirmation_token_
+                                                                application_user_registration_confirmation_token__
                                                             }
                                                             None => {
                                                                 let insert = Insert::new(
@@ -112,7 +112,7 @@ impl Base {
                                                                 match ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::create(
                                                                     authorization_postgresql_connection, insert
                                                                 ).await {
-                                                                    Ok(application_user_registration_confirmation_token_) => application_user_registration_confirmation_token_,
+                                                                    Ok(application_user_registration_confirmation_token__) => application_user_registration_confirmation_token__,
                                                                     Err(mut error) => {
                                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

@@ -9,6 +9,7 @@ use crate::domain_layer::data::entity::application_user_access_token_black_list:
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::encoder::Encoder;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
 use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::base::Base as ApplicationUserAccessRefreshTokenFactory;
 use crate::domain_layer::functionality::service::factory::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::base::Base as ApplicationUserAccessTokenFactory;
@@ -24,7 +25,6 @@ use crate::infrastructure_layer::functionality::repository::state_manager::_in_c
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserLogInTokenStateManagerPostgresql;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::repository_proxy::RepositoryProxy;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::base::Base as UpdateResolver;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -69,107 +69,117 @@ impl Base {
                                     ).await {
                                         Ok(application_user_log_in_token) => {
                                             if let Some(mut application_user_log_in_token_) = application_user_log_in_token {
-                                                if application_user_log_in_token_.get_value() == application_user_log_in_token_value.as_str() {
-                                                    match ApplicationUserAccessRefreshTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
-                                                        redis_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
-                                                    ).await {
-                                                        Ok(application_user_access_refresh_token) => {
-                                                            if let Some(application_user_access_refresh_token_) = application_user_access_refresh_token {
-                                                                if let Err(mut error) = ApplicationUserAccessTokenBlackListStateManagerRedis::create(
-                                                                    redis_connection, &ApplicationUserAccessTokenBlackList::new(application_user_access_refresh_token_.get_application_user_access_token_id())
+                                                let is_expired = match ExpirationTimeResolver::is_expired(&application_user_log_in_token_) {
+                                                    Ok(is_expired_) => is_expired_,
+                                                    Err(mut error) => {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                        return Err(error);
+                                                    }
+                                                };
+                                                if !is_expired {
+                                                    if application_user_log_in_token_.get_value() == application_user_log_in_token_value.as_str() {
+                                                        match ApplicationUserAccessRefreshTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
+                                                            redis_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
+                                                        ).await {
+                                                            Ok(application_user_access_refresh_token) => {
+                                                                if let Some(application_user_access_refresh_token_) = application_user_access_refresh_token {
+                                                                    if let Err(mut error) = ApplicationUserAccessTokenBlackListStateManagerRedis::create(
+                                                                        redis_connection, &ApplicationUserAccessTokenBlackList::new(application_user_access_refresh_token_.get_application_user_access_token_id())
+                                                                    ).await {
+                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                                        return Err(error);
+                                                                    }
+
+                                                                    if let Err(mut error) = RepositoryProxy::delete(redis_connection, &application_user_access_refresh_token_).await {
+                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                                        return Err(error);
+                                                                    }
+                                                                }
+
+                                                                let application_user_access_refresh_token_ = ApplicationUserAccessRefreshTokenFactory::create_from_id_registry(
+                                                                    application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
+                                                                );
+
+                                                                if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::delete(
+                                                                    authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                                     return Err(error);
                                                                 }
 
-                                                                if let Err(mut error) = RepositoryProxy::delete(redis_connection, &application_user_access_refresh_token_).await {
+                                                                if let Err(mut error) = RepositoryProxy::create(redis_connection, &application_user_access_refresh_token_).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                                     return Err(error);
                                                                 }
-                                                            }
 
-                                                            let application_user_access_refresh_token_ = ApplicationUserAccessRefreshTokenFactory::create_from_id_registry(
-                                                                application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
-                                                            );
+                                                                match ApplicationUserAccessTokenFactory::create_from_application_user_access_refresh_token(&application_user_access_refresh_token_) {
+                                                                    Ok(ref application_user_access_token) => {
+                                                                        match SerializationFormResolver::serialize(environment_configuration_resolver, application_user_access_token) {
+                                                                            Ok(application_user_access_token_) => {
+                                                                                match Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
+                                                                                    Ok(application_user_access_refresh_token_) => {
+                                                                                        return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(application_user_access_token_, application_user_access_refresh_token_)));
+                                                                                    }
+                                                                                    Err(mut error) => {
+                                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                                            if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::delete(
-                                                                authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
-                                                            ).await {
-                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                                return Err(error);
-                                                            }
-
-                                                            if let Err(mut error) = RepositoryProxy::create(redis_connection, &application_user_access_refresh_token_).await {
-                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                                return Err(error);
-                                                            }
-
-                                                            match ApplicationUserAccessTokenFactory::create_from_application_user_access_refresh_token(&application_user_access_refresh_token_) {
-                                                                Ok(ref application_user_access_token) => {
-                                                                    match SerializationFormResolver::serialize(environment_configuration_resolver, application_user_access_token) {
-                                                                        Ok(application_user_access_token_) => {
-                                                                            match Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
-                                                                                Ok(application_user_access_refresh_token_) => {
-                                                                                    return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(application_user_access_token_, application_user_access_refresh_token_)));
-                                                                                }
-                                                                                Err(mut error) => {
-                                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                                                    return Err(error);
+                                                                                        return Err(error);
+                                                                                    }
                                                                                 }
                                                                             }
-                                                                        }
-                                                                        Err(mut error) => {
-                                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                                            Err(mut error) => {
+                                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                                                            return Err(error);
+                                                                                return Err(error);
+                                                                            }
                                                                         }
                                                                     }
-                                                                }
-                                                                Err(mut error) => {
-                                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                                    Err(mut error) => {
+                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                                                    return Err(error);
+                                                                        return Err(error);
+                                                                    }
                                                                 }
                                                             }
+                                                            Err(mut error) => {
+                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                                return Err(error);
+                                                            }
                                                         }
-                                                        Err(mut error) => {
+                                                    }
+
+                                                    if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token_) {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                        return Err(error);
+                                                    }
+
+                                                    if application_user_log_in_token_.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                                                        if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::update(
+                                                            authorization_postgresql_connection, &application_user_log_in_token_,
+                                                        ).await {
+                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                            return Err(error);
+                                                        }
+                                                    } else {
+                                                        if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::delete(
+                                                            authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
+                                                        ).await {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                             return Err(error);
                                                         }
                                                     }
+
+                                                    return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::WrongValue));
                                                 }
-
-                                                if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token_) {
-                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                    return Err(error);
-                                                }
-
-                                                if application_user_log_in_token_.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                                                    if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::update(
-                                                        authorization_postgresql_connection, &application_user_log_in_token_, UpdateResolver::new(false, true, false)
-                                                    ).await {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                } else {
-                                                    if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::delete(
-                                                        authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
-                                                    ).await {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                }
-
-                                                return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::WrongValue));
                                             }
 
                                             return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::NotFound));

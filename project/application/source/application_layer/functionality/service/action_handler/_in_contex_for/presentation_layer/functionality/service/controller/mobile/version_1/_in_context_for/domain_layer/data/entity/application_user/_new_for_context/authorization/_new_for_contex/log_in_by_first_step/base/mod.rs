@@ -5,11 +5,10 @@ use crate::application_layer::data::data_transfer_object::_in_context_for::appli
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::value_generator::ValueGenerator;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as Validator;
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::logic_error::LogicError;
+use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::_new_for_context::insert::Insert;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
@@ -19,8 +18,8 @@ use crate::infrastructure_layer::functionality::repository::data_provider::_in_c
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserLogInTokenStateManagerPostgresql;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::email_sender::EmailSender;
+use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::base::Base as UpdateResolver;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -54,16 +53,13 @@ impl Base {
                 Ok(core_postgresql_pooled_connection) => {
                     let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
-                    let application_user: ApplicationUser;
-                    match Validator::is_valid_email(application_user_email_or_application_user_nickname.as_str()) {
+                    let application_user = match Validator::is_valid_email(application_user_email_or_application_user_nickname.as_str()) {
                         Ok(is_valid_email) => {
                             if is_valid_email {
                                 match ApplicationUserDataProviderPostgresql::find_by_email(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
                                     Ok(application_user_) => {
                                         match application_user_ {
-                                            Some(application_user__) => {
-                                                application_user = application_user__;
-                                            }
+                                            Some(application_user__) => application_user__,
                                             None => {
                                                 return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::NotFound));
                                             }
@@ -80,9 +76,7 @@ impl Base {
                                     match ApplicationUserDataProviderPostgresql::find_by_nickname(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
                                         Ok(application_user_) => {
                                             match application_user_ {
-                                                Some(application_user__) => {
-                                                    application_user = application_user__;
-                                                }
+                                                Some(application_user__) => application_user__,
                                                 None => {
                                                     return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::NotFound));
                                                 }
@@ -104,7 +98,7 @@ impl Base {
 
                             return Err(error);
                         }
-                    }
+                    };
 
                     match PasswordHashResolver::is_valid(application_user_password.as_str(), application_user.get_password_hash()) {
                         Ok(is_valid) => {
@@ -115,40 +109,53 @@ impl Base {
                                     Ok(authorization_postgresql_pooled_connection) => {
                                         let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-                                        let application_user_log_in_token: ApplicationUserLogInToken<'_>;
                                         match ApplicationUserLogInTokenDataProviderPostgresql::find_by_application_user_id_and_device_id(
                                             authorization_postgresql_connection, application_user_id, application_user_log_in_token_device_id.as_str()
                                         ).await {
                                             Ok(application_user_log_in_token_) => {
-                                                match application_user_log_in_token_ {
-                                                    Some(application_user_log_in_token__) => {
-                                                        application_user_log_in_token = application_user_log_in_token__;
+                                                let application_user_log_in_token = match application_user_log_in_token_ {
+                                                    Some(mut application_user_log_in_token__) => {
+                                                        let expires_at = match DateTimeResolver::add_interval_from_now_formated(ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
+                                                            Ok(expires_at_) => expires_at_,
+                                                            Err(mut error) => {
+                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                                return Err(error);
+                                                            }
+                                                        };
+
+                                                        application_user_log_in_token__.set_expires_at(expires_at);
 
                                                         if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::update(
-                                                            authorization_postgresql_connection, &application_user_log_in_token, UpdateResolver::new(false, false, true)
+                                                            authorization_postgresql_connection, &application_user_log_in_token__
                                                         ).await {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                             return Err(error);
                                                         }
+
+                                                        application_user_log_in_token__
                                                     }
                                                     None => {
-                                                        application_user_log_in_token = ApplicationUserLogInToken::new(
+                                                        let insert = Insert::new(
                                                             application_user_id,
                                                             application_user_log_in_token_device_id.as_str(),
                                                             ValueGenerator::generate(),
                                                             0
                                                         );
 
-                                                        if let Err(mut error) = ApplicationUserLogInTokenStateManagerPostgresql::create(
-                                                            authorization_postgresql_connection, &application_user_log_in_token
+                                                        match ApplicationUserLogInTokenStateManagerPostgresql::create(
+                                                            authorization_postgresql_connection, insert
                                                         ).await {
-                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                                                            Ok(application_user_log_in_token__) => application_user_log_in_token__,
+                                                            Err(mut error) => {
+                                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                                            return Err(error);
+                                                                return Err(error);
+                                                            }
                                                         }
                                                     }
-                                                }
+                                                };
 
                                                 if let Err(mut error) = EmailSender::send_application_user_log_in_token(
                                                     environment_configuration_resolver, application_user_log_in_token.get_value(), application_user.get_email()
