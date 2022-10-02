@@ -81,15 +81,13 @@ impl Base {
                                                                     }
                                                                 };
 
+                                                                application_user_registration_confirmation_token__.set_expires_at(expires_at);
                                                                 if is_expired || application_user_registration_confirmation_token__.get_is_approved() {
                                                                     application_user_registration_confirmation_token__
                                                                         .set_value(ValueGenerator::generate())
                                                                         .set_wrong_enter_tries_quantity(0)
-                                                                        .set_is_approved(false)
-                                                                        .set_expires_at(expires_at);
-                                                                } else {
-                                                                    application_user_registration_confirmation_token__.set_expires_at(expires_at);
-                                                                };
+                                                                        .set_is_approved(false);
+                                                                }
 
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql::update(
                                                                     authorization_postgresql_connection, &application_user_registration_confirmation_token__

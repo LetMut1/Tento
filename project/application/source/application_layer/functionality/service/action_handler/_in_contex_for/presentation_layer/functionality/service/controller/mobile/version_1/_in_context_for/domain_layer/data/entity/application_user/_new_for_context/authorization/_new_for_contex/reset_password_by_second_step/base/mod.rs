@@ -5,6 +5,7 @@ use crate::application_layer::data::data_transfer_object::_in_context_for::appli
 use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_second_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_second_step::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
+use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
@@ -14,7 +15,6 @@ use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_com
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenStateManagerPostgresql;
-use crate::infrastructure_layer::functionality::service::update_resolver::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::base::Base as UpdateResolver;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -52,49 +52,61 @@ impl Base {
                             ).await {
                                 Ok(application_user_reset_password_token) => {
                                     if let Some(mut application_user_reset_password_token_) = application_user_reset_password_token {
-                                        if !application_user_reset_password_token_.get_is_approved() {
-                                            if application_user_reset_password_token_.get_value().as_bytes() == application_user_reset_password_token_value.as_bytes() {
-                                                application_user_reset_password_token_.set_is_approved(true);
+                                        let is_expired = match ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
+                                            Ok(is_expired_) => is_expired_,
+                                            Err(mut error) => {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                                if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::update(
-                                                    authorization_postgresql_connection, &application_user_reset_password_token_, UpdateResolver::new(false, false, true, true)
-                                                ).await {
-                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                    return Err(error);
-                                                }
-
-                                                return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(true)));
-                                            } else {
-                                                if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_reset_password_token_) {
-                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                    return Err(error);
-                                                }
-
-                                                if application_user_reset_password_token_.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                                                    if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::update(
-                                                        authorization_postgresql_connection, &application_user_reset_password_token_, UpdateResolver::new(false, true, false, false)
-                                                    ).await {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                } else {
-                                                    if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::delete(
-                                                        authorization_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
-                                                    ).await {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                }
-
-                                                return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(false)));
+                                                return Err(error);
                                             }
+                                        };
+                                        if !is_expired {
+                                            if !application_user_reset_password_token_.get_is_approved() {
+                                                if application_user_reset_password_token_.get_value().as_bytes() == application_user_reset_password_token_value.as_bytes() {
+                                                    application_user_reset_password_token_.set_is_approved(true);
+
+                                                    if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::update(
+                                                        authorization_postgresql_connection, &application_user_reset_password_token_
+                                                    ).await {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                        return Err(error);
+                                                    }
+
+                                                    return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(true)));
+                                                } else {
+                                                    if let Err(mut error) = WrongEnterTriesQuantityIncrementor::increment(&mut application_user_reset_password_token_) {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                        return Err(error);
+                                                    }
+
+                                                    if application_user_reset_password_token_.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                                                        if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::update(
+                                                            authorization_postgresql_connection, &application_user_reset_password_token_
+                                                        ).await {
+                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                            return Err(error);
+                                                        }
+                                                    } else {
+                                                        if let Err(mut error) = ApplicationUserResetPasswordTokenStateManagerPostgresql::delete(
+                                                            authorization_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
+                                                        ).await {
+                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                            return Err(error);
+                                                        }
+                                                    }
+
+                                                    return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(false)));
+                                                }
+                                            }
+
+                                            return Ok(ActionHandlerResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordTokenWorkflowException::AlreadyApproved));
                                         }
 
-                                        return Ok(ActionHandlerResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordTokenWorkflowException::AlreadyApproved));
+                                        return Ok(ActionHandlerResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordTokenWorkflowException::AlreadyExpired));
                                     }
 
                                     return Ok(ActionHandlerResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordTokenWorkflowException::NotFound));

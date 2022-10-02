@@ -534,7 +534,8 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound => {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound |
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
                                                 ) {
@@ -757,7 +758,8 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound => {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound |
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
                                                 ) {
@@ -924,7 +926,8 @@ impl Authorization {
                                     }
                                     EntityWorkflowException::ApplicationUserRegistrationConfirmationTokenWorkflowException { application_user_registration_confirmation_token_workflow_exception } => {
                                         match application_user_registration_confirmation_token_workflow_exception {
-                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound => {
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound |
+                                            ApplicationUserRegistrationConfirmationTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
                                                 ) {
@@ -1192,7 +1195,8 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserLogInTokenWorkflowException::NotFound => {
+                                            ApplicationUserLogInTokenWorkflowException::NotFound |
+                                            ApplicationUserLogInTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND)
                                                 ) {
@@ -2043,7 +2047,8 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserResetPasswordTokenWorkflowException::NotFound => {
+                                            ApplicationUserResetPasswordTokenWorkflowException::NotFound |
+                                            ApplicationUserResetPasswordTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND)
                                                 ) {
@@ -2225,7 +2230,8 @@ impl Authorization {
                                                     }
                                                 }
                                             }
-                                            ApplicationUserResetPasswordTokenWorkflowException::NotFound => {
+                                            ApplicationUserResetPasswordTokenWorkflowException::NotFound |
+                                            ApplicationUserResetPasswordTokenWorkflowException::AlreadyExpired => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_error_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND)
                                                 ) {

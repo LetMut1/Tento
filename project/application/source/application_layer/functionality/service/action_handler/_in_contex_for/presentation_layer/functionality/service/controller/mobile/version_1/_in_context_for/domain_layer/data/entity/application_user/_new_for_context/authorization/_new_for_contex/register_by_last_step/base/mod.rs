@@ -112,9 +112,9 @@ impl Base {
                                                                                                                 );
 
                                                                                                                 match ApplicationUserStateManagerPostgresql::create(core_postgresql_connection, insert).await {
-                                                                                                                    Ok(application_user_id) => {
+                                                                                                                    Ok(application_user) => {
                                                                                                                         let application_user_access_refresh_token = ApplicationUserAccessRefreshTokenFactory::create_from_id_registry(
-                                                                                                                            application_user_id, application_user_log_in_token_device_id.as_str()
+                                                                                                                            application_user.get_id(), application_user_log_in_token_device_id.as_str()
                                                                                                                         );
 
                                                                                                                         // TODO TODO TODO
@@ -197,6 +197,8 @@ impl Base {
 
                                                                                                 return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::IsNotApproved));
                                                                                             }
+
+                                                                                            return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::AlreadyExpired));
                                                                                         }
 
                                                                                         return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::NotFound));

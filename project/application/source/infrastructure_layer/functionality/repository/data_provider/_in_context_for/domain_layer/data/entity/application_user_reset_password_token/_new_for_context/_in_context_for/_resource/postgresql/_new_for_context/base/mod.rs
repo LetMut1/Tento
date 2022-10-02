@@ -23,7 +23,7 @@ impl Base {
                 aurpt.value AS v, \
                 aurpt.wrong_enter_tries_quantity AS wetq, \
                 aurpt.is_approved AS ia, \
-                aurpt.created_at::TEXT AS ca \
+                aurpt.expires_at::TEXT AS ca \
             FROM public.application_user_reset_password_token aurpt \
             WHERE aurpt.application_user_id = $1;";
 
@@ -79,8 +79,8 @@ impl Base {
                                 }
                             };
 
-                            let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-                                Ok(created_at_) => created_at_,
+                            let expires_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+                                Ok(expires_at_) => expires_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -97,7 +97,8 @@ impl Base {
                                         application_user_id,
                                         value,
                                         wrong_enter_tries_quantity,
-                                        is_approved
+                                        is_approved,
+                                        expires_at
                                     )
                                 )
                             );

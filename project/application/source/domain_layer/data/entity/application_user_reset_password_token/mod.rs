@@ -1,11 +1,9 @@
-use std::marker::PhantomData;
-
 pub struct ApplicationUserResetPasswordToken {
     application_user_id: i64,
     value: String,
     wrong_enter_tries_quantity: u8,
     is_approved: bool,
-    _created_at: PhantomData<String>
+    expires_at: String
 }
 
 impl ApplicationUserResetPasswordToken {
@@ -17,13 +15,14 @@ impl ApplicationUserResetPasswordToken {
         value: String,
         wrong_enter_tries_quantity: u8,
         is_approved: bool,
+        expires_at: String
     ) -> Self {
         return Self {
             application_user_id,
             value,
             wrong_enter_tries_quantity,
             is_approved,
-            _created_at: PhantomData
+            expires_at
         };
     }
 
@@ -51,6 +50,12 @@ impl ApplicationUserResetPasswordToken {
         return self.is_approved;
     }
 
+    pub fn get_expires_at<'b>(
+        &'b self
+    ) -> &'b str {
+        return self.expires_at.as_str();
+    }
+
     pub fn set_value<'b>(
         &'b mut self,
         value: String
@@ -74,6 +79,15 @@ impl ApplicationUserResetPasswordToken {
         is_approved: bool
     ) -> &'b mut Self {
         self.is_approved = is_approved;
+
+        return self;
+    }
+
+    pub fn set_expires_at<'b>(
+        &'b mut self,
+        expires_at: String
+    ) -> &'b mut Self {
+        self.expires_at = expires_at;
 
         return self;
     }

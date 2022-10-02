@@ -18,10 +18,10 @@ impl Base {
     pub async fn create<'a>(
         core_connection: &'a Connection,
         insert: Insert
-    ) -> Result<i64, ErrorAuditor> {
+    ) -> Result<ApplicationUser, ErrorAuditor> {
         let (
             email,
-            nickanme,
+            nickname,
             password_hash
         ) = insert.into_inner();
 
@@ -43,11 +43,12 @@ impl Base {
             ) \
             ON CONFLICT DO NOTHING \
             RETURNING \
-                au.id AS i;";
+                au.id AS i,
+                au.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&email, Type::VARCHAR)
-            .add_parameter(&nickanme, Type::VARCHAR)
+            .add_parameter(&nickname, Type::VARCHAR)
             .add_parameter(&password_hash, Type::TEXT);
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
@@ -75,7 +76,27 @@ impl Base {
                             }
                         };
 
-                        return Ok(id);
+                        let created_at = match row_registry[0].try_get::<'_, usize, String>(1) {
+                            Ok(created_at_) => created_at_,
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        };
+
+                        let application_user = ApplicationUser::new(
+                            id,
+                            email,
+                            nickname,
+                            password_hash,
+                            created_at
+                        );
+
+                        return Ok(application_user);
                     }
                     Err(error) => {
                         return Err(
