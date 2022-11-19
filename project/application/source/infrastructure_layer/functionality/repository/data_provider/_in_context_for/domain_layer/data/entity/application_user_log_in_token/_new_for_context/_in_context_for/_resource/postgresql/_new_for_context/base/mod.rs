@@ -15,7 +15,7 @@ impl Base {
     pub async fn find_by_application_user_id_and_device_id<'a>(
         authorization_connection: &'a Connection,
         application_user_id: i64,
-        device_id: &'a str
+        application_user_log_in_token_device_id: &'a str
     ) -> Result<Option<ApplicationUserLogInToken<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -28,7 +28,7 @@ impl Base {
             WHERE aulit.application_user_id = $1 AND aulit.device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&device_id, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -84,7 +84,7 @@ impl Base {
                                 Some(
                                     ApplicationUserLogInToken::new(
                                         application_user_id,
-                                        device_id,
+                                        application_user_log_in_token_device_id,
                                         value,
                                         wrong_enter_tries_quantity,
                                         expires_at

@@ -13,7 +13,7 @@ pub struct Base;
 impl Base {
     pub async fn is_exist_by_nickanme<'a>(
         core_connection: &'a Connection,
-        nickname: &'a str
+        application_user_nickname: &'a str
     ) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -23,7 +23,7 @@ impl Base {
             FROM public.application_user au \
             WHERE au.nickname = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::VARCHAR);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::VARCHAR);
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -58,7 +58,7 @@ impl Base {
 
     pub async fn is_exist_by_email<'a>(
         core_connection: &'a Connection,
-        email: &'a str
+        application_user_email: &'a str
     ) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -68,7 +68,7 @@ impl Base {
             FROM public.application_user au \
             WHERE au.email = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::VARCHAR);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::VARCHAR);
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -103,7 +103,7 @@ impl Base {
 
     pub async fn find_by_email<'a>(
         core_connection: &'a Connection,
-        email: String
+        application_user_email: String
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -116,7 +116,7 @@ impl Base {
             FROM public.application_user au \
             WHERE au.email = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&email, Type::VARCHAR);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::VARCHAR);
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -175,7 +175,7 @@ impl Base {
                                 Some(
                                     ApplicationUser::new(
                                         id,
-                                        email,
+                                        application_user_email,
                                         nickname,
                                         password_hash,
                                         created_at,
@@ -209,7 +209,7 @@ impl Base {
 
     pub async fn find_by_nickname<'a>(
         core_connection: &'a Connection,
-        nickname: String
+        application_user_nickname: String
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -222,7 +222,7 @@ impl Base {
             FROM public.application_user au \
             WHERE au.nickname = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&nickname, Type::VARCHAR);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::VARCHAR);
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -282,7 +282,7 @@ impl Base {
                                     ApplicationUser::new(
                                         id,
                                         email,
-                                        nickname,
+                                        application_user_nickname,
                                         password_hash,
                                         created_at,
                                     )
@@ -315,7 +315,7 @@ impl Base {
 
     pub async fn find_by_id<'a>(
         core_connection: &'a Connection,
-        id: i64
+        application_user_id: i64
     ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -328,7 +328,7 @@ impl Base {
             FROM public.application_user au \
             WHERE au.id = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -386,7 +386,7 @@ impl Base {
                             return Ok(
                                 Some(
                                     ApplicationUser::new(
-                                        id,
+                                        application_user_id,
                                         email,
                                         nickname,
                                         password_hash,

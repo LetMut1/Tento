@@ -13,17 +13,17 @@ use crate::infrastructure_layer::functionality::service::counter_u8::CounterU8;
 use tokio_postgres::Client as Connection;
 use tokio_postgres::types::Type;
 
-pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO 
+pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO
                     // TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
 impl Base {
     pub async fn per_request_1<'a>(
         core_connection: &'a Connection,
-        name: &'a str,
+        channel_name: &'a str,
         requery_name: &'a Option<String>,
         limit: i16
     ) -> Result<Option<Vec<ActionHandlerOutcomingDataGetManyByNameChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-        
+
         let mut counter_u8 = CounterU8::new();
 
         let mut counter_u8_value: u8;
@@ -37,8 +37,8 @@ impl Base {
                 return Err(error);
             }
         }
-        
-        let mut query = 
+
+        let mut query =
             "SELECT \
                 c.id AS i, \
                 c.name AS n, \
@@ -54,7 +54,7 @@ impl Base {
             .to_string()
             + counter_u8_value.to_string().as_str();
 
-        let wildcard = name.to_string() + "%";
+        let wildcard = channel_name.to_string() + "%";
         prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_name_) = requery_name {
@@ -64,7 +64,7 @@ impl Base {
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
                     return Err(error);
                 }
             }
@@ -107,8 +107,8 @@ impl Base {
                                     }
                                 };
 
-                                let channel_name = match row.try_get::<'_, usize, String>(1) {
-                                    Ok(channel_name_) => channel_name_,
+                                let channel_name_ = match row.try_get::<'_, usize, String>(1) {
+                                    Ok(channel_name__) => channel_name__,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -205,7 +205,7 @@ impl Base {
 
                                 let channel = ActionHandlerOutcomingDataGetManyByNameChannel::new(
                                     channel_id,
-                                    channel_name,
+                                    channel_name_,
                                     channel_personalization_image_path,
                                     channel_subscribers_quantity,
                                     channel_public_marks_quantity,
@@ -214,13 +214,13 @@ impl Base {
                                     channel_viewing_quantity,
                                     channel_created_at
                                 );
-                
+
                                 channel_registry.push(channel);
                             }
-                
+
                             return Ok(Some(channel_registry));
                         }
-                
+
                         return Ok(None);
                     }
                     Err(error) => {
@@ -246,7 +246,7 @@ impl Base {
 
     pub async fn per_request_2<'a>(
         core_connection: &'a Connection,
-        created_at: &'a Option<String>,
+        channel_created_at: &'a Option<String>,
         order: i8,
         limit: i16
     ) -> Result<Option<Vec<ActionHandlerOutcomingDataGetManyByCreatedAtChannel>>, ErrorAuditor> {
@@ -256,7 +256,7 @@ impl Base {
 
         let mut counter_u8_value: u8;
 
-        let mut query = 
+        let mut query =
             "SELECT \
                 c.id AS i, \
                 c.name AS n, \
@@ -271,7 +271,7 @@ impl Base {
             WHERE c.is_private = FALSE AND c.created_at <= current_timestamp(6)"
             .to_string();
 
-        if let Some(created_at_) = created_at {
+        if let Some(created_at_) = channel_created_at {
             if OrderConventionResolver::is_asc(order) {
                 query += " AND c.created_at > $";
             } else {
@@ -292,7 +292,7 @@ impl Base {
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
                     return Err(error);
                 }
             }
@@ -427,8 +427,8 @@ impl Base {
                                     }
                                 };
 
-                                let channel_created_at = match row.try_get::<'_, usize, String>(8) {
-                                    Ok(channel_created_at_) => channel_created_at_,
+                                let channel_created_at_ = match row.try_get::<'_, usize, String>(8) {
+                                    Ok(channel_created_at__) => channel_created_at__,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -448,15 +448,15 @@ impl Base {
                                     channel_hidden_marks_quantity,
                                     channel_reactions_quantity,
                                     channel_viewing_quantity,
-                                    channel_created_at
+                                    channel_created_at_
                                 );
-                
+
                                 channel_registry.push(channel);
                             }
-                
+
                             return Ok(Some(channel_registry));
                         }
-                
+
                         return Ok(None);
                     }
                     Err(error) => {
@@ -482,7 +482,7 @@ impl Base {
 
     pub async fn per_request_3<'a>(
         core_connection: &'a Connection,
-        subscribers_quantity: Option<i64>,
+        channel_subscribers_quantity: Option<i64>,
         order: i8,
         limit: i16
     ) -> Result<Option<Vec<ActionHandlerOutcomingDataGetManyBySubscribersQuantityChannel>>, ErrorAuditor> {
@@ -492,7 +492,7 @@ impl Base {
 
         let mut counter_u8_value: u8;
 
-        let mut query = 
+        let mut query =
             "SELECT \
                 c.id AS i, \
                 c.subscribers_quantity AS sq \
@@ -500,7 +500,7 @@ impl Base {
             WHERE c.is_private = FALSE"
             .to_string();
 
-        if let Some(ref subscribers_quantity_) = subscribers_quantity {
+        if let Some(ref subscribers_quantity_) = channel_subscribers_quantity {
             if OrderConventionResolver::is_asc(order) {
                 query += " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($";
             } else {
@@ -521,7 +521,7 @@ impl Base {
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
                     return Err(error);
                 }
             }
@@ -572,8 +572,8 @@ impl Base {
                                     }
                                 };
 
-                                let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(1) {
-                                    Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
+                                let channel_subscribers_quantity_ = match row.try_get::<'_, usize, i64>(1) {
+                                    Ok(channel_subscribers_quantity__) => channel_subscribers_quantity__,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -586,15 +586,15 @@ impl Base {
 
                                 let channel = ActionHandlerOutcomingDataGetManyBySubscribersQuantityChannel::new(
                                     channel_id,
-                                    channel_subscribers_quantity
+                                    channel_subscribers_quantity_
                                 );
-                
+
                                 channel_registry.push(channel);
                             }
-                
+
                             return Ok(Some(channel_registry));
                         }
-                
+
                         return Ok(None);
                     }
                     Err(error) => {
@@ -628,7 +628,7 @@ impl Base {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = 
+        let query =
             "SELECT \
                 c.id AS i, \
                 c.name AS n, \
@@ -771,13 +771,13 @@ impl Base {
                                     channel_viewing_quantity,
                                     channel_created_at
                                 );
-                
+
                                 channel_registry.push(channel);
                             }
-                
+
                             return Ok(Some(channel_registry));
                         }
-                
+
                         return Ok(None);
                     }
                     Err(error) => {
@@ -801,4 +801,3 @@ impl Base {
         }
     }
 }
-
