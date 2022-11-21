@@ -4,7 +4,7 @@ use crate::domain_layer::functionality::service::_in_context_for::domain_layer::
 use std::borrow::Cow;
 use uuid::Uuid;
 
-pub struct Base;
+pub struct Base;        // TODO  TODO TODO TODO TODO TODO TODO TODO DELETE
 
 impl Base {
     pub fn create_from_id_registry<'a>(
@@ -15,7 +15,8 @@ impl Base {
             Uuid::new_v4().to_string(),
             application_user_id,
             Cow::Borrowed(application_user_log_in_token_device_id),
-            ObfuscationValueGenerator::generate()
+            ObfuscationValueGenerator::generate(),
+            "stub".to_string()
         );
     }
 }

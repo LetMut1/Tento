@@ -5,7 +5,7 @@ use super::_component::data::Data;
 use serde::Deserialize;
 
 // It is more correct to use Enam in the context of a unified server response.
-// The Struct is used, but not Enam, because there are problems in synchronizing the Enum serialization 
+// The Struct is used, but not Enam, because there are problems in synchronizing the Enum serialization
 // and deserialization rules of the used encoding protocol on both sides.
 //
 // pub enum UnifiedReport<S>
@@ -48,12 +48,12 @@ where
         };
     }
 
-    pub fn new_with_error_code(
-        error_code: &'static str
+    pub fn new_with_communication_code(
+        communication_code: &'static str
     ) -> Self {
         return Self {
             data: None,
-            communication_code: Some(error_code)
+            communication_code: Some(communication_code)
         };
     }
 }
@@ -88,12 +88,12 @@ where
         };
     }
 
-    pub fn new_with_error_code(
-        error_code: String
+    pub fn new_with_communication_code(
+        communication_code: String
     ) -> Self {
         return Self {
             data: None,
-            communication_code: Some(error_code)
+            communication_code: Some(communication_code)
         };
     }
 }

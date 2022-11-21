@@ -24,10 +24,10 @@ impl UnifiedReportCreator {
         return UnifiedReport::new_with_data(data);
     }
 
-    pub fn create_with_error_code(
-        error_code: &'static str
+    pub fn create_with_communication_code(
+        communication_code: &'static str
     ) -> UnifiedReport<()> {
-        return UnifiedReport::new_with_error_code(error_code)
+        return UnifiedReport::new_with_communication_code(communication_code)
     }
 }
 
@@ -42,9 +42,9 @@ impl UnifiedReportCreator {
         return UnifiedReport::new_with_data(data);
     }
 
-    pub fn create_with_error_code(
-        error_code: &'static str
+    pub fn create_with_communication_code(
+        communication_code: &'static str
     ) -> UnifiedReport<()> {
-        return UnifiedReport::new_with_error_code(error_code.to_string());
+        return UnifiedReport::new_with_communication_code(communication_code.to_string());
     }
 }
