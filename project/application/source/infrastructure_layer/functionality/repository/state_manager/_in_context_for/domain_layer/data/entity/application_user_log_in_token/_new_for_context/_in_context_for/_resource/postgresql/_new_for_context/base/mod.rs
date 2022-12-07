@@ -193,9 +193,7 @@ impl Base {
 
         let query =
             "DELETE FROM ONLY public.application_user_log_in_token AS aulit \
-            WHERE aulit.application_user_id = $1 AND aulit.device_id = $2 \
-            RETURNING \
-                aulit.application_user_id AS aui;";
+            WHERE aulit.application_user_id = $1 AND aulit.device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
@@ -203,16 +201,7 @@ impl Base {
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
                 match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserLogInToken can not be deleted from Postgresql database.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-
+                    Ok(_) => {
                         return Ok(());
                     }
                     Err(error) => {

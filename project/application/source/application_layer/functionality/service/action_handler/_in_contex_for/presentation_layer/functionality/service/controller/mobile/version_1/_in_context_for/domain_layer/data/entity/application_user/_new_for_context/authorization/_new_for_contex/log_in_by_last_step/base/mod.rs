@@ -74,7 +74,6 @@ impl Base {
                     );
                 }
             };
-
             let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
             let application_user_log_in_token = match ApplicationUserLogInTokenDataProviderPostgresql::find_1(

@@ -1,5 +1,5 @@
 pub mod check_email_for_existing;
-pub mod check_nickaname_for_existing;
+pub mod check_nickname_for_existing;
 pub mod log_in_by_first_step;
 pub mod log_in_by_last_step;
 pub mod log_out_from_all_devices;

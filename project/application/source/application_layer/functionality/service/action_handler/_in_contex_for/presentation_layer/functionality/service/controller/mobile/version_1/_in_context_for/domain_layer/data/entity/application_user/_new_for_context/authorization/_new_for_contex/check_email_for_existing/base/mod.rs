@@ -33,42 +33,39 @@ impl Base {
     {
         let application_user_email = action_handler_incoming_data.into_inner();
 
-        match Validator::is_valid_email(application_user_email.as_str()) {
-            Ok(is_valid_email) => {
-                if is_valid_email {
-                    match postgresql_connection_pool.get().await {
-                        Ok(pooled_connection) => {
-                            match ApplicationUserDataProviderPostgresql::is_exist_2(
-                                &*pooled_connection, application_user_email.as_str()
-                            ).await {
-                                Ok(result) => {
-                                    return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(result)));
-                                }
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                    return Err(error);
-                                }
-                            }
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-                }
-
-                return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::InvalidEmail));
-            }
+        let is_valid_email = match Validator::is_valid_email(application_user_email.as_str()) {
+            Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
+        };
+        if is_valid_email {
+            let pooled_connection = match postgresql_connection_pool.get().await {
+                Ok(pooled_connection_) => pooled_connection_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let is_exist = match ApplicationUserDataProviderPostgresql::is_exist_2(&*pooled_connection, application_user_email.as_str()).await {
+                Ok(is_exist_) => is_exist_,
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                    return Err(error);
+                }
+            };
+
+            return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(is_exist)));
         }
+
+        return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::InvalidEmail));
     }
 }

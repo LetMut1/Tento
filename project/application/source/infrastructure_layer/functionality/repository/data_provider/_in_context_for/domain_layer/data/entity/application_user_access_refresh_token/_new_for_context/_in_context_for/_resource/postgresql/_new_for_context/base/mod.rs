@@ -89,7 +89,7 @@ impl Base {
                                     ApplicationUserAccessRefreshToken::new(
                                         application_user_id,
                                         Cow::Borrowed(application_user_log_in_token_device_id),
-                                        application_user_access_token_id,
+                                        Cow::Owned(application_user_access_token_id),
                                         application_user_access_refresh_token_obfuscation_value,
                                         application_user_access_refresh_token_expires_at,
                                         application_user_access_refresh_token_updated_at

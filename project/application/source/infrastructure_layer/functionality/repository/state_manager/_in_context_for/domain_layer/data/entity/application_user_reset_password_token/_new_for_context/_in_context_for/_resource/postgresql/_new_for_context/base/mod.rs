@@ -194,25 +194,14 @@ impl Base {
 
         let query =
             "DELETE FROM ONLY public.application_user_reset_password_token AS aurpt \
-            WHERE aurpt.application_user_id = $1 \
-            RETURNING \
-                1::SMALLINT;";
+            WHERE aurpt.application_user_id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
                 match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserResetPasswordToken can not be deleted from Postgresql database.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-
+                    Ok(_) => {
                         return Ok(());
                     }
                     Err(error) => {

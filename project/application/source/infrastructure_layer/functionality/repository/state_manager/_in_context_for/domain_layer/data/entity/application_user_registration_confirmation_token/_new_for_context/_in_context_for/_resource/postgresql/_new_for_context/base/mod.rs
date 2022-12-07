@@ -194,25 +194,14 @@ impl Base {
 
         let query =
             "DELETE FROM ONLY public.application_user_registration_confirmation_token AS aurct \
-            WHERE aurct.application_user_email = $1 \
-            RETURNING \
-                aurct.application_user_email AS aue;";
+            WHERE aurct.application_user_email = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
                 match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationConfirmationToken can not be deleted from Postgresql database.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-
+                    Ok(_) => {
                         return Ok(());
                     }
                     Err(error) => {

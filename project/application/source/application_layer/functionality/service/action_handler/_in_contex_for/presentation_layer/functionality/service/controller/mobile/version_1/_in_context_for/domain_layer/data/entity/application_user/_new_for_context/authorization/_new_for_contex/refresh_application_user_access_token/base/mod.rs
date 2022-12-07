@@ -48,6 +48,7 @@ impl Base {
                                             if let Some(mut application_user_access_refresh_token_) = application_user_access_refresh_token {
                                                 match Encoder::is_valid(environment_configuration_resolver, &application_user_access_refresh_token_, application_user_access_refresh_token_web_form.as_str()) {
                                                     Ok(is_valid) => {
+                                    Как понять, что пара пришла та, что лежит в Бд, для этого юзера и девайсв
                                                         if is_valid && application_user_access_token.get_id().as_bytes() == application_user_access_refresh_token_.get_application_user_access_token_id().as_bytes() {
                                                             Refresher::refresh(&mut application_user_access_refresh_token_);
 

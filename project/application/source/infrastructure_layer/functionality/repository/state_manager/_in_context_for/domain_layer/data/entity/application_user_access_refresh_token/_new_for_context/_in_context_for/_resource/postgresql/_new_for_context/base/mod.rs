@@ -461,7 +461,7 @@ impl Base {
         return Ok(());
     }
 
-    pub async fn delete<'a>(
+    pub async fn delete_1<'a>(
         authorization_connection: &'a Connection,
         application_user_id: i64,
         application_user_log_in_token_device_id: &'a str
@@ -470,26 +470,55 @@ impl Base {
 
         let query =
             "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
-            WHERE auart.application_user_id = $1 AND auart.application_user_log_in_token_device_id = $2 \
-            RETURNING \
-                auart.application_user_id AS aui;";
+            WHERE auart.application_user_id = $1 AND auart.application_user_log_in_token_device_id = $2;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver
+        .add_parameter(&application_user_id, Type::INT8)
+        .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
                 match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserAccessRefreshToken can not be deleted from Postgresql database.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
+                    Ok(_) => {
+                        return Ok(());
+                    }
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
+    }
 
+    pub async fn delete_2<'a>(
+        authorization_connection: &'a Connection,
+        application_user_id: i64
+    ) -> Result<(), ErrorAuditor> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query =
+            "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
+            WHERE auart.application_user_id = $1;";
+
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
+
+        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
+            Ok(ref statement) => {
+                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
+                    Ok(_) => {
                         return Ok(());
                     }
                     Err(error) => {

@@ -34,21 +34,8 @@ impl Base {
         let application_user_nickname = action_handler_incoming_data.into_inner();
 
         if Validator::is_valid_nickname(application_user_nickname.as_str()) {
-            match postgresql_connection_pool.get().await {
-                Ok(pooled_connection) => {
-                    match ApplicationUserDataProviderPostgresql::is_exist_1(
-                        &*pooled_connection, application_user_nickname.as_str()
-                    ).await {
-                        Ok(result) => {
-                            return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(result)));
-                        }
-                        Err(mut error) => {
-                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                            return Err(error);
-                        }
-                    }
-                }
+            let pooled_connection = match postgresql_connection_pool.get().await {
+                Ok(pooled_connection_) => pooled_connection_,
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -57,7 +44,18 @@ impl Base {
                         )
                     );
                 }
-            }
+            };
+
+            let is_exist = match ApplicationUserDataProviderPostgresql::is_exist_1(&*pooled_connection, application_user_nickname.as_str()).await {
+                Ok(is_exist_) => is_exist_,
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                    return Err(error);
+                }
+            };
+
+            return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(is_exist)));
         }
 
         return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::InvalidNickname));
