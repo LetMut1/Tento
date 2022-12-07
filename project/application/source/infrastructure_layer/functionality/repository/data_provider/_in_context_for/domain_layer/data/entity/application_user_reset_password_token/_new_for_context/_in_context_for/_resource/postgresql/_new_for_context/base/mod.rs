@@ -12,7 +12,7 @@ use tokio_postgres::types::Type;
 pub struct Base;
 
 impl Base {
-    pub async fn find_by_application_user_id<'a>(
+    pub async fn find_1<'a>(
         authorization_connection: &'a Connection,
         application_user_id: i64
     ) -> Result<Option<ApplicationUserResetPasswordToken>, ErrorAuditor> {

@@ -69,17 +69,17 @@ impl Base {
                                             Ok(core_postgresql_pooled_connection) => {
                                                 let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
-                                                match ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(core_postgresql_connection, application_user_nickname.as_str()).await {
+                                                match ApplicationUserDataProviderPostgresql::is_exist_1(core_postgresql_connection, application_user_nickname.as_str()).await {
                                                     Ok(is_exist_by_nickname) => {
                                                         if !is_exist_by_nickname {
-                                                            match ApplicationUserDataProviderPostgresql::is_exist_by_email(core_postgresql_connection, application_user_email.as_str()).await {
+                                                            match ApplicationUserDataProviderPostgresql::is_exist_2(core_postgresql_connection, application_user_email.as_str()).await {
                                                                 Ok(is_exist_by_email) => {
                                                                     if !is_exist_by_email {
                                                                         match authorization_postgresql_connection_pool.get().await {
                                                                             Ok(authorization_postgresql_pooled_connection) => {
                                                                                 let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-                                                                                match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_by_application_user_email(
+                                                                                match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_1(
                                                                                     authorization_postgresql_connection, application_user_email.as_str()
                                                                                 ).await {
                                                                                     Ok(application_user_registration_confirmation_token) => {

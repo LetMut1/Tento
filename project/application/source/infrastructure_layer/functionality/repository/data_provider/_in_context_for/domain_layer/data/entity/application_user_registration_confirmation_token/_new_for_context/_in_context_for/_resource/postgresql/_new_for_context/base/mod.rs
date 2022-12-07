@@ -12,7 +12,7 @@ use tokio_postgres::types::Type;
 pub struct Base;
 
 impl Base {
-    pub async fn find_by_application_user_email<'a>(
+    pub async fn find_1<'a>(
         authorization_connection: &'a Connection,
         application_user_email: &'a str
     ) -> Result<Option<ApplicationUserRegistrationConfirmationToken<'a>>, ErrorAuditor> {
@@ -27,7 +27,7 @@ impl Base {
             FROM public.application_user_registration_confirmation_token aurct \
             WHERE aurct.application_user_email = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::VARCHAR);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {

@@ -49,7 +49,7 @@ impl Base {
                 if is_valid_email {
                     match core_postgresql_connection_pool.get().await {
                         Ok(core_postgresql_pooled_connection) => {
-                            match ApplicationUserDataProviderPostgresql::find_by_email(
+                            match ApplicationUserDataProviderPostgresql::find_2(
                                 &*core_postgresql_pooled_connection, application_user_email
                             ).await {
                                 Ok(application_user) => {
@@ -60,7 +60,7 @@ impl Base {
                                             Ok(authorization_postgresql_pooled_connection) => {
                                                 let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-                                                match ApplicationUserResetPasswordTokenDataProviderPostgresql::find_by_application_user_id(
+                                                match ApplicationUserResetPasswordTokenDataProviderPostgresql::find_1(
                                                     authorization_postgresql_connection, application_user_id
                                                 ).await {
                                                     Ok(application_user_reset_password_token_) => {

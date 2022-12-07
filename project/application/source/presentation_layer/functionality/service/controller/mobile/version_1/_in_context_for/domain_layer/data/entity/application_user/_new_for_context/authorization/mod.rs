@@ -1141,7 +1141,7 @@ impl Authorization {
         request: Request<Body>,
         _core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: Pool<RedisConnectionManager>
+        _redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -1161,7 +1161,7 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogInByLastStep>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerLogInByLastStep::handle(
-                    environment_configuration_resolver, authorization_postgresql_connection_pool, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, authorization_postgresql_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {

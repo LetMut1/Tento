@@ -44,8 +44,8 @@ impl Base {
                 au.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_email, Type::VARCHAR)
-            .add_parameter(&application_user_nickname, Type::VARCHAR)
+            .add_parameter(&application_user_email, Type::TEXT)
+            .add_parameter(&application_user_nickname, Type::TEXT)
             .add_parameter(&application_user_password_hash, Type::TEXT);
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
@@ -131,7 +131,7 @@ impl Base {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
-            "UPDATE ONLY public.application_user as au \
+            "UPDATE ONLY public.application_user AS au \
             SET ( \
                 email, \
                 nickname, \
@@ -143,11 +143,11 @@ impl Base {
             ) \
             WHERE au.id = $4 \
             RETURNING \
-                au.id;";
+                au.id AS i;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_email, Type::VARCHAR)
-            .add_parameter(&application_user_nickname, Type::VARCHAR)
+            .add_parameter(&application_user_email, Type::TEXT)
+            .add_parameter(&application_user_nickname, Type::TEXT)
             .add_parameter(&application_user_password_hash, Type::TEXT)
             .add_parameter(&application_user_id, Type::INT8);
 

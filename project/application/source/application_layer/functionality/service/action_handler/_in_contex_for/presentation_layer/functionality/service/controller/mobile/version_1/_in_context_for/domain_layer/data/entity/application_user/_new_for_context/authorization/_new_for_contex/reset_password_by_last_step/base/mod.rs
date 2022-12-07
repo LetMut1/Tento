@@ -54,7 +54,7 @@ impl Base {
                             Ok(authorization_postgresql_pooled_connection) => {
                                 let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-                                match ApplicationUserResetPasswordTokenDataProviderPostgresql::find_by_application_user_id(
+                                match ApplicationUserResetPasswordTokenDataProviderPostgresql::find_1(
                                     authorization_postgresql_connection, application_user_id
                                 ).await {
                                     Ok(application_user_reset_password_token) => {
@@ -74,7 +74,7 @@ impl Base {
                                                             Ok(core_postgresql_pooled_connection) => {
                                                                 let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
-                                                                match ApplicationUserDataProviderPostgresql::find_by_id(core_postgresql_connection, application_user_id).await {
+                                                                match ApplicationUserDataProviderPostgresql::find_3(core_postgresql_connection, application_user_id).await {
                                                                     Ok(application_user) => {
                                                                         if let Some(mut application_user_) = application_user {
                                                                             match PasswordHashResolver::create(application_user_password.as_str()) {

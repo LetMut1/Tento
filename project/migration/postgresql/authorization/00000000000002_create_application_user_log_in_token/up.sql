@@ -1,7 +1,7 @@
 CREATE TABLE public.application_user_log_in_token (
     application_user_id BIGINT,
     device_id TEXT,
-    value CHARACTER VARYING(6),
+    value TEXT,
     wrong_enter_tries_quantity SMALLINT,
     expires_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 95, autovacuum_enabled = true);
@@ -22,5 +22,3 @@ ALTER COLUMN value SET NOT NULL,
 ALTER COLUMN wrong_enter_tries_quantity SET NOT NULL,
 ALTER COLUMN expires_at SET NOT NULL,
 ADD CONSTRAINT application_user_log_in_token4 UNIQUE USING INDEX application_user_log_in_token1;
-
--- TODO  device_id TEXT - какой СHARACTER VARYING(?)

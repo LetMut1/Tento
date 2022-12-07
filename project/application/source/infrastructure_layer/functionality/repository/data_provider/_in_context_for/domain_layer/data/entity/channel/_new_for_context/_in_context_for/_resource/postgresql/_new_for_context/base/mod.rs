@@ -16,7 +16,7 @@ use tokio_postgres::types::Type;
 pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO
                     // TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
 impl Base {
-    pub async fn per_request_1<'a>(
+    pub async fn per_request_1<'a>(                     //  TODO подумать, как это называть. Когда возвращается сущность, это называется find_number
         core_connection: &'a Connection,
         channel_name: &'a str,
         requery_name: &'a Option<String>,

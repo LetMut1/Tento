@@ -47,7 +47,7 @@ impl Base {
                         Ok(authorization_postgresql_pooled_connection) => {
                             let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-                            match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_by_application_user_email(
+                            match ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql::find_1(
                                 authorization_postgresql_connection, application_user_email.as_str()
                             ).await {
                                 Ok(application_user_registration_confirmation_token) => {

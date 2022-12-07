@@ -48,8 +48,8 @@ impl Base {
                 aurct.expires_at::TEXT AS ea;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_email, Type::VARCHAR)
-            .add_parameter(&application_user_registration_confirmation_token_value, Type::VARCHAR)
+            .add_parameter(&application_user_email, Type::TEXT)
+            .add_parameter(&application_user_registration_confirmation_token_value, Type::TEXT)
             .add_parameter(&wrong_enter_tries_quantity_, Type::INT2)
             .add_parameter(&application_user_registration_confirmation_token_is_approved, Type::BOOL)
             .add_parameter(&quantity_of_minute_for_expiration, Type::INT2);
@@ -71,15 +71,15 @@ impl Base {
                                 }
                             };
 
-                            let application_user_registration_confirmation_token = ApplicationUserRegistrationConfirmationToken::new(
-                                application_user_email,
-                                application_user_registration_confirmation_token_value,
-                                application_user_registration_confirmation_token_wrong_enter_tries_quantity,
-                                application_user_registration_confirmation_token_is_approved,
-                                application_user_registration_confirmation_token_expires_at
+                            return Ok(
+                                ApplicationUserRegistrationConfirmationToken::new(
+                                    application_user_email,
+                                    application_user_registration_confirmation_token_value,
+                                    application_user_registration_confirmation_token_wrong_enter_tries_quantity,
+                                    application_user_registration_confirmation_token_is_approved,
+                                    application_user_registration_confirmation_token_expires_at
+                                )
                             );
-
-                            return Ok(application_user_registration_confirmation_token);
                         }
 
                         return Err(
@@ -88,56 +88,6 @@ impl Base {
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
-    }
-
-    pub async fn delete<'a>(
-        authorization_connection: &'a Connection,
-        application_user_email: &'a str
-    ) -> Result<(), ErrorAuditor> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query =
-            "DELETE FROM ONLY public.application_user_registration_confirmation_token AS aurct \
-            WHERE aurct.application_user_email = $1 \
-            RETURNING \
-                aurct.application_user_email AS aue;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::VARCHAR);
-
-        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationConfirmationToken can not be deleted from Postgresql database.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-
-                        return Ok(());
                     }
                     Err(error) => {
                         return Err(
@@ -174,51 +124,31 @@ impl Base {
 
         let application_user_registration_confirmation_token_expires_at = application_user_registration_confirmation_token.get_expires_at();
 
-        let quantity_of_minute_for_expiration = ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
-        "INSERT INTO public.application_user_registration_confirmation_token AS aurct ( \
-            application_user_email, \
-            value, \
-            wrong_enter_tries_quantity, \
-            is_approved, \
-            expires_at \
-        ) VALUES ( \
-            $1, \
-            $2, \
-            $3, \
-            $4, \
-            current_timestamp(6) + INTERVAL '$5 MINUTE' \
-        ) \
-        ON CONFLICT ON CONSTRAINT application_user_registration_confirmation_token3 DO \
-        UPDATE SET ( \
+        "UPDATE ONLY public.application_user_registration_confirmation_token AS aurct
+        SET ( \
             value, \
             wrong_enter_tries_quantity, \
             is_approved, \
             expires_at \
         ) = ROW( \
-            $6, \
-            $7, \
-            $8, \
-            $9::TIMESTAMP(6) WITH TIME ZONE \
+            $1, \
+            $2, \
+            $3, \
+            $4::TIMESTAMP(6) WITH TIME ZONE \
         ) \
-        WHERE aurct.application_user_email = $10 \
+        WHERE aurct.application_user_email = $5 \
         RETURNING \
             aurct.application_user_email AS aue;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_email, Type::VARCHAR)
-            .add_parameter(&application_user_registration_confirmation_token_value, Type::VARCHAR)
+            .add_parameter(&application_user_registration_confirmation_token_value, Type::TEXT)
             .add_parameter(&application_user_registration_confirmation_token_wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&application_user_registration_confirmation_token_is_approved, Type::BOOL)
-            .add_parameter(&quantity_of_minute_for_expiration, Type::INT2)
-            .add_parameter(&application_user_registration_confirmation_token_value, Type::VARCHAR)
-            .add_parameter(&application_user_registration_confirmation_token_wrong_enter_tries_quantity, Type::INT2)
-            .add_parameter(&application_user_registration_confirmation_token_is_approved, Type::BOOL)
-            .add_parameter(&application_user_registration_confirmation_token_expires_at, Type::VARCHAR)
-            .add_parameter(&application_user_email, Type::VARCHAR);
+            .add_parameter(&application_user_registration_confirmation_token_expires_at, Type::TEXT)
+            .add_parameter(&application_user_email, Type::TEXT);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -228,6 +158,56 @@ impl Base {
                             return Err(
                                 ErrorAuditor::new(
                                     BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationConfirmationToken can not be updated in Postgresql database.") },
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+
+                        return Ok(());
+                    }
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
+    }
+
+    pub async fn delete<'a>(
+        authorization_connection: &'a Connection,
+        application_user_email: &'a str
+    ) -> Result<(), ErrorAuditor> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query =
+            "DELETE FROM ONLY public.application_user_registration_confirmation_token AS aurct \
+            WHERE aurct.application_user_email = $1 \
+            RETURNING \
+                aurct.application_user_email AS aue;";
+
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+
+        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
+            Ok(ref statement) => {
+                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
+                    Ok(row_registry) => {
+                        if row_registry.is_empty() {
+                            return Err(
+                                ErrorAuditor::new(
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationConfirmationToken can not be deleted from Postgresql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );

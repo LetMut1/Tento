@@ -49,7 +49,7 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&application_user_reset_password_token_application_user_id, Type::INT8)
-            .add_parameter(&application_user_reset_password_token_value, Type::VARCHAR)
+            .add_parameter(&application_user_reset_password_token_value, Type::TEXT)
             .add_parameter(&wrong_enter_tries_quantity_, Type::INT2)
             .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
             .add_parameter(&quantity_of_minute_for_expiration, Type::INT2);
@@ -71,15 +71,15 @@ impl Base {
                                 }
                             };
 
-                            let application_user_reset_password_token = ApplicationUserResetPasswordToken::new(
-                                application_user_reset_password_token_application_user_id,
-                                application_user_reset_password_token_value,
-                                application_user_reset_password_token_wrong_enter_tries_quantity,
-                                application_user_reset_password_token_is_approved,
-                                application_user_reset_password_token_expires_at
+                            return Ok(
+                                ApplicationUserResetPasswordToken::new(
+                                    application_user_reset_password_token_application_user_id,
+                                    application_user_reset_password_token_value,
+                                    application_user_reset_password_token_wrong_enter_tries_quantity,
+                                    application_user_reset_password_token_is_approved,
+                                    application_user_reset_password_token_expires_at
+                                )
                             );
-
-                            return Ok(application_user_reset_password_token);
                         }
 
                         return Err(
@@ -88,6 +88,82 @@ impl Base {
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
+                    }
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
+    }
+
+    pub async fn update<'a>(
+        authorization_connection: &'a Connection,
+        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken
+    ) -> Result<(), ErrorAuditor> {
+        let application_user_id = application_user_reset_password_token.get_application_user_id();
+
+        let application_user_reset_password_token_value = application_user_reset_password_token.get_value();
+
+        let application_user_reset_password_token_wrong_enter_tries_quantity = application_user_reset_password_token.get_wrong_enter_tries_quantity() as i16;
+
+        let application_user_reset_password_token_is_approved = application_user_reset_password_token.get_is_approved();
+
+        let application_user_reset_password_token_expires_at = application_user_reset_password_token.get_expires_at();
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query =
+            "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+            SET ( \
+                value, \
+                wrong_enter_tries_quantity, \
+                is_approved, \
+                expires_at \
+            ) = ROW( \
+                $1, \
+                $2, \
+                $3, \
+                $4::TIMESTAMP(6) WITH TIME ZONE \
+            ) \
+            WHERE aurpt.application_user_id = $5 \
+            RETURNING \
+                aurpt.application_user_id AS aui;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&application_user_reset_password_token_value, Type::TEXT)
+            .add_parameter(&application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
+            .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
+            .add_parameter(&application_user_reset_password_token_expires_at, Type::TEXT)
+            .add_parameter(&application_user_id, Type::INT8);
+
+        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
+            Ok(ref statement) => {
+                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
+                    Ok(row_registry) => {
+                        if row_registry.is_empty() {
+                            return Err(
+                                ErrorAuditor::new(
+                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserResetPasswordToken can not be updated in Postgresql database.") },
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+
+                        return Ok(());
                     }
                     Err(error) => {
                         return Err(
@@ -132,102 +208,6 @@ impl Base {
                             return Err(
                                 ErrorAuditor::new(
                                     BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserResetPasswordToken can not be deleted from Postgresql database.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-
-                        return Ok(());
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
-    }
-
-    pub async fn update<'a>(
-        authorization_connection: &'a Connection,
-        application_user_reset_password_token: &'a ApplicationUserResetPasswordToken
-    ) -> Result<(), ErrorAuditor> {
-        let application_user_id = application_user_reset_password_token.get_application_user_id();
-
-        let application_user_reset_password_token_value = application_user_reset_password_token.get_value();
-
-        let application_user_reset_password_token_wrong_enter_tries_quantity = application_user_reset_password_token.get_wrong_enter_tries_quantity() as i16;
-
-        let application_user_reset_password_token_is_approved = application_user_reset_password_token.get_is_approved();
-
-        let application_user_reset_password_token_expires_at = application_user_reset_password_token.get_expires_at();
-
-        let quantity_of_minute_for_expiration = ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
-
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query =
-            "INSERT INTO public.application_user_reset_password_token AS aurpt ( \
-                application_user_id, \
-                value, \
-                wrong_enter_tries_quantity, \
-                is_approved, \
-                expires_at \
-            ) VALUES ( \
-                $1, \
-                $2, \
-                $3, \
-                $4, \
-                current_timestamp(6) + (INTERVAL '1 MINUTE' * $5)::INTERVAL \
-            ) \
-            ON CONFLICT ON CONSTRAINT application_user_reset_password_token3 DO \
-            UPDATE SET ( \
-                value, \
-                wrong_enter_tries_quantity, \
-                is_approved, \
-                expires_at \
-            ) = ROW( \
-                $6, \
-                $7, \
-                $8, \
-                $9::TIMESTAMP(6) WITH TIME ZONE \
-            ) \
-            WHERE aurpt.application_user_id = $10 \
-            RETURNING \
-                aurpt.application_user_id AS aui;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_id, Type::INT8)
-            .add_parameter(&application_user_reset_password_token_value, Type::VARCHAR)
-            .add_parameter(&application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
-            .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
-            .add_parameter(&quantity_of_minute_for_expiration, Type::INT2)
-            .add_parameter(&application_user_reset_password_token_value, Type::VARCHAR)
-            .add_parameter(&application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
-            .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
-            .add_parameter(&application_user_reset_password_token_expires_at, Type::VARCHAR)
-            .add_parameter(&application_user_id, Type::INT8);
-
-        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserResetPasswordToken can not be updated in Postgresql database.") },
                                     BacktracePart::new(line!(), file!(), None)
                                 )
                             );

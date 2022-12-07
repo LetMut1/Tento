@@ -15,3 +15,4 @@ fn main(
     // ApplicationUserRegistrationConfirmationToken
     // ApplicationUserLogInToken
     // ApplicationUserResetPasswordToken
+    // application_user_access_refresh_token   - удалять очень редно, так как нет индекса на поле, по которому будет идти поиск кандидатов.

@@ -39,7 +39,7 @@ impl Base {
 
         match authorization_postgresql_connection_pool.get().await {
             Ok(authorization_postgresql_pooled_connection) => {
-                match ApplicationUserResetPasswordTokenDataProviderPostgresql::find_by_application_user_id(
+                match ApplicationUserResetPasswordTokenDataProviderPostgresql::find_1(
                     &*authorization_postgresql_pooled_connection, application_user_id
                 ).await {
                     Ok(application_user_reset_password_token) => {
@@ -47,7 +47,7 @@ impl Base {
                             if !application_user_reset_password_token_.get_is_approved() {
                                 match core_postgresql_connection_pool.get().await {
                                     Ok(core_postgresql_pooled_connection) => {
-                                        match ApplicationUserDataProviderPostgresql::find_by_id(
+                                        match ApplicationUserDataProviderPostgresql::find_3(
                                             &*core_postgresql_pooled_connection, application_user_id
                                         ).await {
                                             Ok(application_user) => {

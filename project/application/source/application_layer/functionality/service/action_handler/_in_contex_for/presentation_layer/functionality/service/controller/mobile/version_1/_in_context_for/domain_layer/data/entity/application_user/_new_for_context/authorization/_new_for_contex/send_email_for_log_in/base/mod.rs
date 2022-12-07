@@ -42,14 +42,14 @@ impl Base {
 
         match authorization_postgresql_connection_pool.get().await {
             Ok(authorization_postgresql_pooled_connection) => {
-                match ApplicationUserLogInTokenDataProviderPostgresql::find_by_application_user_id_and_device_id(
+                match ApplicationUserLogInTokenDataProviderPostgresql::find_1(
                     &*authorization_postgresql_pooled_connection, application_user_id, application_user_log_in_token_device_id.as_str()
                 ).await {
                     Ok(application_user_log_in_token) => {
                         if let Some(application_user_log_in_token_) = application_user_log_in_token {
                             match core_postgresql_connection_pool.get().await {
                                 Ok(core_postgresql_pooled_connection) => {
-                                    match ApplicationUserDataProviderPostgresql::find_by_id(
+                                    match ApplicationUserDataProviderPostgresql::find_3(
                                         &*core_postgresql_pooled_connection, application_user_id
                                     ).await {
                                         Ok(application_user) => {

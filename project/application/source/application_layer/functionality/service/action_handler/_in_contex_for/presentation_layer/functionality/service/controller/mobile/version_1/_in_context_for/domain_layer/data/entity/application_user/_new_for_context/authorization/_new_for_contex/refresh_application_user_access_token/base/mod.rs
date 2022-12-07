@@ -41,7 +41,7 @@ impl Base {
                                 Ok(mut redis_pooled_connection) => {
                                     let connection = &mut *redis_pooled_connection;
 
-                                    match ApplicationUserAccessRefreshTokenDataProviderRedis::find_by_application_user_id_and_application_user_log_in_token_device_id(
+                                    match ApplicationUserAccessRefreshTokenDataProviderRedis::find_1(
                                         connection, application_user_access_token.get_application_user_id(), application_user_access_token.get_application_user_log_in_token_device_id()
                                     ).await {
                                         Ok(application_user_access_refresh_token) => {

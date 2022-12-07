@@ -7,12 +7,12 @@ $$
 LANGUAGE plpgsql
 IMMUTABLE;
 
-CREATE TABLE public.channel ( 
+CREATE TABLE public.channel (
     id BIGINT,
     application_user_channel_administrator_id BIGINT,
-    name CHARACTER VARYING(75),
+    name TEXT,
     personalization_image_path TEXT,
-    description CHARACTER VARYING(500),
+    description TEXT,
     is_private BOOLEAN,
     subscribers_quantity BIGINT,
     public_marks_quantity BIGINT,
@@ -44,7 +44,7 @@ ALTER TABLE ONLY public.channel
 ALTER COLUMN id SET NOT NULL,
 ALTER COLUMN id SET DEFAULT nextval('public.channel1'),
 ALTER COLUMN application_user_channel_administrator_id SET NOT NULL,
-ALTER COLUMN name SET DATA TYPE CHARACTER VARYING(75) COLLATE "C",
+ALTER COLUMN name SET DATA TYPE TEXT COLLATE "C",
 ALTER COLUMN name SET NOT NULL,
 ALTER COLUMN personalization_image_path SET NOT NULL,
 ALTER COLUMN is_private SET NOT NULL,
@@ -63,5 +63,5 @@ ADD CONSTRAINT channel10 UNIQUE USING INDEX channel6;
 
 
 --  // TODO Аккаунт public.application_user_channel_administrator(id) не удалять, пока есть channel__owner_application_user_channel_administrator_id__foreign_key.
---  либо заставлять сначала удалить все паблики вручную. 
+--  либо заставлять сначала удалить все паблики вручную.
   -- // TODO Оффет делаем как (where id < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод)

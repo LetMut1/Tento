@@ -38,7 +38,7 @@ impl Base {
                 if is_valid_email {
                     match postgresql_connection_pool.get().await {
                         Ok(pooled_connection) => {
-                            match ApplicationUserDataProviderPostgresql::is_exist_by_email(
+                            match ApplicationUserDataProviderPostgresql::is_exist_2(
                                 &*pooled_connection, application_user_email.as_str()
                             ).await {
                                 Ok(result) => {

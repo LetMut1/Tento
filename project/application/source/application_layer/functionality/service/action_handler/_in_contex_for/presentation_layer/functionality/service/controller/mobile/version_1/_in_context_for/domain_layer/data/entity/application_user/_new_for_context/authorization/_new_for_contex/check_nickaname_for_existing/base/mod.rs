@@ -36,7 +36,7 @@ impl Base {
         if Validator::is_valid_nickname(application_user_nickname.as_str()) {
             match postgresql_connection_pool.get().await {
                 Ok(pooled_connection) => {
-                    match ApplicationUserDataProviderPostgresql::is_exist_by_nickanme(
+                    match ApplicationUserDataProviderPostgresql::is_exist_1(
                         &*pooled_connection, application_user_nickname.as_str()
                     ).await {
                         Ok(result) => {

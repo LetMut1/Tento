@@ -56,7 +56,7 @@ impl Base {
                     let application_user = match Validator::is_valid_email(application_user_email_or_application_user_nickname.as_str()) {
                         Ok(is_valid_email) => {
                             if is_valid_email {
-                                match ApplicationUserDataProviderPostgresql::find_by_email(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
+                                match ApplicationUserDataProviderPostgresql::find_2(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
                                     Ok(application_user_) => {
                                         match application_user_ {
                                             Some(application_user__) => application_user__,
@@ -73,7 +73,7 @@ impl Base {
                                 }
                             } else {
                                 if Validator::is_valid_nickname(application_user_email_or_application_user_nickname.as_str()) {
-                                    match ApplicationUserDataProviderPostgresql::find_by_nickname(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
+                                    match ApplicationUserDataProviderPostgresql::find_1(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
                                         Ok(application_user_) => {
                                             match application_user_ {
                                                 Some(application_user__) => application_user__,
@@ -109,7 +109,7 @@ impl Base {
                                     Ok(authorization_postgresql_pooled_connection) => {
                                         let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-                                        match ApplicationUserLogInTokenDataProviderPostgresql::find_by_application_user_id_and_device_id(
+                                        match ApplicationUserLogInTokenDataProviderPostgresql::find_1(
                                             authorization_postgresql_connection, application_user_id, application_user_log_in_token_device_id.as_str()
                                         ).await {
                                             Ok(application_user_log_in_token_) => {

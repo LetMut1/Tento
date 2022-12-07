@@ -1,7 +1,7 @@
 CREATE TABLE public.application_user (
     id BIGINT,
-    email CHARACTER VARYING(320),
-    nickname CHARACTER VARYING(55),
+    email TEXT,
+    nickname TEXT,
     password_hash TEXT,
     created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 95, autovacuum_enabled = true);

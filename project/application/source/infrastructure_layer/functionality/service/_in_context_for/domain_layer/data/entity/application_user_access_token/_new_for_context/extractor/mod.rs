@@ -21,7 +21,7 @@ impl Extractor {
                     Ok(is_expired) => {
                         if !is_expired {
 // TODO TODO НУЖНО ЛИ здесь это? Может, не использовать блэелист вообще? При разлогине клиент сам удаляет токен. При массовом разлогине всем клиентам идет пуш, который так же удаляет токен
-                            match ApplicationUserAccessTokenBlackListDataProviderRedis::is_exist_by_application_user_access_token_id(connection, application_user_access_token.get_id()).await {
+                            match ApplicationUserAccessTokenBlackListDataProviderRedis::is_exist_1(connection, application_user_access_token.get_id()).await {
                                 Ok(is_exist_by_application_user_access_token_id) => {
                                     if !is_exist_by_application_user_access_token_id {
                                         return Ok(ExtractorResult::ApplicationUserAccessToken { application_user_access_token });

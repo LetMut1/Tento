@@ -47,7 +47,7 @@ impl Base {
                         Ok(authorization_postgresql_pooled_connection) => {
                             let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-                            match ApplicationUserResetPasswordTokenDataProviderPostgresql::find_by_application_user_id(
+                            match ApplicationUserResetPasswordTokenDataProviderPostgresql::find_1(
                                 authorization_postgresql_connection, application_user_id
                             ).await {
                                 Ok(application_user_reset_password_token) => {

@@ -1,6 +1,6 @@
 CREATE TABLE public.application_user_reset_password_token (
     application_user_id BIGINT,
-    value CHARACTER VARYING(6),
+    value TEXT,
     wrong_enter_tries_quantity SMALLINT,
     is_approved BOOLEAN,
     expires_at TIMESTAMP(6) WITH TIME ZONE

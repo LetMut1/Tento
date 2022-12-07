@@ -1,6 +1,6 @@
 CREATE TABLE public.application_user_registration_confirmation_token (
-    application_user_email CHARACTER VARYING(320),
-    value CHARACTER VARYING(6),
+    application_user_email TEXT,
+    value TEXT,
     wrong_enter_tries_quantity SMALLINT,
     is_approved BOOLEAN,
     expires_at TIMESTAMP(6) WITH TIME ZONE
