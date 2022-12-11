@@ -1423,8 +1423,8 @@ impl Authorization {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         _core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        _authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: Pool<RedisConnectionManager>
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        _redis_connection_pool: Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -1444,7 +1444,7 @@ impl Authorization {
         match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRefreshApplicationUserAccessToken>(bytes.chunk()) {
             Ok(action_handler_incoming_data) => {
                 match ActionHandlerRefreshApplicationUserAccessToken::handle(
-                    environment_configuration_resolver, redis_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, authorization_postgresql_connection_pool, action_handler_incoming_data
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1488,6 +1488,20 @@ impl Authorization {
                                             ApplicationUserAccessRefreshTokenWorkflowException::NotFound => {
                                                 match rmp_serde::to_vec(
                                                     &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_NOT_FOUND)
+                                                ) {
+                                                    Ok(data) => {
+                                                        return ActionResponseCreator::create_ok(data);
+                                                    }
+                                                    Err(error) => {
+                                                        // log::error!("{}", ErrorAuditor::from(error));
+
+                                                        return ActionResponseCreator::create_internal_server_error();
+                                                    }
+                                                }
+                                            }
+                                            ApplicationUserAccessRefreshTokenWorkflowException::AlreadyExpired => {
+                                                match rmp_serde::to_vec(
+                                                    &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_ALREADY_EXPIRED)
                                                 ) {
                                                     Ok(data) => {
                                                         return ActionResponseCreator::create_ok(data);

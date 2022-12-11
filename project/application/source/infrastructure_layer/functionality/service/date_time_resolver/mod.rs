@@ -84,4 +84,10 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
 
         return false;
     }
+
+    pub fn is_greater_or_equal_than_now<'a>(
+        unix_time: i64
+    ) -> bool {
+        return unix_time >= Utc::now().timestamp();
+    }
 }

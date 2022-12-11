@@ -1,3 +1,4 @@
 pub enum ApplicationUserAccessRefreshTokenWorkflowException {
-    NotFound
+    NotFound,
+    AlreadyExpired
 }
