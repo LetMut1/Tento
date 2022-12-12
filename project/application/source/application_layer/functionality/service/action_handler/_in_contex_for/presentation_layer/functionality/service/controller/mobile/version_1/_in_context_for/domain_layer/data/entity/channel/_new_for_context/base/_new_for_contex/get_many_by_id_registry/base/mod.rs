@@ -1,5 +1,4 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::action_handler::_new_for_context::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::action_handler::_new_for_context::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::application_user_access_token_workflow_exception::ApplicationUserAccessTokenWorkflowException;
@@ -29,8 +28,6 @@ impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: Pool<RedisConnectionManager>,
         action_handler_incoming_data: ActionHandlerIncomingData
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
@@ -44,68 +41,56 @@ impl Base {
             channel_id_registry
         ) = action_handler_incoming_data.into_inner();
 
-        match redis_connection_pool.get().await {
-            Ok(mut redis_pooled_connection) => {
-                match Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str(), &mut *redis_pooled_connection).await {
-                    Ok(result) => {
-                        match result {
-                            ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {
-                                if channel_id_registry.is_empty() || channel_id_registry.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::InvalidArgumentError,
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
+        match Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str()).await {
+            Ok(result) => {
+                match result {
+                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {
+                        if channel_id_registry.is_empty() || channel_id_registry.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
+                            return Err(
+                                ErrorAuditor::new(
+                                    BaseError::InvalidArgumentError,
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
 
-                                match core_postgresql_connection_pool.get().await {
-                                    Ok(core_postgresql_pooled_connection) => {
-                                        match ChannelDataProviderPostgresql::per_request_4(
-                                            &*core_postgresql_pooled_connection, &channel_id_registry
-                                        ).await {
-                                            Ok(channel_registry) => {
-                                                return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(channel_registry)));
-                                            }
-                                            Err(mut error) => {
-                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                return Err(error);
-                                            }
-                                        }
+                        match core_postgresql_connection_pool.get().await {
+                            Ok(core_postgresql_pooled_connection) => {
+                                match ChannelDataProviderPostgresql::per_request_4(
+                                    &*core_postgresql_pooled_connection, &channel_id_registry
+                                ).await {
+                                    Ok(channel_registry) => {
+                                        return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(channel_registry)));
                                     }
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
+                                    Err(mut error) => {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                        return Err(error);
                                     }
                                 }
                             }
-                            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                                return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::AlreadyExpired));
-                            }
-                            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                                return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::InApplicationUserAccessTokenBlackList));
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
                             }
                         }
                     }
-                    Err(mut error) => {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        return Err(error);
+                    ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                        return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::AlreadyExpired));
+                    }
+                    ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                        return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::InApplicationUserAccessTokenBlackList));
                     }
                 }
             }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolRedisError { bb8_redis_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
             }
         }
     }

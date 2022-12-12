@@ -1647,24 +1647,6 @@ impl Authorization {
                                             }
                                         }
                                     }
-                                    EntityWorkflowException::ApplicationUserAccessRefreshTokenWorkflowException { application_user_access_refresh_token_workflow_exception } => {
-                                        match application_user_access_refresh_token_workflow_exception {
-                                            ApplicationUserAccessRefreshTokenWorkflowException::NotFound => {
-                                                match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_NOT_FOUND)
-                                                ) {
-                                                    Ok(data) => {
-                                                        return ActionResponseCreator::create_ok(data);
-                                                    }
-                                                    Err(error) => {
-                                                        // log::error!("{}", ErrorAuditor::from(error));
-
-                                                        return ActionResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
                                     _ => {
                                         unreachable!("TODO");
                                     }
@@ -1794,24 +1776,6 @@ impl Authorization {
                                             }
                                             _ => {
                                                 unreachable!("TODO");
-                                            }
-                                        }
-                                    }
-                                    EntityWorkflowException::ApplicationUserAccessRefreshTokenWorkflowException { application_user_access_refresh_token_workflow_exception } => {
-                                        match application_user_access_refresh_token_workflow_exception {
-                                            ApplicationUserAccessRefreshTokenWorkflowException::NotFound => {
-                                                match rmp_serde::to_vec(
-                                                    &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_NOT_FOUND)
-                                                ) {
-                                                    Ok(data) => {
-                                                        return ActionResponseCreator::create_ok(data);
-                                                    }
-                                                    Err(error) => {
-                                                        // log::error!("{}", ErrorAuditor::from(error));
-
-                                                        return ActionResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
                                             }
                                         }
                                     }

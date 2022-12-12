@@ -61,8 +61,7 @@ struct Base {
 
 Result data is absent.
 
-Communication codes:
-- ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_NOT_FOUND
+Communication codes are absent.
 
 ```
  - ## /v1/m/au/lofad (log_out_from_all_devices) POST
@@ -76,8 +75,7 @@ struct Base {
 
 Result data is absent.
 
-Communication codes:
-- ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_NOT_FOUND
+Communication codes are absent.
 ```
 # Area for not authorized application user. API:
  - ## /v1/m/au/cefe (check_email_for_existing) POST (GET functional)
