@@ -3,7 +3,6 @@ use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
-use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::_new_for_context::base::Base as ActionHandlerIncomingData;
 use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -14,6 +13,7 @@ use crate::infrastructure_layer::functionality::service::environment_configurati
 use crate::presentation_layer::data::data_transfer_object::_in_context_for::presentation_layer::functionality::service::controller::_new_for_context::unified_report::unified_report::UnifiedReport;
 use http::header;
 use http::HeaderValue;
+use http::request::Parts;
 use http::StatusCode;
 use hyper::Body;
 use hyper::body::to_bytes;
@@ -29,6 +29,32 @@ use std::marker::Sync;
 use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
+
+pub struct ActionHandlerIncomingData<T> {
+    parts: Parts,
+    convertible_data: T
+}
+
+impl<T> ActionHandlerIncomingData<T> {
+    pub fn new(
+        parts: Parts,
+        convertible_data: T
+    ) -> Self {
+        return Self {
+            parts,
+            convertible_data
+        };
+    }
+
+    pub fn into_inner(
+        self
+    ) -> (Parts, T) {
+        return (
+            self.parts,
+            self.convertible_data
+        );
+    }
+}
 
 pub struct ActionRaoundParameterExtractor;
 
