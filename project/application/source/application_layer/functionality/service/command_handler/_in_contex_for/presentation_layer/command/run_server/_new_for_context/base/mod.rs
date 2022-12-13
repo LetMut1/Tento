@@ -1,7 +1,6 @@
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
-use crate::application_layer::data::data_transfer_object::_in_context_for::application_layer::functionality::service::command_handler::_in_contex_for::presentation_layer::command::run_server::_new_for_context::base::_new_for_context::postgresql_connection_pool_workflow_type_aggregator::PostgresqlConnectionPoolWorkflowTypeAggregator;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
@@ -46,6 +45,14 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio::signal;
+
+#[derive(Clone)]
+pub enum PostgresqlConnectionPoolWorkflowTypeAggregator {
+    LocalDevelopment {
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
+    }
+}
 
 pub struct Base;
 
