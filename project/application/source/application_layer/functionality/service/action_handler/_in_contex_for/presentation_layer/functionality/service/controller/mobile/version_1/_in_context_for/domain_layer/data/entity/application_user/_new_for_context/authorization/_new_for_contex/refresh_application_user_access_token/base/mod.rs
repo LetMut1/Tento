@@ -3,8 +3,6 @@ use bb8::Pool;
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::application_user_access_refresh_token_workflow_exception::ApplicationUserAccessRefreshTokenWorkflowException;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::application_user_access_token_workflow_exception::ApplicationUserAccessTokenWorkflowException;
-use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_application_user_access_token::base::_new_for_context::base::Base as ActionHandlerIncomingData;
-use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::refresh_application_user_access_token::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::encoder::Encoder;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver as ApplicationUserAccessRefreshTokenExpirationTimeResolver;
@@ -22,6 +20,8 @@ use crate::infrastructure_layer::functionality::repository::state_manager::_in_c
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Update;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use serde::Deserialize;
+use serde::Serialize;
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::marker::Send;
@@ -29,6 +29,43 @@ use std::marker::Sync;
 use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_access_token_web_form: String,
+    application_user_access_refresh_token_web_form: String
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> (String, String) {
+        return (
+            self.application_user_access_token_web_form,
+            self.application_user_access_refresh_token_web_form
+        );
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    application_user_access_token_web_form: String,
+    application_user_access_refresh_token_web_form: String
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        application_user_access_token_web_form: String,
+        application_user_access_refresh_token_web_form: String
+    ) -> Self {
+        return Self {
+            application_user_access_token_web_form,
+            application_user_access_refresh_token_web_form
+        };
+    }
+}
 
 pub struct Base;
 

@@ -2,8 +2,6 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8::Pool;
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::application_user_access_token_workflow_exception::ApplicationUserAccessTokenWorkflowException;
-use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::_new_for_context::base::Base as ActionHandlerIncomingData;
-use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_context::get_many_by_subscribers_quantity::base::_new_for_context::base::base::Base as ActionHandlerOutcomingData;
 use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::extractor::_new_for_context::result::Result as ExtractorResult;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -14,6 +12,8 @@ use crate::infrastructure_layer::functionality::repository::data_provider::_in_c
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::extractor::Extractor;
 use crate::infrastructure_layer::functionality::service::_in_context_for::infrastructure_layer::functionality::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::order_convention_resolver::OrderConventionResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use serde::Deserialize;
+use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -21,11 +21,81 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_access_token_web_form: String,
+    channel_subscribers_quantity: Option<i64>,
+    order: i8,
+    limit: i16
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> (String, Option<i64>, i8, i16) {
+        return (
+            self.application_user_access_token_web_form,
+            self.channel_subscribers_quantity,
+            self.order,
+            self.limit
+        );
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct Channel {
+    channel_id: i64,
+    channel_subscribers_quantity: i64,
+}
+
+impl Channel {
+    pub fn new(
+        channel_id: i64,
+        channel_subscribers_quantity: i64,
+    ) -> Self {
+        return Self {
+            channel_id,
+            channel_subscribers_quantity
+        };
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    channel_registry: Option<Vec<Channel>>
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        channel_registry: Option<Vec<Channel>>
+    ) -> Self {
+        return Self {
+            channel_registry
+        };
+    }
+}
+
 pub struct Base;
 
 impl Base {
     const LIMIT_MINIMUM_VALUE: i16 = 300;
     const LIMIT_MAXIMUM_VALUE: i16 = 500;
+
+
+    // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
+    // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
+    // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
+    // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
+    // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
+    // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
+    // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
+    // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
+    // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
+
+
+
 
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,

@@ -2,8 +2,6 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8::Pool;
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::application_user_workflow_exception::ApplicationUserWorkflowException;
-use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
-use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::log_in_by_first_step::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::value_generator::ValueGenerator;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
@@ -20,12 +18,50 @@ use crate::infrastructure_layer::functionality::repository::state_manager::_in_c
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use serde::Deserialize;
+use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_log_in_token_device_id: String,
+    application_user_email_or_application_user_nickname: String,
+    application_user_password: String
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> (String, String, String) {
+        return (
+            self.application_user_log_in_token_device_id,
+            self.application_user_email_or_application_user_nickname,
+            self.application_user_password
+        );
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    application_user_id: i64
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        application_user_id: i64
+    ) -> Self {
+        return Self {
+            application_user_id
+        };
+    }
+}
 
 pub struct Base;
 

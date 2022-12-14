@@ -2,8 +2,6 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8::Pool;
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_workflow_exception::ApplicationUserResetPasswordTokenWorkflowException;
-use crate::application_layer::data::data_transfer_object::action_handler_incoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_second_step::base::_new_for_context::base::Base as ActionHandlerIncomingData;
-use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_context::reset_password_by_second_step::base::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
@@ -15,12 +13,48 @@ use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_com
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenStateManagerPostgresql;
+use serde::Deserialize;
+use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_id: i64,
+    application_user_reset_password_token_value: String
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> (i64, String) {
+        return (
+            self.application_user_id,
+            self.application_user_reset_password_token_value
+        );
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    application_user_reset_password_token_is_approved: bool
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        application_user_reset_password_token_is_approved: bool
+    ) -> Self {
+        return Self {
+            application_user_reset_password_token_is_approved
+        };
+    }
+}
 
 pub struct Base;
 
