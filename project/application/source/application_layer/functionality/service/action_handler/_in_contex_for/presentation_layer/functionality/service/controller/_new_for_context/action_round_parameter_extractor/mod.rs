@@ -3,7 +3,6 @@ use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
-use crate::application_layer::data::data_transfer_object::action_handler_outcoming_data::_in_context_for::application_layer::functionality::service::action_handler::_in_context_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::_new_for_context::base::Base as ActionHandlerOutcomingData;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::other_error::OtherError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
@@ -13,7 +12,8 @@ use crate::infrastructure_layer::functionality::service::environment_configurati
 use crate::presentation_layer::data::data_transfer_object::_in_context_for::presentation_layer::functionality::service::controller::_new_for_context::unified_report::unified_report::UnifiedReport;
 use http::header;
 use http::HeaderValue;
-use http::request::Parts;
+use http::request::Parts as HttpRequestParts;
+use http::response::Parts as HttpResponseParts;
 use http::StatusCode;
 use hyper::Body;
 use hyper::body::to_bytes;
@@ -30,14 +30,15 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub struct ActionHandlerIncomingData<T> {
-    parts: Parts,
+    parts: HttpRequestParts,
     convertible_data: T
 }
 
 impl<T> ActionHandlerIncomingData<T> {
     pub fn new(
-        parts: Parts,
+        parts: HttpRequestParts,
         convertible_data: T
     ) -> Self {
         return Self {
@@ -48,7 +49,7 @@ impl<T> ActionHandlerIncomingData<T> {
 
     pub fn into_inner(
         self
-    ) -> (Parts, T) {
+    ) -> (HttpRequestParts, T) {
         return (
             self.parts,
             self.convertible_data
@@ -56,6 +57,34 @@ impl<T> ActionHandlerIncomingData<T> {
     }
 }
 
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+pub struct ActionHandlerOutcomingData<T> {
+    parts: HttpResponseParts,
+    unified_report: Option<UnifiedReport<T>>
+}
+
+impl<T> ActionHandlerOutcomingData<T> {
+    pub fn new(
+        parts: HttpResponseParts,
+        unified_report: Option<UnifiedReport<T>>
+    ) -> Self {
+        return Self {
+            parts,
+            unified_report
+        };
+    }
+
+    pub fn into_inner(
+        self
+    ) -> (HttpResponseParts, Option<UnifiedReport<T>>) {
+        return (
+            self.parts,
+            self.unified_report,
+        );
+    }
+}
+
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub struct ActionRaoundParameterExtractor;
 
 impl ActionRaoundParameterExtractor {

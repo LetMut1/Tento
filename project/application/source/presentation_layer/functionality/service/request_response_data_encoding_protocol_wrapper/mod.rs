@@ -78,12 +78,12 @@ impl RequestResponseDataEncodingProtocolWrapper {
                                     ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
                                         let (
                                             response_parts,
-                                            convertible_data
+                                            unified_report
                                         ) = action_handler_outcoming_data.into_inner();
 
-                                        match convertible_data {
-                                            Some(unified_report) => {
-                                                match serde_json::to_vec(&unified_report) {
+                                        match unified_report {
+                                            Some(unified_report_) => {
+                                                match serde_json::to_vec(&unified_report_) {
                                                     Ok(data) => {
                                                         return Response::from_parts(response_parts, Body::from(data));
                                                     }
