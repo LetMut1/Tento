@@ -1,5 +1,5 @@
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::email_sender::EmailSender as BaseEmailSender;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 
@@ -17,7 +17,7 @@ impl EmailSender {     // TODO все &'static str в константы? Тог
             application_user_email
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
             return Err(error);
         }
 
@@ -31,12 +31,12 @@ impl EmailSender {     // TODO все &'static str в константы? Тог
     ) -> Result<(), ErrorAuditor> {
         if let Err(mut error) = BaseEmailSender::send(
             environment_configuration_resolver,
-            "Registration confirmation", 
+            "Registration confirmation",
             "Your code: ".to_string() + application_user_registration_confirmation_token_value,
             application_user_email
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
             return Err(error);
         }
 
@@ -55,7 +55,7 @@ impl EmailSender {     // TODO все &'static str в константы? Тог
             application_user_email
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-    
+
             return Err(error);
         }
 

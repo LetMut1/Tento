@@ -1,9 +1,9 @@
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::_component::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::base_error::base_error::BaseError;
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::_component::_in_context_for::_resource::email_server::_new_for_context::email_server_error::EmailServerError;
+use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
+use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
+use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
+use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
+use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use lettre_email::EmailBuilder;
 use lettre::ClientSecurity;
@@ -39,7 +39,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                                 .credentials(Credentials::new("usToDO".to_string(), "pasTODO".to_string())) // TODO
                                 .smtp_utf8(true)
                                 .authentication_mechanism(Mechanism::Plain)// TODO
-                                .connection_reuse(ConnectionReuseParameters::NoReuse);// TODO 
+                                .connection_reuse(ConnectionReuseParameters::NoReuse);// TODO
                         }
                         Err(error) => {
                             return Err(
@@ -97,8 +97,8 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                         )
                     );
                 }
-        
-                return Ok(()); 
+
+                return Ok(());
             }
             Err(error) => {
                 return Err(

@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::data::data_transfer_object::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use hyper::Body;
 use hyper::Request;
 use hyper::Response;
@@ -17,7 +17,7 @@ impl ActionRoundLogger {
         // message + response.status().as_u16();
 
         // if let Some(error_auditor_) = error_auditor {
-            
+
         // }
 
     }
