@@ -34,45 +34,6 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
-#[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
-    application_user_id: i64,
-    application_user_log_in_token_device_id: String,
-    application_user_log_in_token_value: String
-}
-
-impl ActionHandlerIncomingData {
-    pub fn into_inner(
-        self
-    ) -> (i64, String, String) {
-        return (
-            self.application_user_id,
-            self.application_user_log_in_token_device_id,
-            self.application_user_log_in_token_value
-        );
-    }
-}
-
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-pub struct ActionHandlerOutcomingData {
-    application_user_access_token_web_form: String,
-    application_user_access_refresh_token_web_form: String
-}
-
-impl ActionHandlerOutcomingData {
-    pub fn new(
-        application_user_access_token_web_form: String,
-        application_user_access_refresh_token_web_form: String
-    ) -> Self {
-        return Self {
-            application_user_access_token_web_form,
-            application_user_access_refresh_token_web_form
-        };
-    }
-}
-
 pub struct Base;
 
 impl Base {
@@ -274,5 +235,44 @@ impl Base {
         }
 
         return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::InvalidValue));
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_id: i64,
+    application_user_log_in_token_device_id: String,
+    application_user_log_in_token_value: String
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> (i64, String, String) {
+        return (
+            self.application_user_id,
+            self.application_user_log_in_token_device_id,
+            self.application_user_log_in_token_value
+        );
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    application_user_access_token_web_form: String,
+    application_user_access_refresh_token_web_form: String
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        application_user_access_token_web_form: String,
+        application_user_access_refresh_token_web_form: String
+    ) -> Self {
+        return Self {
+            application_user_access_token_web_form,
+            application_user_access_refresh_token_web_form
+        };
     }
 }

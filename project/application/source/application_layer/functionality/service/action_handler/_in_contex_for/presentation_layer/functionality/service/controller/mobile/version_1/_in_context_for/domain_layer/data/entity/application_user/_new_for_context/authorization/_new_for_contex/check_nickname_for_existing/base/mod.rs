@@ -18,36 +18,6 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
-#[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
-    application_user_nickname: String
-}
-
-impl ActionHandlerIncomingData {
-    pub fn into_inner(
-        self
-    ) -> String {
-        return self.application_user_nickname;
-    }
-}
-
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-pub struct ActionHandlerOutcomingData {
-    result: bool
-}
-
-impl ActionHandlerOutcomingData {
-    pub fn new(
-        result: bool
-    ) -> Self {
-        return Self {
-            result
-        };
-    }
-}
-
 pub struct Base;
 
 impl Base {
@@ -89,5 +59,35 @@ impl Base {
         }
 
         return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::InvalidNickname));
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_nickname: String
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> String {
+        return self.application_user_nickname;
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    result: bool
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        result: bool
+    ) -> Self {
+        return Self {
+            result
+        };
     }
 }

@@ -22,83 +22,6 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
-#[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
-    application_user_access_token_web_form: String,
-    channel_created_at:  Option<String>,
-    order: i8,
-    limit: i8
-}
-
-impl ActionHandlerIncomingData {
-    pub fn into_inner(
-        self
-    ) -> (String, Option<String>, i8, i8) {
-        return (
-            self.application_user_access_token_web_form,
-            self.channel_created_at,
-            self.order,
-            self.limit
-        );
-    }
-}
-
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-pub struct Channel {
-    channel_id: i64,
-    channel_name: String,
-    channel_personalization_image_path: String,
-    channel_subscribers_quantity: i64,
-    channel_public_marks_quantity: i64,
-    channel_hidden_marks_quantity: i64,
-    channel_reactions_quantity: i64,
-    channel_viewing_quantity: i64,
-    channel_created_at: String
-}
-
-impl Channel {
-    pub fn new(
-        channel_id: i64,
-        channel_name: String,
-        channel_personalization_image_path: String,
-        channel_subscribers_quantity: i64,
-        channel_public_marks_quantity: i64,
-        channel_hidden_marks_quantity: i64,
-        channel_reactions_quantity: i64,
-        channel_viewing_quantity: i64,
-        channel_created_at: String
-    ) -> Self {
-        return Self {
-            channel_id,
-            channel_name,
-            channel_personalization_image_path,
-            channel_subscribers_quantity,
-            channel_public_marks_quantity,
-            channel_hidden_marks_quantity,
-            channel_reactions_quantity,
-            channel_viewing_quantity,
-            channel_created_at
-        };
-    }
-}
-
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-pub struct ActionHandlerOutcomingData {
-    channel_registry: Option<Vec<Channel>>
-}
-
-impl ActionHandlerOutcomingData {
-    pub fn new(
-        channel_registry: Option<Vec<Channel>>
-    ) -> Self {
-        return Self {
-            channel_registry
-        };
-    }
-}
-
 pub struct Base;
 
 impl Base {
@@ -189,5 +112,82 @@ impl Base {
                 return Err(error);
             }
         }
+    }
+}
+
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_access_token_web_form: String,
+    channel_created_at:  Option<String>,
+    order: i8,
+    limit: i8
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> (String, Option<String>, i8, i8) {
+        return (
+            self.application_user_access_token_web_form,
+            self.channel_created_at,
+            self.order,
+            self.limit
+        );
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    channel_registry: Option<Vec<Channel>>
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        channel_registry: Option<Vec<Channel>>
+    ) -> Self {
+        return Self {
+            channel_registry
+        };
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct Channel {
+    channel_id: i64,
+    channel_name: String,
+    channel_personalization_image_path: String,
+    channel_subscribers_quantity: i64,
+    channel_public_marks_quantity: i64,
+    channel_hidden_marks_quantity: i64,
+    channel_reactions_quantity: i64,
+    channel_viewing_quantity: i64,
+    channel_created_at: String
+}
+
+impl Channel {
+    pub fn new(
+        channel_id: i64,
+        channel_name: String,
+        channel_personalization_image_path: String,
+        channel_subscribers_quantity: i64,
+        channel_public_marks_quantity: i64,
+        channel_hidden_marks_quantity: i64,
+        channel_reactions_quantity: i64,
+        channel_viewing_quantity: i64,
+        channel_created_at: String
+    ) -> Self {
+        return Self {
+            channel_id,
+            channel_name,
+            channel_personalization_image_path,
+            channel_subscribers_quantity,
+            channel_public_marks_quantity,
+            channel_hidden_marks_quantity,
+            channel_reactions_quantity,
+            channel_viewing_quantity,
+            channel_created_at
+        };
     }
 }

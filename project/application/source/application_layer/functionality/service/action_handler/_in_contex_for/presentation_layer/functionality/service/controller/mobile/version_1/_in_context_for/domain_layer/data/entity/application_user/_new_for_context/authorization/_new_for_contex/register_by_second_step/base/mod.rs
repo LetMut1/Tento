@@ -24,40 +24,6 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
-#[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
-    application_user_email: String,
-    application_user_registration_confirmation_token_value: String
-}
-
-impl ActionHandlerIncomingData {
-    pub fn into_inner(
-        self
-    ) -> (String, String) {
-        return (
-            self.application_user_email,
-            self.application_user_registration_confirmation_token_value
-        );
-    }
-}
-
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-pub struct ActionHandlerOutcomingData {
-    application_user_registration_confirmation_token_is_approved: bool
-}
-
-impl ActionHandlerOutcomingData {
-    pub fn new(
-        application_user_registration_confirmation_token_is_approved: bool
-    ) -> Self {
-        return Self {
-            application_user_registration_confirmation_token_is_approved
-        };
-    }
-}
-
 pub struct Base;
 
 impl Base {
@@ -186,5 +152,39 @@ impl Base {
                 return Err(error);
             }
         }
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_email: String,
+    application_user_registration_confirmation_token_value: String
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> (String, String) {
+        return (
+            self.application_user_email,
+            self.application_user_registration_confirmation_token_value
+        );
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    application_user_registration_confirmation_token_is_approved: bool
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        application_user_registration_confirmation_token_is_approved: bool
+    ) -> Self {
+        return Self {
+            application_user_registration_confirmation_token_is_approved
+        };
     }
 }

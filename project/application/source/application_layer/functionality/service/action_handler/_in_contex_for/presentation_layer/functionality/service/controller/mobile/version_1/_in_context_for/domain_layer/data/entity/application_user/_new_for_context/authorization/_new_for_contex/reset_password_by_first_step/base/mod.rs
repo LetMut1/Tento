@@ -27,36 +27,6 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
-#[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
-    application_user_email: String
-}
-
-impl ActionHandlerIncomingData {
-    pub fn into_inner(
-        self
-    ) -> String {
-        return self.application_user_email;
-    }
-}
-
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-pub struct ActionHandlerOutcomingData {
-    application_user_id: i64
-}
-
-impl ActionHandlerOutcomingData {
-    pub fn new(
-        application_user_id: i64
-    ) -> Self {
-        return Self {
-            application_user_id
-        };
-    }
-}
-
 pub struct Base;
 
 impl Base {
@@ -209,5 +179,35 @@ impl Base {
                 return Err(error);
             }
         }
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_email: String
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> String {
+        return self.application_user_email;
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    application_user_id: i64
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        application_user_id: i64
+    ) -> Self {
+        return Self {
+            application_user_id
+        };
     }
 }

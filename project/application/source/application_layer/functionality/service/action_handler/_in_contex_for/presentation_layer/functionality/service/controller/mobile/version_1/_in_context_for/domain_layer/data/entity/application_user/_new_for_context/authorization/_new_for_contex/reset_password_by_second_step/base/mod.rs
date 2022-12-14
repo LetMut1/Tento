@@ -22,40 +22,6 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
-#[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
-    application_user_id: i64,
-    application_user_reset_password_token_value: String
-}
-
-impl ActionHandlerIncomingData {
-    pub fn into_inner(
-        self
-    ) -> (i64, String) {
-        return (
-            self.application_user_id,
-            self.application_user_reset_password_token_value
-        );
-    }
-}
-
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-pub struct ActionHandlerOutcomingData {
-    application_user_reset_password_token_is_approved: bool
-}
-
-impl ActionHandlerOutcomingData {
-    pub fn new(
-        application_user_reset_password_token_is_approved: bool
-    ) -> Self {
-        return Self {
-            application_user_reset_password_token_is_approved
-        };
-    }
-}
-
 pub struct Base;
 
 impl Base {
@@ -171,5 +137,39 @@ impl Base {
                 return Err(error);
             }
         }
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_id: i64,
+    application_user_reset_password_token_value: String
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> (i64, String) {
+        return (
+            self.application_user_id,
+            self.application_user_reset_password_token_value
+        );
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    application_user_reset_password_token_is_approved: bool
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        application_user_reset_password_token_is_approved: bool
+    ) -> Self {
+        return Self {
+            application_user_reset_password_token_is_approved
+        };
     }
 }

@@ -29,20 +29,6 @@ use tokio_postgres::tls::TlsConnect;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use serde::Serialize;
 
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
-#[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
-    application_user_email: String
-}
-
-impl ActionHandlerIncomingData {
-    pub fn into_inner(
-        self
-    ) -> String {
-        return self.application_user_email;
-    }
-}
-
 pub struct Base;
 
 impl Base {
@@ -195,5 +181,19 @@ impl Base {
                 return Err(error);
             }
         }
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_email: String
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> String {
+        return self.application_user_email;
     }
 }

@@ -27,42 +27,6 @@ use tokio_postgres::Socket;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
-#[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
-    application_user_log_in_token_device_id: String,
-    application_user_email_or_application_user_nickname: String,
-    application_user_password: String
-}
-
-impl ActionHandlerIncomingData {
-    pub fn into_inner(
-        self
-    ) -> (String, String, String) {
-        return (
-            self.application_user_log_in_token_device_id,
-            self.application_user_email_or_application_user_nickname,
-            self.application_user_password
-        );
-    }
-}
-
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-pub struct ActionHandlerOutcomingData {
-    application_user_id: i64
-}
-
-impl ActionHandlerOutcomingData {
-    pub fn new(
-        application_user_id: i64
-    ) -> Self {
-        return Self {
-            application_user_id
-        };
-    }
-}
-
 pub struct Base;
 
 impl Base {
@@ -242,5 +206,41 @@ impl Base {
         }
 
         return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::InvalidPassword));
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+pub struct ActionHandlerIncomingData {
+    application_user_log_in_token_device_id: String,
+    application_user_email_or_application_user_nickname: String,
+    application_user_password: String
+}
+
+impl ActionHandlerIncomingData {
+    pub fn into_inner(
+        self
+    ) -> (String, String, String) {
+        return (
+            self.application_user_log_in_token_device_id,
+            self.application_user_email_or_application_user_nickname,
+            self.application_user_password
+        );
+    }
+}
+
+#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+pub struct ActionHandlerOutcomingData {
+    application_user_id: i64
+}
+
+impl ActionHandlerOutcomingData {
+    pub fn new(
+        application_user_id: i64
+    ) -> Self {
+        return Self {
+            application_user_id
+        };
     }
 }

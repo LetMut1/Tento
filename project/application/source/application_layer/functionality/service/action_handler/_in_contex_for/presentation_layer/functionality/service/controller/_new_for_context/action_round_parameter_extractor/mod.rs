@@ -31,60 +31,6 @@ use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-pub struct ActionHandlerIncomingData<T> {
-    parts: HttpRequestParts,
-    convertible_data: T
-}
-
-impl<T> ActionHandlerIncomingData<T> {
-    pub fn new(
-        parts: HttpRequestParts,
-        convertible_data: T
-    ) -> Self {
-        return Self {
-            parts,
-            convertible_data
-        };
-    }
-
-    pub fn into_inner(
-        self
-    ) -> (HttpRequestParts, T) {
-        return (
-            self.parts,
-            self.convertible_data
-        );
-    }
-}
-
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
-pub struct ActionHandlerOutcomingData<T> {
-    parts: HttpResponseParts,
-    unified_report: Option<UnifiedReport<T>>
-}
-
-impl<T> ActionHandlerOutcomingData<T> {
-    pub fn new(
-        parts: HttpResponseParts,
-        unified_report: Option<UnifiedReport<T>>
-    ) -> Self {
-        return Self {
-            parts,
-            unified_report
-        };
-    }
-
-    pub fn into_inner(
-        self
-    ) -> (HttpResponseParts, Option<UnifiedReport<T>>) {
-        return (
-            self.parts,
-            self.unified_report,
-        );
-    }
-}
-
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
 pub struct ActionRaoundParameterExtractor;
 
 impl ActionRaoundParameterExtractor {
@@ -176,5 +122,59 @@ impl ActionRaoundParameterExtractor {
         }
 
         return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(action_handler_outcoming_data));
+    }
+}
+
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+pub struct ActionHandlerIncomingData<T> {
+    parts: HttpRequestParts,
+    convertible_data: T
+}
+
+impl<T> ActionHandlerIncomingData<T> {
+    pub fn new(
+        parts: HttpRequestParts,
+        convertible_data: T
+    ) -> Self {
+        return Self {
+            parts,
+            convertible_data
+        };
+    }
+
+    pub fn into_inner(
+        self
+    ) -> (HttpRequestParts, T) {
+        return (
+            self.parts,
+            self.convertible_data
+        );
+    }
+}
+
+#[cfg(feature="facilitate_non_automatic_functional_testing")]
+pub struct ActionHandlerOutcomingData<T> {
+    parts: HttpResponseParts,
+    unified_report: Option<UnifiedReport<T>>
+}
+
+impl<T> ActionHandlerOutcomingData<T> {
+    pub fn new(
+        parts: HttpResponseParts,
+        unified_report: Option<UnifiedReport<T>>
+    ) -> Self {
+        return Self {
+            parts,
+            unified_report
+        };
+    }
+
+    pub fn into_inner(
+        self
+    ) -> (HttpResponseParts, Option<UnifiedReport<T>>) {
+        return (
+            self.parts,
+            self.unified_report,
+        );
     }
 }
