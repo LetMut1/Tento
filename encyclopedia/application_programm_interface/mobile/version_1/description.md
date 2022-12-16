@@ -45,7 +45,7 @@ struct Data<S>
 
 # Area for authorized application user. API:
  - Every endpoint at this area requires an existing of `access token`
- - Response of EVERY endpoint at this area can contain `communication_code` equals to
+ - Response of EVERY endpoint at this area contains `communication_code` equals to
  ```
   - ENTITY_APPLICATION_USER_ACCESS_TOKEN_ALREADY_EXPIRED
   - ENTITY_APPLICATION_USER_ACCESS_TOKEN_IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
@@ -55,13 +55,13 @@ struct Data<S>
 Deauthorizes application user from one device.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_access_token_web_form: String
 }
 
-Result data is absent.
+Result data: absent.
 
-Communication codes are absent.
+Communication codes: absent.
 
 ```
  - ## /v1/m/au/lofad (log_out_from_all_devices) POST
@@ -69,13 +69,13 @@ Communication codes are absent.
 Deauthorizes application user from all devices.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_access_token_web_form: String
 }
 
-Result data is absent.
+Result data: absent.
 
-Communication codes are absent.
+Communication codes: absent.
 ```
 # Area for not authorized application user. API:
  - ## /v1/m/au/cefe (check_email_for_existing) POST (GET functional)
@@ -83,12 +83,12 @@ Communication codes are absent.
 Checks application user email for existing.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_email: String
 }
 
 Result data:
-struct Base {
+struct Outcoming {
     result: bool
 }
 
@@ -100,12 +100,12 @@ Communication codes:
 Checks application user nickname for existing.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_nickname: String
 }
 
 Result data:
-struct Base {
+struct Outcoming {
     result: bool
 }
 
@@ -117,11 +117,11 @@ Communication codes:
 Registers application user for the first step and sends email to user.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_email: String
 }
 
-Result data is absent.
+Result data: absent.
 
 Communication codes:
 - ENTITY_APPLICATION_USER_INVALID_EMAIL
@@ -132,13 +132,13 @@ Communication codes:
 Registers application user for the second step through token value approving.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_email: String,
     application_user_registration_confirmation_token_value: String
 }
 
 Result data:
-struct Base {
+struct Outcoming {
     application_user_registration_confirmation_token_is_approved: bool
 }
 
@@ -154,7 +154,7 @@ Communication codes:
 Registers application user for the last step.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_log_in_token_device_id: String,
     application_user_nickname: String,
     application_user_password: String,
@@ -163,7 +163,7 @@ struct Base {
 }
 
 Result data:
-struct Base {
+struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
 }
@@ -184,11 +184,11 @@ Communication codes:
 Sends email for register. (Should be used only if the user does not receive an email.)
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_email: String
 }
 
-Result data is absent.
+Result data: absent.
 
 Communication codes:
 - ENTITY_APPLICATION_USER_INVALID_EMAIL
@@ -200,14 +200,14 @@ Communication codes:
 Authorizes application user for the firs step and send email to user.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_log_in_token_device_id: String,
     application_user_email_or_application_user_nickname: String,
     application_user_password: String
 }
 
 Result data:
-struct Base {
+struct Outcoming {
     application_user_id: i64
 }
 
@@ -219,14 +219,14 @@ Communication codes:
 Authorizes application user for the last step.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_id: i64,
     application_user_log_in_token_device_id: String,
     application_user_log_in_token_value: String
 }
 
 Result data:
-struct Base {
+struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
 }
@@ -241,12 +241,12 @@ Communication codes:
 Sends email for log in. (Should be used only if the user does not receive an email.)
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_log_in_token_device_id: String,
     application_user_id: i64
 }
 
-Result data is absent.
+Result data: absent.
 
 Communication codes:
 - ENTITY_APPLICATION_USER_NOT_FOUND
@@ -257,12 +257,12 @@ Communication codes:
 Resets application user password for the first step and send email to user.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_email: String
 }
 
 Result data:
-struct Base {
+struct Outcoming {
     application_user_id: i64
 }
 
@@ -275,13 +275,13 @@ Communication codes:
 Resets application user password for the second step through token value approving.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_id: i64,
     application_user_reset_password_token_value: String
 }
 
 Result data:
-struct Base {
+struct Outcoming {
     application_user_reset_password_token_is_approved: bool
 }
 
@@ -295,13 +295,13 @@ Communication codes:
 Resets application user password for the last step.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_id: i64,
     application_user_password: String,
     application_user_reset_password_token_value: String
 }
 
-Result data is absent.
+Result data: absent.
 
 Communication codes:
 - ENTITY_APPLICATION_USER_INVALID_PASSWORD
@@ -316,11 +316,11 @@ Communication codes:
 Sends email for reset password.  (Should be used only if the user does not receive an email.)
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_id: i64
 }
 
-Result data is absent.
+Result data: absent.
 
 Communication codes:
 - ENTITY_APPLICATION_USER_NOT_FOUND
@@ -332,13 +332,13 @@ Communication codes:
 Refreshs application user access token.
 
 Request data:
-struct Base {
+struct Incoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
 }
 
 Result data:
-struct Base {
+struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
 }
