@@ -39,7 +39,7 @@ impl ActionRaoundParameterExtractor {
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        action_handler_incoming_data: ActionHandlerIncomingData<AHID>,
+        action_handler_incoming_data: Incoming<AHID>,
         action: FO
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData<AHOD>>, ErrorAuditor>
     where
@@ -126,12 +126,12 @@ impl ActionRaoundParameterExtractor {
 }
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-pub struct ActionHandlerIncomingData<T> {
+pub struct Incoming<T> {
     parts: HttpRequestParts,
     convertible_data: T
 }
 
-impl<T> ActionHandlerIncomingData<T> {
+impl<T> Incoming<T> {
     pub fn new(
         parts: HttpRequestParts,
         convertible_data: T

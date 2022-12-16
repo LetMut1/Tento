@@ -23,7 +23,7 @@ pub struct Base;
 impl Base {
     pub async fn handle<T>(
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: ActionHandlerIncomingData
+        action_handler_incoming_data: Incoming
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -64,11 +64,11 @@ impl Base {
 
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
 #[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
+pub struct Incoming {
     application_user_nickname: String
 }
 
-impl ActionHandlerIncomingData {
+impl Incoming {
     pub fn into_inner(
         self
     ) -> String {

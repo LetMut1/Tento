@@ -35,7 +35,7 @@ impl Base {
     pub async fn handle<T>(
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: ActionHandlerIncomingData
+        action_handler_incoming_data: Incoming
     ) -> Result<ActionHandlerResult<()>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -197,13 +197,13 @@ impl Base {
 
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
 #[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
+pub struct Incoming {
     application_user_id: i64,
     application_user_password: String,
     application_user_reset_password_token_value: String
 }
 
-impl ActionHandlerIncomingData {
+impl Incoming {
     pub fn into_inner(
         self
     ) -> (i64, String, String) {

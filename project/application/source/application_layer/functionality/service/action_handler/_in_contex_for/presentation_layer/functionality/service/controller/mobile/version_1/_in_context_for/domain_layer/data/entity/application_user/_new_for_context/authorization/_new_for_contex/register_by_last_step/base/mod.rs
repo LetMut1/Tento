@@ -45,7 +45,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: ActionHandlerIncomingData
+        action_handler_incoming_data: Incoming
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -294,7 +294,7 @@ impl Base {
 
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
 #[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
+pub struct Incoming {
     application_user_log_in_token_device_id: String,
     application_user_nickname: String,
     application_user_password: String,
@@ -302,7 +302,7 @@ pub struct ActionHandlerIncomingData {
     application_user_registration_confirmation_token_value: String
 }
 
-impl ActionHandlerIncomingData {
+impl Incoming {
     pub fn into_inner(
         self
     ) -> (String, String, String, String, String) {

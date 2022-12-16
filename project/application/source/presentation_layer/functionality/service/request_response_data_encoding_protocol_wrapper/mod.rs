@@ -3,7 +3,7 @@ use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use bytes::Buf;
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::ActionHandlerIncomingData;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::Incoming;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::ActionRaoundParameterExtractor;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -70,7 +70,7 @@ impl RequestResponseDataEncodingProtocolWrapper {
                             core_postgresql_connection_pool,
                             authorization_postgresql_connection_pool,
                             redis_connection_pool,
-                            ActionHandlerIncomingData::new(request_parts, wrapped_action_handler_incoming_data),
+                            Incoming::new(request_parts, wrapped_action_handler_incoming_data),
                             wrapped_action
                         ).await {
                             Ok(action_handler_result) => {

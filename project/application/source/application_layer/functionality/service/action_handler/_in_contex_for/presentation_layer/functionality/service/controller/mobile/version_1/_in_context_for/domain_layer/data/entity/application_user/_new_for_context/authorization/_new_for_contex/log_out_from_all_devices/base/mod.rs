@@ -28,7 +28,7 @@ impl Base {
     pub async fn handle<'a, T>(                         // TODO TODO TODO УДАляются ли АккессТокены все при массовом разлогине? Если не удаляются, можно просто при Ектракте АккессТокена использовать проверку на наличие рефреша, если нет, значит произошел разлогин.
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: ActionHandlerIncomingData
+        action_handler_incoming_data: Incoming
     ) -> Result<ActionHandlerResult<()>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -83,11 +83,11 @@ impl Base {
 
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
 #[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
+pub struct Incoming {
     application_user_access_token_web_form: String
 }
 
-impl ActionHandlerIncomingData {
+impl Incoming {
     pub fn into_inner(
         self
     ) -> String {

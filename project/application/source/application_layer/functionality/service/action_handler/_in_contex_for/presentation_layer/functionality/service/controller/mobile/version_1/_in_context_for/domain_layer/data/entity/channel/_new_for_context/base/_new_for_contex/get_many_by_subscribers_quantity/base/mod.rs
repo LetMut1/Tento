@@ -44,7 +44,7 @@ impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: ActionHandlerIncomingData
+        action_handler_incoming_data: Incoming
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -119,14 +119,14 @@ impl Base {
 }
 
 #[derive(Deserialize)]
-pub struct ActionHandlerIncomingData {
+pub struct Incoming {
     application_user_access_token_web_form: String,
     channel_subscribers_quantity: Option<i64>,
     order: i8,
     limit: i16
 }
 
-impl ActionHandlerIncomingData {
+impl Incoming {
     pub fn into_inner(
         self
     ) -> (String, Option<i64>, i8, i16) {
