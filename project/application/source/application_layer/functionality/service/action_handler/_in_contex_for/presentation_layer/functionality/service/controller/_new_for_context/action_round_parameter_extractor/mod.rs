@@ -39,7 +39,7 @@ impl ActionRaoundParameterExtractor {
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
-        action_handler_incoming_data: Incoming<AHID>,
+        incoming: Incoming<AHID>,
         action: FO
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData<AHOD>>, ErrorAuditor>
     where
@@ -61,7 +61,7 @@ impl ActionRaoundParameterExtractor {
         let (
             mut request_parts,
             convertible_data
-        ) = action_handler_incoming_data.into_inner();
+        ) = incoming.into_inner();
 
         let mut data: Vec<u8> = vec![];
         if let Err(error) = rmp_serde::encode::write(&mut data, &convertible_data) {

@@ -40,7 +40,7 @@ impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,             // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
-        action_handler_incoming_data: Incoming
+        incoming: Incoming
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -52,7 +52,7 @@ impl Base {
             application_user_id,
             application_user_log_in_token_device_id,  // TODO ПРоверить все входящие значения application_user_log_in_token_device_id нв формат. Формата может не быть. Нужно определиться, есть ли формат, напримре, UUID
             application_user_log_in_token_value
-        ) = action_handler_incoming_data.into_inner();
+        ) = incoming.into_inner();
 
         let is_valid_value = match Validator::is_valid_value(application_user_log_in_token_value.as_str()) {
             Ok(is_valid_value_) => is_valid_value_,

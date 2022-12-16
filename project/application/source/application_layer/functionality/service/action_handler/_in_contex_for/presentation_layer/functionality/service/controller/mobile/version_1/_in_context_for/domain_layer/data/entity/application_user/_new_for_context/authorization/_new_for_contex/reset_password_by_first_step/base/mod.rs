@@ -34,7 +34,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: Incoming
+        incoming: Incoming
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -42,7 +42,7 @@ impl Base {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_email = action_handler_incoming_data.into_inner();
+        let application_user_email = incoming.into_inner();
 
         match Validator::is_valid_email(application_user_email.as_str()) {
             Ok(is_valid_email) => {

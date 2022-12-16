@@ -64,13 +64,13 @@ impl RequestResponseDataEncodingProtocolWrapper {
         match to_bytes(body).await {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, AHID>(bytes.chunk()) {
-                    Ok(wrapped_action_handler_incoming_data) => {
+                    Ok(wrapped_incoming) => {
                         match ActionRaoundParameterExtractor::handle::<'_, _, _, _, AHID, AHOD>(
                             environment_configuration_resolver,
                             core_postgresql_connection_pool,
                             authorization_postgresql_connection_pool,
                             redis_connection_pool,
-                            Incoming::new(request_parts, wrapped_action_handler_incoming_data),
+                            Incoming::new(request_parts, wrapped_incoming),
                             wrapped_action
                         ).await {
                             Ok(action_handler_result) => {

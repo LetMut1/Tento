@@ -81,7 +81,7 @@ fn main(
 // все крейты вынести в крейт extern_crate В инфраструктуре.
 // ОСТАВИТЬ ТОЛЬКО Функциональность в контексте для сущности. Причем как то заменить суть директорий одной директорией или как-то так "in-context_for_application_user_access..."
 // Разбить контроллер на экшены по директориям. УБрать контроллер вообще?
-// ActionHandlerIncomingData -> Incoming (Data?)
+// Incoming -> Incoming (Data?)
 // ActionHandlerOutcomingData -> OutComing (Data?)
 // _component - не должно быть.
 // проверить, что все Инконтекст будут соблюдены после переноса

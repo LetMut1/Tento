@@ -27,7 +27,7 @@ pub struct Base;
 impl Base {
     pub async fn handle<T>(
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: Incoming
+        incoming: Incoming
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -38,7 +38,7 @@ impl Base {
         let (
             application_user_id,
             application_user_reset_password_token_value
-        ) = action_handler_incoming_data.into_inner();
+        ) = incoming.into_inner();
 
         match Validator::is_valid_value(application_user_reset_password_token_value.as_str()) {
             Ok(is_valid_value) => {

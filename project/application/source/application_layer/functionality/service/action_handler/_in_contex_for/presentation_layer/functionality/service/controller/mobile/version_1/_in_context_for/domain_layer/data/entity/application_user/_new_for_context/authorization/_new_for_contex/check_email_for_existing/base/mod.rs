@@ -23,7 +23,7 @@ pub struct Base;
 impl Base {
     pub async fn handle<T>(
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: Incoming
+        incoming: Incoming
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -31,7 +31,7 @@ impl Base {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_email = action_handler_incoming_data.into_inner();
+        let application_user_email = incoming.into_inner();
 
         let is_valid_email = match Validator::is_valid_email(application_user_email.as_str()) {
             Ok(is_valid_email_) => is_valid_email_,

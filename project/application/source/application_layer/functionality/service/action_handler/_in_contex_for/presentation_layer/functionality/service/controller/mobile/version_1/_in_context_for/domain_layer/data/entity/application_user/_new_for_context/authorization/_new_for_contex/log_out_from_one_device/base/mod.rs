@@ -28,7 +28,7 @@ impl Base {
     pub async fn handle<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: Incoming
+        incoming: Incoming
     ) -> Result<ActionHandlerResult<()>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -36,7 +36,7 @@ impl Base {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_access_token_web_form = action_handler_incoming_data.into_inner();
+        let application_user_access_token_web_form = incoming.into_inner();
 
         let extractor_result = match Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str()).await {
             Ok(extractor_result_) => extractor_result_,

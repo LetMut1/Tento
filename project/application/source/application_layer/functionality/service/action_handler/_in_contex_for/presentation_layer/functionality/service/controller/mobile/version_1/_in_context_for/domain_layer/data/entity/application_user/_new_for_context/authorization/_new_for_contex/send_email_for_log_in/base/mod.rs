@@ -30,7 +30,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: Incoming
+        incoming: Incoming
     ) -> Result<ActionHandlerResult<()>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -41,7 +41,7 @@ impl Base {
         let (
             application_user_log_in_token_device_id,
             application_user_id
-        ) = action_handler_incoming_data.into_inner();
+        ) = incoming.into_inner();
 
         match authorization_postgresql_connection_pool.get().await {
             Ok(authorization_postgresql_pooled_connection) => {

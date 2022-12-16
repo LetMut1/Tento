@@ -45,7 +45,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        action_handler_incoming_data: Incoming
+        incoming: Incoming
     ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -59,7 +59,7 @@ impl Base {
             application_user_password,
             application_user_email,
             application_user_registration_confirmation_token_value
-        ) = action_handler_incoming_data.into_inner();
+        ) = incoming.into_inner();
 
         if ApplicationUserValidator::is_valid_password(application_user_password.as_str()) {
             if ApplicationUserValidator::is_valid_nickname(application_user_nickname.as_str()) {

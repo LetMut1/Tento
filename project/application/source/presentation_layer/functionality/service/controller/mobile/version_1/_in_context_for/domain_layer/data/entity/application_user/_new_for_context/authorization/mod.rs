@@ -10,37 +10,37 @@ use crate::application_layer::data::entity_workflow_exception::_component::_in_c
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::application_user_access_token_workflow_exception::ApplicationUserAccessTokenWorkflowException;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::application_user_access_refresh_token_workflow_exception::ApplicationUserAccessRefreshTokenWorkflowException;
 use crate::application_layer::data::entity_workflow_exception::entity_workflow_exception::EntityWorkflowException;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Incoming as ActionHandlerIncomingDataCheckEmailForExisting;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Incoming as IncomingCheckEmailForExisting;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Base as ActionHandlerCheckEmailForExisting;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickname_for_existing::base::Incoming as ActionHandlerIncomingDataCheckNicknameForExisting;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickname_for_existing::base::Incoming as IncomingCheckNicknameForExisting;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickname_for_existing::base::Base as ActionHandlerCheckNicknameForExisting;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step::base::Incoming as ActionHandlerIncomingDataLogInByFirstStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step::base::Incoming as IncomingLogInByFirstStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step::base::Base as ActionHandlerLogInByFirstStep;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step::base::Incoming as ActionHandlerIncomingDataLogInByLastStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step::base::Incoming as IncomingLogInByLastStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step::base::Base as ActionHandlerLogInByLastStep;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices::base::Incoming as ActionHandlerIncomingDataLogOutFromAllDevices;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices::base::Incoming as IncomingLogOutFromAllDevices;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_all_devices::base::Base as ActionHandlerLogOutFromAllDevices;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_one_device::base::Incoming as ActionHandlerIncomingDataLogOutFromOneDevice;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_one_device::base::Incoming as IncomingLogOutFromOneDevice;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_out_from_one_device::base::Base as ActionHandlerLogOutFromOneDevice;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_application_user_access_token::base::Incoming as ActionHandlerIncomingDataRefreshApplicationUserAccessToken;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_application_user_access_token::base::Incoming as IncomingRefreshApplicationUserAccessToken;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_application_user_access_token::base::Base as ActionHandlerRefreshApplicationUserAccessToken;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step::base::Incoming as ActionHandlerIncomingDataRegisterByFirstStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step::base::Incoming as IncomingRegisterByFirstStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_first_step::base::Base as ActionHandlerRegisterByFirstStep;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Incoming as ActionHandlerIncomingDataRegisterByLastStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Incoming as IncomingRegisterByLastStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Base as ActionHandlerRegisterByLastStep;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_second_step::base::Incoming as ActionHandlerIncomingDataRegisterBySecondStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_second_step::base::Incoming as IncomingRegisterBySecondStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_second_step::base::Base as ActionHandlerRegisterBySecondStep;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Incoming as ActionHandlerIncomingDataResetPasswordByFirstStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Incoming as IncomingResetPasswordByFirstStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Base as ActionHandlerResetPasswordByFirstStep;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step::base::Incoming as ActionHandlerIncomingDataResetPasswordByLastStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step::base::Incoming as IncomingResetPasswordByLastStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_last_step::base::Base as ActionHandlerResetPasswordByLastStep;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_second_step::base::Incoming as ActionHandlerIncomingDataResetPasswordBySecondStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_second_step::base::Incoming as IncomingResetPasswordBySecondStep;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_second_step::base::Base as ActionHandlerResetPasswordBySecondStep;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Incoming as ActionHandlerIncomingDataSendEmailForLogIn;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Incoming as IncomingSendEmailForLogIn;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_log_in::base::Base as ActionHandlerSendEmailForLogIn;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Incoming as ActionHandlerIncomingDataSendEmailForRegister;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Incoming as IncomingSendEmailForRegister;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_register::base::Base as ActionHandlerSendEmailForRegister;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Incoming as ActionHandlerIncomingDataSendEmailForResetPassword;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Incoming as IncomingSendEmailForResetPassword;
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::send_email_for_reset_password::base::Base as ActionHandlerSendEmailForResetPassword;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -107,10 +107,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataCheckEmailForExisting>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingCheckEmailForExisting>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerCheckEmailForExisting::handle(
-                    core_postgresql_connection_pool, action_handler_incoming_data
+                    core_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -194,7 +194,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataCheckEmailForExisting, ActionHandlerOutcomingDataCheckEmailForExisting>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingCheckEmailForExisting, ActionHandlerOutcomingDataCheckEmailForExisting>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -226,10 +226,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataCheckNicknameForExisting>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingCheckNicknameForExisting>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerCheckNicknameForExisting::handle(
-                    core_postgresql_connection_pool, action_handler_incoming_data
+                    core_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -312,7 +312,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataCheckNicknameForExisting, ActionHandlerOutcomingDataCheckNicknameForExisting>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingCheckNicknameForExisting, ActionHandlerOutcomingDataCheckNicknameForExisting>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -344,10 +344,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRegisterByFirstStep>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingRegisterByFirstStep>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerRegisterByFirstStep::handle(
-                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -444,7 +444,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataRegisterByFirstStep, ()>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingRegisterByFirstStep, ()>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -476,10 +476,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRegisterBySecondStep>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingRegisterBySecondStep>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerRegisterBySecondStep::handle(
-                    authorization_postgresql_connection_pool, action_handler_incoming_data
+                    authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -612,7 +612,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataRegisterBySecondStep, ActionHandlerOutcomingDataRegisterBySecondStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingRegisterBySecondStep, ActionHandlerOutcomingDataRegisterBySecondStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -644,10 +644,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRegisterByLastStep>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingRegisterByLastStep>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerRegisterByLastStep::handle(
-                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -850,7 +850,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataRegisterByLastStep, ActionHandlerOutcomingDataRegisterByLastStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingRegisterByLastStep, ActionHandlerOutcomingDataRegisterByLastStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -882,10 +882,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForRegister>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingSendEmailForRegister>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerSendEmailForRegister::handle(
-                    environment_configuration_resolver, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1005,7 +1005,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataSendEmailForRegister, ()>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingSendEmailForRegister, ()>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1037,10 +1037,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogInByFirstStep>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingLogInByFirstStep>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerLogInByFirstStep::handle(
-                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1126,7 +1126,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataLogInByFirstStep, ActionHandlerOutcomingDataLogInByFirstStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingLogInByFirstStep, ActionHandlerOutcomingDataLogInByFirstStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1158,10 +1158,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogInByLastStep>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingLogInByLastStep>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerLogInByLastStep::handle(
-                    environment_configuration_resolver, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1270,7 +1270,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataLogInByLastStep, ActionHandlerOutcomingDataLogInByLastStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingLogInByLastStep, ActionHandlerOutcomingDataLogInByLastStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1302,10 +1302,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForLogIn>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingSendEmailForLogIn>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerSendEmailForLogIn::handle(
-                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1409,7 +1409,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataSendEmailForLogIn, ()>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingSendEmailForLogIn, ()>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1441,10 +1441,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataRefreshApplicationUserAccessToken>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingRefreshApplicationUserAccessToken>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerRefreshApplicationUserAccessToken::handle(
-                    environment_configuration_resolver, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1559,7 +1559,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataRefreshApplicationUserAccessToken, ActionHandlerOutcomingDataRefreshApplicationUserAccessToken>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingRefreshApplicationUserAccessToken, ActionHandlerOutcomingDataRefreshApplicationUserAccessToken>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1591,10 +1591,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogOutFromOneDevice>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingLogOutFromOneDevice>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerLogOutFromOneDevice::handle(
-                    environment_configuration_resolver, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1691,7 +1691,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataLogOutFromOneDevice, ()>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingLogOutFromOneDevice, ()>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1723,10 +1723,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataLogOutFromAllDevices>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingLogOutFromAllDevices>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerLogOutFromAllDevices::handle(
-                    environment_configuration_resolver, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1823,7 +1823,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataLogOutFromAllDevices, ()>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingLogOutFromAllDevices, ()>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1855,10 +1855,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataResetPasswordByFirstStep>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingResetPasswordByFirstStep>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerResetPasswordByFirstStep::handle(
-                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -1956,7 +1956,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataResetPasswordByFirstStep, ActionHandlerOutcomingDataResetPasswordByFirstStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingResetPasswordByFirstStep, ActionHandlerOutcomingDataResetPasswordByFirstStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1988,10 +1988,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataResetPasswordBySecondStep>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingResetPasswordBySecondStep>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerResetPasswordBySecondStep::handle(
-                    authorization_postgresql_connection_pool, action_handler_incoming_data
+                    authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -2103,7 +2103,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataResetPasswordBySecondStep, ActionHandlerOutcomingDataResetPasswordBySecondStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingResetPasswordBySecondStep, ActionHandlerOutcomingDataResetPasswordBySecondStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -2135,10 +2135,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataResetPasswordByLastStep>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingResetPasswordByLastStep>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerResetPasswordByLastStep::handle(
-                    core_postgresql_connection_pool, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -2300,7 +2300,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataResetPasswordByLastStep, ()>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingResetPasswordByLastStep, ()>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -2332,10 +2332,10 @@ impl Authorization {
         // https://github.com/hyperium/hyper/issues/2004
         let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-        match rmp_serde::from_read_ref::<'_, [u8], ActionHandlerIncomingDataSendEmailForResetPassword>(bytes.chunk()) {
-            Ok(action_handler_incoming_data) => {
+        match rmp_serde::from_read_ref::<'_, [u8], IncomingSendEmailForResetPassword>(bytes.chunk()) {
+            Ok(incoming) => {
                 match ActionHandlerSendEmailForResetPassword::handle(
-                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, action_handler_incoming_data
+                    environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
@@ -2453,7 +2453,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, ActionHandlerIncomingDataSendEmailForResetPassword, ()>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingSendEmailForResetPassword, ()>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
