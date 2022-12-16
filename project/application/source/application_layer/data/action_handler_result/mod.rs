@@ -7,8 +7,8 @@ use super::entity_workflow_exception::_component::_in_context_for::domain_layer:
 use super::entity_workflow_exception::entity_workflow_exception::EntityWorkflowException;
 
 pub enum ActionHandlerResult<T> {
-    ActionHandlerOutcomingData {
-        action_handler_outcoming_data: T
+    Outcoming {
+        outcoming: T
     },
     EntityWorkflowException {
         entity_workflow_exception: EntityWorkflowException
@@ -16,10 +16,10 @@ pub enum ActionHandlerResult<T> {
 }
 
 impl<T> ActionHandlerResult<T> {
-    pub fn new_with_action_handler_outcoming_data(
-        action_handler_outcoming_data: T
+    pub fn new_with_outcoming(
+        outcoming: T
     ) -> Self {
-        return Self::ActionHandlerOutcomingData { action_handler_outcoming_data };
+        return Self::Outcoming { outcoming };
     }
 
     pub fn new_with_application_user_workflow_exception(

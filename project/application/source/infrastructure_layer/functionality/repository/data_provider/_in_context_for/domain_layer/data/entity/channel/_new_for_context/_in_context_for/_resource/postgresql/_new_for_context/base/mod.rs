@@ -1,7 +1,7 @@
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_created_at::base::Channel as ActionHandlerOutcomingDataGetManyByCreatedAtChannel;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_id_registry::base::Channel as ActionHandlerOutcomingDataGetManyByIdRegistryChannel;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_name::base::Channel as ActionHandlerOutcomingDataGetManyByNameChannel;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_subscribers_quantity::base::Channel as ActionHandlerOutcomingDataGetManyBySubscribersQuantityChannel;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_created_at::base::Channel as OutcomingGetManyByCreatedAtChannel;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_id_registry::base::Channel as OutcomingGetManyByIdRegistryChannel;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_name::base::Channel as OutcomingGetManyByNameChannel;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_subscribers_quantity::base::Channel as OutcomingGetManyBySubscribersQuantityChannel;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
@@ -21,7 +21,7 @@ impl Base {
         channel_name: &'a str,
         requery_name: &'a Option<String>,
         limit: i16
-    ) -> Result<Option<Vec<ActionHandlerOutcomingDataGetManyByNameChannel>>, ErrorAuditor> {
+    ) -> Result<Option<Vec<OutcomingGetManyByNameChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter_u8 = CounterU8::new();
@@ -87,7 +87,7 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
-        let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyByNameChannel> = vec![];
+        let mut channel_registry: Vec<OutcomingGetManyByNameChannel> = vec![];
 
         match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -203,7 +203,7 @@ impl Base {
                                     }
                                 };
 
-                                let channel = ActionHandlerOutcomingDataGetManyByNameChannel::new(
+                                let channel = OutcomingGetManyByNameChannel::new(
                                     channel_id,
                                     channel_name_,
                                     channel_personalization_image_path,
@@ -249,7 +249,7 @@ impl Base {
         channel_created_at: &'a Option<String>,
         order: i8,
         limit: i16
-    ) -> Result<Option<Vec<ActionHandlerOutcomingDataGetManyByCreatedAtChannel>>, ErrorAuditor> {
+    ) -> Result<Option<Vec<OutcomingGetManyByCreatedAtChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter_u8 = CounterU8::new();
@@ -323,7 +323,7 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
-        let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyByCreatedAtChannel> = vec![];
+        let mut channel_registry: Vec<OutcomingGetManyByCreatedAtChannel> = vec![];
 
         match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -439,7 +439,7 @@ impl Base {
                                     }
                                 };
 
-                                let channel = ActionHandlerOutcomingDataGetManyByCreatedAtChannel::new(
+                                let channel = OutcomingGetManyByCreatedAtChannel::new(
                                     channel_id,
                                     channel_name,
                                     channel_personalization_image_path,
@@ -485,7 +485,7 @@ impl Base {
         channel_subscribers_quantity: Option<i64>,
         order: i8,
         limit: i16
-    ) -> Result<Option<Vec<ActionHandlerOutcomingDataGetManyBySubscribersQuantityChannel>>, ErrorAuditor> {
+    ) -> Result<Option<Vec<OutcomingGetManyBySubscribersQuantityChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter_u8 = CounterU8::new();
@@ -552,7 +552,7 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
-        let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyBySubscribersQuantityChannel> = vec![];
+        let mut channel_registry: Vec<OutcomingGetManyBySubscribersQuantityChannel> = vec![];
 
         match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -584,7 +584,7 @@ impl Base {
                                     }
                                 };
 
-                                let channel = ActionHandlerOutcomingDataGetManyBySubscribersQuantityChannel::new(
+                                let channel = OutcomingGetManyBySubscribersQuantityChannel::new(
                                     channel_id,
                                     channel_subscribers_quantity_
                                 );
@@ -621,7 +621,7 @@ impl Base {
     pub async fn per_request_4<'a>(
         core_connection: &'a Connection,
         id_registry: &'a Vec<i64>
-    ) -> Result<Option<Vec<ActionHandlerOutcomingDataGetManyByIdRegistryChannel>>, ErrorAuditor> {
+    ) -> Result<Option<Vec<OutcomingGetManyByIdRegistryChannel>>, ErrorAuditor> {
         if id_registry.is_empty() {
             return Ok(None)
         }
@@ -644,7 +644,7 @@ impl Base {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&id_registry, Type::INT8_ARRAY);
 
-        let mut channel_registry: Vec<ActionHandlerOutcomingDataGetManyByIdRegistryChannel> = vec![];
+        let mut channel_registry: Vec<OutcomingGetManyByIdRegistryChannel> = vec![];
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -760,7 +760,7 @@ impl Base {
                                     }
                                 };
 
-                                let channel = ActionHandlerOutcomingDataGetManyByIdRegistryChannel::new(
+                                let channel = OutcomingGetManyByIdRegistryChannel::new(
                                     channel_id,
                                     channel_name,
                                     channel_personalization_image_path,

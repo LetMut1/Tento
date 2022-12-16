@@ -45,7 +45,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
+    ) -> Result<ActionHandlerResult<Outcoming>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -82,7 +82,7 @@ impl Base {
                                     &*core_postgresql_pooled_connection, channel_subscribers_quantity, order, limit
                                 ).await {
                                     Ok(channel_registry) => {
-                                        return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(ActionHandlerOutcomingData::new(channel_registry)));
+                                        return Ok(ActionHandlerResult::new_with_outcoming(Outcoming::new(channel_registry)));
                                     }
                                     Err(mut error) => {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -141,11 +141,11 @@ impl Incoming {
 
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
-pub struct ActionHandlerOutcomingData {
+pub struct Outcoming {
     channel_registry: Option<Vec<Channel>>
 }
 
-impl ActionHandlerOutcomingData {
+impl Outcoming {
     pub fn new(
         channel_registry: Option<Vec<Channel>>
     ) -> Self {

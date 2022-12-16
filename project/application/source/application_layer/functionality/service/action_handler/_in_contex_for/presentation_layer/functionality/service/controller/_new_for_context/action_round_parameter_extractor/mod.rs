@@ -41,7 +41,7 @@ impl ActionRaoundParameterExtractor {
         redis_connection_pool: Pool<RedisConnectionManager>,
         incoming: Incoming<AHID>,
         action: FO
-    ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData<AHOD>>, ErrorAuditor>
+    ) -> Result<ActionHandlerResult<Outcoming<AHOD>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -84,7 +84,7 @@ impl ActionRaoundParameterExtractor {
             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
         ).await;
 
-        let action_handler_outcoming_data: ActionHandlerOutcomingData<AHOD>;
+        let outcoming: Outcoming<AHOD>;
 
         let (
             response_parts,
@@ -96,7 +96,7 @@ impl ActionRaoundParameterExtractor {
                 Ok(bytes) => {
                     match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<AHOD>>(bytes.chunk()) {
                         Ok(unified_report) => {
-                            action_handler_outcoming_data = ActionHandlerOutcomingData::new(response_parts, Some(unified_report));
+                            outcoming = Outcoming::new(response_parts, Some(unified_report));
                         }
                         Err(error) => {
                             return Err(
@@ -118,10 +118,10 @@ impl ActionRaoundParameterExtractor {
                 }
             }
         } else {
-            action_handler_outcoming_data = ActionHandlerOutcomingData::new(response_parts, None);
+            outcoming = Outcoming::new(response_parts, None);
         }
 
-        return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(action_handler_outcoming_data));
+        return Ok(ActionHandlerResult::new_with_outcoming(outcoming));
     }
 }
 
@@ -153,12 +153,12 @@ impl<T> Incoming<T> {
 }
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-pub struct ActionHandlerOutcomingData<T> {
+pub struct Outcoming<T> {
     parts: HttpResponseParts,
     unified_report: Option<UnifiedReport<T>>
 }
 
-impl<T> ActionHandlerOutcomingData<T> {
+impl<T> Outcoming<T> {
     pub fn new(
         parts: HttpResponseParts,
         unified_report: Option<UnifiedReport<T>>

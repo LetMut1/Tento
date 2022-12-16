@@ -133,7 +133,7 @@ impl Base {
                                                             return Err(error);
                                                         }
 
-                                                        return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
+                                                        return Ok(ActionHandlerResult::new_with_outcoming(()));
                                                     }
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

@@ -75,11 +75,11 @@ impl RequestResponseDataEncodingProtocolWrapper {
                         ).await {
                             Ok(action_handler_result) => {
                                 match action_handler_result {
-                                    ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
+                                    ActionHandlerResult::Outcoming { outcoming } => {
                                         let (
                                             response_parts,
                                             unified_report
-                                        ) = action_handler_outcoming_data.into_inner();
+                                        ) = outcoming.into_inner();
 
                                         match unified_report {
                                             Some(unified_report_) => {

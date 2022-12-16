@@ -62,23 +62,23 @@ use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::ActionHandlerOutcomingData as ActionHandlerOutcomingDataCheckEmailForExisting;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Outcoming as OutcomingCheckEmailForExisting;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickname_for_existing::base::ActionHandlerOutcomingData as ActionHandlerOutcomingDataCheckNicknameForExisting;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickname_for_existing::base::Outcoming as OutcomingCheckNicknameForExisting;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::ActionHandlerOutcomingData as ActionHandlerOutcomingDataRegisterByLastStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Outcoming as OutcomingRegisterByLastStep;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_second_step::base::ActionHandlerOutcomingData as ActionHandlerOutcomingDataRegisterBySecondStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_second_step::base::Outcoming as OutcomingRegisterBySecondStep;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step::base::ActionHandlerOutcomingData as ActionHandlerOutcomingDataLogInByFirstStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step::base::Outcoming as OutcomingLogInByFirstStep;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step::base::ActionHandlerOutcomingData as ActionHandlerOutcomingDataLogInByLastStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step::base::Outcoming as OutcomingLogInByLastStep;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_application_user_access_token::base::ActionHandlerOutcomingData as ActionHandlerOutcomingDataRefreshApplicationUserAccessToken;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_application_user_access_token::base::Outcoming as OutcomingRefreshApplicationUserAccessToken;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::ActionHandlerOutcomingData as ActionHandlerOutcomingDataResetPasswordByFirstStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Outcoming as OutcomingResetPasswordByFirstStep;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_second_step::base::ActionHandlerOutcomingData as ActionHandlerOutcomingDataResetPasswordBySecondStep;
+use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_second_step::base::Outcoming as OutcomingResetPasswordBySecondStep;
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::request_response_data_encoding_protocol_wrapper::RequestResponseDataEncodingProtocolWrapper;
 
@@ -114,8 +114,8 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -194,7 +194,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingCheckEmailForExisting, ActionHandlerOutcomingDataCheckEmailForExisting>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingCheckEmailForExisting, OutcomingCheckEmailForExisting>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -233,8 +233,8 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -312,7 +312,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingCheckNicknameForExisting, ActionHandlerOutcomingDataCheckNicknameForExisting>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingCheckNicknameForExisting, OutcomingCheckNicknameForExisting>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -351,7 +351,7 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                            ActionHandlerResult::Outcoming { outcoming: _ } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
@@ -483,8 +483,8 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -612,7 +612,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingRegisterBySecondStep, ActionHandlerOutcomingDataRegisterBySecondStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingRegisterBySecondStep, OutcomingRegisterBySecondStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -651,8 +651,8 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -850,7 +850,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingRegisterByLastStep, ActionHandlerOutcomingDataRegisterByLastStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingRegisterByLastStep, OutcomingRegisterByLastStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -889,7 +889,7 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                            ActionHandlerResult::Outcoming { outcoming: _ } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
@@ -1044,8 +1044,8 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -1126,7 +1126,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingLogInByFirstStep, ActionHandlerOutcomingDataLogInByFirstStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingLogInByFirstStep, OutcomingLogInByFirstStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1165,8 +1165,8 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -1270,7 +1270,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingLogInByLastStep, ActionHandlerOutcomingDataLogInByLastStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingLogInByLastStep, OutcomingLogInByLastStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1309,7 +1309,7 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                            ActionHandlerResult::Outcoming { outcoming: _ } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
@@ -1448,8 +1448,8 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -1559,7 +1559,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingRefreshApplicationUserAccessToken, ActionHandlerOutcomingDataRefreshApplicationUserAccessToken>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingRefreshApplicationUserAccessToken, OutcomingRefreshApplicationUserAccessToken>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1598,7 +1598,7 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                            ActionHandlerResult::Outcoming { outcoming: _ } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
@@ -1730,7 +1730,7 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                            ActionHandlerResult::Outcoming { outcoming: _ } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
@@ -1862,8 +1862,8 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -1956,7 +1956,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingResetPasswordByFirstStep, ActionHandlerOutcomingDataResetPasswordByFirstStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingResetPasswordByFirstStep, OutcomingResetPasswordByFirstStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -1995,8 +1995,8 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -2103,7 +2103,7 @@ impl Authorization {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingResetPasswordBySecondStep, ActionHandlerOutcomingDataResetPasswordBySecondStep>(
+        return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, IncomingResetPasswordBySecondStep, OutcomingResetPasswordBySecondStep>(
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
@@ -2142,7 +2142,7 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                            ActionHandlerResult::Outcoming { outcoming: _ } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
@@ -2339,7 +2339,7 @@ impl Authorization {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data: _ } => {
+                            ActionHandlerResult::Outcoming { outcoming: _ } => {
                                 match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);

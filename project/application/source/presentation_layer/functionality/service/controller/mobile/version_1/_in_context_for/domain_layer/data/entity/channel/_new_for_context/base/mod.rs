@@ -83,8 +83,8 @@ impl Base {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -191,8 +191,8 @@ impl Base {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -299,8 +299,8 @@ impl Base {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }
@@ -407,8 +407,8 @@ impl Base {
                 ).await {
                     Ok(action_handler_result) => {
                         match action_handler_result {
-                            ActionHandlerResult::ActionHandlerOutcomingData { action_handler_outcoming_data } => {
-                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(action_handler_outcoming_data)) {
+                            ActionHandlerResult::Outcoming { outcoming } => {
+                                match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                                     Ok(data) => {
                                         return ActionResponseCreator::create_ok(data);
                                     }

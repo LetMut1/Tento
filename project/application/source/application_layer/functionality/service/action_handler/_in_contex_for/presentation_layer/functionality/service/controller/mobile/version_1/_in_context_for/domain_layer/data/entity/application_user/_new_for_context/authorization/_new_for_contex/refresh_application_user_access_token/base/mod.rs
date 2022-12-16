@@ -37,7 +37,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>
+    ) -> Result<ActionHandlerResult<Outcoming>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -153,8 +153,8 @@ impl Base {
                         };
 
                         return Ok(
-                            ActionHandlerResult::new_with_action_handler_outcoming_data(
-                                ActionHandlerOutcomingData::new(application_user_access_token_web_form_new, application_user_access_refresh_token_web_form_new)
+                            ActionHandlerResult::new_with_outcoming(
+                                Outcoming::new(application_user_access_token_web_form_new, application_user_access_refresh_token_web_form_new)
                             )
                         );
 
@@ -208,12 +208,12 @@ impl Incoming {
 
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
-pub struct ActionHandlerOutcomingData {
+pub struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
 }
 
-impl ActionHandlerOutcomingData {
+impl Outcoming {
     pub fn new(
         application_user_access_token_web_form: String,
         application_user_access_refresh_token_web_form: String

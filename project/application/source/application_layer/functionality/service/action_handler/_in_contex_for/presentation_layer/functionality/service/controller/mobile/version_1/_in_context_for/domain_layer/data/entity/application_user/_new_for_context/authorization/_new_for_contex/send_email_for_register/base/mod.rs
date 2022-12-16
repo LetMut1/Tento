@@ -94,7 +94,7 @@ impl Base {
                                                     return Err(error);
                                                 }
 
-                                                return Ok(ActionHandlerResult::new_with_action_handler_outcoming_data(()));
+                                                return Ok(ActionHandlerResult::new_with_outcoming(()));
                                             }
 
                                             return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationTokenWorkflowException::AlreadyApproved));

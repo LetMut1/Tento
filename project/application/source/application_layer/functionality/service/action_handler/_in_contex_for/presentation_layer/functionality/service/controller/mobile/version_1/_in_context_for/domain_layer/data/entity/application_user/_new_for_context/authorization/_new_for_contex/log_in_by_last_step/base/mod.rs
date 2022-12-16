@@ -41,7 +41,7 @@ impl Base {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,             // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
         incoming: Incoming
-    ) -> Result<ActionHandlerResult<ActionHandlerOutcomingData>, ErrorAuditor>   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
+    ) -> Result<ActionHandlerResult<Outcoming>, ErrorAuditor>   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -198,8 +198,8 @@ impl Base {
                     };
 
                     return Ok(
-                        ActionHandlerResult::new_with_action_handler_outcoming_data(
-                            ActionHandlerOutcomingData::new(application_user_access_token_web_form, application_user_access_refresh_token_web_form)
+                        ActionHandlerResult::new_with_outcoming(
+                            Outcoming::new(application_user_access_token_web_form, application_user_access_refresh_token_web_form)
                         )
                     );
                 }
@@ -260,12 +260,12 @@ impl Incoming {
 
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
-pub struct ActionHandlerOutcomingData {
+pub struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
 }
 
-impl ActionHandlerOutcomingData {
+impl Outcoming {
     pub fn new(
         application_user_access_token_web_form: String,
         application_user_access_refresh_token_web_form: String
