@@ -413,6 +413,39 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a246d82be1c9d791c5dfde9a2bd045fc3cbba3fa2b11ad558f27d01712f00569"
 
 [[package]]
+name = "extern_crate"
+version = "0.1.0"
+dependencies = [
+ "base64 0.13.0",
+ "bb8",
+ "bb8-postgres",
+ "bb8-redis",
+ "bytes",
+ "chrono",
+ "dotenv",
+ "futures",
+ "futures-util",
+ "hex",
+ "http",
+ "hyper",
+ "lettre",
+ "lettre_email",
+ "log",
+ "log4rs",
+ "rand 0.8.5",
+ "redis",
+ "regex",
+ "rmp-serde",
+ "rust-argon2",
+ "rust-crypto",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-postgres",
+ "uuid 0.8.2",
+]
+
+[[package]]
 name = "fallible-iterator"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

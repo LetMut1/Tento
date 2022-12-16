@@ -2,11 +2,13 @@
 resolver = "2"
 members = [
     "./source",
+    "./source/infrastructure_layer/extern_crate",
     "./source/presentation_layer/command/run_server",
     "./source/presentation_layer/command/remove_incomplite_state"
 ]
 default-members = [
     "./source",
+    "./source/infrastructure_layer/extern_crate",
     "./source/presentation_layer/command/run_server",
     "./source/presentation_layer/command/remove_incomplite_state"
 ]
@@ -27,7 +29,7 @@ opt-level = 0
 codegen-units = 256
 
 [profile.release]
-opt-level = 3       # TODO  3 can be slawer than 2  https://doc.rust-lang.org/cargo/reference/profiles.html  https://doc.rust-lang.org/rustc/profile-guided-optimization.html  
+opt-level = 3       # TODO  3 can be slawer than 2  https://doc.rust-lang.org/cargo/reference/profiles.html  https://doc.rust-lang.org/rustc/profile-guided-optimization.html
 debug = false
 debug-assertions = false
 overflow-checks = true
