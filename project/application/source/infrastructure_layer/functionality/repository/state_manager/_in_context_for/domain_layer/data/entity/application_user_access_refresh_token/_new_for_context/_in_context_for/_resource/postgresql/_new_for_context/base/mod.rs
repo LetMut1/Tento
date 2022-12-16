@@ -10,45 +10,6 @@ use std::borrow::Cow;
 use tokio_postgres::Client as Connection;
 use tokio_postgres::types::Type;
 
-pub struct Insert<'a> {
-    pub application_user_id: i64,
-    pub application_user_log_in_token_device_id: Cow<'a, str>,
-    pub application_user_access_token_id: Cow<'a, str>,
-    pub application_user_access_refresh_token_obfuscation_value: String,
-}
-
-impl<'a> Insert<'a> {   // TODO DElete
-    pub fn new(
-        application_user_id: i64,
-        application_user_log_in_token_device_id: Cow<'a, str>,
-        application_user_access_token_id: Cow<'a, str>,
-        application_user_access_refresh_token_obfuscation_value: String,
-    ) -> Self {
-        return Self {
-            application_user_id,
-            application_user_log_in_token_device_id,
-            application_user_access_token_id,
-            application_user_access_refresh_token_obfuscation_value
-        }
-    }
-
-    pub fn into_inner(
-        self
-    ) -> (i64, Cow<'a, str>, Cow<'a, str>, String) {
-        return (
-            self.application_user_id,
-            self.application_user_log_in_token_device_id,
-            self.application_user_access_token_id,
-            self.application_user_access_refresh_token_obfuscation_value
-        );
-    }
-}
-
-pub struct Update {
-    pub application_user_access_refresh_token_expires_at: bool,
-    pub application_user_access_refresh_token_updated_at: bool
-}
-
 pub struct Base;
 
 impl Base {
@@ -541,4 +502,43 @@ impl Base {
             }
         }
     }
+}
+
+pub struct Insert<'a> {
+    pub application_user_id: i64,
+    pub application_user_log_in_token_device_id: Cow<'a, str>,
+    pub application_user_access_token_id: Cow<'a, str>,
+    pub application_user_access_refresh_token_obfuscation_value: String,
+}
+
+impl<'a> Insert<'a> {   // TODO DElete
+    pub fn new(
+        application_user_id: i64,
+        application_user_log_in_token_device_id: Cow<'a, str>,
+        application_user_access_token_id: Cow<'a, str>,
+        application_user_access_refresh_token_obfuscation_value: String,
+    ) -> Self {
+        return Self {
+            application_user_id,
+            application_user_log_in_token_device_id,
+            application_user_access_token_id,
+            application_user_access_refresh_token_obfuscation_value
+        }
+    }
+
+    pub fn into_inner(
+        self
+    ) -> (i64, Cow<'a, str>, Cow<'a, str>, String) {
+        return (
+            self.application_user_id,
+            self.application_user_log_in_token_device_id,
+            self.application_user_access_token_id,
+            self.application_user_access_refresh_token_obfuscation_value
+        );
+    }
+}
+
+pub struct Update {
+    pub application_user_access_refresh_token_expires_at: bool,
+    pub application_user_access_refresh_token_updated_at: bool
 }

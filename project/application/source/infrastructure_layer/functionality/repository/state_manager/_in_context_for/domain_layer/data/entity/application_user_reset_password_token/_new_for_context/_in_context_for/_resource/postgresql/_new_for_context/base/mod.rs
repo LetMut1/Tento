@@ -1,5 +1,4 @@
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::infrastructure_layer::data::data_transfer_object::_in_context_for::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::_new_for_context::insert::Insert;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::logic_error::LogicError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -223,5 +222,39 @@ impl Base {
                 );
             }
         }
+    }
+}
+
+pub struct Insert {
+    application_user_id: i64,
+    application_user_reset_password_token_value: String,
+    application_user_reset_password_token_wrong_enter_tries_quantity: u8,
+    application_user_reset_password_token_is_approved: bool,
+}
+
+impl<'a> Insert {
+    pub fn new(
+        application_user_id: i64,
+        application_user_reset_password_token_value: String,
+        application_user_reset_password_token_wrong_enter_tries_quantity: u8,
+        application_user_reset_password_token_is_approved: bool,
+    ) -> Self {
+        return Self {
+            application_user_id,
+            application_user_reset_password_token_value,
+            application_user_reset_password_token_wrong_enter_tries_quantity,
+            application_user_reset_password_token_is_approved
+        }
+    }
+
+    pub fn into_inner(
+        self
+    ) -> (i64, String, u8, bool) {
+        return (
+            self.application_user_id,
+            self.application_user_reset_password_token_value,
+            self.application_user_reset_password_token_wrong_enter_tries_quantity,
+            self.application_user_reset_password_token_is_approved
+        );
     }
 }
