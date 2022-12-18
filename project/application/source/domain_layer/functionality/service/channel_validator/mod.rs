@@ -1,6 +1,7 @@
-pub struct Base;
+#[allow(non_camel_case_types)]
+pub struct Channel_Validator;
 
-impl Base {
+impl Channel_Validator {
     const NAME_MAXIMUM_LENGTH: u8 = 75;
     const DESCRIPTION_MAXIMUM_LENGTH: u16 = 500;
 
@@ -9,7 +10,7 @@ impl Base {
     ) -> bool {
         return name.chars().count() <= (Self::NAME_MAXIMUM_LENGTH as usize);
     }
-    
+
     pub fn is_valid_description<'a>(
         description: &'a str
     ) -> bool {

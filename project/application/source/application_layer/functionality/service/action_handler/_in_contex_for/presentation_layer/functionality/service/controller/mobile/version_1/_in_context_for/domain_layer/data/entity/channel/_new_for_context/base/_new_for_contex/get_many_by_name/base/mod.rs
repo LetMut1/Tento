@@ -1,6 +1,6 @@
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::application_user_access_token_workflow_exception::ApplicationUserAccessTokenWorkflowException;
-use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::Base as Validator;
+use crate::domain_layer::functionality::service::channel_validator::Channel_Validator;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
@@ -52,7 +52,7 @@ impl Base {
                             limit = Self::LIMIT;
                         }
 
-                        if !Validator::is_valid_name(channel_name.as_str()) {
+                        if !Channel_Validator::is_valid_name(channel_name.as_str()) {
                             return Err(
                                 ErrorAuditor::new(
                                     BaseError::InvalidArgumentError,
@@ -61,7 +61,7 @@ impl Base {
                             );
                         }
                         if let Some(ref requery_channel_name_) = requery_channel_name {
-                            if !Validator::is_valid_name(requery_channel_name_.as_str()) {
+                            if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
                                 return Err(
                                     ErrorAuditor::new(
                                         BaseError::InvalidArgumentError,
