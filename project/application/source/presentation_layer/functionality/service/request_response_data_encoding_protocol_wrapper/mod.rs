@@ -25,6 +25,10 @@ use std::ops::FnOnce;
 use super::action_response_creator::ActionResponseCreator;
 use super::request_header_checker::RequestHeaderChecker;
 
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use extern_crate::serde_json;
+
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct RequestResponseDataEncodingProtocolWrapper;
 
 impl RequestResponseDataEncodingProtocolWrapper {

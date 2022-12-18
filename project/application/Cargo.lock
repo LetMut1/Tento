@@ -22,7 +22,6 @@ name = "application"
 version = "0.1.0"
 dependencies = [
  "extern_crate",
- "serde_json",
 ]
 
 [[package]]
@@ -414,6 +413,7 @@ dependencies = [
  "rust-argon2",
  "rust-crypto",
  "serde",
+ "serde_json",
  "tokio",
  "tokio-postgres",
  "uuid 0.8.2",

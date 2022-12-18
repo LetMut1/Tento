@@ -19,8 +19,7 @@ required-features = []
 
 [dependencies]
 extern_crate = { path = "./infrastructure_layer/extern_crate", package = "extern_crate", version = "0.1.0", default-features = true, features = [], optional = false }
-serde_json = { version = "^1.0", default-features = true, features = [], optional = true }
 
 [features]
 default = []
-facilitate_non_automatic_functional_testing = ["dep:serde_json"]
+facilitate_non_automatic_functional_testing = ["extern_crate/facilitate_non_automatic_functional_testing"]
