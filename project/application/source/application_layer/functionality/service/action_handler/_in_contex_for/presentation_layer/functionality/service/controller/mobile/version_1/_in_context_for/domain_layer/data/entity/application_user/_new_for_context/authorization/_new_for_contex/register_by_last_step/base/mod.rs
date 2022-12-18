@@ -9,7 +9,7 @@ use crate::domain_layer::functionality::service::_in_context_for::domain_layer::
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
+use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUserPasswordHashResolver;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenValidator;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
@@ -147,7 +147,7 @@ impl Base {
                                     if !is_expired {
                                         if application_user_registration_confirmation_token_.get_is_approved() {
                                             if application_user_registration_confirmation_token_.get_value() == application_user_registration_confirmation_token_value.as_str() {
-                                                let application_user_password_hash = match PasswordHashResolver::create(application_user_password.as_str()) {
+                                                let application_user_password_hash = match ApplicationUserPasswordHashResolver::create(application_user_password.as_str()) {
                                                     Ok(application_user_password_hash_) => application_user_password_hash_,
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

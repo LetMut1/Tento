@@ -4,7 +4,7 @@ use crate::application_layer::data::entity_workflow_exception::_component::_in_c
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::password_hash_resolver::PasswordHashResolver;
+use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUserPasswordHashResolver;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::base::Base as ApplicationUserResetPasswordTokenValidator;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as ApplicationUserValidator;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
@@ -80,7 +80,7 @@ impl Base {
                                                                 match ApplicationUserDataProviderPostgresql::find_3(core_postgresql_connection, application_user_id).await {
                                                                     Ok(application_user) => {
                                                                         if let Some(mut application_user_) = application_user {
-                                                                            match PasswordHashResolver::create(application_user_password.as_str()) {
+                                                                            match ApplicationUserPasswordHashResolver::create(application_user_password.as_str()) {
                                                                                 Ok(password_hash) => {
                                                                                     application_user_.set_password_hash(password_hash);
 
