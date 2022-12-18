@@ -20,7 +20,6 @@ pub use rand;
 pub use redis;
 pub use regex;
 pub use rmp_serde;
-pub use serde_json;
 pub use serde;
 pub use tokio_postgres;
 pub use tokio;

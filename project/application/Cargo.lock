@@ -414,7 +414,6 @@ dependencies = [
  "rust-argon2",
  "rust-crypto",
  "serde",
- "serde_json",
  "tokio",
  "tokio-postgres",
  "uuid 0.8.2",

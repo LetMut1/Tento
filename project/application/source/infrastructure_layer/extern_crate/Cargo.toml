@@ -31,7 +31,7 @@ futures = { package = "futures", version = "^0.3", default-features = true, feat
 futures_util = { package = "futures-util", version = "^0.3", default-features = true, features = [], optional = false }
 hex = { package = "hex", version = "^0.4", default-features = true, features = [], optional = false }
 http = { package = "http", version = "^0.2", default-features = true, features = [], optional = false }
-hyper = { package = "hyper", version = "^0.14", default-features = true, features = ["full"], optional = false }  # Убрать фичу Full и понять , какие нужны
+hyper = { package = "hyper", version = "^0.14", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 lettre = { package = "lettre", version = "^0.9", default-features = true, features = [], optional = false }
 lettre_email = { package = "lettre_email", version = "^0.9", default-features = true, features = [], optional = false }
 log = { package = "log", version = "^0.4", default-features = true, features = [], optional = false }
@@ -41,11 +41,9 @@ redis = { package = "redis", version = "^0.21", default-features = true, feature
 regex = { package = "regex", version = "^1.4", default-features = true, features = [], optional = false }
 rmp_serde = { package = "rmp-serde", version = "^0.15", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "^1.0", default-features = true, features = ["derive"], optional = false }
-serde_json = { package = "serde_json", version = "^1.0", default-features = true, features = [], optional = true }
-tokio = { package = "tokio", version = "^1.16", default-features = true, features = ["full"], optional = false }  # Убрать фичу Full и понять , какие нужны
+tokio = { package = "tokio", version = "^1.16", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 tokio_postgres = { package = "tokio-postgres", version = "^0.7", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
 
-# [features]
-# default = []
-# facilitate_non_automatic_functional_testing = ["dep:serde_json"]
+[features]
+default = []
