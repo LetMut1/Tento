@@ -48,4 +48,4 @@ uuid = { package = "uuid", version = "^0.8", default-features = true, features =
 
 [features]
 default = []
-facilitate_non_automatic_functional_testing = ["dep:serde_json"]
+facilitate_non_automatic_functional_testing = ["serde_json"]
