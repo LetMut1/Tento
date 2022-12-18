@@ -11,9 +11,9 @@ use extern_crate::crypto::sha2::Sha512;
 use extern_crate::hex;
 use extern_crate::rmp_serde;
 
-pub struct Encoder;
+pub struct ApplicationUserAccessRefreshTokenEncoder;
 
-impl Encoder {
+impl ApplicationUserAccessRefreshTokenEncoder {
     pub fn encode<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>

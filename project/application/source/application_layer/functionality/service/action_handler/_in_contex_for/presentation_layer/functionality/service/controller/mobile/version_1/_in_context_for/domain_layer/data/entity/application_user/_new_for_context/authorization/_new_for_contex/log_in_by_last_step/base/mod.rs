@@ -2,12 +2,12 @@ use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::application_user_log_in_token_workflow_exception::ApplicationUserLogInTokenWorkflowException;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::encoder::Encoder;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::obfuscation_value_generator::ObfuscationValueGenerator;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::id_generator::IdGenerator;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::wrong_enter_tries_quantity_incrementor::WrongEnterTriesQuantityIncrementor;
+use crate::domain_layer::functionality::service::application_user_access_refresh_token__encoder::ApplicationUserAccessRefreshTokenEncoder;
+use crate::domain_layer::functionality::service::application_user_access_refresh_token__obfuscation_value_generator::ApplicationUserAccessRefreshTokenObfuscationValueGenerator;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -133,7 +133,7 @@ impl Base {
                         Some(mut application_user_access_refresh_token__) => {
                             application_user_access_refresh_token__
                                 .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token.get_id()))
-                                .set_obfuscation_value(ObfuscationValueGenerator::generate());
+                                .set_obfuscation_value(ApplicationUserAccessRefreshTokenObfuscationValueGenerator::generate());
 
                             let update = Update {
                                 application_user_access_refresh_token_expires_at: true,
@@ -157,7 +157,7 @@ impl Base {
                                 application_user_id: application_user_log_in_token_.get_application_user_id(),
                                 application_user_log_in_token_device_id: Cow::Borrowed(application_user_log_in_token_.get_device_id()),
                                 application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
-                                application_user_access_refresh_token_obfuscation_value: ObfuscationValueGenerator::generate(),
+                                application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshTokenObfuscationValueGenerator::generate(),
                             };
 
                             match ApplicationUserAccessRefreshTokenStateManagerPostgresql::create(authorization_postgresql_connection, insert).await {
@@ -188,7 +188,7 @@ impl Base {
                         }
                     };
 
-                    let application_user_access_refresh_token_web_form = match Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
+                    let application_user_access_refresh_token_web_form = match ApplicationUserAccessRefreshTokenEncoder::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
                         Ok(application_user_access_refresh_token_web_form_) => application_user_access_refresh_token_web_form_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
