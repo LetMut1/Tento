@@ -2,12 +2,12 @@ use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::application_user_access_refresh_token_workflow_exception::ApplicationUserAccessRefreshTokenWorkflowException;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::application_user_access_token_workflow_exception::ApplicationUserAccessTokenWorkflowException;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver as ApplicationUserAccessTokenExpirationTimeResolver;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::id_generator::IdGenerator;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__encoder::ApplicationUserAccessRefreshTokenEncoder;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__expiration_time_resolver::ApplicationUserAccessRefreshTokenExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__obfuscation_value_generator::ApplicationUserAccessRefreshTokenObfuscationValueGenerator;
+use crate::domain_layer::functionality::service::application_user_access_token__expiration_time_resolver::ApplicationUserAccessTokenExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_access_token__id_generator::ApplicationUserAccessTokenIdGenerator;
+use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessTokenSerializationFormResolver;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
@@ -49,7 +49,7 @@ impl Base {
             application_user_access_refresh_token_web_form
         ) = incoming.into_inner();
 
-        let application_user_access_token = match SerializationFormResolver::deserialize(environment_configuration_resolver, application_user_access_token_web_form.as_str()) {
+        let application_user_access_token = match ApplicationUserAccessTokenSerializationFormResolver::deserialize(environment_configuration_resolver, application_user_access_token_web_form.as_str()) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -109,7 +109,7 @@ impl Base {
                             }
                         };
                         let application_user_access_token_new = ApplicationUserAccessToken::new(
-                            IdGenerator::generate(),
+                            ApplicationUserAccessTokenIdGenerator::generate(),
                             application_user_access_token.get_application_user_id(),
                             Cow::Borrowed(application_user_access_token.get_application_user_log_in_token_device_id()),
                             expires_at
@@ -134,7 +134,7 @@ impl Base {
                             return Err(error);
                         }
 
-                        let application_user_access_token_web_form_new = match SerializationFormResolver::serialize(environment_configuration_resolver, &application_user_access_token_new) {
+                        let application_user_access_token_web_form_new = match ApplicationUserAccessTokenSerializationFormResolver::serialize(environment_configuration_resolver, &application_user_access_token_new) {
                             Ok(application_user_access_token_web_form_new_) => application_user_access_token_web_form_new_,
                             Err(mut error) => {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
