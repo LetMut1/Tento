@@ -1,8 +1,8 @@
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::application_user_workflow_exception::ApplicationUserWorkflowException;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::expiration_time_resolver::ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::value_generator::ValueGenerator;
+use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_reset_password_token__value_generator::ApplicationUserResetPasswordToken_ValueGenerator;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -75,7 +75,7 @@ impl Base {
                                                                     }
                                                                 };
 
-                                                                let is_expired = match ExpirationTimeResolver::is_expired(&application_user_reset_password_token__) {
+                                                                let is_expired = match ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token__) {
                                                                     Ok(is_expired_) => is_expired_,
                                                                     Err(mut error) => {
                                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -87,7 +87,7 @@ impl Base {
                                                                 application_user_reset_password_token__.set_expires_at(expires_at);
                                                                 if is_expired || application_user_reset_password_token__.get_is_approved() {
                                                                     application_user_reset_password_token__
-                                                                        .set_value(ValueGenerator::generate())
+                                                                        .set_value(ApplicationUserResetPasswordToken_ValueGenerator::generate())
                                                                         .set_wrong_enter_tries_quantity(0)
                                                                         .set_is_approved(false);
                                                                 }
@@ -105,7 +105,7 @@ impl Base {
                                                             None => {
                                                                 let insert = Insert::new(
                                                                     application_user_id,
-                                                                    ValueGenerator::generate(),
+                                                                    ApplicationUserResetPasswordToken_ValueGenerator::generate(),
                                                                     0,
                                                                     false
                                                                 );

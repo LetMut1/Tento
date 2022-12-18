@@ -4,9 +4,10 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::ba
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 
-pub struct WrongEnterTriesQuantityIncrementor;
+#[allow(non_camel_case_types)]
+pub struct ApplicationUserResetPasswordToken_WrongEnterTriesQuantityIncrementor;
 
-impl WrongEnterTriesQuantityIncrementor {
+impl ApplicationUserResetPasswordToken_WrongEnterTriesQuantityIncrementor {
     pub fn increment<'a>(
         application_user_reset_password_token: &'a mut ApplicationUserResetPasswordToken
     ) -> Result<(), ErrorAuditor> {
