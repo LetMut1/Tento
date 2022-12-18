@@ -10,11 +10,11 @@ pub struct ApplicationUserogInToken_Validator;
 
 impl ApplicationUserogInToken_Validator {
     pub fn is_valid_value<'a>(
-        value: &'a str
+        application_user_log_in_token_value: &'a str
     ) -> Result<bool, ErrorAuditor> {
         match Regex::new(r"^[0-9]{6}$") {
             Ok(regex) => {
-                return Ok(regex.is_match(value));
+                return Ok(regex.is_match(application_user_log_in_token_value));
             }
             Err(error) => {
                 return Err(

@@ -5,8 +5,8 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_reset_password_token__validator::ApplicationUserResetPasswordToken_Validator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__wrong_enter_tries_quantity_incrementor::ApplicationUserResetPasswordToken_WrongEnterTriesQuantityIncrementor;
-use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::base::Base as ApplicationUserResetPasswordTokenValidator;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
@@ -49,7 +49,7 @@ impl Base {
             application_user_reset_password_token_value
         ) = incoming.into_inner();
 
-        match ApplicationUserResetPasswordTokenValidator::is_valid_value(application_user_reset_password_token_value.as_str()) {
+        match ApplicationUserResetPasswordToken_Validator::is_valid_value(application_user_reset_password_token_value.as_str()) {
             Ok(is_valid_value) => {
                 if is_valid_value {
                     if ApplicationUser_Validator::is_valid_password(application_user_password.as_str()) {

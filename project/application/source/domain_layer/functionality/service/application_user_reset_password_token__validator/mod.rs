@@ -5,15 +5,16 @@ use crate::infrastructure_layer::data::error_auditor::_component::simple_backtra
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use extern_crate::regex::Regex;
 
-pub struct Base;
+#[allow(non_camel_case_types)]
+pub struct ApplicationUserResetPasswordToken_Validator;
 
-impl Base {
+impl ApplicationUserResetPasswordToken_Validator {
     pub fn is_valid_value<'a>(
-        value: &'a str
+        application_user_reset_password_token_value: &'a str
     ) -> Result<bool, ErrorAuditor> {
         match Regex::new(r"^[0-9]{6}$") {
             Ok(regex) => {
-                return Ok(regex.is_match(value));
+                return Ok(regex.is_match(application_user_reset_password_token_value));
             }
             Err(error) => {
                 return Err(

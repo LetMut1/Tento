@@ -15,13 +15,13 @@ impl ApplicationUser_Validator {
     const PASSWORD_MAXIMUM_LENGTH: u8 = 65;
 
     pub fn is_valid_email<'a>(
-        email: &'a str
+        application_user_email: &'a str
     ) -> Result<bool, ErrorAuditor> {
         match Regex::new(r"\S+@\S+") {
             Ok(regex) => {
                 return Ok(
-                    regex.is_match(email)
-                        && email.chars().count() <= (Self::EMAIL_MAXIMUM_LENGTH as usize)
+                    regex.is_match(application_user_email)
+                        && application_user_email.chars().count() <= (Self::EMAIL_MAXIMUM_LENGTH as usize)
                 );
             }
             Err(error) => {
@@ -36,21 +36,21 @@ impl ApplicationUser_Validator {
     }
 
     pub fn is_valid_nickname<'a>(
-        nickname: &'a str
+        application_user_nickname: &'a str
     ) -> bool {
-        return nickname.chars().count() <= (Self::NICKNAME_MAXIMUM_LENGTH as usize)
-            && !nickname.contains('@')
-            && !nickname.contains(' ')       // TODO Проверить символ табуляци TAB            НАПИСАТЬ Через Регекс?
-            && !nickname.is_empty();
+        return application_user_nickname.chars().count() <= (Self::NICKNAME_MAXIMUM_LENGTH as usize)
+            && !application_user_nickname.contains('@')
+            && !application_user_nickname.contains(' ')       // TODO Проверить символ табуляци TAB            НАПИСАТЬ Через Регекс?
+            && !application_user_nickname.is_empty();
     }
 
     pub fn is_valid_password<'a>(
-        password: &'a str
+        application_user_password: &'a str
     ) -> bool {
-        let password_chars_count = password.chars().count();
+        let password_chars_count = application_user_password.chars().count();
 
         return password_chars_count >= (Self::PASSWORD_MINIMUM_LENGTH as usize)             // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
             && password_chars_count <= (Self::PASSWORD_MAXIMUM_LENGTH as usize)
-            && !password.contains(' ');
+            && !application_user_password.contains(' ');
     }
 }
