@@ -5,9 +5,10 @@ use crate::infrastructure_layer::data::error_auditor::_component::simple_backtra
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use extern_crate::regex::Regex;
 
-pub struct Base;
+#[allow(non_camel_case_types)]
+pub struct ApplicationUserRegistrationConfirmationToken_Validator;
 
-impl Base {
+impl ApplicationUserRegistrationConfirmationToken_Validator {
     pub fn is_valid_value<'a>(
         value: &'a str
     ) -> Result<bool, ErrorAuditor> {
