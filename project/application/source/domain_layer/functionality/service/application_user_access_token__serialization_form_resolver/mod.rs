@@ -12,9 +12,10 @@ use extern_crate::crypto::sha2::Sha512;
 use extern_crate::hex;
 use extern_crate::rmp_serde;
 
-pub struct ApplicationUserAccessTokenSerializationFormResolver;
+#[allow(non_camel_case_types)]
+pub struct ApplicationUserAccessToken_SerializationFormResolver;
 
-impl ApplicationUserAccessTokenSerializationFormResolver {
+impl ApplicationUserAccessToken_SerializationFormResolver {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
     pub fn serialize<'a>(
@@ -32,7 +33,7 @@ impl ApplicationUserAccessTokenSerializationFormResolver {
         }
         let application_user_access_token_serialized = base64::encode_config(data.as_slice(), base64::STANDARD);  // TODO TODO TODO TODO TODO Можно ли здесь использовать Бэйс64 на байтф мессаджПака?
 
-        let application_user_access_token_signature = ApplicationUserAccessTokenSignatureCreator::create(environment_configuration_resolver, application_user_access_token_serialized.as_str());
+        let application_user_access_token_signature = ApplicationUserAccessToken_SignatureCreator::create(environment_configuration_resolver, application_user_access_token_serialized.as_str());
 
         let application_user_access_token_web_form = application_user_access_token_serialized + Self::TOKEN_PARTS_SEPARATOR + application_user_access_token_signature.as_str();
 
@@ -48,7 +49,7 @@ impl ApplicationUserAccessTokenSerializationFormResolver {
             .collect::<Vec<&'_ str>>();
 
         if token_part_registry.len() == 2
-            && ApplicationUserAccessTokenSignatureCreator::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
+            && ApplicationUserAccessToken_SignatureCreator::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
             match base64::decode_config(token_part_registry[0].as_bytes(), base64::STANDARD) {
                 Ok(data) => {
                     match rmp_serde::from_read_ref::<'_, [u8], ApplicationUserAccessToken<'static>>(data.as_slice()) {
@@ -85,10 +86,11 @@ impl ApplicationUserAccessTokenSerializationFormResolver {
     }
 }
 
-pub struct ApplicationUserAccessTokenSignatureCreator;
+#[allow(non_camel_case_types)]
+struct ApplicationUserAccessToken_SignatureCreator;
 
-impl ApplicationUserAccessTokenSignatureCreator {
-    pub fn create<'a>(
+impl ApplicationUserAccessToken_SignatureCreator {
+    fn create<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_token_serialized: &'a str
     ) -> String {
@@ -101,7 +103,7 @@ impl ApplicationUserAccessTokenSignatureCreator {
         return hex::encode(hmac.result().code());   // TODO TIme attack
     }
 
-    pub fn is_valid<'a>(
+    fn is_valid<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_token_serialized: &'a str,
         application_user_access_token_signature: &'a str

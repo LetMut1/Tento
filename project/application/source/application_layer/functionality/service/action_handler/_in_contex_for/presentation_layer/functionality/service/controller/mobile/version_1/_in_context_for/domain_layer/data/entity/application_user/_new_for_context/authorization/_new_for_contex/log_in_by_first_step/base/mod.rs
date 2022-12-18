@@ -1,8 +1,8 @@
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::application_user_workflow_exception::ApplicationUserWorkflowException;
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
-use crate::domain_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::value_generator::ValueGenerator;
-use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUserPasswordHashResolver;
+use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
+use crate::domain_layer::functionality::service::application_user_log_in_token__value_generator::ApplicationUserLogInToken_ValueGenerator;
 use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
@@ -100,7 +100,7 @@ impl Base {
                         }
                     };
 
-                    match ApplicationUserPasswordHashResolver::is_valid(application_user_password.as_str(), application_user.get_password_hash()) {
+                    match ApplicationUser_PasswordHashResolver::is_valid(application_user_password.as_str(), application_user.get_password_hash()) {
                         Ok(is_valid) => {
                             if is_valid {
                                 let application_user_id = application_user.get_id();
@@ -140,7 +140,7 @@ impl Base {
                                                         let insert = Insert::new(
                                                             application_user_id,
                                                             application_user_log_in_token_device_id.as_str(),
-                                                            ValueGenerator::generate(),
+                                                            ApplicationUserLogInToken_ValueGenerator::generate(),
                                                             0
                                                         );
 

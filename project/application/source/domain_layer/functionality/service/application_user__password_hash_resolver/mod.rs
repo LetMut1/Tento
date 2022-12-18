@@ -7,13 +7,14 @@ use extern_crate::argon2;
 use extern_crate::argon2::Config;
 use extern_crate::uuid::Uuid;
 
-pub struct ApplicationUserPasswordHashResolver;
+#[allow(non_camel_case_types)]
+pub struct ApplicationUser_PasswordHashResolver;
 
-impl ApplicationUserPasswordHashResolver {
+impl ApplicationUser_PasswordHashResolver {
     pub fn create<'a>(
         application_user_password: &'a str
     ) -> Result<String, ErrorAuditor> {
-        match ApplicationUserPasswordEncoder::encode(application_user_password) {
+        match ApplicationUser_PasswordEncoder::encode(application_user_password) {
             Ok(password_hash) => {
                 return Ok(password_hash);
             }
@@ -29,7 +30,7 @@ impl ApplicationUserPasswordHashResolver {
         application_user_password: &'a str,
         application_user_password_hash: &'a str
     ) -> Result<bool, ErrorAuditor> {
-        match ApplicationUserPasswordEncoder::is_valid(application_user_password, application_user_password_hash) {
+        match ApplicationUser_PasswordEncoder::is_valid(application_user_password, application_user_password_hash) {
             Ok(is_valid) => {
                 return Ok(is_valid);
             }
@@ -42,9 +43,10 @@ impl ApplicationUserPasswordHashResolver {
     }
 }
 
-struct ApplicationUserPasswordEncoder;
+#[allow(non_camel_case_types)]
+struct ApplicationUser_PasswordEncoder;
 
-impl ApplicationUserPasswordEncoder {      // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090  // TODO CREATE CUSTOM CONFIG ?
+impl ApplicationUser_PasswordEncoder {      // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090  // TODO CREATE CUSTOM CONFIG ?
     fn encode<'a>(                            // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.
         application_user_password: &'a str
     ) -> Result<String, ErrorAuditor> {

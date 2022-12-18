@@ -1,9 +1,10 @@
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 
-pub struct ApplicationUserAccessRefreshTokenExpirationTimeResolver;
+#[allow(non_camel_case_types)]
+pub struct ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
 
-impl ApplicationUserAccessRefreshTokenExpirationTimeResolver {
+impl ApplicationUserAccessRefreshToken_ExpirationTimeResolver {
     pub fn is_expired<'a>(
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> bool {

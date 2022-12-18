@@ -4,9 +4,10 @@ use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAudito
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use extern_crate::chrono::Utc;
 
-pub struct ApplicationUserAccessTokenExpirationTimeResolver;
+#[allow(non_camel_case_types)]
+pub struct ApplicationUserAccessToken_ExpirationTimeResolver;
 
-impl ApplicationUserAccessTokenExpirationTimeResolver {
+impl ApplicationUserAccessToken_ExpirationTimeResolver {
     pub fn is_expired<'a>(
         application_user_access_token: &'a ApplicationUserAccessToken<'_>
     ) -> Result<bool, ErrorAuditor> {
