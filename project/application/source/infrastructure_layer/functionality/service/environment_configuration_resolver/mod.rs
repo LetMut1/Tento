@@ -1,7 +1,7 @@
-use redis::ConnectionInfo;
+use extern_crate::redis::ConnectionInfo;
+use extern_crate::tokio_postgres::config::Config;
 use std::clone::Clone;
 use std::net::SocketAddr;
-use tokio_postgres::config::Config;
 
 #[derive(Clone)]
 pub struct EnvironmentConfigurationResolver {

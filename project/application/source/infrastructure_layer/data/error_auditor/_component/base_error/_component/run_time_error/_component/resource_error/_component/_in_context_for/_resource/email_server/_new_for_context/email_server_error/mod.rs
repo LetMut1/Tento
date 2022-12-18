@@ -1,5 +1,5 @@
-use lettre_email::error::Error as EmailError;
-use lettre::smtp::error::Error as SmtpError;
+use extern_crate::lettre_email::error::Error as EmailError;
+use extern_crate::lettre::smtp::error::Error as SmtpError;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;

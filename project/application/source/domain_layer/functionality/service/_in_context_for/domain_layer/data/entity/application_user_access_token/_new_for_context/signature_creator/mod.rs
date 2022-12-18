@@ -1,7 +1,8 @@
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crypto::hmac::Hmac;
-use crypto::mac::Mac;
-use crypto::sha2::Sha512;
+use extern_crate::crypto::hmac::Hmac;
+use extern_crate::crypto::mac::Mac;
+use extern_crate::crypto::sha2::Sha512;
+use extern_crate::hex;
 
 pub struct SignatureCreator;
 

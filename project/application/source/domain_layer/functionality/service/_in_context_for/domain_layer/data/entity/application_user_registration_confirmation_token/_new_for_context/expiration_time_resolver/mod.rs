@@ -1,8 +1,8 @@
-use chrono::Utc;
 use crate::domain_layer::data::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
+use extern_crate::chrono::Utc;
 
 pub struct ExpirationTimeResolver;
 

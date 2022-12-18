@@ -1,5 +1,5 @@
-use tokio_postgres::types::ToSql;
-use tokio_postgres::types::Type;
+use extern_crate::tokio_postgres::types::ToSql;
+use extern_crate::tokio_postgres::types::Type;
 
 pub struct PreparedStatementParameterConvertationResolver<'a> {
     parameter_registry: Vec<&'a (dyn ToSql + Sync)>,

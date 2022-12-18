@@ -5,6 +5,8 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::ba
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use extern_crate::base64;
+use extern_crate::rmp_serde;
 use super::signature_creator::SignatureCreator;
 
 pub struct SerializationFormResolver;

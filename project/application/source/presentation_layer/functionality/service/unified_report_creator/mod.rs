@@ -1,8 +1,8 @@
 use crate::presentation_layer::data::unified_report::unified_report::UnifiedReport;
-use serde::Serialize;
+use extern_crate::serde::Serialize;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use serde::Deserialize;
+use extern_crate::serde::Deserialize;
 
 pub struct UnifiedReportCreator;
 

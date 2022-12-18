@@ -1,5 +1,3 @@
-use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8::Pool;
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::_component::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::application_user_reset_password_token_workflow_exception::ApplicationUserResetPasswordTokenWorkflowException;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
@@ -13,14 +11,16 @@ use crate::infrastructure_layer::data::error_auditor::_component::simple_backtra
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenStateManagerPostgresql;
-use serde::Deserialize;
-use serde::Serialize;
+use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use extern_crate::bb8::Pool;
+use extern_crate::serde::Deserialize;
+use extern_crate::serde::Serialize;
+use extern_crate::tokio_postgres::Socket;
+use extern_crate::tokio_postgres::tls::MakeTlsConnect;
+use extern_crate::tokio_postgres::tls::TlsConnect;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
-use tokio_postgres::Socket;
-use tokio_postgres::tls::MakeTlsConnect;
-use tokio_postgres::tls::TlsConnect;
 
 pub struct Base;
 
@@ -142,6 +142,7 @@ impl Base {
 
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Serialize))]
 #[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_id: i64,
     application_user_reset_password_token_value: String
@@ -160,6 +161,7 @@ impl Incoming {
 
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_reset_password_token_is_approved: bool
 }

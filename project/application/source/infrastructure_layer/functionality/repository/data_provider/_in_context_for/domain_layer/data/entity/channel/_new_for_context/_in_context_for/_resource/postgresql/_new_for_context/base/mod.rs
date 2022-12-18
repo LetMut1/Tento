@@ -10,8 +10,8 @@ use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAudito
 use crate::infrastructure_layer::functionality::service::_in_context_for::infrastructure_layer::functionality::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::order_convention_resolver::OrderConventionResolver;
 use crate::infrastructure_layer::functionality::service::_in_context_for::infrastructure_layer::functionality::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use crate::infrastructure_layer::functionality::service::counter_u8::CounterU8;
-use tokio_postgres::Client as Connection;
-use tokio_postgres::types::Type;
+use extern_crate::tokio_postgres::Client as Connection;
+use extern_crate::tokio_postgres::types::Type;
 
 pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO
                     // TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу

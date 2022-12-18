@@ -1,6 +1,6 @@
-use http::header;
-use hyper::Body;
-use hyper::Request;
+use extern_crate::http::header;
+use extern_crate::hyper::Body;
+use extern_crate::hyper::Request;
 use super::action_response_creator::ActionResponseCreator;
 
 pub struct RequestHeaderChecker;

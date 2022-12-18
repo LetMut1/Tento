@@ -1,4 +1,4 @@
-use uuid::Uuid;
+use extern_crate::uuid::Uuid;
 
 pub struct IdGenerator;
 

@@ -1,10 +1,10 @@
-use serde::Serialize;
+use extern_crate::serde::Serialize;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use serde::Deserialize;
+use extern_crate::serde::Deserialize;
 
 // It is more correct to use Enam in the context of a unified server response.
-// The Struct is used, but not Enam, because there are problems in synchronizing the Enum serialization 
+// The Struct is used, but not Enam, because there are problems in synchronizing the Enum serialization
 // and deserialization rules of the used encoding protocol on both sides.
 //
 // pub enum Data<S>
@@ -17,6 +17,7 @@ use serde::Deserialize;
 
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Data<S>
 {
     data: Option<S>

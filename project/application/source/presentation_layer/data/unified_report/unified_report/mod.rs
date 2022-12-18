@@ -1,8 +1,8 @@
-use serde::Serialize;
+use extern_crate::serde::Serialize;
 use super::_component::data::Data;
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
-use serde::Deserialize;
+use extern_crate::serde::Deserialize;
 
 // It is more correct to use Enam in the context of a unified server response.
 // The Struct is used, but not Enam, because there are problems in synchronizing the Enum serialization
@@ -20,6 +20,7 @@ use serde::Deserialize;
 
 #[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
 #[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct UnifiedReport<S>
 {
     data: Option<Data<S>>,
@@ -60,6 +61,7 @@ where
 
 #[cfg(feature="facilitate_non_automatic_functional_testing")]
 #[derive(Serialize, Deserialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct UnifiedReport<S>
 {
     data: Option<Data<S>>,

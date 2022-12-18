@@ -1,8 +1,9 @@
-use serde::Serialize;
-use serde::Deserialize;
+use extern_crate::serde::Deserialize;
+use extern_crate::serde::Serialize;
 use std::borrow::Cow;
 
 #[derive(Serialize, Deserialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessRefreshToken<'a> {
     application_user_id: i64,
     application_user_log_in_token_device_id: Cow<'a, str>,

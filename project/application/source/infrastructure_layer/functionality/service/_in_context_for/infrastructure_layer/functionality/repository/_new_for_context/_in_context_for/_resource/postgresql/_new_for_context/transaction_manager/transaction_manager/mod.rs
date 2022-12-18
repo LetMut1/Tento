@@ -3,8 +3,8 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::_c
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
+use extern_crate::tokio_postgres::Client as Connection;
 use super::_component::transaction_isolation_level::TransactionIsolationLevel;
-use tokio_postgres::Client as Connection;
 
 pub struct TransactionManager;
 

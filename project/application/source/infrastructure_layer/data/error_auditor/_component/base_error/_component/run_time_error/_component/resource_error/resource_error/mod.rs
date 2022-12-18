@@ -1,6 +1,6 @@
-use redis::RedisError;
-use tokio_postgres::Error as PostgresqlError;
-use bb8::RunError as Bb8Error;
+use extern_crate::bb8::RunError as Bb8Error;
+use extern_crate::redis::RedisError;
+use extern_crate::tokio_postgres::Error as PostgresqlError;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;

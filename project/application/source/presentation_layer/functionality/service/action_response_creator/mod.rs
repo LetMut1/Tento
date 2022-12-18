@@ -1,10 +1,10 @@
-use http::header;
-use http::HeaderMap;
-use http::HeaderValue;
-use http::Version;
-use hyper::Body;
-use hyper::Response;
-use hyper::StatusCode;
+use extern_crate::http::header;
+use extern_crate::http::HeaderMap;
+use extern_crate::http::HeaderValue;
+use extern_crate::http::Version;
+use extern_crate::hyper::Body;
+use extern_crate::hyper::Response;
+use extern_crate::hyper::StatusCode;
 use std::convert::From;
 
 pub struct ActionResponseCreator;
@@ -25,7 +25,7 @@ impl ActionResponseCreator {
         parts.status = status_code;
         parts.version = Version::HTTP_2;
         parts.headers = header_map;
-        
+
         let body = match data {
             Some(data_) => Body::from(data_),
             None => Body::empty()

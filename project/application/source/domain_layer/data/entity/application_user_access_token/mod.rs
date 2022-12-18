@@ -1,8 +1,9 @@
-use serde::Deserialize;
-use serde::Serialize;
+use extern_crate::serde::Deserialize;
+use extern_crate::serde::Serialize;
 use std::borrow::Cow;
 
 #[derive(Serialize, Deserialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessToken<'a> {
     id: String,
     application_user_id: i64,

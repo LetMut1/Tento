@@ -5,14 +5,14 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::ba
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use lettre_email::EmailBuilder;
-use lettre::ClientSecurity;
-use lettre::smtp::authentication::Credentials;
-use lettre::smtp::authentication::Mechanism;
-use lettre::smtp::ConnectionReuseParameters;
-use lettre::smtp::extension::ClientId;
-use lettre::smtp::SmtpClient;
-use lettre::Transport;
+use extern_crate::lettre_email::EmailBuilder;
+use extern_crate::lettre::ClientSecurity;
+use extern_crate::lettre::smtp::authentication::Credentials;
+use extern_crate::lettre::smtp::authentication::Mechanism;
+use extern_crate::lettre::smtp::ConnectionReuseParameters;
+use extern_crate::lettre::smtp::extension::ClientId;
+use extern_crate::lettre::smtp::SmtpClient;
+use extern_crate::lettre::Transport;
 use std::convert::Into;
 
 pub struct EmailSender;
