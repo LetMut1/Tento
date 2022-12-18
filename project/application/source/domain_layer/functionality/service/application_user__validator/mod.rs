@@ -5,9 +5,10 @@ use crate::infrastructure_layer::data::error_auditor::_component::simple_backtra
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use extern_crate::regex::Regex;
 
-pub struct Base;
+#[allow(non_camel_case_types)]
+pub struct ApplicationUser_Validator;
 
-impl Base {
+impl ApplicationUser_Validator {
     const EMAIL_MAXIMUM_LENGTH: u16 = 320;
     const NICKNAME_MAXIMUM_LENGTH: u8 = 55;
     const PASSWORD_MINIMUM_LENGTH: u8 = 7;
