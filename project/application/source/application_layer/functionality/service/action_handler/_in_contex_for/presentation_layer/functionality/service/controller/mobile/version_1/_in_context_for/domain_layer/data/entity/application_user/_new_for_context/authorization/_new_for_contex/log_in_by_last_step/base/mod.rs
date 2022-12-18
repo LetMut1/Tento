@@ -7,8 +7,8 @@ use crate::domain_layer::functionality::service::application_user_access_refresh
 use crate::domain_layer::functionality::service::application_user_access_token__id_generator::ApplicationUserAccessToken_IdGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_log_in_token__expiration_time_resolver::ApplicationUserLogInToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_log_in_token__validator::ApplicationUserogInToken_Validator;
 use crate::domain_layer::functionality::service::application_user_log_in_token__wrong_enter_tries_quantity_incrementor::ApplicationUserLogInToken_WrongEnterTriesQuantityIncrementor;
-use crate::domain_layer::functionality::service::validator::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::base::Base as Validator;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::_component::resource_error::resource_error::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::run_time_error::run_time_error::RunTimeError;
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
@@ -54,7 +54,7 @@ impl Base {
             application_user_log_in_token_value
         ) = incoming.into_inner();
 
-        let is_valid_value = match Validator::is_valid_value(application_user_log_in_token_value.as_str()) {
+        let is_valid_value = match ApplicationUserogInToken_Validator::is_valid_value(application_user_log_in_token_value.as_str()) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
