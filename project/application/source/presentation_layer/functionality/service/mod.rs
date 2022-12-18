@@ -5,5 +5,5 @@ pub mod controller;
 pub mod request_header_checker;
 pub mod unified_report_creator;
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub mod request_response_data_encoding_protocol_wrapper;

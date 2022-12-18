@@ -1,7 +1,7 @@
 use extern_crate::serde::Serialize;
 use super::_component::data::Data;
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use extern_crate::serde::Deserialize;
 
 // It is more correct to use Enam in the context of a unified server response.
@@ -59,7 +59,7 @@ where
     }
 }
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct UnifiedReport<S>
@@ -68,7 +68,7 @@ pub struct UnifiedReport<S>
     communication_code: Option<String>
 }
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl<S> UnifiedReport<S>
 where
     S: Serialize + for<'de> Deserialize<'de>

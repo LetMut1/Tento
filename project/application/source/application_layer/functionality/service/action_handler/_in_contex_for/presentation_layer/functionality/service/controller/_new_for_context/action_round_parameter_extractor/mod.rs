@@ -31,7 +31,7 @@ use std::future::Future;
 use std::marker::Send;
 use std::marker::Sync;
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct ActionRaoundParameterExtractor;
 
 impl ActionRaoundParameterExtractor {
@@ -126,7 +126,7 @@ impl ActionRaoundParameterExtractor {
     }
 }
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct Incoming<T> {
     parts: HttpRequestParts,
     convertible_data: T
@@ -153,7 +153,7 @@ impl<T> Incoming<T> {
     }
 }
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct Outcoming<T> {
     parts: HttpResponseParts,
     unified_report: Option<UnifiedReport<T>>

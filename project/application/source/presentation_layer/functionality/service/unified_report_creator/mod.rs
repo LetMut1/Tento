@@ -1,7 +1,7 @@
 use crate::presentation_layer::data::unified_report::unified_report::UnifiedReport;
 use extern_crate::serde::Serialize;
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use extern_crate::serde::Deserialize;
 
 pub struct UnifiedReportCreator;
@@ -31,7 +31,7 @@ impl UnifiedReportCreator {
     }
 }
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl UnifiedReportCreator {
     pub fn create_with_data<S>(
         data: S

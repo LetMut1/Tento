@@ -62,25 +62,25 @@ use std::convert::From;
 use std::marker::Send;
 use std::marker::Sync;
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Outcoming as OutcomingCheckEmailForExisting;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_nickname_for_existing::base::Outcoming as OutcomingCheckNicknameForExisting;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Outcoming as OutcomingRegisterByLastStep;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_second_step::base::Outcoming as OutcomingRegisterBySecondStep;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_first_step::base::Outcoming as OutcomingLogInByFirstStep;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::log_in_by_last_step::base::Outcoming as OutcomingLogInByLastStep;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_application_user_access_token::base::Outcoming as OutcomingRefreshApplicationUserAccessToken;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_first_step::base::Outcoming as OutcomingResetPasswordByFirstStep;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::reset_password_by_second_step::base::Outcoming as OutcomingResetPasswordBySecondStep;
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::request_response_data_encoding_protocol_wrapper::RequestResponseDataEncodingProtocolWrapper;
 
 pub struct Authorization;
@@ -181,7 +181,7 @@ impl Authorization {
 
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn check_email_for_existing_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -299,7 +299,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn check_nickname_for_existing_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -431,7 +431,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn register_by_first_step_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -599,7 +599,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn register_by_second_step_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -837,7 +837,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn register_by_last_step_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -992,7 +992,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn send_email_for_register_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -1113,7 +1113,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn log_in_by_first_step_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -1257,7 +1257,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn log_in_by_last_step_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -1396,7 +1396,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn send_email_for_log_in_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -1546,7 +1546,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn refresh_application_user_access_token_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -1678,7 +1678,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn log_out_from_one_device_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -1810,7 +1810,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn log_out_from_all_devices_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -1943,7 +1943,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn reset_password_by_first_step_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -2090,7 +2090,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn reset_password_by_second_step_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -2287,7 +2287,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn reset_password_by_last_step_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
@@ -2440,7 +2440,7 @@ impl Authorization {
         }
     }
 
-    #[cfg(feature="facilitate_non_automatic_functional_testing")]
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
     pub async fn send_email_for_reset_password_<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,

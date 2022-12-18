@@ -757,7 +757,7 @@ impl Base {
             }
             // Area for not existing routes.
             _ => {
-                #[cfg(feature="facilitate_non_automatic_functional_testing")]
+                #[cfg(feature = "facilitate_non_automatic_functional_testing")]
                 match (request.uri().path(), request.method()) {
                     // Area for existing routes with not authorized user.
                     // GET functional, but POST is used. This is because there is a restriction on mobile frontend.

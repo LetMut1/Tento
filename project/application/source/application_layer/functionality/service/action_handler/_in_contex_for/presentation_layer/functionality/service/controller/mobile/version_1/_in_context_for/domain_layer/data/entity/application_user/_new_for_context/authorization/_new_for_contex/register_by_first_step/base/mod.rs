@@ -26,7 +26,7 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use extern_crate::serde::Serialize;
 
 pub struct Base;

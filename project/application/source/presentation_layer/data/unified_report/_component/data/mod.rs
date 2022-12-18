@@ -1,6 +1,6 @@
 use extern_crate::serde::Serialize;
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use extern_crate::serde::Deserialize;
 
 // It is more correct to use Enam in the context of a unified server response.
@@ -35,7 +35,7 @@ where
     }
 }
 
-#[cfg(feature="facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl<S> Data<S>
 where
     S: Serialize + for<'de> Deserialize<'de>
