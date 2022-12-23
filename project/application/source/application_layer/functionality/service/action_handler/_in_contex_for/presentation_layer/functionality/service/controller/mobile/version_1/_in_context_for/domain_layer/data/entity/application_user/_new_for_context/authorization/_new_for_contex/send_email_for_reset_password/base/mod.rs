@@ -7,7 +7,7 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::ba
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenDataProviderPostgresql;
+use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::ApplicationUserResetPasswordToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -42,7 +42,7 @@ impl Base {
 
         match authorization_postgresql_connection_pool.get().await {
             Ok(authorization_postgresql_pooled_connection) => {
-                match ApplicationUserResetPasswordTokenDataProviderPostgresql::find_1(
+                match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
                     &*authorization_postgresql_pooled_connection, application_user_id
                 ).await {
                     Ok(application_user_reset_password_token) => {
