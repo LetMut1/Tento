@@ -1,8 +1,8 @@
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::infrastructure_layer::data::error_auditor::_component::base_error::_component::logic_error::LogicError;
-use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
-use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::LogicError;
 
 #[allow(non_camel_case_types)]
 pub struct ApplicationUserResetPasswordToken_WrongEnterTriesQuantityIncrementor;

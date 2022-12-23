@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::body::HttpBody;
 use extern_crate::hyper::Request;
