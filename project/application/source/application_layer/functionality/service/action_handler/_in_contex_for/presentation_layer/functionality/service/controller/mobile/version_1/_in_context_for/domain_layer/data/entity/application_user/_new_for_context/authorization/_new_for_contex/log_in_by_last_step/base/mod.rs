@@ -14,11 +14,10 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::_c
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserAccessRefreshTokenDataProviderPostgresql;
+use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::ApplicationUserAccessRefreshToken_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserLogInTokenDataProviderPostgresql;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserAccessRefreshTokenStateManagerPostgresql;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Insert;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Update;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserLogInTokenStateManagerPostgresql;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -118,7 +117,7 @@ impl Base {
                         expires_at
                     );
 
-                    let application_user_access_refresh_token = match ApplicationUserAccessRefreshTokenDataProviderPostgresql::find_1(
+                    let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::find_1(
                         authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
                     ).await {
                         Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
@@ -140,7 +139,7 @@ impl Base {
                                 application_user_access_refresh_token_updated_at: true
                             };
 
-                            if let Err(mut error) = ApplicationUserAccessRefreshTokenStateManagerPostgresql::update(
+                            if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::update(
                                 authorization_postgresql_connection,
                                 &mut application_user_access_refresh_token__,
                                 update
@@ -160,7 +159,7 @@ impl Base {
                                 application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate(),
                             };
 
-                            match ApplicationUserAccessRefreshTokenStateManagerPostgresql::create(authorization_postgresql_connection, insert).await {
+                            match ApplicationUserAccessRefreshToken_PostgresqlRepository::create(authorization_postgresql_connection, insert).await {
                                 Ok(application_user_access_refresh_token___) => application_user_access_refresh_token___,
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
