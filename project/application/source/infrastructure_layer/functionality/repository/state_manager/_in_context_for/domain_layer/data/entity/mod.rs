@@ -1,2 +1,1 @@
-pub mod application_user_registration_confirmation_token;
 pub mod application_user_reset_password_token;
