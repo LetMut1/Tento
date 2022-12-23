@@ -17,13 +17,12 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::_c
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenDataProviderPostgresql;
-use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserAccessRefreshTokenStateManagerPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_access_refresh_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Insert as ApplicationUserAccessRefreshTokenInsert;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_registration_confirmation_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserRegistrationConfirmationTokenStateManagerPostgresql;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserStateManagerPostgresql;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -94,7 +93,7 @@ impl Base {
                         };
                         let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
-                        let is_exist_1 = match ApplicationUserDataProviderPostgresql::is_exist_1(core_postgresql_connection, application_user_nickname.as_str()).await {     // TODO написать один запро на два значения.!!!!!!!!!!
+                        let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(core_postgresql_connection, application_user_nickname.as_str()).await {     // TODO написать один запро на два значения.!!!!!!!!!!
                             Ok(is_exist_1_) => is_exist_1_,
                             Err(mut error) => {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -103,7 +102,7 @@ impl Base {
                             }
                         };
                         if !is_exist_1 {
-                            let is_exist_2 = match ApplicationUserDataProviderPostgresql::is_exist_2(core_postgresql_connection, application_user_email.as_str()).await {
+                            let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(core_postgresql_connection, application_user_email.as_str()).await {
                                 Ok(is_exist_2_) => is_exist_2_,
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -170,7 +169,7 @@ impl Base {
                                                     application_user_password_hash,
                                                 );
 
-                                                let application_user = match ApplicationUserStateManagerPostgresql::create(core_postgresql_connection, application_usert_insert).await {
+                                                let application_user = match ApplicationUser_PostgresqlRepository::create(core_postgresql_connection, application_usert_insert).await {
                                                     Ok(application_user_) => application_user_,
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

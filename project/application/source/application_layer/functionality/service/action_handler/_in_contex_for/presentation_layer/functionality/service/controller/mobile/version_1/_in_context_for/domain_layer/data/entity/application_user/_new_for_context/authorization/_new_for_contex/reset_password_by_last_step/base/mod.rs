@@ -12,10 +12,9 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::_c
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenDataProviderPostgresql;
-use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user_reset_password_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserResetPasswordTokenStateManagerPostgresql;
-use crate::infrastructure_layer::functionality::repository::state_manager::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserStateManagerPostgresql;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
@@ -77,14 +76,14 @@ impl Base {
                                                             Ok(core_postgresql_pooled_connection) => {
                                                                 let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
-                                                                match ApplicationUserDataProviderPostgresql::find_3(core_postgresql_connection, application_user_id).await {
+                                                                match ApplicationUser_PostgresqlRepository::find_3(core_postgresql_connection, application_user_id).await {
                                                                     Ok(application_user) => {
                                                                         if let Some(mut application_user_) = application_user {
                                                                             match ApplicationUser_PasswordHashResolver::create(application_user_password.as_str()) {
                                                                                 Ok(password_hash) => {
                                                                                     application_user_.set_password_hash(password_hash);
 
-                                                                                    if let Err(mut error) = ApplicationUserStateManagerPostgresql::update(core_postgresql_connection, &application_user_).await {
+                                                                                    if let Err(mut error) = ApplicationUser_PostgresqlRepository::update(core_postgresql_connection, &application_user_).await {
                                                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                                                         return Err(error);

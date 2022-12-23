@@ -6,8 +6,8 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::_c
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user_log_in_token::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserLogInTokenDataProviderPostgresql;
-use crate::infrastructure_layer::functionality::repository::data_provider::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::base::Base as ApplicationUserDataProviderPostgresql;
 use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::email_sender::EmailSender;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -52,7 +52,7 @@ impl Base {
                         if let Some(application_user_log_in_token_) = application_user_log_in_token {
                             match core_postgresql_connection_pool.get().await {
                                 Ok(core_postgresql_pooled_connection) => {
-                                    match ApplicationUserDataProviderPostgresql::find_3(
+                                    match ApplicationUser_PostgresqlRepository::find_3(
                                         &*core_postgresql_pooled_connection, application_user_id
                                     ).await {
                                         Ok(application_user) => {
