@@ -13,9 +13,10 @@ use crate::infrastructure_layer::functionality::service::counter_u8::CounterU8;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 
-pub struct Base;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO
+#[allow(non_camel_case_types)]
+pub struct Channel_PostgresqlRepository;    // TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO
                     // TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
-impl Base {
+impl Channel_PostgresqlRepository {
     pub async fn per_request_1<'a>(                     //  TODO подумать, как это называть. Когда возвращается сущность, это называется find_number
         core_connection: &'a Connection,
         channel_name: &'a str,
