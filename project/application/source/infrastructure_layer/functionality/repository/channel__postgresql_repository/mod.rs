@@ -7,9 +7,9 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::_c
 use crate::infrastructure_layer::data::error_auditor::_component::base_error::base_error::BaseError;
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::functionality::service::_in_context_for::infrastructure_layer::functionality::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::order_convention_resolver::OrderConventionResolver;
-use crate::infrastructure_layer::functionality::service::_in_context_for::infrastructure_layer::functionality::repository::_new_for_context::_in_context_for::_resource::postgresql::_new_for_context::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use crate::infrastructure_layer::functionality::service::counter_u8::CounterU8;
+use crate::infrastructure_layer::functionality::service::counter::Counter;
+use crate::infrastructure_layer::functionality::service::order_convention_resolver::OrderConventionResolver;
+use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 
@@ -25,12 +25,12 @@ impl Channel_PostgresqlRepository {
     ) -> Result<Option<Vec<OutcomingGetManyByNameChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut counter_u8 = CounterU8::new();
+        let mut counter = Counter::new();
 
-        let mut counter_u8_value: u8;
-        match counter_u8.get_next() {
+        let mut counter_value: usize;
+        match counter.get_next() {
             Ok(counter_) => {
-                counter_u8_value = counter_;
+                counter_value = counter_;
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -53,15 +53,15 @@ impl Channel_PostgresqlRepository {
             FROM public.channel c \
             WHERE c.is_private = FALSE AND c.name LIKE $"
             .to_string()
-            + counter_u8_value.to_string().as_str();
+            + counter_value.to_string().as_str();
 
         let wildcard = channel_name.to_string() + "%";
         prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_name_) = requery_name {
-            match counter_u8.get_next() {
+            match counter.get_next() {
                 Ok(counter_) => {
-                    counter_u8_value = counter_;
+                    counter_value = counter_;
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -69,14 +69,14 @@ impl Channel_PostgresqlRepository {
                     return Err(error);
                 }
             }
-            query = query + " AND c.name > $" + counter_u8_value.to_string().as_str();
+            query = query + " AND c.name > $" + counter_value.to_string().as_str();
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_name_, Type::TEXT);
         }
 
-        match counter_u8.get_next() {
+        match counter.get_next() {
             Ok(counter_) => {
-                counter_u8_value = counter_;
+                counter_value = counter_;
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -84,7 +84,7 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         }
-        query = query + " ORDER BY c.name ASC LIMIT $" + counter_u8_value.to_string().as_str() + ";";
+        query = query + " ORDER BY c.name ASC LIMIT $" + counter_value.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
@@ -253,9 +253,9 @@ impl Channel_PostgresqlRepository {
     ) -> Result<Option<Vec<OutcomingGetManyByCreatedAtChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut counter_u8 = CounterU8::new();
+        let mut counter = Counter::new();
 
-        let mut counter_u8_value: u8;
+        let mut counter_value: usize;
 
         let mut query =
             "SELECT \
@@ -287,9 +287,9 @@ impl Channel_PostgresqlRepository {
                     );
                 }
             }
-            match counter_u8.get_next() {
+            match counter.get_next() {
                 Ok(counter_) => {
-                    counter_u8_value = counter_;
+                    counter_value = counter_;
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -297,7 +297,7 @@ impl Channel_PostgresqlRepository {
                     return Err(error);
                 }
             }
-            query = query + counter_u8_value.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
+            query = query + counter_value.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(created_at_, Type::TEXT);
         }
@@ -310,9 +310,9 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         };
-        match counter_u8.get_next() {
+        match counter.get_next() {
             Ok(counter_) => {
-                counter_u8_value = counter_;
+                counter_value = counter_;
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -320,7 +320,7 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         }
-        query = query + " ORDER BY c.created_at " + order_ + " LIMIT $" + counter_u8_value.to_string().as_str() + ";";
+        query = query + " ORDER BY c.created_at " + order_ + " LIMIT $" + counter_value.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
@@ -489,9 +489,9 @@ impl Channel_PostgresqlRepository {
     ) -> Result<Option<Vec<OutcomingGetManyBySubscribersQuantityChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut counter_u8 = CounterU8::new();
+        let mut counter = Counter::new();
 
-        let mut counter_u8_value: u8;
+        let mut counter_value: usize;
 
         let mut query =
             "SELECT \
@@ -516,9 +516,9 @@ impl Channel_PostgresqlRepository {
                     );
                 }
             }
-            match counter_u8.get_next() {
+            match counter.get_next() {
                 Ok(counter_) => {
-                    counter_u8_value = counter_;
+                    counter_value = counter_;
                 }
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -526,7 +526,7 @@ impl Channel_PostgresqlRepository {
                     return Err(error);
                 }
             }
-            query = query + counter_u8_value.to_string().as_str() + ")";
+            query = query + counter_value.to_string().as_str() + ")";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity_, Type::INT8);
         }
@@ -539,9 +539,9 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         };
-        match counter_u8.get_next() {
+        match counter.get_next() {
             Ok(counter_) => {
-                counter_u8_value = counter_;
+                counter_value = counter_;
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -549,7 +549,7 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         }
-        query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + order_ +" LIMIT $" + counter_u8_value.to_string().as_str() + ";";
+        query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + order_ +" LIMIT $" + counter_value.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 

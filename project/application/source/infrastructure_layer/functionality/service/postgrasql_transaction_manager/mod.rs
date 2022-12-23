@@ -4,11 +4,10 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::ba
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use extern_crate::tokio_postgres::Client as Connection;
-use super::_component::transaction_isolation_level::TransactionIsolationLevel;
 
-pub struct TransactionManager;
+pub struct PostgrasqlTransactionManager;
 
-impl TransactionManager {
+impl PostgrasqlTransactionManager {
     pub async fn start_transaction<'a>(
         connection: &'a Connection,
         transaction_isolation_level: TransactionIsolationLevel
@@ -82,5 +81,14 @@ impl TransactionManager {
         }
 
         return Ok(());
+    }
+}
+
+pub enum TransactionIsolationLevel {
+    ReadCommitted,
+    RepeatableRead,
+    Serializable {
+        read_only: bool,
+        deferrable: bool
     }
 }

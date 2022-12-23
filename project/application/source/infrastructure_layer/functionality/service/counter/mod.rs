@@ -3,11 +3,11 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::ba
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 
-pub struct CounterU8 {
-    counter: u8
+pub struct Counter {
+    counter: usize
 }
 
-impl CounterU8 {
+impl Counter {
     pub fn new(
     ) -> Self {
         return Self {
@@ -17,11 +17,11 @@ impl CounterU8 {
 
     pub fn get_next<'a>(
         &'a mut self
-    ) -> Result<u8, ErrorAuditor> {
-        if self.counter == u8::max_value() {
+    ) -> Result<usize, ErrorAuditor> {
+        if self.counter == usize::max_value() {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::LogicError { logic_error: LogicError::new(false, "Out of range for `u8` type.") },
+                    BaseError::LogicError { logic_error: LogicError::new(false, "Out of range for `usize` type.") },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
