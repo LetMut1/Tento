@@ -6,8 +6,8 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::ba
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::ApplicationUserAccessRefreshToken_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::extractor::Extractor;
-use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user_access_token::_new_for_context::extractor::ExtractorResult;
+use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
+use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -38,7 +38,7 @@ impl Base {
     {
         let application_user_access_token_web_form = incoming.into_inner();
 
-        let extractor_result = match Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str()).await {
+        let extractor_result = match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str()).await {
             Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

@@ -5,9 +5,11 @@ use crate::infrastructure_layer::data::error_auditor::_component::simple_backtra
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 
-pub struct Extractor;
 
-impl Extractor {
+#[allow(non_camel_case_types)]
+pub struct ApplicationUserAccessToken_Extractor;
+
+impl ApplicationUserAccessToken_Extractor {
     pub async fn extract<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_token_web_form: &'a str
