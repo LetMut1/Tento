@@ -4,3 +4,5 @@ pub mod state_manager;
 pub mod application_user__postgresql_repository;
 #[allow(non_snake_case)]
 pub mod application_user_access_refresh_token__postgresql_repository;
+#[allow(non_snake_case)]
+pub mod application_user_log_in_token__postgresql_repository;
