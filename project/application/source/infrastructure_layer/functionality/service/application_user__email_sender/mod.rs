@@ -3,9 +3,10 @@ use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAudito
 use crate::infrastructure_layer::functionality::service::email_sender::EmailSender as BaseEmailSender;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 
-pub struct EmailSender;
+#[allow(non_camel_case_types)]
+pub struct ApplicationUser_EmailSender;
 
-impl EmailSender {     // TODO все &'static str в константы? Тогда пройтись по всему приложению и проверить, везде ли так.
+impl ApplicationUser_EmailSender {     // TODO все &'static str в константы? Тогда пройтись по всему приложению и проверить, везде ли так.
     pub fn send_application_user_log_in_token<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_log_in_token_value: &'a str,

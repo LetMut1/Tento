@@ -10,7 +10,7 @@ use crate::infrastructure_layer::data::error_auditor::_component::base_error::ba
 use crate::infrastructure_layer::data::error_auditor::_component::simple_backtrace::_component::backtrace_part::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_confirmation_token__postgresql_repository::ApplicationUserRegistrationConfirmationToken_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::email_sender::EmailSender;
+use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -83,7 +83,7 @@ impl Base {
                                                     return Err(error);
                                                 }
 
-                                                if let Err(mut error) = EmailSender::send_application_user_registration_confirmation_token(
+                                                if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_confirmation_token(
                                                     environment_configuration_resolver,
                                                     application_user_registration_confirmation_token_.get_value(),
                                                     application_user_email.as_str()
