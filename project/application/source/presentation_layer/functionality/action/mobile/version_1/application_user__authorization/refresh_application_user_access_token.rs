@@ -2,8 +2,8 @@ use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessRefreshToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
-use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_application_user_access_token::base::Base;
-use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_application_user_access_token::base::Incoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::refresh_application_user_access_token::ActionProcessor;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::refresh_application_user_access_token::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
@@ -29,7 +29,7 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::refresh_application_user_access_token::base::Outcoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::refresh_application_user_access_token::Outcoming;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
@@ -57,7 +57,7 @@ where
 
     match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
         Ok(incoming) => {
-            match Base::handle(
+            match ActionProcessor::process(
                 environment_configuration_resolver, authorization_postgresql_connection_pool, incoming
             ).await {
                 Ok(action_handler_result) => {
