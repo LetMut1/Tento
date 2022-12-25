@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
-use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::ActionRaoundParameterExtractor;
+use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::ActionRoundParameterExtractor;
 use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -69,7 +69,7 @@ impl RequestResponseDataEncodingProtocolWrapper {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, AHID>(bytes.chunk()) {
                     Ok(wrapped_incoming) => {
-                        match ActionRaoundParameterExtractor::handle::<'_, _, _, _, AHID, AHOD>(
+                        match ActionRoundParameterExtractor::handle::<'_, _, _, _, AHID, AHOD>(
                             environment_configuration_resolver,
                             core_postgresql_connection_pool,
                             authorization_postgresql_connection_pool,
