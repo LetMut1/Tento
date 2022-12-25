@@ -1,11 +1,11 @@
 [package]
-name = "remove_incomplite_state"
+name = "run_server"
 version = "0.1.0"
 authors = ["zda"]
 edition = "2021"
 
 [[bin]]
-name = "remove_incomplite_state"
+name = "run_server"
 path = "./mod.rs"
 test = true
 doctest = true
@@ -17,4 +17,4 @@ edition = "2021"
 required-features = []
 
 [dependencies]
-application = { path = "./../../..", package = "application", version = "0.1.0", default-features = true, features = [], optional = false }
+application = { path = "./../../../..", package = "application", version = "0.1.0", default-features = true, features = [], optional = false }
