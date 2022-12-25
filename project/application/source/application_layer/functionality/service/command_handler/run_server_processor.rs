@@ -49,22 +49,14 @@ use std::net::ToSocketAddrs;
 use std::path::Path;
 use std::str::FromStr;
 
-#[derive(Clone)]
-pub enum PostgresqlConnectionPoolWorkflowTypeAggregator {
-    LocalDevelopment {
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
-    }
-}
+pub struct RunServerProcessor;
 
-pub struct Base;
-
-impl Base {
+impl RunServerProcessor {
     const PRODUCTION_ENVIRONMENT_FILE_NAME: &'static str = "production.env";  // TODO Посмотреть, какие есть еще лучшие форматы аналоги .env (Может, Томл?)
     const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.env";
     const LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
-    pub fn handle(
+    pub fn process(
         binary_file_path: &'static str
     ) -> Result<(), ErrorAuditor> {
         match Self::load_environment_configuration_registry(binary_file_path) {
@@ -850,5 +842,13 @@ impl Base {
                 return route_not_found().await;
             }
         }
+    }
+}
+
+#[derive(Clone)]
+enum PostgresqlConnectionPoolWorkflowTypeAggregator {
+    LocalDevelopment {
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
+        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
     }
 }

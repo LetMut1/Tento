@@ -2,8 +2,8 @@ use crate::application_layer::data::action_handler_result::ActionHandlerResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserRegistrationConfirmationToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Base;
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Incoming;
+use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Base;
+use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
@@ -29,7 +29,7 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_handler::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Outcoming as Outcoming;
+use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::register_by_last_step::base::Outcoming as Outcoming;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::request_response_data_encoding_protocol_wrapper::RequestResponseDataEncodingProtocolWrapper;
 
