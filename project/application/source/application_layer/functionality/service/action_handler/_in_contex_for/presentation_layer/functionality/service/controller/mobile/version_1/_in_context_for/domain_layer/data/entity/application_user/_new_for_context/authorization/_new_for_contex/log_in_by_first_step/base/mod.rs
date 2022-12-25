@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserWorkflowException;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
@@ -60,7 +60,7 @@ impl Base {
                                         match application_user_ {
                                             Some(application_user__) => application_user__,
                                             None => {
-                                                return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::NotFound));
+                                                return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::NotFound));
                                             }
                                         }
                                     }
@@ -77,7 +77,7 @@ impl Base {
                                             match application_user_ {
                                                 Some(application_user__) => application_user__,
                                                 None => {
-                                                    return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::NotFound));
+                                                    return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::NotFound));
                                                 }
                                             }
                                         }
@@ -88,7 +88,7 @@ impl Base {
                                         }
                                     }
                                 } else {
-                                    return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::InvalidNickname));
+                                    return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
                                 }
                             }
                         }
@@ -184,7 +184,7 @@ impl Base {
                                 }
                             }
 
-                            return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::WrongPassword));
+                            return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::WrongPassword));
                         }
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -204,7 +204,7 @@ impl Base {
             }
         }
 
-        return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::InvalidPassword));
+        return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
     }
 }
 

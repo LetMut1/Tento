@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserWorkflowException;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -58,7 +58,7 @@ impl Base {
             return Ok(ActionHandlerResult::new_with_outcoming(Outcoming::new(is_exist)));
         }
 
-        return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUserWorkflowException::InvalidNickname));
+        return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
     }
 }
 

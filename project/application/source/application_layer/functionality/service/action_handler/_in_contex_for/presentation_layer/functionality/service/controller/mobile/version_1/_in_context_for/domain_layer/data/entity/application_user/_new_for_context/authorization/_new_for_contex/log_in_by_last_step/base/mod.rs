@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInTokenWorkflowException;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__encoder::ApplicationUserAccessRefreshToken_Encoder;
@@ -87,7 +87,7 @@ impl Base {
             let mut application_user_log_in_token_ = match application_user_log_in_token {
                 Some(application_user_log_in_token__) => application_user_log_in_token__,
                 None => {
-                    return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::NotFound));
+                    return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInToken_WorkflowException::NotFound));
                 }
             };
 
@@ -226,13 +226,13 @@ impl Base {
                     }
                 }
 
-                return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::WrongValue));
+                return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInToken_WorkflowException::WrongValue));
             }
 
-            return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::AlreadyExpired));
+            return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInToken_WorkflowException::AlreadyExpired));
         }
 
-        return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInTokenWorkflowException::InvalidValue));
+        return Ok(ActionHandlerResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInToken_WorkflowException::InvalidValue));
     }
 }
 

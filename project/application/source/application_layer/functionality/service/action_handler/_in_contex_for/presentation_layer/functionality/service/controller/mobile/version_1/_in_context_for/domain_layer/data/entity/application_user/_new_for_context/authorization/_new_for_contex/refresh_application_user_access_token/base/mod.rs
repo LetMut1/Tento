@@ -1,6 +1,6 @@
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessRefreshTokenWorkflowException;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessTokenWorkflowException;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessRefreshToken_WorkflowException;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessToken_WorkflowException;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__encoder::ApplicationUserAccessRefreshToken_Encoder;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__expiration_time_resolver::ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
@@ -169,7 +169,7 @@ impl Base {
                         return Err(error);
                     }
 
-                    return Ok(ActionHandlerResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshTokenWorkflowException::AlreadyExpired));
+                    return Ok(ActionHandlerResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::AlreadyExpired));
                 }
 
                 return Err(
@@ -180,10 +180,10 @@ impl Base {
                 );
             }
 
-            return Ok(ActionHandlerResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshTokenWorkflowException::NotFound));
+            return Ok(ActionHandlerResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::NotFound));
         }
 
-        return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessTokenWorkflowException::NotExpired));
+        return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::NotExpired));
     }
 }
 
