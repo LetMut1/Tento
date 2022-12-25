@@ -1,6 +1,6 @@
 extern crate application;
 
-use application::application_layer::functionality::service::command_handler::run_server_processor::RunServerProcessor;
+use application::application_layer::functionality::service::command_processor::run_server_processor::RunServerProcessor;
 
 fn main(
 ) -> () {
