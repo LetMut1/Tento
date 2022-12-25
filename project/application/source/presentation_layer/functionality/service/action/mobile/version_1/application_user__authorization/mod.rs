@@ -83,9 +83,9 @@ use crate::application_layer::functionality::service::action_handler::_in_contex
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::request_response_data_encoding_protocol_wrapper::RequestResponseDataEncodingProtocolWrapper;
 
-pub struct Authorization;
+pub struct ApplicationUser_Authorization;
 
-impl Authorization {
+impl ApplicationUser_Authorization {
     pub async fn check_email_for_existing<'a, T>(
         _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,

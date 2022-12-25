@@ -6,9 +6,9 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::Authorization as ControllerApplicationUserAuthorization;
-use crate::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::Base as ControllerChannelBase;
-use crate::presentation_layer::functionality::service::controller::route_not_found::RouteNotFound as ControllerRouteNotFound;
+use crate::presentation_layer::functionality::service::action::mobile::version_1::application_user__authorization::ApplicationUser_Authorization as ControllerApplicationUserAuthorization;
+use crate::presentation_layer::functionality::service::action::mobile::version_1::channel__base::Channel_Base as ControllerChannelBase;
+use crate::presentation_layer::functionality::service::action::route_not_found::route_not_found;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -847,7 +847,7 @@ impl Base {
                     _ => {}
                 }
 
-                return ControllerRouteNotFound::not_found().await;
+                return route_not_found().await;
             }
         }
     }

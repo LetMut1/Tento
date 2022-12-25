@@ -32,9 +32,9 @@ use std::convert::From;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct Base;
+pub struct Channel_Base;
 
-impl Base {
+impl Channel_Base {
 
 
 
