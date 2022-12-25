@@ -28,7 +28,7 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::presentation_layer::functionality::service::request_response_data_encoding_protocol_wrapper::RequestResponseDataEncodingProtocolWrapper;
+use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
 pub async fn log_out_from_one_device<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
@@ -152,7 +152,7 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
-    return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, Incoming, ()>(
+    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, ()>(
         environment_configuration_resolver,
         request,
         core_postgresql_connection_pool,

@@ -32,10 +32,10 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub struct ActionRoundParameterExtractor;
+pub struct ActionProcessingDelegator;
 
-impl ActionRoundParameterExtractor {
-    pub async fn handle<'a, T, FO, F, AHID, AHOD>(
+impl ActionProcessingDelegator {
+    pub async fn delegate<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,

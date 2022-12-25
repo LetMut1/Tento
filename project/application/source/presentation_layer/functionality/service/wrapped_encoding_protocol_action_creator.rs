@@ -1,6 +1,6 @@
 use crate::application_layer::data::action_handler_result::ActionHandlerResult;
-use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::ActionRoundParameterExtractor;
-use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::_new_for_context::action_round_parameter_extractor::Incoming;
+use crate::application_layer::functionality::service::action_processing_delegator::ActionProcessingDelegator;
+use crate::application_layer::functionality::service::action_processing_delegator::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -29,10 +29,10 @@ use super::request_header_checker::RequestHeaderChecker;
 use extern_crate::serde_json;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub struct RequestResponseDataEncodingProtocolWrapper;
+pub struct WrappedEncodingProtocolActionCreator;
 
-impl RequestResponseDataEncodingProtocolWrapper {
-    pub async fn wrap_to_json<'a, T, FO, F, AHID, AHOD>(
+impl WrappedEncodingProtocolActionCreator {
+    pub async fn create_for_json<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
@@ -69,7 +69,7 @@ impl RequestResponseDataEncodingProtocolWrapper {
             Ok(bytes) => {
                 match serde_json::from_slice::<'_, AHID>(bytes.chunk()) {
                     Ok(wrapped_incoming) => {
-                        match ActionRoundParameterExtractor::handle::<'_, _, _, _, AHID, AHOD>(
+                        match ActionProcessingDelegator::delegate::<'_, _, _, _, AHID, AHOD>(
                             environment_configuration_resolver,
                             core_postgresql_connection_pool,
                             authorization_postgresql_connection_pool,

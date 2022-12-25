@@ -30,7 +30,7 @@ use std::marker::Sync;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::application_user::_new_for_context::authorization::_new_for_contex::check_email_for_existing::base::Outcoming;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::presentation_layer::functionality::service::request_response_data_encoding_protocol_wrapper::RequestResponseDataEncodingProtocolWrapper;
+use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
 pub async fn check_email_for_existing<'a, T>(
     _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
@@ -141,7 +141,7 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
-    return RequestResponseDataEncodingProtocolWrapper::wrap_to_json::<'_, _, _, _, Incoming, Outcoming>(
+    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
         environment_configuration_resolver,
         request,
         core_postgresql_connection_pool,
