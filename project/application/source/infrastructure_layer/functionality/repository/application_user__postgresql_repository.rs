@@ -17,12 +17,6 @@ impl ApplicationUser_PostgresqlRepository {
         core_connection: &'a Connection,
         insert: Insert
     ) -> Result<ApplicationUser, ErrorAuditor> {
-        let (
-            application_user_email,
-            application_user_nickname,
-            application_user_password_hash
-        ) = insert.into_inner();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -44,9 +38,9 @@ impl ApplicationUser_PostgresqlRepository {
                 au.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_email, Type::TEXT)
-            .add_parameter(&application_user_nickname, Type::TEXT)
-            .add_parameter(&application_user_password_hash, Type::TEXT);
+            .add_parameter(&insert.application_user_email, Type::TEXT)
+            .add_parameter(&insert.application_user_nickname, Type::TEXT)
+            .add_parameter(&insert.application_user_password_hash, Type::TEXT);
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -87,9 +81,9 @@ impl ApplicationUser_PostgresqlRepository {
 
                         let application_user = ApplicationUser::new(
                             application_user_id,
-                            application_user_email,
-                            application_user_nickname,
-                            application_user_password_hash,
+                            insert.application_user_email,
+                            insert.application_user_nickname,
+                            insert.application_user_password_hash,
                             application_user_created_at
                         );
 
@@ -597,31 +591,7 @@ impl ApplicationUser_PostgresqlRepository {
 }
 
 pub struct Insert {
-    application_user_email: String,
-    application_user_nickname: String,
-    application_user_password_hash: String
-}
-
-impl Insert {
-    pub fn new(
-        application_user_email: String,
-        application_user_nickname: String,
-        application_user_password_hash: String
-    ) -> Self {
-        return Self {
-            application_user_email,
-            application_user_nickname,
-            application_user_password_hash
-        }
-    }
-
-    pub fn into_inner(
-        self
-    ) -> (String, String, String) {
-        return (
-            self.application_user_email,
-            self.application_user_nickname,
-            self.application_user_password_hash
-        );
-    }
+    pub application_user_email: String,
+    pub application_user_nickname: String,
+    pub application_user_password_hash: String
 }

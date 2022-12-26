@@ -100,12 +100,12 @@ impl ActionProcessor {
                                                                 application_user_registration_confirmation_token__
                                                             }
                                                             None => {
-                                                                let insert = Insert::new(
-                                                                        incoming.application_user_email.as_str(),
-                                                                        ApplicationUserRegistrationConfirmationToken_ValueGenerator::generate(),
-                                                                        0,
-                                                                        false
-                                                                    );
+                                                                let insert = Insert {
+                                                                    application_user_email: incoming.application_user_email.as_str(),
+                                                                    application_user_registration_confirmation_token_value: ApplicationUserRegistrationConfirmationToken_ValueGenerator::generate(),
+                                                                    application_user_registration_confirmation_token_wrong_enter_tries_quantity: 0,
+                                                                    application_user_registration_confirmation_token_is_approved: false
+                                                                };
 
                                                                 match ApplicationUserRegistrationConfirmationToken_PostgresqlRepository::create(
                                                                     authorization_postgresql_connection, insert

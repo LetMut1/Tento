@@ -18,16 +18,9 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
         authorization_connection: &'a Connection,
         insert: Insert<'b>
     ) -> Result<ApplicationUserAccessRefreshToken<'b>, ErrorAuditor> {
-        let (
-            application_user_id,
-            application_user_log_in_token_device_id,
-            application_user_access_token_id,
-            application_user_access_refresh_token_obfuscation_value
-        ) = insert.into_inner();
+        let application_user_log_in_token_device_id_ = insert.application_user_log_in_token_device_id.as_ref();
 
-        let application_user_log_in_token_device_id_ = application_user_log_in_token_device_id.as_ref();
-
-        let application_user_access_token_id_ = application_user_access_token_id.as_ref();
+        let application_user_access_token_id_ = insert.application_user_access_token_id.as_ref();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -52,10 +45,10 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                 auart.updated_at::TEXT as ua;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_id, Type::INT8)
+            .add_parameter(&insert.application_user_id, Type::INT8)
             .add_parameter(&application_user_log_in_token_device_id_, Type::TEXT)
             .add_parameter(&application_user_access_token_id_, Type::TEXT)
-            .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
+            .add_parameter(&insert.application_user_access_refresh_token_obfuscation_value, Type::TEXT)
             .add_parameter(&ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT4);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
@@ -89,10 +82,10 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
 
                             return Ok(
                                 ApplicationUserAccessRefreshToken::new(
-                                    application_user_id,
-                                    application_user_log_in_token_device_id,
-                                    application_user_access_token_id,
-                                    application_user_access_refresh_token_obfuscation_value,
+                                    insert.application_user_id,
+                                    insert.application_user_log_in_token_device_id,
+                                    insert.application_user_access_token_id,
+                                    insert.application_user_access_refresh_token_obfuscation_value,
                                     application_user_access_refresh_token_expires_at,
                                     application_user_access_refresh_token_updated_at
                                 )
@@ -619,33 +612,6 @@ pub struct Insert<'a> {
     pub application_user_log_in_token_device_id: Cow<'a, str>,
     pub application_user_access_token_id: Cow<'a, str>,
     pub application_user_access_refresh_token_obfuscation_value: String,
-}
-
-impl<'a> Insert<'a> {   // TODO DElete
-    pub fn new(
-        application_user_id: i64,
-        application_user_log_in_token_device_id: Cow<'a, str>,
-        application_user_access_token_id: Cow<'a, str>,
-        application_user_access_refresh_token_obfuscation_value: String,
-    ) -> Self {
-        return Self {
-            application_user_id,
-            application_user_log_in_token_device_id,
-            application_user_access_token_id,
-            application_user_access_refresh_token_obfuscation_value
-        }
-    }
-
-    pub fn into_inner(
-        self
-    ) -> (i64, Cow<'a, str>, Cow<'a, str>, String) {
-        return (
-            self.application_user_id,
-            self.application_user_log_in_token_device_id,
-            self.application_user_access_token_id,
-            self.application_user_access_refresh_token_obfuscation_value
-        );
-    }
 }
 
 pub struct Update {

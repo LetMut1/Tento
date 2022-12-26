@@ -154,11 +154,11 @@ impl ActionProcessor {
                                                     return Err(error);
                                                 }
 
-                                                let application_usert_insert = ApplicationUserInsert::new(
-                                                    incoming.application_user_email,
-                                                    incoming.application_user_nickname,
+                                                let application_usert_insert = ApplicationUserInsert {
+                                                    application_user_email: incoming.application_user_email,
+                                                    application_user_nickname: incoming.application_user_nickname,
                                                     application_user_password_hash,
-                                                );
+                                                };
 
                                                 let application_user = match ApplicationUser_PostgresqlRepository::create(core_postgresql_connection, application_usert_insert).await {
                                                     Ok(application_user_) => application_user_,

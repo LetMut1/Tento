@@ -130,12 +130,12 @@ impl ActionProcessor {
                                                         application_user_log_in_token__
                                                     }
                                                     None => {
-                                                        let insert = Insert::new(
+                                                        let insert = Insert {
                                                             application_user_id,
-                                                            incoming.application_user_log_in_token_device_id.as_str(),
-                                                            ApplicationUserLogInToken_ValueGenerator::generate(),
-                                                            0
-                                                        );
+                                                            application_user_log_in_token_device_id: incoming.application_user_log_in_token_device_id.as_str(),
+                                                            application_user_log_in_token_value: ApplicationUserLogInToken_ValueGenerator::generate(),
+                                                            application_user_log_in_token_wrong_enter_tries_quantity: 0
+                                                        };
 
                                                         match ApplicationUserLogInToken_PostgresqlRepository::create(
                                                             authorization_postgresql_connection, insert

@@ -18,14 +18,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
         authorization_connection: &'a Connection,
         insert: Insert<'b>
     ) -> Result<ApplicationUserLogInToken<'b>, ErrorAuditor> {
-        let (
-            application_user_id,
-            application_user_log_in_token_device_id,
-            application_user_log_in_token_value,
-            application_user_log_in_token_wrong_enter_tries_quantity
-        ) = insert.into_inner();
-
-        let wrong_enter_tries_quantity_ = application_user_log_in_token_wrong_enter_tries_quantity as i16;
+        let wrong_enter_tries_quantity_ = insert.application_user_log_in_token_wrong_enter_tries_quantity as i16;
 
         let quantity_of_minute_for_expiration = ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
 
@@ -49,9 +42,9 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 aulit.expires_at::TEXT AS ea;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_id, Type::INT8)
-            .add_parameter(&application_user_log_in_token_device_id, Type::TEXT)
-            .add_parameter(&application_user_log_in_token_value, Type::TEXT)
+            .add_parameter(&insert.application_user_id, Type::INT8)
+            .add_parameter(&insert.application_user_log_in_token_device_id, Type::TEXT)
+            .add_parameter(&insert.application_user_log_in_token_value, Type::TEXT)
             .add_parameter(&wrong_enter_tries_quantity_, Type::INT2)
             .add_parameter(&quantity_of_minute_for_expiration, Type::INT2);
 
@@ -74,10 +67,10 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
 
                             return Ok(
                                 ApplicationUserLogInToken::new(
-                                    application_user_id,
-                                    application_user_log_in_token_device_id,
-                                    application_user_log_in_token_value,
-                                    application_user_log_in_token_wrong_enter_tries_quantity,
+                                    insert.application_user_id,
+                                    insert.application_user_log_in_token_device_id,
+                                    insert.application_user_log_in_token_value,
+                                    insert.application_user_log_in_token_wrong_enter_tries_quantity,
                                     application_user_log_in_token_expires_at
                                 )
                             );
@@ -332,35 +325,8 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
 }
 
 pub struct Insert<'a> {
-    application_user_id: i64,
-    application_user_log_in_token_device_id: &'a str,
-    application_user_log_in_token_value: String,
-    application_user_log_in_token_wrong_enter_tries_quantity: u8
-}
-
-impl<'a> Insert<'a> {
-    pub fn new(
-        application_user_id: i64,
-        application_user_log_in_token_device_id: &'a str,
-        application_user_log_in_token_value: String,
-        application_user_log_in_token_wrong_enter_tries_quantity: u8
-    ) -> Self {
-        return Self {
-            application_user_id,
-            application_user_log_in_token_device_id,
-            application_user_log_in_token_value,
-            application_user_log_in_token_wrong_enter_tries_quantity
-        }
-    }
-
-    pub fn into_inner(
-        self
-    ) -> (i64, &'a str, String, u8) {
-        return (
-            self.application_user_id,
-            self.application_user_log_in_token_device_id,
-            self.application_user_log_in_token_value,
-            self.application_user_log_in_token_wrong_enter_tries_quantity
-        );
-    }
+    pub application_user_id: i64,
+    pub application_user_log_in_token_device_id: &'a str,
+    pub application_user_log_in_token_value: String,
+    pub application_user_log_in_token_wrong_enter_tries_quantity: u8
 }

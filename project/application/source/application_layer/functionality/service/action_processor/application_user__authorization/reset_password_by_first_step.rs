@@ -100,12 +100,12 @@ impl ActionProcessor {
                                                                 application_user_reset_password_token__
                                                             }
                                                             None => {
-                                                                let insert = Insert::new(
+                                                                let insert = Insert {
                                                                     application_user_id,
-                                                                    ApplicationUserResetPasswordToken_ValueGenerator::generate(),
-                                                                    0,
-                                                                    false
-                                                                );
+                                                                    application_user_reset_password_token_value: ApplicationUserResetPasswordToken_ValueGenerator::generate(),
+                                                                    application_user_reset_password_token_wrong_enter_tries_quantity: 0,
+                                                                    application_user_reset_password_token_is_approved: false
+                                                                };
 
                                                                 match ApplicationUserResetPasswordToken_PostgresqlRepository::create(
                                                                     authorization_postgresql_connection, insert

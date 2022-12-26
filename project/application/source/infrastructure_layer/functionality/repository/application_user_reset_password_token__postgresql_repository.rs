@@ -18,14 +18,7 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
         authorization_connection: &'a Connection,
         insert: Insert
     ) -> Result<ApplicationUserResetPasswordToken, ErrorAuditor> {
-        let (
-            application_user_reset_password_token_application_user_id,
-            application_user_reset_password_token_value,
-            application_user_reset_password_token_wrong_enter_tries_quantity,
-            application_user_reset_password_token_is_approved
-        ) = insert.into_inner();
-
-        let wrong_enter_tries_quantity_ = application_user_reset_password_token_wrong_enter_tries_quantity as i16;
+        let wrong_enter_tries_quantity_ = insert.application_user_reset_password_token_wrong_enter_tries_quantity as i16;
 
         let quantity_of_minute_for_expiration = ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
 
@@ -49,10 +42,10 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                 aurpt.expires_at::TEXT AS ea;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_reset_password_token_application_user_id, Type::INT8)
-            .add_parameter(&application_user_reset_password_token_value, Type::TEXT)
+            .add_parameter(&insert.application_user_id, Type::INT8)
+            .add_parameter(&insert.application_user_reset_password_token_value, Type::TEXT)
             .add_parameter(&wrong_enter_tries_quantity_, Type::INT2)
-            .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
+            .add_parameter(&insert.application_user_reset_password_token_is_approved, Type::BOOL)
             .add_parameter(&quantity_of_minute_for_expiration, Type::INT2);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
@@ -74,10 +67,10 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
 
                             return Ok(
                                 ApplicationUserResetPasswordToken::new(
-                                    application_user_reset_password_token_application_user_id,
-                                    application_user_reset_password_token_value,
-                                    application_user_reset_password_token_wrong_enter_tries_quantity,
-                                    application_user_reset_password_token_is_approved,
+                                    insert.application_user_id,
+                                    insert.application_user_reset_password_token_value,
+                                    insert.application_user_reset_password_token_wrong_enter_tries_quantity,
+                                    insert.application_user_reset_password_token_is_approved,
                                     application_user_reset_password_token_expires_at
                                 )
                             );
@@ -343,35 +336,8 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
 }
 
 pub struct Insert {
-    application_user_id: i64,
-    application_user_reset_password_token_value: String,
-    application_user_reset_password_token_wrong_enter_tries_quantity: u8,
-    application_user_reset_password_token_is_approved: bool,
-}
-
-impl<'a> Insert {
-    pub fn new(
-        application_user_id: i64,
-        application_user_reset_password_token_value: String,
-        application_user_reset_password_token_wrong_enter_tries_quantity: u8,
-        application_user_reset_password_token_is_approved: bool,
-    ) -> Self {
-        return Self {
-            application_user_id,
-            application_user_reset_password_token_value,
-            application_user_reset_password_token_wrong_enter_tries_quantity,
-            application_user_reset_password_token_is_approved
-        }
-    }
-
-    pub fn into_inner(
-        self
-    ) -> (i64, String, u8, bool) {
-        return (
-            self.application_user_id,
-            self.application_user_reset_password_token_value,
-            self.application_user_reset_password_token_wrong_enter_tries_quantity,
-            self.application_user_reset_password_token_is_approved
-        );
-    }
+    pub application_user_id: i64,
+    pub application_user_reset_password_token_value: String,
+    pub application_user_reset_password_token_wrong_enter_tries_quantity: u8,
+    pub application_user_reset_password_token_is_approved: bool,
 }
