@@ -1,4 +1,4 @@
-use crate::application_layer::data::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -24,7 +24,7 @@ impl ActionProcessor {
     pub async fn process<T>(
         postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionHandlerResult<Outcoming>, ErrorAuditor>
+    ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -63,10 +63,10 @@ impl ActionProcessor {
                 }
             };
 
-            return Ok(ActionHandlerResult::new_with_outcoming(Outcoming::new(is_exist)));
+            return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(is_exist)));
         }
 
-        return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
+        return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
     }
 }
 

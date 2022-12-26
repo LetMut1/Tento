@@ -1,4 +1,4 @@
-use crate::application_layer::data::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserRegistrationConfirmationToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
@@ -44,7 +44,7 @@ impl ActionProcessor {
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionHandlerResult<Outcoming>, ErrorAuditor>
+    ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -229,7 +229,7 @@ impl ActionProcessor {
                                                 };
 
                                                 return Ok(
-                                                    ActionHandlerResult::new_with_outcoming(
+                                                    ActionProcessorResult::new_with_outcoming(
                                                         Outcoming::new(application_user_access_token_web_form, application_user_access_refresh_token_web_form)
                                                     )
                                                 );
@@ -259,34 +259,34 @@ impl ActionProcessor {
                                                 }
                                             }
 
-                                            return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::WrongValue));
+                                            return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::WrongValue));
                                         }
 
-                                        return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::IsNotApproved));
+                                        return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::IsNotApproved));
                                     }
 
-                                    return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::AlreadyExpired));
+                                    return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::AlreadyExpired));
                                 }
 
-                                return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::NotFound));
+                                return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::NotFound));
                             }
 
-                            return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::EmailAlreadyExist));
+                            return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::EmailAlreadyExist));
                         }
 
-                        return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::NicknameAlreadyExist));
+                        return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::NicknameAlreadyExist));
                     }
 
-                    return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::InvalidValue));
+                    return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::InvalidValue));
                 }
 
-                return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
+                return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
             }
 
-            return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
+            return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
         }
 
-        return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
+        return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
     }
 }
 

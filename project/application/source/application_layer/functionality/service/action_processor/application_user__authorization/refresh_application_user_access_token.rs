@@ -1,4 +1,4 @@
-use crate::application_layer::data::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessRefreshToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessToken_WorkflowException;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
@@ -36,7 +36,7 @@ impl ActionProcessor {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionHandlerResult<Outcoming>, ErrorAuditor>
+    ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -152,7 +152,7 @@ impl ActionProcessor {
                         };
 
                         return Ok(
-                            ActionHandlerResult::new_with_outcoming(
+                            ActionProcessorResult::new_with_outcoming(
                                 Outcoming::new(application_user_access_token_web_form_new, application_user_access_refresh_token_web_form_new)
                             )
                         );
@@ -169,7 +169,7 @@ impl ActionProcessor {
                         return Err(error);
                     }
 
-                    return Ok(ActionHandlerResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::AlreadyExpired));
+                    return Ok(ActionProcessorResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::AlreadyExpired));
                 }
 
                 return Err(
@@ -180,10 +180,10 @@ impl ActionProcessor {
                 );
             }
 
-            return Ok(ActionHandlerResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::NotFound));
+            return Ok(ActionProcessorResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::NotFound));
         }
 
-        return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::NotExpired));
+        return Ok(ActionProcessorResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::NotExpired));
     }
 }
 

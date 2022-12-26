@@ -1,4 +1,4 @@
-use crate::application_layer::data::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessToken_WorkflowException;
 use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -30,7 +30,7 @@ impl ActionProcessor {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionHandlerResult<Outcoming>, ErrorAuditor>
+    ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -77,7 +77,7 @@ impl ActionProcessor {
                                     &*core_postgresql_pooled_connection, channel_name.as_str(), &requery_channel_name, limit as i16
                                 ).await {
                                     Ok(channel_registry) => {
-                                        return Ok(ActionHandlerResult::new_with_outcoming(Outcoming::new(channel_registry)));
+                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(channel_registry)));
                                     }
                                     Err(mut error) => {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -97,10 +97,10 @@ impl ActionProcessor {
                         }
                     }
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::AlreadyExpired));
+                        return Ok(ActionProcessorResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::AlreadyExpired));
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(ActionHandlerResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList));
+                        return Ok(ActionProcessorResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList));
                     }
                 }
             }

@@ -1,4 +1,4 @@
-use crate::application_layer::data::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserRegistrationConfirmationToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
 use crate::domain_layer::data::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
@@ -29,7 +29,7 @@ impl ActionProcessor {
     pub async fn process<'a, T>(
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionHandlerResult<Outcoming>, ErrorAuditor>
+    ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -77,7 +77,7 @@ impl ActionProcessor {
                                                                     return Err(error);
                                                                 }
 
-                                                                return Ok(ActionHandlerResult::new_with_outcoming(Outcoming::new(true)));
+                                                                return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(true)));
                                                             } else {
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationToken_WrongEnterTriesQuantityIncrementor::increment(&mut application_user_registration_confirmation_token_) {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -103,17 +103,17 @@ impl ActionProcessor {
                                                                     }
                                                                 }
 
-                                                                return Ok(ActionHandlerResult::new_with_outcoming(Outcoming::new(false)));
+                                                                return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(false)));
                                                             }
                                                         }
 
-                                                        return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::AlreadyApproved));
+                                                        return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::AlreadyApproved));
                                                     }
 
-                                                    return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::AlreadyExpired));
+                                                    return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::AlreadyExpired));
                                                 }
 
-                                                return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::NotFound));
+                                                return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::NotFound));
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -133,7 +133,7 @@ impl ActionProcessor {
                                 }
                             }
 
-                            return Ok(ActionHandlerResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::InvalidValue));
+                            return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::InvalidValue));
                         }
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -143,7 +143,7 @@ impl ActionProcessor {
                     }
                 }
 
-                return Ok(ActionHandlerResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
+                return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

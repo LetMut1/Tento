@@ -1,4 +1,4 @@
-use crate::application_layer::data::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::functionality::service::action_processing_delegator::ActionProcessingDelegator;
 use crate::application_layer::functionality::service::action_processing_delegator::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -79,7 +79,7 @@ impl WrappedEncodingProtocolActionCreator {
                         ).await {
                             Ok(action_handler_result) => {
                                 match action_handler_result {
-                                    ActionHandlerResult::Outcoming { outcoming } => {
+                                    ActionProcessorResult::Outcoming { outcoming } => {
                                         let (
                                             response_parts,
                                             unified_report
@@ -103,7 +103,7 @@ impl WrappedEncodingProtocolActionCreator {
                                             }
                                         }
                                     }
-                                    ActionHandlerResult::EntityWorkflowException { entity_workflow_exception: _ } => {
+                                    ActionProcessorResult::EntityWorkflowException { entity_workflow_exception: _ } => {
                                         unreachable!("TODO");
                                     }
                                 }

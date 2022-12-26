@@ -1,4 +1,4 @@
-use crate::application_layer::data::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
@@ -60,7 +60,7 @@ where
             ).await {
                 Ok(action_handler_result) => {
                     match action_handler_result {
-                        ActionHandlerResult::Outcoming { outcoming: _ } => {
+                        ActionProcessorResult::Outcoming { outcoming: _ } => {
                             match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                                 Ok(data) => {
                                     return ActionResponseCreator::create_ok(data);
@@ -72,7 +72,7 @@ where
                                 }
                             }
                         }
-                        ActionHandlerResult::EntityWorkflowException { entity_workflow_exception } => {
+                        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
                             match entity_workflow_exception {
                                 EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
                                     match application_user__workflow_exception {

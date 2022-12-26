@@ -1,4 +1,4 @@
-use crate::application_layer::data::action_handler_result::ActionHandlerResult;
+use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -42,7 +42,7 @@ impl ActionProcessingDelegator {
         redis_connection_pool: Pool<RedisConnectionManager>,
         incoming: Incoming<AHID>,
         action: FO
-    ) -> Result<ActionHandlerResult<Outcoming<AHOD>>, ErrorAuditor>
+    ) -> Result<ActionProcessorResult<Outcoming<AHOD>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -122,7 +122,7 @@ impl ActionProcessingDelegator {
             outcoming = Outcoming::new(response_parts, None);
         }
 
-        return Ok(ActionHandlerResult::new_with_outcoming(outcoming));
+        return Ok(ActionProcessorResult::new_with_outcoming(outcoming));
     }
 }
 

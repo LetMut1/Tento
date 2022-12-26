@@ -6,7 +6,7 @@ use super::entity_workflow_exception::ApplicationUserResetPasswordToken_Workflow
 use super::entity_workflow_exception::ApplicationUser_WorkflowException;
 use super::entity_workflow_exception::EntityWorkflowException;
 
-pub enum ActionHandlerResult<T> {
+pub enum ActionProcessorResult<T> {
     Outcoming {
         outcoming: T
     },
@@ -15,7 +15,7 @@ pub enum ActionHandlerResult<T> {
     }
 }
 
-impl<T> ActionHandlerResult<T> {
+impl<T> ActionProcessorResult<T> {
     pub fn new_with_outcoming(
         outcoming: T
     ) -> Self {
