@@ -21,9 +21,9 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct Base;
+pub struct ActionProcessor;
 
-impl Base {
+impl ActionProcessor {
     const LIMIT_MINIMUM_VALUE: i16 = 300;
     const LIMIT_MAXIMUM_VALUE: i16 = 500;
 
@@ -41,7 +41,7 @@ impl Base {
 
 
 
-    pub async fn handle<'a, T>(
+    pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming

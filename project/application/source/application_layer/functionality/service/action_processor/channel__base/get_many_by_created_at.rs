@@ -8,7 +8,9 @@ use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
+use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::order_convention_resolver::OrderConventionResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
@@ -20,12 +22,12 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct Base;
+pub struct ActionProcessor;
 
-impl Base {
-    const CHANNEL_ID_REGISTRY_LENGTH_LIMIT: usize = 30;
+impl ActionProcessor {
+    const LIMIT: i8 = 30;
 
-    pub async fn handle<'a, T>(
+    pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
@@ -38,14 +40,27 @@ impl Base {
     {
         let (
             application_user_access_token_web_form,
-            channel_id_registry
+            channel_created_at,
+            order,
+            mut limit
         ) = incoming.into_inner();
 
         match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str()).await {
             Ok(extractor_result) => {
                 match extractor_result {
                     ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {
-                        if channel_id_registry.is_empty() || channel_id_registry.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
+                        if let Some(ref channel_created_at_) = channel_created_at {
+                            if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        BaseError::InvalidArgumentError,
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        }
+
+                        if !OrderConventionResolver::can_convert(order) {
                             return Err(
                                 ErrorAuditor::new(
                                     BaseError::InvalidArgumentError,
@@ -54,10 +69,14 @@ impl Base {
                             );
                         }
 
+                        if limit <= 0 || limit > Self::LIMIT {
+                            limit = Self::LIMIT;
+                        }
+
                         match core_postgresql_connection_pool.get().await {
                             Ok(core_postgresql_pooled_connection) => {
-                                match Channel_PostgresqlRepository::per_request_4(
-                                    &*core_postgresql_pooled_connection, &channel_id_registry
+                                match Channel_PostgresqlRepository::per_request_2(
+                                    &*core_postgresql_pooled_connection, &channel_created_at, order, limit as i16
                                 ).await {
                                     Ok(channel_registry) => {
                                         return Ok(ActionHandlerResult::new_with_outcoming(Outcoming::new(channel_registry)));
@@ -100,16 +119,20 @@ impl Base {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_access_token_web_form: String,
-    channel_id_registry: Vec<i64>,
+    channel_created_at:  Option<String>,
+    order: i8,
+    limit: i8
 }
 
 impl Incoming {
     pub fn into_inner(
         self
-    ) -> (String, Vec<i64>) {
+    ) -> (String, Option<String>, i8, i8) {
         return (
             self.application_user_access_token_web_form,
-            self.channel_id_registry,
+            self.channel_created_at,
+            self.order,
+            self.limit
         );
     }
 }

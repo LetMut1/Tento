@@ -21,12 +21,12 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct Base;
+pub struct ActionProcessor;
 
-impl Base {
+impl ActionProcessor {
     const LIMIT: i8 = 30;
 
-    pub async fn handle<'a, T>(
+    pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming

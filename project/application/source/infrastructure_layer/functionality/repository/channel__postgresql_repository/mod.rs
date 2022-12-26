@@ -1,7 +1,7 @@
-use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_created_at::base::Channel as OutcomingGetManyByCreatedAtChannel;
-use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_id_registry::base::Channel as OutcomingGetManyByIdRegistryChannel;
-use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_name::base::Channel as OutcomingGetManyByNameChannel;
-use crate::application_layer::functionality::service::action_processor::_in_contex_for::presentation_layer::functionality::service::controller::mobile::version_1::_in_context_for::domain_layer::data::entity::channel::_new_for_context::base::_new_for_contex::get_many_by_subscribers_quantity::base::Channel as OutcomingGetManyBySubscribersQuantityChannel;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_created_at::Channel as GetManyByCreatedAtChannel;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_id_registry::Channel as GetManyByIdRegistryChannel;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name::Channel as GetManyByNameChannel;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_subscribers_quantity::Channel as GetManyBySubscribersQuantityChannel;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -22,7 +22,7 @@ impl Channel_PostgresqlRepository {
         channel_name: &'a str,
         requery_name: &'a Option<String>,
         limit: i16
-    ) -> Result<Option<Vec<OutcomingGetManyByNameChannel>>, ErrorAuditor> {
+    ) -> Result<Option<Vec<GetManyByNameChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::new();
@@ -88,7 +88,7 @@ impl Channel_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
-        let mut channel_registry: Vec<OutcomingGetManyByNameChannel> = vec![];
+        let mut channel_registry: Vec<GetManyByNameChannel> = vec![];
 
         match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -204,7 +204,7 @@ impl Channel_PostgresqlRepository {
                                     }
                                 };
 
-                                let channel = OutcomingGetManyByNameChannel::new(
+                                let channel = GetManyByNameChannel::new(
                                     channel_id,
                                     channel_name_,
                                     channel_personalization_image_path,
@@ -250,7 +250,7 @@ impl Channel_PostgresqlRepository {
         channel_created_at: &'a Option<String>,
         order: i8,
         limit: i16
-    ) -> Result<Option<Vec<OutcomingGetManyByCreatedAtChannel>>, ErrorAuditor> {
+    ) -> Result<Option<Vec<GetManyByCreatedAtChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::new();
@@ -324,7 +324,7 @@ impl Channel_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
-        let mut channel_registry: Vec<OutcomingGetManyByCreatedAtChannel> = vec![];
+        let mut channel_registry: Vec<GetManyByCreatedAtChannel> = vec![];
 
         match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -440,7 +440,7 @@ impl Channel_PostgresqlRepository {
                                     }
                                 };
 
-                                let channel = OutcomingGetManyByCreatedAtChannel::new(
+                                let channel = GetManyByCreatedAtChannel::new(
                                     channel_id,
                                     channel_name,
                                     channel_personalization_image_path,
@@ -486,7 +486,7 @@ impl Channel_PostgresqlRepository {
         channel_subscribers_quantity: Option<i64>,
         order: i8,
         limit: i16
-    ) -> Result<Option<Vec<OutcomingGetManyBySubscribersQuantityChannel>>, ErrorAuditor> {
+    ) -> Result<Option<Vec<GetManyBySubscribersQuantityChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::new();
@@ -553,7 +553,7 @@ impl Channel_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
-        let mut channel_registry: Vec<OutcomingGetManyBySubscribersQuantityChannel> = vec![];
+        let mut channel_registry: Vec<GetManyBySubscribersQuantityChannel> = vec![];
 
         match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -585,7 +585,7 @@ impl Channel_PostgresqlRepository {
                                     }
                                 };
 
-                                let channel = OutcomingGetManyBySubscribersQuantityChannel::new(
+                                let channel = GetManyBySubscribersQuantityChannel::new(
                                     channel_id,
                                     channel_subscribers_quantity_
                                 );
@@ -622,7 +622,7 @@ impl Channel_PostgresqlRepository {
     pub async fn per_request_4<'a>(
         core_connection: &'a Connection,
         id_registry: &'a Vec<i64>
-    ) -> Result<Option<Vec<OutcomingGetManyByIdRegistryChannel>>, ErrorAuditor> {
+    ) -> Result<Option<Vec<GetManyByIdRegistryChannel>>, ErrorAuditor> {
         if id_registry.is_empty() {
             return Ok(None)
         }
@@ -645,7 +645,7 @@ impl Channel_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&id_registry, Type::INT8_ARRAY);
 
-        let mut channel_registry: Vec<OutcomingGetManyByIdRegistryChannel> = vec![];
+        let mut channel_registry: Vec<GetManyByIdRegistryChannel> = vec![];
 
         match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -761,7 +761,7 @@ impl Channel_PostgresqlRepository {
                                     }
                                 };
 
-                                let channel = OutcomingGetManyByIdRegistryChannel::new(
+                                let channel = GetManyByIdRegistryChannel::new(
                                     channel_id,
                                     channel_name,
                                     channel_personalization_image_path,
