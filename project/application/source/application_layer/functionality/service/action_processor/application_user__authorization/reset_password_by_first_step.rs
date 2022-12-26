@@ -186,8 +186,15 @@ pub struct Incoming {
     application_user_email: String
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
 #[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+struct Outcoming {
+    application_user_id: i64
+}
+
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_id: i64

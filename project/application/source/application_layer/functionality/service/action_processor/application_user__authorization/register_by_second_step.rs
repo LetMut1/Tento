@@ -157,8 +157,15 @@ pub struct Incoming {
     application_user_registration_confirmation_token_value: String
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
 #[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+struct Outcoming {
+    application_user_registration_confirmation_token_is_approved: bool
+}
+
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_registration_confirmation_token_is_approved: bool
