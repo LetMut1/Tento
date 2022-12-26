@@ -74,22 +74,20 @@ impl WrappedEncodingProtocolActionCreator {
                             core_postgresql_connection_pool,
                             authorization_postgresql_connection_pool,
                             redis_connection_pool,
-                            Incoming::new(request_parts, wrapped_incoming),
+                            Incoming {
+                                parts: request_parts,
+                                convertible_data: wrapped_incoming
+                            },
                             wrapped_action
                         ).await {
                             Ok(action_processor_result) => {
                                 match action_processor_result {
                                     ActionProcessorResult::Outcoming { outcoming } => {
-                                        let (
-                                            response_parts,
-                                            unified_report
-                                        ) = outcoming.into_inner();
-
-                                        match unified_report {
+                                        match outcoming.unified_report {
                                             Some(unified_report_) => {
                                                 match serde_json::to_vec(&unified_report_) {
                                                     Ok(data) => {
-                                                        return Response::from_parts(response_parts, Body::from(data));
+                                                        return Response::from_parts(outcoming.parts, Body::from(data));
                                                     }
                                                     Err(error) => {
                                                         // log::error!("{}", ErrorAuditor::from(error));
@@ -99,7 +97,7 @@ impl WrappedEncodingProtocolActionCreator {
                                                 }
                                             }
                                             None => {
-                                                return Response::from_parts(response_parts, Body::empty());
+                                                return Response::from_parts(outcoming.parts, Body::empty());
                                             }
                                         }
                                     }

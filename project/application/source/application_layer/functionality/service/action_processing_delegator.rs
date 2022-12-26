@@ -59,13 +59,10 @@ impl ActionProcessingDelegator {
         AHID: Serialize + for<'de> Deserialize<'de>,
         AHOD: Serialize + for<'de> Deserialize<'de>
     {
-        let (
-            mut request_parts,
-            convertible_data
-        ) = incoming.into_inner();
+        let mut request_parts = incoming.parts;
 
         let mut data: Vec<u8> = vec![];
-        if let Err(error) = rmp_serde::encode::write(&mut data, &convertible_data) {
+        if let Err(error) = rmp_serde::encode::write(&mut data, &incoming.convertible_data) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
@@ -97,7 +94,7 @@ impl ActionProcessingDelegator {
                 Ok(bytes) => {
                     match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<AHOD>>(bytes.chunk()) {
                         Ok(unified_report) => {
-                            outcoming = Outcoming::new(response_parts, Some(unified_report));
+                            outcoming = Outcoming { parts: response_parts, unified_report: Some(unified_report) };
                         }
                         Err(error) => {
                             return Err(
@@ -119,7 +116,7 @@ impl ActionProcessingDelegator {
                 }
             }
         } else {
-            outcoming = Outcoming::new(response_parts, None);
+            outcoming = Outcoming { parts: response_parts, unified_report: None };
         }
 
         return Ok(ActionProcessorResult::new_with_outcoming(outcoming));
@@ -128,54 +125,12 @@ impl ActionProcessingDelegator {
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct Incoming<T> {
-    parts: HttpRequestParts,
-    convertible_data: T
-}
-
-impl<T> Incoming<T> {
-    pub fn new(
-        parts: HttpRequestParts,
-        convertible_data: T
-    ) -> Self {
-        return Self {
-            parts,
-            convertible_data
-        };
-    }
-
-    pub fn into_inner(
-        self
-    ) -> (HttpRequestParts, T) {
-        return (
-            self.parts,
-            self.convertible_data
-        );
-    }
+    pub parts: HttpRequestParts,
+    pub convertible_data: T
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct Outcoming<T> {
-    parts: HttpResponseParts,
-    unified_report: Option<UnifiedReport<T>>
-}
-
-impl<T> Outcoming<T> {
-    pub fn new(
-        parts: HttpResponseParts,
-        unified_report: Option<UnifiedReport<T>>
-    ) -> Self {
-        return Self {
-            parts,
-            unified_report
-        };
-    }
-
-    pub fn into_inner(
-        self
-    ) -> (HttpResponseParts, Option<UnifiedReport<T>>) {
-        return (
-            self.parts,
-            self.unified_report,
-        );
-    }
+    pub parts: HttpResponseParts,
+    pub unified_report: Option<UnifiedReport<T>>
 }

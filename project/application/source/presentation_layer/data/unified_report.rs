@@ -17,7 +17,7 @@ use extern_crate::serde::Deserialize;
 //     }
 // }
 
-#[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
+#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct UnifiedReport<S>
@@ -26,7 +26,7 @@ pub struct UnifiedReport<S>
     communication_code: Option<&'static str>
 }
 
-#[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
+#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
 impl<S> UnifiedReport<S>
 where
     S: Serialize
@@ -112,7 +112,7 @@ where
 //     }
 // }
 
-#[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Data<S>
@@ -120,7 +120,7 @@ pub struct Data<S>
     data: Option<S>
 }
 
-#[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
+#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
 impl<S> Data<S>
 where
     S: Serialize

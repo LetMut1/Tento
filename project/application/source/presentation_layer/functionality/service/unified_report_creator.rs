@@ -13,7 +13,7 @@ impl UnifiedReportCreator {
     }
 }
 
-#[cfg(not(feature="facilitate_non_automatic_functional_testing"))]
+#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
 impl UnifiedReportCreator {
     pub fn create_with_data<S>(
         data: S
