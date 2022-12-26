@@ -58,8 +58,8 @@ where
             match ActionProcessor::process(
                 environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
             ).await {
-                Ok(action_handler_result) => {
-                    match action_handler_result {
+                Ok(action_processor_result) => {
+                    match action_processor_result {
                         ActionProcessorResult::Outcoming { outcoming: _ } => {
                             match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                                 Ok(data) => {

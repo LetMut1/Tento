@@ -77,8 +77,8 @@ impl WrappedEncodingProtocolActionCreator {
                             Incoming::new(request_parts, wrapped_incoming),
                             wrapped_action
                         ).await {
-                            Ok(action_handler_result) => {
-                                match action_handler_result {
+                            Ok(action_processor_result) => {
+                                match action_processor_result {
                                     ActionProcessorResult::Outcoming { outcoming } => {
                                         let (
                                             response_parts,
