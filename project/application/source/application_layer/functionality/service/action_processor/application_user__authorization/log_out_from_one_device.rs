@@ -36,9 +36,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_access_token_web_form = incoming.into_inner();
-
-        let extractor_result = match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str()).await {
+        let extractor_result = match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()).await {
             Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -87,12 +85,4 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_access_token_web_form: String
-}
-
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> String {
-        return self.application_user_access_token_web_form;
-    }
 }

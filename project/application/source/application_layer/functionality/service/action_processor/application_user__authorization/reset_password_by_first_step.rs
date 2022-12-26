@@ -41,15 +41,13 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_email = incoming.into_inner();
-
-        match ApplicationUser_Validator::is_valid_email(application_user_email.as_str()) {
+        match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {
             Ok(is_valid_email) => {
                 if is_valid_email {
                     match core_postgresql_connection_pool.get().await {
                         Ok(core_postgresql_pooled_connection) => {
                             match ApplicationUser_PostgresqlRepository::find_2(
-                                &*core_postgresql_pooled_connection, application_user_email
+                                &*core_postgresql_pooled_connection, incoming.application_user_email
                             ).await {
                                 Ok(application_user) => {
                                     if let Some(application_user_) = application_user {
@@ -130,7 +128,7 @@ impl ActionProcessor {
                                                             return Err(error);
                                                         }
 
-                                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(application_user_id)));
+                                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { application_user_id }));
                                                     }
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -188,27 +186,9 @@ pub struct Incoming {
     application_user_email: String
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> String {
-        return self.application_user_email;
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_id: i64
-}
-
-impl Outcoming {
-    pub fn new(
-        application_user_id: i64
-    ) -> Self {
-        return Self {
-            application_user_id
-        };
-    }
 }

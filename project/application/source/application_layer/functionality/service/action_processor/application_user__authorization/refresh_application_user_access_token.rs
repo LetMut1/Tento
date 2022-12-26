@@ -43,12 +43,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let (
-            application_user_access_token_web_form,
-            application_user_access_refresh_token_web_form
-        ) = incoming.into_inner();
-
-        let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(environment_configuration_resolver, application_user_access_token_web_form.as_str()) {
+        let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -89,7 +84,7 @@ impl ActionProcessor {
                 }
             };
             if let Some(mut application_user_access_refresh_token_) = application_user_access_refresh_token {
-                let is_valid = match ApplicationUserAccessRefreshToken_Encoder::is_valid(environment_configuration_resolver, &application_user_access_refresh_token_, application_user_access_refresh_token_web_form.as_str()) {
+                let is_valid = match ApplicationUserAccessRefreshToken_Encoder::is_valid(environment_configuration_resolver, &application_user_access_refresh_token_, incoming.application_user_access_refresh_token_web_form.as_str()) {
                     Ok(is_valid_) => is_valid_,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -153,7 +148,10 @@ impl ActionProcessor {
 
                         return Ok(
                             ActionProcessorResult::new_with_outcoming(
-                                Outcoming::new(application_user_access_token_web_form_new, application_user_access_refresh_token_web_form_new)
+                                Outcoming {
+                                    application_user_access_token_web_form: application_user_access_token_web_form_new,
+                                    application_user_access_refresh_token_web_form: application_user_access_refresh_token_web_form_new
+                                }
                             )
                         );
 
@@ -195,33 +193,10 @@ pub struct Incoming {
     application_user_access_refresh_token_web_form: String
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> (String, String) {
-        return (
-            self.application_user_access_token_web_form,
-            self.application_user_access_refresh_token_web_form
-        );
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
-}
-
-impl Outcoming {
-    pub fn new(
-        application_user_access_token_web_form: String,
-        application_user_access_refresh_token_web_form: String
-    ) -> Self {
-        return Self {
-            application_user_access_token_web_form,
-            application_user_access_refresh_token_web_form
-        };
-    }
 }

@@ -37,23 +37,18 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-    { // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        let (
-            application_user_log_in_token_device_id,
-            application_user_id
-        ) = incoming.into_inner();
-
+    {                                                                   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         match authorization_postgresql_connection_pool.get().await {
             Ok(authorization_postgresql_pooled_connection) => {
                 match ApplicationUserLogInToken_PostgresqlRepository::find_1(
-                    &*authorization_postgresql_pooled_connection, application_user_id, application_user_log_in_token_device_id.as_str()
+                    &*authorization_postgresql_pooled_connection, incoming.application_user_id, incoming.application_user_log_in_token_device_id.as_str()
                 ).await {
                     Ok(application_user_log_in_token) => {
                         if let Some(application_user_log_in_token_) = application_user_log_in_token {
                             match core_postgresql_connection_pool.get().await {
                                 Ok(core_postgresql_pooled_connection) => {
                                     match ApplicationUser_PostgresqlRepository::find_3(
-                                        &*core_postgresql_pooled_connection, application_user_id
+                                        &*core_postgresql_pooled_connection, incoming.application_user_id
                                     ).await {
                                         Ok(application_user) => {
                                             if let Some(application_user_) = application_user {
@@ -115,15 +110,4 @@ impl ActionProcessor {
 pub struct Incoming {
     application_user_log_in_token_device_id: String,
     application_user_id: i64
-}
-
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> (String, i64) {
-        return (
-            self.application_user_log_in_token_device_id,
-            self.application_user_id
-        );
-    }
 }

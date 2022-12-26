@@ -51,17 +51,9 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {                                                                                               // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        let (
-            application_user_log_in_token_device_id,                                                // TODO Это значение должно быть одно для 1 устройствоа клиента. ЛУчше сделать его постоянным, - Mac устрйоства, или что-то подобное. То значение, которе будет для КЛаудМессадж. Хранить в БД.
-            application_user_nickname,
-            application_user_password,
-            application_user_email,
-            application_user_registration_confirmation_token_value
-        ) = incoming.into_inner();
-
-        if ApplicationUser_Validator::is_valid_password(application_user_password.as_str()) {
-            if ApplicationUser_Validator::is_valid_nickname(application_user_nickname.as_str()) {
-                let is_valid_email = match ApplicationUser_Validator::is_valid_email(application_user_email.as_str()) {
+        if ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
+            if ApplicationUser_Validator::is_valid_nickname(incoming.application_user_nickname.as_str()) {
+                let is_valid_email = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {
                     Ok(is_valid_email_) => is_valid_email_,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -70,7 +62,7 @@ impl ActionProcessor {
                     }
                 };
                 if is_valid_email {
-                    let is_valid_value = match ApplicationUserRegistrationConfirmationToken_Validator::is_valid_value(application_user_registration_confirmation_token_value.as_str()) {
+                    let is_valid_value = match ApplicationUserRegistrationConfirmationToken_Validator::is_valid_value(incoming.application_user_registration_confirmation_token_value.as_str()) {
                         Ok(is_valid_value_) => is_valid_value_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -92,7 +84,7 @@ impl ActionProcessor {
                         };
                         let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
-                        let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(core_postgresql_connection, application_user_nickname.as_str()).await {     // TODO написать один запро на два значения.!!!!!!!!!!
+                        let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(core_postgresql_connection, incoming.application_user_nickname.as_str()).await {     // TODO написать один запро на два значения.!!!!!!!!!!
                             Ok(is_exist_1_) => is_exist_1_,
                             Err(mut error) => {
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -101,7 +93,7 @@ impl ActionProcessor {
                             }
                         };
                         if !is_exist_1 {
-                            let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(core_postgresql_connection, application_user_email.as_str()).await {
+                            let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(core_postgresql_connection, incoming.application_user_email.as_str()).await {
                                 Ok(is_exist_2_) => is_exist_2_,
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -124,7 +116,7 @@ impl ActionProcessor {
                                 let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
                                 let application_user_registration_confirmation_token = match ApplicationUserRegistrationConfirmationToken_PostgresqlRepository::find_1(
-                                    authorization_postgresql_connection, application_user_email.as_str()
+                                    authorization_postgresql_connection, incoming.application_user_email.as_str()
                                 ).await {
                                     Ok(application_user_registration_confirmation_token_) => application_user_registration_confirmation_token_,
                                     Err(mut error) => {
@@ -144,8 +136,8 @@ impl ActionProcessor {
                                     };
                                     if !is_expired {
                                         if application_user_registration_confirmation_token_.get_is_approved() {
-                                            if application_user_registration_confirmation_token_.get_value() == application_user_registration_confirmation_token_value.as_str() {
-                                                let application_user_password_hash = match ApplicationUser_PasswordHashResolver::create(application_user_password.as_str()) {
+                                            if application_user_registration_confirmation_token_.get_value() == incoming.application_user_registration_confirmation_token_value.as_str() {
+                                                let application_user_password_hash = match ApplicationUser_PasswordHashResolver::create(incoming.application_user_password.as_str()) {
                                                     Ok(application_user_password_hash_) => application_user_password_hash_,
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -163,8 +155,8 @@ impl ActionProcessor {
                                                 }
 
                                                 let application_usert_insert = ApplicationUserInsert::new(
-                                                    application_user_email,
-                                                    application_user_nickname,
+                                                    incoming.application_user_email,
+                                                    incoming.application_user_nickname,
                                                     application_user_password_hash,
                                                 );
 
@@ -188,13 +180,13 @@ impl ActionProcessor {
                                                 let application_user_access_token = ApplicationUserAccessToken::new(
                                                     ApplicationUserAccessToken_IdGenerator::generate(),
                                                     application_user.get_id(),
-                                                    Cow::Borrowed(application_user_log_in_token_device_id.as_str()),
+                                                    Cow::Borrowed(incoming.application_user_log_in_token_device_id.as_str()),
                                                     expires_at
                                                 );
 // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
                                                 let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
                                                     application_user_id: application_user.get_id(),
-                                                    application_user_log_in_token_device_id: Cow::Borrowed(application_user_log_in_token_device_id.as_str()),
+                                                    application_user_log_in_token_device_id: Cow::Borrowed(incoming.application_user_log_in_token_device_id.as_str()),
                                                     application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
                                                     application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate(),
                                                 };
@@ -230,7 +222,7 @@ impl ActionProcessor {
 
                                                 return Ok(
                                                     ActionProcessorResult::new_with_outcoming(
-                                                        Outcoming::new(application_user_access_token_web_form, application_user_access_refresh_token_web_form)
+                                                        Outcoming { application_user_access_token_web_form, application_user_access_refresh_token_web_form }
                                                     )
                                                 );
                                             }
@@ -301,36 +293,10 @@ pub struct Incoming {
     application_user_registration_confirmation_token_value: String
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> (String, String, String, String, String) {
-        return (
-            self.application_user_log_in_token_device_id,
-            self.application_user_nickname,
-            self.application_user_password,
-            self.application_user_email,
-            self.application_user_registration_confirmation_token_value
-        );
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
-}
-
-impl Outcoming {
-    pub fn new(
-        application_user_access_token_web_form: String,
-        application_user_access_refresh_token_web_form: String
-    ) -> Self {
-        return Self {
-            application_user_access_token_web_form,
-            application_user_access_refresh_token_web_form
-        };
-    }
 }

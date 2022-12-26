@@ -31,9 +31,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_email = incoming.into_inner();
-
-        let is_valid_email = match ApplicationUser_Validator::is_valid_email(application_user_email.as_str()) {
+        let is_valid_email = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -54,7 +52,7 @@ impl ActionProcessor {
                 }
             };
 
-            let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_2(&*pooled_connection, application_user_email.as_str()).await {
+            let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_2(&*pooled_connection, incoming.application_user_email.as_str()).await {
                 Ok(is_exist_) => is_exist_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -63,7 +61,7 @@ impl ActionProcessor {
                 }
             };
 
-            return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(is_exist)));
+            return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { result: is_exist }));
         }
 
         return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
@@ -77,27 +75,9 @@ pub struct Incoming {
     application_user_email: String
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> String {
-        return self.application_user_email;
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     result: bool
-}
-
-impl Outcoming {
-    pub fn new(
-        result: bool
-    ) -> Self {
-        return Self {
-            result
-        };
-    }
 }

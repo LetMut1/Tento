@@ -31,9 +31,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_nickname = incoming.into_inner();
-
-        if ApplicationUser_Validator::is_valid_nickname(application_user_nickname.as_str()) {
+        if ApplicationUser_Validator::is_valid_nickname(incoming.application_user_nickname.as_str()) {
             let pooled_connection = match postgresql_connection_pool.get().await {
                 Ok(pooled_connection_) => pooled_connection_,
                 Err(error) => {
@@ -46,7 +44,7 @@ impl ActionProcessor {
                 }
             };
 
-            let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_1(&*pooled_connection, application_user_nickname.as_str()).await {
+            let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_1(&*pooled_connection, incoming.application_user_nickname.as_str()).await {
                 Ok(is_exist_) => is_exist_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -55,7 +53,7 @@ impl ActionProcessor {
                 }
             };
 
-            return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(is_exist)));
+            return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { result: is_exist }));
         }
 
         return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
@@ -69,27 +67,9 @@ pub struct Incoming {
     application_user_nickname: String
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> String {
-        return self.application_user_nickname;
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     result: bool
-}
-
-impl Outcoming {
-    pub fn new(
-        result: bool
-    ) -> Self {
-        return Self {
-            result
-        };
-    }
 }

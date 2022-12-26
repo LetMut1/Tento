@@ -39,10 +39,8 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-    { // TODO  TODO  TODO  TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        let application_user_email = incoming.into_inner();
-
-        match ApplicationUser_Validator::is_valid_email(application_user_email.as_str()) {
+    {                                                                               // TODO  TODO  TODO  TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
+        match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {
             Ok(is_valid_email) => {
                 if is_valid_email {
                     match authorization_postgresql_connection_pool.get().await {
@@ -50,7 +48,7 @@ impl ActionProcessor {
                             let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
                             match ApplicationUserRegistrationConfirmationToken_PostgresqlRepository::find_1(
-                                authorization_postgresql_connection, application_user_email.as_str()
+                                authorization_postgresql_connection, incoming.application_user_email.as_str()
                             ).await {
                                 Ok(application_user_registration_confirmation_token) => {
                                     if let Some(mut application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
@@ -86,7 +84,7 @@ impl ActionProcessor {
                                                 if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_confirmation_token(
                                                     environment_configuration_resolver,
                                                     application_user_registration_confirmation_token_.get_value(),
-                                                    application_user_email.as_str()
+                                                    incoming.application_user_email.as_str()
                                                 ) {
                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -138,12 +136,4 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_email: String
-}
-
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> String {
-        return self.application_user_email;
-    }
 }

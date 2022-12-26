@@ -41,21 +41,15 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let (
-            application_user_log_in_token_device_id,
-            application_user_email_or_application_user_nickname,
-            application_user_password
-        ) = incoming.into_inner();
-
-        if ApplicationUser_Validator::is_valid_password(application_user_password.as_str()) {
+        if ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
             match core_postgresql_connection_pool.get().await {
                 Ok(core_postgresql_pooled_connection) => {
                     let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
-                    let application_user = match ApplicationUser_Validator::is_valid_email(application_user_email_or_application_user_nickname.as_str()) {
+                    let application_user = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email_or_application_user_nickname.as_str()) {
                         Ok(is_valid_email) => {
                             if is_valid_email {
-                                match ApplicationUser_PostgresqlRepository::find_2(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
+                                match ApplicationUser_PostgresqlRepository::find_2(core_postgresql_connection, incoming.application_user_email_or_application_user_nickname).await {
                                     Ok(application_user_) => {
                                         match application_user_ {
                                             Some(application_user__) => application_user__,
@@ -71,8 +65,8 @@ impl ActionProcessor {
                                     }
                                 }
                             } else {
-                                if ApplicationUser_Validator::is_valid_nickname(application_user_email_or_application_user_nickname.as_str()) {
-                                    match ApplicationUser_PostgresqlRepository::find_1(core_postgresql_connection, application_user_email_or_application_user_nickname).await {
+                                if ApplicationUser_Validator::is_valid_nickname(incoming.application_user_email_or_application_user_nickname.as_str()) {
+                                    match ApplicationUser_PostgresqlRepository::find_1(core_postgresql_connection, incoming.application_user_email_or_application_user_nickname).await {
                                         Ok(application_user_) => {
                                             match application_user_ {
                                                 Some(application_user__) => application_user__,
@@ -99,7 +93,7 @@ impl ActionProcessor {
                         }
                     };
 
-                    match ApplicationUser_PasswordHashResolver::is_valid(application_user_password.as_str(), application_user.get_password_hash()) {
+                    match ApplicationUser_PasswordHashResolver::is_valid(incoming.application_user_password.as_str(), application_user.get_password_hash()) {
                         Ok(is_valid) => {
                             if is_valid {
                                 let application_user_id = application_user.get_id();
@@ -109,7 +103,7 @@ impl ActionProcessor {
                                         let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
                                         match ApplicationUserLogInToken_PostgresqlRepository::find_1(
-                                            authorization_postgresql_connection, application_user_id, application_user_log_in_token_device_id.as_str()
+                                            authorization_postgresql_connection, application_user_id, incoming.application_user_log_in_token_device_id.as_str()
                                         ).await {
                                             Ok(application_user_log_in_token_) => {
                                                 let application_user_log_in_token = match application_user_log_in_token_ {
@@ -138,7 +132,7 @@ impl ActionProcessor {
                                                     None => {
                                                         let insert = Insert::new(
                                                             application_user_id,
-                                                            application_user_log_in_token_device_id.as_str(),
+                                                            incoming.application_user_log_in_token_device_id.as_str(),
                                                             ApplicationUserLogInToken_ValueGenerator::generate(),
                                                             0
                                                         );
@@ -164,7 +158,7 @@ impl ActionProcessor {
                                                     return Err(error);
                                                 }
 
-                                                return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(application_user_id)));
+                                                return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { application_user_id }));
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -217,31 +211,9 @@ pub struct Incoming {
     application_user_password: String
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> (String, String, String) {
-        return (
-            self.application_user_log_in_token_device_id,
-            self.application_user_email_or_application_user_nickname,
-            self.application_user_password
-        );
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_id: i64
-}
-
-impl Outcoming {
-    pub fn new(
-        application_user_id: i64
-    ) -> Self {
-        return Self {
-            application_user_id
-        };
-    }
 }

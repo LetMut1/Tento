@@ -36,15 +36,10 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let (
-            application_user_email,
-            application_user_registration_confirmation_token_value
-        ) = incoming.into_inner();
-
-        match ApplicationUser_Validator::is_valid_email(application_user_email.as_str()) {
+        match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {
             Ok(is_valid_email) => {
                 if is_valid_email {
-                    match ApplicationUserRegistrationConfirmationToken_Validator::is_valid_value(application_user_registration_confirmation_token_value.as_str()) {
+                    match ApplicationUserRegistrationConfirmationToken_Validator::is_valid_value(incoming.application_user_registration_confirmation_token_value.as_str()) {
                         Ok(is_valid_value) => {
                             if is_valid_value {
                                 match authorization_postgresql_connection_pool.get().await {
@@ -52,7 +47,7 @@ impl ActionProcessor {
                                         let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
                                         match ApplicationUserRegistrationConfirmationToken_PostgresqlRepository::find_1(
-                                            authorization_postgresql_connection, application_user_email.as_str()
+                                            authorization_postgresql_connection, incoming.application_user_email.as_str()
                                         ).await {
                                             Ok(application_user_registration_confirmation_token) => {
                                                 if let Some(mut application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
@@ -66,7 +61,7 @@ impl ActionProcessor {
                                                     };
                                                     if !is_expired {
                                                         if !application_user_registration_confirmation_token_.get_is_approved() {
-                                                            if application_user_registration_confirmation_token_.get_value().as_bytes() == application_user_registration_confirmation_token_value.as_bytes() {
+                                                            if application_user_registration_confirmation_token_.get_value().as_bytes() == incoming.application_user_registration_confirmation_token_value.as_bytes() {
                                                                 application_user_registration_confirmation_token_.set_is_approved(true);
 
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationToken_PostgresqlRepository::update(
@@ -77,7 +72,7 @@ impl ActionProcessor {
                                                                     return Err(error);
                                                                 }
 
-                                                                return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(true)));
+                                                                return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { application_user_registration_confirmation_token_is_approved: true }));
                                                             } else {
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationToken_WrongEnterTriesQuantityIncrementor::increment(&mut application_user_registration_confirmation_token_) {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -103,7 +98,7 @@ impl ActionProcessor {
                                                                     }
                                                                 }
 
-                                                                return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(false)));
+                                                                return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { application_user_registration_confirmation_token_is_approved: false }));
                                                             }
                                                         }
 
@@ -162,30 +157,9 @@ pub struct Incoming {
     application_user_registration_confirmation_token_value: String
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> (String, String) {
-        return (
-            self.application_user_email,
-            self.application_user_registration_confirmation_token_value
-        );
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_registration_confirmation_token_is_approved: bool
-}
-
-impl Outcoming {
-    pub fn new(
-        application_user_registration_confirmation_token_is_approved: bool
-    ) -> Self {
-        return Self {
-            application_user_registration_confirmation_token_is_approved
-        };
-    }
 }

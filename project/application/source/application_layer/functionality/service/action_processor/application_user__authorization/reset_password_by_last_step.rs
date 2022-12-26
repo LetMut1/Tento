@@ -40,23 +40,17 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-    { // TODO  !!!!! Это ресет для пользователя, забывшего пароль. НО также нужно сделать АККУРАТНО ресетпассворд для залогиневшегося пользователя с повторной отправкой старого пароля !!!!!!!!!
-        let (
-            application_user_id,
-            application_user_password,
-            application_user_reset_password_token_value
-        ) = incoming.into_inner();
-
-        match ApplicationUserResetPasswordToken_Validator::is_valid_value(application_user_reset_password_token_value.as_str()) {
+    {                                                                                                                       // TODO  !!!!! Это ресет для пользователя, забывшего пароль. НО также нужно сделать АККУРАТНО ресетпассворд для залогиневшегося пользователя с повторной отправкой старого пароля !!!!!!!!!
+        match ApplicationUserResetPasswordToken_Validator::is_valid_value(incoming.application_user_reset_password_token_value.as_str()) {
             Ok(is_valid_value) => {
                 if is_valid_value {
-                    if ApplicationUser_Validator::is_valid_password(application_user_password.as_str()) {
+                    if ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
                         match authorization_postgresql_connection_pool.get().await {
                             Ok(authorization_postgresql_pooled_connection) => {
                                 let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
                                 match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
-                                    authorization_postgresql_connection, application_user_id
+                                    authorization_postgresql_connection, incoming.application_user_id
                                 ).await {
                                     Ok(application_user_reset_password_token) => {
                                         if let Some(mut application_user_reset_password_token_) = application_user_reset_password_token {
@@ -70,15 +64,15 @@ impl ActionProcessor {
                                             };
                                             if !is_expired {
                                                 if application_user_reset_password_token_.get_is_approved() {
-                                                    if application_user_reset_password_token_.get_value() == application_user_reset_password_token_value.as_str() {
+                                                    if application_user_reset_password_token_.get_value() == incoming.application_user_reset_password_token_value.as_str() {
                                                         match core_postgresql_connection_pool.get().await {
                                                             Ok(core_postgresql_pooled_connection) => {
                                                                 let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
-                                                                match ApplicationUser_PostgresqlRepository::find_3(core_postgresql_connection, application_user_id).await {
+                                                                match ApplicationUser_PostgresqlRepository::find_3(core_postgresql_connection, incoming.application_user_id).await {
                                                                     Ok(application_user) => {
                                                                         if let Some(mut application_user_) = application_user {
-                                                                            match ApplicationUser_PasswordHashResolver::create(application_user_password.as_str()) {
+                                                                            match ApplicationUser_PasswordHashResolver::create(incoming.application_user_password.as_str()) {
                                                                                 Ok(password_hash) => {
                                                                                     application_user_.set_password_hash(password_hash);
 
@@ -200,16 +194,4 @@ pub struct Incoming {
     application_user_id: i64,
     application_user_password: String,
     application_user_reset_password_token_value: String
-}
-
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> (i64, String, String) {
-        return (
-            self.application_user_id,
-            self.application_user_password,
-            self.application_user_reset_password_token_value
-        );
-    }
 }

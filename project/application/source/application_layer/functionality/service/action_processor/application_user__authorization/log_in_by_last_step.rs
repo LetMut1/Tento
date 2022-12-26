@@ -46,13 +46,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let (
-            application_user_id,
-            application_user_log_in_token_device_id,  // TODO ПРоверить все входящие значения application_user_log_in_token_device_id нв формат. Формата может не быть. Нужно определиться, есть ли формат, напримре, UUID
-            application_user_log_in_token_value
-        ) = incoming.into_inner();
-
-        let is_valid_value = match ApplicationUserogInToken_Validator::is_valid_value(application_user_log_in_token_value.as_str()) {
+        let is_valid_value = match ApplicationUserogInToken_Validator::is_valid_value(incoming.application_user_log_in_token_value.as_str()) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -75,7 +69,7 @@ impl ActionProcessor {
             let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
             let application_user_log_in_token = match ApplicationUserLogInToken_PostgresqlRepository::find_1(
-                authorization_postgresql_connection, application_user_id, application_user_log_in_token_device_id.as_str()
+                authorization_postgresql_connection, incoming.application_user_id, incoming.application_user_log_in_token_device_id.as_str()
             ).await {
                 Ok(application_user_log_in_token_) => application_user_log_in_token_,
                 Err(mut error) => {
@@ -100,7 +94,7 @@ impl ActionProcessor {
                 }
             };
             if !is_expired {
-                if application_user_log_in_token_.get_value() == application_user_log_in_token_value.as_str() {
+                if application_user_log_in_token_.get_value() == incoming.application_user_log_in_token_value.as_str() {
                     let expires_at = match DateTimeResolver::add_interval_from_now_formated(ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
                         Ok(expires_at_) => expires_at_,
                         Err(mut error) => {
@@ -197,7 +191,7 @@ impl ActionProcessor {
 
                     return Ok(
                         ActionProcessorResult::new_with_outcoming(
-                            Outcoming::new(application_user_access_token_web_form, application_user_access_refresh_token_web_form)
+                            Outcoming { application_user_access_token_web_form, application_user_access_refresh_token_web_form }
                         )
                     );
                 }
@@ -245,34 +239,10 @@ pub struct Incoming {
     application_user_log_in_token_value: String
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> (i64, String, String) {
-        return (
-            self.application_user_id,
-            self.application_user_log_in_token_device_id,
-            self.application_user_log_in_token_value
-        );
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
-}
-
-impl Outcoming {
-    pub fn new(
-        application_user_access_token_web_form: String,
-        application_user_access_refresh_token_web_form: String
-    ) -> Self {
-        return Self {
-            application_user_access_token_web_form,
-            application_user_access_refresh_token_web_form
-        };
-    }
 }

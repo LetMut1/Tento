@@ -37,13 +37,11 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-    {     // TODO Защита от частого посыла емэй
-        let application_user_id = incoming.into_inner();
-
+    {                                                           // TODO Защита от частого посыла емэй
         match authorization_postgresql_connection_pool.get().await {
             Ok(authorization_postgresql_pooled_connection) => {
                 match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
-                    &*authorization_postgresql_pooled_connection, application_user_id
+                    &*authorization_postgresql_pooled_connection, incoming.application_user_id
                 ).await {
                     Ok(application_user_reset_password_token) => {
                         if let Some(application_user_reset_password_token_) = application_user_reset_password_token {
@@ -51,7 +49,7 @@ impl ActionProcessor {
                                 match core_postgresql_connection_pool.get().await {
                                     Ok(core_postgresql_pooled_connection) => {
                                         match ApplicationUser_PostgresqlRepository::find_3(
-                                            &*core_postgresql_pooled_connection, application_user_id
+                                            &*core_postgresql_pooled_connection, incoming.application_user_id
                                         ).await {
                                             Ok(application_user) => {
                                                 if let Some(application_user_) = application_user {
@@ -115,12 +113,4 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_id: i64
-}
-
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> i64 {
-        return self.application_user_id;
-    }
 }
