@@ -37,14 +37,9 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let (
-            application_user_access_token_web_form,
-            channel_name,
-            requery_channel_name,
-            mut limit
-        ) = incoming.into_inner();
+        let mut limit = incoming.limit;
 
-        match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str()).await {
+        match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()).await {
             Ok(extractor_result) => {
                 match extractor_result {
                     ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {
@@ -52,7 +47,7 @@ impl ActionProcessor {
                             limit = Self::LIMIT;
                         }
 
-                        if !Channel_Validator::is_valid_name(channel_name.as_str()) {
+                        if !Channel_Validator::is_valid_name(incoming.channel_name.as_str()) {
                             return Err(
                                 ErrorAuditor::new(
                                     BaseError::InvalidArgumentError,
@@ -60,7 +55,7 @@ impl ActionProcessor {
                                 )
                             );
                         }
-                        if let Some(ref requery_channel_name_) = requery_channel_name {
+                        if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
                             if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
                                 return Err(
                                     ErrorAuditor::new(
@@ -74,10 +69,10 @@ impl ActionProcessor {
                         match core_postgresql_connection_pool.get().await {
                             Ok(core_postgresql_pooled_connection) => {
                                 match Channel_PostgresqlRepository::per_request_1(
-                                    &*core_postgresql_pooled_connection, channel_name.as_str(), &requery_channel_name, limit as i16
+                                    &*core_postgresql_pooled_connection, incoming.channel_name.as_str(), &incoming.requery_channel_name, limit as i16
                                 ).await {
                                     Ok(channel_registry) => {
-                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(channel_registry)));
+                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { channel_registry }));
                                     }
                                     Err(mut error) => {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -122,19 +117,6 @@ pub struct Incoming {
     limit: i8
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> (String, String, Option<String>, i8) {
-        return (
-            self.application_user_access_token_web_form,
-            self.channel_name,
-            self.requery_channel_name,
-            self.limit
-        );
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
@@ -142,53 +124,17 @@ pub struct Outcoming {
     channel_registry: Option<Vec<Channel>>
 }
 
-impl Outcoming {
-    pub fn new(
-        channel_registry: Option<Vec<Channel>>
-    ) -> Self {
-        return Self {
-            channel_registry
-        };
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Channel {
-    channel_id: i64,
-    channel_name: String,
-    channel_personalization_image_path: String,
-    channel_subscribers_quantity: i64,
-    channel_public_marks_quantity: i64,
-    channel_hidden_marks_quantity: i64,
-    channel_reactions_quantity: i64,
-    channel_viewing_quantity: i64,
-    channel_created_at: String
-}
-
-impl Channel {
-    pub fn new(
-        channel_id: i64,
-        channel_name: String,
-        channel_personalization_image_path: String,
-        channel_subscribers_quantity: i64,
-        channel_public_marks_quantity: i64,
-        channel_hidden_marks_quantity: i64,
-        channel_reactions_quantity: i64,
-        channel_viewing_quantity: i64,
-        channel_created_at: String
-    ) -> Self {
-        return Self {
-            channel_id,
-            channel_name,
-            channel_personalization_image_path,
-            channel_subscribers_quantity,
-            channel_public_marks_quantity,
-            channel_hidden_marks_quantity,
-            channel_reactions_quantity,
-            channel_viewing_quantity,
-            channel_created_at
-        };
-    }
+    pub channel_id: i64,
+    pub channel_name: String,
+    pub channel_personalization_image_path: String,
+    pub channel_subscribers_quantity: i64,
+    pub channel_public_marks_quantity: i64,
+    pub channel_hidden_marks_quantity: i64,
+    pub channel_reactions_quantity: i64,
+    pub channel_viewing_quantity: i64,
+    pub channel_created_at: String
 }

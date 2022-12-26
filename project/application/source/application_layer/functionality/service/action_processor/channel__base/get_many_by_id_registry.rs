@@ -36,16 +36,11 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let (
-            application_user_access_token_web_form,
-            channel_id_registry
-        ) = incoming.into_inner();
-
-        match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str()).await {
+        match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()).await {
             Ok(extractor_result) => {
                 match extractor_result {
                     ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {
-                        if channel_id_registry.is_empty() || channel_id_registry.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
+                        if incoming.channel_id_registry.is_empty() || incoming.channel_id_registry.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
                             return Err(
                                 ErrorAuditor::new(
                                     BaseError::InvalidArgumentError,
@@ -57,10 +52,10 @@ impl ActionProcessor {
                         match core_postgresql_connection_pool.get().await {
                             Ok(core_postgresql_pooled_connection) => {
                                 match Channel_PostgresqlRepository::per_request_4(
-                                    &*core_postgresql_pooled_connection, &channel_id_registry
+                                    &*core_postgresql_pooled_connection, &incoming.channel_id_registry
                                 ).await {
                                     Ok(channel_registry) => {
-                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(channel_registry)));
+                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { channel_registry }));
                                     }
                                     Err(mut error) => {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -103,17 +98,6 @@ pub struct Incoming {
     channel_id_registry: Vec<i64>,
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> (String, Vec<i64>) {
-        return (
-            self.application_user_access_token_web_form,
-            self.channel_id_registry,
-        );
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
@@ -121,53 +105,17 @@ pub struct Outcoming {
     channel_registry: Option<Vec<Channel>>
 }
 
-impl Outcoming {
-    pub fn new(
-        channel_registry: Option<Vec<Channel>>
-    ) -> Self {
-        return Self {
-            channel_registry
-        };
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Channel {
-    channel_id: i64,
-    channel_name: String,
-    channel_personalization_image_path: String,
-    channel_subscribers_quantity: i64,
-    channel_public_marks_quantity: i64,
-    channel_hidden_marks_quantity: i64,
-    channel_reactions_quantity: i64,
-    channel_viewing_quantity: i64,
-    channel_created_at: String
-}
-
-impl Channel {
-    pub fn new(
-        channel_id: i64,
-        channel_name: String,
-        channel_personalization_image_path: String,
-        channel_subscribers_quantity: i64,
-        channel_public_marks_quantity: i64,
-        channel_hidden_marks_quantity: i64,
-        channel_reactions_quantity: i64,
-        channel_viewing_quantity: i64,
-        channel_created_at: String
-    ) -> Self {
-        return Self {
-            channel_id,
-            channel_name,
-            channel_personalization_image_path,
-            channel_subscribers_quantity,
-            channel_public_marks_quantity,
-            channel_hidden_marks_quantity,
-            channel_reactions_quantity,
-            channel_viewing_quantity,
-            channel_created_at
-        };
-    }
+    pub channel_id: i64,
+    pub channel_name: String,
+    pub channel_personalization_image_path: String,
+    pub channel_subscribers_quantity: i64,
+    pub channel_public_marks_quantity: i64,
+    pub channel_hidden_marks_quantity: i64,
+    pub channel_reactions_quantity: i64,
+    pub channel_viewing_quantity: i64,
+    pub channel_created_at: String
 }

@@ -52,14 +52,9 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let (
-            application_user_access_token_web_form,
-            channel_subscribers_quantity,       // TODO // TODO // TODO // TODO // TODO  не нужно ли проверять на >=0 ?
-            order,
-            mut limit
-        ) = incoming.into_inner();
+        let mut limit = incoming.limit;
 
-        match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, application_user_access_token_web_form.as_str()).await {
+        match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()).await {
             Ok(extractor_result) => {
                 match extractor_result {
                     ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {
@@ -67,7 +62,7 @@ impl ActionProcessor {
                             limit = Self::LIMIT_MINIMUM_VALUE;
                         }
 
-                        if !OrderConventionResolver::can_convert(order) {
+                        if !OrderConventionResolver::can_convert(incoming.order) {
                             return Err(
                                 ErrorAuditor::new(
                                     BaseError::InvalidArgumentError,
@@ -79,10 +74,10 @@ impl ActionProcessor {
                         match core_postgresql_connection_pool.get().await {
                             Ok(core_postgresql_pooled_connection) => {
                                 match Channel_PostgresqlRepository::per_request_3(
-                                    &*core_postgresql_pooled_connection, channel_subscribers_quantity, order, limit
+                                    &*core_postgresql_pooled_connection, incoming.channel_subscribers_quantity, incoming.order, limit
                                 ).await {
                                     Ok(channel_registry) => {
-                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming::new(channel_registry)));
+                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { channel_registry }));
                                     }
                                     Err(mut error) => {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -127,19 +122,6 @@ pub struct Incoming {
     limit: i16
 }
 
-impl Incoming {
-    pub fn into_inner(
-        self
-    ) -> (String, Option<i64>, i8, i16) {
-        return (
-            self.application_user_access_token_web_form,
-            self.channel_subscribers_quantity,
-            self.order,
-            self.limit
-        );
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
@@ -147,32 +129,10 @@ pub struct Outcoming {
     channel_registry: Option<Vec<Channel>>
 }
 
-impl Outcoming {
-    pub fn new(
-        channel_registry: Option<Vec<Channel>>
-    ) -> Self {
-        return Self {
-            channel_registry
-        };
-    }
-}
-
 #[cfg_attr(feature="facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Channel {
-    channel_id: i64,
-    channel_subscribers_quantity: i64,
-}
-
-impl Channel {
-    pub fn new(
-        channel_id: i64,
-        channel_subscribers_quantity: i64,
-    ) -> Self {
-        return Self {
-            channel_id,
-            channel_subscribers_quantity
-        };
-    }
+    pub channel_id: i64,
+    pub channel_subscribers_quantity: i64,
 }

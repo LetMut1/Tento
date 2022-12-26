@@ -204,9 +204,9 @@ impl Channel_PostgresqlRepository {
                                     }
                                 };
 
-                                let channel = GetManyByNameChannel::new(
+                                let channel = GetManyByNameChannel {
                                     channel_id,
-                                    channel_name_,
+                                    channel_name: channel_name_,
                                     channel_personalization_image_path,
                                     channel_subscribers_quantity,
                                     channel_public_marks_quantity,
@@ -214,7 +214,7 @@ impl Channel_PostgresqlRepository {
                                     channel_reactions_quantity,
                                     channel_viewing_quantity,
                                     channel_created_at
-                                );
+                                };
 
                                 channel_registry.push(channel);
                             }
@@ -440,7 +440,7 @@ impl Channel_PostgresqlRepository {
                                     }
                                 };
 
-                                let channel = GetManyByCreatedAtChannel::new(
+                                let channel = GetManyByCreatedAtChannel {
                                     channel_id,
                                     channel_name,
                                     channel_personalization_image_path,
@@ -449,8 +449,8 @@ impl Channel_PostgresqlRepository {
                                     channel_hidden_marks_quantity,
                                     channel_reactions_quantity,
                                     channel_viewing_quantity,
-                                    channel_created_at_
-                                );
+                                    channel_created_at: channel_created_at_
+                                };
 
                                 channel_registry.push(channel);
                             }
@@ -585,10 +585,10 @@ impl Channel_PostgresqlRepository {
                                     }
                                 };
 
-                                let channel = GetManyBySubscribersQuantityChannel::new(
+                                let channel = GetManyBySubscribersQuantityChannel {
                                     channel_id,
-                                    channel_subscribers_quantity_
-                                );
+                                    channel_subscribers_quantity: channel_subscribers_quantity_
+                                };
 
                                 channel_registry.push(channel);
                             }
@@ -761,7 +761,7 @@ impl Channel_PostgresqlRepository {
                                     }
                                 };
 
-                                let channel = GetManyByIdRegistryChannel::new(
+                                let channel = GetManyByIdRegistryChannel {
                                     channel_id,
                                     channel_name,
                                     channel_personalization_image_path,
@@ -771,7 +771,7 @@ impl Channel_PostgresqlRepository {
                                     channel_reactions_quantity,
                                     channel_viewing_quantity,
                                     channel_created_at
-                                );
+                                };
 
                                 channel_registry.push(channel);
                             }
