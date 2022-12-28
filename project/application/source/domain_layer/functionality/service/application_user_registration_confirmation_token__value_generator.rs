@@ -4,8 +4,7 @@ use crate::infrastructure_layer::functionality::service::number_row_generator::N
 pub struct ApplicationUserRegistrationConfirmationToken_ValueGenerator;
 
 impl ApplicationUserRegistrationConfirmationToken_ValueGenerator {       // TODO Как-то нужно связать с Validator? (6 цифр)
-    pub fn generate(
-    ) -> String {
+    pub fn generate() -> String {
         return NumberRowGenerator::generate_row_with_6_numbers();
     }
 }

@@ -51,81 +51,55 @@ impl ChannelFeedPublication {
         };
     }
 
-    pub fn get_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_id<'a>(&'a self) -> i64 {
         return self.id;
     }
 
-    pub fn get_channel_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_channel_id<'a>(&'a self) -> i64 {
         return self.channel_id;
     }
 
-    pub fn get_application_user_channel_administrator_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_application_user_channel_administrator_id<'a>(&'a self) -> i64 {
         return self.application_user_channel_administrator_id;
     }
 
-    pub fn get_content_type<'a>(
-        &'a self
-    ) -> u8 {
+    pub fn get_content_type<'a>(&'a self) -> u8 {
         return self.content_type;
     }
 
-    pub fn get_content_type_component<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_content_type_component<'a>(&'a self) -> &'a str {
         return self.content_type_component.as_str();
     }
 
-    pub fn get_content_type_component_preview<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_content_type_component_preview<'a>(&'a self) -> &'a str {
         return self.content_type_component_preview.as_str();
     }
 
-    pub fn get_public_marks_quantoty<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_public_marks_quantoty<'a>(&'a self) -> i64 {
         return self.public_marks_quantity;
     }
 
-    pub fn get_hidden_marks_quantity<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_hidden_marks_quantity<'a>(&'a self) -> i64 {
         return self.hidden_marks_quantity;
     }
 
-    pub fn get_reactions_quantity<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_reactions_quantity<'a>(&'a self) -> i64 {
         return self.reactions_quantity;
     }
 
-    pub fn get_viewing_quantity<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_viewing_quantity<'a>(&'a self) -> i64 {
         return self.viewing_quantity;
     }
 
-    pub fn get_status<'a>(
-        &'a self
-    ) -> u8 {
+    pub fn get_status<'a>(&'a self) -> u8 {
         return self.status;
     }
 
-    pub fn get_visible_from<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_visible_from<'a>(&'a self) -> &'a str {
         return self.visible_from.as_str();
     }
 
-    pub fn get_delete_on<'a>(
-        &'a self
-    ) -> Option<&'a str> {
+    pub fn get_delete_on<'a>(&'a self) -> Option<&'a str> {
         match self.delete_on {
             Some(ref delete_on) => {
                 return Some(delete_on.as_str());
@@ -136,9 +110,7 @@ impl ChannelFeedPublication {
         }
     }
 
-    pub fn get_created_at<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_created_at<'a>(&'a self) -> &'a str {
         return self.created_at.as_str();
     }
 }

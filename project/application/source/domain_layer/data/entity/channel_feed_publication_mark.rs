@@ -20,27 +20,19 @@ impl ChannelFeedPublicationMark {
         };
     }
 
-    pub fn get_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_id<'a>(&'a self) -> i64 {
         return self.id;
     }
 
-    pub fn get_application_user_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_application_user_id<'a>(&'a self) -> i64 {
         return self.application_user_id;
     }
 
-    pub fn get_channel_feed_publication_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_channel_feed_publication_id<'a>(&'a self) -> i64 {
         return self.channel_feed_publication_id;
     }
 
-    pub fn get_type<'a>(
-        &'a self
-    ) -> u8 {
+    pub fn get_type<'a>(&'a self) -> u8 {
         return self.r#type;
     }
 }

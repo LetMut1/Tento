@@ -33,7 +33,9 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
         }
         let application_user_access_token_serialized = base64::encode_config(data.as_slice(), base64::STANDARD);  // TODO TODO TODO TODO TODO Можно ли здесь использовать Бэйс64 на байтф мессаджПака?
 
-        let application_user_access_token_signature = ApplicationUserAccessToken_SignatureCreator::create(environment_configuration_resolver, application_user_access_token_serialized.as_str());
+        let application_user_access_token_signature = ApplicationUserAccessToken_SignatureCreator::create(
+            environment_configuration_resolver, application_user_access_token_serialized.as_str()
+        );
 
         let application_user_access_token_web_form = application_user_access_token_serialized + Self::TOKEN_PARTS_SEPARATOR + application_user_access_token_signature.as_str();
 

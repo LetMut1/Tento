@@ -5,9 +5,7 @@ use crate::infrastructure_layer::functionality::service::date_time_resolver::Dat
 pub struct ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
 
 impl ApplicationUserAccessRefreshToken_ExpirationTimeResolver {
-    pub fn is_expired<'a>(
-        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
-    ) -> bool {
+    pub fn is_expired<'a>(application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>) -> bool {
         return !DateTimeResolver::is_greater_or_equal_than_now(application_user_access_refresh_token.get_expires_at());
     }
 }

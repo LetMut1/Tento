@@ -44,33 +44,23 @@ impl Channel {
         };
     }
 
-    pub fn get_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_id<'a>(&'a self) -> i64 {
         return self.id;
     }
 
-    pub fn get_application_user_channel_administrator_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_application_user_channel_administrator_id<'a>(&'a self) -> i64 {
         return self.application_user_channel_administrator_id;
     }
 
-    pub fn get_name<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_name<'a>(&'a self) -> &'a str {
         return self.name.as_str();
     }
 
-    pub fn get_personalization_image_path<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_personalization_image_path<'a>(&'a self) -> &'a str {
         return self.personalization_image_path.as_str();
     }
 
-    pub fn get_description<'a>(
-        &'a self
-    ) -> Option<&'a str> {
+    pub fn get_description<'a>(&'a self) -> Option<&'a str> {
         match self.description {
             Some(ref description) => {
                 return Some(description.as_str());
@@ -81,45 +71,31 @@ impl Channel {
         }
     }
 
-    pub fn is_private<'a>(
-        &'a self
-    ) -> &'a bool {
+    pub fn is_private<'a>(&'a self) -> &'a bool {
         return &self.is_private;
     }
 
-    pub fn get_subscribers_quantity<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_subscribers_quantity<'a>(&'a self) -> i64 {
         return self.subscribers_quantity;
     }
 
-    pub fn get_public_marks_quantoty<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_public_marks_quantoty<'a>(&'a self) -> i64 {
         return self.public_marks_quantity;
     }
 
-    pub fn get_hidden_marks_quantity<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_hidden_marks_quantity<'a>(&'a self) -> i64 {
         return self.hidden_marks_quantity;
     }
 
-    pub fn get_reactions_quantity<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_reactions_quantity<'a>(&'a self) -> i64 {
         return self.reactions_quantity;
     }
 
-    pub fn get_viewing_quantity<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_viewing_quantity<'a>(&'a self) -> i64 {
         return self.viewing_quantity;
     }
 
-    pub fn get_created_at<'a>(
-        &'a self
-    ) -> &'a Option<String> {
+    pub fn get_created_at<'a>(&'a self) -> &'a Option<String> {
         return &self.created_at;
     }
 }

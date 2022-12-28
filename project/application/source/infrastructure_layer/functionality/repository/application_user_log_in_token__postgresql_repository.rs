@@ -14,10 +14,7 @@ use extern_crate::tokio_postgres::types::Type;
 pub struct ApplicationUserLogInToken_PostgresqlRepository;
 
 impl ApplicationUserLogInToken_PostgresqlRepository {
-    pub async fn create<'a, 'b>(
-        authorization_connection: &'a Connection,
-        insert: Insert<'b>
-    ) -> Result<ApplicationUserLogInToken<'b>, ErrorAuditor> {
+    pub async fn create<'a, 'b>(authorization_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserLogInToken<'b>, ErrorAuditor> {
         let wrong_enter_tries_quantity_ = insert.application_user_log_in_token_wrong_enter_tries_quantity as i16;
 
         let quantity_of_minute_for_expiration = ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
@@ -104,10 +101,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
         }
     }
 
-    pub async fn update<'a>(
-        authorization_connection: &'a Connection,
-        application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
-    ) -> Result<(), ErrorAuditor> {
+    pub async fn update<'a>(authorization_connection: &'a Connection, application_user_log_in_token: &'a ApplicationUserLogInToken<'_>) -> Result<(), ErrorAuditor> {
         let application_user_id = application_user_log_in_token.get_application_user_id();
 
         let application_user_log_in_token_device_id = application_user_log_in_token.get_device_id();

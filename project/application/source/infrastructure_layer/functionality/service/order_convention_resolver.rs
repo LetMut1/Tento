@@ -7,21 +7,15 @@ impl OrderConventionResolver {
     const ASC: &'static str = "ASC";
     const DESC: &'static str = "DESC";
 
-    pub fn is_asc(
-        order: i8
-    ) -> bool {
+    pub fn is_asc(order: i8) -> bool {
         return order == 0;
     }
 
-    pub fn is_desc(
-        order: i8
-    ) -> bool {
-        return order == 1;
+    pub fn is_desc(order: i8) -> bool {
+        return !Self::is_asc(order);
     }
 
-    pub fn can_convert(
-        order:  i8
-    ) -> bool {
+    pub fn can_convert(order:  i8) -> bool {
         if Self::is_asc(order) || Self::is_desc(order) {
             return true;
         }
@@ -29,9 +23,7 @@ impl OrderConventionResolver {
         return false;
     }
 
-    pub fn convert(
-        order: i8
-    ) -> Result<&'static str, ErrorAuditor> {
+    pub fn convert(order: i8) -> Result<&'static str, ErrorAuditor> {
         if Self::is_asc(order) {
             return Ok(Self::ASC);
         }

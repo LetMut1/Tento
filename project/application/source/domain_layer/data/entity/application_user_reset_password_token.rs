@@ -26,67 +26,45 @@ impl ApplicationUserResetPasswordToken {
         };
     }
 
-    pub fn get_application_user_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_application_user_id<'a>(&'a self) -> i64 {
         return self.application_user_id;
     }
 
-    pub fn get_value<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_value<'a>(&'a self) -> &'a str {
         return self.value.as_str();
     }
 
-    pub fn get_wrong_enter_tries_quantity<'a>(
-        &'a self
-    ) -> u8 {
+    pub fn get_wrong_enter_tries_quantity<'a>(&'a self) -> u8 {
         return self.wrong_enter_tries_quantity;
     }
 
-    pub fn get_is_approved<'b>(
-        &'b self
-    ) -> bool {
+    pub fn get_is_approved<'b>(&'b self) -> bool {
         return self.is_approved;
     }
 
-    pub fn get_expires_at<'b>(
-        &'b self
-    ) -> &'b str {
+    pub fn get_expires_at<'b>(&'b self) -> &'b str {
         return self.expires_at.as_str();
     }
 
-    pub fn set_value<'b>(
-        &'b mut self,
-        value: String
-    ) -> &'b mut Self {
+    pub fn set_value<'b>(&'b mut self, value: String) -> &'b mut Self {
         self.value = value;
 
         return self;
     }
 
-    pub fn set_wrong_enter_tries_quantity<'a>(
-        &'a mut self,
-        wrong_enter_tries_quantity: u8
-    ) -> &'a mut Self {
+    pub fn set_wrong_enter_tries_quantity<'a>(&'a mut self, wrong_enter_tries_quantity: u8) -> &'a mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
         return self;
     }
 
-    pub fn set_is_approved<'b>(
-        &'b mut self,
-        is_approved: bool
-    ) -> &'b mut Self {
+    pub fn set_is_approved<'b>(&'b mut self, is_approved: bool) -> &'b mut Self {
         self.is_approved = is_approved;
 
         return self;
     }
 
-    pub fn set_expires_at<'b>(
-        &'b mut self,
-        expires_at: String
-    ) -> &'b mut Self {
+    pub fn set_expires_at<'b>(&'b mut self, expires_at: String) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;

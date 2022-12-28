@@ -15,37 +15,26 @@ pub struct ErrorAuditor {
 }
 
 impl ErrorAuditor {
-    pub fn new(
-        base_error: BaseError,
-        backtrace_part: BacktracePart
-    ) -> Self {
+    pub fn new(base_error: BaseError, backtrace_part: BacktracePart) -> Self {
         return Self {
             base_error,
             simple_backtrace: SimpleBacktrace::new(backtrace_part)
         };
     }
 
-    pub fn add_backtrace_part<'a>(
-        &'a mut self,
-        backtrace_part: BacktracePart
-    ) -> () {
+    pub fn add_backtrace_part<'a>(&'a mut self, backtrace_part: BacktracePart) -> () {
         self.simple_backtrace.add(backtrace_part);
 
         return ();
     }
 
-    pub fn get_base_error(
-        self
-    ) -> BaseError {
+    pub fn get_base_error(self) -> BaseError {
         return self.base_error;
     }
 }
 
 impl Display for ErrorAuditor {
-    fn fmt<'a, 'b>(
-        &'a self,
-        _formatter: &'b mut Formatter<'_>
-    ) -> Result {
+    fn fmt<'a, 'b>(&'a self, _formatter: &'b mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }
@@ -64,10 +53,7 @@ pub enum BaseError {
 }
 
 impl Display for BaseError {
-    fn fmt<'a, 'b>(
-        &'a self,
-        _formatter: &'b mut Formatter<'_>
-    ) -> Result {
+    fn fmt<'a, 'b>(&'a self, _formatter: &'b mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }
@@ -79,34 +65,24 @@ pub struct LogicError {
 }
 
 impl LogicError {
-    pub fn new(
-        unreachable: bool,
-        message: &'static str
-    ) -> Self {
+    pub fn new(unreachable: bool, message: &'static str) -> Self {
         return Self {
             unreachable,
             message
         };
     }
 
-    pub fn get_message<'a>(
-        &'a self
-    ) -> &'static str {
+    pub fn get_message<'a>(&'a self) -> &'static str {
         return self.message;
     }
 
-    pub fn is_unreachable<'a>(
-        &'a self
-    ) -> &'a bool {
+    pub fn is_unreachable<'a>(&'a self) -> &'a bool {
         return &self.unreachable;
     }
 }
 
 impl Display for LogicError {
-    fn fmt<'a, 'b>(
-        &'a self,
-        _: &'b mut Formatter<'_>
-    ) -> Result {
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }
@@ -122,10 +98,7 @@ pub enum RunTimeError {
 }
 
 impl Display for RunTimeError {
-    fn fmt<'a, 'b>(
-        &'a self,
-        _: &'b mut Formatter<'_>
-    ) -> Result {
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }
@@ -136,9 +109,7 @@ pub struct OtherError {
 }
 
 impl OtherError {
-    pub fn new<E>(
-        error: E
-    ) -> Self
+    pub fn new<E>(error: E) -> Self
     where
         E: Error
     {
@@ -147,18 +118,13 @@ impl OtherError {
         };
     }
 
-    pub fn get_message<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_message<'a>(&'a self) -> &'a str {
         return self.message.as_str();
     }
 }
 
 impl Display for OtherError {
-    fn fmt<'a, 'b>(
-        &'a self,
-        _: &'b mut Formatter<'_>
-    ) -> Result {
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }
@@ -183,10 +149,7 @@ pub enum ResourceError {
 }
 
 impl Display for ResourceError {
-    fn fmt<'a, 'b>(
-        &'a self,
-        _: &'b mut Formatter<'_>
-    ) -> Result {
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }
@@ -202,10 +165,7 @@ pub enum EmailServerError {
 }
 
 impl Display for EmailServerError {
-    fn fmt<'a, 'b>(
-        &'a self,
-        _: &'b mut Formatter<'_>
-    ) -> Result {
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result {
         return Ok(());
     }
 }
@@ -216,18 +176,13 @@ pub struct SimpleBacktrace {
 }
 
 impl SimpleBacktrace {
-    pub fn new(
-        backtrace_part: BacktracePart
-    ) -> Self {
+    pub fn new(backtrace_part: BacktracePart) -> Self {
         return Self {
             backtrace_part_registry: vec![backtrace_part]
         };
     }
 
-    pub fn add<'a>(
-        &'a mut self,
-        backtrace_part: BacktracePart
-    ) -> () {
+    pub fn add<'a>(&'a mut self, backtrace_part: BacktracePart) -> () {
         self.backtrace_part_registry.push(backtrace_part);
 
         return ();
@@ -242,11 +197,7 @@ pub struct BacktracePart {
 }
 
 impl BacktracePart {
-    pub fn new(
-        line_number: u32,
-        file_path: &'static str,
-        context: Option<String>
-    ) -> Self {
+    pub fn new(line_number: u32, file_path: &'static str, context: Option<String>) -> Self {
         return Self {
             line_number,
             file_path,

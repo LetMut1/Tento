@@ -2,18 +2,16 @@
 pub struct Channel_Validator;
 
 impl Channel_Validator {
-    const NAME_MAXIMUM_LENGTH: u8 = 75;
-    const DESCRIPTION_MAXIMUM_LENGTH: u16 = 500;
+    #[allow(non_upper_case_globals)]
+    const CHANNEL__NAME_MAXIMUM_LENGTH: u8 = 75;
+    #[allow(non_upper_case_globals)]
+    const CHANNEL__DESCRIPTION_MAXIMUM_LENGTH: u16 = 500;
 
-    pub fn is_valid_name<'a>(
-        name: &'a str
-    ) -> bool {
-        return name.chars().count() <= (Self::NAME_MAXIMUM_LENGTH as usize);
+    pub fn is_valid_name<'a>(channel_name: &'a str) -> bool {
+        return channel_name.chars().count() <= (Self::CHANNEL__NAME_MAXIMUM_LENGTH as usize);
     }
 
-    pub fn is_valid_description<'a>(
-        description: &'a str
-    ) -> bool {
-        return description.chars().count() <= (Self::DESCRIPTION_MAXIMUM_LENGTH as usize);
+    pub fn is_valid_description<'a>(channel_description: &'a str) -> bool {
+        return channel_description.chars().count() <= (Self::CHANNEL__DESCRIPTION_MAXIMUM_LENGTH as usize);
     }
 }

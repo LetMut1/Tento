@@ -31,26 +31,21 @@ impl<S> UnifiedReport<S>
 where
     S: Serialize
 {
-    pub fn new_without_data(
-    ) -> Self {
+    pub fn empty() -> Self {
         return Self {
             data: Some(Data::new(None)),
             communication_code: None
         };
     }
 
-    pub fn data(
-        data: S
-    ) -> Self {
+    pub fn data(data: S) -> Self {
         return Self {
             data: Some(Data::new(Some(data))),
             communication_code: None
         };
     }
 
-    pub fn communication_code(
-        communication_code: &'static str
-    ) -> Self {
+    pub fn communication_code(communication_code: &'static str) -> Self {
         return Self {
             data: None,
             communication_code: Some(communication_code)
@@ -72,26 +67,21 @@ impl<S> UnifiedReport<S>
 where
     S: Serialize + for<'de> Deserialize<'de>
 {
-    pub fn new_without_data(
-    ) -> Self {
+    pub fn empty() -> Self {
         return Self {
             data: Some(Data::new(None)),
             communication_code: None
         };
     }
 
-    pub fn data(
-        data: S
-    ) -> Self {
+    pub fn data(data: S) -> Self {
         return Self {
             data: Some(Data::new(Some(data))),
             communication_code: None
         };
     }
 
-    pub fn communication_code(
-        communication_code: String
-    ) -> Self {
+    pub fn communication_code(communication_code: String) -> Self {
         return Self {
             data: None,
             communication_code: Some(communication_code)

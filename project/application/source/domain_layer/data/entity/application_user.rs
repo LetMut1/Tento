@@ -23,40 +23,27 @@ impl ApplicationUser {
         };
     }
 
-    pub fn get_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_id<'a>(&'a self) -> i64 {
         return self.id;
     }
 
-    pub fn get_email<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_email<'a>(&'a self) -> &'a str {
         return self.email.as_str();
     }
 
-    pub fn get_nickname<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_nickname<'a>(&'a self) -> &'a str {
         return &self.nickname;
     }
 
-    pub fn get_password_hash<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_password_hash<'a>(&'a self) -> &'a str {
         return self.password_hash.as_str();
     }
 
-    pub fn get_created_at<'a>(
-        &'a self
-    ) -> &'a str {
+    pub fn get_created_at<'a>(&'a self) -> &'a str {
         return self.created_at.as_str();
     }
 
-    pub fn set_password_hash<'a>(
-        &'a mut self,
-        password_hash: String
-    ) -> &'a mut Self {
+    pub fn set_password_hash<'a>(&'a mut self, password_hash: String) -> &'a mut Self {
         self.password_hash = password_hash;
 
         return self;

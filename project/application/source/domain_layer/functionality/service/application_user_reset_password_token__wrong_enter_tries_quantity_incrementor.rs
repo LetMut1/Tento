@@ -8,9 +8,7 @@ use crate::infrastructure_layer::data::error_auditor::LogicError;
 pub struct ApplicationUserResetPasswordToken_WrongEnterTriesQuantityIncrementor;
 
 impl ApplicationUserResetPasswordToken_WrongEnterTriesQuantityIncrementor {
-    pub fn increment<'a>(
-        application_user_reset_password_token: &'a mut ApplicationUserResetPasswordToken
-    ) -> Result<(), ErrorAuditor> {
+    pub fn increment<'a>(application_user_reset_password_token: &'a mut ApplicationUserResetPasswordToken) -> Result<(), ErrorAuditor> {
         let wrong_enter_tries_quantity = application_user_reset_password_token.get_wrong_enter_tries_quantity();
         if wrong_enter_tries_quantity == u8::max_value() {
             return Err(

@@ -14,10 +14,7 @@ use extern_crate::tokio_postgres::types::Type;
 pub struct ApplicationUserResetPasswordToken_PostgresqlRepository;
 
 impl ApplicationUserResetPasswordToken_PostgresqlRepository {
-    pub async fn create<'a>(
-        authorization_connection: &'a Connection,
-        insert: Insert
-    ) -> Result<ApplicationUserResetPasswordToken, ErrorAuditor> {
+    pub async fn create<'a>(authorization_connection: &'a Connection, insert: Insert) -> Result<ApplicationUserResetPasswordToken, ErrorAuditor> {
         let wrong_enter_tries_quantity_ = insert.application_user_reset_password_token_wrong_enter_tries_quantity as i16;
 
         let quantity_of_minute_for_expiration = ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
@@ -180,10 +177,7 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
         }
     }
 
-    pub async fn delete<'a>(
-        authorization_connection: &'a Connection,
-        application_user_id: i64
-    ) -> Result<(), ErrorAuditor> {
+    pub async fn delete<'a>(authorization_connection: &'a Connection, application_user_id: i64) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =

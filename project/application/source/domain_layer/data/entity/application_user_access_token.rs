@@ -29,27 +29,19 @@ impl<'a> ApplicationUserAccessToken<'a> {
         };
     }
 
-    pub fn get_id<'b>(
-        &'b self
-    ) -> &'b str {
+    pub fn get_id<'b>(&'b self) -> &'b str {
         return self.id.as_str();
     }
 
-    pub fn get_application_user_id<'b>(
-        &'b self
-    ) -> i64 {
+    pub fn get_application_user_id<'b>(&'b self) -> i64 {
         return self.application_user_id;
     }
 
-    pub fn get_application_user_log_in_token_device_id<'b>(
-        &'b self
-    ) -> &'b str {
+    pub fn get_application_user_log_in_token_device_id<'b>(&'b self) -> &'b str {
         return self.application_user_log_in_token_device_id.as_ref();
     }
 
-    pub fn get_expires_at<'b>(
-        &'b self
-    ) -> &'b str {
+    pub fn get_expires_at<'b>(&'b self) -> &'b str {
         return self.expires_at.as_str();
     }
 }

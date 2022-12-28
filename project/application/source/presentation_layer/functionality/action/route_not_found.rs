@@ -2,7 +2,6 @@ use crate::presentation_layer::functionality::service::action_response_creator::
 use extern_crate::hyper::Body;
 use extern_crate::hyper::Response;
 
-pub async fn route_not_found(
-) -> Response<Body> {
+pub async fn route_not_found() -> Response<Body> {
     return ActionResponseCreator::create_not_found();
 }

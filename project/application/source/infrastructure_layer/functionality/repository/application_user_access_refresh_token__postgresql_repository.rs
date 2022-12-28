@@ -14,10 +14,7 @@ use std::borrow::Cow;
 pub struct ApplicationUserAccessRefreshToken_PostgresqlRepository;
 
 impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
-    pub async fn create<'a, 'b>(
-        authorization_connection: &'a Connection,
-        insert: Insert<'b>
-    ) -> Result<ApplicationUserAccessRefreshToken<'b>, ErrorAuditor> {
+    pub async fn create<'a, 'b>(authorization_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserAccessRefreshToken<'b>, ErrorAuditor> {
         let application_user_log_in_token_device_id_ = insert.application_user_log_in_token_device_id.as_ref();
 
         let application_user_access_token_id_ = insert.application_user_access_token_id.as_ref();
@@ -458,10 +455,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
         }
     }
 
-    pub async fn delete_2<'a>(
-        authorization_connection: &'a Connection,
-        application_user_id: i64
-    ) -> Result<(), ErrorAuditor> {
+    pub async fn delete_2<'a>(authorization_connection: &'a Connection, application_user_id: i64) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =

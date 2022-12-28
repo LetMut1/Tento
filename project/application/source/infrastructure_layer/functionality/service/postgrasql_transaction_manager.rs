@@ -8,10 +8,7 @@ use extern_crate::tokio_postgres::Client as Connection;
 pub struct PostgrasqlTransactionManager;
 
 impl PostgrasqlTransactionManager {
-    pub async fn start_transaction<'a>(
-        connection: &'a Connection,
-        transaction_isolation_level: TransactionIsolationLevel
-    ) -> Result<Self, ErrorAuditor> {
+    pub async fn start_transaction<'a>(connection: &'a Connection, transaction_isolation_level: TransactionIsolationLevel) -> Result<Self, ErrorAuditor> {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
         match transaction_isolation_level {
             TransactionIsolationLevel::ReadCommitted => {
@@ -47,10 +44,7 @@ impl PostgrasqlTransactionManager {
         return Ok(Self);
     }
 
-    pub async fn commit_transaction<'a>(
-        self,
-        connection: &'a Connection
-    ) -> Result<(), ErrorAuditor> {
+    pub async fn commit_transaction<'a>(self, connection: &'a Connection) -> Result<(), ErrorAuditor> {
         let query = "COMMIT;";
 
         if let Err(error) = connection.execute(query, &[]).await {
@@ -65,10 +59,7 @@ impl PostgrasqlTransactionManager {
         return Ok(());
     }
 
-    pub async fn rollback_transaction<'a>(
-        self,
-        connection: &'a Connection
-    ) -> Result<(), ErrorAuditor> {
+    pub async fn rollback_transaction<'a>(self, connection: &'a Connection) -> Result<(), ErrorAuditor> {
         let query = "ROLLBACK;";
 
         if let Err(error) = connection.execute(query, &[]).await {

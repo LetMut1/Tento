@@ -8,9 +8,7 @@ use extern_crate::chrono::Utc;
 pub struct ApplicationUserLogInToken_ExpirationTimeResolver;
 
 impl ApplicationUserLogInToken_ExpirationTimeResolver {
-    pub fn is_expired<'a>(
-        application_user_log_in_token: &'a ApplicationUserLogInToken<'_>
-    ) -> Result<bool, ErrorAuditor> {
+    pub fn is_expired<'a>(application_user_log_in_token: &'a ApplicationUserLogInToken<'_>) -> Result<bool, ErrorAuditor> {
         match DateTimeResolver::create_chrono_date_time_utc(application_user_log_in_token.get_expires_at()) {
             Ok(ref date_time) => {
                 return Ok(!DateTimeResolver::is_greater_or_equal_than(date_time, &Utc::now()));

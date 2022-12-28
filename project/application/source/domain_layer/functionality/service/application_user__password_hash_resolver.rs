@@ -11,9 +11,7 @@ use extern_crate::uuid::Uuid;
 pub struct ApplicationUser_PasswordHashResolver;
 
 impl ApplicationUser_PasswordHashResolver {
-    pub fn create<'a>(
-        application_user_password: &'a str
-    ) -> Result<String, ErrorAuditor> {
+    pub fn create<'a>(application_user_password: &'a str) -> Result<String, ErrorAuditor> {
         match ApplicationUser_PasswordEncoder::encode(application_user_password) {
             Ok(password_hash) => {
                 return Ok(password_hash);
@@ -26,10 +24,7 @@ impl ApplicationUser_PasswordHashResolver {
         }
     }
 
-    pub fn is_valid<'a>(
-        application_user_password: &'a str,
-        application_user_password_hash: &'a str
-    ) -> Result<bool, ErrorAuditor> {
+    pub fn is_valid<'a>(application_user_password: &'a str, application_user_password_hash: &'a str) -> Result<bool, ErrorAuditor> {
         match ApplicationUser_PasswordEncoder::is_valid(application_user_password, application_user_password_hash) {
             Ok(is_valid) => {
                 return Ok(is_valid);
@@ -47,9 +42,7 @@ impl ApplicationUser_PasswordHashResolver {
 struct ApplicationUser_PasswordEncoder;
 
 impl ApplicationUser_PasswordEncoder {      // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090  // TODO CREATE CUSTOM CONFIG ?
-    fn encode<'a>(                            // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.
-        application_user_password: &'a str
-    ) -> Result<String, ErrorAuditor> {
+    fn encode<'a>(application_user_password: &'a str) -> Result<String, ErrorAuditor> {                          // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.
         let config = Config::default();
 
         match argon2::hash_encoded(application_user_password.as_bytes(), Uuid::new_v4().as_bytes().as_slice(), &config) {
@@ -67,10 +60,7 @@ impl ApplicationUser_PasswordEncoder {      // TODO отрабатывает з�
         }
     }
 
-    fn is_valid<'a>(
-        application_user_password: &'a str,
-        application_user_password_hash: &'a str
-    ) -> Result<bool, ErrorAuditor> {
+    fn is_valid<'a>(application_user_password: &'a str, application_user_password_hash: &'a str) -> Result<bool, ErrorAuditor> {
         match argon2::verify_encoded(application_user_password_hash, application_user_password.as_bytes()) {
             Ok(value) => {
                 return Ok(value);

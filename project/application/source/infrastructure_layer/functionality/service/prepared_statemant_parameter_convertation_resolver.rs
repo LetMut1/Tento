@@ -7,34 +7,25 @@ pub struct PreparedStatementParameterConvertationResolver<'a> {
 }
 
 impl<'a> PreparedStatementParameterConvertationResolver<'a> {
-    pub fn new(
-    ) -> Self {
+    pub fn new() -> Self {
         return Self {
             parameter_registry: vec![],
             parameter_type_registry: vec![]
         };
     }
 
-    pub fn add_parameter<'b>(
-        &'b mut self,
-        parameter_value: &'a (dyn ToSql + Sync),
-        patameter_type: Type
-    ) -> &'b mut Self {
+    pub fn add_parameter<'b>(&'b mut self, parameter_value: &'a (dyn ToSql + Sync), patameter_type: Type) -> &'b mut Self {
         self.parameter_registry.push(parameter_value);
         self.parameter_type_registry.push(patameter_type);
 
         return self;
     }
 
-    pub fn get_parameter_registry<'b>(
-        &'b self
-    ) -> &'b Vec<&'a (dyn ToSql + Sync)> {
+    pub fn get_parameter_registry<'b>(&'b self) -> &'b Vec<&'a (dyn ToSql + Sync)> {
         return &self.parameter_registry;
     }
 
-    pub fn get_parameter_type_registry<'b>(
-        &'b self
-    ) -> &'b Vec<Type> {
+    pub fn get_parameter_type_registry<'b>(&'b self) -> &'b Vec<Type> {
         return &self.parameter_type_registry;
     }
 }

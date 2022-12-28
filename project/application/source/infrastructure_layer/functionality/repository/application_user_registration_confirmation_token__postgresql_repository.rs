@@ -14,10 +14,7 @@ use extern_crate::tokio_postgres::types::Type;
 pub struct ApplicationUserRegistrationConfirmationToken_PostgresqlRepository;
 
 impl ApplicationUserRegistrationConfirmationToken_PostgresqlRepository {
-    pub async fn create<'a, 'b>(
-        authorization_connection: &'a Connection,
-        insert: Insert<'b>
-    ) -> Result<ApplicationUserRegistrationConfirmationToken<'b>, ErrorAuditor> {
+    pub async fn create<'a, 'b>(authorization_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserRegistrationConfirmationToken<'b>, ErrorAuditor> {
         let wrong_enter_tries_quantity_ = insert.application_user_registration_confirmation_token_wrong_enter_tries_quantity as i16;
 
         let quantity_of_minute_for_expiration = ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
@@ -104,10 +101,7 @@ impl ApplicationUserRegistrationConfirmationToken_PostgresqlRepository {
         }
     }
 
-    pub async fn update<'a>(
-        authorization_connection: &'a Connection,
-        application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>
-    ) -> Result<(), ErrorAuditor> {
+    pub async fn update<'a>(authorization_connection: &'a Connection, application_user_registration_confirmation_token: &'a ApplicationUserRegistrationConfirmationToken<'_>) -> Result<(), ErrorAuditor> {
         let application_user_email = application_user_registration_confirmation_token.get_application_user_email();
 
         let application_user_registration_confirmation_token_value = application_user_registration_confirmation_token.get_value();
@@ -180,10 +174,7 @@ impl ApplicationUserRegistrationConfirmationToken_PostgresqlRepository {
         }
     }
 
-    pub async fn delete<'a>(
-        authorization_connection: &'a Connection,
-        application_user_email: &'a str
-    ) -> Result<(), ErrorAuditor> {
+    pub async fn delete<'a>(authorization_connection: &'a Connection, application_user_email: &'a str) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =

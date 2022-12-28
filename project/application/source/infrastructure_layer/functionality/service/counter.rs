@@ -8,16 +8,13 @@ pub struct Counter {
 }
 
 impl Counter {
-    pub fn new(
-    ) -> Self {
+    pub fn new() -> Self {
         return Self {
             counter: 0
         };
     }
 
-    pub fn get_next<'a>(
-        &'a mut self
-    ) -> Result<usize, ErrorAuditor> {
+    pub fn get_next<'a>(&'a mut self) -> Result<usize, ErrorAuditor> {
         if self.counter == usize::max_value() {
             return Err(
                 ErrorAuditor::new(

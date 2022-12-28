@@ -17,21 +17,15 @@ impl ApplicationUserSubscription {
         };
     }
 
-    pub fn get_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_id<'a>(&'a self) -> i64 {
         return self.id;
     }
 
-    pub fn get_publisher_application_user_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_publisher_application_user_id<'a>(&'a self) -> i64 {
         return self.publisher_application_user_id;
     }
 
-    pub fn get_subscriber_application_user_id<'a>(
-        &'a self
-    ) -> i64 {
+    pub fn get_subscriber_application_user_id<'a>(&'a self) -> i64 {
         return self.subscriber_application_user_id;
     }
 }

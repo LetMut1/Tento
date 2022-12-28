@@ -6,9 +6,7 @@ use super::action_response_creator::ActionResponseCreator;
 pub struct RequestHeaderChecker;
 
 impl RequestHeaderChecker {
-    pub fn is_valid<'a>(
-        request: &'a Request<Body>
-    ) -> bool {
+    pub fn is_valid<'a>(request: &'a Request<Body>) -> bool {
         let header_map = request.headers();
         if let None = header_map.get(header::USER_AGENT) {
             return false;

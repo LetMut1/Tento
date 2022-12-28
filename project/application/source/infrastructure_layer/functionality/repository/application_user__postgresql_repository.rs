@@ -13,10 +13,7 @@ use extern_crate::tokio_postgres::types::Type;
 pub struct ApplicationUser_PostgresqlRepository;
 
 impl ApplicationUser_PostgresqlRepository {
-    pub async fn create<'a>(
-        core_connection: &'a Connection,
-        insert: Insert
-    ) -> Result<ApplicationUser, ErrorAuditor> {
+    pub async fn create<'a>(core_connection: &'a Connection, insert: Insert) -> Result<ApplicationUser, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -110,10 +107,7 @@ impl ApplicationUser_PostgresqlRepository {
         }
     }
 
-    pub async fn update<'a>(
-        core_connection: &'a Connection,
-        application_user: &'a ApplicationUser
-    ) -> Result<(), ErrorAuditor> {
+    pub async fn update<'a>(core_connection: &'a Connection, application_user: &'a ApplicationUser) -> Result<(), ErrorAuditor> {
         let application_user_id = application_user.get_id();
 
         let application_user_email = application_user.get_email();
@@ -181,10 +175,7 @@ impl ApplicationUser_PostgresqlRepository {
         }
     }
 
-    pub async fn is_exist_1<'a>(
-        core_connection: &'a Connection,
-        application_user_nickname: &'a str
-    ) -> Result<bool, ErrorAuditor> {
+    pub async fn is_exist_1<'a>(core_connection: &'a Connection, application_user_nickname: &'a str) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -226,10 +217,7 @@ impl ApplicationUser_PostgresqlRepository {
         }
     }
 
-    pub async fn is_exist_2<'a>(
-        core_connection: &'a Connection,
-        application_user_email: &'a str
-    ) -> Result<bool, ErrorAuditor> {
+    pub async fn is_exist_2<'a>(core_connection: &'a Connection, application_user_email: &'a str) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -271,10 +259,7 @@ impl ApplicationUser_PostgresqlRepository {
         }
     }
 
-    pub async fn find_1<'a>(
-        core_connection: &'a Connection,
-        application_user_nickname: String
-    ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
+    pub async fn find_1<'a>(core_connection: &'a Connection, application_user_nickname: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -377,10 +362,7 @@ impl ApplicationUser_PostgresqlRepository {
         }
     }
 
-    pub async fn find_2<'a>(
-        core_connection: &'a Connection,
-        application_user_email: String
-    ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
+    pub async fn find_2<'a>(core_connection: &'a Connection, application_user_email: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -483,10 +465,7 @@ impl ApplicationUser_PostgresqlRepository {
         }
     }
 
-    pub async fn find_3<'a>(
-        core_connection: &'a Connection,
-        application_user_id: i64
-    ) -> Result<Option<ApplicationUser>, ErrorAuditor> {
+    pub async fn find_3<'a>(core_connection: &'a Connection, application_user_id: i64) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =

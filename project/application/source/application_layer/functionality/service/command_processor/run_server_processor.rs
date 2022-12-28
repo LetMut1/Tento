@@ -56,9 +56,7 @@ impl RunServerProcessor {
     const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.env";
     const LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
-    pub fn process(
-        binary_file_path: &'static str
-    ) -> Result<(), ErrorAuditor> {
+    pub fn process(binary_file_path: &'static str) -> Result<(), ErrorAuditor> {
         match Self::load_environment_configuration_registry(binary_file_path) {
             Ok(environment_configuration_resolver) => {
                 if let Err(mut error) = Self::configure_log(&environment_configuration_resolver) {
@@ -82,9 +80,7 @@ impl RunServerProcessor {
         }
     }
 
-    fn load_environment_configuration_registry<'a>(
-        binary_file_path: &'a str
-    ) -> Result<EnvironmentConfigurationResolver, ErrorAuditor> {
+    fn load_environment_configuration_registry<'a>(binary_file_path: &'a str) -> Result<EnvironmentConfigurationResolver, ErrorAuditor> {
         match Path::new(binary_file_path).parent() {
             Some(file_path) => {
                 let production_environment_file_path_buffer = file_path.join(Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME));
@@ -416,9 +412,7 @@ impl RunServerProcessor {
         }
     }
 
-    fn configure_log<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver
-    ) -> Result<(), ErrorAuditor> {
+    fn configure_log<'a>(environment_configuration_resolver: &'a EnvironmentConfigurationResolver) -> Result<(), ErrorAuditor> {
         match FixedWindowRoller::builder()
             .base(1)
             .build(environment_configuration_resolver.get_logger_roller_log_file_name(), 10) {          // TODO 10 - КОНСТАНТА или енваронмент
@@ -486,9 +480,7 @@ impl RunServerProcessor {
 
      // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     #[tokio::main]                      // TODO написать без макроса
-    async fn run_http_server(
-        environment_configuration_resolver: EnvironmentConfigurationResolver
-    ) -> Result<(), ErrorAuditor> {
+    async fn run_http_server(environment_configuration_resolver: EnvironmentConfigurationResolver) -> Result<(), ErrorAuditor> {
         let postgresql_connection_pool: PostgresqlConnectionPoolWorkflowTypeAggregator;
         if environment_configuration_resolver.is_production_environment() {
             todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
@@ -616,8 +608,7 @@ impl RunServerProcessor {
         }
     }
 
-    async fn create_shutdown_signal(    // TODO  TODO  TODO  УБрать expect. Перерегистрировать с помощью ТОКИО (без использования .with_graceful_shutdown()) ----------
-    ) -> () {
+    async fn create_shutdown_signal() -> () {    // TODO  TODO  TODO  УБрать expect. Перерегистрировать с помощью ТОКИО (без использования .with_graceful_shutdown()) ----------
         signal::ctrl_c()
             .await
             .expect("Failed to install gracefully shutdown signal");
