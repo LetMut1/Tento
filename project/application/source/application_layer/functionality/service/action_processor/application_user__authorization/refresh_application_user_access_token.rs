@@ -147,7 +147,7 @@ impl ActionProcessor {
                         };
 
                         return Ok(
-                            ActionProcessorResult::new_with_outcoming(
+                            ActionProcessorResult::outcoming(
                                 Outcoming {
                                     application_user_access_token_web_form: application_user_access_token_web_form_new,
                                     application_user_access_refresh_token_web_form: application_user_access_refresh_token_web_form_new
@@ -167,7 +167,7 @@ impl ActionProcessor {
                         return Err(error);
                     }
 
-                    return Ok(ActionProcessorResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::AlreadyExpired));
+                    return Ok(ActionProcessorResult::application_user_access_refresh_token__workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::AlreadyExpired));
                 }
 
                 return Err(
@@ -178,10 +178,10 @@ impl ActionProcessor {
                 );
             }
 
-            return Ok(ActionProcessorResult::new_with_application_user_access_refresh_token_workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::NotFound));
+            return Ok(ActionProcessorResult::application_user_access_refresh_token__workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::NotFound));
         }
 
-        return Ok(ActionProcessorResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::NotExpired));
+        return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::NotExpired));
     }
 }
 

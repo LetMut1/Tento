@@ -72,7 +72,7 @@ impl ActionProcessor {
                                     &*core_postgresql_pooled_connection, incoming.channel_name.as_str(), &incoming.requery_channel_name, limit as i16
                                 ).await {
                                     Ok(channel_registry) => {
-                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { channel_registry }));
+                                        return Ok(ActionProcessorResult::outcoming(Outcoming { channel_registry }));
                                     }
                                     Err(mut error) => {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -92,10 +92,10 @@ impl ActionProcessor {
                         }
                     }
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(ActionProcessorResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::AlreadyExpired));
+                        return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::AlreadyExpired));
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(ActionProcessorResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList));
+                        return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList));
                     }
                 }
             }

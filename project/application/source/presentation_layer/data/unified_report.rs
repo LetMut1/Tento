@@ -39,7 +39,7 @@ where
         };
     }
 
-    pub fn new_with_data(
+    pub fn data(
         data: S
     ) -> Self {
         return Self {
@@ -48,7 +48,7 @@ where
         };
     }
 
-    pub fn new_with_communication_code(
+    pub fn communication_code(
         communication_code: &'static str
     ) -> Self {
         return Self {
@@ -80,7 +80,7 @@ where
         };
     }
 
-    pub fn new_with_data(
+    pub fn data(
         data: S
     ) -> Self {
         return Self {
@@ -89,7 +89,7 @@ where
         };
     }
 
-    pub fn new_with_communication_code(
+    pub fn communication_code(
         communication_code: String
     ) -> Self {
         return Self {

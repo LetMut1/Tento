@@ -87,7 +87,7 @@ where
                                     match application_user_access_token__workflow_exception {
                                         ApplicationUserAccessToken_WorkflowException::AlreadyExpired => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_ACCESS_TOKEN_ALREADY_EXPIRED)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -101,7 +101,7 @@ where
                                         }
                                         ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_ACCESS_TOKEN_IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);

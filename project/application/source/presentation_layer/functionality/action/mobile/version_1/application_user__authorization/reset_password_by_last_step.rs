@@ -78,7 +78,7 @@ where
                                     match application_user__workflow_exception {
                                         ApplicationUser_WorkflowException::InvalidPassword => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_PASSWORD)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_PASSWORD)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -92,7 +92,7 @@ where
                                         }
                                         ApplicationUser_WorkflowException::NotFound => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_NOT_FOUND)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -114,7 +114,7 @@ where
                                     match application_user_reset_password_token__workflow_exception {
                                         ApplicationUserResetPasswordToken_WorkflowException::InvalidValue => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_INVALID_VALUE)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__INVALID_VALUE)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -126,10 +126,23 @@ where
                                                 }
                                             }
                                         }
-                                        ApplicationUserResetPasswordToken_WorkflowException::NotFound |
+                                        ApplicationUserResetPasswordToken_WorkflowException::NotFound => {
+                                            match rmp_serde::to_vec(
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND)
+                                            ) {
+                                                Ok(data) => {
+                                                    return ActionResponseCreator::create_ok(data);
+                                                }
+                                                Err(error) => {
+                                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                                    return ActionResponseCreator::create_internal_server_error();
+                                                }
+                                            }
+                                        }
                                         ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_NOT_FOUND)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -143,7 +156,7 @@ where
                                         }
                                         ApplicationUserResetPasswordToken_WorkflowException::IsNotApproved => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_IS_NOT_APPROVED)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__IS_NOT_APPROVED)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -157,7 +170,7 @@ where
                                         }
                                         ApplicationUserResetPasswordToken_WorkflowException::WrongValue => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_RESET_PASSWORD_TOKEN_WRONG_VALUE)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);

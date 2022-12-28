@@ -79,7 +79,7 @@ where
                                     match application_user__workflow_exception {
                                         ApplicationUser_WorkflowException::InvalidNickname => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_NICKNAME)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_NICKNAME)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);

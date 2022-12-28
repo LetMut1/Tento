@@ -80,7 +80,7 @@ where
                                     match application_user_access_token__workflow_exception {
                                         ApplicationUserAccessToken_WorkflowException::NotExpired => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_ACCESS_TOKEN_NOT_EXPIRED)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__NOT_EXPIRED)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -101,7 +101,7 @@ where
                                     match application_user_access_refresh_token__workflow_exception {
                                         ApplicationUserAccessRefreshToken_WorkflowException::NotFound => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_NOT_FOUND)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -115,7 +115,7 @@ where
                                         }
                                         ApplicationUserAccessRefreshToken_WorkflowException::AlreadyExpired => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_ACCESS_REFRESH_TOKEN_ALREADY_EXPIRED)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);

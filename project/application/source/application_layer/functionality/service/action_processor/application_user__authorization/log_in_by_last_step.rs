@@ -81,7 +81,7 @@ impl ActionProcessor {
             let mut application_user_log_in_token_ = match application_user_log_in_token {
                 Some(application_user_log_in_token__) => application_user_log_in_token__,
                 None => {
-                    return Ok(ActionProcessorResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInToken_WorkflowException::NotFound));
+                    return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::NotFound));
                 }
             };
 
@@ -190,7 +190,7 @@ impl ActionProcessor {
                     };
 
                     return Ok(
-                        ActionProcessorResult::new_with_outcoming(
+                        ActionProcessorResult::outcoming(
                             Outcoming { application_user_access_token_web_form, application_user_access_refresh_token_web_form }
                         )
                     );
@@ -220,13 +220,13 @@ impl ActionProcessor {
                     }
                 }
 
-                return Ok(ActionProcessorResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInToken_WorkflowException::WrongValue));
+                return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::WrongValue));
             }
 
-            return Ok(ActionProcessorResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInToken_WorkflowException::AlreadyExpired));
+            return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::AlreadyExpired));
         }
 
-        return Ok(ActionProcessorResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInToken_WorkflowException::InvalidValue));
+        return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::InvalidValue));
     }
 }
 

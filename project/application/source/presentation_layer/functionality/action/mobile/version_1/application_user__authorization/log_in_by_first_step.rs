@@ -82,7 +82,7 @@ where
                                         ApplicationUser_WorkflowException::NotFound |
                                         ApplicationUser_WorkflowException::WrongPassword => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);

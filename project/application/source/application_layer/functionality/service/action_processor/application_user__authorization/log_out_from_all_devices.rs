@@ -67,13 +67,13 @@ impl ActionProcessor {
                     return Err(error);
                 }
 
-                return Ok(ActionProcessorResult::new_with_outcoming(()));
+                return Ok(ActionProcessorResult::outcoming(()));
             }
             ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                return Ok(ActionProcessorResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::AlreadyExpired));
+                return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::AlreadyExpired));
             }
             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                return Ok(ActionProcessorResult::new_with_application_user_access_token_workflow_exception(ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList));
+                return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList));
             }
         }
     }

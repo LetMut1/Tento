@@ -119,7 +119,7 @@ impl ActionProcessingDelegator {
             outcoming = Outcoming { parts: response_parts, unified_report: None };
         }
 
-        return Ok(ActionProcessorResult::new_with_outcoming(outcoming));
+        return Ok(ActionProcessorResult::outcoming(outcoming));
     }
 }
 

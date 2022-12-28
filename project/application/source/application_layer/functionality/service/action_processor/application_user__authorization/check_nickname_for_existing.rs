@@ -53,10 +53,10 @@ impl ActionProcessor {
                 }
             };
 
-            return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { result: is_exist }));
+            return Ok(ActionProcessorResult::outcoming(Outcoming { result: is_exist }));
         }
 
-        return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
+        return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
     }
 }
 

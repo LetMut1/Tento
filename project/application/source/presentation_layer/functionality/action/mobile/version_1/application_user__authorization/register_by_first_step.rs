@@ -77,7 +77,7 @@ where
                                     match application_user__workflow_exception {
                                         ApplicationUser_WorkflowException::InvalidEmail => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_EMAIL)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -91,7 +91,7 @@ where
                                         }
                                         ApplicationUser_WorkflowException::EmailAlreadyExist => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__EMAIL_ALREADY_EXIST)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);

@@ -21,13 +21,13 @@ impl UnifiedReportCreator {
     where
         S: Serialize
     {
-        return UnifiedReport::new_with_data(data);
+        return UnifiedReport::data(data);
     }
 
     pub fn create_with_communication_code(
         communication_code: &'static str
     ) -> UnifiedReport<()> {
-        return UnifiedReport::new_with_communication_code(communication_code)
+        return UnifiedReport::communication_code(communication_code)
     }
 }
 
@@ -39,12 +39,12 @@ impl UnifiedReportCreator {
     where
         S: Serialize + for<'de> Deserialize<'de>
     {
-        return UnifiedReport::new_with_data(data);
+        return UnifiedReport::data(data);
     }
 
     pub fn create_with_communication_code(
         communication_code: &'static str
     ) -> UnifiedReport<()> {
-        return UnifiedReport::new_with_communication_code(communication_code.to_string());
+        return UnifiedReport::communication_code(communication_code.to_string());
     }
 }

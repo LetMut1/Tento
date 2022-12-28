@@ -128,7 +128,7 @@ impl ActionProcessor {
                                                             return Err(error);
                                                         }
 
-                                                        return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { application_user_id }));
+                                                        return Ok(ActionProcessorResult::outcoming(Outcoming { application_user_id }));
                                                     }
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -148,7 +148,7 @@ impl ActionProcessor {
                                         }
                                     }
 
-                                    return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::NotFound));
+                                    return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
                                 }
                                 Err(mut error) => {
                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -168,7 +168,7 @@ impl ActionProcessor {
                     }
                 }
 
-                return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
+                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

@@ -54,7 +54,7 @@ impl ActionProcessor {
                                         match application_user_ {
                                             Some(application_user__) => application_user__,
                                             None => {
-                                                return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::NotFound));
+                                                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
                                             }
                                         }
                                     }
@@ -71,7 +71,7 @@ impl ActionProcessor {
                                             match application_user_ {
                                                 Some(application_user__) => application_user__,
                                                 None => {
-                                                    return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::NotFound));
+                                                    return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
                                                 }
                                             }
                                         }
@@ -82,7 +82,7 @@ impl ActionProcessor {
                                         }
                                     }
                                 } else {
-                                    return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
+                                    return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
                                 }
                             }
                         }
@@ -158,7 +158,7 @@ impl ActionProcessor {
                                                     return Err(error);
                                                 }
 
-                                                return Ok(ActionProcessorResult::new_with_outcoming(Outcoming { application_user_id }));
+                                                return Ok(ActionProcessorResult::outcoming(Outcoming { application_user_id }));
                                             }
                                             Err(mut error) => {
                                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -178,7 +178,7 @@ impl ActionProcessor {
                                 }
                             }
 
-                            return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::WrongPassword));
+                            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::WrongPassword));
                         }
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -198,7 +198,7 @@ impl ActionProcessor {
             }
         }
 
-        return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
+        return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
     }
 }
 

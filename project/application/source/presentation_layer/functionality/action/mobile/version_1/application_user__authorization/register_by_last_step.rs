@@ -80,7 +80,7 @@ where
                                     match application_user__workflow_exception {
                                         ApplicationUser_WorkflowException::InvalidPassword => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_PASSWORD)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_PASSWORD)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -94,7 +94,7 @@ where
                                         }
                                         ApplicationUser_WorkflowException::InvalidNickname => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_NICKNAME)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_NICKNAME)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -108,7 +108,7 @@ where
                                         }
                                         ApplicationUser_WorkflowException::InvalidEmail => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_INVALID_EMAIL)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -122,7 +122,7 @@ where
                                         }
                                         ApplicationUser_WorkflowException::NicknameAlreadyExist => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_NICKNAME_ALREADY_EXIST)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__NICKNAME_ALREADY_EXIST)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -136,7 +136,7 @@ where
                                         }
                                         ApplicationUser_WorkflowException::EmailAlreadyExist => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_EMAIL_ALREADY_EXIST)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__EMAIL_ALREADY_EXIST)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -157,7 +157,7 @@ where
                                     match application_user_registration_confirmation_token__workflow_exception {
                                         ApplicationUserRegistrationConfirmationToken_WorkflowException::InvalidValue => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_INVALID_VALUE)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__INVALID_VALUE)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -169,10 +169,23 @@ where
                                                 }
                                             }
                                         }
-                                        ApplicationUserRegistrationConfirmationToken_WorkflowException::NotFound |
+                                        ApplicationUserRegistrationConfirmationToken_WorkflowException::NotFound => {
+                                            match rmp_serde::to_vec(
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__NOT_FOUND)
+                                            ) {
+                                                Ok(data) => {
+                                                    return ActionResponseCreator::create_ok(data);
+                                                }
+                                                Err(error) => {
+                                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                                    return ActionResponseCreator::create_internal_server_error();
+                                                }
+                                            }
+                                        }
                                         ApplicationUserRegistrationConfirmationToken_WorkflowException::AlreadyExpired => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_NOT_FOUND)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__ALREADY_EXPIRED)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -186,7 +199,7 @@ where
                                         }
                                         ApplicationUserRegistrationConfirmationToken_WorkflowException::IsNotApproved => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_IS_NOT_APPROVED)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__IS_NOT_APPROVED)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -200,7 +213,7 @@ where
                                         }
                                         ApplicationUserRegistrationConfirmationToken_WorkflowException::WrongValue => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN_WRONG_VALUE)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__WRONG_VALUE)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);

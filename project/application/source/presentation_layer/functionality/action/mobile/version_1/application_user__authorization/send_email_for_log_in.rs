@@ -78,7 +78,7 @@ where
                                     match application_user__workflow_exception {
                                         ApplicationUser_WorkflowException::NotFound => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_NOT_FOUND)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -99,7 +99,21 @@ where
                                     match application_user_log_in_token__workflow_exception {
                                         ApplicationUserLogInToken_WorkflowException::NotFound => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::ENTITY_APPLICATION_USER_LOG_IN_TOKEN_NOT_FOUND)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_LOG_IN_TOKEN__NOT_FOUND)
+                                            ) {
+                                                Ok(data) => {
+                                                    return ActionResponseCreator::create_ok(data);
+                                                }
+                                                Err(error) => {
+                                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                                    return ActionResponseCreator::create_internal_server_error();
+                                                }
+                                            }
+                                        }
+                                        ApplicationUserLogInToken_WorkflowException::AlreadyExpired => {
+                                            match rmp_serde::to_vec(
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_LOG_IN_TOKEN__ALREADY_EXPIRED)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);

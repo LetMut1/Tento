@@ -221,7 +221,7 @@ impl ActionProcessor {
                                                 };
 
                                                 return Ok(
-                                                    ActionProcessorResult::new_with_outcoming(
+                                                    ActionProcessorResult::outcoming(
                                                         Outcoming { application_user_access_token_web_form, application_user_access_refresh_token_web_form }
                                                     )
                                                 );
@@ -251,34 +251,34 @@ impl ActionProcessor {
                                                 }
                                             }
 
-                                            return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::WrongValue));
+                                            return Ok(ActionProcessorResult::application_user_registration_confirmation_token__workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::WrongValue));
                                         }
 
-                                        return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::IsNotApproved));
+                                        return Ok(ActionProcessorResult::application_user_registration_confirmation_token__workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::IsNotApproved));
                                     }
 
-                                    return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::AlreadyExpired));
+                                    return Ok(ActionProcessorResult::application_user_registration_confirmation_token__workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::AlreadyExpired));
                                 }
 
-                                return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::NotFound));
+                                return Ok(ActionProcessorResult::application_user_registration_confirmation_token__workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::NotFound));
                             }
 
-                            return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::EmailAlreadyExist));
+                            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::EmailAlreadyExist));
                         }
 
-                        return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::NicknameAlreadyExist));
+                        return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NicknameAlreadyExist));
                     }
 
-                    return Ok(ActionProcessorResult::new_with_application_user_registration_confirmation_token_workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::InvalidValue));
+                    return Ok(ActionProcessorResult::application_user_registration_confirmation_token__workflow_exception(ApplicationUserRegistrationConfirmationToken_WorkflowException::InvalidValue));
                 }
 
-                return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
+                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
             }
 
-            return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
+            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
         }
 
-        return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
+        return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
     }
 }
 

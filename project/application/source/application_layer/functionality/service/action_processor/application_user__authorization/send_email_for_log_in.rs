@@ -1,6 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
+use crate::domain_layer::functionality::service::application_user_log_in_token__expiration_time_resolver::ApplicationUserLogInToken_ExpirationTimeResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -45,45 +46,58 @@ impl ActionProcessor {
                 ).await {
                     Ok(application_user_log_in_token) => {
                         if let Some(application_user_log_in_token_) = application_user_log_in_token {
-                            match core_postgresql_connection_pool.get().await {
-                                Ok(core_postgresql_pooled_connection) => {
-                                    match ApplicationUser_PostgresqlRepository::find_3(
-                                        &*core_postgresql_pooled_connection, incoming.application_user_id
-                                    ).await {
-                                        Ok(application_user) => {
-                                            if let Some(application_user_) = application_user {
-                                                if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_log_in_token(
-                                                   environment_configuration_resolver, application_user_log_in_token_.get_value(), application_user_.get_email()
-                                                ) {
-                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                            let is_expired = match ApplicationUserLogInToken_ExpirationTimeResolver::is_expired(&application_user_log_in_token_) {
+                                Ok(is_expired_) => is_expired_,
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                                    return Err(error);
+                                    return Err(error);
+                                }
+                            };
+
+                            if !is_expired {
+                                match core_postgresql_connection_pool.get().await {
+                                    Ok(core_postgresql_pooled_connection) => {
+                                        match ApplicationUser_PostgresqlRepository::find_3(
+                                            &*core_postgresql_pooled_connection, incoming.application_user_id
+                                        ).await {
+                                            Ok(application_user) => {
+                                                if let Some(application_user_) = application_user {
+                                                    if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_log_in_token(
+                                                    environment_configuration_resolver, application_user_log_in_token_.get_value(), application_user_.get_email()
+                                                    ) {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                        return Err(error);
+                                                    }
+
+                                                    return Ok(ActionProcessorResult::outcoming(()));
                                                 }
 
-                                                return Ok(ActionProcessorResult::new_with_outcoming(()));
+                                                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
                                             }
+                                            Err(mut error) => {
+                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                            return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::NotFound));
-                                        }
-                                        Err(mut error) => {
-                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                            return Err(error);
+                                                return Err(error);
+                                            }
                                         }
                                     }
-                                }
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
+                                    Err(error) => {
+                                        return Err(
+                                            ErrorAuditor::new(
+                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                                                BacktracePart::new(line!(), file!(), None)
+                                            )
+                                        );
+                                    }
                                 }
                             }
+
+                            return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::AlreadyExpired));
                         }
 
-                        return Ok(ActionProcessorResult::new_with_application_user_log_in_token_workflow_exception(ApplicationUserLogInToken_WorkflowException::NotFound));
+                        return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::NotFound));
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

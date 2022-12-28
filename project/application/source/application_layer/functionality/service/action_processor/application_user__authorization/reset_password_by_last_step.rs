@@ -90,7 +90,7 @@ impl ActionProcessor {
                                                                                         return Err(error);
                                                                                     }
 
-                                                                                    return Ok(ActionProcessorResult::new_with_outcoming(()));
+                                                                                    return Ok(ActionProcessorResult::outcoming(()));
                                                                                 }
                                                                                 Err(mut error) => {
                                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -100,7 +100,7 @@ impl ActionProcessor {
                                                                             }
                                                                         }
 
-                                                                        return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::NotFound));
+                                                                        return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
                                                                     }
                                                                     Err(mut error) => {
                                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -144,16 +144,16 @@ impl ActionProcessor {
                                                         }
                                                     }
 
-                                                    return Ok(ActionProcessorResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::WrongValue));
+                                                    return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::WrongValue));
                                                 }
 
-                                                return Ok(ActionProcessorResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::IsNotApproved));
+                                                return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::IsNotApproved));
                                             }
 
-                                            return Ok(ActionProcessorResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired));
+                                            return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired));
                                         }
 
-                                        return Ok(ActionProcessorResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::NotFound));
+                                        return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::NotFound));
                                     }
                                     Err(mut error) => {
                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -173,10 +173,10 @@ impl ActionProcessor {
                         }
                     }
 
-                    return Ok(ActionProcessorResult::new_with_application_user_workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
+                    return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
                 }
 
-                return Ok(ActionProcessorResult::new_with_application_user_reset_password_token_workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::InvalidValue));
+                return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::InvalidValue));
             }
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
