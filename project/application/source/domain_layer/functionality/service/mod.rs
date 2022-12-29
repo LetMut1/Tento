@@ -11,6 +11,8 @@ pub mod application_user_access_refresh_token__obfuscation_value_generator;
 #[allow(non_snake_case)]
 pub mod application_user_access_token__expiration_time_resolver;
 #[allow(non_snake_case)]
+pub mod application_user_access_token__expires_at_generator;
+#[allow(non_snake_case)]
 pub mod application_user_access_token__id_generator;
 #[allow(non_snake_case)]
 pub mod application_user_access_token__serialization_form_resolver;

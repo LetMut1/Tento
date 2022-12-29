@@ -8,8 +8,7 @@ pub struct ApplicationUserAccessToken<'a> {
     id: String,
     application_user_id: i64,
     application_user_log_in_token_device_id: Cow<'a, str>,
-    // obfuscation_value: String,       // TODO Все равно добавить сюда. Проверить еще раз
-    expires_at: String    // TODO TODO TODO ВОт здесь, скорее всего, нужно передвать ЮниксТайм, так как так легче будет переводить в тайм. u64
+    expires_at: i64
 }
 
 impl<'a> ApplicationUserAccessToken<'a> {
@@ -19,7 +18,7 @@ impl<'a> ApplicationUserAccessToken<'a> {
         id: String,
         application_user_id: i64,
         application_user_log_in_token_device_id: Cow<'a, str>,
-        expires_at: String
+        expires_at: i64
     ) -> Self {
         return Self {
             id,
@@ -41,7 +40,7 @@ impl<'a> ApplicationUserAccessToken<'a> {
         return self.application_user_log_in_token_device_id.as_ref();
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> &'b str {
-        return self.expires_at.as_str();
+    pub fn get_expires_at<'b>(&'b self) -> i64 {
+        return self.expires_at;
     }
 }

@@ -4,6 +4,7 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__encoder::ApplicationUserAccessRefreshToken_Encoder;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__obfuscation_value_generator::ApplicationUserAccessRefreshToken_ObfuscationValueGenerator;
+use crate::domain_layer::functionality::service::application_user_access_token__expires_at_generator::ApplicationUserAccessToken_ExpiresAtGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__id_generator::ApplicationUserAccessToken_IdGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_log_in_token__expiration_time_resolver::ApplicationUserLogInToken_ExpirationTimeResolver;
@@ -18,7 +19,6 @@ use crate::infrastructure_layer::functionality::repository::application_user_acc
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::repository::application_user_log_in_token__postgresql_repository::ApplicationUserLogInToken_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -95,7 +95,7 @@ impl ActionProcessor {
             };
             if !is_expired {
                 if application_user_log_in_token_.get_value() == incoming.application_user_log_in_token_value.as_str() {
-                    let expires_at = match DateTimeResolver::add_interval_from_now_formated(ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
+                    let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {
                         Ok(expires_at_) => expires_at_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

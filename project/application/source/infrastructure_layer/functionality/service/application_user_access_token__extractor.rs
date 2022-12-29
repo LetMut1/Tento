@@ -23,15 +23,7 @@ impl ApplicationUserAccessToken_Extractor {
             }
         };
 
-        let is_expired = match ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token) {
-            Ok(is_expired_) => is_expired_,
-            Err(mut error) => {
-                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                return Err(error);
-            }
-        };
-        if !is_expired {
+        if !ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token) {
             return Ok(ExtractorResult::ApplicationUserAccessToken { application_user_access_token });
         }
 
