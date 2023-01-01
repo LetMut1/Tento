@@ -11,7 +11,7 @@ CREATE UNIQUE INDEX application_user_access_refresh_token1 ON public.application
 USING btree (application_user_id, application_user_log_in_token_device_id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 -- The index is not put on the field `expires_at` on purpose, because otherwise there will be a high load,
--- because this field will be constantly updated.
+-- because this field will be constantly updated. That is, we will have a constant rebuilding of the index.
 
 ALTER TABLE ONLY public.application_user_access_refresh_token
 ALTER COLUMN application_user_id SET NOT NULL,

@@ -5,7 +5,6 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RunTimeError;
-use crate::infrastructure_layer::functionality::service::integer_type_converter::IntegerTypeConverter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
@@ -15,8 +14,6 @@ pub struct ApplicationUserRegistrationConfirmationToken_PostgresqlRepository;
 
 impl ApplicationUserRegistrationConfirmationToken_PostgresqlRepository {
     pub async fn create<'a, 'b>(authorization_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserRegistrationConfirmationToken<'b>, ErrorAuditor> {
-        let wrong_enter_tries_quantity_ = insert.application_user_registration_confirmation_token_wrong_enter_tries_quantity as i16;
-
         let quantity_of_minute_for_expiration = ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -41,7 +38,7 @@ impl ApplicationUserRegistrationConfirmationToken_PostgresqlRepository {
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.application_user_email, Type::TEXT)
             .add_parameter(&insert.application_user_registration_confirmation_token_value, Type::TEXT)
-            .add_parameter(&wrong_enter_tries_quantity_, Type::INT2)
+            .add_parameter(&insert.application_user_registration_confirmation_token_wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&insert.application_user_registration_confirmation_token_is_approved, Type::BOOL)
             .add_parameter(&quantity_of_minute_for_expiration, Type::INT2);
 
@@ -106,7 +103,7 @@ impl ApplicationUserRegistrationConfirmationToken_PostgresqlRepository {
 
         let application_user_registration_confirmation_token_value = application_user_registration_confirmation_token.get_value();
 
-        let application_user_registration_confirmation_token_wrong_enter_tries_quantity = application_user_registration_confirmation_token.get_wrong_enter_tries_quantity() as i16;
+        let application_user_registration_confirmation_token_wrong_enter_tries_quantity = application_user_registration_confirmation_token.get_wrong_enter_tries_quantity();
 
         let application_user_registration_confirmation_token_is_approved = application_user_registration_confirmation_token.get_is_approved();
 
@@ -245,16 +242,7 @@ impl ApplicationUserRegistrationConfirmationToken_PostgresqlRepository {
                             };
 
                             let wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-                                Ok(wrong_enter_tries_quantity_) => {
-                                    match IntegerTypeConverter::convert_i16_to_u8(wrong_enter_tries_quantity_) {
-                                        Ok(wrong_enter_tries_quantity__) => wrong_enter_tries_quantity__,
-                                        Err(mut error) => {
-                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                            return Err(error);
-                                        }
-                                    }
-                                }
+                                Ok(wrong_enter_tries_quantity_) => wrong_enter_tries_quantity_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -329,6 +317,6 @@ impl ApplicationUserRegistrationConfirmationToken_PostgresqlRepository {
 pub struct Insert<'a> {
     pub application_user_email: &'a str,
     pub application_user_registration_confirmation_token_value: String,
-    pub application_user_registration_confirmation_token_wrong_enter_tries_quantity: u8,
+    pub application_user_registration_confirmation_token_wrong_enter_tries_quantity: i16,
     pub application_user_registration_confirmation_token_is_approved: bool
 }

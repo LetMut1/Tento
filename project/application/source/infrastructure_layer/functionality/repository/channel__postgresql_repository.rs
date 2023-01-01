@@ -25,10 +25,10 @@ impl Channel_PostgresqlRepository {
     ) -> Result<Option<Vec<GetManyByNameChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut counter = Counter::new();
+        let mut counter = Counter::new_classic();
 
-        let mut counter_value: usize;
-        match counter.get_next() {
+        let mut counter_value: i16;
+        match counter.get_next_value() {
             Ok(counter_) => {
                 counter_value = counter_;
             }
@@ -59,7 +59,7 @@ impl Channel_PostgresqlRepository {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_name_) = requery_name {
-            match counter.get_next() {
+            match counter.get_next_value() {
                 Ok(counter_) => {
                     counter_value = counter_;
                 }
@@ -74,7 +74,7 @@ impl Channel_PostgresqlRepository {
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_name_, Type::TEXT);
         }
 
-        match counter.get_next() {
+        match counter.get_next_value() {
             Ok(counter_) => {
                 counter_value = counter_;
             }
@@ -253,9 +253,9 @@ impl Channel_PostgresqlRepository {
     ) -> Result<Option<Vec<GetManyByCreatedAtChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut counter = Counter::new();
+        let mut counter = Counter::new_classic();
 
-        let mut counter_value: usize;
+        let mut counter_value: i16;
 
         let mut query =
             "SELECT \
@@ -287,7 +287,7 @@ impl Channel_PostgresqlRepository {
                     );
                 }
             }
-            match counter.get_next() {
+            match counter.get_next_value() {
                 Ok(counter_) => {
                     counter_value = counter_;
                 }
@@ -310,7 +310,7 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         };
-        match counter.get_next() {
+        match counter.get_next_value() {
             Ok(counter_) => {
                 counter_value = counter_;
             }
@@ -489,9 +489,9 @@ impl Channel_PostgresqlRepository {
     ) -> Result<Option<Vec<GetManyBySubscribersQuantityChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let mut counter = Counter::new();
+        let mut counter = Counter::new_classic();
 
-        let mut counter_value: usize;
+        let mut counter_value: i16;
 
         let mut query =
             "SELECT \
@@ -516,7 +516,7 @@ impl Channel_PostgresqlRepository {
                     );
                 }
             }
-            match counter.get_next() {
+            match counter.get_next_value() {
                 Ok(counter_) => {
                     counter_value = counter_;
                 }
@@ -539,7 +539,7 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         };
-        match counter.get_next() {
+        match counter.get_next_value() {
             Ok(counter_) => {
                 counter_value = counter_;
             }

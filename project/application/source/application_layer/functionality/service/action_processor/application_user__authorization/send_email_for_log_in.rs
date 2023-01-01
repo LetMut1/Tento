@@ -46,16 +46,7 @@ impl ActionProcessor {
                 ).await {
                     Ok(application_user_log_in_token) => {
                         if let Some(application_user_log_in_token_) = application_user_log_in_token {
-                            let is_expired = match ApplicationUserLogInToken_ExpirationTimeResolver::is_expired(&application_user_log_in_token_) {
-                                Ok(is_expired_) => is_expired_,
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                    return Err(error);
-                                }
-                            };
-
-                            if !is_expired {
+                            if !ApplicationUserLogInToken_ExpirationTimeResolver::is_expired(&application_user_log_in_token_) {
                                 match core_postgresql_connection_pool.get().await {
                                     Ok(core_postgresql_pooled_connection) => {
                                         match ApplicationUser_PostgresqlRepository::find_3(

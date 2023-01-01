@@ -131,9 +131,6 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
         let application_user_access_refresh_token_obfuscation_value = application_user_access_refresh_token.get_obfuscation_value();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_access_token_id, Type::TEXT)
-            .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT);
 
         if update.application_user_access_refresh_token_expires_at {
             if update.application_user_access_refresh_token_updated_at {
@@ -156,6 +153,8 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                         auart.updated_at::TEXT as ua;";
 
                 prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_access_token_id, Type::TEXT)
+                    .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
                     .add_parameter(&ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT4)
                     .add_parameter(&application_user_id, Type::INT8)
                     .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
@@ -237,6 +236,8 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                         auart.expires_at AS ea;";
 
                 prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_access_token_id, Type::TEXT)
+                    .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
                     .add_parameter(&ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT4)
                     .add_parameter(&application_user_id, Type::INT8)
                     .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
@@ -258,8 +259,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                                         }
                                     };
 
-                                    application_user_access_refresh_token
-                                        .set_expires_at(application_user_access_refresh_token_expires_at);
+                                    application_user_access_refresh_token.set_expires_at(application_user_access_refresh_token_expires_at);
                                 } else {
                                     return Err(
                                         ErrorAuditor::new(
@@ -307,6 +307,8 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                         auart.updated_at::TEXT as ua;";
 
                 prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_access_token_id, Type::TEXT)
+                    .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
                     .add_parameter(&application_user_id, Type::INT8)
                     .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
 
@@ -327,8 +329,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                                         }
                                     };
 
-                                    application_user_access_refresh_token
-                                        .set_updated_at(application_user_access_refresh_token_updated_at);
+                                    application_user_access_refresh_token.set_updated_at(application_user_access_refresh_token_updated_at);
                                 } else {
                                     return Err(
                                         ErrorAuditor::new(
@@ -372,6 +373,8 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                         auart.application_user_id as aui;";
 
                 prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_access_token_id, Type::TEXT)
+                    .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
                     .add_parameter(&application_user_id, Type::INT8)
                     .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
 

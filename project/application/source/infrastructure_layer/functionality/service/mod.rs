@@ -6,7 +6,6 @@ pub mod counter;
 pub mod date_time_resolver;
 pub mod email_sender;
 pub mod environment_configuration_resolver;
-pub mod integer_type_converter;
 pub mod number_row_generator;
 pub mod order_convention_resolver;
 pub mod postgrasql_transaction_manager;
