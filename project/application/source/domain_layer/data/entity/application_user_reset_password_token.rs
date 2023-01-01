@@ -3,7 +3,7 @@ pub struct ApplicationUserResetPasswordToken {
     value: String,
     wrong_enter_tries_quantity: i16,
     is_approved: bool,
-    expires_at: String
+    expires_at: i64
 }
 
 impl ApplicationUserResetPasswordToken {
@@ -15,7 +15,7 @@ impl ApplicationUserResetPasswordToken {
         value: String,
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
-        expires_at: String
+        expires_at: i64
     ) -> Self {
         return Self {
             application_user_id,
@@ -42,8 +42,8 @@ impl ApplicationUserResetPasswordToken {
         return self.is_approved;
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> &'b str {
-        return self.expires_at.as_str();
+    pub fn get_expires_at<'b>(&'b self) -> i64 {
+        return self.expires_at;
     }
 
     pub fn set_value<'b>(&'b mut self, value: String) -> &'b mut Self {
@@ -64,7 +64,7 @@ impl ApplicationUserResetPasswordToken {
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: String) -> &'b mut Self {
+    pub fn set_expires_at<'b>(&'b mut self, expires_at: i64) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;

@@ -46,15 +46,7 @@ impl ActionProcessor {
                 ).await {
                     Ok(application_user_reset_password_token) => {
                         if let Some(application_user_reset_password_token_) = application_user_reset_password_token {
-                            let is_expired = match ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
-                                Ok(is_expired_) => is_expired_,
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                    return Err(error);
-                                }
-                            };
-                            if !is_expired {
+                            if !ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
                                 if !application_user_reset_password_token_.get_is_approved() {
                                     match core_postgresql_connection_pool.get().await {
                                         Ok(core_postgresql_pooled_connection) => {

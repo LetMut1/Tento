@@ -10,6 +10,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::ApplicationUserResetPasswordToken_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::Update;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
@@ -46,21 +47,15 @@ impl ActionProcessor {
                             ).await {
                                 Ok(application_user_reset_password_token) => {
                                     if let Some(mut application_user_reset_password_token_) = application_user_reset_password_token {
-                                        let is_expired = match ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
-                                            Ok(is_expired_) => is_expired_,
-                                            Err(mut error) => {
-                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                return Err(error);
-                                            }
-                                        };
-                                        if !is_expired {
+                                        if !ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
                                             if !application_user_reset_password_token_.get_is_approved() {
                                                 if application_user_reset_password_token_.get_value().as_bytes() == incoming.application_user_reset_password_token_value.as_bytes() {
                                                     application_user_reset_password_token_.set_is_approved(true);
 
                                                     if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
-                                                        authorization_postgresql_connection, &application_user_reset_password_token_
+                                                        authorization_postgresql_connection,
+                                                        &mut application_user_reset_password_token_,
+                                                        Update { application_user_reset_password_token_expires_at: false }
                                                     ).await {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -77,7 +72,9 @@ impl ActionProcessor {
 
                                                     if application_user_reset_password_token_.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                                                         if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
-                                                            authorization_postgresql_connection, &application_user_reset_password_token_
+                                                            authorization_postgresql_connection,
+                                                            &mut application_user_reset_password_token_,
+                                                            Update { application_user_reset_password_token_expires_at: false }
                                                         ).await {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

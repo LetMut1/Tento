@@ -3,7 +3,7 @@ CREATE TABLE public.application_user_reset_password_token (
     value TEXT,
     wrong_enter_tries_quantity SMALLINT,
     is_approved BOOLEAN,
-    expires_at TIMESTAMP(6) WITH TIME ZONE
+    expires_at BIGINT
 ) WITH (oids = false, fillfactor = 95, autovacuum_enabled = true);
 
 CREATE UNIQUE INDEX application_user_reset_password_token1 ON public.application_user_reset_password_token
