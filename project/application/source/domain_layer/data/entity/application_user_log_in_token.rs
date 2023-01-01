@@ -7,7 +7,7 @@ pub struct ApplicationUserLogInToken<'a> {
 }
 
 impl<'a> ApplicationUserLogInToken<'a> {
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: u8 = 10;
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i16 = 10;
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 5;
 
     pub fn new(

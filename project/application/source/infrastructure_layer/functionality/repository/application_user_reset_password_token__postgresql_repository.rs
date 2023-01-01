@@ -14,8 +14,6 @@ pub struct ApplicationUserResetPasswordToken_PostgresqlRepository;
 
 impl ApplicationUserResetPasswordToken_PostgresqlRepository {
     pub async fn create<'a>(authorization_connection: &'a Connection, insert: Insert) -> Result<ApplicationUserResetPasswordToken, ErrorAuditor> {
-        let quantity_of_minute_for_expiration = ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -40,7 +38,7 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
             .add_parameter(&insert.application_user_reset_password_token_value, Type::TEXT)
             .add_parameter(&insert.application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&insert.application_user_reset_password_token_is_approved, Type::BOOL)
-            .add_parameter(&quantity_of_minute_for_expiration, Type::INT2);
+            .add_parameter(&ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -232,8 +230,8 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                 match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            let value = match row_registry[0].try_get::<'_, usize, String>(0) {
-                                Ok(value_) => value_,
+                            let application_user_reset_password_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
+                                Ok(application_user_reset_password_token_value_) => application_user_reset_password_token_value_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -244,8 +242,8 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                                 }
                             };
 
-                            let wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-                                Ok(wrong_enter_tries_quantity_) => wrong_enter_tries_quantity_,
+                            let application_user_reset_password_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
+                                Ok(application_user_reset_password_token_wrong_enter_tries_quantity_) => application_user_reset_password_token_wrong_enter_tries_quantity_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -256,8 +254,8 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                                 }
                             };
 
-                            let is_approved = match row_registry[0].try_get::<'_, usize, bool>(2) {
-                                Ok(is_approved_) => is_approved_,
+                            let application_user_reset_password_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(2) {
+                                Ok(application_user_reset_password_token_is_approved_) => application_user_reset_password_token_is_approved_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -268,8 +266,8 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                                 }
                             };
 
-                            let expires_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-                                Ok(expires_at_) => expires_at_,
+                            let application_user_reset_password_token_expires_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+                                Ok(application_user_reset_password_token_expires_at_) => application_user_reset_password_token_expires_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -284,10 +282,10 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                                 Some(
                                     ApplicationUserResetPasswordToken::new(
                                         application_user_id,
-                                        value,
-                                        wrong_enter_tries_quantity,
-                                        is_approved,
-                                        expires_at
+                                        application_user_reset_password_token_value,
+                                        application_user_reset_password_token_wrong_enter_tries_quantity,
+                                        application_user_reset_password_token_is_approved,
+                                        application_user_reset_password_token_expires_at
                                     )
                                 )
                             );

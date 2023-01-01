@@ -3,11 +3,11 @@ pub struct ApplicationUserRegistrationConfirmationToken<'a> {
     value: String,
     wrong_enter_tries_quantity: i16,
     is_approved: bool,
-    expires_at: String
+    expires_at: i64
 }
 
 impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: u16 = 60 * 3;
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i16 = 60 * 3;
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 5;
 
     pub fn new(
@@ -15,7 +15,7 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         value: String,
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
-        expires_at: String
+        expires_at: i64
     ) -> Self {
         return Self {
             application_user_email,
@@ -42,8 +42,8 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         return self.is_approved;
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> &'b str {
-        return self.expires_at.as_str();
+    pub fn get_expires_at<'b>(&'b self) -> i64 {
+        return self.expires_at;
     }
 
     pub fn set_value<'b>(&'b mut self, value: String) -> &'b mut Self {
@@ -64,7 +64,7 @@ impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: String) -> &'b mut Self {
+    pub fn set_expires_at<'b>(&'b mut self, expires_at: i64) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;

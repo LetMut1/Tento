@@ -1,6 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
-use crate::domain_layer::data::entity::application_user_registration_confirmation_token::ApplicationUserRegistrationConfirmationToken;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_registration_confirmation_token__expiration_time_resolver::ApplicationUserRegistrationConfirmationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_registration_confirmation_token__value_generator::ApplicationUserRegistrationConfirmationToken_ValueGenerator;
@@ -12,8 +11,8 @@ use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_confirmation_token__postgresql_repository::ApplicationUserRegistrationConfirmationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_confirmation_token__postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::application_user_registration_confirmation_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
-use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -63,26 +62,8 @@ impl ActionProcessor {
                                                     Ok(application_user_registration_confirmation_token_) => {
                                                         let application_user_registration_confirmation_token = match application_user_registration_confirmation_token_ {
                                                             Some(mut application_user_registration_confirmation_token__) => {
-                                                                let expires_at = match DateTimeResolver::add_interval_from_now_formated(ApplicationUserRegistrationConfirmationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i64) {
-                                                                    Ok(expires_at_) => expires_at_,
-                                                                    Err(mut error) => {
-                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                                        return Err(error);
-                                                                    }
-                                                                };
-
-                                                                let is_expired = match ApplicationUserRegistrationConfirmationToken_ExpirationTimeResolver::is_expired(&application_user_registration_confirmation_token__) {
-                                                                    Ok(is_expired_) => is_expired_,
-                                                                    Err(mut error) => {
-                                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                                        return Err(error);
-                                                                    }
-                                                                };
-
-                                                                application_user_registration_confirmation_token__.set_expires_at(expires_at);
-                                                                if is_expired || application_user_registration_confirmation_token__.get_is_approved() {
+                                                                if ApplicationUserRegistrationConfirmationToken_ExpirationTimeResolver::is_expired(&application_user_registration_confirmation_token__)
+                                                                    || application_user_registration_confirmation_token__.get_is_approved() {
                                                                     application_user_registration_confirmation_token__
                                                                         .set_value(ApplicationUserRegistrationConfirmationToken_ValueGenerator::generate())
                                                                         .set_wrong_enter_tries_quantity(0)
@@ -90,7 +71,9 @@ impl ActionProcessor {
                                                                 }
 
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationToken_PostgresqlRepository::update(
-                                                                    authorization_postgresql_connection, &application_user_registration_confirmation_token__
+                                                                    authorization_postgresql_connection,
+                                                                    &mut application_user_registration_confirmation_token__,
+                                                                    Update { application_user_registration_confirmation_token_expires_at: true }
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

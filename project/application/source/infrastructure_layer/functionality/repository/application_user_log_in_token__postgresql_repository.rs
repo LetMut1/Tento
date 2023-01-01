@@ -14,8 +14,6 @@ pub struct ApplicationUserLogInToken_PostgresqlRepository;
 
 impl ApplicationUserLogInToken_PostgresqlRepository {
     pub async fn create<'a, 'b>(authorization_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserLogInToken<'b>, ErrorAuditor> {
-        let quantity_of_minute_for_expiration = ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -40,7 +38,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
             .add_parameter(&insert.application_user_log_in_token_device_id, Type::TEXT)
             .add_parameter(&insert.application_user_log_in_token_value, Type::TEXT)
             .add_parameter(&insert.application_user_log_in_token_wrong_enter_tries_quantity, Type::INT2)
-            .add_parameter(&quantity_of_minute_for_expiration, Type::INT2);
+            .add_parameter(&ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -111,10 +109,6 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
 
         let application_user_log_in_token_wrong_enter_tries_quantity = application_user_log_in_token.get_wrong_enter_tries_quantity();
 
-        let application_user_log_in_token_expires_at = application_user_log_in_token.get_expires_at();
-
-        let quantity_of_minute_for_expiration = ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION as i16;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         if update.application_user_log_in_token_expires_at {
@@ -136,7 +130,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(&application_user_log_in_token_value, Type::TEXT)
                 .add_parameter(&application_user_log_in_token_wrong_enter_tries_quantity, Type::INT2)
-                .add_parameter(&quantity_of_minute_for_expiration, Type::INT2)
+                .add_parameter(&ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
                 .add_parameter(&application_user_id, Type::INT8)
                 .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
 
@@ -307,8 +301,8 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            let value = match row_registry[0].try_get::<'_, usize, String>(0) {
-                                Ok(value_) => value_,
+                            let application_user_log_in_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
+                                Ok(application_user_log_in_token_value_) => application_user_log_in_token_value_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -319,8 +313,8 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                                 }
                             };
 
-                            let wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-                                Ok(wrong_enter_tries_quantity_) => wrong_enter_tries_quantity_,
+                            let application_user_log_in_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
+                                Ok(application_user_log_in_token_wrong_enter_tries_quantity_) => application_user_log_in_token_wrong_enter_tries_quantity_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -331,8 +325,8 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                                 }
                             };
 
-                            let expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
-                                Ok(expires_at_) => expires_at_,
+                            let application_user_log_in_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
+                                Ok(application_user_log_in_token_expires_at_) => application_user_log_in_token_expires_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -348,9 +342,9 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                                     ApplicationUserLogInToken::new(
                                         application_user_id,
                                         application_user_log_in_token_device_id,
-                                        value,
-                                        wrong_enter_tries_quantity,
-                                        expires_at
+                                        application_user_log_in_token_value,
+                                        application_user_log_in_token_wrong_enter_tries_quantity,
+                                        application_user_log_in_token_expires_at
                                     )
                                 )
                             );
