@@ -61,7 +61,7 @@ impl ActionProcessor {
                 if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_1(
                     &*authorization_postgresql_pooled_connection,
                     application_user_access_token.get_application_user_id(),
-                    application_user_access_token.get_application_user_log_in_token_device_id()
+                    application_user_access_token.get_application_user_device_id()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

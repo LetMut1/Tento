@@ -173,13 +173,13 @@ impl ActionProcessor {
                                                 let application_user_access_token = ApplicationUserAccessToken::new(
                                                     ApplicationUserAccessToken_IdGenerator::generate(),
                                                     application_user.get_id(),
-                                                    Cow::Borrowed(incoming.application_user_log_in_token_device_id.as_str()),
+                                                    Cow::Borrowed(incoming.application_user_device_id.as_str()),
                                                     expires_at
                                                 );
 // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
                                                 let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
                                                     application_user_id: application_user.get_id(),
-                                                    application_user_log_in_token_device_id: Cow::Borrowed(incoming.application_user_log_in_token_device_id.as_str()),
+                                                    application_user_device_id: Cow::Borrowed(incoming.application_user_device_id.as_str()),
                                                     application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
                                                     application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate(),
                                                 };
@@ -281,7 +281,7 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_log_in_token_device_id: String,
+    application_user_device_id: String,
     application_user_nickname: String,
     application_user_password: String,
     application_user_email: String,

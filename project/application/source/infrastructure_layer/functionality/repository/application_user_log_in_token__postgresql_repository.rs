@@ -19,7 +19,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
         let query =
             "INSERT INTO public.application_user_log_in_token AS aulit ( \
                 application_user_id, \
-                device_id, \
+                application_user_device_id, \
                 value, \
                 wrong_enter_tries_quantity, \
                 expires_at \
@@ -35,7 +35,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.application_user_id, Type::INT8)
-            .add_parameter(&insert.application_user_log_in_token_device_id, Type::TEXT)
+            .add_parameter(&insert.application_user_device_id, Type::TEXT)
             .add_parameter(&insert.application_user_log_in_token_value, Type::TEXT)
             .add_parameter(&insert.application_user_log_in_token_wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2);
@@ -60,7 +60,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                             return Ok(
                                 ApplicationUserLogInToken::new(
                                     insert.application_user_id,
-                                    insert.application_user_log_in_token_device_id,
+                                    insert.application_user_device_id,
                                     insert.application_user_log_in_token_value,
                                     insert.application_user_log_in_token_wrong_enter_tries_quantity,
                                     application_user_log_in_token_expires_at
@@ -103,7 +103,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
     ) -> Result<(), ErrorAuditor> {
         let application_user_id = application_user_log_in_token.get_application_user_id();
 
-        let application_user_log_in_token_device_id = application_user_log_in_token.get_device_id();
+        let application_user_device_id = application_user_log_in_token.get_application_user_device_id();
 
         let application_user_log_in_token_value = application_user_log_in_token.get_value();
 
@@ -123,7 +123,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 $2, \
                 extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $3)::INTERVAL)) \
             ) \
-            WHERE aulit.application_user_id = $4 AND aulit.device_id = $5 \
+            WHERE aulit.application_user_id = $4 AND aulit.application_user_device_id = $5 \
             RETURNING \
                 aulit.expires_at AS ea;";
 
@@ -132,7 +132,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 .add_parameter(&application_user_log_in_token_wrong_enter_tries_quantity, Type::INT2)
                 .add_parameter(&ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
                 .add_parameter(&application_user_id, Type::INT8)
-                .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+                .add_parameter(&application_user_device_id, Type::TEXT);
 
             match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
                 Ok(ref statement) => {
@@ -190,7 +190,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 $1, \
                 $2 \
             ) \
-            WHERE aulit.application_user_id = $3 AND aulit.device_id = $4 \
+            WHERE aulit.application_user_id = $3 AND aulit.application_user_device_id = $4 \
             RETURNING \
                 aulit.application_user_id AS aui;";
 
@@ -198,7 +198,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 .add_parameter(&application_user_log_in_token_value, Type::TEXT)
                 .add_parameter(&application_user_log_in_token_wrong_enter_tries_quantity, Type::INT2)
                 .add_parameter(&application_user_id, Type::INT8)
-                .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+                .add_parameter(&application_user_device_id, Type::TEXT);
 
             match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
                 Ok(ref statement) => {
@@ -240,16 +240,16 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
     pub async fn delete<'a>(
         authorization_connection: &'a Connection,
         application_user_id: i64,
-        application_user_log_in_token_device_id: &'a str
+        application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
             "DELETE FROM ONLY public.application_user_log_in_token AS aulit \
-            WHERE aulit.application_user_id = $1 AND aulit.device_id = $2;";
+            WHERE aulit.application_user_id = $1 AND aulit.application_user_device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_device_id, Type::TEXT);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -281,7 +281,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
     pub async fn find_1<'a>(
         authorization_connection: &'a Connection,
         application_user_id: i64,
-        application_user_log_in_token_device_id: &'a str
+        application_user_device_id: &'a str
     ) -> Result<Option<ApplicationUserLogInToken<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -291,10 +291,10 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 aulit.wrong_enter_tries_quantity AS wetq, \
                 aulit.expires_at AS ea \
             FROM public.application_user_log_in_token aulit \
-            WHERE aulit.application_user_id = $1 AND aulit.device_id = $2;";
+            WHERE aulit.application_user_id = $1 AND aulit.application_user_device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_device_id, Type::TEXT);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -341,7 +341,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                                 Some(
                                     ApplicationUserLogInToken::new(
                                         application_user_id,
-                                        application_user_log_in_token_device_id,
+                                        application_user_device_id,
                                         application_user_log_in_token_value,
                                         application_user_log_in_token_wrong_enter_tries_quantity,
                                         application_user_log_in_token_expires_at
@@ -376,7 +376,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
 
 pub struct Insert<'a> {
     pub application_user_id: i64,
-    pub application_user_log_in_token_device_id: &'a str,
+    pub application_user_device_id: &'a str,
     pub application_user_log_in_token_value: String,
     pub application_user_log_in_token_wrong_enter_tries_quantity: i16
 }

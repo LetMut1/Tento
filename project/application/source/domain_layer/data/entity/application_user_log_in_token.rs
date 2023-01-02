@@ -1,6 +1,6 @@
 pub struct ApplicationUserLogInToken<'a> {
     application_user_id: i64,
-    device_id: &'a str,
+    application_user_device_id: &'a str,
     value: String,
     wrong_enter_tries_quantity: i16,
     expires_at: i64
@@ -12,14 +12,14 @@ impl<'a> ApplicationUserLogInToken<'a> {
 
     pub fn new(
         application_user_id: i64,
-        device_id: &'a str,
+        application_user_device_id: &'a str,
         value: String,
         wrong_enter_tries_quantity: i16,
         expires_at: i64
     ) -> Self {
         return Self {
             application_user_id,
-            device_id,
+            application_user_device_id,
             value,
             wrong_enter_tries_quantity,
             expires_at
@@ -30,8 +30,8 @@ impl<'a> ApplicationUserLogInToken<'a> {
         return self.application_user_id;
     }
 
-    pub fn get_device_id<'b>(&'b self) -> &'a str {
-        return self.device_id;
+    pub fn get_application_user_device_id<'b>(&'b self) -> &'a str {
+        return self.application_user_device_id;
     }
 
     pub fn get_value<'b>(&'b self) -> &'b str {

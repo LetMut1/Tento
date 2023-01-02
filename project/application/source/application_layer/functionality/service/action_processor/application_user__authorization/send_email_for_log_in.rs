@@ -42,7 +42,7 @@ impl ActionProcessor {
         match authorization_postgresql_connection_pool.get().await {
             Ok(authorization_postgresql_pooled_connection) => {
                 match ApplicationUserLogInToken_PostgresqlRepository::find_1(
-                    &*authorization_postgresql_pooled_connection, incoming.application_user_id, incoming.application_user_log_in_token_device_id.as_str()
+                    &*authorization_postgresql_pooled_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
                 ).await {
                     Ok(application_user_log_in_token) => {
                         if let Some(application_user_log_in_token_) = application_user_log_in_token {
@@ -113,6 +113,6 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_log_in_token_device_id: String,
+    application_user_device_id: String,
     application_user_id: i64
 }

@@ -102,7 +102,7 @@ impl ActionProcessor {
                                         let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
                                         match ApplicationUserLogInToken_PostgresqlRepository::find_1(
-                                            authorization_postgresql_connection, application_user_id, incoming.application_user_log_in_token_device_id.as_str()
+                                            authorization_postgresql_connection, application_user_id, incoming.application_user_device_id.as_str()
                                         ).await {
                                             Ok(application_user_log_in_token_) => {
                                                 let application_user_log_in_token = match application_user_log_in_token_ {
@@ -122,7 +122,7 @@ impl ActionProcessor {
                                                     None => {
                                                         let insert = Insert {
                                                             application_user_id,
-                                                            application_user_log_in_token_device_id: incoming.application_user_log_in_token_device_id.as_str(),
+                                                            application_user_device_id: incoming.application_user_device_id.as_str(),
                                                             application_user_log_in_token_value: ApplicationUserLogInToken_ValueGenerator::generate(),
                                                             application_user_log_in_token_wrong_enter_tries_quantity: 0
                                                         };
@@ -196,7 +196,7 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_log_in_token_device_id: String,
+    application_user_device_id: String,
     application_user_email_or_application_user_nickname: String,
     application_user_password: String
 }

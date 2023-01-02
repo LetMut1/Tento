@@ -156,7 +156,7 @@ Registers application user for the last step.
 
 Request data:
 struct Incoming {
-    application_user_log_in_token_device_id: String,
+    application_user_device_id: String,
     application_user_nickname: String,
     application_user_password: String,
     application_user_email: String,
@@ -204,7 +204,7 @@ Authorizes application user for the firs step and send email to user.
 
 Request data:
 struct Incoming {
-    application_user_log_in_token_device_id: String,
+    application_user_device_id: String,
     application_user_email_or_application_user_nickname: String,
     application_user_password: String
 }
@@ -224,7 +224,7 @@ Authorizes application user for the last step.
 Request data:
 struct Incoming {
     application_user_id: i64,
-    application_user_log_in_token_device_id: String,
+    application_user_device_id: String,
     application_user_log_in_token_value: String
 }
 
@@ -246,7 +246,7 @@ Sends email for log in. (Should be used only if the user does not receive an ema
 
 Request data:
 struct Incoming {
-    application_user_log_in_token_device_id: String,
+    application_user_device_id: String,
     application_user_id: i64
 }
 

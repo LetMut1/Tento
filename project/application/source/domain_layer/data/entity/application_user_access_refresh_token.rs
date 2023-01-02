@@ -6,7 +6,7 @@ use std::borrow::Cow;
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessRefreshToken<'a> {
     application_user_id: i64,
-    application_user_log_in_token_device_id: Cow<'a, str>,
+    application_user_device_id: Cow<'a, str>,
     application_user_access_token_id: Cow<'a, str>,
     obfuscation_value: String,
     expires_at: i64,
@@ -18,7 +18,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
 
     pub fn new(
         application_user_id: i64,
-        application_user_log_in_token_device_id: Cow<'a, str>,
+        application_user_device_id: Cow<'a, str>,
         application_user_access_token_id: Cow<'a, str>,
         obfuscation_value: String,
         expires_at: i64,
@@ -26,7 +26,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
     ) -> Self {
         return Self {
             application_user_id,
-            application_user_log_in_token_device_id,
+            application_user_device_id,
             application_user_access_token_id,
             obfuscation_value,
             expires_at,
@@ -38,8 +38,8 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         return self.application_user_id;
     }
 
-    pub fn get_application_user_log_in_token_device_id<'b>(&'b self) -> &'b str {
-        return self.application_user_log_in_token_device_id.as_ref();
+    pub fn get_application_user_device_id<'b>(&'b self) -> &'b str {
+        return self.application_user_device_id.as_ref();
     }
 
     pub fn get_application_user_access_token_id<'b>(&'b self) -> &'b str {

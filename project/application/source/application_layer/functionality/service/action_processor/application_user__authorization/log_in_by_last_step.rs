@@ -70,7 +70,7 @@ impl ActionProcessor {
             let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
             let application_user_log_in_token = match ApplicationUserLogInToken_PostgresqlRepository::find_1(
-                authorization_postgresql_connection, incoming.application_user_id, incoming.application_user_log_in_token_device_id.as_str()
+                authorization_postgresql_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
             ).await {
                 Ok(application_user_log_in_token_) => application_user_log_in_token_,
                 Err(mut error) => {
@@ -99,12 +99,12 @@ impl ActionProcessor {
                     let application_user_access_token = ApplicationUserAccessToken::new(
                         ApplicationUserAccessToken_IdGenerator::generate(),
                         application_user_log_in_token_.get_application_user_id(),
-                        Cow::Borrowed(application_user_log_in_token_.get_device_id()),
+                        Cow::Borrowed(application_user_log_in_token_.get_application_user_device_id()),
                         expires_at
                     );
 
                     let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::find_1(
-                        authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
+                        authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_application_user_device_id()
                     ).await {
                         Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
                         Err(mut error) => {
@@ -140,7 +140,7 @@ impl ActionProcessor {
                         None => {
                             let insert = Insert {
                                 application_user_id: application_user_log_in_token_.get_application_user_id(),
-                                application_user_log_in_token_device_id: Cow::Borrowed(application_user_log_in_token_.get_device_id()),
+                                application_user_device_id: Cow::Borrowed(application_user_log_in_token_.get_application_user_device_id()),
                                 application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
                                 application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate(),
                             };
@@ -157,7 +157,7 @@ impl ActionProcessor {
                     };
 
                     if let Err(mut error) = ApplicationUserLogInToken_PostgresqlRepository::delete(
-                        authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
+                        authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_application_user_device_id()
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -207,7 +207,7 @@ impl ActionProcessor {
                     }
                 } else {
                     if let Err(mut error) = ApplicationUserLogInToken_PostgresqlRepository::delete(
-                        authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_device_id()
+                        authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_application_user_device_id()
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -230,7 +230,7 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_id: i64,
-    application_user_log_in_token_device_id: String,
+    application_user_device_id: String,
     application_user_log_in_token_value: String
 }
 

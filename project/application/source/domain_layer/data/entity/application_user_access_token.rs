@@ -7,7 +7,7 @@ use std::borrow::Cow;
 pub struct ApplicationUserAccessToken<'a> {
     id: String,
     application_user_id: i64,
-    application_user_log_in_token_device_id: Cow<'a, str>,
+    application_user_device_id: Cow<'a, str>,
     expires_at: i64
 }
 
@@ -17,13 +17,13 @@ impl<'a> ApplicationUserAccessToken<'a> {
     pub fn new(
         id: String,
         application_user_id: i64,
-        application_user_log_in_token_device_id: Cow<'a, str>,
+        application_user_device_id: Cow<'a, str>,
         expires_at: i64
     ) -> Self {
         return Self {
             id,
             application_user_id,
-            application_user_log_in_token_device_id,
+            application_user_device_id,
             expires_at
         };
     }
@@ -36,8 +36,8 @@ impl<'a> ApplicationUserAccessToken<'a> {
         return self.application_user_id;
     }
 
-    pub fn get_application_user_log_in_token_device_id<'b>(&'b self) -> &'b str {
-        return self.application_user_log_in_token_device_id.as_ref();
+    pub fn get_application_user_device_id<'b>(&'b self) -> &'b str {
+        return self.application_user_device_id.as_ref();
     }
 
     pub fn get_expires_at<'b>(&'b self) -> i64 {

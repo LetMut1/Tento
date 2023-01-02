@@ -15,7 +15,7 @@ pub struct ApplicationUserAccessRefreshToken_PostgresqlRepository;
 
 impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
     pub async fn create<'a, 'b>(authorization_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserAccessRefreshToken<'b>, ErrorAuditor> {
-        let application_user_log_in_token_device_id_ = insert.application_user_log_in_token_device_id.as_ref();
+        let application_user_device_id_ = insert.application_user_device_id.as_ref();
 
         let application_user_access_token_id_ = insert.application_user_access_token_id.as_ref();
 
@@ -24,7 +24,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
         let query =
             "INSERT INTO public.application_user_access_refresh_token AS auart ( \
                 application_user_id, \
-                application_user_log_in_token_device_id, \
+                application_user_device_id, \
                 application_user_access_token_id, \
                 obfuscation_value, \
                 expires_at, \
@@ -43,7 +43,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.application_user_id, Type::INT8)
-            .add_parameter(&application_user_log_in_token_device_id_, Type::TEXT)
+            .add_parameter(&application_user_device_id_, Type::TEXT)
             .add_parameter(&application_user_access_token_id_, Type::TEXT)
             .add_parameter(&insert.application_user_access_refresh_token_obfuscation_value, Type::TEXT)
             .add_parameter(&ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT4);
@@ -80,7 +80,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                             return Ok(
                                 ApplicationUserAccessRefreshToken::new(
                                     insert.application_user_id,
-                                    insert.application_user_log_in_token_device_id,
+                                    insert.application_user_device_id,
                                     insert.application_user_access_token_id,
                                     insert.application_user_access_refresh_token_obfuscation_value,
                                     application_user_access_refresh_token_expires_at,
@@ -124,7 +124,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
     ) -> Result<(), ErrorAuditor> {
         let application_user_id = application_user_access_refresh_token.get_application_user_id();
 
-        let application_user_log_in_token_device_id = application_user_access_refresh_token.get_application_user_log_in_token_device_id();
+        let application_user_device_id = application_user_access_refresh_token.get_application_user_device_id();
 
         let application_user_access_token_id = application_user_access_refresh_token.get_application_user_access_token_id();
 
@@ -147,7 +147,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                         extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $3)::INTERVAL)), \
                         current_timestamp(6) \
                     ) \
-                    WHERE auart.application_user_id = $4 AND auart.application_user_log_in_token_device_id = $5 \
+                    WHERE auart.application_user_id = $4 AND auart.application_user_device_id = $5 \
                     RETURNING \
                         auart.expires_at AS ea, \
                         auart.updated_at::TEXT as ua;";
@@ -157,7 +157,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
                     .add_parameter(&ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT4)
                     .add_parameter(&application_user_id, Type::INT8)
-                    .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+                    .add_parameter(&application_user_device_id, Type::TEXT);
 
                 match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
                     Ok(ref statement) => {
@@ -231,7 +231,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                         $2, \
                         extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $3)::INTERVAL)) \
                     ) \
-                    WHERE auart.application_user_id = $4 AND auart.application_user_log_in_token_device_id = $5 \
+                    WHERE auart.application_user_id = $4 AND auart.application_user_device_id = $5 \
                     RETURNING \
                         auart.expires_at AS ea;";
 
@@ -240,7 +240,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
                     .add_parameter(&ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT4)
                     .add_parameter(&application_user_id, Type::INT8)
-                    .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+                    .add_parameter(&application_user_device_id, Type::TEXT);
 
                 match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
                     Ok(ref statement) => {
@@ -302,7 +302,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                         $2, \
                         current_timestamp(6) \
                     ) \
-                    WHERE auart.application_user_id = $3 AND auart.application_user_log_in_token_device_id = $4 \
+                    WHERE auart.application_user_id = $3 AND auart.application_user_device_id = $4 \
                     RETURNING \
                         auart.updated_at::TEXT as ua;";
 
@@ -310,7 +310,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     .add_parameter(&application_user_access_token_id, Type::TEXT)
                     .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
                     .add_parameter(&application_user_id, Type::INT8)
-                    .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+                    .add_parameter(&application_user_device_id, Type::TEXT);
 
                 match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
                     Ok(ref statement) => {
@@ -368,7 +368,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                         $1, \
                         $2 \
                     ) \
-                    WHERE auart.application_user_id = $3 AND auart.application_user_log_in_token_device_id = $4 \
+                    WHERE auart.application_user_id = $3 AND auart.application_user_device_id = $4 \
                     RETURNING \
                         auart.application_user_id as aui;";
 
@@ -376,7 +376,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     .add_parameter(&application_user_access_token_id, Type::TEXT)
                     .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
                     .add_parameter(&application_user_id, Type::INT8)
-                    .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+                    .add_parameter(&application_user_device_id, Type::TEXT);
 
                 match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
                     Ok(ref statement) => {
@@ -419,17 +419,17 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
     pub async fn delete_1<'a>(
         authorization_connection: &'a Connection,
         application_user_id: i64,
-        application_user_log_in_token_device_id: &'a str
+        application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
             "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
-            WHERE auart.application_user_id = $1 AND auart.application_user_log_in_token_device_id = $2;";
+            WHERE auart.application_user_id = $1 AND auart.application_user_device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver
         .add_parameter(&application_user_id, Type::INT8)
-        .add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+        .add_parameter(&application_user_device_id, Type::TEXT);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -497,7 +497,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
     pub async fn find_1<'a>(
         authorization_connection: &'a Connection,
         application_user_id: i64,
-        application_user_log_in_token_device_id: &'a str
+        application_user_device_id: &'a str
     ) -> Result<Option<ApplicationUserAccessRefreshToken<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -508,10 +508,10 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                 auart.expires_at AS ea, \
                 auart.updated_at AS ua::TEXT \
             FROM public.application_user_access_refresh_token auart \
-            WHERE auart.application_user_id = $1 AND auart.application_user_log_in_token_device_id = $2;";
+            WHERE auart.application_user_id = $1 AND auart.application_user_device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_log_in_token_device_id, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_device_id, Type::TEXT);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
@@ -570,7 +570,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                                 Some(
                                     ApplicationUserAccessRefreshToken::new(
                                         application_user_id,
-                                        Cow::Borrowed(application_user_log_in_token_device_id),
+                                        Cow::Borrowed(application_user_device_id),
                                         Cow::Owned(application_user_access_token_id),
                                         application_user_access_refresh_token_obfuscation_value,
                                         application_user_access_refresh_token_expires_at,
@@ -606,7 +606,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
 
 pub struct Insert<'a> {
     pub application_user_id: i64,
-    pub application_user_log_in_token_device_id: Cow<'a, str>,
+    pub application_user_device_id: Cow<'a, str>,
     pub application_user_access_token_id: Cow<'a, str>,
     pub application_user_access_refresh_token_obfuscation_value: String,
 }
