@@ -29,6 +29,6 @@ ALTER COLUMN created_at SET NOT NULL,
 ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel_subscription6 PRIMARY KEY USING INDEX channel_subscription2,
 ADD CONSTRAINT channel_subscription7 FOREIGN KEY (channel_id)
-REFERENCES public.channel(id) ON DELETE CASCADE,
+REFERENCES public.channel (id) ON DELETE CASCADE,
 ADD CONSTRAINT channel_subscription8 FOREIGN KEY (application_user_id)
-REFERENCES public.application_user(id) ON DELETE CASCADE;
+REFERENCES public.application_user (id) ON DELETE CASCADE;

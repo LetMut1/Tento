@@ -1,4 +1,4 @@
-CREATE TABLE public.channel_feed_publication_mark ( 
+CREATE TABLE public.channel_feed_publication_mark (
     id BIGINT,
     channel_feed_publication_id BIGINT,
     application_user_id BIGINT,
@@ -25,6 +25,6 @@ ALTER COLUMN application_user_id SET NOT NULL,
 ALTER COLUMN type SET NOT NULL,
 ADD CONSTRAINT channel_feed_publication_mark5 PRIMARY KEY USING INDEX channel_feed_publication_mark2,
 ADD CONSTRAINT channel_feed_publication_mark6 FOREIGN KEY (channel_feed_publication_id)
-REFERENCES public.channel_feed_publication(id) ON DELETE CASCADE,
+REFERENCES public.channel_feed_publication (id) ON DELETE CASCADE,
 ADD CONSTRAINT channel_feed_publication_mark7 FOREIGN KEY (application_user_id)
-REFERENCES public.application_user(id) ON DELETE CASCADE;
+REFERENCES public.application_user (id) ON DELETE CASCADE;

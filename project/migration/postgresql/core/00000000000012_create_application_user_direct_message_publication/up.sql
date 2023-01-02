@@ -25,13 +25,13 @@ ALTER COLUMN created_at SET NOT NULL,
 ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT application_user_direct_message_publication4 PRIMARY KEY USING INDEX application_user_direct_message_publication2,
 ADD CONSTRAINT application_user_direct_message_publication5 FOREIGN KEY (application_user_direct_message_id)
-REFERENCES public.application_user_direct_message(id) ON DELETE CASCADE,
+REFERENCES public.application_user_direct_message (id) ON DELETE CASCADE,
 ADD CONSTRAINT application_user_direct_message_publication6 FOREIGN KEY (application_user_id)
-REFERENCES public.application_user(id) ON DELETE CASCADE,
+REFERENCES public.application_user (id) ON DELETE CASCADE,
 ADD CONSTRAINT application_user_direct_message_publication7 FOREIGN KEY (channel_feed_publication_id)
-REFERENCES public.channel_feed_publication(id) ON DELETE CASCADE,
+REFERENCES public.channel_feed_publication (id) ON DELETE CASCADE,
 ADD CONSTRAINT application_user_direct_message_publication8 FOREIGN KEY (channel_feed_publication_reaction_id)
-REFERENCES public.channel_feed_publication_reaction(id) ON DELETE CASCADE,
+REFERENCES public.channel_feed_publication_reaction (id) ON DELETE CASCADE,
 ADD CONSTRAINT application_user_direct_message_publication9 CHECK (
     (channel_feed_publication_id IS NULL AND channel_feed_publication_reaction_id IS NOT NULL) OR
     (channel_feed_publication_id IS NOT NULL AND channel_feed_publication_reaction_id IS NULL)

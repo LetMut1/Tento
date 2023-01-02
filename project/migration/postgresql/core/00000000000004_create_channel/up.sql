@@ -57,7 +57,7 @@ ALTER COLUMN created_at SET NOT NULL,
 ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel7 PRIMARY KEY USING INDEX channel2,
 ADD CONSTRAINT channel8 FOREIGN KEY (application_user_channel_administrator_id)
-REFERENCES public.application_user_channel_administrator(id) ON DELETE RESTRICT,
+REFERENCES public.application_user_channel_administrator (id) ON DELETE RESTRICT,
 ADD CONSTRAINT channel9 UNIQUE USING INDEX channel3,
 ADD CONSTRAINT channel10 UNIQUE USING INDEX channel6;
 

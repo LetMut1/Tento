@@ -38,7 +38,7 @@ ALTER COLUMN created_at SET NOT NULL,
 ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel_direct_message_publication5 PRIMARY KEY USING INDEX channel_direct_message_publication2,
 ADD CONSTRAINT channel_direct_message_publication6 FOREIGN KEY (channel_id)
-REFERENCES public.channel(id) ON DELETE RESTRICT,
+REFERENCES public.channel (id) ON DELETE RESTRICT,
 ADD CONSTRAINT channel_direct_message_publication7 FOREIGN KEY (application_user_channel_administrator_id)
-REFERENCES public.application_user_channel_administrator(id) ON DELETE RESTRICT,
+REFERENCES public.application_user_channel_administrator (id) ON DELETE RESTRICT,
 ADD CONSTRAINT channel_direct_message_publication8 UNIQUE USING INDEX channel_direct_message_publication3;

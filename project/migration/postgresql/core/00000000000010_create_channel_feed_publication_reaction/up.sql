@@ -35,6 +35,6 @@ ALTER COLUMN created_at SET NOT NULL,
 ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel_feed_publication_reaction6 PRIMARY KEY USING INDEX channel_feed_publication_reaction2,
 ADD CONSTRAINT channel_feed_publication_reaction7 FOREIGN KEY (channel_feed_publication_id)
-REFERENCES public.channel_feed_publication(id) ON DELETE CASCADE,
+REFERENCES public.channel_feed_publication (id) ON DELETE CASCADE,
 ADD CONSTRAINT channel_feed_publication_reaction8 FOREIGN KEY (application_user_id)
-REFERENCES public.application_user(id) ON DELETE CASCADE;
+REFERENCES public.application_user (id) ON DELETE CASCADE;

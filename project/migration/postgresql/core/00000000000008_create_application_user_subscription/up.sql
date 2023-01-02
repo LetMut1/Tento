@@ -1,4 +1,4 @@
-CREATE TABLE public.application_user_subscription ( 
+CREATE TABLE public.application_user_subscription (
     id BIGINT,
     publisher_application_user_id BIGINT,
     subscriber_application_user_id BIGINT
@@ -23,7 +23,7 @@ ALTER COLUMN publisher_application_user_id SET NOT NULL,
 ALTER COLUMN subscriber_application_user_id SET NOT NULL,
 ADD CONSTRAINT application_user_subscription5 PRIMARY KEY USING INDEX application_user_subscription2,
 ADD CONSTRAINT application_user_subscription6 FOREIGN KEY (publisher_application_user_id)
-REFERENCES public.application_user(id) ON DELETE CASCADE,
+REFERENCES public.application_user (id) ON DELETE CASCADE,
 ADD CONSTRAINT application_user_subscription7 FOREIGN KEY (subscriber_application_user_id)
-REFERENCES public.application_user(id) ON DELETE CASCADE,
+REFERENCES public.application_user (id) ON DELETE CASCADE,
 ADD CONSTRAINT application_user_subscription8 CHECK (publisher_application_user_id != subscriber_application_user_id);
