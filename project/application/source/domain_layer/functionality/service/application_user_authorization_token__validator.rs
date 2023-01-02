@@ -6,13 +6,13 @@ use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use extern_crate::regex::Regex;
 
 #[allow(non_camel_case_types)]
-pub struct ApplicationUserogInToken_Validator;
+pub struct ApplicationUserAuthorizationToken_Validator;
 
-impl ApplicationUserogInToken_Validator {
-    pub fn is_valid_value<'a>(application_user_log_in_token_value: &'a str) -> Result<bool, ErrorAuditor> {
+impl ApplicationUserAuthorizationToken_Validator {
+    pub fn is_valid_value<'a>(application_user_authorization_token: &'a str) -> Result<bool, ErrorAuditor> {
         match Regex::new(r"^[0-9]{6}$") {
             Ok(regex) => {
-                return Ok(regex.is_match(application_user_log_in_token_value));
+                return Ok(regex.is_match(application_user_authorization_token));
             }
             Err(error) => {
                 return Err(

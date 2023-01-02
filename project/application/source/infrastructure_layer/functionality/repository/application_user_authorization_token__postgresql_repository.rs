@@ -1,4 +1,4 @@
-use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -10,14 +10,14 @@ use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 
 #[allow(non_camel_case_types)]
-pub struct ApplicationUserLogInToken_PostgresqlRepository;
+pub struct ApplicationUserAuthorizationToken_PostgresqlRepository;
 
-impl ApplicationUserLogInToken_PostgresqlRepository {
-    pub async fn create<'a, 'b>(authorization_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserLogInToken<'b>, ErrorAuditor> {
+impl ApplicationUserAuthorizationToken_PostgresqlRepository {
+    pub async fn create<'a, 'b>(authorization_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserAuthorizationToken<'b>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
-            "INSERT INTO public.application_user_log_in_token AS aulit ( \
+            "INSERT INTO public.application_user_authorization_token AS auat ( \
                 application_user_id, \
                 application_user_device_id, \
                 value, \
@@ -31,22 +31,22 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $5)::INTERVAL)) \
             ) \
             RETURNING \
-                aulit.expires_at AS ea;";
+                auat.expires_at AS ea;";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.application_user_id, Type::INT8)
             .add_parameter(&insert.application_user_device_id, Type::TEXT)
-            .add_parameter(&insert.application_user_log_in_token_value, Type::TEXT)
-            .add_parameter(&insert.application_user_log_in_token_wrong_enter_tries_quantity, Type::INT2)
-            .add_parameter(&ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2);
+            .add_parameter(&insert.application_user_authorization_token_value, Type::TEXT)
+            .add_parameter(&insert.application_user_authorization_token_wrong_enter_tries_quantity, Type::INT2)
+            .add_parameter(&ApplicationUserAuthorizationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2);
 
         match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
             Ok(ref statement) => {
                 match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            let application_user_log_in_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                                Ok(application_user_log_in_token_expires_at_) => application_user_log_in_token_expires_at_,
+                            let application_user_authorization_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                                Ok(application_user_authorization_token_expires_at_) => application_user_authorization_token_expires_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -58,19 +58,19 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                             };
 
                             return Ok(
-                                ApplicationUserLogInToken::new(
+                                ApplicationUserAuthorizationToken::new(
                                     insert.application_user_id,
                                     insert.application_user_device_id,
-                                    insert.application_user_log_in_token_value,
-                                    insert.application_user_log_in_token_wrong_enter_tries_quantity,
-                                    application_user_log_in_token_expires_at
+                                    insert.application_user_authorization_token_value,
+                                    insert.application_user_authorization_token_wrong_enter_tries_quantity,
+                                    application_user_authorization_token_expires_at
                                 )
                             );
                         }
 
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserLogInToken can not be inserted into Postgresql database.") },
+                                BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserAuthorizationToken can not be inserted into Postgresql database.") },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -98,22 +98,22 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
 
     pub async fn update<'a>(
         authorization_connection: &'a Connection,
-        application_user_log_in_token: &'a mut ApplicationUserLogInToken<'_>,
+        application_user_authorization_token: &'a mut ApplicationUserAuthorizationToken<'_>,
         update: Update
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = application_user_log_in_token.get_application_user_id();
+        let application_user_id = application_user_authorization_token.get_application_user_id();
 
-        let application_user_device_id = application_user_log_in_token.get_application_user_device_id();
+        let application_user_device_id = application_user_authorization_token.get_application_user_device_id();
 
-        let application_user_log_in_token_value = application_user_log_in_token.get_value();
+        let application_user_authorization_token_value = application_user_authorization_token.get_value();
 
-        let application_user_log_in_token_wrong_enter_tries_quantity = application_user_log_in_token.get_wrong_enter_tries_quantity();
+        let application_user_authorization_token_wrong_enter_tries_quantity = application_user_authorization_token.get_wrong_enter_tries_quantity();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        if update.application_user_log_in_token_expires_at {
+        if update.application_user_authorization_token_expires_at {
             let query =
-            "UPDATE ONLY public.application_user_log_in_token AS aulit \
+            "UPDATE ONLY public.application_user_authorization_token AS auat \
             SET ( \
                 value, \
                 wrong_enter_tries_quantity, \
@@ -123,14 +123,14 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 $2, \
                 extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $3)::INTERVAL)) \
             ) \
-            WHERE aulit.application_user_id = $4 AND aulit.application_user_device_id = $5 \
+            WHERE auat.application_user_id = $4 AND auat.application_user_device_id = $5 \
             RETURNING \
-                aulit.expires_at AS ea;";
+                auat.expires_at AS ea;";
 
             prepared_statemant_parameter_convertation_resolver
-                .add_parameter(&application_user_log_in_token_value, Type::TEXT)
-                .add_parameter(&application_user_log_in_token_wrong_enter_tries_quantity, Type::INT2)
-                .add_parameter(&ApplicationUserLogInToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
+                .add_parameter(&application_user_authorization_token_value, Type::TEXT)
+                .add_parameter(&application_user_authorization_token_wrong_enter_tries_quantity, Type::INT2)
+                .add_parameter(&ApplicationUserAuthorizationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
                 .add_parameter(&application_user_id, Type::INT8)
                 .add_parameter(&application_user_device_id, Type::TEXT);
 
@@ -139,8 +139,8 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                     match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                         Ok(row_registry) => {
                             if !row_registry.is_empty() {
-                                let application_user_log_in_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                                    Ok(application_user_log_in_token_expires_at_) => application_user_log_in_token_expires_at_,
+                                let application_user_authorization_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                                    Ok(application_user_authorization_token_expires_at_) => application_user_authorization_token_expires_at_,
                                     Err(error) => {
                                         return Err(
                                             ErrorAuditor::new(
@@ -151,11 +151,11 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                                     }
                                 };
 
-                                application_user_log_in_token.set_expires_at(application_user_log_in_token_expires_at);
+                                application_user_authorization_token.set_expires_at(application_user_authorization_token_expires_at);
                             } else {
                                 return Err(
                                     ErrorAuditor::new(
-                                        BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserLogInToken can not be updated in Postgresql database.") },
+                                        BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserAuthorizationToken can not be updated in Postgresql database.") },
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -182,7 +182,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
             }
         } else {
             let query =
-            "UPDATE ONLY public.application_user_log_in_token AS aulit \
+            "UPDATE ONLY public.application_user_authorization_token AS auat \
             SET ( \
                 value, \
                 wrong_enter_tries_quantity \
@@ -190,13 +190,13 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 $1, \
                 $2 \
             ) \
-            WHERE aulit.application_user_id = $3 AND aulit.application_user_device_id = $4 \
+            WHERE auat.application_user_id = $3 AND auat.application_user_device_id = $4 \
             RETURNING \
-                aulit.application_user_id AS aui;";
+                auat.application_user_id AS aui;";
 
             prepared_statemant_parameter_convertation_resolver
-                .add_parameter(&application_user_log_in_token_value, Type::TEXT)
-                .add_parameter(&application_user_log_in_token_wrong_enter_tries_quantity, Type::INT2)
+                .add_parameter(&application_user_authorization_token_value, Type::TEXT)
+                .add_parameter(&application_user_authorization_token_wrong_enter_tries_quantity, Type::INT2)
                 .add_parameter(&application_user_id, Type::INT8)
                 .add_parameter(&application_user_device_id, Type::TEXT);
 
@@ -207,7 +207,7 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                             if row_registry.is_empty() {
                                 return Err(
                                     ErrorAuditor::new(
-                                        BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserLogInToken can not be updated in Postgresql database.") },
+                                        BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserAuthorizationToken can not be updated in Postgresql database.") },
                                         BacktracePart::new(line!(), file!(), None)
                                     )
                                 );
@@ -245,8 +245,8 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
-            "DELETE FROM ONLY public.application_user_log_in_token AS aulit \
-            WHERE aulit.application_user_id = $1 AND aulit.application_user_device_id = $2;";
+            "DELETE FROM ONLY public.application_user_authorization_token AS auat \
+            WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_device_id, Type::TEXT);
@@ -282,16 +282,16 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
         authorization_connection: &'a Connection,
         application_user_id: i64,
         application_user_device_id: &'a str
-    ) -> Result<Option<ApplicationUserLogInToken<'a>>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserAuthorizationToken<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
             "SELECT \
-                aulit.value AS v, \
-                aulit.wrong_enter_tries_quantity AS wetq, \
-                aulit.expires_at AS ea \
-            FROM public.application_user_log_in_token aulit \
-            WHERE aulit.application_user_id = $1 AND aulit.application_user_device_id = $2;";
+                auat.value AS v, \
+                auat.wrong_enter_tries_quantity AS wetq, \
+                auat.expires_at AS ea \
+            FROM public.application_user_authorization_token auat \
+            WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_device_id, Type::TEXT);
@@ -301,8 +301,8 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                 match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
                     Ok(row_registry) => {
                         if !row_registry.is_empty() {
-                            let application_user_log_in_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-                                Ok(application_user_log_in_token_value_) => application_user_log_in_token_value_,
+                            let application_user_authorization_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
+                                Ok(application_user_authorization_token_value_) => application_user_authorization_token_value_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -313,8 +313,8 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                                 }
                             };
 
-                            let application_user_log_in_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-                                Ok(application_user_log_in_token_wrong_enter_tries_quantity_) => application_user_log_in_token_wrong_enter_tries_quantity_,
+                            let application_user_authorization_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
+                                Ok(application_user_authorization_token_wrong_enter_tries_quantity_) => application_user_authorization_token_wrong_enter_tries_quantity_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -325,8 +325,8 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
                                 }
                             };
 
-                            let application_user_log_in_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
-                                Ok(application_user_log_in_token_expires_at_) => application_user_log_in_token_expires_at_,
+                            let application_user_authorization_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
+                                Ok(application_user_authorization_token_expires_at_) => application_user_authorization_token_expires_at_,
                                 Err(error) => {
                                     return Err(
                                         ErrorAuditor::new(
@@ -339,12 +339,12 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
 
                             return Ok(
                                 Some(
-                                    ApplicationUserLogInToken::new(
+                                    ApplicationUserAuthorizationToken::new(
                                         application_user_id,
                                         application_user_device_id,
-                                        application_user_log_in_token_value,
-                                        application_user_log_in_token_wrong_enter_tries_quantity,
-                                        application_user_log_in_token_expires_at
+                                        application_user_authorization_token_value,
+                                        application_user_authorization_token_wrong_enter_tries_quantity,
+                                        application_user_authorization_token_expires_at
                                     )
                                 )
                             );
@@ -377,10 +377,10 @@ impl ApplicationUserLogInToken_PostgresqlRepository {
 pub struct Insert<'a> {
     pub application_user_id: i64,
     pub application_user_device_id: &'a str,
-    pub application_user_log_in_token_value: String,
-    pub application_user_log_in_token_wrong_enter_tries_quantity: i16
+    pub application_user_authorization_token_value: String,
+    pub application_user_authorization_token_wrong_enter_tries_quantity: i16
 }
 
 pub struct Update {
-    pub application_user_log_in_token_expires_at: bool
+    pub application_user_authorization_token_expires_at: bool
 }

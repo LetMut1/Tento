@@ -1,6 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUserAuthorizationToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_last_step::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_last_step::Incoming;
@@ -76,9 +76,9 @@ where
                         }
                         ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
                             match entity_workflow_exception {
-                                EntityWorkflowException::ApplicationUserLogInToken { application_user_log_in_token__workflow_exception } => {
-                                    match application_user_log_in_token__workflow_exception {
-                                        ApplicationUserLogInToken_WorkflowException::InvalidValue => {
+                                EntityWorkflowException::ApplicationUserAuthorizationToken { application_user_authorization_token__workflow_exception } => {
+                                    match application_user_authorization_token__workflow_exception {
+                                        ApplicationUserAuthorizationToken_WorkflowException::InvalidValue => {
                                             match rmp_serde::to_vec(
                                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__INVALID_VALUE)
                                             ) {
@@ -92,7 +92,7 @@ where
                                                 }
                                             }
                                         }
-                                        ApplicationUserLogInToken_WorkflowException::NotFound => {
+                                        ApplicationUserAuthorizationToken_WorkflowException::NotFound => {
                                             match rmp_serde::to_vec(
                                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND)
                                             ) {
@@ -106,7 +106,7 @@ where
                                                 }
                                             }
                                         }
-                                        ApplicationUserLogInToken_WorkflowException::AlreadyExpired => {
+                                        ApplicationUserAuthorizationToken_WorkflowException::AlreadyExpired => {
                                             match rmp_serde::to_vec(
                                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED)
                                             ) {
@@ -120,7 +120,7 @@ where
                                                 }
                                             }
                                         }
-                                        ApplicationUserLogInToken_WorkflowException::WrongValue => {
+                                        ApplicationUserAuthorizationToken_WorkflowException::WrongValue => {
                                             match rmp_serde::to_vec(
                                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE)
                                             ) {

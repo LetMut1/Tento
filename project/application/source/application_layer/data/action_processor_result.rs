@@ -1,6 +1,6 @@
 use super::entity_workflow_exception::ApplicationUserAccessRefreshToken_WorkflowException;
 use super::entity_workflow_exception::ApplicationUserAccessToken_WorkflowException;
-use super::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
+use super::entity_workflow_exception::ApplicationUserAuthorizationToken_WorkflowException;
 use super::entity_workflow_exception::ApplicationUserRegistrationConfirmationToken_WorkflowException;
 use super::entity_workflow_exception::ApplicationUserResetPasswordToken_WorkflowException;
 use super::entity_workflow_exception::ApplicationUser_WorkflowException;
@@ -30,11 +30,11 @@ impl<T> ActionProcessorResult<T> {
     }
 
     #[allow(non_snake_case)]
-    pub fn application_user_log_in_token__workflow_exception(
-        application_user_log_in_token__workflow_exception: ApplicationUserLogInToken_WorkflowException
+    pub fn application_user_authorization_token__workflow_exception(
+        application_user_authorization_token__workflow_exception: ApplicationUserAuthorizationToken_WorkflowException
     ) -> Self {
         return Self::EntityWorkflowException {
-            entity_workflow_exception: EntityWorkflowException::ApplicationUserLogInToken { application_user_log_in_token__workflow_exception }
+            entity_workflow_exception: EntityWorkflowException::ApplicationUserAuthorizationToken { application_user_authorization_token__workflow_exception }
         };
     }
 

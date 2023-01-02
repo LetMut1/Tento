@@ -1,16 +1,16 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUserAuthorizationToken_WorkflowException;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::data::entity::application_user_log_in_token::ApplicationUserLogInToken;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__encoder::ApplicationUserAccessRefreshToken_Encoder;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__obfuscation_value_generator::ApplicationUserAccessRefreshToken_ObfuscationValueGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__expires_at_generator::ApplicationUserAccessToken_ExpiresAtGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__id_generator::ApplicationUserAccessToken_IdGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
-use crate::domain_layer::functionality::service::application_user_log_in_token__expiration_time_resolver::ApplicationUserLogInToken_ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::application_user_log_in_token__validator::ApplicationUserogInToken_Validator;
-use crate::domain_layer::functionality::service::application_user_log_in_token__wrong_enter_tries_quantity_incrementor::ApplicationUserLogInToken_WrongEnterTriesQuantityIncrementor;
+use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_authorization_token__validator::ApplicationUserAuthorizationToken_Validator;
+use crate::domain_layer::functionality::service::application_user_authorization_token__wrong_enter_tries_quantity_incrementor::ApplicationUserAuthorizationToken_WrongEnterTriesQuantityIncrementor;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -22,8 +22,8 @@ use crate::infrastructure_layer::functionality::repository::application_user_acc
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Update as ApplicationUserAccessRefreshTokenUpdate;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::ApplicationUserDevice_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
-use crate::infrastructure_layer::functionality::repository::application_user_log_in_token__postgresql_repository::ApplicationUserLogInToken_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::application_user_log_in_token__postgresql_repository::Update as ApplicationUserLogInTokenUpdate;
+use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::ApplicationUserAuthorizationToken_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::Update as ApplicationUserAuthorizationTokenUpdate;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -52,7 +52,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let is_valid_value = match ApplicationUserogInToken_Validator::is_valid_value(incoming.application_user_authorization_token_value.as_str()) {
+        let is_valid_value = match ApplicationUserAuthorizationToken_Validator::is_valid_value(incoming.application_user_authorization_token_value.as_str()) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -74,25 +74,25 @@ impl ActionProcessor {
             };
             let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-            let application_user_log_in_token = match ApplicationUserLogInToken_PostgresqlRepository::find_1(
+            let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
                 authorization_postgresql_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
             ).await {
-                Ok(application_user_log_in_token_) => application_user_log_in_token_,
+                Ok(application_user_authorization_token_) => application_user_authorization_token_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                     return Err(error);
                 }
             };
-            let mut application_user_log_in_token_ = match application_user_log_in_token {
-                Some(application_user_log_in_token__) => application_user_log_in_token__,
+            let mut application_user_authorization_token_ = match application_user_authorization_token {
+                Some(application_user_authorization_token__) => application_user_authorization_token__,
                 None => {
-                    return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::NotFound));
+                    return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::NotFound));
                 }
             };
 
-            if !ApplicationUserLogInToken_ExpirationTimeResolver::is_expired(&application_user_log_in_token_) {
-                if application_user_log_in_token_.get_value() == incoming.application_user_authorization_token_value.as_str() {
+            if !ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
+                if application_user_authorization_token_.get_value() == incoming.application_user_authorization_token_value.as_str() {
                     let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
                         Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
                         Err(error) => {
@@ -125,13 +125,13 @@ impl ActionProcessor {
                         };
                         let application_user_access_token = ApplicationUserAccessToken::new(
                             ApplicationUserAccessToken_IdGenerator::generate(),
-                            application_user_log_in_token_.get_application_user_id(),
-                            Cow::Borrowed(application_user_log_in_token_.get_application_user_device_id()),
+                            application_user_authorization_token_.get_application_user_id(),
+                            Cow::Borrowed(application_user_authorization_token_.get_application_user_device_id()),
                             expires_at
                         );
 
                         let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::find_1(
-                            authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_application_user_device_id()
+                            authorization_postgresql_connection, application_user_authorization_token_.get_application_user_id(), application_user_authorization_token_.get_application_user_device_id()
                         ).await {
                             Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
                             Err(mut error) => {
@@ -166,8 +166,8 @@ impl ActionProcessor {
                             }
                             None => {
                                 let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
-                                    application_user_id: application_user_log_in_token_.get_application_user_id(),
-                                    application_user_device_id: Cow::Borrowed(application_user_log_in_token_.get_application_user_device_id()),
+                                    application_user_id: application_user_authorization_token_.get_application_user_id(),
+                                    application_user_device_id: Cow::Borrowed(application_user_authorization_token_.get_application_user_device_id()),
                                     application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
                                     application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate(),
                                 };
@@ -183,8 +183,8 @@ impl ActionProcessor {
                             }
                         };
 
-                        if let Err(mut error) = ApplicationUserLogInToken_PostgresqlRepository::delete(
-                            authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_application_user_device_id()
+                        if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::delete(
+                            authorization_postgresql_connection, application_user_authorization_token_.get_application_user_id(), application_user_authorization_token_.get_application_user_device_id()
                         ).await {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -229,25 +229,25 @@ impl ActionProcessor {
                     return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
                 }
 
-                if let Err(mut error) = ApplicationUserLogInToken_WrongEnterTriesQuantityIncrementor::increment(&mut application_user_log_in_token_) {
+                if let Err(mut error) = ApplicationUserAuthorizationToken_WrongEnterTriesQuantityIncrementor::increment(&mut application_user_authorization_token_) {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                     return Err(error);
                 }
 
-                if application_user_log_in_token_.get_wrong_enter_tries_quantity() <= ApplicationUserLogInToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                    if let Err(mut error) = ApplicationUserLogInToken_PostgresqlRepository::update(
+                if application_user_authorization_token_.get_wrong_enter_tries_quantity() <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                    if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::update(
                         authorization_postgresql_connection,
-                        &mut application_user_log_in_token_,
-                        ApplicationUserLogInTokenUpdate { application_user_log_in_token_expires_at: false }
+                        &mut application_user_authorization_token_,
+                        ApplicationUserAuthorizationTokenUpdate { application_user_authorization_token_expires_at: false }
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         return Err(error);
                     }
                 } else {
-                    if let Err(mut error) = ApplicationUserLogInToken_PostgresqlRepository::delete(
-                        authorization_postgresql_connection, application_user_log_in_token_.get_application_user_id(), application_user_log_in_token_.get_application_user_device_id()
+                    if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::delete(
+                        authorization_postgresql_connection, application_user_authorization_token_.get_application_user_id(), application_user_authorization_token_.get_application_user_device_id()
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -255,13 +255,13 @@ impl ActionProcessor {
                     }
                 }
 
-                return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::WrongValue));
+                return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::WrongValue));
             }
 
-            return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::AlreadyExpired));
+            return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::AlreadyExpired));
         }
 
-        return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::InvalidValue));
+        return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::InvalidValue));
     }
 }
 

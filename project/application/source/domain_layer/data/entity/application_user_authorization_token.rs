@@ -1,4 +1,4 @@
-pub struct ApplicationUserLogInToken<'a> {
+pub struct ApplicationUserAuthorizationToken<'a> {
     application_user_id: i64,
     application_user_device_id: &'a str,
     value: String,
@@ -6,7 +6,7 @@ pub struct ApplicationUserLogInToken<'a> {
     expires_at: i64
 }
 
-impl<'a> ApplicationUserLogInToken<'a> {
+impl<'a> ApplicationUserAuthorizationToken<'a> {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i16 = 10;
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 5;
 

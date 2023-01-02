@@ -3,8 +3,8 @@ pub enum EntityWorkflowException {
     ApplicationUser {
         application_user__workflow_exception: ApplicationUser_WorkflowException
     },
-    ApplicationUserLogInToken {
-        application_user_log_in_token__workflow_exception: ApplicationUserLogInToken_WorkflowException
+    ApplicationUserAuthorizationToken {
+        application_user_authorization_token__workflow_exception: ApplicationUserAuthorizationToken_WorkflowException
     },
     ApplicationUserRegistrationConfirmationToken {
         application_user_registration_confirmation_token__workflow_exception: ApplicationUserRegistrationConfirmationToken_WorkflowException
@@ -45,7 +45,7 @@ pub enum ApplicationUserAccessToken_WorkflowException {
 }
 
 #[allow(non_camel_case_types)]
-pub enum ApplicationUserLogInToken_WorkflowException {
+pub enum ApplicationUserAuthorizationToken_WorkflowException {
     AlreadyExpired,
     InvalidValue,
     NotFound,

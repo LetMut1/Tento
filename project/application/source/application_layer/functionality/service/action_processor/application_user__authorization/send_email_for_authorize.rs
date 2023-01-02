@@ -1,14 +1,14 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
-use crate::domain_layer::functionality::service::application_user_log_in_token__expiration_time_resolver::ApplicationUserLogInToken_ExpirationTimeResolver;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUserAuthorizationToken_WorkflowException;
+use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::application_user_log_in_token__postgresql_repository::ApplicationUserLogInToken_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::ApplicationUserAuthorizationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -41,12 +41,12 @@ impl ActionProcessor {
     {                                                                   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         match authorization_postgresql_connection_pool.get().await {
             Ok(authorization_postgresql_pooled_connection) => {
-                match ApplicationUserLogInToken_PostgresqlRepository::find_1(
+                match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
                     &*authorization_postgresql_pooled_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
                 ).await {
-                    Ok(application_user_log_in_token) => {
-                        if let Some(application_user_log_in_token_) = application_user_log_in_token {
-                            if !ApplicationUserLogInToken_ExpirationTimeResolver::is_expired(&application_user_log_in_token_) {
+                    Ok(application_user_authorization_token) => {
+                        if let Some(application_user_authorization_token_) = application_user_authorization_token {
+                            if !ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
                                 match core_postgresql_connection_pool.get().await {
                                     Ok(core_postgresql_pooled_connection) => {
                                         match ApplicationUser_PostgresqlRepository::find_3(
@@ -54,8 +54,8 @@ impl ActionProcessor {
                                         ).await {
                                             Ok(application_user) => {
                                                 if let Some(application_user_) = application_user {
-                                                    if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_log_in_token(
-                                                    environment_configuration_resolver, application_user_log_in_token_.get_value(), application_user_.get_email()
+                                                    if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_authorization_token(
+                                                    environment_configuration_resolver, application_user_authorization_token_.get_value(), application_user_.get_email()
                                                     ) {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -85,10 +85,10 @@ impl ActionProcessor {
                                 }
                             }
 
-                            return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::AlreadyExpired));
+                            return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::AlreadyExpired));
                         }
 
-                        return Ok(ActionProcessorResult::application_user_log_in_token__workflow_exception(ApplicationUserLogInToken_WorkflowException::NotFound));
+                        return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::NotFound));
                     }
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
