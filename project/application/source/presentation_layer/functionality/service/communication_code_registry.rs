@@ -17,17 +17,17 @@ impl CommunicationCodeRegistry {
     pub const APPLICATION_USER__INVALID_PASSWORD: &'static str = "apus_7";
 
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__NOT_FOUND: &'static str = "apusrecoto_1";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND: &'static str = "apusreto_1";
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__INVALID_VALUE: &'static str = "apusrecoto_2";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE: &'static str = "apusreto_2";
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__WRONG_VALUE: &'static str = "apusrecoto_3";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE: &'static str = "apusreto_3";
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__IS_NOT_APPROVED: &'static str = "apusrecoto_4";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__IS_NOT_APPROVED: &'static str = "apusreto_4";
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__ALREADY_APPROVED: &'static str = "apusrecoto_5";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED: &'static str = "apusreto_5";
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__ALREADY_EXPIRED: &'static str = "apusrecoto_6";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED: &'static str = "apusreto_6";
 
     #[allow(non_upper_case_globals)]
     pub const APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND: &'static str = "apusauto_1";

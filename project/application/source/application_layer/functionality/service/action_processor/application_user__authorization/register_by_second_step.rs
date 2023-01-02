@@ -40,7 +40,7 @@ impl ActionProcessor {
         match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {
             Ok(is_valid_email) => {
                 if is_valid_email {
-                    match ApplicationUserRegistrationConfirmationToken_Validator::is_valid_value(incoming.application_user_registration_confirmation_token_value.as_str()) {
+                    match ApplicationUserRegistrationConfirmationToken_Validator::is_valid_value(incoming.application_user_registration_token_value.as_str()) {
                         Ok(is_valid_value) => {
                             if is_valid_value {
                                 match authorization_postgresql_connection_pool.get().await {
@@ -54,7 +54,7 @@ impl ActionProcessor {
                                                 if let Some(mut application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
                                                     if !ApplicationUserRegistrationConfirmationToken_ExpirationTimeResolver::is_expired(&application_user_registration_confirmation_token_) {
                                                         if !application_user_registration_confirmation_token_.get_is_approved() {
-                                                            if application_user_registration_confirmation_token_.get_value().as_bytes() == incoming.application_user_registration_confirmation_token_value.as_bytes() {
+                                                            if application_user_registration_confirmation_token_.get_value().as_bytes() == incoming.application_user_registration_token_value.as_bytes() {
                                                                 application_user_registration_confirmation_token_.set_is_approved(true);
 
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationToken_PostgresqlRepository::update(
@@ -67,7 +67,7 @@ impl ActionProcessor {
                                                                     return Err(error);
                                                                 }
 
-                                                                return Ok(ActionProcessorResult::outcoming(Outcoming { application_user_registration_confirmation_token_is_approved: true }));
+                                                                return Ok(ActionProcessorResult::outcoming(Outcoming { application_user_registration_token_is_approved: true }));
                                                             } else {
                                                                 if let Err(mut error) = ApplicationUserRegistrationConfirmationToken_WrongEnterTriesQuantityIncrementor::increment(&mut application_user_registration_confirmation_token_) {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -95,7 +95,7 @@ impl ActionProcessor {
                                                                     }
                                                                 }
 
-                                                                return Ok(ActionProcessorResult::outcoming(Outcoming { application_user_registration_confirmation_token_is_approved: false }));
+                                                                return Ok(ActionProcessorResult::outcoming(Outcoming { application_user_registration_token_is_approved: false }));
                                                             }
                                                         }
 
@@ -151,19 +151,19 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_email: String,
-    application_user_registration_confirmation_token_value: String
+    application_user_registration_token_value: String
 }
 
 #[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 struct Outcoming {
-    application_user_registration_confirmation_token_is_approved: bool
+    application_user_registration_token_is_approved: bool
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    application_user_registration_confirmation_token_is_approved: bool
+    application_user_registration_token_is_approved: bool
 }

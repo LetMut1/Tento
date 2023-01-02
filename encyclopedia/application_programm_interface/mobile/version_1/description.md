@@ -134,20 +134,20 @@ Registers application user for the second step through token value approving.
 Request data:
 struct Incoming {
     application_user_email: String,
-    application_user_registration_confirmation_token_value: String
+    application_user_registration_token_value: String
 }
 
 Result data:
 struct Outcoming {
-    application_user_registration_confirmation_token_is_approved: bool
+    application_user_registration_token_is_approved: bool
 }
 
 Communication codes:
 - APPLICATION_USER__INVALID_EMAIL
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__INVALID_VALUE
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__NOT_FOUND
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__ALREADY_APPROVED
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE
+- APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
+- APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
+- APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
 ```
 
  - ## /v1/m/au/rbls (register_by_last_step) POST
@@ -160,7 +160,7 @@ struct Incoming {
     application_user_nickname: String,
     application_user_password: String,
     application_user_email: String,
-    application_user_registration_confirmation_token_value: String
+    application_user_registration_token_value: String
 }
 
 Result data:
@@ -175,11 +175,11 @@ Communication codes:
 - APPLICATION_USER__INVALID_EMAIL
 - APPLICATION_USER__NICKNAME_ALREADY_EXIST
 - APPLICATION_USER__EMAIL_ALREADY_EXIST
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__INVALID_VALUE
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__NOT_FOUND
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__IS_NOT_APPROVED
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__WRONG_VALUE
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE
+- APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
+- APPLICATION_USER_REGISTRATION_TOKEN__IS_NOT_APPROVED
+- APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE
+- APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
 ```
  - ## /v1/m/au/sefr (send_email_for_register) POST
 ```
@@ -194,9 +194,9 @@ Result data: absent.
 
 Communication codes:
 - APPLICATION_USER__INVALID_EMAIL
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__NOT_FOUND
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__ALREADY_APPROVED
-- APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
+- APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
+- APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
 ```
  - ## /v1/m/au/abfs (authorize_by_first_step) POST                             БЫВШИЙ log_in_by_first_step. УДАЛИТЬ
 ```
@@ -358,7 +358,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED
 ```
 # Incoming parameters validation rule.
- - ## application_user_registration_confirmation_token_value
+ - ## application_user_registration_token_value
 ```
 - "^[0-9]{6}$" - regular expression.
 ```

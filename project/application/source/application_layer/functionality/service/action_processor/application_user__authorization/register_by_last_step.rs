@@ -65,7 +65,7 @@ impl ActionProcessor {
                     }
                 };
                 if is_valid_email {
-                    let is_valid_value = match ApplicationUserRegistrationConfirmationToken_Validator::is_valid_value(incoming.application_user_registration_confirmation_token_value.as_str()) {
+                    let is_valid_value = match ApplicationUserRegistrationConfirmationToken_Validator::is_valid_value(incoming.application_user_registration_token_value.as_str()) {
                         Ok(is_valid_value_) => is_valid_value_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -131,7 +131,7 @@ impl ActionProcessor {
                                 if let Some(mut application_user_registration_confirmation_token_) = application_user_registration_confirmation_token {
                                     if !ApplicationUserRegistrationConfirmationToken_ExpirationTimeResolver::is_expired(&application_user_registration_confirmation_token_) {
                                         if application_user_registration_confirmation_token_.get_is_approved() {
-                                            if application_user_registration_confirmation_token_.get_value() == incoming.application_user_registration_confirmation_token_value.as_str() {
+                                            if application_user_registration_confirmation_token_.get_value() == incoming.application_user_registration_token_value.as_str() {
                                                 let application_user_password_hash = match ApplicationUser_PasswordHashResolver::create(incoming.application_user_password.as_str()) {
                                                     Ok(application_user_password_hash_) => application_user_password_hash_,
                                                     Err(mut error) => {
@@ -299,7 +299,7 @@ pub struct Incoming {
     application_user_nickname: String,
     application_user_password: String,
     application_user_email: String,
-    application_user_registration_confirmation_token_value: String
+    application_user_registration_token_value: String
 }
 
 #[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]

@@ -73,5 +73,6 @@ fn main() -> () {
 
 
 
+// Заменить все вхождения
 // ApplicationUserLogInToken -> ApplicationUserAuthorizationToken Нужно ли заменять. И log in/ regstration -> sign in/up   ?????
-// ApplicationUserRegistrationConfirmationToken ->                            ApplicationUserRegistrationToken
+// ApplicationUserRegistrationConfirmationToken ->  ApplicationUserRegistrationToken
