@@ -52,7 +52,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let is_valid_value = match ApplicationUserogInToken_Validator::is_valid_value(incoming.application_user_log_in_token_value.as_str()) {
+        let is_valid_value = match ApplicationUserogInToken_Validator::is_valid_value(incoming.application_user_authorization_token_value.as_str()) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -92,7 +92,7 @@ impl ActionProcessor {
             };
 
             if !ApplicationUserLogInToken_ExpirationTimeResolver::is_expired(&application_user_log_in_token_) {
-                if application_user_log_in_token_.get_value() == incoming.application_user_log_in_token_value.as_str() {
+                if application_user_log_in_token_.get_value() == incoming.application_user_authorization_token_value.as_str() {
                     let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
                         Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
                         Err(error) => {
@@ -271,7 +271,7 @@ impl ActionProcessor {
 pub struct Incoming {
     application_user_id: i64,
     application_user_device_id: String,
-    application_user_log_in_token_value: String
+    application_user_authorization_token_value: String
 }
 
 #[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]

@@ -2,8 +2,8 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
-use crate::application_layer::functionality::service::action_processor::application_user__authorization::log_in_by_last_step::ActionProcessor;
-use crate::application_layer::functionality::service::action_processor::application_user__authorization::log_in_by_last_step::Incoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_last_step::ActionProcessor;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_last_step::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
@@ -29,11 +29,11 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_processor::application_user__authorization::log_in_by_last_step::Outcoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_last_step::Outcoming;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
-pub async fn log_in_by_last_step<'a, T>(
+pub async fn authorize_by_last_step<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
     core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
@@ -80,7 +80,7 @@ where
                                     match application_user_log_in_token__workflow_exception {
                                         ApplicationUserLogInToken_WorkflowException::InvalidValue => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_LOG_IN_TOKEN__INVALID_VALUE)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__INVALID_VALUE)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -94,7 +94,7 @@ where
                                         }
                                         ApplicationUserLogInToken_WorkflowException::NotFound => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_LOG_IN_TOKEN__NOT_FOUND)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -108,7 +108,7 @@ where
                                         }
                                         ApplicationUserLogInToken_WorkflowException::AlreadyExpired => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_LOG_IN_TOKEN__ALREADY_EXPIRED)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -122,7 +122,7 @@ where
                                         }
                                         ApplicationUserLogInToken_WorkflowException::WrongValue => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_LOG_IN_TOKEN__WRONG_VALUE)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -188,7 +188,7 @@ where
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub async fn log_in_by_last_step_<'a, T>(
+pub async fn authorize_by_last_step_<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
     core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
@@ -207,6 +207,6 @@ where
         core_postgresql_connection_pool,
         authorization_postgresql_connection_pool,
         redis_connection_pool,
-        log_in_by_last_step
+        authorize_by_last_step
     ).await;
 }

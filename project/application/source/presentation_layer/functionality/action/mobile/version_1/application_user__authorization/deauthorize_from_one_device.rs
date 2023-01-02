@@ -1,9 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
-use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_log_in::ActionProcessor;
-use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_log_in::Incoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::deauthorize_from_one_device::ActionProcessor;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::deauthorize_from_one_device::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
@@ -31,10 +30,10 @@ use std::marker::Sync;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
-pub async fn send_email_for_log_in<'a, T>(
+pub async fn deauthorize_from_one_device<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
-    core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    _core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     _redis_connection_pool: Pool<RedisConnectionManager>
 ) -> Response<Body>
@@ -56,7 +55,7 @@ where
     match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
         Ok(incoming) => {
             match ActionProcessor::process(
-                environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
+                environment_configuration_resolver, authorization_postgresql_connection_pool, incoming
             ).await {
                 Ok(action_processor_result) => {
                     match action_processor_result {
@@ -74,11 +73,11 @@ where
                         }
                         ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
                             match entity_workflow_exception {
-                                EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
-                                    match application_user__workflow_exception {
-                                        ApplicationUser_WorkflowException::NotFound => {
+                                EntityWorkflowException::ApplicationUserAccessToken { application_user_access_token__workflow_exception } => {
+                                    match application_user_access_token__workflow_exception {
+                                        ApplicationUserAccessToken_WorkflowException::AlreadyExpired => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -90,30 +89,9 @@ where
                                                 }
                                             }
                                         }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
-                                    }
-                                }
-                                EntityWorkflowException::ApplicationUserLogInToken { application_user_log_in_token__workflow_exception } => {
-                                    match application_user_log_in_token__workflow_exception {
-                                        ApplicationUserLogInToken_WorkflowException::NotFound => {
+                                        ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList => {
                                             match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_LOG_IN_TOKEN__NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserLogInToken_WorkflowException::AlreadyExpired => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_LOG_IN_TOKEN__ALREADY_EXPIRED)
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST)
                                             ) {
                                                 Ok(data) => {
                                                     return ActionResponseCreator::create_ok(data);
@@ -161,7 +139,7 @@ where
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub async fn send_email_for_log_in_<'a, T>(
+pub async fn deauthorize_from_one_device_<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
     core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
@@ -180,6 +158,6 @@ where
         core_postgresql_connection_pool,
         authorization_postgresql_connection_pool,
         redis_connection_pool,
-        send_email_for_log_in
+        deauthorize_from_one_device
     ).await;
 }

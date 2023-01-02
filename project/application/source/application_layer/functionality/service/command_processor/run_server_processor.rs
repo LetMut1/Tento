@@ -663,18 +663,18 @@ impl RunServerProcessor {
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/libfs", &Method::POST) => {
-                return application_user__authorization::log_in_by_first_step::log_in_by_first_step(
+            ("/v1/m/au/abfs", &Method::POST) => {
+                return application_user__authorization::authorize_by_first_step::authorize_by_first_step(
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/libls", &Method::POST) => {
-                return application_user__authorization::log_in_by_last_step::log_in_by_last_step(
+            ("/v1/m/au/abls", &Method::POST) => {
+                return application_user__authorization::authorize_by_last_step::authorize_by_last_step(
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/sefli", &Method::POST) => {
-                return application_user__authorization::send_email_for_log_in::send_email_for_log_in(
+            ("/v1/m/au/sefa", &Method::POST) => {
+                return application_user__authorization::send_email_for_authorize::send_email_for_authorize(
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -704,13 +704,13 @@ impl RunServerProcessor {
                 ).await;
             }
             // Area for existing routes with authorized user.
-            ("/v1/m/au/lofod", &Method::POST) => {
-                return application_user__authorization::log_out_from_one_device::log_out_from_one_device(
+            ("/v1/m/au/dfod", &Method::POST) => {
+                return application_user__authorization::deauthorize_from_one_device::deauthorize_from_one_device(
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/lofad", &Method::POST) => {
-                return application_user__authorization::log_out_from_all_devices::log_out_from_all_devices(
+            ("/v1/m/au/dfad", &Method::POST) => {
+                return application_user__authorization::deauthorize_from_all_devices::deauthorize_from_all_devices(
                     environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -775,18 +775,18 @@ impl RunServerProcessor {
                             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/libfs_", &Method::POST) => {
-                        return application_user__authorization::log_in_by_first_step::log_in_by_first_step_(
+                    ("/v1/m/au/abfs_", &Method::POST) => {
+                        return application_user__authorization::authorize_by_first_step::authorize_by_first_step_(
                             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/libls_", &Method::POST) => {
-                        return application_user__authorization::log_in_by_last_step::log_in_by_last_step_(
+                    ("/v1/m/au/abls_", &Method::POST) => {
+                        return application_user__authorization::authorize_by_last_step::authorize_by_last_step_(
                             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/sefli_", &Method::POST) => {
-                        return application_user__authorization::send_email_for_log_in::send_email_for_log_in_(
+                    ("/v1/m/au/sefa_", &Method::POST) => {
+                        return application_user__authorization::send_email_for_authorize::send_email_for_authorize_(
                             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
@@ -816,13 +816,13 @@ impl RunServerProcessor {
                         ).await;
                     }
                     // Area for existing routes with authorized user.
-                    ("/v1/m/au/lofod_", &Method::POST) => {
-                        return application_user__authorization::log_out_from_one_device::log_out_from_one_device_(
+                    ("/v1/m/au/dfod_", &Method::POST) => {
+                        return application_user__authorization::deauthorize_from_one_device::deauthorize_from_one_device_(
                             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/lofad_", &Method::POST) => {
-                        return application_user__authorization::log_out_from_all_devices::log_out_from_all_devices_(
+                    ("/v1/m/au/dfad_", &Method::POST) => {
+                        return application_user__authorization::deauthorize_from_all_devices::deauthorize_from_all_devices_(
                             environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }

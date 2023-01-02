@@ -1,8 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
-use crate::application_layer::functionality::service::action_processor::application_user__authorization::log_out_from_one_device::ActionProcessor;
-use crate::application_layer::functionality::service::action_processor::application_user__authorization::log_out_from_one_device::Incoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::deauthorize_from_all_devices::ActionProcessor;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::deauthorize_from_all_devices::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
@@ -30,7 +30,7 @@ use std::marker::Sync;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
-pub async fn log_out_from_one_device<'a, T>(
+pub async fn deauthorize_from_all_devices<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
     _core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
@@ -139,7 +139,7 @@ where
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub async fn log_out_from_one_device_<'a, T>(
+pub async fn deauthorize_from_all_devices_<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
     core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
@@ -158,6 +158,6 @@ where
         core_postgresql_connection_pool,
         authorization_postgresql_connection_pool,
         redis_connection_pool,
-        log_out_from_one_device
+        deauthorize_from_all_devices
     ).await;
 }

@@ -50,7 +50,7 @@ struct Data<S>
   - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
   - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
  ```
- - ## /v1/m/au/lofod (log_out_from_one_device) POST
+ - ## /v1/m/au/dfod (deauthorize_from_one_device) POST                              БЫВШИЙ log_out_from_one_device. УДАЛИТЬ
 ```
 Deauthorizes application user from one device.
 
@@ -64,7 +64,7 @@ Result data: absent.
 Communication codes: absent.
 
 ```
- - ## /v1/m/au/lofad (log_out_from_all_devices) POST
+ - ## /v1/m/au/dfad (deauthorize_from_all_devices) POST                                 БЫВШИЙ log_out_from_all_device. УДАЛИТЬ
 ```
 Deauthorizes application user from all devices.
 
@@ -198,7 +198,7 @@ Communication codes:
 - APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__ALREADY_APPROVED
 - APPLICATION_USER_REGISTRATION_CONFIRMATION_TOKEN__ALREADY_EXPIRED
 ```
- - ## /v1/m/au/libfs (log_in_by_first_step) POST
+ - ## /v1/m/au/abfs (authorize_by_first_step) POST                             БЫВШИЙ log_in_by_first_step. УДАЛИТЬ
 ```
 Authorizes application user for the firs step and send email to user.
 
@@ -217,7 +217,7 @@ struct Outcoming {
 Communication codes:
 - APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
 ```
- - ## /v1/m/au/libls (log_in_by_last_step) POST
+ - ## /v1/m/au/abls (authorize_by_last_step) POST                       БЫВШИЙ (log_in_by_last_step). УДАЛИТЬ
 ```
 Authorizes application user for the last step.
 
@@ -225,7 +225,7 @@ Request data:
 struct Incoming {
     application_user_id: i64,
     application_user_device_id: String,
-    application_user_log_in_token_value: String
+    application_user_authorization_token_value: String
 }
 
 Result data:
@@ -235,15 +235,15 @@ struct Outcoming {
 }
 
 Communication codes:
-- APPLICATION_USER_LOG_IN_TOKEN__INVALID_VALUE
-- APPLICATION_USER_LOG_IN_TOKEN__NOT_FOUND
-- APPLICATION_USER_LOG_IN_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_LOG_IN_TOKEN__WRONG_VALUE
+- APPLICATION_USER_AUTHORIZATION_TOKEN__INVALID_VALUE
+- APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
+- APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE
 - APPLICATION_USER__NOT_FOUND
 ```
- - ## /v1/m/au/sefli (send_email_for_log_in) POST
+ - ## /v1/m/au/sefa (send_email_for_authorize) POST                                 БЫВШИЙ (send_email_for_log_in). УДАЛИТЬ
 ```
-Sends email for log in. (Should be used only if the user does not receive an email.)
+Sends email for authorization. (Should be used only if the user does not receive an email.)
 
 Request data:
 struct Incoming {
@@ -255,8 +255,8 @@ Result data: absent.
 
 Communication codes:
 - APPLICATION_USER__NOT_FOUND
-- APPLICATION_USER_LOG_IN_TOKEN__NOT_FOUND
-- APPLICATION_USER_LOG_IN_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
+- APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
 ```
  - ## /v1/m/au/rpbfs (reset_password_by_first_step) POST
 ```
@@ -366,7 +366,7 @@ Communication codes:
 ```
 - "^[0-9]{6}$" - regular expression.
 ```
- - ## application_user_log_in_token_value
+ - ## application_user_authorization_token_value
 ```
 - "^[0-9]{6}$" - regular expression.
 ```
