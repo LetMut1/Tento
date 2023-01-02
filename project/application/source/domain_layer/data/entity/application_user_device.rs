@@ -1,6 +1,6 @@
 pub struct ApplicationUserDevice {
     id: String,
-    application_user_id: i64
+    _application_user_id: i64
 }
 
 impl ApplicationUserDevice {
@@ -11,7 +11,7 @@ impl ApplicationUserDevice {
     ) -> Self {
         return Self {
             id,
-            application_user_id
+            _application_user_id: application_user_id
         };
     }
 
