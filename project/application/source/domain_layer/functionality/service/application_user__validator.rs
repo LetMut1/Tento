@@ -10,20 +10,20 @@ pub struct ApplicationUser_Validator;
 
 impl ApplicationUser_Validator {
     #[allow(non_upper_case_globals)]
-    const APPLICATION_USER__EMAIL_MAXIMUM_LENGTH: u16 = 320;
+    const APPLICATION_USER__EMAIL_MAXIMUM_LENGTH: usize = 320;
     #[allow(non_upper_case_globals)]
-    const APPLICATION_USER__NICKNAME_MAXIMUM_LENGTH: u8 = 55;
+    const APPLICATION_USER__NICKNAME_MAXIMUM_LENGTH: usize = 55;
     #[allow(non_upper_case_globals)]
-    const APPLICATION_USER__PASSWORD_MINIMUM_LENGTH: u8 = 7;
+    const APPLICATION_USER__PASSWORD_MINIMUM_LENGTH: usize = 7;
     #[allow(non_upper_case_globals)]
-    const APPLICATION_USER__PASSWORD_MAXIMUM_LENGTH: u8 = 65;
+    const APPLICATION_USER__PASSWORD_MAXIMUM_LENGTH: usize = 65;
 
     pub fn is_valid_email<'a>(application_user_email: &'a str) -> Result<bool, ErrorAuditor> {
         match Regex::new(r"\S+@\S+") {
             Ok(regex) => {
                 return Ok(
                     regex.is_match(application_user_email)
-                        && application_user_email.chars().count() <= (Self::APPLICATION_USER__EMAIL_MAXIMUM_LENGTH as usize)
+                        && application_user_email.chars().count() <= Self::APPLICATION_USER__EMAIL_MAXIMUM_LENGTH
                 );
             }
             Err(error) => {
@@ -38,7 +38,7 @@ impl ApplicationUser_Validator {
     }
 
     pub fn is_valid_nickname<'a>(application_user_nickname: &'a str) -> bool {
-        return application_user_nickname.chars().count() <= (Self::APPLICATION_USER__NICKNAME_MAXIMUM_LENGTH as usize)
+        return application_user_nickname.chars().count() <= Self::APPLICATION_USER__NICKNAME_MAXIMUM_LENGTH
             && !application_user_nickname.contains('@')
             && !application_user_nickname.contains(' ')       // TODO Проверить символ табуляци TAB            НАПИСАТЬ Через Регекс?
             && !application_user_nickname.is_empty();
@@ -47,8 +47,8 @@ impl ApplicationUser_Validator {
     pub fn is_valid_password<'a>(application_user_password: &'a str) -> bool {
         let password_chars_count = application_user_password.chars().count();
 
-        return password_chars_count >= (Self::APPLICATION_USER__PASSWORD_MINIMUM_LENGTH as usize)             // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
-            && password_chars_count <= (Self::APPLICATION_USER__PASSWORD_MAXIMUM_LENGTH as usize)
+        return password_chars_count >= Self::APPLICATION_USER__PASSWORD_MINIMUM_LENGTH             // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
+            && password_chars_count <= Self::APPLICATION_USER__PASSWORD_MAXIMUM_LENGTH
             && !application_user_password.contains(' ');
     }
 }

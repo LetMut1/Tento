@@ -22,6 +22,8 @@ use crate::infrastructure_layer::functionality::repository::application_user__po
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::ApplicationUserAccessRefreshToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
+use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::ApplicationUserDevice_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_confirmation_token__postgresql_repository::ApplicationUserRegistrationConfirmationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_confirmation_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -147,14 +149,26 @@ impl ActionProcessor {
                                                     return Err(error);
                                                 }
 
-                                                let application_usert_insert = ApplicationUserInsert {
+                                                let application_user_insert = ApplicationUserInsert {
                                                     application_user_email: incoming.application_user_email,
                                                     application_user_nickname: incoming.application_user_nickname,
                                                     application_user_password_hash,
                                                 };
-
-                                                let application_user = match ApplicationUser_PostgresqlRepository::create(core_postgresql_connection, application_usert_insert).await {
+                                                let application_user = match ApplicationUser_PostgresqlRepository::create(core_postgresql_connection, application_user_insert).await {
                                                     Ok(application_user_) => application_user_,
+                                                    Err(mut error) => {
+                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                                        return Err(error);
+                                                    }
+                                                };
+
+                                                let application_user_device_insert = ApplicationUserDeviceInsert {
+                                                    application_user_device_id: incoming.application_user_device_id,
+                                                    application_user_id: application_user.get_id()
+                                                };
+                                                let application_user_device = match ApplicationUserDevice_PostgresqlRepository::create(core_postgresql_connection, application_user_device_insert).await {
+                                                    Ok(application_user_device_) => application_user_device_,
                                                     Err(mut error) => {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -173,13 +187,13 @@ impl ActionProcessor {
                                                 let application_user_access_token = ApplicationUserAccessToken::new(
                                                     ApplicationUserAccessToken_IdGenerator::generate(),
                                                     application_user.get_id(),
-                                                    Cow::Borrowed(incoming.application_user_device_id.as_str()),
+                                                    Cow::Borrowed(application_user_device.get_id()),
                                                     expires_at
                                                 );
 // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
                                                 let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
                                                     application_user_id: application_user.get_id(),
-                                                    application_user_device_id: Cow::Borrowed(incoming.application_user_device_id.as_str()),
+                                                    application_user_device_id: Cow::Borrowed(application_user_device.get_id()),
                                                     application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
                                                     application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate(),
                                                 };

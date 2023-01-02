@@ -14,4 +14,8 @@ impl ApplicationUserDevice {
             application_user_id
         };
     }
+
+    pub fn get_id<'a>(&'a self) -> &'a str {
+        return self.id.as_str();
+    }
 }

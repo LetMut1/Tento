@@ -1,4 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
+use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserLogInToken_WorkflowException;
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::log_in_by_last_step::ActionProcessor;
@@ -35,7 +36,7 @@ use crate::presentation_layer::functionality::service::wrapped_encoding_protocol
 pub async fn log_in_by_last_step<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
-    _core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     _redis_connection_pool: Pool<RedisConnectionManager>
 ) -> Response<Body>
@@ -57,7 +58,7 @@ where
     match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
         Ok(incoming) => {
             match ActionProcessor::process(
-                environment_configuration_resolver, authorization_postgresql_connection_pool, incoming
+                environment_configuration_resolver, core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
             ).await {
                 Ok(action_processor_result) => {
                     match action_processor_result {
@@ -132,6 +133,27 @@ where
                                                     return ActionResponseCreator::create_internal_server_error();
                                                 }
                                             }
+                                        }
+                                    }
+                                }
+                                EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
+                                    match application_user__workflow_exception {
+                                        ApplicationUser_WorkflowException::NotFound => {
+                                            match rmp_serde::to_vec(
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND)
+                                            ) {
+                                                Ok(data) => {
+                                                    return ActionResponseCreator::create_ok(data);
+                                                }
+                                                Err(error) => {
+                                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                                    return ActionResponseCreator::create_internal_server_error();
+                                                }
+                                            }
+                                        }
+                                        _ => {
+                                            unreachable!("TODO");
                                         }
                                     }
                                 }

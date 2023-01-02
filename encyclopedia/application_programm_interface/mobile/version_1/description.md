@@ -1,4 +1,4 @@
-# Request standards:
+# Request standards
  - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
  - Every request should contain this `HTTP header`s:
  ```
@@ -13,7 +13,7 @@
 1 - is equal to 'DESC'
 ```
 
-# Response standards:
+# Response standards
  - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
  - Every response should contain this `HTTP header`s:
  ```
@@ -43,8 +43,8 @@ struct Data<S>
 
 <br/><br/>
 
-# Area for authorized application user. API:
- - Every endpoint at this area requires an existing of `access token`
+# API for authorized application user.
+ - Every endpoint at this area requires an existing of `application_user_access_token`
  - Response of EVERY endpoint at this area contains `communication_code` equals to
  ```
   - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
@@ -77,7 +77,7 @@ Result data: absent.
 
 Communication codes: absent.
 ```
-# Area for not authorized application user. API:
+# API for not authorized application user.
  - ## /v1/m/au/cefe (check_email_for_existing) POST (GET functional)
 ```
 Checks application user email for existing.
@@ -239,6 +239,7 @@ Communication codes:
 - APPLICATION_USER_LOG_IN_TOKEN__NOT_FOUND
 - APPLICATION_USER_LOG_IN_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_LOG_IN_TOKEN__WRONG_VALUE
+- APPLICATION_USER__NOT_FOUND
 ```
  - ## /v1/m/au/sefli (send_email_for_log_in) POST
 ```
@@ -356,6 +357,46 @@ Communication codes:
 - APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND
 - APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED
 ```
+# Incoming parameters validation rule.
+ - ## application_user_registration_confirmation_token_value
+```
+- "^[0-9]{6}$" - regular expression.
+```
+ - ## application_user_reset_password_token_value
+```
+- "^[0-9]{6}$" - regular expression.
+```
+ - ## application_user_log_in_token_value
+```
+- "^[0-9]{6}$" - regular expression.
+```
+ - ## application_user_email
+```
+- "\S+@\S+" - regular expression.
+- 320 - maximum number of characters.
+
+```
+ - ## application_user_nickname
+```
+- 55 - maximum number of characters.
+- '@' - can not contain this character.
+- ' ' - can not contain this character (space character).
+- can not be empty.
+
+```
+ - ## application_user_password
+```
+- 7 - minimum number of characters.
+- 65 - maximum number of characters.
+- ' ' - can not contain this character (space character).
+```
+
+
+
+
+
+
+
 <!-- ## /v1/m/a/c/gmbn GET
 Returns Channel registry by Channel Name.
 ### Request Query parameters:

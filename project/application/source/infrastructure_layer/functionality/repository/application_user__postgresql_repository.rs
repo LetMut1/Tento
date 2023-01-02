@@ -259,6 +259,48 @@ impl ApplicationUser_PostgresqlRepository {
         }
     }
 
+    pub async fn is_exist_3<'a>(core_connection: &'a Connection, application_user_id: i64) -> Result<bool, ErrorAuditor> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query =
+            "SELECT \
+                au.id AS i \
+            FROM public.application_user au \
+            WHERE au.application_user_id = $1;";
+
+            prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
+
+        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
+            Ok(ref statement) => {
+                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
+                    Ok(row_registry) => {
+                        if row_registry.is_empty() {
+                            return Ok(false);
+                        }
+
+                        return Ok(true);
+                    }
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
+    }
+
     pub async fn find_1<'a>(core_connection: &'a Connection, application_user_nickname: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
