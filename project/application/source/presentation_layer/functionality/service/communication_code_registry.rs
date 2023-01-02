@@ -1,65 +1,71 @@
 pub struct CommunicationCodeRegistry;
 
 impl CommunicationCodeRegistry {
+    /// [0, 999]
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER__EMAIL_ALREADY_EXIST: &'static str = "apus_1";
+    pub const APPLICATION_USER__EMAIL_ALREADY_EXIST: i64 = 0;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER__NICKNAME_ALREADY_EXIST: &'static str = "apus_2";
+    pub const APPLICATION_USER__NICKNAME_ALREADY_EXIST: i64 = 1;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER__NOT_FOUND: &'static str = "apus_3";
+    pub const APPLICATION_USER__NOT_FOUND: i64 = 2;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD: &'static str = "apus_4";
+    pub const APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD: i64 = 3;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER__INVALID_EMAIL: &'static str = "apus_5";
+    pub const APPLICATION_USER__INVALID_EMAIL: i64 = 4;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER__INVALID_NICKNAME: &'static str = "apus_6";
+    pub const APPLICATION_USER__INVALID_NICKNAME: i64 = 5;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER__INVALID_PASSWORD: &'static str = "apus_7";
+    pub const APPLICATION_USER__INVALID_PASSWORD: i64 = 6;
 
+    /// [1000, 1999]
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND: &'static str = "apusreto_1";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND: i64 = 1000;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE: &'static str = "apusreto_2";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE: i64 = 1001;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE: &'static str = "apusreto_3";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE: i64 = 1002;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_TOKEN__IS_NOT_APPROVED: &'static str = "apusreto_4";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__IS_NOT_APPROVED: i64 = 1003;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED: &'static str = "apusreto_5";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED: i64 = 1004;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED: &'static str = "apusreto_6";
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED: i64 = 1005;
 
+    /// [2000, 2999]
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND: &'static str = "apusauto_1";
+    pub const APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND: i64 = 2000;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_AUTHORIZATION_TOKEN__INVALID_VALUE: &'static str = "apusauto_2";
+    pub const APPLICATION_USER_AUTHORIZATION_TOKEN__INVALID_VALUE: i64 = 2001;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE: &'static str = "apusauto_3";
+    pub const APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE: i64 = 2002;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED: &'static str = "apusauto_4";
+    pub const APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED: i64 = 2003;
 
+    /// [3000, 3999]
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND: &'static str = "apusrepato_1";
+    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND: i64 = 3000;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__INVALID_VALUE: &'static str = "apusrepato_2";
+    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__INVALID_VALUE: i64 = 3001;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE: &'static str = "apusrepato_3";
+    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE: i64 = 3002;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__IS_NOT_APPROVED: &'static str = "apusrepato_4";
+    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__IS_NOT_APPROVED: i64 = 3003;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED: &'static str = "apusrepato_5";
+    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED: i64 = 3004;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED: &'static str = "apusrepato_6";
+    pub const APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED: i64 = 3005;
 
+    /// [4000, 4999]
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED: &'static str = "apusacto_1";
+    pub const APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED: i64 = 4000;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_ACCESS_TOKEN__NOT_EXPIRED: &'static str = "apusacto_2";
+    pub const APPLICATION_USER_ACCESS_TOKEN__NOT_EXPIRED: i64 = 4001;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST: &'static str = "apusacto_3";
+    pub const APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST: i64 = 4002;
 
+    /// [5000, 5999]
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND: &'static str = "apusacreto_1";
+    pub const APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND: i64 = 5000;
     #[allow(non_upper_case_globals)]
-    pub const APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED: &'static str = "apusacreto_2";
+    pub const APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED: i64 = 5001;
 }

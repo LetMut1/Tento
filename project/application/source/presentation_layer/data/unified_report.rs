@@ -3,27 +3,13 @@ use extern_crate::serde::Serialize;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use extern_crate::serde::Deserialize;
 
-// It is more correct to use Enam in the context of a unified server response.
-// The Struct is used, but not Enam, because there are problems in synchronizing the Enum serialization
-// and deserialization rules of the used encoding protocol on both sides.
-//
-// pub enum UnifiedReport<S>
-// {
-//     Data {
-//         data: Data<S>
-//     },
-//     ErrorCode {
-//         communication_code: &'static str,
-//     }
-// }
-
-#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
 #[derive(Serialize)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[serde(crate = "extern_crate::serde")]
 pub struct UnifiedReport<S>
 {
     data: Option<Data<S>>,
-    communication_code: Option<&'static str>
+    communication_code: Option<i64>
 }
 
 #[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
@@ -45,21 +31,12 @@ where
         };
     }
 
-    pub fn communication_code(communication_code: &'static str) -> Self {
+    pub fn communication_code(communication_code: i64) -> Self {
         return Self {
             data: None,
             communication_code: Some(communication_code)
         };
     }
-}
-
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
-#[derive(Serialize, Deserialize)]
-#[serde(crate = "extern_crate::serde")]
-pub struct UnifiedReport<S>
-{
-    data: Option<Data<S>>,
-    communication_code: Option<String>
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
@@ -81,26 +58,13 @@ where
         };
     }
 
-    pub fn communication_code(communication_code: String) -> Self {
+    pub fn communication_code(communication_code: i64) -> Self {
         return Self {
             data: None,
             communication_code: Some(communication_code)
         };
     }
 }
-
-
-// It is more correct to use Enam in the context of a unified server response.
-// The Struct is used, but not Enam, because there are problems in synchronizing the Enum serialization
-// and deserialization rules of the used encoding protocol on both sides.
-//
-// pub enum Data<S>
-// {
-//     Empty,
-//     Filled {
-//         data: S
-//     }
-// }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
