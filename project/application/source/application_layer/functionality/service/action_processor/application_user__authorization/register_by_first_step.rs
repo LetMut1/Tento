@@ -1,17 +1,17 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
-use crate::domain_layer::functionality::service::application_user_registration_confirmation_token__expiration_time_resolver::ApplicationUserRegistrationConfirmationToken_ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::application_user_registration_confirmation_token__value_generator::ApplicationUserRegistrationConfirmationToken_ValueGenerator;
+use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_registration_token__value_generator::ApplicationUserRegistrationToken_ValueGenerator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::application_user_registration_confirmation_token__postgresql_repository::ApplicationUserRegistrationConfirmationToken_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::application_user_registration_confirmation_token__postgresql_repository::Insert;
-use crate::infrastructure_layer::functionality::repository::application_user_registration_confirmation_token__postgresql_repository::Update;
+use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::ApplicationUserRegistrationToken_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -56,44 +56,44 @@ impl ActionProcessor {
                                             Ok(authorization_postgresql_pooled_connection) => {
                                                 let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-                                                match ApplicationUserRegistrationConfirmationToken_PostgresqlRepository::find_1(
+                                                match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
                                                     authorization_postgresql_connection, incoming.application_user_email.as_str()
                                                 ).await {
-                                                    Ok(application_user_registration_confirmation_token_) => {
-                                                        let application_user_registration_confirmation_token = match application_user_registration_confirmation_token_ {
-                                                            Some(mut application_user_registration_confirmation_token__) => {
-                                                                if ApplicationUserRegistrationConfirmationToken_ExpirationTimeResolver::is_expired(&application_user_registration_confirmation_token__)
-                                                                    || application_user_registration_confirmation_token__.get_is_approved() {
-                                                                    application_user_registration_confirmation_token__
-                                                                        .set_value(ApplicationUserRegistrationConfirmationToken_ValueGenerator::generate())
+                                                    Ok(application_user_registration_token_) => {
+                                                        let application_user_registration_token = match application_user_registration_token_ {
+                                                            Some(mut application_user_registration_token__) => {
+                                                                if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token__)
+                                                                    || application_user_registration_token__.get_is_approved() {
+                                                                    application_user_registration_token__
+                                                                        .set_value(ApplicationUserRegistrationToken_ValueGenerator::generate())
                                                                         .set_wrong_enter_tries_quantity(0)
                                                                         .set_is_approved(false);
                                                                 }
 
-                                                                if let Err(mut error) = ApplicationUserRegistrationConfirmationToken_PostgresqlRepository::update(
+                                                                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
                                                                     authorization_postgresql_connection,
-                                                                    &mut application_user_registration_confirmation_token__,
-                                                                    Update { application_user_registration_confirmation_token_expires_at: true }
+                                                                    &mut application_user_registration_token__,
+                                                                    Update { application_user_registration_token_expires_at: true }
                                                                 ).await {
                                                                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                                                     return Err(error);
                                                                 }
 
-                                                                application_user_registration_confirmation_token__
+                                                                application_user_registration_token__
                                                             }
                                                             None => {
                                                                 let insert = Insert {
                                                                     application_user_email: incoming.application_user_email.as_str(),
-                                                                    application_user_registration_confirmation_token_value: ApplicationUserRegistrationConfirmationToken_ValueGenerator::generate(),
-                                                                    application_user_registration_confirmation_token_wrong_enter_tries_quantity: 0,
-                                                                    application_user_registration_confirmation_token_is_approved: false
+                                                                    application_user_registration_token_value: ApplicationUserRegistrationToken_ValueGenerator::generate(),
+                                                                    application_user_registration_token_wrong_enter_tries_quantity: 0,
+                                                                    application_user_registration_token_is_approved: false
                                                                 };
 
-                                                                match ApplicationUserRegistrationConfirmationToken_PostgresqlRepository::create(
+                                                                match ApplicationUserRegistrationToken_PostgresqlRepository::create(
                                                                     authorization_postgresql_connection, insert
                                                                 ).await {
-                                                                    Ok(application_user_registration_confirmation_token__) => application_user_registration_confirmation_token__,
+                                                                    Ok(application_user_registration_token__) => application_user_registration_token__,
                                                                     Err(mut error) => {
                                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -103,9 +103,9 @@ impl ActionProcessor {
                                                             }
                                                         };
 
-                                                        if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_confirmation_token(
+                                                        if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_token(
                                                             environment_configuration_resolver,
-                                                            application_user_registration_confirmation_token.get_value(),
+                                                            application_user_registration_token.get_value(),
                                                             incoming.application_user_email.as_str()
                                                         ) {
                                                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

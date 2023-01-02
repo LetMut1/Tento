@@ -1,4 +1,4 @@
-pub struct ApplicationUserRegistrationConfirmationToken<'a> {
+pub struct ApplicationUserRegistrationToken<'a> {
     application_user_email: &'a str,
     value: String,
     wrong_enter_tries_quantity: i16,
@@ -6,7 +6,7 @@ pub struct ApplicationUserRegistrationConfirmationToken<'a> {
     expires_at: i64
 }
 
-impl<'a> ApplicationUserRegistrationConfirmationToken<'a> {
+impl<'a> ApplicationUserRegistrationToken<'a> {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i16 = 60 * 3;
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 5;
 

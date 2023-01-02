@@ -25,15 +25,15 @@ impl ApplicationUser_EmailSender {     // TODO все &'static str в конст
         return Ok(());
     }
 
-    pub fn send_application_user_registration_confirmation_token<'a>(
+    pub fn send_application_user_registration_token<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        application_user_registration_confirmation_token_value: &'a str,
+        application_user_registration_token_value: &'a str,
         application_user_email: &'a str
     ) -> Result<(), ErrorAuditor> {
         if let Err(mut error) = BaseEmailSender::send(
             environment_configuration_resolver,
             "Registration confirmation",
-            "Your code: ".to_string() + application_user_registration_confirmation_token_value,
+            "Your code: ".to_string() + application_user_registration_token_value,
             application_user_email
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

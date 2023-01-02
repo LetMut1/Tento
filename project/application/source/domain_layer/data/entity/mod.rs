@@ -6,7 +6,7 @@ pub mod application_user_channel_administrator;
 pub mod application_user_device;
 pub mod application_user_direct_message_publication;
 pub mod application_user_direct_message;
-pub mod application_user_registration_confirmation_token;
+pub mod application_user_registration_token;
 pub mod application_user_reset_password_token;
 pub mod application_user_subscription;
 pub mod application_user;

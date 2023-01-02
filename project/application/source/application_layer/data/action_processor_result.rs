@@ -1,7 +1,7 @@
 use super::entity_workflow_exception::ApplicationUserAccessRefreshToken_WorkflowException;
 use super::entity_workflow_exception::ApplicationUserAccessToken_WorkflowException;
 use super::entity_workflow_exception::ApplicationUserAuthorizationToken_WorkflowException;
-use super::entity_workflow_exception::ApplicationUserRegistrationConfirmationToken_WorkflowException;
+use super::entity_workflow_exception::ApplicationUserRegistrationToken_WorkflowException;
 use super::entity_workflow_exception::ApplicationUserResetPasswordToken_WorkflowException;
 use super::entity_workflow_exception::ApplicationUser_WorkflowException;
 use super::entity_workflow_exception::EntityWorkflowException;
@@ -39,12 +39,12 @@ impl<T> ActionProcessorResult<T> {
     }
 
     #[allow(non_snake_case)]
-    pub fn application_user_registration_confirmation_token__workflow_exception(
-        application_user_registration_confirmation_token__workflow_exception: ApplicationUserRegistrationConfirmationToken_WorkflowException
+    pub fn application_user_registration_token__workflow_exception(
+        application_user_registration_token__workflow_exception: ApplicationUserRegistrationToken_WorkflowException
     ) -> Self {
         return Self::EntityWorkflowException {
-            entity_workflow_exception: EntityWorkflowException::ApplicationUserRegistrationConfirmationToken {
-                application_user_registration_confirmation_token__workflow_exception
+            entity_workflow_exception: EntityWorkflowException::ApplicationUserRegistrationToken {
+                application_user_registration_token__workflow_exception
             }
         };
     }
