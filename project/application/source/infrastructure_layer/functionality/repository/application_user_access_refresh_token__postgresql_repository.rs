@@ -39,7 +39,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             ) \
             RETURNING \
                 auart.expires_at AS ea, \
-                auart.updated_at::TEXT as ua;";
+                auart.updated_at::TEXT AS ua;";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.application_user_id, Type::INT8)
@@ -150,7 +150,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     WHERE auart.application_user_id = $4 AND auart.application_user_device_id = $5 \
                     RETURNING \
                         auart.expires_at AS ea, \
-                        auart.updated_at::TEXT as ua;";
+                        auart.updated_at::TEXT AS ua;";
 
                 prepared_statemant_parameter_convertation_resolver
                     .add_parameter(&application_user_access_token_id, Type::TEXT)
@@ -304,7 +304,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     ) \
                     WHERE auart.application_user_id = $3 AND auart.application_user_device_id = $4 \
                     RETURNING \
-                        auart.updated_at::TEXT as ua;";
+                        auart.updated_at::TEXT AS ua;";
 
                 prepared_statemant_parameter_convertation_resolver
                     .add_parameter(&application_user_access_token_id, Type::TEXT)
@@ -370,7 +370,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     ) \
                     WHERE auart.application_user_id = $3 AND auart.application_user_device_id = $4 \
                     RETURNING \
-                        auart.application_user_id as aui;";
+                        auart.application_user_id AS aui;";
 
                 prepared_statemant_parameter_convertation_resolver
                     .add_parameter(&application_user_access_token_id, Type::TEXT)
