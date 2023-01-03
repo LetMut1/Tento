@@ -52,6 +52,36 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
+        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
+            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+        let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
+
+        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
+            authorization_postgresql_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
+        ).await {
+            Ok(application_user_authorization_token_) => application_user_authorization_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        let mut application_user_authorization_token_ = match application_user_authorization_token {
+            Some(application_user_authorization_token__) => application_user_authorization_token__,
+            None => {
+                return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::NotFound));
+            }
+        };
+
         let is_valid_value = match ApplicationUserAuthorizationToken_Validator::is_valid_value(incoming.application_user_authorization_token_value.as_str()) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
@@ -61,36 +91,6 @@ impl ActionProcessor {
             }
         };
         if is_valid_value {
-            let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
-                Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
-            let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
-
-            let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
-                authorization_postgresql_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
-            ).await {
-                Ok(application_user_authorization_token_) => application_user_authorization_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                    return Err(error);
-                }
-            };
-            let mut application_user_authorization_token_ = match application_user_authorization_token {
-                Some(application_user_authorization_token__) => application_user_authorization_token__,
-                None => {
-                    return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::NotFound));
-                }
-            };
-
             if !ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
                 if application_user_authorization_token_.get_value() == incoming.application_user_authorization_token_value.as_str() {
                     let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
