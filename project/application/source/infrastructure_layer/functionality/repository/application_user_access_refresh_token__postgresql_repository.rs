@@ -506,7 +506,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                 auart.application_user_access_token_id AS auati, \
                 auart.obfuscation_value AS ov, \
                 auart.expires_at AS ea, \
-                auart.updated_at AS ua::TEXT \
+                auart.updated_at::TEXT AS ua \
             FROM public.application_user_access_refresh_token auart \
             WHERE auart.application_user_id = $1 AND auart.application_user_device_id = $2;";
 
