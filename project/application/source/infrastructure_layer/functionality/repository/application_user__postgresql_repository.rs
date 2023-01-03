@@ -266,7 +266,7 @@ impl ApplicationUser_PostgresqlRepository {
             "SELECT \
                 au.id AS i \
             FROM public.application_user au \
-            WHERE au.application_user_id = $1;";
+            WHERE au.id = $1;";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
