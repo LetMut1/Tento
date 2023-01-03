@@ -65,7 +65,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                                 }
                             };
 
-                            let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(0) {
+                            let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(1) {
                                 Ok(application_user_access_refresh_token_updated_at_) => application_user_access_refresh_token_updated_at_,
                                 Err(error) => {
                                     return Err(
@@ -176,7 +176,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                                         }
                                     };
 
-                                    let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(0) {
+                                    let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(1) {
                                         Ok(application_user_access_refresh_token_updated_at_) => application_user_access_refresh_token_updated_at_,
                                         Err(error) => {
                                             return Err(
@@ -554,7 +554,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                                 }
                             };
 
-                            let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(2) {
+                            let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(3) {
                                 Ok(application_user_access_refresh_token_updated_at_) => application_user_access_refresh_token_updated_at_,
                                 Err(error) => {
                                     return Err(
