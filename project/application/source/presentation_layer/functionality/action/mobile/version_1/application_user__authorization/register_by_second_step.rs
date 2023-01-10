@@ -29,8 +29,6 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_processor::application_user__authorization::register_by_second_step::Outcoming;
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
 pub async fn register_by_second_step<'a, T>(
@@ -62,8 +60,8 @@ where
             ).await {
                 Ok(action_processor_result) => {
                     match action_processor_result {
-                        ActionProcessorResult::Outcoming { outcoming } => {
-                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
+                        ActionProcessorResult::Outcoming { outcoming: _ } => {
+                            match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                                 Ok(data) => {
                                     return ActionResponseCreator::create_ok(data);
                                 }
@@ -155,6 +153,20 @@ where
                                                 }
                                             }
                                         }
+                                        ApplicationUserRegistrationToken_WorkflowException::WrongValue => {
+                                            match rmp_serde::to_vec(
+                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE)
+                                            ) {
+                                                Ok(data) => {
+                                                    return ActionResponseCreator::create_ok(data);
+                                                }
+                                                Err(error) => {
+                                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                                    return ActionResponseCreator::create_internal_server_error();
+                                                }
+                                            }
+                                        }
                                         _ => {
                                             unreachable!("TODO");
                                         }
@@ -204,7 +216,7 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
-    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
+    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, ()>(
         environment_configuration_resolver,
         request,
         core_postgresql_connection_pool,

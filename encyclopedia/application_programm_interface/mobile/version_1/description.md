@@ -137,10 +137,7 @@ struct Incoming {
     application_user_registration_token_value: String
 }
 
-Result data:
-struct Outcoming {
-    application_user_registration_token_is_approved: bool
-}
+Result data: absent.
 
 Communication codes:
 - APPLICATION_USER__INVALID_EMAIL
@@ -148,6 +145,7 @@ Communication codes:
 - APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE
 ```
 
  - ## /v1/m/au/rbls (register_by_last_step) POST
@@ -286,16 +284,14 @@ struct Incoming {
     application_user_reset_password_token_value: String
 }
 
-Result data:
-struct Outcoming {
-    application_user_reset_password_token_is_approved: bool
-}
+Result data: absent.
 
 Communication codes:
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__INVALID_VALUE
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED
+- APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE
 ```
  - ## /v1/m/au/rpbls (reset_password_by_last_step) POST
 ```

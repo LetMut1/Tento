@@ -28,7 +28,7 @@ impl ActionProcessor {
     pub async fn process<T>(
         authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
+    ) -> Result<ActionProcessorResult<()>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -62,7 +62,7 @@ impl ActionProcessor {
                                                         return Err(error);
                                                     }
 
-                                                    return Ok(ActionProcessorResult::outcoming(Outcoming { application_user_reset_password_token_is_approved: true }));
+                                                    return Ok(ActionProcessorResult::outcoming(()));
                                                 } else {
                                                     if let Err(mut error) = ApplicationUserResetPasswordToken_WrongEnterTriesQuantityIncrementor::increment(&mut application_user_reset_password_token_) {
                                                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -90,7 +90,7 @@ impl ActionProcessor {
                                                         }
                                                     }
 
-                                                    return Ok(ActionProcessorResult::outcoming(Outcoming { application_user_reset_password_token_is_approved: false }));
+                                                    return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::WrongValue));
                                                 }
                                             }
 
@@ -137,18 +137,4 @@ impl ActionProcessor {
 pub struct Incoming {
     application_user_id: i64,
     application_user_reset_password_token_value: String
-}
-
-#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
-#[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
-struct Outcoming {
-    application_user_reset_password_token_is_approved: bool
-}
-
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
-#[derive(Serialize, Deserialize)]
-#[serde(crate = "extern_crate::serde")]
-pub struct Outcoming {
-    application_user_reset_password_token_is_approved: bool
 }
