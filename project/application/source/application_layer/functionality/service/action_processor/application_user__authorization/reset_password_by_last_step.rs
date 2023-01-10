@@ -42,19 +42,19 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {                                   // TODO  !!!!! Это ресет для пользователя, забывшего пароль. НО также нужно сделать АККУРАТНО ресетпассворд для залогиневшегося пользователя с повторной отправкой старого пароля !!!!!!!!!
-        match authorization_postgresql_connection_pool.get().await {
-            Ok(authorization_postgresql_pooled_connection) => {
-                let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
+        match ApplicationUserResetPasswordToken_Validator::is_valid_value(incoming.application_user_reset_password_token_value.as_str()) {
+            Ok(is_valid_value) => {
+                if is_valid_value {
+                    if ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
+                        match authorization_postgresql_connection_pool.get().await {
+                            Ok(authorization_postgresql_pooled_connection) => {
+                                let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-                match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
-                    authorization_postgresql_connection, incoming.application_user_id
-                ).await {
-                    Ok(application_user_reset_password_token) => {
-                        if let Some(mut application_user_reset_password_token_) = application_user_reset_password_token {
-                            match ApplicationUserResetPasswordToken_Validator::is_valid_value(incoming.application_user_reset_password_token_value.as_str()) {
-                                Ok(is_valid_value) => {
-                                    if is_valid_value {
-                                        if ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
+                                match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
+                                    authorization_postgresql_connection, incoming.application_user_id
+                                ).await {
+                                    Ok(application_user_reset_password_token) => {
+                                        if let Some(mut application_user_reset_password_token_) = application_user_reset_password_token {
                                             if !ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
                                                 if application_user_reset_password_token_.get_is_approved() {
                                                     if application_user_reset_password_token_.get_value() == incoming.application_user_reset_password_token_value.as_str() {
@@ -148,35 +148,35 @@ impl ActionProcessor {
                                             return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired));
                                         }
 
-                                        return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
+                                        return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::NotFound));
                                     }
+                                    Err(mut error) => {
+                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                    return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::InvalidValue));
-                                }
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                    return Err(error);
+                                        return Err(error);
+                                    }
                                 }
                             }
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
                         }
-
-                        return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::NotFound));
                     }
-                    Err(mut error) => {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                        return Err(error);
-                    }
+                    return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
                 }
+
+                return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::InvalidValue));
             }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
             }
         }
     }
