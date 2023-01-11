@@ -54,241 +54,243 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {                                                                                              // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        if ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
-            if ApplicationUser_Validator::is_valid_nickname(incoming.application_user_nickname.as_str()) {
-                let is_valid_email = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {
-                    Ok(is_valid_email_) => is_valid_email_,
-                    Err(mut error) => {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        if !ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
+            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
+        }
 
-                        return Err(error);
-                    }
-                };
-                if is_valid_email {
-                    let is_valid_value = match ApplicationUserRegistrationToken_Validator::is_valid_value(incoming.application_user_registration_token_value.as_str()) {
-                        Ok(is_valid_value_) => is_valid_value_,
-                        Err(mut error) => {
-                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                            return Err(error);
-                        }
-                    };
-                    if is_valid_value {
-                        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
-                            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
-                            Err(error) => {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
-                            }
-                        };
-                        let core_postgresql_connection = &*core_postgresql_pooled_connection;
-
-                        let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(core_postgresql_connection, incoming.application_user_nickname.as_str()).await {     // TODO написать один запро на два значения.!!!!!!!!!!
-                            Ok(is_exist_1_) => is_exist_1_,
-                            Err(mut error) => {
-                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                return Err(error);
-                            }
-                        };
-                        if !is_exist_1 {
-                            let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(core_postgresql_connection, incoming.application_user_email.as_str()).await {
-                                Ok(is_exist_2_) => is_exist_2_,
-                                Err(mut error) => {
-                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                    return Err(error);
-                                }
-                            };
-                            if !is_exist_2 {
-                                let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
-                                    Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-                                let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
-
-                                let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
-                                    authorization_postgresql_connection, incoming.application_user_email.as_str()
-                                ).await {
-                                    Ok(application_user_registration_token_) => application_user_registration_token_,
-                                    Err(mut error) => {
-                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                        return Err(error);
-                                    }
-                                };
-
-                                if let Some(mut application_user_registration_token_) = application_user_registration_token {
-                                    if !ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
-                                        if application_user_registration_token_.get_is_approved() {
-                                            if application_user_registration_token_.get_value() == incoming.application_user_registration_token_value.as_str() {
-                                                let application_user_password_hash = match ApplicationUser_PasswordHashResolver::create(incoming.application_user_password.as_str()) {
-                                                    Ok(application_user_password_hash_) => application_user_password_hash_,
-                                                    Err(mut error) => {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                };
-
-                                                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
-                                                    authorization_postgresql_connection, application_user_registration_token_.get_application_user_email()
-                                                ).await {
-                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                    return Err(error);
-                                                }
-
-                                                let application_user_insert = ApplicationUserInsert {
-                                                    application_user_email: incoming.application_user_email,
-                                                    application_user_nickname: incoming.application_user_nickname,
-                                                    application_user_password_hash,
-                                                };
-                                                let application_user = match ApplicationUser_PostgresqlRepository::create(core_postgresql_connection, application_user_insert).await {
-                                                    Ok(application_user_) => application_user_,
-                                                    Err(mut error) => {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                };
-
-                                                let application_user_device_insert = ApplicationUserDeviceInsert {
-                                                    application_user_device_id: incoming.application_user_device_id,
-                                                    application_user_id: application_user.get_id()
-                                                };
-                                                let application_user_device = match ApplicationUserDevice_PostgresqlRepository::create(core_postgresql_connection, application_user_device_insert).await {
-                                                    Ok(application_user_device_) => application_user_device_,
-                                                    Err(mut error) => {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                };
-
-                                                let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {
-                                                    Ok(expires_at_) => expires_at_,
-                                                    Err(mut error) => {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                };
-                                                let application_user_access_token = ApplicationUserAccessToken::new(
-                                                    ApplicationUserAccessToken_IdGenerator::generate(),
-                                                    application_user.get_id(),
-                                                    Cow::Borrowed(application_user_device.get_id()),
-                                                    expires_at
-                                                );
-    // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
-                                                let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
-                                                    application_user_id: application_user.get_id(),
-                                                    application_user_device_id: Cow::Borrowed(application_user_device.get_id()),
-                                                    application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
-                                                    application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate(),
-                                                };
-
-                                                let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::create(
-                                                    authorization_postgresql_connection, application_user_access_refresh_token_insert
-                                                ).await {
-                                                    Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
-                                                    Err(mut error) => {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                };
-
-                                                let application_user_access_token_web_form = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration_resolver, &application_user_access_token) {
-                                                    Ok(application_user_access_token_web_form_) => application_user_access_token_web_form_,
-                                                    Err(mut error) => {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                };
-
-                                                let application_user_access_refresh_token_web_form = match ApplicationUserAccessRefreshToken_Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token) {
-                                                    Ok(application_user_access_refresh_token_web_form_) => application_user_access_refresh_token_web_form_,
-                                                    Err(mut error) => {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-                                                };
-
-                                                return Ok(
-                                                    ActionProcessorResult::outcoming(
-                                                        Outcoming { application_user_access_token_web_form, application_user_access_refresh_token_web_form }
-                                                    )
-                                                );
-                                            }
-
-                                            if let Err(mut error) = ApplicationUserRegistrationToken_WrongEnterTriesQuantityIncrementor::increment(&mut application_user_registration_token_) {
-                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                return Err(error);
-                                            }
-
-                                            if application_user_registration_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                                                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
-                                                    authorization_postgresql_connection,
-                                                    &mut application_user_registration_token_,
-                                                    Update { application_user_registration_token_expires_at: false }
-                                                ).await {
-                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                    return Err(error);
-                                                }
-                                            } else {
-                                                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
-                                                    authorization_postgresql_connection, application_user_registration_token_.get_application_user_email()
-                                                ).await {
-                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                    return Err(error);
-                                                }
-                                            }
-
-                                            return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::WrongValue));
-                                        }
-
-                                        return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::IsNotApproved));
-                                    }
-
-                                    return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::AlreadyExpired));
-                                }
-
-                                return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::NotFound));
-                            }
-
-                            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::EmailAlreadyExist));
-                        }
-
-                        return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NicknameAlreadyExist));
-                    }
-
-                    return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::InvalidValue));
-                }
-
-                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
-            }
-
+        if !ApplicationUser_Validator::is_valid_nickname(incoming.application_user_nickname.as_str()) {
             return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
         }
 
-        return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
+        let is_valid_email = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {
+            Ok(is_valid_email_) => is_valid_email_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        if !is_valid_email {
+            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
+        }
+
+        let is_valid_value = match ApplicationUserRegistrationToken_Validator::is_valid_value(incoming.application_user_registration_token_value.as_str()) {
+            Ok(is_valid_value_) => is_valid_value_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        if !is_valid_value {
+            return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::InvalidValue));
+        }
+
+        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
+            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+        let core_postgresql_connection = &*core_postgresql_pooled_connection;
+
+        let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(core_postgresql_connection, incoming.application_user_nickname.as_str()).await {
+            Ok(is_exist_1_) => is_exist_1_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        if is_exist_1 {
+            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NicknameAlreadyExist));
+        }
+
+        let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(core_postgresql_connection, incoming.application_user_email.as_str()).await {
+            Ok(is_exist_2_) => is_exist_2_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        if is_exist_2 {
+            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::EmailAlreadyExist));
+        }
+
+        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
+            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+        let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
+
+        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
+            authorization_postgresql_connection, incoming.application_user_email.as_str()
+        ).await {
+            Ok(application_user_registration_token_) => application_user_registration_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let mut application_user_registration_token_ = match application_user_registration_token {
+            Some(application_user_registration_token__) => application_user_registration_token__,
+            None => {
+                return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::NotFound));
+            }
+        };
+        if !ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
+            return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::AlreadyExpired));
+        }
+
+        if !application_user_registration_token_.get_is_approved() {
+            return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::IsNotApproved));
+        }
+
+        if application_user_registration_token_.get_value() != incoming.application_user_registration_token_value.as_str() {
+            if let Err(mut error) = ApplicationUserRegistrationToken_WrongEnterTriesQuantityIncrementor::increment(&mut application_user_registration_token_) {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+
+            if application_user_registration_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
+                    authorization_postgresql_connection,
+                    &mut application_user_registration_token_,
+                    Update { application_user_registration_token_expires_at: false }
+                ).await {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                    return Err(error);
+                }
+            } else {
+                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
+                    authorization_postgresql_connection, application_user_registration_token_.get_application_user_email()
+                ).await {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                    return Err(error);
+                }
+            }
+
+            return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::WrongValue));
+        }
+
+        let application_user_password_hash = match ApplicationUser_PasswordHashResolver::create(incoming.application_user_password.as_str()) {
+            Ok(application_user_password_hash_) => application_user_password_hash_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
+            authorization_postgresql_connection, application_user_registration_token_.get_application_user_email()
+        ).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+
+        let application_user_insert = ApplicationUserInsert {
+            application_user_email: incoming.application_user_email,
+            application_user_nickname: incoming.application_user_nickname,
+            application_user_password_hash,
+        };
+        let application_user = match ApplicationUser_PostgresqlRepository::create(core_postgresql_connection, application_user_insert).await {
+            Ok(application_user_) => application_user_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let application_user_device_insert = ApplicationUserDeviceInsert {
+            application_user_device_id: incoming.application_user_device_id,
+            application_user_id: application_user.get_id()
+        };
+        let application_user_device = match ApplicationUserDevice_PostgresqlRepository::create(core_postgresql_connection, application_user_device_insert).await {
+            Ok(application_user_device_) => application_user_device_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {
+            Ok(expires_at_) => expires_at_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        let application_user_access_token = ApplicationUserAccessToken::new(
+            ApplicationUserAccessToken_IdGenerator::generate(),
+            application_user.get_id(),
+            Cow::Borrowed(application_user_device.get_id()),
+            expires_at
+        );
+                // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
+        let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
+            application_user_id: application_user.get_id(),
+            application_user_device_id: Cow::Borrowed(application_user_device.get_id()),
+            application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
+            application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate(),
+        };
+
+        let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::create(
+            authorization_postgresql_connection, application_user_access_refresh_token_insert
+        ).await {
+            Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let application_user_access_token_web_form = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration_resolver, &application_user_access_token) {
+            Ok(application_user_access_token_web_form_) => application_user_access_token_web_form_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let application_user_access_refresh_token_web_form = match ApplicationUserAccessRefreshToken_Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token) {
+            Ok(application_user_access_refresh_token_web_form_) => application_user_access_refresh_token_web_form_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        return Ok(
+            ActionProcessorResult::outcoming(
+                Outcoming { application_user_access_token_web_form, application_user_access_refresh_token_web_form }
+            )
+        );
     }
 }
 
