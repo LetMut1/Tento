@@ -36,7 +36,9 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let extractor_result = match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()).await {
+        let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
+            environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()
+        ).await {
             Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -59,8 +61,7 @@ impl ActionProcessor {
                 };
 
                 if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_2(
-                    &*authorization_postgresql_pooled_connection,
-                    application_user_access_token.get_application_user_id()
+                    &*authorization_postgresql_pooled_connection, application_user_access_token.get_application_user_id()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
