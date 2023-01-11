@@ -87,3 +87,11 @@ fn main() -> () {
 // Переписать код в стиле вниз. Там, где, Иф лет Сам, тоже присвоить переменной во внешний space. ТАк же использовать обраьное условие, чтобы код шел вниз.
 
 // Стоит ли в pub enum ActionProcessorResult<T> сделать Емпти вариант. Обратить внимание на Джсонвреппер.
+
+// refresh_application_user_access_token aplication_layer. Разобраться, не стоит ли отдавать конкретные ошибки о том, что конкретный токен инвалидный.
+// return Err(
+//     ErrorAuditor::new(
+//         BaseError::InvalidArgumentError,
+//         BacktracePart::new(line!(), file!(), None)
+//     )
+// );

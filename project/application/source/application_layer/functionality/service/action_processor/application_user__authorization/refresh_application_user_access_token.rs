@@ -43,7 +43,9 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()) {
+        let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(
+            environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()
+        ) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -52,129 +54,131 @@ impl ActionProcessor {
             }
         };
 
-        if ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token) {   // TODO TODO TODO TODO СДелать интервал, когда можео менять. На 3 часа раньше, чем срок экспирации, например
-            let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
-                Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
-            let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
+        if !ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token) {   // TODO TODO TODO TODO СДелать интервал, когда можео менять. На 3 часа раньше, чем срок экспирации, например
+            return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::NotExpired));
+        }
 
-            let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::find_1(
-                authorization_postgresql_connection, application_user_access_token.get_application_user_id(), application_user_access_token.get_application_user_device_id()
-            ).await {
-                Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                    return Err(error);
-                }
-            };
-            if let Some(mut application_user_access_refresh_token_) = application_user_access_refresh_token {
-                let is_valid = match ApplicationUserAccessRefreshToken_Encoder::is_valid(environment_configuration_resolver, &application_user_access_refresh_token_, incoming.application_user_access_refresh_token_web_form.as_str()) {
-                    Ok(is_valid_) => is_valid_,
-                    Err(mut error) => {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        return Err(error);
-                    }
-                };
-                if is_valid && application_user_access_token.get_id().as_bytes() == application_user_access_refresh_token_.get_application_user_access_token_id().as_bytes() {
-                    if !ApplicationUserAccessRefreshToken_ExpirationTimeResolver::is_expired(&application_user_access_refresh_token_) {
-                        let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {
-                            Ok(expires_at_) => expires_at_,
-                            Err(mut error) => {
-                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                return Err(error);
-                            }
-                        };
-                        let application_user_access_token_new = ApplicationUserAccessToken::new(
-                            ApplicationUserAccessToken_IdGenerator::generate(),
-                            application_user_access_token.get_application_user_id(),
-                            Cow::Borrowed(application_user_access_token.get_application_user_device_id()),
-                            expires_at
-                        );
-
-                        application_user_access_refresh_token_
-                                .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_new.get_id()))
-                                .set_obfuscation_value(ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate());
-
-                        let update = Update {
-                            application_user_access_refresh_token_expires_at: true,
-                            application_user_access_refresh_token_updated_at: true
-                        };
-
-                        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::update(
-                            authorization_postgresql_connection,
-                            &mut application_user_access_refresh_token_,
-                            update
-                        ).await {
-                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                            return Err(error);
-                        }
-
-                        let application_user_access_token_web_form_new = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration_resolver, &application_user_access_token_new) {
-                            Ok(application_user_access_token_web_form_new_) => application_user_access_token_web_form_new_,
-                            Err(mut error) => {
-                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                return Err(error);
-                            }
-                        };
-
-                        let application_user_access_refresh_token_web_form_new = match ApplicationUserAccessRefreshToken_Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
-                            Ok(application_user_access_refresh_token_web_form_new_) => application_user_access_refresh_token_web_form_new_,
-                            Err(mut error) => {
-                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                return Err(error);
-                            }
-                        };
-
-                        return Ok(
-                            ActionProcessorResult::outcoming(
-                                Outcoming {
-                                    application_user_access_token_web_form: application_user_access_token_web_form_new,
-                                    application_user_access_refresh_token_web_form: application_user_access_refresh_token_web_form_new
-                                }
-                            )
-                        );
-
-                    }
-
-                    if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_1(
-                        authorization_postgresql_connection,
-                        application_user_access_refresh_token_.get_application_user_id(),
-                        application_user_access_refresh_token_.get_application_user_device_id()
-                    ).await {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        return Err(error);
-                    }
-
-                    return Ok(ActionProcessorResult::application_user_access_refresh_token__workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::AlreadyExpired));
-                }
-
+        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
+            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
+            Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::InvalidArgumentError,
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
             }
+        };
+        let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
 
-            return Ok(ActionProcessorResult::application_user_access_refresh_token__workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::NotFound));
+        let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::find_1(
+            authorization_postgresql_connection, application_user_access_token.get_application_user_id(), application_user_access_token.get_application_user_device_id()
+        ).await {
+            Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let mut application_user_access_refresh_token_ = match application_user_access_refresh_token {
+            Some(application_user_access_refresh_token__) => application_user_access_refresh_token__,
+            None => {
+                return Ok(ActionProcessorResult::application_user_access_refresh_token__workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::NotFound));
+            }
+        };
+
+        let is_valid = match ApplicationUserAccessRefreshToken_Encoder::is_valid(environment_configuration_resolver, &application_user_access_refresh_token_, incoming.application_user_access_refresh_token_web_form.as_str()) {
+            Ok(is_valid_) => is_valid_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        if !is_valid || application_user_access_token.get_id().as_bytes() != application_user_access_refresh_token_.get_application_user_access_token_id().as_bytes() {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::InvalidArgumentError,
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
+        if ApplicationUserAccessRefreshToken_ExpirationTimeResolver::is_expired(&application_user_access_refresh_token_) {
+            if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_1(
+                authorization_postgresql_connection,
+                application_user_access_refresh_token_.get_application_user_id(),
+                application_user_access_refresh_token_.get_application_user_device_id()
+            ).await {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+
+            return Ok(ActionProcessorResult::application_user_access_refresh_token__workflow_exception(ApplicationUserAccessRefreshToken_WorkflowException::AlreadyExpired));
         }
 
-        return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::NotExpired));
+        let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {
+            Ok(expires_at_) => expires_at_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        let application_user_access_token_new = ApplicationUserAccessToken::new(
+            ApplicationUserAccessToken_IdGenerator::generate(),
+            application_user_access_token.get_application_user_id(),
+            Cow::Borrowed(application_user_access_token.get_application_user_device_id()),
+            expires_at
+        );
+
+        application_user_access_refresh_token_
+                .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_new.get_id()))
+                .set_obfuscation_value(ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate());
+
+        let update = Update {
+            application_user_access_refresh_token_expires_at: true,
+            application_user_access_refresh_token_updated_at: true
+        };
+
+        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::update(
+            authorization_postgresql_connection,
+            &mut application_user_access_refresh_token_,
+            update
+        ).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+
+        let application_user_access_token_web_form_new = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration_resolver, &application_user_access_token_new) {
+            Ok(application_user_access_token_web_form_new_) => application_user_access_token_web_form_new_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let application_user_access_refresh_token_web_form_new = match ApplicationUserAccessRefreshToken_Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
+            Ok(application_user_access_refresh_token_web_form_new_) => application_user_access_refresh_token_web_form_new_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        return Ok(
+            ActionProcessorResult::outcoming(
+                Outcoming {
+                    application_user_access_token_web_form: application_user_access_token_web_form_new,
+                    application_user_access_refresh_token_web_form: application_user_access_refresh_token_web_form_new
+                }
+            )
+        );
     }
 }
 
