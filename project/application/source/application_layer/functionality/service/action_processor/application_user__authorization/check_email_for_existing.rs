@@ -22,7 +22,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<T>(
-        postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
@@ -39,32 +39,32 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
-        if is_valid_email {
-            let pooled_connection = match postgresql_connection_pool.get().await {
-                Ok(pooled_connection_) => pooled_connection_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
-
-            let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_2(&*pooled_connection, incoming.application_user_email.as_str()).await {
-                Ok(is_exist_) => is_exist_,
-                Err(mut error) => {
-                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                    return Err(error);
-                }
-            };
-
-            return Ok(ActionProcessorResult::outcoming(Outcoming { result: is_exist }));
+        if !is_valid_email {
+            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
         }
 
-        return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
+        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
+            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_2(&*core_postgresql_pooled_connection, incoming.application_user_email.as_str()).await {
+            Ok(is_exist_) => is_exist_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        return Ok(ActionProcessorResult::outcoming(Outcoming { result: is_exist }));
     }
 }
 
