@@ -57,38 +57,46 @@ impl ActionProcessor {
         };
         let core_postgresql_connection = &*core_postgresql_pooled_connection;
 
-        let application_user = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email_or_application_user_nickname.as_str()) {
-            Ok(is_valid_email) => {
-                if is_valid_email {
-                    match ApplicationUser_PostgresqlRepository::find_2(core_postgresql_connection, incoming.application_user_email_or_application_user_nickname).await {
-                        Ok(application_user_) => application_user_,
-                        Err(mut error) => {
-                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                            return Err(error);
-                        }
-                    }
-                } else {
-                    if ApplicationUser_Validator::is_valid_nickname(incoming.application_user_email_or_application_user_nickname.as_str()) {
-                        match ApplicationUser_PostgresqlRepository::find_1(core_postgresql_connection, incoming.application_user_email_or_application_user_nickname).await {
-                            Ok(application_user_) => application_user_,
-                            Err(mut error) => {
-                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                return Err(error);
-                            }
-                        }
-                    } else {
-                        return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
-                    }
-                }
-            }
+        let is_valid_email = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email_or_application_user_nickname.as_str()) {
+            Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
         };
+        let application_user = if is_valid_email {
+            let application_user_ = match ApplicationUser_PostgresqlRepository::find_2(
+                core_postgresql_connection, incoming.application_user_email_or_application_user_nickname
+            ).await {
+                Ok(application_user__) => application_user__,
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                    return Err(error);
+                }
+            };
+
+            application_user_
+        } else {
+            if ApplicationUser_Validator::is_valid_nickname(incoming.application_user_email_or_application_user_nickname.as_str()) {
+                let application_user_ = match ApplicationUser_PostgresqlRepository::find_1(
+                    core_postgresql_connection, incoming.application_user_email_or_application_user_nickname
+                ).await {
+                    Ok(application_user__) => application_user__,
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        return Err(error);
+                    }
+                };
+
+                application_user_
+            } else {
+                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
+            }
+        };
+
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
