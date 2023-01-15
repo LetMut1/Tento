@@ -44,39 +44,39 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
-        match extractor_result {
-            ExtractorResult::ApplicationUserAccessToken { application_user_access_token } => {
-                let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
-                    Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_1(
-                    &*authorization_postgresql_pooled_connection,
-                    application_user_access_token.get_application_user_id(),
-                    application_user_access_token.get_application_user_device_id()
-                ).await {
-                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                    return Err(error);
-                }
-
-                return Ok(ActionProcessorResult::outcoming(()));
-            }
+        let application_user_access_token_ = match extractor_result {
+            ExtractorResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
             ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                 return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::AlreadyExpired));
             }
             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                 return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList));
             }
+        };
+
+        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
+            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_1(
+            &*authorization_postgresql_pooled_connection,
+            application_user_access_token_.get_application_user_id(),
+            application_user_access_token_.get_application_user_device_id()
+        ).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
         }
+
+        return Ok(ActionProcessorResult::outcoming(()));
     }
 }
 
