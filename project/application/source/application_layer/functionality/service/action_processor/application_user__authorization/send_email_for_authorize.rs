@@ -39,64 +39,8 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {                                                                   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        match authorization_postgresql_connection_pool.get().await {
-            Ok(authorization_postgresql_pooled_connection) => {
-                match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
-                    &*authorization_postgresql_pooled_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
-                ).await {
-                    Ok(application_user_authorization_token) => {
-                        if let Some(application_user_authorization_token_) = application_user_authorization_token {
-                            if !ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
-                                match core_postgresql_connection_pool.get().await {
-                                    Ok(core_postgresql_pooled_connection) => {
-                                        match ApplicationUser_PostgresqlRepository::find_3(
-                                            &*core_postgresql_pooled_connection, incoming.application_user_id
-                                        ).await {
-                                            Ok(application_user) => {
-                                                if let Some(application_user_) = application_user {
-                                                    if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_authorization_token(
-                                                    environment_configuration_resolver, application_user_authorization_token_.get_value(), application_user_.get_email()
-                                                    ) {
-                                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                        return Err(error);
-                                                    }
-
-                                                    return Ok(ActionProcessorResult::outcoming(()));
-                                                }
-
-                                                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
-                                            }
-                                            Err(mut error) => {
-                                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                return Err(error);
-                                            }
-                                        }
-                                    }
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                }
-                            }
-
-                            return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::AlreadyExpired));
-                        }
-
-                        return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::NotFound));
-                    }
-                    Err(mut error) => {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        return Err(error);
-                    }
-                }
-            }
+        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
+            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -105,7 +49,67 @@ impl ActionProcessor {
                     )
                 );
             }
+        };
+
+        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
+            &*authorization_postgresql_pooled_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
+        ).await {
+            Ok(application_user_authorization_token_) => application_user_authorization_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        let application_user_authorization_token_ = match application_user_authorization_token {
+            Some(application_user_authorization_token__) => application_user_authorization_token__,
+            None => {
+                return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::NotFound));
+            }
+        };
+
+        if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
+            return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::AlreadyExpired));
         }
+
+        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
+            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let application_user = match ApplicationUser_PostgresqlRepository::find_3(
+            &*core_postgresql_pooled_connection, incoming.application_user_id
+        ).await {
+            Ok(application_user_) => application_user_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        let application_user_ = match application_user {
+            Some(application_user__) => application_user__,
+            None => {
+                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
+            }
+        };
+
+        if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_authorization_token(
+            environment_configuration_resolver, application_user_authorization_token_.get_value(), application_user_.get_email()
+        ) {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+
+        return Ok(ActionProcessorResult::outcoming(()));
     }
 }
 

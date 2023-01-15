@@ -39,68 +39,8 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {                                                           // TODO Защита от частого посыла емэй
-        match authorization_postgresql_connection_pool.get().await {
-            Ok(authorization_postgresql_pooled_connection) => {
-                match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
-                    &*authorization_postgresql_pooled_connection, incoming.application_user_id
-                ).await {
-                    Ok(application_user_reset_password_token) => {
-                        if let Some(application_user_reset_password_token_) = application_user_reset_password_token {
-                            if !ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
-                                if !application_user_reset_password_token_.get_is_approved() {
-                                    match core_postgresql_connection_pool.get().await {
-                                        Ok(core_postgresql_pooled_connection) => {
-                                            match ApplicationUser_PostgresqlRepository::find_3(
-                                                &*core_postgresql_pooled_connection, incoming.application_user_id
-                                            ).await {
-                                                Ok(application_user) => {
-                                                    if let Some(application_user_) = application_user {
-                                                        if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_reset_password_token(
-                                                            environment_configuration_resolver, application_user_reset_password_token_.get_value(), application_user_.get_email()
-                                                        ) {
-                                                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                            return Err(error);
-                                                        }
-
-                                                        return Ok(ActionProcessorResult::outcoming(()));
-                                                    }
-
-                                                    return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
-                                                }
-                                                Err(mut error) => {
-                                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                                    return Err(error);
-                                                }
-                                            }
-                                        }
-                                        Err(error) => {
-                                            return Err(
-                                                ErrorAuditor::new(
-                                                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                                                    BacktracePart::new(line!(), file!(), None)
-                                                )
-                                            );
-                                        }
-                                    }
-                                }
-
-                                return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::AlreadyApproved));
-                            }
-
-                            return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired));
-                        }
-
-                        return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::NotFound));
-                    }
-                    Err(mut error) => {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        return Err(error);
-                    }
-                }
-            }
+        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
+            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -109,7 +49,72 @@ impl ActionProcessor {
                     )
                 );
             }
+        };
+
+        let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
+            &*authorization_postgresql_pooled_connection, incoming.application_user_id
+        ).await {
+            Ok(application_user_reset_password_token_) => application_user_reset_password_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        let application_user_reset_password_token_ = match application_user_reset_password_token {
+            Some(application_user_reset_password_token__) => application_user_reset_password_token__,
+            None => {
+                return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::NotFound));
+            }
+        };
+
+        if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
+            return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired));
         }
+
+        if application_user_reset_password_token_.get_is_approved() {
+            return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::AlreadyApproved));
+        }
+
+        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
+            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let application_user = match ApplicationUser_PostgresqlRepository::find_3(
+            &*core_postgresql_pooled_connection, incoming.application_user_id
+        ).await {
+            Ok(application_user_) => application_user_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let application_user_ = match application_user {
+            Some(application_user__) => application_user__,
+            None => {
+                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
+            }
+        };
+
+        if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_reset_password_token(
+            environment_configuration_resolver, application_user_reset_password_token_.get_value(), application_user_.get_email()
+        ) {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+
+        return Ok(ActionProcessorResult::outcoming(()));
     }
 }
 
