@@ -36,58 +36,59 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        match ApplicationUserAccessToken_Extractor::extract(environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()).await {
-            Ok(extractor_result) => {
-                match extractor_result {
-                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {
-                        if incoming.channel_id_registry.is_empty() || incoming.channel_id_registry.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::InvalidArgumentError,
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-
-                        match core_postgresql_connection_pool.get().await {
-                            Ok(core_postgresql_pooled_connection) => {
-                                match Channel_PostgresqlRepository::per_request_4(
-                                    &*core_postgresql_pooled_connection, &incoming.channel_id_registry
-                                ).await {
-                                    Ok(channel_registry) => {
-                                        return Ok(ActionProcessorResult::outcoming(Outcoming { channel_registry }));
-                                    }
-                                    Err(mut error) => {
-                                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                        return Err(error);
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
-                            }
-                        }
-                    }
-                    ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::AlreadyExpired));
-                    }
-                    ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList));
-                    }
-                }
-            }
+        let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
+            environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()
+        ).await {
+            Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
+        };
+        match extractor_result {
+            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::AlreadyExpired));
+            }
+            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList));
+            }
+            _ => {}
         }
+
+        if incoming.channel_id_registry.is_empty() || incoming.channel_id_registry.len() > Self::CHANNEL_ID_REGISTRY_LENGTH_LIMIT {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::InvalidArgumentError,
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
+
+        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
+            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let channel_registry = match Channel_PostgresqlRepository::per_request_4(
+            &*core_postgresql_pooled_connection, &incoming.channel_id_registry
+        ).await {
+            Ok(channel_registry_) => channel_registry_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        return Ok(ActionProcessorResult::outcoming(Outcoming { channel_registry }));
     }
 }
 
