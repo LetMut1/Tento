@@ -367,8 +367,8 @@ impl ApplicationUser_PostgresqlRepository {
             return Ok(None);
         }
 
-        let id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(id_) => id_,
+        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
+            Ok(application_user_id_) => application_user_id_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -379,8 +379,8 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let email = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(email_) => email_,
+        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(1) {
+            Ok(application_user_email_) => application_user_email_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -391,8 +391,8 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(password_hash_) => password_hash_,
+        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
+            Ok(application_user_password_hash_) => application_user_password_hash_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -403,8 +403,8 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-            Ok(created_at_) => created_at_,
+        let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+            Ok(application_user_created_at_) => application_user_created_at_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -418,11 +418,11 @@ impl ApplicationUser_PostgresqlRepository {
         return Ok(
             Some(
                 ApplicationUser::new(
-                    id,
-                    email,
+                    application_user_id,
+                    application_user_email,
                     application_user_nickname,
-                    password_hash,
-                    created_at,
+                    application_user_password_hash,
+                    application_user_created_at,
                 )
             )
         );
@@ -474,8 +474,8 @@ impl ApplicationUser_PostgresqlRepository {
             return Ok(None);
         }
 
-        let id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(id_) => id_,
+        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
+            Ok(application_user_id_) => application_user_id_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -486,8 +486,8 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(nickname_) => nickname_,
+        let application_user_nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
+            Ok(application_user_nickname_) => application_user_nickname_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -498,8 +498,8 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(password_hash_) => password_hash_,
+        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
+            Ok(application_user_password_hash_) => application_user_password_hash_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -510,8 +510,8 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-            Ok(created_at_) => created_at_,
+        let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+            Ok(application_user_created_at_) => application_user_created_at_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -525,11 +525,11 @@ impl ApplicationUser_PostgresqlRepository {
         return Ok(
             Some(
                 ApplicationUser::new(
-                    id,
+                    application_user_id,
                     application_user_email,
-                    nickname,
-                    password_hash,
-                    created_at,
+                    application_user_nickname,
+                    application_user_password_hash,
+                    application_user_created_at,
                 )
             )
         );
@@ -581,8 +581,8 @@ impl ApplicationUser_PostgresqlRepository {
             return Ok(None);
         }
 
-        let email = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(email_) => email_,
+        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(0) {
+            Ok(application_user_email_) => application_user_email_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -593,8 +593,8 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(nickname_) => nickname_,
+        let application_user_nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
+            Ok(application_user_nickname_) => application_user_nickname_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -605,8 +605,8 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(password_hash_) => password_hash_,
+        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
+            Ok(application_user_password_hash_) => application_user_password_hash_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -617,8 +617,8 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-            Ok(created_at_) => created_at_,
+        let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+            Ok(application_user_created_at_) => application_user_created_at_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -633,10 +633,10 @@ impl ApplicationUser_PostgresqlRepository {
             Some(
                 ApplicationUser::new(
                     application_user_id,
-                    email,
-                    nickname,
-                    password_hash,
-                    created_at,
+                    application_user_email,
+                    application_user_nickname,
+                    application_user_password_hash,
+                    application_user_created_at,
                 )
             )
         );
