@@ -10,10 +10,8 @@ pub struct ApplicationUserResetPasswordToken_Validator;
 
 impl ApplicationUserResetPasswordToken_Validator {
     pub fn is_valid_value<'a>(application_user_reset_password_token_value: &'a str) -> Result<bool, ErrorAuditor> {
-        match Regex::new(r"^[0-9]{6}$") {
-            Ok(regex) => {
-                return Ok(regex.is_match(application_user_reset_password_token_value));
-            }
+        let regex = match Regex::new(r"^[0-9]{6}$") {
+            Ok(regex_) => regex_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -22,6 +20,8 @@ impl ApplicationUserResetPasswordToken_Validator {
                     )
                 );
             }
-        }
+        };
+
+        return Ok(regex.is_match(application_user_reset_password_token_value));
     }
 }

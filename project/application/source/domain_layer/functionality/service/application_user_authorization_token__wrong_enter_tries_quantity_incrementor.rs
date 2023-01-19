@@ -11,6 +11,7 @@ impl ApplicationUserAuthorizationToken_WrongEnterTriesQuantityIncrementor {
 
     pub fn increment<'a>(application_user_authorization_token: &'a mut ApplicationUserAuthorizationToken<'_>) -> Result<(), ErrorAuditor> {
         let mut counter = Counter::new(application_user_authorization_token.get_wrong_enter_tries_quantity(), Self::STEP_SIZE);
+
         let value = match counter.get_next_value() {
             Ok(value_) => value_,
             Err(mut error) => {

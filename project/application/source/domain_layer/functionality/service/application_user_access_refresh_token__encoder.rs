@@ -45,15 +45,17 @@ impl ApplicationUserAccessRefreshToken_Encoder {
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_web_form: &'a str
     ) -> Result<bool, ErrorAuditor> {
-        match Self::encode(environment_configuration_resolver, application_user_access_refresh_token) {
-            Ok(application_user_access_refresh_token_web_form_) => {
-                return Ok(application_user_access_refresh_token_web_form_.as_bytes() == application_user_access_refresh_token_web_form.as_bytes());
-            }
+        let application_user_access_refresh_token_web_form_ = match Self::encode(environment_configuration_resolver, application_user_access_refresh_token) {
+            Ok(application_user_access_refresh_token_web_form__) => application_user_access_refresh_token_web_form__,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
-        }
+        };
+
+        return Ok(
+            application_user_access_refresh_token_web_form_.as_bytes() == application_user_access_refresh_token_web_form.as_bytes()
+        );
     }
 }

@@ -48,43 +48,43 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
     ) -> Result<ApplicationUserAccessToken<'static>, ErrorAuditor> {
         let token_part_registry = application_user_access_token_classic_form
             .split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR)
-            .collect::<Vec<&'_ str>>();
+            .collect::<Vec<&'_ str>>();                                                         // проверить, правильно ли вот тут вообще
 
-        if token_part_registry.len() == 2
-            && ApplicationUserAccessToken_SignatureCreator::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
-            match base64::decode_config(token_part_registry[0].as_bytes(), base64::STANDARD) {
-                Ok(data) => {
-                    match rmp_serde::from_read_ref::<'_, [u8], ApplicationUserAccessToken<'static>>(data.as_slice()) {
-                        Ok(application_user_access_token) => {
-                            return Ok(application_user_access_token);
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-                }
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            }
+        if token_part_registry.len() != 2
+            || !ApplicationUserAccessToken_SignatureCreator::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::InvalidArgumentError,
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
         }
 
-        return Err(
-            ErrorAuditor::new(
-                BaseError::InvalidArgumentError,
-                BacktracePart::new(line!(), file!(), None)
-            )
-        );
+        let data = match base64::decode_config(token_part_registry[0].as_bytes(), base64::STANDARD) {
+            Ok(data_) => data_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let application_user_access_token = match rmp_serde::from_read_ref::<'_, [u8], ApplicationUserAccessToken<'static>>(data.as_slice()) {
+            Ok(application_user_access_token_) => application_user_access_token_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        return Ok(application_user_access_token);
     }
 }
 
@@ -110,6 +110,7 @@ impl ApplicationUserAccessToken_SignatureCreator {
         application_user_access_token_serialized: &'a str,
         application_user_access_token_signature: &'a str
     ) -> bool {
-        return Self::create(environment_configuration_resolver, application_user_access_token_serialized).as_bytes() == application_user_access_token_signature.as_bytes();
+        return Self::create(environment_configuration_resolver, application_user_access_token_serialized).as_bytes()
+            == application_user_access_token_signature.as_bytes();
     }
 }

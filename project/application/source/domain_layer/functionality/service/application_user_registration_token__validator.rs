@@ -10,10 +10,8 @@ pub struct ApplicationUserRegistrationToken_Validator;
 
 impl ApplicationUserRegistrationToken_Validator {
     pub fn is_valid_value<'a>(application_user_registration_token_value: &'a str) -> Result<bool, ErrorAuditor> {
-        match Regex::new(r"^[0-9]{6}$") {
-            Ok(regex) => {
-                return Ok(regex.is_match(application_user_registration_token_value));
-            }
+        let regex = match Regex::new(r"^[0-9]{6}$") {
+            Ok(regex_) => regex_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -22,6 +20,8 @@ impl ApplicationUserRegistrationToken_Validator {
                     )
                 );
             }
-        }
+        };
+
+        return Ok(regex.is_match(application_user_registration_token_value));
     }
 }

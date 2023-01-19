@@ -9,11 +9,9 @@ use extern_crate::regex::Regex;
 pub struct ApplicationUserAuthorizationToken_Validator;
 
 impl ApplicationUserAuthorizationToken_Validator {
-    pub fn is_valid_value<'a>(application_user_authorization_token: &'a str) -> Result<bool, ErrorAuditor> {
-        match Regex::new(r"^[0-9]{6}$") {
-            Ok(regex) => {
-                return Ok(regex.is_match(application_user_authorization_token));
-            }
+    pub fn is_valid_value<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, ErrorAuditor> {
+        let regex = match Regex::new(r"^[0-9]{6}$") {
+            Ok(regex_) => regex_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -22,6 +20,8 @@ impl ApplicationUserAuthorizationToken_Validator {
                     )
                 );
             }
-        }
+        };
+
+        return Ok(regex.is_match(application_user_authorization_token_value));
     }
 }
