@@ -39,63 +39,10 @@ impl ApplicationUser_PostgresqlRepository {
             .add_parameter(&insert.application_user_nickname, Type::TEXT)
             .add_parameter(&insert.application_user_password_hash, Type::TEXT);
 
-        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgresql database.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-
-                        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                            Ok(application_user_id_) => application_user_id_,
-                            Err(error) => {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
-                            }
-                        };
-
-                        let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(1) {
-                            Ok(application_user_created_at_) => application_user_created_at_,
-                            Err(error) => {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
-                            }
-                        };
-
-                        let application_user = ApplicationUser::new(
-                            application_user_id,
-                            insert.application_user_email,
-                            insert.application_user_nickname,
-                            insert.application_user_password_hash,
-                            application_user_created_at
-                        );
-
-                        return Ok(application_user);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -104,7 +51,64 @@ impl ApplicationUser_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgresql database.") },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
         }
+
+        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
+            Ok(application_user_id_) => application_user_id_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(1) {
+            Ok(application_user_created_at_) => application_user_created_at_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let application_user = ApplicationUser::new(
+            application_user_id,
+            insert.application_user_email,
+            insert.application_user_nickname,
+            insert.application_user_password_hash,
+            application_user_created_at
+        );
+
+        return Ok(application_user);
     }
 
     pub async fn update<'a>(core_connection: &'a Connection, application_user: &'a ApplicationUser) -> Result<(), ErrorAuditor> {
@@ -139,31 +143,10 @@ impl ApplicationUser_PostgresqlRepository {
             .add_parameter(&application_user_password_hash, Type::TEXT)
             .add_parameter(&application_user_id, Type::INT8);
 
-        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgresql database.") },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-
-                        return Ok(());
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -172,7 +155,32 @@ impl ApplicationUser_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgresql database.") },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
         }
+
+        return Ok(());
     }
 
     pub async fn is_exist_1<'a>(core_connection: &'a Connection, application_user_nickname: &'a str) -> Result<bool, ErrorAuditor> {
@@ -186,26 +194,10 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::TEXT);
 
-        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Ok(false);
-                        }
-
-                        return Ok(true);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -214,7 +206,27 @@ impl ApplicationUser_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(false);
         }
+
+        return Ok(true);
     }
 
     pub async fn is_exist_2<'a>(core_connection: &'a Connection, application_user_email: &'a str) -> Result<bool, ErrorAuditor> {
@@ -228,26 +240,10 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
-        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Ok(false);
-                        }
-
-                        return Ok(true);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -256,7 +252,27 @@ impl ApplicationUser_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(false);
         }
+
+        return Ok(true);
     }
 
     pub async fn is_exist_3<'a>(core_connection: &'a Connection, application_user_id: i64) -> Result<bool, ErrorAuditor> {
@@ -268,28 +284,12 @@ impl ApplicationUser_PostgresqlRepository {
             FROM public.application_user au \
             WHERE au.id = $1;";
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
-        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if row_registry.is_empty() {
-                            return Ok(false);
-                        }
-
-                        return Ok(true);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -298,7 +298,27 @@ impl ApplicationUser_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(false);
         }
+
+        return Ok(true);
     }
 
     pub async fn find_1<'a>(core_connection: &'a Connection, application_user_nickname: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
@@ -315,84 +335,10 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::TEXT);
 
-        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if !row_registry.is_empty() {
-                            let id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                                Ok(id_) => id_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let email = match row_registry[0].try_get::<'_, usize, String>(1) {
-                                Ok(email_) => email_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-                                Ok(password_hash_) => password_hash_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-                                Ok(created_at_) => created_at_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            return Ok(
-                                Some(
-                                    ApplicationUser::new(
-                                        id,
-                                        email,
-                                        application_user_nickname,
-                                        password_hash,
-                                        created_at,
-                                    )
-                                )
-                            );
-                        }
-
-                        return Ok(None);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -401,7 +347,85 @@ impl ApplicationUser_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(None);
         }
+
+        let id = match row_registry[0].try_get::<'_, usize, i64>(0) {
+            Ok(id_) => id_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let email = match row_registry[0].try_get::<'_, usize, String>(1) {
+            Ok(email_) => email_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
+            Ok(password_hash_) => password_hash_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+            Ok(created_at_) => created_at_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        return Ok(
+            Some(
+                ApplicationUser::new(
+                    id,
+                    email,
+                    application_user_nickname,
+                    password_hash,
+                    created_at,
+                )
+            )
+        );
     }
 
     pub async fn find_2<'a>(core_connection: &'a Connection, application_user_email: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
@@ -418,84 +442,10 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
-        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if !row_registry.is_empty() {
-                            let id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                                Ok(id_) => id_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
-                                Ok(nickname_) => nickname_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-                                Ok(password_hash_) => password_hash_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-                                Ok(created_at_) => created_at_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            return Ok(
-                                Some(
-                                    ApplicationUser::new(
-                                        id,
-                                        application_user_email,
-                                        nickname,
-                                        password_hash,
-                                        created_at,
-                                    )
-                                )
-                            );
-                        }
-
-                        return Ok(None);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -504,7 +454,85 @@ impl ApplicationUser_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(None);
         }
+
+        let id = match row_registry[0].try_get::<'_, usize, i64>(0) {
+            Ok(id_) => id_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
+            Ok(nickname_) => nickname_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
+            Ok(password_hash_) => password_hash_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+            Ok(created_at_) => created_at_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        return Ok(
+            Some(
+                ApplicationUser::new(
+                    id,
+                    application_user_email,
+                    nickname,
+                    password_hash,
+                    created_at,
+                )
+            )
+        );
     }
 
     pub async fn find_3<'a>(core_connection: &'a Connection, application_user_id: i64) -> Result<Option<ApplicationUser>, ErrorAuditor> {
@@ -521,84 +549,10 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
-        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if !row_registry.is_empty() {
-                            let email = match row_registry[0].try_get::<'_, usize, String>(0) {
-                                Ok(email_) => email_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
-                                Ok(nickname_) => nickname_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-                                Ok(password_hash_) => password_hash_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-                                Ok(created_at_) => created_at_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            return Ok(
-                                Some(
-                                    ApplicationUser::new(
-                                        application_user_id,
-                                        email,
-                                        nickname,
-                                        password_hash,
-                                        created_at,
-                                    )
-                                )
-                            );
-                        }
-
-                        return Ok(None);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -607,7 +561,85 @@ impl ApplicationUser_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(None);
         }
+
+        let email = match row_registry[0].try_get::<'_, usize, String>(0) {
+            Ok(email_) => email_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
+            Ok(nickname_) => nickname_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
+            Ok(password_hash_) => password_hash_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+            Ok(created_at_) => created_at_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        return Ok(
+            Some(
+                ApplicationUser::new(
+                    application_user_id,
+                    email,
+                    nickname,
+                    password_hash,
+                    created_at,
+                )
+            )
+        );
     }
 }
 
