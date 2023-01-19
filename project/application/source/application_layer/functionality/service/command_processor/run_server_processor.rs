@@ -44,7 +44,6 @@ use std::clone::Clone;
 use std::env;
 use std::marker::Send;
 use std::marker::Sync;
-use std::net::SocketAddr;
 use std::net::ToSocketAddrs;
 use std::path::Path;
 use std::str::FromStr;
