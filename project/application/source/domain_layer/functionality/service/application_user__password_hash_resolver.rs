@@ -12,29 +12,29 @@ pub struct ApplicationUser_PasswordHashResolver;
 
 impl ApplicationUser_PasswordHashResolver {
     pub fn create<'a>(application_user_password: &'a str) -> Result<String, ErrorAuditor> {
-        match ApplicationUser_PasswordEncoder::encode(application_user_password) {
-            Ok(password_hash) => {
-                return Ok(password_hash);
-            }
+        let password_hash = match ApplicationUser_PasswordEncoder::encode(application_user_password) {
+            Ok(password_hash_) => password_hash_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
-        }
+        };
+
+        return Ok(password_hash);
     }
 
     pub fn is_valid<'a>(application_user_password: &'a str, application_user_password_hash: &'a str) -> Result<bool, ErrorAuditor> {
-        match ApplicationUser_PasswordEncoder::is_valid(application_user_password, application_user_password_hash) {
-            Ok(is_valid) => {
-                return Ok(is_valid);
-            }
+        let is_valid = match ApplicationUser_PasswordEncoder::is_valid(application_user_password, application_user_password_hash) {
+            Ok(is_valid_) => is_valid_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
-        }
+        };
+
+        return Ok(is_valid);
     }
 }
 
@@ -43,12 +43,14 @@ struct ApplicationUser_PasswordEncoder;
 
 impl ApplicationUser_PasswordEncoder {      // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090  // TODO CREATE CUSTOM CONFIG ?
     fn encode<'a>(application_user_password: &'a str) -> Result<String, ErrorAuditor> {                          // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.
-        let config = Config::default();
+        let config = Config::default();   // TODO настроить конфиг
 
-        match argon2::hash_encoded(application_user_password.as_bytes(), Uuid::new_v4().as_bytes().as_slice(), &config) {
-            Ok(value) => {
-                return Ok(value);
-            }
+        let value = match argon2::hash_encoded(
+            application_user_password.as_bytes(),
+            Uuid::new_v4().as_bytes().as_slice(),
+            &config
+        ) {
+            Ok(value_) => value_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -57,14 +59,14 @@ impl ApplicationUser_PasswordEncoder {      // TODO отрабатывает з�
                     )
                 );
             }
-        }
+        };
+
+        return Ok(value);
     }
 
     fn is_valid<'a>(application_user_password: &'a str, application_user_password_hash: &'a str) -> Result<bool, ErrorAuditor> {
-        match argon2::verify_encoded(application_user_password_hash, application_user_password.as_bytes()) {
-            Ok(value) => {
-                return Ok(value);
-            }
+        let value = match argon2::verify_encoded(application_user_password_hash, application_user_password.as_bytes()) {
+            Ok(value_) => value_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -73,6 +75,8 @@ impl ApplicationUser_PasswordEncoder {      // TODO отрабатывает з�
                     )
                 );
             }
-        }
+        };
+
+        return Ok(value);
     }
 }

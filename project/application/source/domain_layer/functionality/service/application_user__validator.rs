@@ -19,13 +19,8 @@ impl ApplicationUser_Validator {
     const APPLICATION_USER__PASSWORD_MAXIMUM_LENGTH: usize = 65;
 
     pub fn is_valid_email<'a>(application_user_email: &'a str) -> Result<bool, ErrorAuditor> {
-        match Regex::new(r"\S+@\S+") {
-            Ok(regex) => {
-                return Ok(
-                    regex.is_match(application_user_email)
-                        && application_user_email.chars().count() <= Self::APPLICATION_USER__EMAIL_MAXIMUM_LENGTH
-                );
-            }
+        let regex = match Regex::new(r"\S+@\S+") {
+            Ok(regex_) => regex_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -34,7 +29,11 @@ impl ApplicationUser_Validator {
                     )
                 );
             }
-        }
+        };
+
+        return Ok(
+            regex.is_match(application_user_email) && application_user_email.chars().count() <= Self::APPLICATION_USER__EMAIL_MAXIMUM_LENGTH
+        );
     }
 
     pub fn is_valid_nickname<'a>(application_user_nickname: &'a str) -> bool {
