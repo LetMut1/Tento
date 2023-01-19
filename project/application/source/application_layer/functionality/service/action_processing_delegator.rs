@@ -79,33 +79,21 @@ impl ActionProcessingDelegator {
         let request = Request::from_parts(request_parts, Body::from(data));
 
         let response = action(
-            environment_configuration_resolver, request, core_postgresql_connection_pool, authorization_postgresql_connection_pool, redis_connection_pool
+            environment_configuration_resolver,
+            request,
+            core_postgresql_connection_pool,
+            authorization_postgresql_connection_pool,
+            redis_connection_pool
         ).await;
-
-        let outcoming: Outcoming<AHOD>;
 
         let (
             response_parts,
             body
         ) = response.into_parts();
 
-        if response_parts.status == StatusCode::OK {
-            match to_bytes(body).await {
-                Ok(bytes) => {
-                    match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<AHOD>>(bytes.chunk()) {
-                        Ok(unified_report) => {
-                            outcoming = Outcoming { parts: response_parts, unified_report: Some(unified_report) };
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-                }
+        let outcoming = if response_parts.status == StatusCode::OK {
+            let bytes = match to_bytes(body).await {
+                Ok(bytes_) => bytes_,
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -114,10 +102,24 @@ impl ActionProcessingDelegator {
                         )
                     );
                 }
-            }
+            };
+
+            let unified_report = match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<AHOD>>(bytes.chunk()) {
+                Ok(unified_report_) => unified_report_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            Outcoming { parts: response_parts, unified_report: Some(unified_report) }
         } else {
-            outcoming = Outcoming { parts: response_parts, unified_report: None };
-        }
+            Outcoming { parts: response_parts, unified_report: None }
+        };
 
         return Ok(ActionProcessorResult::outcoming(outcoming));
     }
