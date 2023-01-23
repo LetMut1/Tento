@@ -22,7 +22,7 @@
  - content-length: ...
  ```
  - The permanent general structure of the each response with `HTTP status code` equal to `200` looks like:
-```
+```rust
 struct UnifiedReport<S>
 {
     data: Option<Data<S>>,
@@ -53,76 +53,90 @@ struct Data<S>
  - ## /v1/m/au/dfod (deauthorize_from_one_device) POST                              БЫВШИЙ log_out_from_one_device. УДАЛИТЬ
 ```
 Deauthorizes application user from one device.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_access_token_web_form: String
 }
-
+```
+```
 Result data: absent.
-
+```
+```
 Communication codes: absent.
-
 ```
  - ## /v1/m/au/dfad (deauthorize_from_all_devices) POST                                 БЫВШИЙ log_out_from_all_device. УДАЛИТЬ
 ```
 Deauthorizes application user from all devices.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_access_token_web_form: String
 }
-
+```
+```
 Result data: absent.
-
+```
+```
 Communication codes: absent.
 ```
 # API for not authorized application user.
  - ## /v1/m/au/cefe (check_email_for_existing) POST (GET functional)
 ```
 Checks application user email for existing.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_email: String
 }
-
+```
+```rust
 Result data:
 struct Outcoming {
     result: bool
 }
-
+```
+```
 Communication codes:
 - APPLICATION_USER__INVALID_EMAIL
 ```
  - ## /v1/m/au/cnfe (check_nickname_for_existing) POST (GET functional)
 ```
 Checks application user nickname for existing.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_nickname: String
 }
-
+```
+```rust
 Result data:
 struct Outcoming {
     result: bool
 }
-
+```
+```
 Communication codes:
 - APPLICATION_USER__INVALID_NICKNAME
 ```
  - ## /v1/m/au/rbfs (register_by_first_step) POST
 ```
 Registers application user for the first step and sends email to user.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_email: String
 }
-
+```
+```
 Result data: absent.
-
+```
+```
 Communication codes:
 - APPLICATION_USER__INVALID_EMAIL
 - APPLICATION_USER__EMAIL_ALREADY_EXIST
@@ -130,15 +144,18 @@ Communication codes:
 - ## /v1/m/au/rbss (register_by_second_step) POST
 ```
 Registers application user for the second step through token value approving.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_email: String,
     application_user_registration_token_value: String
 }
-
+```
+```
 Result data: absent.
-
+```
+```
 Communication codes:
 - APPLICATION_USER__INVALID_EMAIL
 - APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE
@@ -151,7 +168,8 @@ Communication codes:
  - ## /v1/m/au/rbls (register_by_last_step) POST
 ```
 Registers application user for the last step.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_device_id: String,
@@ -160,13 +178,15 @@ struct Incoming {
     application_user_email: String,
     application_user_registration_token_value: String
 }
-
+```
+```rust
 Result data:
 struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
 }
-
+```
+```
 Communication codes:
 - APPLICATION_USER__INVALID_PASSWORD
 - APPLICATION_USER__INVALID_NICKNAME
@@ -182,14 +202,17 @@ Communication codes:
  - ## /v1/m/au/sefr (send_email_for_register) POST
 ```
 Sends email for register. (Should be used only if the user does not receive an email.)
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_email: String
 }
-
+```
+```
 Result data: absent.
-
+```
+```
 Communication codes:
 - APPLICATION_USER__INVALID_EMAIL
 - APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
@@ -199,39 +222,45 @@ Communication codes:
  - ## /v1/m/au/abfs (authorize_by_first_step) POST                             БЫВШИЙ log_in_by_first_step. УДАЛИТЬ
 ```
 Authorizes application user for the firs step and send email to user.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_device_id: String,
     application_user_email_or_application_user_nickname: String,
     application_user_password: String
 }
-
+```
+```rust
 Result data:
 struct Outcoming {
     application_user_id: i64
 }
-
+```
+```
 Communication codes:
 - APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
 ```
  - ## /v1/m/au/abls (authorize_by_last_step) POST                       БЫВШИЙ (log_in_by_last_step). УДАЛИТЬ
 ```
 Authorizes application user for the last step.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_id: i64,
     application_user_device_id: String,
     application_user_authorization_token_value: String
 }
-
+```
+```rust
 Result data:
 struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
 }
-
+```
+```
 Communication codes:
 - APPLICATION_USER_AUTHORIZATION_TOKEN__INVALID_VALUE
 - APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
@@ -242,15 +271,18 @@ Communication codes:
  - ## /v1/m/au/sefa (send_email_for_authorize) POST                                 БЫВШИЙ (send_email_for_log_in). УДАЛИТЬ
 ```
 Sends email for authorization. (Should be used only if the user does not receive an email.)
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_device_id: String,
     application_user_id: i64
 }
-
+```
+```
 Result data: absent.
-
+```
+```
 Communication codes:
 - APPLICATION_USER__NOT_FOUND
 - APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
@@ -259,17 +291,20 @@ Communication codes:
  - ## /v1/m/au/rpbfs (reset_password_by_first_step) POST
 ```
 Resets application user password for the first step and send email to user.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_email: String
 }
-
+```
+```rust
 Result data:
 struct Outcoming {
     application_user_id: i64
 }
-
+```
+```
 Communication codes:
 - APPLICATION_USER__INVALID_EMAIL
 - APPLICATION_USER__NOT_FOUND
@@ -277,15 +312,18 @@ Communication codes:
  - ## /v1/m/au/rpbss (reset_password_by_second_step) POST
 ```
 Resets application user password for the second step through token value approving.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_id: i64,
     application_user_reset_password_token_value: String
 }
-
+```
+```
 Result data: absent.
-
+```
+```
 Communication codes:
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__INVALID_VALUE
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND
@@ -296,16 +334,19 @@ Communication codes:
  - ## /v1/m/au/rpbls (reset_password_by_last_step) POST
 ```
 Resets application user password for the last step.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_id: i64,
     application_user_password: String,
     application_user_reset_password_token_value: String
 }
-
+```
+```
 Result data: absent.
-
+```
+```
 Communication codes:
 - APPLICATION_USER__INVALID_PASSWORD
 - APPLICATION_USER__NOT_FOUND
@@ -318,14 +359,17 @@ Communication codes:
  - ## /v1/m/au/sefrp (send_email_for_reset_password) POST
 ```
 Sends email for reset password.  (Should be used only if the user does not receive an email.)
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_id: i64
 }
-
+```
+```
 Result data: absent.
-
+```
+```
 Communication codes:
 - APPLICATION_USER__NOT_FOUND
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND
@@ -335,19 +379,22 @@ Communication codes:
  - ## /v1/m/au/rauat (refresh_application_user_access_token) POST
 ```
 Refreshs application user access token.
-
+```
+```rust
 Request data:
 struct Incoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
 }
-
+```
+```rust
 Result data:
 struct Outcoming {
     application_user_access_token_web_form: String,
     application_user_access_refresh_token_web_form: String
 }
-
+```
+```
 Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__NOT_EXPIRED
 - APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND
