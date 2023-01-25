@@ -2,6 +2,7 @@
 pub mod application_user__email_sender;
 #[allow(non_snake_case)]
 pub mod application_user_access_token__extractor;
+pub mod cloud_message_resolver;
 pub mod counter;
 pub mod date_time_resolver;
 pub mod email_sender;

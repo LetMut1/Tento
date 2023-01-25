@@ -13,8 +13,10 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::ApplicationUserAccessRefreshToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::ApplicationUserResetPasswordToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::Update;
+use crate::infrastructure_layer::functionality::service::cloud_message_resolver::CloudMessageResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
@@ -179,6 +181,16 @@ impl ActionProcessor {
 
             return Err(error);
         }
+
+        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_2(
+            &*authorization_postgresql_pooled_connection, application_user_.get_id()
+        ).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+
+        CloudMessageResolver::deauthorize_application_user_from_all_devices();
 
         return Ok(ActionProcessorResult::outcoming(()));
     }
