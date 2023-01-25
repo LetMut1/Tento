@@ -14,7 +14,9 @@ impl ApplicationUserAccessToken_Extractor {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_token_web_form: &'a str
     ) -> Result<ExtractorResult, ErrorAuditor> {
-        let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(environment_configuration_resolver, application_user_access_token_web_form) {
+        let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(
+            environment_configuration_resolver, application_user_access_token_web_form
+        ) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

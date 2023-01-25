@@ -17,10 +17,8 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
     const TIMESTAMP_FORMAT_TO_FORMAT: &'static str = "%Y-%m-%d %H:%M:%S%.6f%z";
 
     pub fn create_chrono_date_time_utc<'a>(date_time: &'a str) -> Result<DateTime<Utc>, ErrorAuditor> {
-        match DateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT_TO_PARSE) {
-            Ok(date_time_) => {
-                return Ok(date_time_.with_timezone(&Utc));
-            }
+        let date_time_ = match DateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT_TO_PARSE) {
+            Ok(date_time__) => date_time__,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -29,7 +27,9 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
                     )
                 );
             }
-        }
+        };
+
+        return Ok(date_time_.with_timezone(&Utc));
     }
 
     pub fn is_greater_or_equal_than<'a>(subject_date_time: &'a DateTime<Utc>, than_date_time: &'a DateTime<Utc>) -> bool {
@@ -37,10 +37,8 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
     }
 
     pub fn add_interval_from<'a>(date_time: &'a DateTime<Utc>, quantity_of_minutes: i64) -> Result<DateTime<Utc>, ErrorAuditor> {
-        match date_time.checked_add_signed(Duration::minutes(quantity_of_minutes)) {
-            Some(date_time_) => {
-                return Ok(date_time_);
-            }
+        let date_time_ = match date_time.checked_add_signed(Duration::minutes(quantity_of_minutes)) {
+            Some(date_time__) => date_time__,
             None => {
                 return Err(
                     ErrorAuditor::new(
@@ -50,23 +48,25 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
                 );
             }
         };
+
+        return Ok(date_time_);
     }
 
     pub fn add_interval_from_now_formated(quantity_of_minutes: i64) -> Result<String, ErrorAuditor> {
-        match Self::add_interval_from(&Utc::now(), quantity_of_minutes) {
-            Ok(date_time) => {
-                return Ok(date_time.format(Self::TIMESTAMP_FORMAT_TO_FORMAT).to_string())
-            }
+        let date_time = match Self::add_interval_from(&Utc::now(), quantity_of_minutes) {
+            Ok(date_time_) => date_time_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
-        }
+        };
+
+        return Ok(date_time.format(Self::TIMESTAMP_FORMAT_TO_FORMAT).to_string())
     }
 
     pub fn is_valid_timestamp<'a>(date_time: &'a str) -> bool {
-        if let Ok(_date_time) = DateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT_TO_PARSE) {
+        if let Ok(_) = DateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT_TO_PARSE) {
             return true;
         }
 
