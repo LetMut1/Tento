@@ -27,17 +27,14 @@ impl Channel_PostgresqlRepository {
 
         let mut counter = Counter::new_classic();
 
-        let mut counter_value: i16;
-        match counter.get_next_value() {
-            Ok(counter_) => {
-                counter_value = counter_;
-            }
+        let mut counter_value = match counter.get_next_value() {
+            Ok(counter_value_) => counter_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
-        }
+        };
 
         let mut query =
             "SELECT \
@@ -56,184 +53,41 @@ impl Channel_PostgresqlRepository {
             + counter_value.to_string().as_str();
 
         let wildcard = channel_name.to_string() + "%";
+
         prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_name_) = requery_name {
-            match counter.get_next_value() {
-                Ok(counter_) => {
-                    counter_value = counter_;
-                }
+            counter_value = match counter.get_next_value() {
+                Ok(counter_value_) => counter_value_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                     return Err(error);
                 }
-            }
+            };
             query = query + " AND c.name > $" + counter_value.to_string().as_str();
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_name_, Type::TEXT);
         }
 
-        match counter.get_next_value() {
-            Ok(counter_) => {
-                counter_value = counter_;
-            }
+        counter_value = match counter.get_next_value() {
+            Ok(counter_value_) => counter_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
-        }
+        };
         query = query + " ORDER BY c.name ASC LIMIT $" + counter_value.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let mut channel_registry: Vec<GetManyByNameChannel> = vec![];
 
-        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if !row_registry.is_empty() {
-                            '_a: for row in row_registry.iter() {
-                                let channel_id = match row.try_get::<'_, usize, i64>(0) {
-                                    Ok(channel_id_) => channel_id_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_name_ = match row.try_get::<'_, usize, String>(1) {
-                                    Ok(channel_name__) => channel_name__,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_personalization_image_path = match row.try_get::<'_, usize, String>(2) {
-                                    Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(3) {
-                                    Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_public_marks_quantity = match row.try_get::<'_, usize, i64>(4) {
-                                    Ok(channel_public_marks_quantity_) => channel_public_marks_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_hidden_marks_quantity = match row.try_get::<'_, usize, i64>(5) {
-                                    Ok(channel_hidden_marks_quantity_) => channel_hidden_marks_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_reactions_quantity = match row.try_get::<'_, usize, i64>(6) {
-                                    Ok(channel_reactions_quantity_) => channel_reactions_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_viewing_quantity = match row.try_get::<'_, usize, i64>(7) {
-                                    Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_created_at = match row.try_get::<'_, usize, String>(8) {
-                                    Ok(channel_created_at_) => channel_created_at_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel = GetManyByNameChannel {
-                                    channel_id,
-                                    channel_name: channel_name_,
-                                    channel_personalization_image_path,
-                                    channel_subscribers_quantity,
-                                    channel_public_marks_quantity,
-                                    channel_hidden_marks_quantity,
-                                    channel_reactions_quantity,
-                                    channel_viewing_quantity,
-                                    channel_created_at
-                                };
-
-                                channel_registry.push(channel);
-                            }
-
-                            return Ok(Some(channel_registry));
-                        }
-
-                        return Ok(None);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -242,7 +96,151 @@ impl Channel_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(None);
         }
+
+        '_a: for row in row_registry.iter() {
+            let channel_id = match row.try_get::<'_, usize, i64>(0) {
+                Ok(channel_id_) => channel_id_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_name_ = match row.try_get::<'_, usize, String>(1) {
+                Ok(channel_name__) => channel_name__,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_personalization_image_path = match row.try_get::<'_, usize, String>(2) {
+                Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(3) {
+                Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_public_marks_quantity = match row.try_get::<'_, usize, i64>(4) {
+                Ok(channel_public_marks_quantity_) => channel_public_marks_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_hidden_marks_quantity = match row.try_get::<'_, usize, i64>(5) {
+                Ok(channel_hidden_marks_quantity_) => channel_hidden_marks_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_reactions_quantity = match row.try_get::<'_, usize, i64>(6) {
+                Ok(channel_reactions_quantity_) => channel_reactions_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_viewing_quantity = match row.try_get::<'_, usize, i64>(7) {
+                Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_created_at = match row.try_get::<'_, usize, String>(8) {
+                Ok(channel_created_at_) => channel_created_at_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel = GetManyByNameChannel {
+                channel_id,
+                channel_name: channel_name_,
+                channel_personalization_image_path,
+                channel_subscribers_quantity,
+                channel_public_marks_quantity,
+                channel_hidden_marks_quantity,
+                channel_reactions_quantity,
+                channel_viewing_quantity,
+                channel_created_at
+            };
+
+            channel_registry.push(channel);
+        }
+
+        return Ok(Some(channel_registry));
     }
 
     pub async fn per_request_2<'a>(
@@ -287,16 +285,14 @@ impl Channel_PostgresqlRepository {
                     );
                 }
             }
-            match counter.get_next_value() {
-                Ok(counter_) => {
-                    counter_value = counter_;
-                }
+            counter_value = match counter.get_next_value() {
+                Ok(counter_value_) => counter_value_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                     return Err(error);
                 }
-            }
+            };
             query = query + counter_value.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(created_at_, Type::TEXT);
@@ -310,166 +306,24 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         };
-        match counter.get_next_value() {
-            Ok(counter_) => {
-                counter_value = counter_;
-            }
+        counter_value = match counter.get_next_value() {
+            Ok(counter_value_) => counter_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
-        }
+        };
         query = query + " ORDER BY c.created_at " + order_ + " LIMIT $" + counter_value.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let mut channel_registry: Vec<GetManyByCreatedAtChannel> = vec![];
 
-        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if !row_registry.is_empty() {
-                            '_a: for row in row_registry.iter() {
-                                let channel_id = match row.try_get::<'_, usize, i64>(0) {
-                                    Ok(channel_id_) => channel_id_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_name = match row.try_get::<'_, usize, String>(1) {
-                                    Ok(channel_name_) => channel_name_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_personalization_image_path = match row.try_get::<'_, usize, String>(2) {
-                                    Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(3) {
-                                    Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_public_marks_quantity = match row.try_get::<'_, usize, i64>(4) {
-                                    Ok(channel_public_marks_quantity_) => channel_public_marks_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_hidden_marks_quantity = match row.try_get::<'_, usize, i64>(5) {
-                                    Ok(channel_hidden_marks_quantity_) => channel_hidden_marks_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_reactions_quantity = match row.try_get::<'_, usize, i64>(6) {
-                                    Ok(channel_reactions_quantity_) => channel_reactions_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_viewing_quantity = match row.try_get::<'_, usize, i64>(7) {
-                                    Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_created_at_ = match row.try_get::<'_, usize, String>(8) {
-                                    Ok(channel_created_at__) => channel_created_at__,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel = GetManyByCreatedAtChannel {
-                                    channel_id,
-                                    channel_name,
-                                    channel_personalization_image_path,
-                                    channel_subscribers_quantity,
-                                    channel_public_marks_quantity,
-                                    channel_hidden_marks_quantity,
-                                    channel_reactions_quantity,
-                                    channel_viewing_quantity,
-                                    channel_created_at: channel_created_at_
-                                };
-
-                                channel_registry.push(channel);
-                            }
-
-                            return Ok(Some(channel_registry));
-                        }
-
-                        return Ok(None);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -478,7 +332,151 @@ impl Channel_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(None);
         }
+
+        '_a: for row in row_registry.iter() {
+            let channel_id = match row.try_get::<'_, usize, i64>(0) {
+                Ok(channel_id_) => channel_id_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_name = match row.try_get::<'_, usize, String>(1) {
+                Ok(channel_name_) => channel_name_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_personalization_image_path = match row.try_get::<'_, usize, String>(2) {
+                Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(3) {
+                Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_public_marks_quantity = match row.try_get::<'_, usize, i64>(4) {
+                Ok(channel_public_marks_quantity_) => channel_public_marks_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_hidden_marks_quantity = match row.try_get::<'_, usize, i64>(5) {
+                Ok(channel_hidden_marks_quantity_) => channel_hidden_marks_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_reactions_quantity = match row.try_get::<'_, usize, i64>(6) {
+                Ok(channel_reactions_quantity_) => channel_reactions_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_viewing_quantity = match row.try_get::<'_, usize, i64>(7) {
+                Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_created_at_ = match row.try_get::<'_, usize, String>(8) {
+                Ok(channel_created_at__) => channel_created_at__,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel = GetManyByCreatedAtChannel {
+                channel_id,
+                channel_name,
+                channel_personalization_image_path,
+                channel_subscribers_quantity,
+                channel_public_marks_quantity,
+                channel_hidden_marks_quantity,
+                channel_reactions_quantity,
+                channel_viewing_quantity,
+                channel_created_at: channel_created_at_
+            };
+
+            channel_registry.push(channel);
+        }
+
+        return Ok(Some(channel_registry));
     }
 
     pub async fn per_request_3<'a>(
@@ -516,16 +514,14 @@ impl Channel_PostgresqlRepository {
                     );
                 }
             }
-            match counter.get_next_value() {
-                Ok(counter_) => {
-                    counter_value = counter_;
-                }
+            counter_value = match counter.get_next_value() {
+                Ok(counter_value_) => counter_value_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                     return Err(error);
                 }
-            }
+            };
             query = query + counter_value.to_string().as_str() + ")";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity_, Type::INT8);
@@ -539,75 +535,24 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         };
-        match counter.get_next_value() {
-            Ok(counter_) => {
-                counter_value = counter_;
-            }
+        counter_value = match counter.get_next_value() {
+            Ok(counter_value_) => counter_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
-        }
+        };
         query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + order_ +" LIMIT $" + counter_value.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let mut channel_registry: Vec<GetManyBySubscribersQuantityChannel> = vec![];
 
-        match core_connection.prepare_typed(query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if !row_registry.is_empty() {
-                            '_a: for row in row_registry.iter() {
-                                let channel_id = match row.try_get::<'_, usize, i64>(0) {
-                                    Ok(channel_id_) => channel_id_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_subscribers_quantity_ = match row.try_get::<'_, usize, i64>(1) {
-                                    Ok(channel_subscribers_quantity__) => channel_subscribers_quantity__,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel = GetManyBySubscribersQuantityChannel {
-                                    channel_id,
-                                    channel_subscribers_quantity: channel_subscribers_quantity_
-                                };
-
-                                channel_registry.push(channel);
-                            }
-
-                            return Ok(Some(channel_registry));
-                        }
-
-                        return Ok(None);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -616,7 +561,60 @@ impl Channel_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(None);
         }
+
+        '_a: for row in row_registry.iter() {
+            let channel_id = match row.try_get::<'_, usize, i64>(0) {
+                Ok(channel_id_) => channel_id_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_subscribers_quantity_ = match row.try_get::<'_, usize, i64>(1) {
+                Ok(channel_subscribers_quantity__) => channel_subscribers_quantity__,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel = GetManyBySubscribersQuantityChannel {
+                channel_id,
+                channel_subscribers_quantity: channel_subscribers_quantity_
+            };
+
+            channel_registry.push(channel);
+        }
+
+        return Ok(Some(channel_registry));
     }
 
     pub async fn per_request_4<'a>(
@@ -647,150 +645,10 @@ impl Channel_PostgresqlRepository {
 
         let mut channel_registry: Vec<GetManyByIdRegistryChannel> = vec![];
 
-        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if !row_registry.is_empty() {
-                            '_a: for row in row_registry.iter() {
-                                let channel_id = match row.try_get::<'_, usize, i64>(0) {
-                                    Ok(channel_id_) => channel_id_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_name = match row.try_get::<'_, usize, String>(1) {
-                                    Ok(channel_name_) => channel_name_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_personalization_image_path =  match row.try_get::<'_, usize, String>(2) {
-                                    Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(3) {
-                                    Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_public_marks_quantity = match row.try_get::<'_, usize, i64>(4) {
-                                    Ok(channel_public_marks_quantity_) => channel_public_marks_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_hidden_marks_quantity = match row.try_get::<'_, usize, i64>(5) {
-                                    Ok(channel_hidden_marks_quantity_) => channel_hidden_marks_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_reactions_quantity = match row.try_get::<'_, usize, i64>(6) {
-                                    Ok(channel_reactions_quantity_) => channel_reactions_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_viewing_quantity = match row.try_get::<'_, usize, i64>(7) {
-                                    Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel_created_at: String = match row.try_get::<'_, usize, String>(8) {
-                                    Ok(channel_created_at_) => channel_created_at_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                let channel = GetManyByIdRegistryChannel {
-                                    channel_id,
-                                    channel_name,
-                                    channel_personalization_image_path,
-                                    channel_subscribers_quantity,
-                                    channel_public_marks_quantity,
-                                    channel_hidden_marks_quantity,
-                                    channel_reactions_quantity,
-                                    channel_viewing_quantity,
-                                    channel_created_at
-                                };
-
-                                channel_registry.push(channel);
-                            }
-
-                            return Ok(Some(channel_registry));
-                        }
-
-                        return Ok(None);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -799,6 +657,150 @@ impl Channel_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(None);
         }
+
+        '_a: for row in row_registry.iter() {
+            let channel_id = match row.try_get::<'_, usize, i64>(0) {
+                Ok(channel_id_) => channel_id_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_name = match row.try_get::<'_, usize, String>(1) {
+                Ok(channel_name_) => channel_name_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_personalization_image_path =  match row.try_get::<'_, usize, String>(2) {
+                Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_subscribers_quantity = match row.try_get::<'_, usize, i64>(3) {
+                Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_public_marks_quantity = match row.try_get::<'_, usize, i64>(4) {
+                Ok(channel_public_marks_quantity_) => channel_public_marks_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_hidden_marks_quantity = match row.try_get::<'_, usize, i64>(5) {
+                Ok(channel_hidden_marks_quantity_) => channel_hidden_marks_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_reactions_quantity = match row.try_get::<'_, usize, i64>(6) {
+                Ok(channel_reactions_quantity_) => channel_reactions_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_viewing_quantity = match row.try_get::<'_, usize, i64>(7) {
+                Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_created_at: String = match row.try_get::<'_, usize, String>(8) {
+                Ok(channel_created_at_) => channel_created_at_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel = GetManyByIdRegistryChannel {
+                channel_id,
+                channel_name,
+                channel_personalization_image_path,
+                channel_subscribers_quantity,
+                channel_public_marks_quantity,
+                channel_hidden_marks_quantity,
+                channel_reactions_quantity,
+                channel_viewing_quantity,
+                channel_created_at
+            };
+
+            channel_registry.push(channel);
+        }
+
+        return Ok(Some(channel_registry));
     }
 }
