@@ -40,51 +40,10 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             .add_parameter(&insert.application_user_registration_token_is_approved, Type::BOOL)
             .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2);
 
-        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if !row_registry.is_empty() {
-                            let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                                Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            return Ok(
-                                ApplicationUserRegistrationToken::new(
-                                    insert.application_user_email,
-                                    insert.application_user_registration_token_value,
-                                    insert.application_user_registration_token_wrong_enter_tries_quantity,
-                                    insert.application_user_registration_token_is_approved,
-                                    application_user_registration_token_expires_at
-                                )
-                            );
-                        }
-
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationToken can not be inserted into Postgresql database.") },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match authorization_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -93,7 +52,52 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match authorization_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationToken can not be inserted into Postgresql database.") },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
         }
+
+        let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
+            Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        return Ok(
+            ApplicationUserRegistrationToken::new(
+                insert.application_user_email,
+                insert.application_user_registration_token_value,
+                insert.application_user_registration_token_wrong_enter_tries_quantity,
+                insert.application_user_registration_token_is_approved,
+                application_user_registration_token_expires_at
+            )
+        );
     }
 
     pub async fn update<'a>(
@@ -136,43 +140,10 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
                 .add_parameter(&application_user_email, Type::TEXT);
 
-            match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-                Ok(ref statement) => {
-                    match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                        Ok(row_registry) => {
-                            if !row_registry.is_empty() {
-                                let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                                    Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
-                                    Err(error) => {
-                                        return Err(
-                                            ErrorAuditor::new(
-                                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                                BacktracePart::new(line!(), file!(), None)
-                                            )
-                                        );
-                                    }
-                                };
-
-                                application_user_registration_token.set_expires_at(application_user_registration_token_expires_at);
-                            } else {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationToken can not be updated in Postgresql database.") },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
-                            }
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-                }
+            let statement = match authorization_connection.prepare_typed(
+                query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+            ).await {
+                Ok(statement_) => statement_,
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -181,7 +152,44 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                         )
                     );
                 }
+            };
+
+            let row_registry = match authorization_connection.query(
+                &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+            ).await {
+                Ok(row_registry_) => row_registry_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            if row_registry.is_empty() {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationToken can not be updated in Postgresql database.") },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
             }
+
+            let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            application_user_registration_token.set_expires_at(application_user_registration_token_expires_at);
         } else {
             let query =
             "UPDATE ONLY public.application_user_registration_token AS aurt
@@ -204,29 +212,10 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 .add_parameter(&application_user_registration_token_is_approved, Type::BOOL)
                 .add_parameter(&application_user_email, Type::TEXT);
 
-            match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-                Ok(ref statement) => {
-                    match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                        Ok(row_registry) => {
-                            if row_registry.is_empty() {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationToken can not be updated in Postgresql database.") },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    )
-                                );
-                            }
-                        }
-                        Err(error) => {
-                            return Err(
-                                ErrorAuditor::new(
-                                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                    BacktracePart::new(line!(), file!(), None)
-                                )
-                            );
-                        }
-                    }
-                }
+            let statement = match authorization_connection.prepare_typed(
+                query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+            ).await {
+                Ok(statement_) => statement_,
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -235,6 +224,29 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                         )
                     );
                 }
+            };
+
+            let row_registry = match authorization_connection.query(
+                &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+            ).await {
+                Ok(row_registry_) => row_registry_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            if row_registry.is_empty() {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserRegistrationToken can not be updated in Postgresql database.") },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
             }
         }
 
@@ -250,22 +262,10 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
-        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(_) => {
-                        return Ok(());
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match authorization_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -274,7 +274,20 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                     )
                 );
             }
-        }
+        };
+
+        if let Err(error) = authorization_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        };
+
+        return Ok(());
     }
 
     pub async fn find_1<'a>(
@@ -294,84 +307,10 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
-        match authorization_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match authorization_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(row_registry) => {
-                        if !row_registry.is_empty() {
-                            let application_user_registration_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-                                Ok(application_user_registration_token_value_) => application_user_registration_token_value_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let application_user_registration_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-                                Ok(application_user_registration_token_wrong_enter_tries_quantity_) => application_user_registration_token_wrong_enter_tries_quantity_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let application_user_registration_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(2) {
-                                Ok(application_user_registration_token_is_approved_) => application_user_registration_token_is_approved_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
-                                Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
-                                Err(error) => {
-                                    return Err(
-                                        ErrorAuditor::new(
-                                            BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                            BacktracePart::new(line!(), file!(), None)
-                                        )
-                                    );
-                                }
-                            };
-
-                            return Ok(
-                                Some(
-                                    ApplicationUserRegistrationToken::new(
-                                        application_user_email,
-                                        application_user_registration_token_value,
-                                        application_user_registration_token_wrong_enter_tries_quantity,
-                                        application_user_registration_token_is_approved,
-                                        application_user_registration_token_expires_at
-                                    )
-                                )
-                            );
-                        }
-
-                        return Ok(None);
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match authorization_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -380,7 +319,85 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                     )
                 );
             }
+        };
+
+        let row_registry = match authorization_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(None);
         }
+
+        let application_user_registration_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
+            Ok(application_user_registration_token_value_) => application_user_registration_token_value_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let application_user_registration_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
+            Ok(application_user_registration_token_wrong_enter_tries_quantity_) => application_user_registration_token_wrong_enter_tries_quantity_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let application_user_registration_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(2) {
+            Ok(application_user_registration_token_is_approved_) => application_user_registration_token_is_approved_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
+            Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        return Ok(
+            Some(
+                ApplicationUserRegistrationToken::new(
+                    application_user_email,
+                    application_user_registration_token_value,
+                    application_user_registration_token_wrong_enter_tries_quantity,
+                    application_user_registration_token_is_approved,
+                    application_user_registration_token_expires_at
+                )
+            )
+        );
     }
 }
 

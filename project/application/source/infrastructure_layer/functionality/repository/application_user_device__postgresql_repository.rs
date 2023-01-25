@@ -29,27 +29,10 @@ impl ApplicationUserDevice_PostgresqlRepository {
             .add_parameter(&insert.application_user_device_id, Type::TEXT)
             .add_parameter(&insert.application_user_id, Type::INT8);
 
-        match core_connection.prepare_typed(query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()).await {
-            Ok(ref statement) => {
-                match core_connection.query(statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()).await {
-                    Ok(_) => {
-                        return Ok(
-                            ApplicationUserDevice::new(
-                                insert.application_user_device_id,
-                                insert.application_user_id
-                            )
-                        );
-                    }
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
+        let statement = match core_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -58,7 +41,25 @@ impl ApplicationUserDevice_PostgresqlRepository {
                     )
                 );
             }
-        }
+        };
+
+        if let Err(error) = core_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        };
+
+        return Ok(
+            ApplicationUserDevice::new(
+                insert.application_user_device_id,
+                insert.application_user_id
+            )
+        );
     }
 }
 
