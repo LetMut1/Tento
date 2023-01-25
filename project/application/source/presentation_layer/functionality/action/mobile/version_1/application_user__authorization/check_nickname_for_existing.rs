@@ -54,74 +54,74 @@ where
     // https://github.com/hyperium/hyper/issues/2004
     let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-    match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
-        Ok(incoming) => {
-            match ActionProcessor::process(
-                core_postgresql_connection_pool, incoming
-            ).await {
-                Ok(action_processor_result) => {
-                    match action_processor_result {
-                        ActionProcessorResult::Outcoming { outcoming } => {
-                            match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
-                                Ok(data) => {
-                                    return ActionResponseCreator::create_ok(data);
-                                }
+    let incoming = match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
+        Ok(incoming_) => incoming_,
+        Err(error) => {
+            // log::error!("{}", ErrorAuditor::from(error));
+
+            return ActionResponseCreator::create_internal_server_error();
+        }
+    };
+
+    let action_processor_result = match ActionProcessor::process(
+        core_postgresql_connection_pool, incoming
+    ).await {
+        Ok(action_processor_result_) => action_processor_result_,
+        Err(error) => {
+            match error.get_base_error() {
+                BaseError::InvalidArgumentError => {
+                    return ActionResponseCreator::create_bad_request();
+                }
+                BaseError::LogicError { logic_error: _ } |
+                BaseError::RunTimeError { run_time_error: _ } => {
+                    // log::error!("{}", error);
+
+                    return ActionResponseCreator::create_internal_server_error();
+                }
+            }
+        }
+    };
+
+    match action_processor_result {
+        ActionProcessorResult::Outcoming { outcoming } => {
+            let data = match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
+                Ok(data_) => data_,
+                Err(error) => {
+                    // log::error!("{}", ErrorAuditor::from(error));
+
+                    return ActionResponseCreator::create_internal_server_error();
+                }
+            };
+
+            return ActionResponseCreator::create_ok(data);
+        }
+        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
+            match entity_workflow_exception {
+                EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
+                    match application_user__workflow_exception {
+                        ApplicationUser_WorkflowException::InvalidNickname => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_NICKNAME)
+                            ) {
+                                Ok(data_) => data_,
                                 Err(error) => {
                                     // log::error!("{}", ErrorAuditor::from(error));
 
                                     return ActionResponseCreator::create_internal_server_error();
                                 }
-                            }
-                        }
-                        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
-                            match entity_workflow_exception {
-                                EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
-                                    match application_user__workflow_exception {
-                                        ApplicationUser_WorkflowException::InvalidNickname => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_NICKNAME)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
+                            };
 
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
-                                    }
-                                }
-                                _ => {
-                                    unreachable!("TODO");
-                                }
-                            }
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        _ => {
+                            unreachable!("TODO");
                         }
                     }
                 }
-                Err(error) => {
-                    match error.get_base_error() {
-                        BaseError::InvalidArgumentError => {
-                            return ActionResponseCreator::create_bad_request();
-                        }
-                        BaseError::LogicError { logic_error: _ } |
-                        BaseError::RunTimeError { run_time_error: _ } => {
-                            // log::error!("{}", error);
-
-                            return ActionResponseCreator::create_internal_server_error();
-                        }
-                    }
+                _ => {
+                    unreachable!("TODO");
                 }
             }
-        }
-        Err(error) => {
-            // log::error!("{}", ErrorAuditor::from(error));
-
-            return ActionResponseCreator::create_internal_server_error();
         }
     }
 }

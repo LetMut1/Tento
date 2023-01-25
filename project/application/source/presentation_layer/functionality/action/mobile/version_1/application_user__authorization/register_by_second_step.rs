@@ -53,151 +53,151 @@ where
     // https://github.com/hyperium/hyper/issues/2004
     let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-    match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
-        Ok(incoming) => {
-            match ActionProcessor::process(
-                authorization_postgresql_connection_pool, incoming
-            ).await {
-                Ok(action_processor_result) => {
-                    match action_processor_result {
-                        ActionProcessorResult::Outcoming { outcoming: _ } => {
-                            match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
-                                Ok(data) => {
-                                    return ActionResponseCreator::create_ok(data);
-                                }
+    let incoming = match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
+        Ok(incoming_) => incoming_,
+        Err(error) => {
+            // log::error!("{}", ErrorAuditor::from(error));
+
+            return ActionResponseCreator::create_internal_server_error();
+        }
+    };
+
+    let action_processor_result = match ActionProcessor::process(
+        authorization_postgresql_connection_pool, incoming
+    ).await {
+        Ok(action_processor_result_) => action_processor_result_,
+        Err(error) => {
+            match error.get_base_error() {
+                BaseError::InvalidArgumentError => {
+                    return ActionResponseCreator::create_bad_request();
+                }
+                BaseError::LogicError { logic_error: _ } |
+                BaseError::RunTimeError { run_time_error: _ } => {
+                    // log::error!("{}", error);
+
+                    return ActionResponseCreator::create_internal_server_error();
+                }
+            }
+        }
+    };
+
+    match action_processor_result {
+        ActionProcessorResult::Outcoming { outcoming: _ } => {
+            let data = match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
+                Ok(data_) => data_,
+                Err(error) => {
+                    // log::error!("{}", ErrorAuditor::from(error));
+
+                    return ActionResponseCreator::create_internal_server_error();
+                }
+            };
+
+            return ActionResponseCreator::create_ok(data);
+        }
+        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
+            match entity_workflow_exception {
+                EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
+                    match application_user__workflow_exception {
+                        ApplicationUser_WorkflowException::InvalidEmail => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL)
+                            ) {
+                                Ok(data_) => data_,
                                 Err(error) => {
                                     // log::error!("{}", ErrorAuditor::from(error));
 
                                     return ActionResponseCreator::create_internal_server_error();
                                 }
-                            }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
                         }
-                        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
-                            match entity_workflow_exception {
-                                EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
-                                    match application_user__workflow_exception {
-                                        ApplicationUser_WorkflowException::InvalidEmail => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
-                                    }
-                                }
-                                EntityWorkflowException::ApplicationUserRegistrationToken { application_user_registration_token__workflow_exception } => {
-                                    match application_user_registration_token__workflow_exception {
-                                        ApplicationUserRegistrationToken_WorkflowException::InvalidValue => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserRegistrationToken_WorkflowException::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserRegistrationToken_WorkflowException::AlreadyExpired => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserRegistrationToken_WorkflowException::AlreadyApproved => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserRegistrationToken_WorkflowException::WrongValue => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
-                                    }
-                                }
-                                _ => {
-                                    unreachable!("TODO");
-                                }
-                            }
+                        _ => {
+                            unreachable!("TODO");
                         }
                     }
                 }
-                Err(error) => {
-                    match error.get_base_error() {
-                        BaseError::InvalidArgumentError => {
-                            return ActionResponseCreator::create_bad_request();
-                        }
-                        BaseError::LogicError { logic_error: _ } |
-                        BaseError::RunTimeError { run_time_error: _ } => {
-                            // log::error!("{}", error);
+                EntityWorkflowException::ApplicationUserRegistrationToken { application_user_registration_token__workflow_exception } => {
+                    match application_user_registration_token__workflow_exception {
+                        ApplicationUserRegistrationToken_WorkflowException::InvalidValue => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
 
-                            return ActionResponseCreator::create_internal_server_error();
+                                    return ActionResponseCreator::create_internal_server_error();
+                                }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        ApplicationUserRegistrationToken_WorkflowException::NotFound => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                    return ActionResponseCreator::create_internal_server_error();
+                                }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        ApplicationUserRegistrationToken_WorkflowException::AlreadyExpired => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                    return ActionResponseCreator::create_internal_server_error();
+                                }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        ApplicationUserRegistrationToken_WorkflowException::AlreadyApproved => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                    return ActionResponseCreator::create_internal_server_error();
+                                }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        ApplicationUserRegistrationToken_WorkflowException::WrongValue => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                    return ActionResponseCreator::create_internal_server_error();
+                                }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        _ => {
+                            unreachable!("TODO");
                         }
                     }
+                }
+                _ => {
+                    unreachable!("TODO");
                 }
             }
-        }
-        Err(error) => {
-            // log::error!("{}", ErrorAuditor::from(error));
-
-            return ActionResponseCreator::create_internal_server_error();
         }
     }
 }

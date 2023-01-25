@@ -53,166 +53,166 @@ where
     // https://github.com/hyperium/hyper/issues/2004
     let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
 
-    match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
-        Ok(incoming) => {
-            match ActionProcessor::process(
-                core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
-            ).await {
-                Ok(action_processor_result) => {
-                    match action_processor_result {
-                        ActionProcessorResult::Outcoming { outcoming: _ } => {
-                            match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
-                                Ok(data) => {
-                                    return ActionResponseCreator::create_ok(data);
-                                }
+    let incoming = match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
+        Ok(incoming_) => incoming_,
+        Err(error) => {
+            // log::error!("{}", ErrorAuditor::from(error));
+
+            return ActionResponseCreator::create_internal_server_error();
+        }
+    };
+
+    let action_processor_result = match ActionProcessor::process(
+        core_postgresql_connection_pool, authorization_postgresql_connection_pool, incoming
+    ).await {
+        Ok(action_processor_result_) => action_processor_result_,
+        Err(error) => {
+            match error.get_base_error() {
+                BaseError::InvalidArgumentError => {
+                    return ActionResponseCreator::create_bad_request();
+                }
+                BaseError::LogicError { logic_error: _ } |
+                BaseError::RunTimeError { run_time_error: _ } => {
+                    // log::error!("{}", error);
+
+                    return ActionResponseCreator::create_internal_server_error();
+                }
+            }
+        }
+    };
+
+    match action_processor_result {
+        ActionProcessorResult::Outcoming { outcoming: _ } => {
+            let data = match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
+                Ok(data_) => data_,
+                Err(error) => {
+                    // log::error!("{}", ErrorAuditor::from(error));
+
+                    return ActionResponseCreator::create_internal_server_error();
+                }
+            };
+
+            return ActionResponseCreator::create_ok(data);
+        }
+        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
+            match entity_workflow_exception {
+                EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
+                    match application_user__workflow_exception {
+                        ApplicationUser_WorkflowException::InvalidPassword => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_PASSWORD)
+                            ) {
+                                Ok(data_) => data_,
                                 Err(error) => {
                                     // log::error!("{}", ErrorAuditor::from(error));
 
                                     return ActionResponseCreator::create_internal_server_error();
                                 }
-                            }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
                         }
-                        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
-                            match entity_workflow_exception {
-                                EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
-                                    match application_user__workflow_exception {
-                                        ApplicationUser_WorkflowException::InvalidPassword => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_PASSWORD)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
+                        ApplicationUser_WorkflowException::NotFound => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
 
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUser_WorkflowException::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
-
-                                    }
+                                    return ActionResponseCreator::create_internal_server_error();
                                 }
-                                EntityWorkflowException::ApplicationUserResetPasswordToken { application_user_reset_password_token__workflow_exception } => {
-                                    match application_user_reset_password_token__workflow_exception {
-                                        ApplicationUserResetPasswordToken_WorkflowException::InvalidValue => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__INVALID_VALUE)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
+                            };
 
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserResetPasswordToken_WorkflowException::NotFound => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        _ => {
+                            unreachable!("TODO");
+                        }
 
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
+                    }
+                }
+                EntityWorkflowException::ApplicationUserResetPasswordToken { application_user_reset_password_token__workflow_exception } => {
+                    match application_user_reset_password_token__workflow_exception {
+                        ApplicationUserResetPasswordToken_WorkflowException::InvalidValue => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__INVALID_VALUE)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
 
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserResetPasswordToken_WorkflowException::IsNotApproved => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__IS_NOT_APPROVED)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        ApplicationUserResetPasswordToken_WorkflowException::WrongValue => {
-                                            match rmp_serde::to_vec(
-                                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE)
-                                            ) {
-                                                Ok(data) => {
-                                                    return ActionResponseCreator::create_ok(data);
-                                                }
-                                                Err(error) => {
-                                                    // log::error!("{}", ErrorAuditor::from(error));
-
-                                                    return ActionResponseCreator::create_internal_server_error();
-                                                }
-                                            }
-                                        }
-                                        _ => {
-                                            unreachable!("TODO");
-                                        }
-                                    }
+                                    return ActionResponseCreator::create_internal_server_error();
                                 }
-                                _ => {
-                                    unreachable!("TODO");
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        ApplicationUserResetPasswordToken_WorkflowException::NotFound => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                    return ActionResponseCreator::create_internal_server_error();
                                 }
-                            }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                    return ActionResponseCreator::create_internal_server_error();
+                                }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        ApplicationUserResetPasswordToken_WorkflowException::IsNotApproved => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__IS_NOT_APPROVED)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                    return ActionResponseCreator::create_internal_server_error();
+                                }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        ApplicationUserResetPasswordToken_WorkflowException::WrongValue => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                    return ActionResponseCreator::create_internal_server_error();
+                                }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
+                        _ => {
+                            unreachable!("TODO");
                         }
                     }
                 }
-                Err(error) => {
-                    match error.get_base_error() {
-                        BaseError::InvalidArgumentError => {
-                            return ActionResponseCreator::create_bad_request();
-                        }
-                        BaseError::LogicError { logic_error: _ } |
-                        BaseError::RunTimeError { run_time_error: _ } => {
-                            // log::error!("{}", error);
-
-                            return ActionResponseCreator::create_internal_server_error();
-                        }
-                    }
+                _ => {
+                    unreachable!("TODO");
                 }
             }
-        }
-        Err(error) => {
-            // log::error!("{}", ErrorAuditor::from(error));
-
-            return ActionResponseCreator::create_internal_server_error();
         }
     }
 }
