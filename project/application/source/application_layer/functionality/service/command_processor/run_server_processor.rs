@@ -463,7 +463,7 @@ impl RunServerProcessor {
     // TODO написать без макроса
     #[tokio::main]
     async fn run_http_server(environment_configuration_resolver: EnvironmentConfigurationResolver) -> Result<(), ErrorAuditor> {
-        let postgresql_connection_pool = if environment_configuration_resolver.is_production_environment() {
+        let postgresql_connection_pool_workflow_type_aggregator = if environment_configuration_resolver.is_production_environment() {
             todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
         } else {
             let core_postgresql_connection_pool = match Pool::builder()
@@ -535,7 +535,7 @@ impl RunServerProcessor {
             move |_: &AddrStream| {
                 let environment_configuration_resolver_ = environment_configuration_resolver.clone();
 
-                let postgresql_connection_pool_ = postgresql_connection_pool.clone();
+                let postgresql_connection_pool_workflow_type_aggregator_ = postgresql_connection_pool_workflow_type_aggregator.clone();
 
                 let redis_connection_pool_ = redis_connection_pool.clone();
 
@@ -545,12 +545,12 @@ impl RunServerProcessor {
                             move |requset| {
                                 let environment_configuration_resolver__ = environment_configuration_resolver_.clone();
 
-                                let postgresql_connection_pool__ = postgresql_connection_pool_.clone();
+                                let postgresql_connection_pool_workflow_type_aggregator__ = postgresql_connection_pool_workflow_type_aggregator_.clone();
 
                                 let redis_connection_pool__ = redis_connection_pool_.clone();
 
                                 return async move {
-                                    let (core_postgresql_connection_pool_, authorization_postgresql_connection_pool_) = match postgresql_connection_pool__ {
+                                    let (core_postgresql_connection_pool_, authorization_postgresql_connection_pool_) = match postgresql_connection_pool_workflow_type_aggregator__ {
                                         PostgresqlConnectionPoolWorkflowTypeAggregator::LocalDevelopment {
                                             core_postgresql_connection_pool, authorization_postgresql_connection_pool
                                         } => (core_postgresql_connection_pool, authorization_postgresql_connection_pool)
