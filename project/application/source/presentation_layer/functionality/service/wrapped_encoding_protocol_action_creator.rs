@@ -65,73 +65,73 @@ impl WrappedEncodingProtocolActionCreator {
             body
         ) = request.into_parts();
 
-        match to_bytes(body).await {
-            Ok(bytes) => {
-                match serde_json::from_slice::<'_, AHID>(bytes.chunk()) {
-                    Ok(wrapped_incoming) => {
-                        match ActionProcessingDelegator::delegate::<'_, _, _, _, AHID, AHOD>(
-                            environment_configuration_resolver,
-                            core_postgresql_connection_pool,
-                            authorization_postgresql_connection_pool,
-                            redis_connection_pool,
-                            Incoming {
-                                parts: request_parts,
-                                convertible_data: wrapped_incoming
-                            },
-                            wrapped_action
-                        ).await {
-                            Ok(action_processor_result) => {
-                                match action_processor_result {
-                                    ActionProcessorResult::Outcoming { outcoming } => {
-                                        match outcoming.unified_report {
-                                            Some(unified_report_) => {
-                                                match serde_json::to_vec(&unified_report_) {
-                                                    Ok(data) => {
-                                                        return Response::from_parts(outcoming.parts, Body::from(data));
-                                                    }
-                                                    Err(error) => {
-                                                        // log::error!("{}", ErrorAuditor::from(error));
+        let bytes = match to_bytes(body).await {
+            Ok(bytes_) => bytes_,
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
 
-                                                        return ActionResponseCreator::create_internal_server_error();
-                                                    }
-                                                }
-                                            }
-                                            None => {
-                                                return Response::from_parts(outcoming.parts, Body::empty());
-                                            }
-                                        }
-                                    }
-                                    ActionProcessorResult::EntityWorkflowException { entity_workflow_exception: _ } => {
-                                        unreachable!("TODO");
-                                    }
-                                }
-                            }
-                            Err(error) => {
-                                match error.get_base_error() {
-                                    BaseError::InvalidArgumentError => {
-                                        unreachable!("TODO");
-                                    }
-                                    BaseError::LogicError { logic_error: _ } |
-                                    BaseError::RunTimeError { run_time_error: _ } => {
-                                        // log::error!("{}", error);
+                return ActionResponseCreator::create_internal_server_error();
+            }
+        };
 
-                                        return ActionResponseCreator::create_internal_server_error();
-                                    }
-                                }
-                            }
-                        }
+        let wrapped_incoming = match serde_json::from_slice::<'_, AHID>(bytes.chunk()) {
+            Ok(wrapped_incoming_) => wrapped_incoming_,
+            Err(error) => {
+                // log::error!("{}", ErrorAuditor::from(error));
+
+                return ActionResponseCreator::create_internal_server_error();
+            }
+        };
+
+        let action_processor_result = match ActionProcessingDelegator::delegate::<'_, _, _, _, AHID, AHOD>(
+            environment_configuration_resolver,
+            core_postgresql_connection_pool,
+            authorization_postgresql_connection_pool,
+            redis_connection_pool,
+            Incoming {
+                parts: request_parts,
+                convertible_data: wrapped_incoming
+            },
+            wrapped_action
+        ).await {
+            Ok(action_processor_result_) => action_processor_result_,
+            Err(error) => {
+                match error.get_base_error() {
+                    BaseError::InvalidArgumentError => {
+                        unreachable!("TODO");
                     }
-                    Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+                    BaseError::LogicError { logic_error: _ } |
+                    BaseError::RunTimeError { run_time_error: _ } => {
+                        // log::error!("{}", error);
 
                         return ActionResponseCreator::create_internal_server_error();
                     }
                 }
             }
-            Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+        };
 
-                return ActionResponseCreator::create_internal_server_error();
+        match action_processor_result {
+            ActionProcessorResult::Outcoming { outcoming } => {
+                let unified_report = match outcoming.unified_report {
+                    Some(unified_report_) => unified_report_,
+                    None => {
+                        return Response::from_parts(outcoming.parts, Body::empty());
+                    }
+                };
+
+                let data = match serde_json::to_vec(&unified_report) {
+                    Ok(data_) => data_,
+                    Err(error) => {
+                        // log::error!("{}", ErrorAuditor::from(error));
+
+                        return ActionResponseCreator::create_internal_server_error();
+                    }
+                };
+
+                return Response::from_parts(outcoming.parts, Body::from(data));
+            }
+            ActionProcessorResult::EntityWorkflowException { entity_workflow_exception: _ } => {
+                unreachable!("TODO");
             }
         }
     }
