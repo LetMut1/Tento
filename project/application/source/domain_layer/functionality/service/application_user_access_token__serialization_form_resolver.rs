@@ -33,31 +33,26 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
         }
         let application_user_access_token_serialized = base64::encode_config(data.as_slice(), base64::STANDARD);  // TODO TODO TODO TODO TODO Можно ли здесь использовать Бэйс64 на байтф мессаджПака?
 
-        let application_user_access_token_signature = ApplicationUserAccessToken_SignatureCreator::create(
+        let application_user_access_token_signature = ApplicationUserAccessToken_Encoder::create(
             environment_configuration_resolver, application_user_access_token_serialized.as_str()
         );
 
-        let application_user_access_token_web_form = application_user_access_token_serialized + Self::TOKEN_PARTS_SEPARATOR + application_user_access_token_signature.as_str();
+        let application_user_access_token_deserialized_form = application_user_access_token_serialized + Self::TOKEN_PARTS_SEPARATOR + application_user_access_token_signature.as_str();
 
-        return Ok(application_user_access_token_web_form);
+        return Ok(application_user_access_token_deserialized_form);
     }
 
     pub fn deserialize<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        application_user_access_token_web_form: &'a str
-    ) -> Result<ApplicationUserAccessToken<'static>, ErrorAuditor> {
-        let token_part_registry = application_user_access_token_web_form
+        application_user_access_token_deserialized_form: &'a str
+    ) -> Result<SerializationFormResolverResult, ErrorAuditor> {
+        let token_part_registry = application_user_access_token_deserialized_form
             .split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR)
-            .collect::<Vec<&'_ str>>();                                                         // проверить, правильно ли вот тут вообще
+            .collect::<Vec<&'_ str>>();                                                         // TODO проверить, правильно ли вот тут вообще
 
         if token_part_registry.len() != 2
-            || !ApplicationUserAccessToken_SignatureCreator::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::InvalidArgumentError,
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
+            || !ApplicationUserAccessToken_Encoder::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
+            return Ok(SerializationFormResolverResult::ApplicationUserAccessTokenWrongDeserializedForm);
         }
 
         let data = match base64::decode_config(token_part_registry[0].as_bytes(), base64::STANDARD) {
@@ -84,14 +79,14 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
             }
         };
 
-        return Ok(application_user_access_token);
+        return Ok(SerializationFormResolverResult::ApplicationUserAccessToken { application_user_access_token });
     }
 }
 
 #[allow(non_camel_case_types)]
-struct ApplicationUserAccessToken_SignatureCreator;
+struct ApplicationUserAccessToken_Encoder;
 
-impl ApplicationUserAccessToken_SignatureCreator {
+impl ApplicationUserAccessToken_Encoder {
     fn create<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_token_serialized: &'a str
@@ -113,4 +108,11 @@ impl ApplicationUserAccessToken_SignatureCreator {
         return Self::create(environment_configuration_resolver, application_user_access_token_serialized).as_bytes()
             == application_user_access_token_signature.as_bytes();
     }
+}
+
+pub enum SerializationFormResolverResult {
+    ApplicationUserAccessToken {
+        application_user_access_token: ApplicationUserAccessToken<'static>
+    },
+    ApplicationUserAccessTokenWrongDeserializedForm
 }

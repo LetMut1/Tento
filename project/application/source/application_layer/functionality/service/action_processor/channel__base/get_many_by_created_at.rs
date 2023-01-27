@@ -41,7 +41,7 @@ impl ActionProcessor {
         let mut limit = incoming.limit;
 
         let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
-            environment_configuration_resolver, incoming.application_user_access_token_web_form.as_str()
+            environment_configuration_resolver, incoming.application_user_access_token_deserialized_form.as_str()
         ).await {
             Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {
@@ -51,13 +51,16 @@ impl ActionProcessor {
             }
         };
         match extractor_result {
+            ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {}
             ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                 return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::AlreadyExpired));
             }
             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                 return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList));
             }
-            _ => {}
+            ExtractorResult::ApplicationUserAccessTokenWrongDeserializedForm => {
+                return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::WrongDeserializedForm));
+            }
         }
 
         if let Some(ref channel_created_at_) = incoming.channel_created_at {
@@ -114,7 +117,7 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_access_token_web_form: String,
+    application_user_access_token_deserialized_form: String,
     channel_created_at:  Option<String>,
     order: i8,
     limit: i8

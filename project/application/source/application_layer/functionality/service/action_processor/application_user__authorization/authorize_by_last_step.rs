@@ -3,7 +3,7 @@ use crate::application_layer::data::entity_workflow_exception::ApplicationUser_W
 use crate::application_layer::data::entity_workflow_exception::ApplicationUserAuthorizationToken_WorkflowException;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::functionality::service::application_user_access_refresh_token__encoder::ApplicationUserAccessRefreshToken_Encoder;
+use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__obfuscation_value_generator::ApplicationUserAccessRefreshToken_ObfuscationValueGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__expires_at_generator::ApplicationUserAccessToken_ExpiresAtGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__id_generator::ApplicationUserAccessToken_IdGenerator;
@@ -229,8 +229,8 @@ impl ActionProcessor {
             return Err(error);
         }
 // TODO  TRANZACTION
-        let application_user_access_token_web_form = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration_resolver, &application_user_access_token) {
-            Ok(application_user_access_token_web_form_) => application_user_access_token_web_form_,
+        let application_user_access_token_deserialized_form = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration_resolver, &application_user_access_token) {
+            Ok(application_user_access_token_deserialized_form_) => application_user_access_token_deserialized_form_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -238,8 +238,8 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_web_form = match ApplicationUserAccessRefreshToken_Encoder::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
-            Ok(application_user_access_refresh_token_web_form_) => application_user_access_refresh_token_web_form_,
+        let application_user_access_refresh_token_deserialized_form = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
+            Ok(application_user_access_refresh_token_deserialized_form_) => application_user_access_refresh_token_deserialized_form_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -259,7 +259,7 @@ impl ActionProcessor {
 
         return Ok(
             ActionProcessorResult::outcoming(
-                Outcoming { application_user_access_token_web_form, application_user_access_refresh_token_web_form }
+                Outcoming { application_user_access_token_deserialized_form, application_user_access_refresh_token_deserialized_form }
             )
         );
     }
@@ -278,14 +278,14 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 struct Outcoming {
-    application_user_access_token_web_form: String,
-    application_user_access_refresh_token_web_form: String
+    application_user_access_token_deserialized_form: String,
+    application_user_access_refresh_token_deserialized_form: String
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    application_user_access_token_web_form: String,
-    application_user_access_refresh_token_web_form: String
+    application_user_access_token_deserialized_form: String,
+    application_user_access_refresh_token_deserialized_form: String
 }

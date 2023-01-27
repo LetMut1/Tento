@@ -12,9 +12,9 @@ use extern_crate::hex;
 use extern_crate::rmp_serde;
 
 #[allow(non_camel_case_types)]
-pub struct ApplicationUserAccessRefreshToken_Encoder;
+pub struct ApplicationUserAccessRefreshToken_SerializationFormResolver;
 
-impl ApplicationUserAccessRefreshToken_Encoder {
+impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
     pub fn encode<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
@@ -35,18 +35,20 @@ impl ApplicationUserAccessRefreshToken_Encoder {
         );
         hmac.input(data.as_slice());
 
-        let application_user_access_refresh_token_web_form = hex::encode(hmac.result().code());     // TODO  TODO TODO time attac// TODO TODO TODO TODO TODO Валидно ли кодирует ХЕКС, если это Байты МессаджПака?
+        let application_user_access_refresh_token_deserialized_form = hex::encode(hmac.result().code());     // TODO  TODO TODO time attac// TODO TODO TODO TODO TODO Валидно ли кодирует ХЕКС, если это Байты МессаджПака?
 
-        return Ok(application_user_access_refresh_token_web_form);
+        return Ok(application_user_access_refresh_token_deserialized_form);
     }
 
     pub fn is_valid<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
-        application_user_access_refresh_token_web_form: &'a str
+        application_user_access_refresh_token_deserialized_form: &'a str
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_access_refresh_token_web_form_ = match Self::encode(environment_configuration_resolver, application_user_access_refresh_token) {
-            Ok(application_user_access_refresh_token_web_form__) => application_user_access_refresh_token_web_form__,
+        let application_user_access_refresh_token_deserialized_form_ = match Self::encode(
+            environment_configuration_resolver, application_user_access_refresh_token
+        ) {
+            Ok(application_user_access_refresh_token_deserialized_form__) => application_user_access_refresh_token_deserialized_form__,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -55,7 +57,7 @@ impl ApplicationUserAccessRefreshToken_Encoder {
         };
 
         return Ok(
-            application_user_access_refresh_token_web_form_.as_bytes() == application_user_access_refresh_token_web_form.as_bytes()
+            application_user_access_refresh_token_deserialized_form_.as_bytes() == application_user_access_refresh_token_deserialized_form.as_bytes()
         );
     }
 }

@@ -76,10 +76,16 @@ fn main() -> () {
 
 // Стоит ли в pub enum ActionProcessorResult<T> сделать Емпти вариант. Обратить внимание на Джсонвреппер.
 
-// refresh_application_user_access_token aplication_layer. Разобраться, не стоит ли отдавать конкретные ошибки о том, что конкретный токен инвалидный.
-// return Err(
-//     ErrorAuditor::new(
-//         BaseError::InvalidArgumentError,
-//         BacktracePart::new(line!(), file!(), None)
-//     )
-// );
+
+// ВОТ ЭТО НУЖНО МЕТОДОМ
+// match error.get_base_error() {
+//     BaseError::InvalidArgumentError => {
+//         return ActionResponseCreator::create_bad_request();
+//     }
+//     BaseError::LogicError { logic_error: _ } |
+//     BaseError::RunTimeError { run_time_error: _ } => {
+//         // log::error!("{}", error);
+
+//         return ActionResponseCreator::create_internal_server_error();
+//     }
+// }

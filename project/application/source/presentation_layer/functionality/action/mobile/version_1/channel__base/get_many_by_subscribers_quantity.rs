@@ -121,6 +121,20 @@ where
 
                             return ActionResponseCreator::create_ok(data);
                         }
+                        ApplicationUserAccessToken_WorkflowException::WrongDeserializedForm => {
+                            let data = match rmp_serde::to_vec(
+                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__WRONG_DESERIALIZED_FORM)
+                            ) {
+                                Ok(data_) => data_,
+                                Err(error) => {
+                                    // log::error!("{}", ErrorAuditor::from(error));
+
+                                    return ActionResponseCreator::create_internal_server_error();
+                                }
+                            };
+
+                            return ActionResponseCreator::create_ok(data);
+                        }
                         ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST)

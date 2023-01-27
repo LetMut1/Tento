@@ -33,15 +33,17 @@ pub enum ApplicationUser_WorkflowException {
 
 #[allow(non_camel_case_types)]
 pub enum ApplicationUserAccessRefreshToken_WorkflowException {
+    AlreadyExpired,
     NotFound,
-    AlreadyExpired
+    WrongDeserializedForm
 }
 
 #[allow(non_camel_case_types)]
 pub enum ApplicationUserAccessToken_WorkflowException {
     AlreadyExpired,
     InApplicationUserAccessTokenBlackList,
-    NotExpired
+    NotExpired,
+    WrongDeserializedForm
 }
 
 #[allow(non_camel_case_types)]

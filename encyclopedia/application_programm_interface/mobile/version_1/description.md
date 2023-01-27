@@ -44,12 +44,10 @@ struct Data<S>
 <br/><br/>
 
 # API for authorized application user.
- - Every endpoint at this area requires an existing of `application_user_access_token`
- - Response of EVERY endpoint at this area contains `communication_code` equals to
+```
+ Every endpoint at this area requires an existing of access token.
  ```
-  - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
-  - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
- ```
+
  - ## /v1/m/au/dfod (deauthorize_from_one_device) POST                              БЫВШИЙ log_out_from_one_device. УДАЛИТЬ
 ```
 Deauthorizes application user from one device.
@@ -57,14 +55,17 @@ Deauthorizes application user from one device.
 ```rust
 Request data:
 struct Incoming {
-    application_user_access_token_web_form: String
+    aapplication_user_access_token_deserialized_form: String
 }
 ```
 ```
 Result data: absent.
 ```
 ```
-Communication codes: absent.
+Communication codes:
+- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+- APPLICATION_USER_ACCESS_TOKEN__WRONG_DESERIALIZED_FORM
 ```
  - ## /v1/m/au/dfad (deauthorize_from_all_devices) POST                                 БЫВШИЙ log_out_from_all_device. УДАЛИТЬ
 ```
@@ -73,15 +74,20 @@ Deauthorizes application user from all devices.
 ```rust
 Request data:
 struct Incoming {
-    application_user_access_token_web_form: String
+    aapplication_user_access_token_deserialized_form: String
 }
 ```
 ```
 Result data: absent.
 ```
 ```
-Communication codes: absent.
+Communication codes:
+- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+- APPLICATION_USER_ACCESS_TOKEN__WRONG_DESERIALIZED_FORM
 ```
+<br/><br/>
+
 # API for not authorized application user.
  - ## /v1/m/au/cefe (check_email_for_existing) POST (GET functional)
 ```
@@ -182,8 +188,8 @@ struct Incoming {
 ```rust
 Result data:
 struct Outcoming {
-    application_user_access_token_web_form: String,
-    application_user_access_refresh_token_web_form: String
+    aapplication_user_access_token_deserialized_form: String,
+    application_user_access_refresh_token_deserialized_form: String
 }
 ```
 ```
@@ -256,8 +262,8 @@ struct Incoming {
 ```rust
 Result data:
 struct Outcoming {
-    application_user_access_token_web_form: String,
-    application_user_access_refresh_token_web_form: String
+    aapplication_user_access_token_deserialized_form: String,
+    application_user_access_refresh_token_deserialized_form: String
 }
 ```
 ```
@@ -383,22 +389,24 @@ Refreshs application user access token.
 ```rust
 Request data:
 struct Incoming {
-    application_user_access_token_web_form: String,
-    application_user_access_refresh_token_web_form: String
+    aapplication_user_access_token_deserialized_form: String,
+    application_user_access_refresh_token_deserialized_form: String
 }
 ```
 ```rust
 Result data:
 struct Outcoming {
-    application_user_access_token_web_form: String,
-    application_user_access_refresh_token_web_form: String
+    aapplication_user_access_token_deserialized_form: String,
+    application_user_access_refresh_token_deserialized_form: String
 }
 ```
 ```
 Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__NOT_EXPIRED
-- APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND
+- APPLICATION_USER_ACCESS_TOKEN__WRONG_DESERIALIZED_FORM
 - APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND
+- APPLICATION_USER_ACCESS_REFRESH_TOKEN__WRONG_DESERIALIZED_FORM
 ```
 # Incoming parameters validation rule.
  - ## application_user_registration_token_value
