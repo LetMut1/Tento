@@ -44,9 +44,9 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
 
     pub fn deserialize<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        application_user_access_token_classic_form: &'a str
+        application_user_access_token_web_form: &'a str
     ) -> Result<ApplicationUserAccessToken<'static>, ErrorAuditor> {
-        let token_part_registry = application_user_access_token_classic_form
+        let token_part_registry = application_user_access_token_web_form
             .split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR)
             .collect::<Vec<&'_ str>>();                                                         // проверить, правильно ли вот тут вообще
 

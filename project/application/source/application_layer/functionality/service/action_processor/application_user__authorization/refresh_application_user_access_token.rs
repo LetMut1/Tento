@@ -54,7 +54,7 @@ impl ActionProcessor {
             }
         };
 
-        if !ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token) {   // TODO TODO TODO TODO СДелать интервал, когда можео менять. На 3 часа раньше, чем срок экспирации, например
+        if !ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token) {
             return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::NotExpired));
         }
 
@@ -63,7 +63,11 @@ impl ActionProcessor {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BaseError::RunTimeError {
+                            run_time_error: RunTimeError::ResourceError {
+                                resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error }
+                            }
+                        },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
