@@ -78,7 +78,7 @@ fn main() -> () {
 
 
 // ВОТ ЭТО НУЖНО МЕТОДОМ
-// match error.get_base_error() {
+// match *error.get_base_error() {
 //     BaseError::InvalidArgumentError => {
 //         return ActionResponseCreator::create_bad_request();
 //     }

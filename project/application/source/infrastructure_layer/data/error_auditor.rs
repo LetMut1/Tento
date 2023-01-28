@@ -28,8 +28,8 @@ impl ErrorAuditor {
         return ();
     }
 
-    pub fn get_base_error(self) -> BaseError {
-        return self.base_error;
+    pub fn get_base_error<'a>(&'a self) -> &'a BaseError {
+        return &self.base_error;
     }
 }
 

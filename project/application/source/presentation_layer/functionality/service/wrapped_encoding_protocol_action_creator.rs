@@ -96,7 +96,7 @@ impl WrappedEncodingProtocolActionCreator {
         ).await {
             Ok(action_processor_result_) => action_processor_result_,
             Err(error) => {
-                match error.get_base_error() {
+                match *error.get_base_error() {
                     BaseError::InvalidArgumentError => {
                         unreachable!("TODO");
                     }
