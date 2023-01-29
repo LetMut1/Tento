@@ -6,7 +6,7 @@ use crate::application_layer::functionality::service::action_processor::applicat
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::refresh_application_user_access_token::Incoming;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
-use crate::presentation_layer::functionality::service::unexpected_begavior_resolver::UnexpectedBehaviorResolver;
+use crate::presentation_layer::functionality::service::unexpected_behavior_resolver::UnexpectedBehaviorResolver;
 use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::functionality::service::unified_report_creator::UnifiedReportCreator;
