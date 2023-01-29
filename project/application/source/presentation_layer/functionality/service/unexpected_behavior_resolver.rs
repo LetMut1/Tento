@@ -20,4 +20,10 @@ impl UnexpectedBehaviorResolver {
             }
         }
     }
+
+    pub fn create_unreachable_action_response() -> Response<Body> {
+        // TODO log о том, что это АНРИАЧЭБЛ. unreachable!()
+
+        return ActionResponseCreator::create_not_extended();
+    }
 }

@@ -121,7 +121,7 @@ impl WrappedEncodingProtocolActionCreator {
                 return ActionResponseCreator::create_from_response_parts(outcoming.parts, Some(data));
             }
             ActionProcessorResult::EntityWorkflowException { entity_workflow_exception: _ } => {
-                unreachable!();
+                return UnexpectedBehaviorResolver::create_unreachable_action_response();
             }
         }
     }

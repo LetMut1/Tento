@@ -119,7 +119,7 @@ where
                             return ActionResponseCreator::create_ok(data);
                         }
                         _ => {
-                            unreachable!("TODO");
+                            return UnexpectedBehaviorResolver::create_unreachable_action_response();
                         }
                     }
                 }
@@ -170,7 +170,7 @@ where
                     }
                 }
                 _ => {
-                    unreachable!("TODO");
+                    return UnexpectedBehaviorResolver::create_unreachable_action_response();
                 }
             }
         }

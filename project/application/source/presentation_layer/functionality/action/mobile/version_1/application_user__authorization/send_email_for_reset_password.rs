@@ -103,7 +103,7 @@ where
                             return ActionResponseCreator::create_ok(data);
                         }
                         _ => {
-                            unreachable!("TODO");
+                            return UnexpectedBehaviorResolver::create_unreachable_action_response();
                         }
                     }
                 }
@@ -152,12 +152,12 @@ where
                             return ActionResponseCreator::create_ok(data);
                         }
                         _ => {
-                            unreachable!("TODO");
+                            return UnexpectedBehaviorResolver::create_unreachable_action_response();
                         }
                     }
                 }
                 _ => {
-                    unreachable!("TODO");
+                    return UnexpectedBehaviorResolver::create_unreachable_action_response();
                 }
             }
         }

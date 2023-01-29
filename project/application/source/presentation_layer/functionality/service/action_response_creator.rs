@@ -50,6 +50,10 @@ impl ActionResponseCreator {
         return Self::create(StatusCode::INTERNAL_SERVER_ERROR, None);
     }
 
+    pub fn create_not_extended() -> Response<Body> {
+        return Self::create(StatusCode::NOT_EXTENDED, None);
+    }
+
     pub fn create_ok(data: Vec<u8>) -> Response<Body> {
         return Self::create(StatusCode::OK, Some(data));
     }
