@@ -84,7 +84,7 @@ fn main() -> () {
 //     }
 //     BaseError::LogicError { logic_error: _ } |
 //     BaseError::RunTimeError { run_time_error: _ } => {
-//         // log::error!("{}", error);
+//         // TODO log::error!("{}", error);
 
 //         return ActionResponseCreator::create_internal_server_error();
 //     }

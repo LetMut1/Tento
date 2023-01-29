@@ -1,7 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::functionality::service::action_processing_delegator::ActionProcessingDelegator;
 use crate::application_layer::functionality::service::action_processing_delegator::Incoming;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -23,6 +22,7 @@ use std::marker::Send;
 use std::marker::Sync;
 use std::ops::FnOnce;
 use super::action_response_creator::ActionResponseCreator;
+use super::action_unexpected_response_creator::ActionUnexpectedResponseCreator;
 use super::request_header_checker::RequestHeaderChecker;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
@@ -68,7 +68,7 @@ impl WrappedEncodingProtocolActionCreator {
         let bytes = match to_bytes(body).await {
             Ok(bytes_) => bytes_,
             Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+                // TODO log::error!("{}", ErrorAuditor::from(error));
 
                 return ActionResponseCreator::create_internal_server_error();
             }
@@ -77,7 +77,7 @@ impl WrappedEncodingProtocolActionCreator {
         let wrapped_incoming = match serde_json::from_slice::<'_, AHID>(bytes.chunk()) {
             Ok(wrapped_incoming_) => wrapped_incoming_,
             Err(error) => {
-                // log::error!("{}", ErrorAuditor::from(error));
+                // TODO log::error!("{}", ErrorAuditor::from(error));
 
                 return ActionResponseCreator::create_internal_server_error();
             }
@@ -96,17 +96,7 @@ impl WrappedEncodingProtocolActionCreator {
         ).await {
             Ok(action_processor_result_) => action_processor_result_,
             Err(error) => {
-                match *error.get_base_error() {
-                    BaseError::InvalidArgumentError => {
-                        unreachable!("TODO");
-                    }
-                    BaseError::LogicError { logic_error: _ } |
-                    BaseError::RunTimeError { run_time_error: _ } => {
-                        // log::error!("{}", error);
-
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                }
+                return ActionUnexpectedResponseCreator::create(&error);
             }
         };
 
@@ -115,23 +105,23 @@ impl WrappedEncodingProtocolActionCreator {
                 let unified_report = match outcoming.unified_report {
                     Some(unified_report_) => unified_report_,
                     None => {
-                        return Response::from_parts(outcoming.parts, Body::empty());
+                        return ActionResponseCreator::create_from_response_parts(outcoming.parts, None);
                     }
                 };
 
                 let data = match serde_json::to_vec(&unified_report) {
                     Ok(data_) => data_,
                     Err(error) => {
-                        // log::error!("{}", ErrorAuditor::from(error));
+                        // TODO log::error!("{}", ErrorAuditor::from(error));
 
                         return ActionResponseCreator::create_internal_server_error();
                     }
                 };
 
-                return Response::from_parts(outcoming.parts, Body::from(data));
+                return ActionResponseCreator::create_from_response_parts(outcoming.parts, Some(data));
             }
             ActionProcessorResult::EntityWorkflowException { entity_workflow_exception: _ } => {
-                unreachable!("TODO");
+                unreachable!();
             }
         }
     }

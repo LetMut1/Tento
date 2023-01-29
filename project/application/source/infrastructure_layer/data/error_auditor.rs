@@ -5,25 +5,25 @@ use extern_crate::redis::RedisError;
 use extern_crate::tokio_postgres::Error as PostgresqlError;
 use std::error::Error;
 use std::fmt::Display;
+use std::fmt::Error as FormatError;
 use std::fmt::Formatter;
-use std::fmt::Result;
 
 #[derive(Debug)]
 pub struct ErrorAuditor {
     base_error: BaseError,
-    simple_backtrace: SimpleBacktrace
+    backtrace: Backtrace
 }
 
 impl ErrorAuditor {
     pub fn new(base_error: BaseError, backtrace_part: BacktracePart) -> Self {
         return Self {
             base_error,
-            simple_backtrace: SimpleBacktrace::new(backtrace_part)
+            backtrace: Backtrace::new(backtrace_part)
         };
     }
 
     pub fn add_backtrace_part<'a>(&'a mut self, backtrace_part: BacktracePart) -> () {
-        self.simple_backtrace.add(backtrace_part);
+        self.backtrace.add(backtrace_part);
 
         return ();
     }
@@ -34,7 +34,7 @@ impl ErrorAuditor {
 }
 
 impl Display for ErrorAuditor {
-    fn fmt<'a, 'b>(&'a self, _formatter: &'b mut Formatter<'_>) -> Result {
+    fn fmt<'a, 'b>(&'a self, _formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -53,7 +53,7 @@ pub enum BaseError {
 }
 
 impl Display for BaseError {
-    fn fmt<'a, 'b>(&'a self, _formatter: &'b mut Formatter<'_>) -> Result {
+    fn fmt<'a, 'b>(&'a self, _formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -82,7 +82,7 @@ impl LogicError {
 }
 
 impl Display for LogicError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result {
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -98,7 +98,7 @@ pub enum RunTimeError {
 }
 
 impl Display for RunTimeError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result {
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -124,7 +124,7 @@ impl OtherError {
 }
 
 impl Display for OtherError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result {
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -149,7 +149,7 @@ pub enum ResourceError {
 }
 
 impl Display for ResourceError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result {
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -165,17 +165,17 @@ pub enum EmailServerError {
 }
 
 impl Display for EmailServerError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result {
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }
 }
 
 #[derive(Debug)]
-pub struct SimpleBacktrace {
+pub struct Backtrace {
     backtrace_part_registry: Vec<BacktracePart>
 }
 
-impl SimpleBacktrace {
+impl Backtrace {
     pub fn new(backtrace_part: BacktracePart) -> Self {
         return Self {
             backtrace_part_registry: vec![backtrace_part]

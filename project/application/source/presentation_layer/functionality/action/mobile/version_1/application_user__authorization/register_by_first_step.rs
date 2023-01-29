@@ -3,9 +3,9 @@ use crate::application_layer::data::entity_workflow_exception::ApplicationUser_W
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::register_by_first_step::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::register_by_first_step::Incoming;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
+use crate::presentation_layer::functionality::service::action_unexpected_response_creator::ActionUnexpectedResponseCreator;
 use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::functionality::service::unified_report_creator::UnifiedReportCreator;
@@ -55,7 +55,7 @@ where
     let incoming = match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
         Ok(incoming_) => incoming_,
         Err(error) => {
-            // log::error!("{}", ErrorAuditor::from(error));
+            // TODO log::error!("{}", ErrorAuditor::from(error));
 
             return ActionResponseCreator::create_internal_server_error();
         }
@@ -66,17 +66,7 @@ where
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {
-            match *error.get_base_error() {
-                BaseError::InvalidArgumentError => {
-                    return ActionResponseCreator::create_bad_request();
-                }
-                BaseError::LogicError { logic_error: _ } |
-                BaseError::RunTimeError { run_time_error: _ } => {
-                    // log::error!("{}", error);
-
-                    return ActionResponseCreator::create_internal_server_error();
-                }
-            }
+            return ActionUnexpectedResponseCreator::create(&error);
         }
     };
 
@@ -85,7 +75,7 @@ where
             let data = match rmp_serde::to_vec(&UnifiedReportCreator::create_without_data()) {
                 Ok(data_) => data_,
                 Err(error) => {
-                    // log::error!("{}", ErrorAuditor::from(error));
+                    // TODO log::error!("{}", ErrorAuditor::from(error));
 
                     return ActionResponseCreator::create_internal_server_error();
                 }
@@ -103,7 +93,7 @@ where
                             ) {
                                 Ok(data_) => data_,
                                 Err(error) => {
-                                    // log::error!("{}", ErrorAuditor::from(error));
+                                    // TODO log::error!("{}", ErrorAuditor::from(error));
 
                                     return ActionResponseCreator::create_internal_server_error();
                                 }
@@ -117,7 +107,7 @@ where
                             ) {
                                 Ok(data_) => data_,
                                 Err(error) => {
-                                    // log::error!("{}", ErrorAuditor::from(error));
+                                    // TODO log::error!("{}", ErrorAuditor::from(error));
 
                                     return ActionResponseCreator::create_internal_server_error();
                                 }

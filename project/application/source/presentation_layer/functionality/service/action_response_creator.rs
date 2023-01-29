@@ -7,6 +7,9 @@ use extern_crate::hyper::Response;
 use extern_crate::hyper::StatusCode;
 use std::convert::From;
 
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use extern_crate::http::response::Parts;
+
 pub struct ActionResponseCreator;
 
 impl ActionResponseCreator {
@@ -49,5 +52,19 @@ impl ActionResponseCreator {
 
     pub fn create_ok(data: Vec<u8>) -> Response<Body> {
         return Self::create(StatusCode::OK, Some(data));
+    }
+}
+
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+impl ActionResponseCreator {
+    pub fn create_from_response_parts(response_parts: Parts, data: Option<Vec<u8>>) -> Response<Body> {
+        match data {
+            Some(data_) => {
+                return Response::from_parts(response_parts, Body::from(data_));
+            }
+            None => {
+                return Response::from_parts(response_parts, Body::empty());
+            }
+        }
     }
 }
