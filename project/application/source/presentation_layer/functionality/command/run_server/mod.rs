@@ -75,17 +75,3 @@ fn main() -> () {
 // Проверить, почему пропускает @@ для правил валидации емейла.
 
 // Стоит ли в pub enum ActionProcessorResult<T> сделать Емпти вариант. Обратить внимание на Джсонвреппер.
-
-
-// ВОТ ЭТО НУЖНО МЕТОДОМ
-// match *error.get_base_error() {
-//     BaseError::InvalidArgumentError => {
-//         return ActionResponseCreator::create_bad_request();
-//     }
-//     BaseError::LogicError { logic_error: _ } |
-//     BaseError::RunTimeError { run_time_error: _ } => {
-//         // TODO log::error!("{}", error);
-
-//         return ActionResponseCreator::create_internal_server_error();
-//     }
-// }

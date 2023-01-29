@@ -4,10 +4,10 @@ use extern_crate::hyper::Body;
 use extern_crate::hyper::Response;
 use super::action_response_creator::ActionResponseCreator;
 
-pub struct ActionUnexpectedResponseCreator;
+pub struct UnexpectedBehaviorResolver;
 
-impl ActionUnexpectedResponseCreator {
-    pub fn create<'a>(error_auditor: &'a ErrorAuditor) -> Response<Body> {
+impl UnexpectedBehaviorResolver {
+    pub fn create_action_response<'a>(error_auditor: &'a ErrorAuditor) -> Response<Body> {
         match *error_auditor.get_base_error() {
             BaseError::InvalidArgumentError => {
                 return ActionResponseCreator::create_bad_request();

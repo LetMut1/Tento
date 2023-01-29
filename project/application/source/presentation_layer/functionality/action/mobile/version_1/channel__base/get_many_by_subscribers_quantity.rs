@@ -5,7 +5,7 @@ use crate::application_layer::functionality::service::action_processor::channel_
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_subscribers_quantity::Incoming;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
-use crate::presentation_layer::functionality::service::action_unexpected_response_creator::ActionUnexpectedResponseCreator;
+use crate::presentation_layer::functionality::service::unexpected_begavior_resolver::UnexpectedBehaviorResolver;
 use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::functionality::service::unified_report_creator::UnifiedReportCreator;
@@ -76,7 +76,7 @@ where
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {
-            return ActionUnexpectedResponseCreator::create(&error);
+            return UnexpectedBehaviorResolver::create_action_response(&error);
         }
     };
 

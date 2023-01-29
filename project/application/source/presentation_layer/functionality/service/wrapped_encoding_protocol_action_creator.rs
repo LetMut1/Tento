@@ -22,7 +22,7 @@ use std::marker::Send;
 use std::marker::Sync;
 use std::ops::FnOnce;
 use super::action_response_creator::ActionResponseCreator;
-use super::action_unexpected_response_creator::ActionUnexpectedResponseCreator;
+use super::unexpected_begavior_resolver::UnexpectedBehaviorResolver;
 use super::request_header_checker::RequestHeaderChecker;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
@@ -96,7 +96,7 @@ impl WrappedEncodingProtocolActionCreator {
         ).await {
             Ok(action_processor_result_) => action_processor_result_,
             Err(error) => {
-                return ActionUnexpectedResponseCreator::create(&error);
+                return UnexpectedBehaviorResolver::create_action_response(&error);
             }
         };
 
