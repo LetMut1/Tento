@@ -30,7 +30,7 @@ impl ActionProcessor {
     pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<()>, ErrorAuditor>
     where
@@ -39,8 +39,8 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {                                                                   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
-        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
-            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
+        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
+            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -52,7 +52,7 @@ impl ActionProcessor {
         };
 
         let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
-            &*authorization_postgresql_pooled_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
+            &*database_2_postgresql_pooled_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_authorization_token_) => application_user_authorization_token_,
             Err(mut error) => {

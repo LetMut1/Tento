@@ -28,7 +28,7 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     pub async fn process<'a, T>(                         // TODO TODO TODO УДАляются ли АккессТокены все при массовом разлогине? Если не удаляются, можно просто при Ектракте АккессТокена использовать проверку на наличие рефреша, если нет, значит произошел разлогин.
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<()>, ErrorAuditor>
     where
@@ -60,8 +60,8 @@ impl ActionProcessor {
             }
         };
 
-        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
-            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
+        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
+            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -73,7 +73,7 @@ impl ActionProcessor {
         };
 
         if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_2(
-            &*authorization_postgresql_pooled_connection, application_user_access_token_.get_application_user_id()
+            &*database_2_postgresql_pooled_connection, application_user_access_token_.get_application_user_id()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

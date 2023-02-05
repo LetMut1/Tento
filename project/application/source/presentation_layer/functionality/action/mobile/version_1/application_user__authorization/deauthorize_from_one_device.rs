@@ -34,7 +34,7 @@ pub async fn deauthorize_from_one_device<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
     _core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     _redis_connection_pool: Pool<RedisConnectionManager>
 ) -> Response<Body>
 where
@@ -62,7 +62,7 @@ where
     };
 
     let action_processor_result = match ActionProcessor::process(
-        environment_configuration_resolver, authorization_postgresql_connection_pool, incoming
+        environment_configuration_resolver, database_2_postgresql_connection_pool, incoming
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {
@@ -147,7 +147,7 @@ pub async fn deauthorize_from_one_device_<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
     core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     redis_connection_pool: Pool<RedisConnectionManager>
 ) -> Response<Body>
 where
@@ -160,7 +160,7 @@ where
         environment_configuration_resolver,
         request,
         core_postgresql_connection_pool,
-        authorization_postgresql_connection_pool,
+        database_2_postgresql_connection_pool,
         redis_connection_pool,
         deauthorize_from_one_device
     ).await;

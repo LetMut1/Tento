@@ -26,7 +26,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<T>(
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<()>, ErrorAuditor>
     where
@@ -47,8 +47,8 @@ impl ActionProcessor {
             return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::InvalidValue));
         }
 
-        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
-            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
+        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
+            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -58,10 +58,10 @@ impl ActionProcessor {
                 );
             }
         };
-        let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
+        let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
-            authorization_postgresql_connection, incoming.application_user_id
+            database_2_postgresql_connection, incoming.application_user_id
         ).await {
             Ok(application_user_reset_password_token_) => application_user_reset_password_token_,
             Err(mut error) => {
@@ -94,7 +94,7 @@ impl ActionProcessor {
 
             if application_user_reset_password_token_.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
-                    authorization_postgresql_connection,
+                    database_2_postgresql_connection,
                     &mut application_user_reset_password_token_,
                     Update { application_user_reset_password_token_expires_at: false }
                 ).await {
@@ -104,7 +104,7 @@ impl ActionProcessor {
                 }
             } else {
                 if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::delete(
-                    authorization_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
+                    database_2_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -118,7 +118,7 @@ impl ActionProcessor {
         application_user_reset_password_token_.set_is_approved(true);
 
         if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
-            authorization_postgresql_connection,
+            database_2_postgresql_connection,
             &mut application_user_reset_password_token_,
             Update { application_user_reset_password_token_expires_at: false }
         ).await {

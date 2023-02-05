@@ -45,7 +45,7 @@ impl ActionProcessor {
     pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
@@ -123,8 +123,8 @@ impl ActionProcessor {
             return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::EmailAlreadyExist));
         }
 
-        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
-            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
+        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
+            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -134,10 +134,10 @@ impl ActionProcessor {
                 );
             }
         };
-        let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
+        let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
-            authorization_postgresql_connection, incoming.application_user_email.as_str()
+            database_2_postgresql_connection, incoming.application_user_email.as_str()
         ).await {
             Ok(application_user_registration_token_) => application_user_registration_token_,
             Err(mut error) => {
@@ -170,7 +170,7 @@ impl ActionProcessor {
 
             if application_user_registration_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
-                    authorization_postgresql_connection,
+                    database_2_postgresql_connection,
                     &mut application_user_registration_token_,
                     Update { application_user_registration_token_expires_at: false }
                 ).await {
@@ -180,7 +180,7 @@ impl ActionProcessor {
                 }
             } else {
                 if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
-                    authorization_postgresql_connection, application_user_registration_token_.get_application_user_email()
+                    database_2_postgresql_connection, application_user_registration_token_.get_application_user_email()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -201,7 +201,7 @@ impl ActionProcessor {
         };
 
         if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
-            authorization_postgresql_connection, application_user_registration_token_.get_application_user_email()
+            database_2_postgresql_connection, application_user_registration_token_.get_application_user_email()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -258,7 +258,7 @@ impl ActionProcessor {
         };
 
         let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::create(
-            authorization_postgresql_connection, application_user_access_refresh_token_insert
+            database_2_postgresql_connection, application_user_access_refresh_token_insert
         ).await {
             Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
             Err(mut error) => {

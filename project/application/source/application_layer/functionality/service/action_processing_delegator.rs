@@ -38,7 +38,7 @@ impl ActionProcessingDelegator {
     pub async fn delegate<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         incoming: Incoming<AHID>,
         action: FO
@@ -82,7 +82,7 @@ impl ActionProcessingDelegator {
             environment_configuration_resolver,
             request,
             core_postgresql_connection_pool,
-            authorization_postgresql_connection_pool,
+            database_2_postgresql_connection_pool,
             redis_connection_pool
         ).await;
 

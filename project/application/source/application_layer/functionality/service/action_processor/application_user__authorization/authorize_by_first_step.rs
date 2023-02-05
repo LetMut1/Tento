@@ -31,7 +31,7 @@ impl ActionProcessor {
     pub async fn process<'a, T>(      // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
@@ -118,8 +118,8 @@ impl ActionProcessor {
 
         let application_user_id = application_user_.get_id();
 
-        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
-            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
+        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
+            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -129,10 +129,10 @@ impl ActionProcessor {
                 );
             }
         };
-        let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
+        let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
-            authorization_postgresql_connection, application_user_id, incoming.application_user_device_id.as_str()
+            database_2_postgresql_connection, application_user_id, incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_authorization_token_) => application_user_authorization_token_,
             Err(mut error) => {
@@ -144,7 +144,7 @@ impl ActionProcessor {
         let application_user_authorization_token_ = match application_user_authorization_token {
             Some(mut application_user_authorization_token__) => {
                 if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::update(
-                    authorization_postgresql_connection,
+                    database_2_postgresql_connection,
                     &mut application_user_authorization_token__,
                     Update { application_user_authorization_token_expires_at: true }
                 ).await {
@@ -164,7 +164,7 @@ impl ActionProcessor {
                 };
 
                 match ApplicationUserAuthorizationToken_PostgresqlRepository::create(
-                    authorization_postgresql_connection, insert
+                    database_2_postgresql_connection, insert
                 ).await {
                     Ok(application_user_authorization_token__) => application_user_authorization_token__,
                     Err(mut error) => {

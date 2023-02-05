@@ -23,8 +23,8 @@ services:
         ports:
         - 8081:8080
         restart: always
-    authorization_postgresql:
-        container_name: tento_authorization_postgresql
+    database_2_postgresql:
+        container_name: tento_database_2_postgresql
         build:
             context: ./service/postgresql
             dockerfile: dockerfile
@@ -35,10 +35,10 @@ services:
             POSTGRES_PASSWORD: 'password'
             POSTGRES_DB: 'tento'
         volumes:
-            - authorization_postgresql_data:/var/lib/postgresql/data
+            - database_2_postgresql_data:/var/lib/postgresql/data
         restart: always
-    authorization_postgresql_client:
-        container_name: tento_authorization_postgresql_client
+    database_2_postgresql_client:
+        container_name: tento_database_2_postgresql_client
         build:
             context: ./service/postgresql_client
             dockerfile: dockerfile
@@ -71,7 +71,7 @@ services:
 volumes:
     core_postgresql_data:
         driver: local
-    authorization_postgresql_data:
+    database_2_postgresql_data:
         driver: local
 
 networks:

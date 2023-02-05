@@ -35,7 +35,7 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
@@ -65,8 +65,8 @@ impl ActionProcessor {
             return Ok(ActionProcessorResult::application_user_access_token__workflow_exception(ApplicationUserAccessToken_WorkflowException::NotExpired));
         }
 
-        let authorization_postgresql_pooled_connection = match authorization_postgresql_connection_pool.get().await {
-            Ok(authorization_postgresql_pooled_connection_) => authorization_postgresql_pooled_connection_,
+        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
+            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -80,10 +80,10 @@ impl ActionProcessor {
                 );
             }
         };
-        let authorization_postgresql_connection = &*authorization_postgresql_pooled_connection;
+        let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::find_1(
-            authorization_postgresql_connection, application_user_access_token_.get_application_user_id(), application_user_access_token_.get_application_user_device_id()
+            database_2_postgresql_connection, application_user_access_token_.get_application_user_id(), application_user_access_token_.get_application_user_device_id()
         ).await {
             Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
             Err(mut error) => {
@@ -117,7 +117,7 @@ impl ActionProcessor {
 
         if ApplicationUserAccessRefreshToken_ExpirationTimeResolver::is_expired(&application_user_access_refresh_token_) {
             if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_1(
-                authorization_postgresql_connection,
+                database_2_postgresql_connection,
                 application_user_access_refresh_token_.get_application_user_id(),
                 application_user_access_refresh_token_.get_application_user_device_id()
             ).await {
@@ -154,7 +154,7 @@ impl ActionProcessor {
         };
 
         if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::update(
-            authorization_postgresql_connection,
+            database_2_postgresql_connection,
             &mut application_user_access_refresh_token_,
             update
         ).await {

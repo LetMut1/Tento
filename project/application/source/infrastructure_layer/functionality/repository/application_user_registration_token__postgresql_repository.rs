@@ -13,7 +13,7 @@ use extern_crate::tokio_postgres::types::Type;
 pub struct ApplicationUserRegistrationToken_PostgresqlRepository;
 
 impl ApplicationUserRegistrationToken_PostgresqlRepository {
-    pub async fn create<'a, 'b>(authorization_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserRegistrationToken<'b>, ErrorAuditor> {
+    pub async fn create<'a, 'b>(database_2_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserRegistrationToken<'b>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -40,7 +40,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             .add_parameter(&insert.application_user_registration_token_is_approved, Type::BOOL)
             .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2);
 
-        let statement = match authorization_connection.prepare_typed(
+        let statement = match database_2_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -54,7 +54,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             }
         };
 
-        let row_registry = match authorization_connection.query(
+        let row_registry = match database_2_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             Ok(row_registry_) => row_registry_,
@@ -101,7 +101,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
     }
 
     pub async fn update<'a>(
-        authorization_connection: &'a Connection,
+        database_2_connection: &'a Connection,
         application_user_registration_token: &'a mut ApplicationUserRegistrationToken<'_>,
         update: Update
     ) -> Result<(), ErrorAuditor> {
@@ -140,7 +140,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
                 .add_parameter(&application_user_email, Type::TEXT);
 
-            let statement = match authorization_connection.prepare_typed(
+            let statement = match database_2_connection.prepare_typed(
                 query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
             ).await {
                 Ok(statement_) => statement_,
@@ -154,7 +154,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 }
             };
 
-            let row_registry = match authorization_connection.query(
+            let row_registry = match database_2_connection.query(
                 &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
             ).await {
                 Ok(row_registry_) => row_registry_,
@@ -212,7 +212,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 .add_parameter(&application_user_registration_token_is_approved, Type::BOOL)
                 .add_parameter(&application_user_email, Type::TEXT);
 
-            let statement = match authorization_connection.prepare_typed(
+            let statement = match database_2_connection.prepare_typed(
                 query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
             ).await {
                 Ok(statement_) => statement_,
@@ -226,7 +226,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 }
             };
 
-            let row_registry = match authorization_connection.query(
+            let row_registry = match database_2_connection.query(
                 &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
             ).await {
                 Ok(row_registry_) => row_registry_,
@@ -253,7 +253,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         return Ok(());
     }
 
-    pub async fn delete<'a>(authorization_connection: &'a Connection, application_user_email: &'a str) -> Result<(), ErrorAuditor> {
+    pub async fn delete<'a>(database_2_connection: &'a Connection, application_user_email: &'a str) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -262,7 +262,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
-        let statement = match authorization_connection.prepare_typed(
+        let statement = match database_2_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -276,7 +276,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             }
         };
 
-        if let Err(error) = authorization_connection.query(
+        if let Err(error) = database_2_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             return Err(
@@ -291,7 +291,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
     }
 
     pub async fn find_1<'a>(
-        authorization_connection: &'a Connection,
+        database_2_connection: &'a Connection,
         application_user_email: &'a str
     ) -> Result<Option<ApplicationUserRegistrationToken<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -307,7 +307,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
-        let statement = match authorization_connection.prepare_typed(
+        let statement = match database_2_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -321,7 +321,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             }
         };
 
-        let row_registry = match authorization_connection.query(
+        let row_registry = match database_2_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             Ok(row_registry_) => row_registry_,

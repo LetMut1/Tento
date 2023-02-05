@@ -47,7 +47,7 @@ pub async fn get_many_by_name<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
     core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    _authorization_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    _database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     _redis_connection_pool: Pool<RedisConnectionManager>
 ) -> Response<Body>
 where
