@@ -14,8 +14,6 @@ pub use http;
 pub use hyper;
 pub use lettre_email;
 pub use lettre;
-pub use log;
-pub use log4rs;
 pub use rand;
 pub use redis;
 pub use regex;

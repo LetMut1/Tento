@@ -22,16 +22,6 @@ use extern_crate::hyper::Server;
 use extern_crate::hyper::server::conn::AddrStream;
 use extern_crate::hyper::service::make_service_fn;
 use extern_crate::hyper::service::service_fn;
-use extern_crate::log::LevelFilter;
-use extern_crate::log4rs;
-use extern_crate::log4rs::append::rolling_file::policy::compound::CompoundPolicy;
-use extern_crate::log4rs::append::rolling_file::policy::compound::roll::fixed_window::FixedWindowRoller;
-use extern_crate::log4rs::append::rolling_file::policy::compound::trigger::size::SizeTrigger;
-use extern_crate::log4rs::append::rolling_file::RollingFileAppender;
-use extern_crate::log4rs::config::Appender;
-use extern_crate::log4rs::config::Config as LogConfiguration;
-use extern_crate::log4rs::config::Root;
-use extern_crate::log4rs::encode::pattern::PatternEncoder;
 use extern_crate::redis::ConnectionInfo;
 use extern_crate::tokio_postgres::Config as PostgresqlConfiguration;
 use extern_crate::tokio_postgres::NoTls;
@@ -56,7 +46,7 @@ impl RunServerProcessor {
     const LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
     pub fn process(binary_file_path: &'static str) -> Result<(), ErrorAuditor> {
-        let environment_configuration_resolver = match Self::load_environment_configuration_registry(binary_file_path) {
+        let environment_configuration_resolver = match Self::load_environment_configuration_resolver(binary_file_path) {
             Ok(environment_configuration_resolver_) => environment_configuration_resolver_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -64,12 +54,6 @@ impl RunServerProcessor {
                 return Err(error);
             }
         };
-
-        if let Err(mut error) = Self::configure_log(&environment_configuration_resolver) {
-            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-            return Err(error);
-        }
 
         if let Err(mut error) = Self::run_http_server(environment_configuration_resolver) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -80,7 +64,7 @@ impl RunServerProcessor {
         return Ok(());
     }
 
-    fn load_environment_configuration_registry<'a>(binary_file_path: &'a str) -> Result<EnvironmentConfigurationResolver, ErrorAuditor> {
+    fn load_environment_configuration_resolver<'a>(binary_file_path: &'a str) -> Result<EnvironmentConfigurationResolver, ErrorAuditor> {
         let file_path = match Path::new(binary_file_path).parent() {
             Some(file_path_) => file_path_,
             None => {
@@ -378,85 +362,6 @@ impl RunServerProcessor {
                 resource_email_server_socket_address_
             )
         );
-    }
-
-    fn configure_log<'a>(environment_configuration_resolver: &'a EnvironmentConfigurationResolver) -> Result<(), ErrorAuditor> {
-        let fixed_window_roller = match FixedWindowRoller::builder()
-            .base(1)
-            .build(environment_configuration_resolver.get_logger_roller_log_file_name(), 10) {          // TODO 10 - КОНСТАНТА или енваронмент
-            Ok(fixed_window_roller_) => fixed_window_roller_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error.root_cause()) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        let rolling_file_appender = match RollingFileAppender::builder()
-            .append(true)
-            .encoder(
-                Box::new(
-                    PatternEncoder::new(environment_configuration_resolver.get_logger_encoder_pattern())
-                )
-            )
-            .build(
-                Path::new(environment_configuration_resolver.get_logger_log_file_name()),                                                                                      // TODO Через Тип неопходимый, а не СТринг
-                Box::new(
-                    CompoundPolicy::new(
-                        Box::new(
-                            SizeTrigger::new(50 * 1024 * 1024)
-                        ),
-                        Box::new(fixed_window_roller)
-                    )
-                )
-            ) {
-            Ok(rolling_file_appender_) => rolling_file_appender_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        let rolling_file_appender_name = "rfa";            // TODO  TODO  Const или Енваронмент
-
-        let appender = Appender::builder()
-            .build(rolling_file_appender_name.to_string(), Box::new(rolling_file_appender));
-
-        let root = Root::builder()
-            .appender(rolling_file_appender_name.to_string())
-            .build(LevelFilter::Error);                                 // TODO TODO TODO FIlter
-
-        let log_configuration = match LogConfiguration::builder()
-            .appender(appender)
-            .build(root) {
-            Ok(log_configuration_) => log_configuration_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        if let Err(error) = log4rs::init_config(log_configuration) {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
-
-        return Ok(());
     }
 
     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
