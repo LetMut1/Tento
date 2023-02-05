@@ -34,8 +34,6 @@ http = { package = "http", version = "^0.2", default-features = true, features =
 hyper = { package = "hyper", version = "^0.14", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 lettre = { package = "lettre", version = "^0.9", default-features = true, features = [], optional = false }
 lettre_email = { package = "lettre_email", version = "^0.9", default-features = true, features = [], optional = false }
-log = { package = "log", version = "^0.4", default-features = true, features = [], optional = false }
-log4rs = { package = "log4rs", version = "^1.0", default-features = true, features = ["all_components"], optional = false }
 rand = { package = "rand", version = "^0.8.5", default-features = true, features = [], optional = false }
 redis = { package = "redis", version = "^0.21", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp"], optional = false }
 regex = { package = "regex", version = "^1.4", default-features = true, features = [], optional = false }
