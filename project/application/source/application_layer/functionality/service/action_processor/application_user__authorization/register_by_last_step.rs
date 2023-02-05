@@ -44,7 +44,7 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
@@ -86,8 +86,8 @@ impl ActionProcessor {
             return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::InvalidValue));
         }
 
-        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
-            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -97,9 +97,9 @@ impl ActionProcessor {
                 );
             }
         };
-        let core_postgresql_connection = &*core_postgresql_pooled_connection;
+        let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(core_postgresql_connection, incoming.application_user_nickname.as_str()).await {
+        let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(database_1_postgresql_connection, incoming.application_user_nickname.as_str()).await {
             Ok(is_exist_1_) => is_exist_1_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -111,7 +111,7 @@ impl ActionProcessor {
             return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NicknameAlreadyExist));
         }
 
-        let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(core_postgresql_connection, incoming.application_user_email.as_str()).await {
+        let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(database_1_postgresql_connection, incoming.application_user_email.as_str()).await {
             Ok(is_exist_2_) => is_exist_2_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -213,7 +213,7 @@ impl ActionProcessor {
             application_user_nickname: incoming.application_user_nickname,
             application_user_password_hash,
         };
-        let application_user = match ApplicationUser_PostgresqlRepository::create(core_postgresql_connection, application_user_insert).await {
+        let application_user = match ApplicationUser_PostgresqlRepository::create(database_1_postgresql_connection, application_user_insert).await {
             Ok(application_user_) => application_user_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -226,7 +226,7 @@ impl ActionProcessor {
             application_user_device_id: incoming.application_user_device_id,
             application_user_id: application_user.get_id()
         };
-        let application_user_device = match ApplicationUserDevice_PostgresqlRepository::create(core_postgresql_connection, application_user_device_insert).await {
+        let application_user_device = match ApplicationUserDevice_PostgresqlRepository::create(database_1_postgresql_connection, application_user_device_insert).await {
             Ok(application_user_device_) => application_user_device_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

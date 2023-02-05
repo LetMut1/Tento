@@ -35,7 +35,7 @@ impl WrappedEncodingProtocolActionCreator {
     pub async fn create_for_json<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: Pool<RedisConnectionManager>,
         wrapped_action: FO
@@ -85,7 +85,7 @@ impl WrappedEncodingProtocolActionCreator {
 
         let action_processor_result = match ActionProcessingDelegator::delegate::<'_, _, _, _, AHID, AHOD>(
             environment_configuration_resolver,
-            core_postgresql_connection_pool,
+            database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             redis_connection_pool,
             Incoming {

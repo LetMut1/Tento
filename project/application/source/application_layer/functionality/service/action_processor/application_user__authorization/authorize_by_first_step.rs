@@ -30,7 +30,7 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     pub async fn process<'a, T>(      // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
@@ -44,8 +44,8 @@ impl ActionProcessor {
             return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
         }
 
-        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
-            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -55,7 +55,7 @@ impl ActionProcessor {
                 );
             }
         };
-        let core_postgresql_connection = &*core_postgresql_pooled_connection;
+        let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         let is_valid_email = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email_or_application_user_nickname.as_str()) {
             Ok(is_valid_email_) => is_valid_email_,
@@ -67,7 +67,7 @@ impl ActionProcessor {
         };
         let application_user = if is_valid_email {
             let application_user_ = match ApplicationUser_PostgresqlRepository::find_2(
-                core_postgresql_connection, incoming.application_user_email_or_application_user_nickname
+                database_1_postgresql_connection, incoming.application_user_email_or_application_user_nickname
             ).await {
                 Ok(application_user__) => application_user__,
                 Err(mut error) => {
@@ -81,7 +81,7 @@ impl ActionProcessor {
         } else {
             if ApplicationUser_Validator::is_valid_nickname(incoming.application_user_email_or_application_user_nickname.as_str()) {
                 let application_user_ = match ApplicationUser_PostgresqlRepository::find_1(
-                    core_postgresql_connection, incoming.application_user_email_or_application_user_nickname
+                    database_1_postgresql_connection, incoming.application_user_email_or_application_user_nickname
                 ).await {
                     Ok(application_user__) => application_user__,
                     Err(mut error) => {

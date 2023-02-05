@@ -29,7 +29,7 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<()>, ErrorAuditor>
@@ -76,8 +76,8 @@ impl ActionProcessor {
             return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::AlreadyApproved));
         }
 
-        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
-            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -89,7 +89,7 @@ impl ActionProcessor {
         };
 
         let application_user = match ApplicationUser_PostgresqlRepository::find_3(
-            &*core_postgresql_pooled_connection, incoming.application_user_id
+            &*database_1_postgresql_pooled_connection, incoming.application_user_id
         ).await {
             Ok(application_user_) => application_user_,
             Err(mut error) => {

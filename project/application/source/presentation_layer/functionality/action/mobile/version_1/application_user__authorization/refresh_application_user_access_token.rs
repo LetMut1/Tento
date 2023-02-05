@@ -36,7 +36,7 @@ use crate::presentation_layer::functionality::service::wrapped_encoding_protocol
 pub async fn refresh_application_user_access_token<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
-    _core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    _database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     _redis_connection_pool: Pool<RedisConnectionManager>
 ) -> Response<Body>
@@ -181,7 +181,7 @@ where
 pub async fn refresh_application_user_access_token_<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
-    core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     redis_connection_pool: Pool<RedisConnectionManager>
 ) -> Response<Body>
@@ -194,7 +194,7 @@ where
     return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
         environment_configuration_resolver,
         request,
-        core_postgresql_connection_pool,
+        database_1_postgresql_connection_pool,
         database_2_postgresql_connection_pool,
         redis_connection_pool,
         refresh_application_user_access_token

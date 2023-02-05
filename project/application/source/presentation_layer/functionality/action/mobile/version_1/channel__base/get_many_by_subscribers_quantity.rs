@@ -43,7 +43,7 @@ use std::marker::Sync;
 pub async fn get_many_by_subscribers_quantity<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
-    core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     _database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     _redis_connection_pool: Pool<RedisConnectionManager>
 ) -> Response<Body>
@@ -72,7 +72,7 @@ where
     };
 
     let action_processor_result = match ActionProcessor::process(
-        environment_configuration_resolver, core_postgresql_connection_pool, incoming
+        environment_configuration_resolver, database_1_postgresql_connection_pool, incoming
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {

@@ -42,7 +42,7 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,             // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
@@ -128,8 +128,8 @@ impl ActionProcessor {
             return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::WrongValue));
         }
 
-        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
-            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -139,9 +139,9 @@ impl ActionProcessor {
                 );
             }
         };
-        let core_postgresql_connection = &*core_postgresql_pooled_connection;
+        let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_3(core_postgresql_connection, incoming.application_user_id).await {
+        let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_3(database_1_postgresql_connection, incoming.application_user_id).await {
             Ok(is_exist_) => is_exist_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -251,7 +251,7 @@ impl ActionProcessor {
             application_user_device_id: incoming.application_user_device_id,
             application_user_id: incoming.application_user_id
         };
-        if let Err(mut error) = ApplicationUserDevice_PostgresqlRepository::create(core_postgresql_connection, application_user_device_insert).await {
+        if let Err(mut error) = ApplicationUserDevice_PostgresqlRepository::create(database_1_postgresql_connection, application_user_device_insert).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);

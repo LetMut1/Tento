@@ -22,7 +22,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<T>(
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
@@ -35,8 +35,8 @@ impl ActionProcessor {
             return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidNickname));
         }
 
-        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
-            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -47,7 +47,7 @@ impl ActionProcessor {
             }
         };
 
-        let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_1(&*core_postgresql_pooled_connection, incoming.application_user_nickname.as_str()).await {
+        let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_1(&*database_1_postgresql_pooled_connection, incoming.application_user_nickname.as_str()).await {
             Ok(is_exist_) => is_exist_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

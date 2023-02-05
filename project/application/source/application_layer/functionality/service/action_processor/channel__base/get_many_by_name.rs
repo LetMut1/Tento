@@ -28,7 +28,7 @@ impl ActionProcessor {
 
     pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        core_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where
@@ -86,8 +86,8 @@ impl ActionProcessor {
             }
         }
 
-        let core_postgresql_pooled_connection = match core_postgresql_connection_pool.get().await {
-            Ok(core_postgresql_pooled_connection_) => core_postgresql_pooled_connection_,
+        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -99,7 +99,7 @@ impl ActionProcessor {
         };
 
         let channel_registry = match Channel_PostgresqlRepository::per_request_1(
-            &*core_postgresql_pooled_connection, incoming.channel_name.as_str(), &incoming.requery_channel_name, limit as i16
+            &*database_1_postgresql_pooled_connection, incoming.channel_name.as_str(), &incoming.requery_channel_name, limit as i16
         ).await {
             Ok(channel_registry_) => channel_registry_,
             Err(mut error) => {

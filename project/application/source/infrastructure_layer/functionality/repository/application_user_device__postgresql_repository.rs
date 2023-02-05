@@ -12,7 +12,7 @@ use extern_crate::tokio_postgres::types::Type;
 pub struct ApplicationUserDevice_PostgresqlRepository;
 
 impl ApplicationUserDevice_PostgresqlRepository {
-    pub async fn create<'a>(core_connection: &'a Connection, insert: Insert) -> Result<ApplicationUserDevice, ErrorAuditor> {
+    pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<ApplicationUserDevice, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -29,7 +29,7 @@ impl ApplicationUserDevice_PostgresqlRepository {
             .add_parameter(&insert.application_user_device_id, Type::TEXT)
             .add_parameter(&insert.application_user_id, Type::INT8);
 
-        let statement = match core_connection.prepare_typed(
+        let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -43,7 +43,7 @@ impl ApplicationUserDevice_PostgresqlRepository {
             }
         };
 
-        if let Err(error) = core_connection.query(
+        if let Err(error) = database_1_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             return Err(

@@ -13,7 +13,7 @@ use extern_crate::tokio_postgres::types::Type;
 pub struct ApplicationUser_PostgresqlRepository;
 
 impl ApplicationUser_PostgresqlRepository {
-    pub async fn create<'a>(core_connection: &'a Connection, insert: Insert) -> Result<ApplicationUser, ErrorAuditor> {
+    pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<ApplicationUser, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -39,7 +39,7 @@ impl ApplicationUser_PostgresqlRepository {
             .add_parameter(&insert.application_user_nickname, Type::TEXT)
             .add_parameter(&insert.application_user_password_hash, Type::TEXT);
 
-        let statement = match core_connection.prepare_typed(
+        let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -53,7 +53,7 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let row_registry = match core_connection.query(
+        let row_registry = match database_1_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             Ok(row_registry_) => row_registry_,
@@ -111,7 +111,7 @@ impl ApplicationUser_PostgresqlRepository {
         return Ok(application_user);
     }
 
-    pub async fn update<'a>(core_connection: &'a Connection, application_user: &'a ApplicationUser) -> Result<(), ErrorAuditor> {
+    pub async fn update<'a>(database_1_connection: &'a Connection, application_user: &'a ApplicationUser) -> Result<(), ErrorAuditor> {
         let application_user_id = application_user.get_id();
 
         let application_user_email = application_user.get_email();
@@ -143,7 +143,7 @@ impl ApplicationUser_PostgresqlRepository {
             .add_parameter(&application_user_password_hash, Type::TEXT)
             .add_parameter(&application_user_id, Type::INT8);
 
-        let statement = match core_connection.prepare_typed(
+        let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -157,7 +157,7 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let row_registry = match core_connection.query(
+        let row_registry = match database_1_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             Ok(row_registry_) => row_registry_,
@@ -183,7 +183,7 @@ impl ApplicationUser_PostgresqlRepository {
         return Ok(());
     }
 
-    pub async fn is_exist_1<'a>(core_connection: &'a Connection, application_user_nickname: &'a str) -> Result<bool, ErrorAuditor> {
+    pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, application_user_nickname: &'a str) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -194,7 +194,7 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::TEXT);
 
-        let statement = match core_connection.prepare_typed(
+        let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -208,7 +208,7 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let row_registry = match core_connection.query(
+        let row_registry = match database_1_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             Ok(row_registry_) => row_registry_,
@@ -229,7 +229,7 @@ impl ApplicationUser_PostgresqlRepository {
         return Ok(true);
     }
 
-    pub async fn is_exist_2<'a>(core_connection: &'a Connection, application_user_email: &'a str) -> Result<bool, ErrorAuditor> {
+    pub async fn is_exist_2<'a>(database_1_connection: &'a Connection, application_user_email: &'a str) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -240,7 +240,7 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
-        let statement = match core_connection.prepare_typed(
+        let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -254,7 +254,7 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let row_registry = match core_connection.query(
+        let row_registry = match database_1_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             Ok(row_registry_) => row_registry_,
@@ -275,7 +275,7 @@ impl ApplicationUser_PostgresqlRepository {
         return Ok(true);
     }
 
-    pub async fn is_exist_3<'a>(core_connection: &'a Connection, application_user_id: i64) -> Result<bool, ErrorAuditor> {
+    pub async fn is_exist_3<'a>(database_1_connection: &'a Connection, application_user_id: i64) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -286,7 +286,7 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
-        let statement = match core_connection.prepare_typed(
+        let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -300,7 +300,7 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let row_registry = match core_connection.query(
+        let row_registry = match database_1_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             Ok(row_registry_) => row_registry_,
@@ -321,7 +321,7 @@ impl ApplicationUser_PostgresqlRepository {
         return Ok(true);
     }
 
-    pub async fn find_1<'a>(core_connection: &'a Connection, application_user_nickname: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, application_user_nickname: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -335,7 +335,7 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::TEXT);
 
-        let statement = match core_connection.prepare_typed(
+        let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -349,7 +349,7 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let row_registry = match core_connection.query(
+        let row_registry = match database_1_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             Ok(row_registry_) => row_registry_,
@@ -428,7 +428,7 @@ impl ApplicationUser_PostgresqlRepository {
         );
     }
 
-    pub async fn find_2<'a>(core_connection: &'a Connection, application_user_email: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
+    pub async fn find_2<'a>(database_1_connection: &'a Connection, application_user_email: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -442,7 +442,7 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
-        let statement = match core_connection.prepare_typed(
+        let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -456,7 +456,7 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let row_registry = match core_connection.query(
+        let row_registry = match database_1_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             Ok(row_registry_) => row_registry_,
@@ -535,7 +535,7 @@ impl ApplicationUser_PostgresqlRepository {
         );
     }
 
-    pub async fn find_3<'a>(core_connection: &'a Connection, application_user_id: i64) -> Result<Option<ApplicationUser>, ErrorAuditor> {
+    pub async fn find_3<'a>(database_1_connection: &'a Connection, application_user_id: i64) -> Result<Option<ApplicationUser>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -549,7 +549,7 @@ impl ApplicationUser_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
-        let statement = match core_connection.prepare_typed(
+        let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
         ).await {
             Ok(statement_) => statement_,
@@ -563,7 +563,7 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let row_registry = match core_connection.query(
+        let row_registry = match database_1_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
             Ok(row_registry_) => row_registry_,
