@@ -31,6 +31,7 @@ use extern_crate::serde_json;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct WrappedEncodingProtocolActionCreator;
 
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl WrappedEncodingProtocolActionCreator {
     pub async fn create_for_json<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,

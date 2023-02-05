@@ -34,6 +34,7 @@ use std::marker::Sync;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct ActionProcessingDelegator;
 
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl ActionProcessingDelegator {
     pub async fn delegate<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
