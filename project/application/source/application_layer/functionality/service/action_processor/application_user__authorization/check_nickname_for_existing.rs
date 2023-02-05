@@ -67,15 +67,8 @@ pub struct Incoming {
     application_user_nickname: String
 }
 
-#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
-struct Outcoming {
-    result: bool
-}
-
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
-#[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     result: bool

@@ -274,16 +274,8 @@ pub struct Incoming {
     application_user_authorization_token_value: String
 }
 
-#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
-struct Outcoming {
-    application_user_access_token_deserialized_form: String,
-    application_user_access_refresh_token_deserialized_form: String
-}
-
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
-#[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_access_token_deserialized_form: String,

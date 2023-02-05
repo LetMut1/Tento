@@ -123,15 +123,8 @@ pub struct Incoming {
     limit: i8
 }
 
-#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
-struct Outcoming {
-    channel_registry: Option<Vec<Channel>>
-}
-
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
-#[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     channel_registry: Option<Vec<Channel>>
