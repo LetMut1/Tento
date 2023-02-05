@@ -7,14 +7,19 @@ use extern_crate::hyper::Response;
 pub struct ActionRoundLogger;
 
 impl ActionRoundLogger {
-    pub fn log<'a>(request: &'a Request<Body>, response: &'a Response<Body>, error_auditor: Option<&'a ErrorAuditor>) -> () {
-        // let message = "REQUEST DTA TODO".to_string();
+    pub fn log<'a>(
+        request: &'a Request<Body>,
+        response: &'a Response<Body>,
+        error_auditor: Option<&'a ErrorAuditor>
+    ) -> () {                   // TODO сделать, через Logger::log.. собствкнный сервис.
+        // let message = format!("{} {}");
 
-        // message + response.status().as_u16();
+
 
         // if let Some(error_auditor_) = error_auditor {
 
         // }
 
+        todo!();
     }
 }
