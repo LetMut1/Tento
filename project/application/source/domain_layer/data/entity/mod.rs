@@ -16,3 +16,4 @@ pub mod channel_feed_publication_reaction;
 pub mod channel_feed_publication;
 pub mod channel_subscription;
 pub mod channel;
+pub mod system_registry;

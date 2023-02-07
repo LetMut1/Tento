@@ -11,3 +11,5 @@ pub mod number_row_generator;
 pub mod order_convention_resolver;
 pub mod postgrasql_transaction_manager;
 pub mod prepared_statemant_parameter_convertation_resolver;
+#[allow(non_snake_case)]
+pub mod system_registry__creator;

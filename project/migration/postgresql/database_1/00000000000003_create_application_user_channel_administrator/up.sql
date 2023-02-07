@@ -22,12 +22,10 @@ USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.application_user_channel_administrator
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.application_user_channel_administrator1'),
 -- ALTER COLUMN email SET NOT NULL,
 -- ALTER COLUMN nickname SET NOT NULL,
 -- ALTER COLUMN password_hash SET NOT NULL,
 -- ALTER COLUMN created_at SET NOT NULL,
--- ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT application_user_channel_administrator3 PRIMARY KEY USING INDEX application_user_channel_administrator2;
 -- ADD CONSTRAINT application_user_channel_administrator__email__unique_constraint UNIQUE USING INDEX application_user_channel_administrator__email__unique_index,
 -- ADD CONSTRAINT application_user_channel_administrator__nickname__unique_constraint UNIQUE USING INDEX application_user_channel_administrator__nickname__unique_index;

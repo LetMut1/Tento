@@ -1,4 +1,4 @@
-CREATE TABLE public.application_user_direct_message ( 
+CREATE TABLE public.application_user_direct_message (
     id BIGINT,
     list_of_members JSONB
 ) WITH (oids = false, fillfactor = 90, autovacuum_enabled = true);
@@ -14,7 +14,6 @@ USING gin (list_of_members jsonb_path_ops) WITH (fastupdate = on);
 
 ALTER TABLE ONLY public.application_user_direct_message
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.application_user_direct_message1'),
 ALTER COLUMN list_of_members SET NOT NULL,
 ADD CONSTRAINT application_user_direct_message4 PRIMARY KEY USING INDEX application_user_direct_message2;
 

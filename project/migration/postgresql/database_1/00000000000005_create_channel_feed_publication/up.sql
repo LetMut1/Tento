@@ -30,7 +30,6 @@ WHERE delete_on IS NOT NULL;
 
 ALTER TABLE ONLY public.channel_feed_publication
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.channel_feed_publication1'),
 ALTER COLUMN channel_id SET NOT NULL,
 ALTER COLUMN application_user_channel_administrator_id SET NOT NULL,
 ALTER COLUMN content_type SET NOT NULL,
@@ -42,7 +41,6 @@ ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN status SET NOT NULL,
 ALTER COLUMN visible_from SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel_feed_publication5 PRIMARY KEY USING INDEX channel_feed_publication2,
 ADD CONSTRAINT channel_feed_publication6 FOREIGN KEY (channel_id)
 REFERENCES public.channel (id) ON DELETE RESTRICT,

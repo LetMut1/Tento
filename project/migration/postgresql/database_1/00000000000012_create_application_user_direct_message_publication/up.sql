@@ -18,11 +18,9 @@ USING btree (application_user_direct_message_id, created_at ASC NULLS LAST) WITH
 
 ALTER TABLE ONLY public.application_user_direct_message_publication
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.application_user_direct_message_publication1'),
 ALTER COLUMN application_user_direct_message_id SET NOT NULL,
 ALTER COLUMN application_user_id SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT application_user_direct_message_publication4 PRIMARY KEY USING INDEX application_user_direct_message_publication2,
 ADD CONSTRAINT application_user_direct_message_publication5 FOREIGN KEY (application_user_direct_message_id)
 REFERENCES public.application_user_direct_message (id) ON DELETE CASCADE,

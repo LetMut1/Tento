@@ -4,7 +4,6 @@ pub struct ApplicationUserDevice {
 }
 
 impl ApplicationUserDevice {
-
     pub fn new(
         id: String,
         application_user_id: i64

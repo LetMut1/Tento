@@ -25,14 +25,12 @@ USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items
 
 ALTER TABLE ONLY public.channel_feed_publication_reaction
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.channel_feed_publication_reaction1'),
 ALTER COLUMN channel_feed_publication_id SET NOT NULL,
 ALTER COLUMN application_user_id SET NOT NULL,
 ALTER COLUMN content_type SET NOT NULL,
 ALTER COLUMN content_type_component SET NOT NULL,
 ALTER COLUMN public_marks_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel_feed_publication_reaction6 PRIMARY KEY USING INDEX channel_feed_publication_reaction2,
 ADD CONSTRAINT channel_feed_publication_reaction7 FOREIGN KEY (channel_feed_publication_id)
 REFERENCES public.channel_feed_publication (id) ON DELETE CASCADE,

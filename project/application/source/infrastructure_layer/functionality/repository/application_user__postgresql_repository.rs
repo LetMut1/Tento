@@ -28,7 +28,7 @@ impl ApplicationUser_PostgresqlRepository {
                 $1, \
                 $2, \
                 $3, \
-                DEFAULT \
+                current_timestamp(6) \
             ) \
             RETURNING \
                 au.id AS i,

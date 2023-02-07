@@ -22,11 +22,9 @@ USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items
 
 ALTER TABLE ONLY public.channel_subscription
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.channel_subscription1'),
 ALTER COLUMN channel_id SET NOT NULL,
 ALTER COLUMN application_user_id SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel_subscription6 PRIMARY KEY USING INDEX channel_subscription2,
 ADD CONSTRAINT channel_subscription7 FOREIGN KEY (channel_id)
 REFERENCES public.channel (id) ON DELETE CASCADE,

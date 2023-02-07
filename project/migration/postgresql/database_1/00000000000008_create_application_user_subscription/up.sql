@@ -18,7 +18,6 @@ USING btree (subscriber_application_user_id ASC NULLS LAST) WITH (fillfactor = 7
 
 ALTER TABLE ONLY public.application_user_subscription
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.application_user_subscription1'),
 ALTER COLUMN publisher_application_user_id SET NOT NULL,
 ALTER COLUMN subscriber_application_user_id SET NOT NULL,
 ADD CONSTRAINT application_user_subscription5 PRIMARY KEY USING INDEX application_user_subscription2,

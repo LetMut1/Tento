@@ -25,7 +25,6 @@ USING btree (delete_on ASC NULLS LAST) WITH (fillfactor = 70);
 
 ALTER TABLE ONLY public.channel_direct_message_publication
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.channel_direct_message_publication1'),
 ALTER COLUMN channel_id SET NOT NULL,
 ALTER COLUMN application_user_channel_administrator_id SET NOT NULL,
 ALTER COLUMN content_type SET NOT NULL,
@@ -35,7 +34,6 @@ ALTER COLUMN status SET NOT NULL,
 ALTER COLUMN visible_from SET NOT NULL,
 ALTER COLUMN delete_on SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel_direct_message_publication5 PRIMARY KEY USING INDEX channel_direct_message_publication2,
 ADD CONSTRAINT channel_direct_message_publication6 FOREIGN KEY (channel_id)
 REFERENCES public.channel (id) ON DELETE RESTRICT,

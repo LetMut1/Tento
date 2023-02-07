@@ -19,7 +19,6 @@ USING btree (application_user_id ASC NULLS LAST) WITH (fillfactor = 70);
 
 ALTER TABLE ONLY public.channel_feed_publication_mark
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.channel_feed_publication_mark1'),
 ALTER COLUMN channel_feed_publication_id SET NOT NULL,
 ALTER COLUMN application_user_id SET NOT NULL,
 ALTER COLUMN type SET NOT NULL,

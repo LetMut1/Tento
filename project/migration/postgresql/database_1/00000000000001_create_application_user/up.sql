@@ -20,12 +20,10 @@ USING btree (nickname ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items =
 
 ALTER TABLE ONLY public.application_user
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.application_user1'),
 ALTER COLUMN email SET NOT NULL,
 ALTER COLUMN nickname SET NOT NULL,
 ALTER COLUMN password_hash SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT application_user5 PRIMARY KEY USING INDEX application_user2,
 ADD CONSTRAINT application_user6 UNIQUE USING INDEX application_user3,
 ADD CONSTRAINT application_user7 UNIQUE USING INDEX application_user4;

@@ -42,7 +42,6 @@ USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items
 
 ALTER TABLE ONLY public.channel
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN id SET DEFAULT nextval('public.channel1'),
 ALTER COLUMN application_user_channel_administrator_id SET NOT NULL,
 ALTER COLUMN name SET DATA TYPE TEXT COLLATE "C",
 ALTER COLUMN name SET NOT NULL,
@@ -54,7 +53,6 @@ ALTER COLUMN hidden_marks_quantity SET NOT NULL,
 ALTER COLUMN reactions_quantity SET NOT NULL,
 ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ALTER COLUMN created_at SET DEFAULT current_timestamp(6),
 ADD CONSTRAINT channel7 PRIMARY KEY USING INDEX channel2,
 ADD CONSTRAINT channel8 FOREIGN KEY (application_user_channel_administrator_id)
 REFERENCES public.application_user_channel_administrator (id) ON DELETE RESTRICT,
