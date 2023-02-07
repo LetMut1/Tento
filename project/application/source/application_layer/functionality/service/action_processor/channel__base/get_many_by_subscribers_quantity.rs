@@ -138,5 +138,5 @@ pub struct Outcoming {
 #[serde(crate = "extern_crate::serde")]
 pub struct Channel {
     pub channel_id: i64,
-    pub channel_subscribers_quantity: i64,
+    pub channel_subscribers_quantity: i64
 }
