@@ -1,25 +1,90 @@
+use crate::domain_layer::data::entity::system_registry::Level;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::functionality::service::system_registry__creator::SystemRegistry_Creator;
+use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use extern_crate::bb8::Pool;
 use extern_crate::hyper::Body;
-use extern_crate::hyper::body::HttpBody;
 use extern_crate::hyper::Request;
 use extern_crate::hyper::Response;
+use extern_crate::tokio_postgres::Socket;
+use extern_crate::tokio_postgres::tls::MakeTlsConnect;
+use extern_crate::tokio_postgres::tls::TlsConnect;
+use std::clone::Clone;
+use std::marker::Send;
+use std::marker::Sync;
 
 pub struct ActionRoundLogger;
 
 impl ActionRoundLogger {
-    pub fn log<'a>(
+    pub async fn log_error<'a, T>(
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request<Body>,
         response: &'a Response<Body>,
-        error_auditor: Option<&'a ErrorAuditor>
-    ) -> () {                   // TODO сделать, через Logger::log.. собствкнный сервис.
-        // let message = format!("{} {}");
+        error_auditor: Option<ErrorAuditor>
+    ) -> ()
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        Self::log(Level::Error, database_2_postgresql_connection_pool, request, response, error_auditor).await;
 
+        return ();
+    }
 
+    pub async fn log_fatal_error<'a, T>(
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        request: &'a Request<Body>,
+        response: &'a Response<Body>,
+        error_auditor: Option<ErrorAuditor>
+    ) -> ()
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        Self::log(Level::FatalError, database_2_postgresql_connection_pool, request, response, error_auditor).await;
 
-        // if let Some(error_auditor_) = error_auditor {
+        return ();
+    }
 
-        // }
+    async fn log<'a, T>(
+        level: Level,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        request: &'a Request<Body>,
+        response: &'a Response<Body>,
+        error_auditor: Option<ErrorAuditor>
+    ) -> ()
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        let message = match error_auditor {
+            Some(error_auditor_) => {
+                format!(
+                    "{} {} {} - {}",
+                    request.uri().path(),
+                    request.method().as_str(),
+                    response.status().as_u16(),
+                    &error_auditor_
+                )
+            }
+            None => {
+                format!(
+                    "{} {} {}",
+                    request.uri().path(),
+                    request.method().as_str(),
+                    response.status().as_u16(),
+                )
+            }
+        };
 
-        todo!();
+        SystemRegistry_Creator::create(database_2_postgresql_connection_pool, message, level).await;
+
+        return ();
     }
 }

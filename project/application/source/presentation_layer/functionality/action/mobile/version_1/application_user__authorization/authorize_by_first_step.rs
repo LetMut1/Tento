@@ -3,9 +3,15 @@ use crate::application_layer::data::entity_workflow_exception::ApplicationUser_W
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_first_step::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_first_step::Incoming;
+use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::LogicError;
+use crate::infrastructure_layer::data::error_auditor::OtherError;
+use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
-use crate::presentation_layer::functionality::service::unexpected_behavior_resolver::UnexpectedBehaviorResolver;
+use crate::presentation_layer::functionality::service::action_round_logger::ActionRoundLogger;
 use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::functionality::service::unified_report_creator::UnifiedReportCreator;
@@ -14,8 +20,7 @@ use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::bytes::Buf;
 use extern_crate::hyper::Body;
-use extern_crate::hyper::body::HttpBody;
-use extern_crate::hyper::body::to_bytes;      // TODO почему не использую этот метод для получения байт?
+use extern_crate::hyper::body::to_bytes;
 use extern_crate::hyper::Request;
 use extern_crate::hyper::Response;
 use extern_crate::rmp_serde;
@@ -23,7 +28,6 @@ use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
 use std::clone::Clone;
-use std::convert::From;
 use std::marker::Send;
 use std::marker::Sync;
 
@@ -34,10 +38,10 @@ use crate::presentation_layer::functionality::service::wrapped_encoding_protocol
 
 pub async fn authorize_by_first_step<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-    request: Request<Body>,
-    database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    _redis_connection_pool: Pool<RedisConnectionManager>
+    mut request: Request<Body>,
+    database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    _redis_connection_pool: &'a Pool<RedisConnectionManager>
 ) -> Response<Body>
 where
     T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -46,20 +50,44 @@ where
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
     if !RequestHeaderChecker::is_valid(&request) {
-        return ActionResponseCreator::create_bad_request();
+        let error = ErrorAuditor::new(BaseError::InvalidArgumentError, BacktracePart::new(line!(), file!(), None));
+
+        let response = ActionResponseCreator::create_bad_request();
+
+        ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+
+        return response;
     }
 
-    //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
-    // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
-    // https://github.com/hyperium/hyper/issues/2004
-    let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
+    let bytes = match to_bytes(request.body_mut()).await {
+        Ok(bytes_) => bytes_,
+        Err(error) => {
+            let error_ = ErrorAuditor::new(
+                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                BacktracePart::new(line!(), file!(), None)
+            );
+
+            let response = ActionResponseCreator::create_internal_server_error();
+
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+            return response;
+        }
+    };
 
     let incoming = match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
         Ok(incoming_) => incoming_,
         Err(error) => {
-            // TODO log::error!("{}", ErrorAuditor::from(error));
+            let error_ = ErrorAuditor::new(
+                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                BacktracePart::new(line!(), file!(), None)
+            );
 
-            return ActionResponseCreator::create_internal_server_error();
+            let response = ActionResponseCreator::create_internal_server_error();
+
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+            return response;
         }
     };
 
@@ -68,7 +96,14 @@ where
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {
-            return UnexpectedBehaviorResolver::create_action_response(&error);
+            let response = match *error.get_base_error() {
+                BaseError::InvalidArgumentError => ActionResponseCreator::create_bad_request(),
+                _ => ActionResponseCreator::create_internal_server_error()
+            };
+
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+
+            return response;
         }
     };
 
@@ -77,13 +112,24 @@ where
             let data = match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                 Ok(data_) => data_,
                 Err(error) => {
-                    // TODO log::error!("{}", ErrorAuditor::from(error));
+                    let error_ = ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    );
 
-                    return ActionResponseCreator::create_internal_server_error();
+                    let response = ActionResponseCreator::create_internal_server_error();
+
+                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+                    return response;
                 }
             };
 
-            return ActionResponseCreator::create_ok(data);
+            let response = ActionResponseCreator::create_ok(data);
+
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+
+            return response;
         }
         ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
             match entity_workflow_exception {
@@ -98,21 +144,50 @@ where
                             ) {
                                 Ok(data_) => data_,
                                 Err(error) => {
-                                    // TODO log::error!("{}", ErrorAuditor::from(error));
+                                    let error_ = ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    );
 
-                                    return ActionResponseCreator::create_internal_server_error();
+                                    let response = ActionResponseCreator::create_internal_server_error();
+
+                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+                                    return response;
                                 }
                             };
 
-                            return ActionResponseCreator::create_ok(data);
+                            let response = ActionResponseCreator::create_ok(data);
+
+                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+
+                            return response;
                         }
                         _ => {
-                            return UnexpectedBehaviorResolver::create_unreachable_action_response();
+                            let error = ErrorAuditor::new(
+                                BaseError::LogicError { logic_error: LogicError::new(true, "Unreachable state") },
+                                BacktracePart::new(line!(), file!(), None)
+                            );
+
+                            let response = ActionResponseCreator::create_not_extended();
+
+                            ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+
+                            return response;
                         }
                     }
                 }
                 _ => {
-                    return UnexpectedBehaviorResolver::create_unreachable_action_response();
+                    let error = ErrorAuditor::new(
+                        BaseError::LogicError { logic_error: LogicError::new(true, "Unreachable state") },
+                        BacktracePart::new(line!(), file!(), None)
+                    );
+
+                    let response = ActionResponseCreator::create_not_extended();
+
+                    ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+
+                    return response;
                 }
             }
         }
@@ -123,9 +198,9 @@ where
 pub async fn authorize_by_first_step_<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
-    database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    redis_connection_pool: Pool<RedisConnectionManager>
+    database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    redis_connection_pool: &'a Pool<RedisConnectionManager>
 ) -> Response<Body>
 where
     T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,

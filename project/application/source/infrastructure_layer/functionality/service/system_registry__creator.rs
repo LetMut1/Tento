@@ -16,7 +16,7 @@ pub struct SystemRegistry_Creator;
 
 impl SystemRegistry_Creator {
     pub async fn create<'a, T>(
-        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         message: String,
         level: Level
     ) -> ()
@@ -35,26 +35,13 @@ impl SystemRegistry_Creator {
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
-            Err(error) => {
-
-                // TODO
-                // Написать в СТДЕРР? std_err
-
-                // return Err(
-                //     ErrorAuditor::new(
-                //         BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                //         BacktracePart::new(line!(), file!(), None)
-                //     )
-                // );
-                return ();
+            Err(_) => {
+                return ();   // TODO TODO TOOD Где-то нужно оставлять информацию о том, что случилось. Писать либо в СтдЕрр, либо в лог-файл. Писать нужно асинхронно, иначе все апи будут работать синхронно.
             }
         };
 
-        if let Err(error) = SystemRegistry_PostgresqlRepository::create(&*database_2_postgresql_pooled_connection, insert).await {
-            // TODO
-            // stderr Написать
-
-            return ();
+        if let Err(_) = SystemRegistry_PostgresqlRepository::create(&*database_2_postgresql_pooled_connection, insert).await {
+            return ();  // TODO TODO TOOD Где-то нужно оставлять информацию о том, что случилось. Писать либо в СтдЕрр, либо в лог-файл. Писать нужно асинхронно, иначе все апи будут работать синхронно.
         }
 
         return ();

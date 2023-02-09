@@ -28,7 +28,7 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     pub async fn process<'a, T>(                         // TODO TODO TODO УДАляются ли АккессТокены все при массовом разлогине? Если не удаляются, можно просто при Ектракте АккессТокена использовать проверку на наличие рефреша, если нет, значит произошел разлогин.
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<()>, ErrorAuditor>
     where

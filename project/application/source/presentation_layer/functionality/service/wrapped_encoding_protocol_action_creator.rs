@@ -1,6 +1,11 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::functionality::service::action_processing_delegator::ActionProcessingDelegator;
 use crate::application_layer::functionality::service::action_processing_delegator::Incoming;
+use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::OtherError;
+use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -22,7 +27,6 @@ use std::marker::Send;
 use std::marker::Sync;
 use std::ops::FnOnce;
 use super::action_response_creator::ActionResponseCreator;
-use super::unexpected_behavior_resolver::UnexpectedBehaviorResolver;
 use super::request_header_checker::RequestHeaderChecker;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
@@ -36,9 +40,9 @@ impl WrappedEncodingProtocolActionCreator {
     pub async fn create_for_json<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: Pool<RedisConnectionManager>,
+        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: &'a Pool<RedisConnectionManager>,
         wrapped_action: FO
     ) -> Response<Body>
     where
@@ -49,9 +53,9 @@ impl WrappedEncodingProtocolActionCreator {
         FO: FnOnce(
             &'a EnvironmentConfigurationResolver,
             Request<Body>,
-            Pool<PostgresqlConnectionManager<T>>,
-            Pool<PostgresqlConnectionManager<T>>,
-            Pool<RedisConnectionManager>
+            &'a Pool<PostgresqlConnectionManager<T>>,
+            &'a Pool<PostgresqlConnectionManager<T>>,
+            &'a Pool<RedisConnectionManager>
         ) -> F,
         F: Future<Output = Response<Body>>,
         AHID: Serialize + for<'de> Deserialize<'de>,
@@ -97,7 +101,17 @@ impl WrappedEncodingProtocolActionCreator {
         ).await {
             Ok(action_processor_result_) => action_processor_result_,
             Err(error) => {
-                return UnexpectedBehaviorResolver::create_action_response(&error);
+                match *error.get_base_error() {
+                    BaseError::InvalidArgumentError => {
+                        return ActionResponseCreator::create_bad_request();
+                    }
+                    BaseError::LogicError { logic_error: _ } |
+                    BaseError::RunTimeError { run_time_error: _ } => {
+                        // TODO log::error!("{}", error);
+
+                        return ActionResponseCreator::create_internal_server_error();
+                    }
+                }
             }
         };
 
@@ -122,7 +136,7 @@ impl WrappedEncodingProtocolActionCreator {
                 return ActionResponseCreator::create_from_response_parts(outcoming.parts, Some(data));
             }
             ActionProcessorResult::EntityWorkflowException { entity_workflow_exception: _ } => {
-                return UnexpectedBehaviorResolver::create_unreachable_action_response();
+                return ActionResponseCreator::create_not_extended();
             }
         }
     }

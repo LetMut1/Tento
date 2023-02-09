@@ -33,9 +33,9 @@ use extern_crate::serde::Serialize;
 pub struct ActionProcessor;
 
 impl ActionProcessor {
-    pub async fn process<T>(
-        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    pub async fn process<'a, T>(
+        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<()>, ErrorAuditor>
     where

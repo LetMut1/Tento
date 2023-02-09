@@ -21,8 +21,8 @@ use std::marker::Sync;
 pub struct ActionProcessor;
 
 impl ActionProcessor {
-    pub async fn process<T>(
-        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    pub async fn process<'a, T>(
+        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where

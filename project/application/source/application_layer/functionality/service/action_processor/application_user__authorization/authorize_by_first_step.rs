@@ -30,8 +30,8 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     pub async fn process<'a, T>(      // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
     where

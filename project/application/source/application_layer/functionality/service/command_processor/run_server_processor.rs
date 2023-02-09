@@ -465,9 +465,9 @@ impl RunServerProcessor {
                                         Self::resolve(
                                             &environment_configuration_resolver__,
                                             requset,
-                                            database_1_postgresql_connection_pool_,
-                                            database_2_postgresql_connection_pool_,
-                                            redis_connection_pool__
+                                            &database_1_postgresql_connection_pool_,
+                                            &database_2_postgresql_connection_pool_,
+                                            &redis_connection_pool__
                                         ).await
                                     );
                                 };
@@ -505,9 +505,9 @@ impl RunServerProcessor {
     async fn resolve<'a, T>(   // TODO Можно ли пробростить ЛОггер как объект? Нужно ли?  (Лог4рс делает так, чтобы все крееты, на основе этого лога могли писать в общий лог) // TODO TODO  TODO Пути через константы?
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         request: Request<Body>,
-        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: Pool<RedisConnectionManager>
+        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: &'a Pool<RedisConnectionManager>
     ) -> Response<Body>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,

@@ -3,9 +3,13 @@ use crate::application_layer::data::entity_workflow_exception::ApplicationUserRe
 use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::reset_password_by_second_step::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::reset_password_by_second_step::Incoming;
+use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::OtherError;
+use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
-use crate::presentation_layer::functionality::service::unexpected_behavior_resolver::UnexpectedBehaviorResolver;
 use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::functionality::service::unified_report_creator::UnifiedReportCreator;
@@ -33,9 +37,9 @@ use crate::presentation_layer::functionality::service::wrapped_encoding_protocol
 pub async fn reset_password_by_second_step<'a, T>(
     _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
-    _database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    _redis_connection_pool: Pool<RedisConnectionManager>
+    _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    _redis_connection_pool: &'a Pool<RedisConnectionManager>
 ) -> Response<Body>
 where
     T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -66,7 +70,17 @@ where
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {
-            return UnexpectedBehaviorResolver::create_action_response(&error);
+            match *error.get_base_error() {
+                BaseError::InvalidArgumentError => {
+                    return ActionResponseCreator::create_bad_request();
+                }
+                BaseError::LogicError { logic_error: _ } |
+                BaseError::RunTimeError { run_time_error: _ } => {
+                    // TODO log::error!("{}", error);
+
+                    return ActionResponseCreator::create_internal_server_error();
+                }
+            }
         }
     };
 
@@ -158,12 +172,12 @@ where
                             return ActionResponseCreator::create_ok(data);
                         }
                         _ => {
-                            return UnexpectedBehaviorResolver::create_unreachable_action_response();
+                            return ActionResponseCreator::create_not_extended();
                         }
                     }
                 }
                 _ => {
-                    return UnexpectedBehaviorResolver::create_unreachable_action_response();
+                    return ActionResponseCreator::create_not_extended();
                 }
             }
         }
@@ -174,9 +188,9 @@ where
 pub async fn reset_password_by_second_step_<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
-    database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-    redis_connection_pool: Pool<RedisConnectionManager>
+    database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    redis_connection_pool: &'a Pool<RedisConnectionManager>
 ) -> Response<Body>
 where
     T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,

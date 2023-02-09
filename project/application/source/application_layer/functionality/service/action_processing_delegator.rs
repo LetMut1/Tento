@@ -38,10 +38,10 @@ pub struct ActionProcessingDelegator;
 impl ActionProcessingDelegator {
     pub async fn delegate<'a, T, FO, F, AHID, AHOD>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: Pool<RedisConnectionManager>,
-        incoming: Incoming<AHID>,
+        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: &'a Pool<RedisConnectionManager>,
+        mut incoming: Incoming<AHID>,
         action: FO
     ) -> Result<ActionProcessorResult<Outcoming<AHOD>>, ErrorAuditor>
     where
@@ -52,15 +52,15 @@ impl ActionProcessingDelegator {
         FO: FnOnce(
             &'a EnvironmentConfigurationResolver,
             Request<Body>,
-            Pool<PostgresqlConnectionManager<T>>,
-            Pool<PostgresqlConnectionManager<T>>,
-            Pool<RedisConnectionManager>
+            &'a Pool<PostgresqlConnectionManager<T>>,
+            &'a Pool<PostgresqlConnectionManager<T>>,
+            &'a Pool<RedisConnectionManager>
         ) -> F,
         F: Future<Output = Response<Body>>,
         AHID: Serialize + for<'de> Deserialize<'de>,
         AHOD: Serialize + for<'de> Deserialize<'de>
     {
-        let mut request_parts = incoming.parts;
+        // let mut request_parts = incoming.parts;
 
         let mut data: Vec<u8> = vec![];
         if let Err(error) = rmp_serde::encode::write(&mut data, &incoming.convertible_data) {
@@ -72,12 +72,12 @@ impl ActionProcessingDelegator {
             );
         }
 
-        let mut header_map = request_parts.headers;
+        let mut header_map = incoming.parts.headers;
         header_map.remove(header::CONTENT_LENGTH);
         header_map.append(header::CONTENT_LENGTH, HeaderValue::from(data.len() as u64));
-        request_parts.headers = header_map;
+        incoming.parts.headers = header_map;
 
-        let request = Request::from_parts(request_parts, Body::from(data));
+        let request = Request::from_parts(incoming.parts, Body::from(data));
 
         let response = action(
             environment_configuration_resolver,
