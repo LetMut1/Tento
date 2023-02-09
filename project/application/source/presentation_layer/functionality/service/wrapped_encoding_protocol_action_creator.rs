@@ -8,6 +8,7 @@ use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::presentation_layer::functionality::service::action_round_logger::ActionRoundLogger;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -62,7 +63,13 @@ impl WrappedEncodingProtocolActionCreator {
         AHOD: Serialize + for<'de> Deserialize<'de>
     {
         if !RequestHeaderChecker::is_valid(&request) {
-            return ActionResponseCreator::create_bad_request();
+            let error = ErrorAuditor::new(BaseError::InvalidArgumentError, BacktracePart::new(line!(), file!(), None));
+
+            let response = ActionResponseCreator::create_bad_request();
+
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+
+            return response;
         }
 
         let (

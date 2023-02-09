@@ -11,6 +11,7 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
+use crate::presentation_layer::functionality::service::action_round_logger::ActionRoundLogger;
 use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::functionality::service::unified_report_creator::UnifiedReportCreator;
@@ -40,7 +41,7 @@ pub async fn check_email_for_existing<'a, T>(
     _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
     request: Request<Body>,
     database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-    _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     _redis_connection_pool: &'a Pool<RedisConnectionManager>
 ) -> Response<Body>
 where
@@ -50,7 +51,13 @@ where
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
     if !RequestHeaderChecker::is_valid(&request) {
-        return ActionResponseCreator::create_bad_request();
+        let error = ErrorAuditor::new(BaseError::InvalidArgumentError, BacktracePart::new(line!(), file!(), None));
+
+        let response = ActionResponseCreator::create_bad_request();
+
+        ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+
+        return response;
     }
 
     //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
