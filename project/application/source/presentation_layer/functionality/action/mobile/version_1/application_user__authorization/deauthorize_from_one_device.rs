@@ -20,7 +20,6 @@ use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::bytes::Buf;
 use extern_crate::hyper::Body;
-use extern_crate::hyper::body::HttpBody;
 use extern_crate::hyper::body::to_bytes;
 use extern_crate::hyper::Request;
 use extern_crate::hyper::Response;
@@ -37,7 +36,7 @@ use crate::presentation_layer::functionality::service::wrapped_encoding_protocol
 
 pub async fn deauthorize_from_one_device<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
-    request: Request<Body>,
+    mut request: Request<Body>,
     _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     _redis_connection_pool: &'a Pool<RedisConnectionManager>
@@ -58,17 +57,35 @@ where
         return response;
     }
 
-    //https://stackoverflow.com/questions/43419974/how-do-i-read-the-entire-body-of-a-tokio-based-hyper-request
-    // Обязательно ограничивать количество считываемых байт   https://stackoverflow.com/questions/53142508/how-do-i-apply-a-limit-to-the-number-of-bytes-read-by-futuresstreamconcat2
-    // https://github.com/hyperium/hyper/issues/2004
-    let bytes = request.into_body().data().await.unwrap().unwrap(); // TODO TODO  TODO  TODO  Неправильный способ !!!!!!!!
+    let bytes = match to_bytes(request.body_mut()).await {
+        Ok(bytes_) => bytes_,
+        Err(error) => {
+            let error_ = ErrorAuditor::new(
+                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                BacktracePart::new(line!(), file!(), None)
+            );
+
+            let response = ActionResponseCreator::create_internal_server_error();
+
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+            return response;
+        }
+    };
 
     let incoming = match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
         Ok(incoming_) => incoming_,
         Err(error) => {
-            // TODO log::error!("{}", ErrorAuditor::from(error));
+            let error_ = ErrorAuditor::new(
+                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                BacktracePart::new(line!(), file!(), None)
+            );
 
-            return ActionResponseCreator::create_internal_server_error();
+            let response = ActionResponseCreator::create_internal_server_error();
+
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+            return response;
         }
     };
 
