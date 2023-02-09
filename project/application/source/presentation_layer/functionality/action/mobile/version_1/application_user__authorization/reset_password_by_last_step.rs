@@ -8,6 +8,7 @@ use crate::infrastructure_layer::functionality::service::environment_configurati
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
@@ -20,7 +21,7 @@ use extern_crate::bb8::Pool;
 use extern_crate::bytes::Buf;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::body::HttpBody;
-use extern_crate::hyper::body::to_bytes;      // TODO почему не использую этот метод для получения байт?
+use extern_crate::hyper::body::to_bytes;
 use extern_crate::hyper::Request;
 use extern_crate::hyper::Response;
 use extern_crate::rmp_serde;
@@ -28,7 +29,6 @@ use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
 use std::clone::Clone;
-use std::convert::From;
 use std::marker::Send;
 use std::marker::Sync;
 
