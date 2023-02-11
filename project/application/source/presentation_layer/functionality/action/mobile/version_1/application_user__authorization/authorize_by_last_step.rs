@@ -128,7 +128,7 @@ where
 
             let response = ActionResponseCreator::create_ok(data);
 
-            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
 
             return response;
         }
@@ -157,7 +157,7 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
 
                             return response;
                         }
@@ -182,7 +182,7 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
 
                             return response;
                         }
@@ -207,7 +207,7 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
 
                             return response;
                         }
@@ -232,7 +232,7 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
 
                             return response;
                         }
@@ -261,7 +261,7 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
 
                             return response;
                         }

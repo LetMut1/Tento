@@ -16,6 +16,23 @@ use std::marker::Sync;
 pub struct ActionRoundLogger;
 
 impl ActionRoundLogger {
+    pub async fn log_info<'a, T>(
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        request: &'a Request<Body>,
+        response: &'a Response<Body>,
+        error_auditor: Option<ErrorAuditor>
+    ) -> ()
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        Self::log(Level::Info, database_2_postgresql_connection_pool, request, response, error_auditor).await;
+
+        return ();
+    }
+
     pub async fn log_error<'a, T>(
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request<Body>,
