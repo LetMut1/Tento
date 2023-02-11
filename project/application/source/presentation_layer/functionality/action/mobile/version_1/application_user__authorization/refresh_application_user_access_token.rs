@@ -97,17 +97,14 @@ where
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {
-            match *error.get_base_error() {
-                BaseError::InvalidArgumentError => {
-                    return ActionResponseCreator::create_bad_request();
-                }
-                BaseError::LogicError { logic_error: _ } |
-                BaseError::RunTimeError { run_time_error: _ } => {
-                    // TODO log::error!("{}", error);
+            let response = match *error.get_base_error() {
+                BaseError::InvalidArgumentError => ActionResponseCreator::create_bad_request(),
+                _ => ActionResponseCreator::create_internal_server_error()
+            };
 
-                    return ActionResponseCreator::create_internal_server_error();
-                }
-            }
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+
+            return response;
         }
     };
 
@@ -116,13 +113,24 @@ where
             let data = match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
                 Ok(data_) => data_,
                 Err(error) => {
-                    // TODO log::error!("{}", ErrorAuditor::from(error));
+                    let error_ = ErrorAuditor::new(
+                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    );
 
-                    return ActionResponseCreator::create_internal_server_error();
+                    let response = ActionResponseCreator::create_internal_server_error();
+
+                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+                    return response;
                 }
             };
 
-            return ActionResponseCreator::create_ok(data);
+            let response = ActionResponseCreator::create_ok(data);
+
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+
+            return response;
         }
         ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
             match entity_workflow_exception {
@@ -134,13 +142,24 @@ where
                             ) {
                                 Ok(data_) => data_,
                                 Err(error) => {
-                                    // TODO log::error!("{}", ErrorAuditor::from(error));
+                                    let error_ = ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    );
 
-                                    return ActionResponseCreator::create_internal_server_error();
+                                    let response = ActionResponseCreator::create_internal_server_error();
+
+                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+                                    return response;
                                 }
                             };
 
-                            return ActionResponseCreator::create_ok(data);
+                            let response = ActionResponseCreator::create_ok(data);
+
+                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+
+                            return response;
                         }
                         ApplicationUserAccessToken_WorkflowException::WrongDeserializedForm => {
                             let data = match rmp_serde::to_vec(
@@ -148,16 +167,36 @@ where
                             ) {
                                 Ok(data_) => data_,
                                 Err(error) => {
-                                    // TODO log::error!("{}", ErrorAuditor::from(error));
+                                    let error_ = ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    );
 
-                                    return ActionResponseCreator::create_internal_server_error();
+                                    let response = ActionResponseCreator::create_internal_server_error();
+
+                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+                                    return response;
                                 }
                             };
 
-                            return ActionResponseCreator::create_ok(data);
+                            let response = ActionResponseCreator::create_ok(data);
+
+                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+
+                            return response;
                         }
                         _ => {
-                            return ActionResponseCreator::create_not_extended();
+                            let error = ErrorAuditor::new(
+                                BaseError::LogicError { logic_error: LogicError::new(true, "Unreachable state") },
+                                BacktracePart::new(line!(), file!(), None)
+                            );
+
+                            let response = ActionResponseCreator::create_not_extended();
+
+                            ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+
+                            return response;
                         }
                     }
                 }
@@ -169,13 +208,24 @@ where
                             ) {
                                 Ok(data_) => data_,
                                 Err(error) => {
-                                    // TODO log::error!("{}", ErrorAuditor::from(error));
+                                    let error_ = ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    );
 
-                                    return ActionResponseCreator::create_internal_server_error();
+                                    let response = ActionResponseCreator::create_internal_server_error();
+
+                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+                                    return response;
                                 }
                             };
 
-                            return ActionResponseCreator::create_ok(data);
+                            let response = ActionResponseCreator::create_ok(data);
+
+                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+
+                            return response;
                         }
                         ApplicationUserAccessRefreshToken_WorkflowException::WrongDeserializedForm => {
                             let data = match rmp_serde::to_vec(
@@ -183,13 +233,24 @@ where
                             ) {
                                 Ok(data_) => data_,
                                 Err(error) => {
-                                    // TODO log::error!("{}", ErrorAuditor::from(error));
+                                    let error_ = ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    );
 
-                                    return ActionResponseCreator::create_internal_server_error();
+                                    let response = ActionResponseCreator::create_internal_server_error();
+
+                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+                                    return response;
                                 }
                             };
 
-                            return ActionResponseCreator::create_ok(data);
+                            let response = ActionResponseCreator::create_ok(data);
+
+                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+
+                            return response;
                         }
                         ApplicationUserAccessRefreshToken_WorkflowException::AlreadyExpired => {
                             let data = match rmp_serde::to_vec(
@@ -197,18 +258,38 @@ where
                             ) {
                                 Ok(data_) => data_,
                                 Err(error) => {
-                                    // TODO log::error!("{}", ErrorAuditor::from(error));
+                                    let error_ = ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    );
 
-                                    return ActionResponseCreator::create_internal_server_error();
+                                    let response = ActionResponseCreator::create_internal_server_error();
+
+                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+                                    return response;
                                 }
                             };
 
-                            return ActionResponseCreator::create_ok(data);
+                            let response = ActionResponseCreator::create_ok(data);
+
+                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+
+                            return response;
                         }
                     }
                 }
                 _ => {
-                    return ActionResponseCreator::create_not_extended();
+                    let error = ErrorAuditor::new(
+                        BaseError::LogicError { logic_error: LogicError::new(true, "Unreachable state") },
+                        BacktracePart::new(line!(), file!(), None)
+                    );
+
+                    let response = ActionResponseCreator::create_not_extended();
+
+                    ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+
+                    return response;
                 }
             }
         }

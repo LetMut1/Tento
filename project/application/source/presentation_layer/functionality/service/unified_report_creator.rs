@@ -7,7 +7,7 @@ use extern_crate::serde::Deserialize;
 pub struct UnifiedReportCreator;
 
 impl UnifiedReportCreator {
-    pub fn create_without_data() -> UnifiedReport<()> {
+    pub fn create_empty() -> UnifiedReport<()> {
         return UnifiedReport::empty();
     }
 
