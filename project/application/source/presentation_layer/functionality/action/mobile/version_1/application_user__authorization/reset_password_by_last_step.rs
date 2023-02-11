@@ -232,13 +232,24 @@ where
                             ) {
                                 Ok(data_) => data_,
                                 Err(error) => {
-                                    // TODO log::error!("{}", ErrorAuditor::from(error));
+                                    let error_ = ErrorAuditor::new(
+                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    );
 
-                                    return ActionResponseCreator::create_internal_server_error();
+                                    let response = ActionResponseCreator::create_internal_server_error();
+
+                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+
+                                    return response;
                                 }
                             };
 
-                            return ActionResponseCreator::create_ok(data);
+                            let response = ActionResponseCreator::create_ok(data);
+
+                            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, None).await;
+
+                            return response;
                         }
                         ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired => {
                             let data = match rmp_serde::to_vec(
