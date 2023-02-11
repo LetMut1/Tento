@@ -60,8 +60,6 @@ impl ActionProcessingDelegator {
         AHID: Serialize + for<'de> Deserialize<'de>,
         AHOD: Serialize + for<'de> Deserialize<'de>
     {
-        // let mut request_parts = incoming.parts;
-
         let mut data: Vec<u8> = vec![];
         if let Err(error) = rmp_serde::encode::write(&mut data, &incoming.convertible_data) {
             return Err(
