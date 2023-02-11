@@ -12,8 +12,7 @@ use extern_crate::bb8::Pool;
 use extern_crate::bytes::Buf;
 use extern_crate::http::header;
 use extern_crate::http::HeaderValue;
-use extern_crate::http::request::Parts as HttpRequestParts;
-use extern_crate::http::response::Parts as HttpResponseParts;
+use extern_crate::http::response::Parts;
 use extern_crate::http::StatusCode;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::body::to_bytes;
@@ -41,7 +40,7 @@ impl ActionProcessingDelegator {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        mut incoming: Incoming<AHID>,
+        incoming: Incoming<AHID>,
         action: FO
     ) -> Result<ActionProcessorResult<Outcoming<AHOD>>, ErrorAuditor>
     where
@@ -70,12 +69,11 @@ impl ActionProcessingDelegator {
             );
         }
 
-        let mut header_map = incoming.parts.headers;
-        header_map.remove(header::CONTENT_LENGTH);
-        header_map.append(header::CONTENT_LENGTH, HeaderValue::from(data.len() as u64));
-        incoming.parts.headers = header_map;
+        let mut request_parts = incoming.request.into_parts().0;
+        request_parts.headers.remove(header::CONTENT_LENGTH);
+        request_parts.headers.append(header::CONTENT_LENGTH, HeaderValue::from(data.len() as u64));
 
-        let request = Request::from_parts(incoming.parts, Body::from(data));
+        let request = Request::from_parts(request_parts, Body::from(data));
 
         let response = action(
             environment_configuration_resolver,
@@ -126,12 +124,12 @@ impl ActionProcessingDelegator {
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct Incoming<T> {
-    pub parts: HttpRequestParts,
+    pub request: Request<Body>,
     pub convertible_data: T
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct Outcoming<T> {
-    pub parts: HttpResponseParts,
+    pub parts: Parts,
     pub unified_report: Option<UnifiedReport<T>>
 }

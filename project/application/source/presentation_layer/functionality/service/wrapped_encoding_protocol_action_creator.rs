@@ -1,14 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::functionality::service::action_processing_delegator::ActionProcessingDelegator;
 use crate::application_layer::functionality::service::action_processing_delegator::Incoming;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::LogicError;
-use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::RunTimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::presentation_layer::functionality::service::action_round_logger::ActionRoundLogger;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -63,44 +57,20 @@ impl WrappedEncodingProtocolActionCreator {
         AHOD: Serialize + for<'de> Deserialize<'de>
     {
         if !RequestHeaderChecker::is_valid(&request) {
-            let error = ErrorAuditor::new(BaseError::InvalidArgumentError, BacktracePart::new(line!(), file!(), None));
-
-            let response = ActionResponseCreator::create_bad_request();
-
-            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
-
-            return response;
+            return ActionResponseCreator::create_bad_request();
         }
 
         let bytes = match to_bytes(request.body_mut()).await {
             Ok(bytes_) => bytes_,
-            Err(error) => {
-                let error_ = ErrorAuditor::new(
-                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                    BacktracePart::new(line!(), file!(), None)
-                );
-
-                let response = ActionResponseCreator::create_internal_server_error();
-
-                ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
-
-                return response;
+            Err(_) => {
+                return ActionResponseCreator::create_internal_server_error();
             }
         };
 
         let incoming = match serde_json::from_slice::<'_, AHID>(bytes.chunk()) {
             Ok(wrapped_incoming_) => wrapped_incoming_,
-            Err(error) => {
-                let error_ = ErrorAuditor::new(
-                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                    BacktracePart::new(line!(), file!(), None)
-                );
-
-                let response = ActionResponseCreator::create_internal_server_error();
-
-                ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
-
-                return response;
+            Err(_) => {
+                return ActionResponseCreator::create_internal_server_error();
             }
         };
 
@@ -110,21 +80,17 @@ impl WrappedEncodingProtocolActionCreator {
             database_2_postgresql_connection_pool,
             redis_connection_pool,
             Incoming {
-                parts: request.into_parts().0,
+                request,
                 convertible_data: incoming
             },
             wrapped_action
         ).await {
             Ok(action_processor_result_) => action_processor_result_,
             Err(error) => {
-                let response = match *error.get_base_error() {
+                return match *error.get_base_error() {
                     BaseError::InvalidArgumentError => ActionResponseCreator::create_bad_request(),
                     _ => ActionResponseCreator::create_internal_server_error()
                 };
-
-                ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
-
-                return response;
             }
         };
 
@@ -133,47 +99,21 @@ impl WrappedEncodingProtocolActionCreator {
                 let unified_report = match outcoming.unified_report {
                     Some(unified_report_) => unified_report_,
                     None => {
-                        let response = ActionResponseCreator::create_from_response_parts(outcoming.parts, None);
-
-                        ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
-
-                        return response;
+                        return ActionResponseCreator::create_from_response_parts(outcoming.parts, None);
                     }
                 };
 
                 let data = match serde_json::to_vec(&unified_report) {
                     Ok(data_) => data_,
-                    Err(error) => {
-                        let error_ = ErrorAuditor::new(
-                            BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
-                            BacktracePart::new(line!(), file!(), None)
-                        );
-
-                        let response = ActionResponseCreator::create_internal_server_error();
-
-                        ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
-
-                        return response;
+                    Err(_) => {
+                        return ActionResponseCreator::create_internal_server_error();
                     }
                 };
 
-                let response = ActionResponseCreator::create_from_response_parts(outcoming.parts, Some(data));
-
-                ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
-
-                return response;
+                return ActionResponseCreator::create_from_response_parts(outcoming.parts, Some(data));
             }
             ActionProcessorResult::EntityWorkflowException { entity_workflow_exception: _ } => {
-                let error = ErrorAuditor::new(
-                    BaseError::LogicError { logic_error: LogicError::new(true, "Unreachable state") },
-                    BacktracePart::new(line!(), file!(), None)
-                );
-
-                let response = ActionResponseCreator::create_not_extended();
-
-                ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
-
-                return response;
+                return ActionResponseCreator::create_not_extended();
             }
         }
     }
