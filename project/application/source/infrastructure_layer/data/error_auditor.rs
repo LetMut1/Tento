@@ -35,7 +35,7 @@ impl ErrorAuditor {
 
 impl Display for ErrorAuditor {
     fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
-        writeln!(formatter, "{} >>> {}", &self.backtrace, &self.base_error)?;
+        write!(formatter, "{} > {}", &self.backtrace, &self.base_error)?;
 
         return Ok(());
     }
@@ -58,39 +58,39 @@ impl Display for BaseError {
     fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         match *self {
             Self::InvalidArgumentError => {
-                writeln!(formatter, "Invalid argument.")?;
+                write!(formatter, "invalid argument.")?;
             }
             Self::LogicError { ref logic_error } => {
-                writeln!(formatter, "Logic: {}.", logic_error.message)?;
+                write!(formatter, "logic: {}.", logic_error.message)?;
             }
             Self::RuntimeError { runtime_error: ref run_time_error } => {
                 match *run_time_error {
                     RuntimeError::OtherError { ref other_error } => {
-                        writeln!(formatter, "Runtime, other: {}.", other_error.message.as_str())?;
+                        write!(formatter, "runtime, other: {}.", other_error.message.as_str())?;
                     }
                     RuntimeError::ResourceError { ref resource_error } => {
                         match *resource_error {
                             ResourceError::ConnectionPoolRedisError { ref bb8_redis_error } => {
-                                writeln!(formatter, "Runtime, resource, Redis connection pool : {}.", bb8_redis_error)?;
+                                write!(formatter, "runtime, resource, Redis connection pool : {}.", bb8_redis_error)?;
                             }
                             ResourceError::ConnectionPoolPostgresqlError { ref bb8_postgresql_error } => {
-                                writeln!(formatter, "Runtime, resource, Postgresql connection pool : {}.", bb8_postgresql_error)?;
+                                write!(formatter, "runtime, resource, Postgresql connection pool : {}.", bb8_postgresql_error)?;
                             }
                             ResourceError::EmailServerError { ref email_server_error } => {
                                 match *email_server_error {
                                     EmailServerError::EmailError { ref email_error } => {
-                                        writeln!(formatter, "Runtime, resource, email : {}.", email_error)?;
+                                        write!(formatter, "runtime, resource, email : {}.", email_error)?;
                                     }
                                     EmailServerError::SmtpError { ref smtp_error } => {
-                                        writeln!(formatter, "Runtime, resource, email : {}.", smtp_error)?;
+                                        write!(formatter, "runtime, resource, email : {}.", smtp_error)?;
                                     }
                                 }
                             }
                             ResourceError::PostgresqlError { ref postgresql_error } => {
-                                writeln!(formatter, "Runtime, resource,  Postgresql : {}.", postgresql_error)?;
+                                write!(formatter, "runtime, resource,  Postgresql : {}.", postgresql_error)?;
                             }
                             ResourceError::RedisError { ref redis_error } => {
-                                writeln!(formatter, "Runtime, resource, Redis : {}.", redis_error)?;
+                                write!(formatter, "runtime, resource, Redis : {}.", redis_error)?;
                             }
                         }
                     }
@@ -226,10 +226,10 @@ impl Display for Backtrace {
         for (index, backtrace_part) in self.backtrace_part_registry.iter().enumerate() {
             match backtrace_part.context {
                 Some(ref context) => {
-                    writeln!(formatter, "({}) {}:{} ({}).", index, backtrace_part.file_path, backtrace_part.line_number, context)?;
+                    writeln!(formatter, "({}){}:{} ({}).", index, backtrace_part.file_path, backtrace_part.line_number, context)?;
                 }
                 None => {
-                    writeln!(formatter, "({})  {}:{}.", index, backtrace_part.file_path, backtrace_part.line_number)?;
+                    writeln!(formatter, "({}){}:{}.", index, backtrace_part.file_path, backtrace_part.line_number)?;
                 }
             }
         }
