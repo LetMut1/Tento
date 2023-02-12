@@ -34,8 +34,19 @@ impl ErrorAuditor {
 }
 
 impl Display for ErrorAuditor {
-    fn fmt<'a, 'b>(&'a self, _formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
-        todo!();
+    fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+        for (index, backtrace_part) in self.backtrace.backtrace_part_registry.iter().enumerate() {
+            match backtrace_part.context {
+                Some(ref context) => {
+                    write!(formatter, "{} > {}:{} {} ", index, backtrace_part.file_path, backtrace_part.line_number, context)?;
+                }
+                None => {
+                    write!(formatter, "{} > {}:{}. ", index, backtrace_part.file_path, backtrace_part.line_number)?;
+                }
+            }
+        }
+
+        return Ok(());
     }
 }
 
