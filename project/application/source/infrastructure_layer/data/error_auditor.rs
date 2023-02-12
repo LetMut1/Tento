@@ -35,16 +35,7 @@ impl ErrorAuditor {
 
 impl Display for ErrorAuditor {
     fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
-        for (index, backtrace_part) in self.backtrace.backtrace_part_registry.iter().enumerate() {
-            match backtrace_part.context {
-                Some(ref context) => {
-                    write!(formatter, "{} > {}:{} {} ", index, backtrace_part.file_path, backtrace_part.line_number, context)?;
-                }
-                None => {
-                    write!(formatter, "{} > {}:{}. ", index, backtrace_part.file_path, backtrace_part.line_number)?;
-                }
-            }
-        }
+        write!(formatter, "{} >>> {}", &self.backtrace, &self.base_error)?;
 
         return Ok(());
     }
@@ -65,7 +56,11 @@ pub enum BaseError {
 
 impl Display for BaseError {
     fn fmt<'a, 'b>(&'a self, _formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
-        return Ok(());
+
+
+
+
+        todo!();
     }
 }
 
@@ -81,14 +76,6 @@ impl LogicError {
             unreachable,
             message
         };
-    }
-
-    pub fn get_message<'a>(&'a self) -> &'static str {
-        return self.message;
-    }
-
-    pub fn is_unreachable<'a>(&'a self) -> &'a bool {
-        return &self.unreachable;
     }
 }
 
@@ -127,10 +114,6 @@ impl OtherError {
         return Self {
             message: format!("{}", error)
         };
-    }
-
-    pub fn get_message<'a>(&'a self) -> &'a str {
-        return self.message.as_str();
     }
 }
 
@@ -197,6 +180,23 @@ impl Backtrace {
         self.backtrace_part_registry.push(backtrace_part);
 
         return ();
+    }
+}
+
+impl Display for Backtrace {
+    fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+        for (index, backtrace_part) in self.backtrace_part_registry.iter().enumerate() {
+            match backtrace_part.context {
+                Some(ref context) => {
+                    writeln!(formatter, "({}) {}:{} ({}).", index, backtrace_part.file_path, backtrace_part.line_number, context)?;
+                }
+                None => {
+                    writeln!(formatter, "({})  {}:{}.", index, backtrace_part.file_path, backtrace_part.line_number)?;
+                }
+            }
+        }
+
+        return Ok(());
     }
 }
 
