@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RunTimeError;
+use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
@@ -55,7 +55,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -69,7 +69,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -90,7 +90,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -102,7 +102,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -170,7 +170,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -184,7 +184,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -205,7 +205,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -217,7 +217,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -257,7 +257,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -271,7 +271,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -292,7 +292,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -331,7 +331,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -345,7 +345,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -366,7 +366,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -401,7 +401,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -415,7 +415,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                                 BacktracePart::new(line!(), file!(), None)
                             )
                         );
@@ -458,7 +458,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -470,7 +470,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
         ).await {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -495,7 +495,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -507,7 +507,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
         ).await {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -543,7 +543,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -557,7 +557,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -573,7 +573,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -585,7 +585,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -597,7 +597,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -609,7 +609,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

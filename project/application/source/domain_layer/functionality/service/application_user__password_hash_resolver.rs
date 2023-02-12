@@ -2,7 +2,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::RunTimeError;
+use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::argon2;
 use extern_crate::argon2::Config;
 use extern_crate::uuid::Uuid;
@@ -54,7 +54,7 @@ impl ApplicationUser_PasswordEncoder {      // TODO отрабатывает з�
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -70,7 +70,7 @@ impl ApplicationUser_PasswordEncoder {      // TODO отрабатывает з�
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

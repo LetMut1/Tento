@@ -35,7 +35,7 @@ impl ErrorAuditor {
 
 impl Display for ErrorAuditor {
     fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
-        write!(formatter, "{} >>> {}", &self.backtrace, &self.base_error)?;
+        writeln!(formatter, "{} >>> {}", &self.backtrace, &self.base_error)?;
 
         return Ok(());
     }
@@ -49,18 +49,56 @@ pub enum BaseError {
     LogicError {
         logic_error: LogicError
     },
-    RunTimeError {
-        run_time_error: RunTimeError
+    RuntimeError {
+        runtime_error: RuntimeError
     }
 }
 
 impl Display for BaseError {
-    fn fmt<'a, 'b>(&'a self, _formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+    fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+        match *self {
+            Self::InvalidArgumentError => {
+                writeln!(formatter, "Invalid argument.")?;
+            }
+            Self::LogicError { ref logic_error } => {
+                writeln!(formatter, "Logic: {}.", logic_error.message)?;
+            }
+            Self::RuntimeError { runtime_error: ref run_time_error } => {
+                match *run_time_error {
+                    RuntimeError::OtherError { ref other_error } => {
+                        writeln!(formatter, "Runtime, other: {}.", other_error.message.as_str())?;
+                    }
+                    RuntimeError::ResourceError { ref resource_error } => {
+                        match *resource_error {
+                            ResourceError::ConnectionPoolRedisError { ref bb8_redis_error } => {
+                                writeln!(formatter, "Runtime, resource, Redis connection pool : {}.", bb8_redis_error)?;
+                            }
+                            ResourceError::ConnectionPoolPostgresqlError { ref bb8_postgresql_error } => {
+                                writeln!(formatter, "Runtime, resource, Postgresql connection pool : {}.", bb8_postgresql_error)?;
+                            }
+                            ResourceError::EmailServerError { ref email_server_error } => {
+                                match *email_server_error {
+                                    EmailServerError::EmailError { ref email_error } => {
+                                        writeln!(formatter, "Runtime, resource, email : {}.", email_error)?;
+                                    }
+                                    EmailServerError::SmtpError { ref smtp_error } => {
+                                        writeln!(formatter, "Runtime, resource, email : {}.", smtp_error)?;
+                                    }
+                                }
+                            }
+                            ResourceError::PostgresqlError { ref postgresql_error } => {
+                                writeln!(formatter, "Runtime, resource,  Postgresql : {}.", postgresql_error)?;
+                            }
+                            ResourceError::RedisError { ref redis_error } => {
+                                writeln!(formatter, "Runtime, resource, Redis : {}.", redis_error)?;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-
-
-
-        todo!();
+        return Ok(());
     }
 }
 
@@ -86,7 +124,7 @@ impl Display for LogicError {
 }
 
 #[derive(Debug)]
-pub enum RunTimeError {
+pub enum RuntimeError {
     OtherError {
         other_error: OtherError
     },
@@ -95,7 +133,7 @@ pub enum RunTimeError {
     }
 }
 
-impl Display for RunTimeError {
+impl Display for RuntimeError {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }

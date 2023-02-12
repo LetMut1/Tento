@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::RunTimeError;
+use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::chrono::DateTime;
 use extern_crate::chrono::Duration;
 use extern_crate::chrono::Utc;
@@ -22,7 +22,7 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

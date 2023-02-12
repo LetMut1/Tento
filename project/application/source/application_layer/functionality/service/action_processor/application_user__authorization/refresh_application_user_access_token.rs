@@ -14,7 +14,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RunTimeError;
+use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::ApplicationUserAccessRefreshToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -70,8 +70,8 @@ impl ActionProcessor {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RunTimeError {
-                            run_time_error: RunTimeError::ResourceError {
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
                                 resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error }
                             }
                         },

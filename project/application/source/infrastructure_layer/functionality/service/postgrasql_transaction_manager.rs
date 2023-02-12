@@ -2,7 +2,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RunTimeError;
+use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::tokio_postgres::Client as Connection;
 
 pub struct PostgrasqlTransactionManager;
@@ -35,7 +35,7 @@ impl PostgrasqlTransactionManager {
         if let Err(error) = connection.execute(query.as_str(), &[]).await {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -50,7 +50,7 @@ impl PostgrasqlTransactionManager {
         if let Err(error) = connection.execute(query, &[]).await {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -65,7 +65,7 @@ impl PostgrasqlTransactionManager {
         if let Err(error) = connection.execute(query, &[]).await {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RunTimeError { run_time_error: RunTimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );

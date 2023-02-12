@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::RunTimeError;
+use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -63,7 +63,7 @@ impl ActionProcessingDelegator {
         if let Err(error) = rmp_serde::encode::write(&mut data, &incoming.convertible_data) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                    BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -94,7 +94,7 @@ impl ActionProcessingDelegator {
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
-                            BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                            BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                             BacktracePart::new(line!(), file!(), None)
                         )
                     );
@@ -106,7 +106,7 @@ impl ActionProcessingDelegator {
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
-                            BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                            BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                             BacktracePart::new(line!(), file!(), None)
                         )
                     );

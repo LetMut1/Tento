@@ -9,7 +9,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::RunTimeError;
+use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
 use crate::presentation_layer::functionality::service::action_round_logger::ActionRoundLogger;
@@ -64,7 +64,7 @@ where
         Ok(bytes_) => bytes_,
         Err(error) => {
             let error_ = ErrorAuditor::new(
-                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                 BacktracePart::new(line!(), file!(), None)
             );
 
@@ -80,7 +80,7 @@ where
         Ok(incoming_) => incoming_,
         Err(error) => {
             let error_ = ErrorAuditor::new(
-                BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                 BacktracePart::new(line!(), file!(), None)
             );
 
@@ -114,7 +114,7 @@ where
                 Ok(data_) => data_,
                 Err(error) => {
                     let error_ = ErrorAuditor::new(
-                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                         BacktracePart::new(line!(), file!(), None)
                     );
 
@@ -143,7 +143,7 @@ where
                                 Ok(data_) => data_,
                                 Err(error) => {
                                     let error_ = ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     );
 
@@ -168,7 +168,7 @@ where
                                 Ok(data_) => data_,
                                 Err(error) => {
                                     let error_ = ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     );
 
@@ -193,7 +193,7 @@ where
                                 Ok(data_) => data_,
                                 Err(error) => {
                                     let error_ = ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     );
 
@@ -218,7 +218,7 @@ where
                                 Ok(data_) => data_,
                                 Err(error) => {
                                     let error_ = ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     );
 
@@ -243,7 +243,7 @@ where
                                 Ok(data_) => data_,
                                 Err(error) => {
                                     let error_ = ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     );
 
@@ -284,7 +284,7 @@ where
                                 Ok(data_) => data_,
                                 Err(error) => {
                                     let error_ = ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     );
 
@@ -309,7 +309,7 @@ where
                                 Ok(data_) => data_,
                                 Err(error) => {
                                     let error_ = ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     );
 
@@ -334,7 +334,7 @@ where
                                 Ok(data_) => data_,
                                 Err(error) => {
                                     let error_ = ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     );
 
@@ -359,7 +359,7 @@ where
                                 Ok(data_) => data_,
                                 Err(error) => {
                                     let error_ = ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     );
 
@@ -384,7 +384,7 @@ where
                                 Ok(data_) => data_,
                                 Err(error) => {
                                     let error_ = ErrorAuditor::new(
-                                        BaseError::RunTimeError { run_time_error: RunTimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                         BacktracePart::new(line!(), file!(), None)
                                     );
 
