@@ -9,7 +9,6 @@ pub mod application_user_registration_token;
 pub mod application_user_reset_password_token;
 pub mod application_user_subscription;
 pub mod application_user;
-pub mod channel_direct_message_publication;
 pub mod channel_feed_publication_mark;
 pub mod channel_feed_publication_reaction;
 pub mod channel_feed_publication;

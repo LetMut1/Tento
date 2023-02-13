@@ -1,1 +1,0 @@
-DROP TABLE public.channel_direct_message_publication;
