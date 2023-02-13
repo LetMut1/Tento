@@ -104,14 +104,12 @@ impl Display for BaseError {
 
 #[derive(Debug)]
 pub struct LogicError {
-    unreachable: bool,
-    message: &'static str,
+    message: &'static str
 }
 
 impl LogicError {
-    pub fn new(unreachable: bool, message: &'static str) -> Self {
+    pub fn new(message: &'static str) -> Self {
         return Self {
-            unreachable,
             message
         };
     }

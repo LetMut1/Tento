@@ -70,7 +70,7 @@ impl RunServerProcessor {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "The directory does not exist.") },
+                        BaseError::LogicError { logic_error: LogicError::new("The directory does not exist.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -123,7 +123,7 @@ impl RunServerProcessor {
                 } else {
                     return Err(
                         ErrorAuditor::new(
-                            BaseError::LogicError { logic_error: LogicError::new(false, "Any ....env files does not exist.") },
+                            BaseError::LogicError { logic_error: LogicError::new("Any ....env files does not exist.") },
                             BacktracePart::new(line!(), file!(), None)
                         )
                     );
@@ -162,7 +162,7 @@ impl RunServerProcessor {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "Invalid socket address.") },
+                        BaseError::LogicError { logic_error: LogicError::new("Invalid socket address.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -339,7 +339,7 @@ impl RunServerProcessor {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "Invalid socket address.") },
+                        BaseError::LogicError { logic_error: LogicError::new("Invalid socket address.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

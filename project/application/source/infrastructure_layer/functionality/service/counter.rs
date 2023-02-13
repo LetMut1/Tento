@@ -31,7 +31,7 @@ impl Counter<i16> {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "Out of range for `i16` type.") },
+                        BaseError::LogicError { logic_error: LogicError::new("Out of range for `i16` type.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

@@ -70,7 +70,7 @@ impl ApplicationUser_PostgresqlRepository {
         if row_registry.is_empty() {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be inserted into Postgresql database.") },
+                    BaseError::LogicError { logic_error: LogicError::new("ApplicationUser can not be inserted into Postgresql database.") },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -174,7 +174,7 @@ impl ApplicationUser_PostgresqlRepository {
         if row_registry.is_empty() {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUser can not be updated in Postgresql database.") },
+                    BaseError::LogicError { logic_error: LogicError::new("ApplicationUser can not be updated in Postgresql database.") },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );

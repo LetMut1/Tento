@@ -260,7 +260,7 @@ where
                         }
                         _ => {
                             let error = ErrorAuditor::new(
-                                BaseError::LogicError { logic_error: LogicError::new(true, "Unreachable state") },
+                                BaseError::LogicError { logic_error: LogicError::new("Unreachable state") },
                                 BacktracePart::new(line!(), file!(), None)
                             );
 
@@ -274,7 +274,7 @@ where
                 }
                 _ => {
                     let error = ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(true, "Unreachable state") },
+                        BaseError::LogicError { logic_error: LogicError::new("Unreachable state") },
                         BacktracePart::new(line!(), file!(), None)
                     );
 

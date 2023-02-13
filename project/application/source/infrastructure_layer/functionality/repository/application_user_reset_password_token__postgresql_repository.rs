@@ -71,7 +71,7 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
         if row_registry.is_empty() {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserResetPasswordToken can not be inserted into Postgresql database.") },
+                    BaseError::LogicError { logic_error: LogicError::new("ApplicationUserResetPasswordToken can not be inserted into Postgresql database.") },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -171,7 +171,7 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
             if row_registry.is_empty() {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserResetPasswordToken can not be updated in Postgresql database.") },
+                        BaseError::LogicError { logic_error: LogicError::new("ApplicationUserResetPasswordToken can not be updated in Postgresql database.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -243,7 +243,7 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
             if row_registry.is_empty() {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "ApplicationUserResetPasswordToken can not be updated in Postgresql database.") },
+                        BaseError::LogicError { logic_error: LogicError::new("ApplicationUserResetPasswordToken can not be updated in Postgresql database.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

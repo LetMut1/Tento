@@ -42,7 +42,7 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "Too big date must not be added.") },
+                        BaseError::LogicError { logic_error: LogicError::new("Too big date must not be added.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -79,7 +79,7 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "Too big quantity of minutes must not be added.") },
+                        BaseError::LogicError { logic_error: LogicError::new("Too big quantity of minutes must not be added.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -93,7 +93,7 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new(false, "Too big quantity of minutes must not be added.") },
+                        BaseError::LogicError { logic_error: LogicError::new("Too big quantity of minutes must not be added.") },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
