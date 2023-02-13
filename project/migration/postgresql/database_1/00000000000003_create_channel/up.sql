@@ -9,7 +9,7 @@ IMMUTABLE;
 
 CREATE TABLE public.channel (
     id BIGINT,
-    application_user_channel_administrator_id BIGINT,
+    application_user_id BIGINT,
     name TEXT,
     personalization_image_path TEXT,
     description TEXT,
@@ -42,7 +42,7 @@ USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items
 
 ALTER TABLE ONLY public.channel
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN application_user_channel_administrator_id SET NOT NULL,
+ALTER COLUMN application_user_id SET NOT NULL,
 ALTER COLUMN name SET DATA TYPE TEXT COLLATE "C",
 ALTER COLUMN name SET NOT NULL,
 ALTER COLUMN personalization_image_path SET NOT NULL,
@@ -54,12 +54,9 @@ ALTER COLUMN reactions_quantity SET NOT NULL,
 ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel7 PRIMARY KEY USING INDEX channel2,
-ADD CONSTRAINT channel8 FOREIGN KEY (application_user_channel_administrator_id)
-REFERENCES public.application_user_channel_administrator (id) ON DELETE RESTRICT,
+ADD CONSTRAINT channel8 FOREIGN KEY (application_user_id)
+REFERENCES public.application_user (id) ON DELETE RESTRICT,
 ADD CONSTRAINT channel9 UNIQUE USING INDEX channel3,
 ADD CONSTRAINT channel10 UNIQUE USING INDEX channel6;
 
-
---  // TODO Аккаунт public.application_user_channel_administrator(id) не удалять, пока есть channel__owner_application_user_channel_administrator_id__foreign_key.
---  либо заставлять сначала удалить все паблики вручную.
-  -- // TODO Оффет делаем как (where id < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод)
+-- // TODO Оффет делаем как (where id < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод)

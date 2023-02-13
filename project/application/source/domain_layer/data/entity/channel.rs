@@ -1,6 +1,6 @@
 pub struct Channel {    // TODO НАПРАВЛЕННОСТЬБ
     id: i64,
-    application_user_channel_administrator_id: i64,
+    application_user_id: i64,
     name: String,
     personalization_image_path: String,
     description: Option<String>,
@@ -16,7 +16,7 @@ pub struct Channel {    // TODO НАПРАВЛЕННОСТЬБ
 impl Channel {
     pub fn new(
         id: i64,
-        application_user_channel_administrator_id: i64,
+        application_user_id: i64,
         name: String,
         personalization_image_path: String,
         description: Option<String>,
@@ -30,7 +30,7 @@ impl Channel {
     ) -> Self {
         return Self {
             id,
-            application_user_channel_administrator_id,
+            application_user_id,
             name,
             personalization_image_path,
             description,
@@ -48,8 +48,8 @@ impl Channel {
         return self.id;
     }
 
-    pub fn get_application_user_channel_administrator_id<'a>(&'a self) -> i64 {
-        return self.application_user_channel_administrator_id;
+    pub fn get_application_user_id<'a>(&'a self) -> i64 {
+        return self.application_user_id;
     }
 
     pub fn get_name<'a>(&'a self) -> &'a str {

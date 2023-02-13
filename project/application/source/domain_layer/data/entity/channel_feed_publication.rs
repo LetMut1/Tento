@@ -1,7 +1,7 @@
 pub struct ChannelFeedPublication {
     id: i64,
     channel_id: i64,
-    application_user_channel_administrator_id: i64,
+    application_user_id: i64,
     content_type: u8,
     content_type_component: String,
     content_type_component_preview: String,
@@ -20,7 +20,7 @@ impl ChannelFeedPublication {
     pub fn new(
         id: i64,
         channel_id: i64,
-        application_user_channel_administrator_id: i64,
+        application_user_id: i64,
         content_type: u8,
         content_type_component: String,
         content_type_component_preview: String,
@@ -36,7 +36,7 @@ impl ChannelFeedPublication {
         return Self {
             id,
             channel_id,
-            application_user_channel_administrator_id,
+            application_user_id,
             content_type,
             content_type_component,
             content_type_component_preview,
@@ -59,8 +59,8 @@ impl ChannelFeedPublication {
         return self.channel_id;
     }
 
-    pub fn get_application_user_channel_administrator_id<'a>(&'a self) -> i64 {
-        return self.application_user_channel_administrator_id;
+    pub fn get_application_user_id<'a>(&'a self) -> i64 {
+        return self.application_user_id;
     }
 
     pub fn get_content_type<'a>(&'a self) -> u8 {
