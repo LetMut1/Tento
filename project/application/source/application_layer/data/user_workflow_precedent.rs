@@ -1,27 +1,27 @@
 #[allow(non_snake_case)]
-pub enum EntityWorkflowException {
+pub enum UserWorkflowPrecedent {
     ApplicationUser {
-        application_user__workflow_exception: ApplicationUser_WorkflowException
+        application_user__precedent: ApplicationUser_Precedent
     },
     ApplicationUserAuthorizationToken {
-        application_user_authorization_token__workflow_exception: ApplicationUserAuthorizationToken_WorkflowException
+        application_user_authorization_token__precedent: ApplicationUserAuthorizationToken_Precedent
     },
     ApplicationUserRegistrationToken {
-        application_user_registration_token__workflow_exception: ApplicationUserRegistrationToken_WorkflowException
+        application_user_registration_token__precedent: ApplicationUserRegistrationToken_Precedent
     },
     ApplicationUserResetPasswordToken {
-        application_user_reset_password_token__workflow_exception: ApplicationUserResetPasswordToken_WorkflowException
+        application_user_reset_password_token__precedent: ApplicationUserResetPasswordToken_Precedent
     },
     ApplicationUserAccessToken {
-        application_user_access_token__workflow_exception: ApplicationUserAccessToken_WorkflowException
+        application_user_access_token__precedent: ApplicationUserAccessToken_Precedent
     },
     ApplicationUserAccessRefreshToken {
-        application_user_access_refresh_token__workflow_exception: ApplicationUserAccessRefreshToken_WorkflowException
+        application_user_access_refresh_token__precedent: ApplicationUserAccessRefreshToken_Precedent
     }
 }
 
 #[allow(non_camel_case_types)]
-pub enum ApplicationUser_WorkflowException {
+pub enum ApplicationUser_Precedent {
     EmailAlreadyExist,
     InvalidEmail,
     InvalidNickname,
@@ -32,14 +32,14 @@ pub enum ApplicationUser_WorkflowException {
 }
 
 #[allow(non_camel_case_types)]
-pub enum ApplicationUserAccessRefreshToken_WorkflowException {
+pub enum ApplicationUserAccessRefreshToken_Precedent {
     AlreadyExpired,
     NotFound,
     WrongDeserializedForm
 }
 
 #[allow(non_camel_case_types)]
-pub enum ApplicationUserAccessToken_WorkflowException {
+pub enum ApplicationUserAccessToken_Precedent {
     AlreadyExpired,
     InApplicationUserAccessTokenBlackList,
     NotExpired,
@@ -47,7 +47,7 @@ pub enum ApplicationUserAccessToken_WorkflowException {
 }
 
 #[allow(non_camel_case_types)]
-pub enum ApplicationUserAuthorizationToken_WorkflowException {
+pub enum ApplicationUserAuthorizationToken_Precedent {
     AlreadyExpired,
     InvalidValue,
     NotFound,
@@ -55,7 +55,7 @@ pub enum ApplicationUserAuthorizationToken_WorkflowException {
 }
 
 #[allow(non_camel_case_types)]
-pub enum ApplicationUserRegistrationToken_WorkflowException {
+pub enum ApplicationUserRegistrationToken_Precedent {
     AlreadyApproved,
     AlreadyExpired,
     InvalidValue,
@@ -65,7 +65,7 @@ pub enum ApplicationUserRegistrationToken_WorkflowException {
 }
 
 #[allow(non_camel_case_types)]
-pub enum ApplicationUserResetPasswordToken_WorkflowException {
+pub enum ApplicationUserResetPasswordToken_Precedent {
     AlreadyApproved,
     AlreadyExpired,
     InvalidValue,

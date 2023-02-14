@@ -112,7 +112,7 @@ impl WrappedEncodingProtocolActionCreator {
 
                 return ActionResponseCreator::create_from_response_parts(outcoming.parts, Some(data));
             }
-            ActionProcessorResult::EntityWorkflowException { entity_workflow_exception: _ } => {
+            ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: _ } => {
                 return ActionResponseCreator::create_not_extended();
             }
         }

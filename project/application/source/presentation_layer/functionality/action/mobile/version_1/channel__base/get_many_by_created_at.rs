@@ -1,6 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserAccessToken_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUserAccessToken_Precedent;
+use crate::application_layer::data::user_workflow_precedent::UserWorkflowPrecedent;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_created_at::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_created_at::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -192,11 +192,11 @@ where
 
             return response;
         }
-        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
-            match entity_workflow_exception {
-                EntityWorkflowException::ApplicationUserAccessToken { application_user_access_token__workflow_exception } => {
-                    match application_user_access_token__workflow_exception {
-                        ApplicationUserAccessToken_WorkflowException::AlreadyExpired => {
+        ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
+            match user_workflow_precedent {
+                UserWorkflowPrecedent::ApplicationUserAccessToken { application_user_access_token__precedent } => {
+                    match application_user_access_token__precedent {
+                        ApplicationUserAccessToken_Precedent::AlreadyExpired => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED)
                             ) {
@@ -238,7 +238,7 @@ where
 
                             return response;
                         }
-                        ApplicationUserAccessToken_WorkflowException::WrongDeserializedForm => {
+                        ApplicationUserAccessToken_Precedent::WrongDeserializedForm => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__WRONG_DESERIALIZED_FORM)
                             ) {
@@ -280,7 +280,7 @@ where
 
                             return response;
                         }
-                        ApplicationUserAccessToken_WorkflowException::InApplicationUserAccessTokenBlackList => {
+                        ApplicationUserAccessToken_Precedent::InApplicationUserAccessTokenBlackList => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST)
                             ) {

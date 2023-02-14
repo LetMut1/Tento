@@ -1,6 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserAuthorizationToken_WorkflowException;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUser_Precedent;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUserAuthorizationToken_Precedent;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -64,12 +64,12 @@ impl ActionProcessor {
         let application_user_authorization_token_ = match application_user_authorization_token {
             Some(application_user_authorization_token__) => application_user_authorization_token__,
             None => {
-                return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::NotFound));
+                return Ok(ActionProcessorResult::application_user_authorization_token__precedent(ApplicationUserAuthorizationToken_Precedent::NotFound));
             }
         };
 
         if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
-            return Ok(ActionProcessorResult::application_user_authorization_token__workflow_exception(ApplicationUserAuthorizationToken_WorkflowException::AlreadyExpired));
+            return Ok(ActionProcessorResult::application_user_authorization_token__precedent(ApplicationUserAuthorizationToken_Precedent::AlreadyExpired));
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -97,7 +97,7 @@ impl ActionProcessor {
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
-                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
+                return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::NotFound));
             }
         };
 

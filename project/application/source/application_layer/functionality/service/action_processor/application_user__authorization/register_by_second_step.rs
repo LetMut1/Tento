@@ -1,6 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserRegistrationToken_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUserRegistrationToken_Precedent;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUser_Precedent;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
@@ -46,7 +46,7 @@ impl ActionProcessor {
             }
         };
         if !is_valid_email {
-            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidEmail));
+            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::InvalidEmail));
         }
 
         let is_valid_value = match ApplicationUserRegistrationToken_Validator::is_valid_value(incoming.application_user_registration_token_value.as_str()) {
@@ -58,7 +58,7 @@ impl ActionProcessor {
             }
         };
         if !is_valid_value {
-            return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::InvalidValue));
+            return Ok(ActionProcessorResult::application_user_registration_token__precedent(ApplicationUserRegistrationToken_Precedent::InvalidValue));
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -87,16 +87,16 @@ impl ActionProcessor {
         let mut application_user_registration_token_ = match application_user_registration_token {
             Some(application_user_registration_token__) => application_user_registration_token__,
             None => {
-                return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::NotFound));
+                return Ok(ActionProcessorResult::application_user_registration_token__precedent(ApplicationUserRegistrationToken_Precedent::NotFound));
             }
         };
 
         if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
-            return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::AlreadyExpired));
+            return Ok(ActionProcessorResult::application_user_registration_token__precedent(ApplicationUserRegistrationToken_Precedent::AlreadyExpired));
         }
 
         if !application_user_registration_token_.get_is_approved() {
-            return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::AlreadyApproved));
+            return Ok(ActionProcessorResult::application_user_registration_token__precedent(ApplicationUserRegistrationToken_Precedent::AlreadyApproved));
         }
 
         if application_user_registration_token_.get_value().as_bytes() != incoming.application_user_registration_token_value.as_bytes() {
@@ -126,7 +126,7 @@ impl ActionProcessor {
                 }
             }
 
-            return Ok(ActionProcessorResult::application_user_registration_token__workflow_exception(ApplicationUserRegistrationToken_WorkflowException::WrongValue));
+            return Ok(ActionProcessorResult::application_user_registration_token__precedent(ApplicationUserRegistrationToken_Precedent::WrongValue));
         }
 
         application_user_registration_token_.set_is_approved(true);

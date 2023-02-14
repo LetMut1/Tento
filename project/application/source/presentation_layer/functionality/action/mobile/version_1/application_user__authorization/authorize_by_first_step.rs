@@ -1,6 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUser_Precedent;
+use crate::application_layer::data::user_workflow_precedent::UserWorkflowPrecedent;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_first_step::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_first_step::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -184,14 +184,14 @@ where
 
             return response;
         }
-        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
-            match entity_workflow_exception {
-                EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
-                    match application_user__workflow_exception {
-                        ApplicationUser_WorkflowException::InvalidNickname |
-                        ApplicationUser_WorkflowException::InvalidPassword |
-                        ApplicationUser_WorkflowException::NotFound |
-                        ApplicationUser_WorkflowException::WrongPassword => {
+        ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
+            match user_workflow_precedent {
+                UserWorkflowPrecedent::ApplicationUser { application_user__precedent } => {
+                    match application_user__precedent {
+                        ApplicationUser_Precedent::InvalidNickname |
+                        ApplicationUser_Precedent::InvalidPassword |
+                        ApplicationUser_Precedent::NotFound |
+                        ApplicationUser_Precedent::WrongPassword => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD)
                             ) {

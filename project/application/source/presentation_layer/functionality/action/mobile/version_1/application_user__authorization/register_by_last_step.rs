@@ -1,7 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserRegistrationToken_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUserRegistrationToken_Precedent;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUser_Precedent;
+use crate::application_layer::data::user_workflow_precedent::UserWorkflowPrecedent;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::register_by_last_step::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::register_by_last_step::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -185,11 +185,11 @@ where
 
             return response;
         }
-        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
-            match entity_workflow_exception {
-                EntityWorkflowException::ApplicationUser { application_user__workflow_exception } => {
-                    match application_user__workflow_exception {
-                        ApplicationUser_WorkflowException::InvalidPassword => {
+        ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
+            match user_workflow_precedent {
+                UserWorkflowPrecedent::ApplicationUser { application_user__precedent } => {
+                    match application_user__precedent {
+                        ApplicationUser_Precedent::InvalidPassword => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_PASSWORD)
                             ) {
@@ -231,7 +231,7 @@ where
 
                             return response;
                         }
-                        ApplicationUser_WorkflowException::InvalidNickname => {
+                        ApplicationUser_Precedent::InvalidNickname => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_NICKNAME)
                             ) {
@@ -273,7 +273,7 @@ where
 
                             return response;
                         }
-                        ApplicationUser_WorkflowException::InvalidEmail => {
+                        ApplicationUser_Precedent::InvalidEmail => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL)
                             ) {
@@ -315,7 +315,7 @@ where
 
                             return response;
                         }
-                        ApplicationUser_WorkflowException::NicknameAlreadyExist => {
+                        ApplicationUser_Precedent::NicknameAlreadyExist => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__NICKNAME_ALREADY_EXIST)
                             ) {
@@ -357,7 +357,7 @@ where
 
                             return response;
                         }
-                        ApplicationUser_WorkflowException::EmailAlreadyExist => {
+                        ApplicationUser_Precedent::EmailAlreadyExist => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__EMAIL_ALREADY_EXIST)
                             ) {
@@ -422,9 +422,9 @@ where
                         }
                     }
                 }
-                EntityWorkflowException::ApplicationUserRegistrationToken { application_user_registration_token__workflow_exception } => {
-                    match application_user_registration_token__workflow_exception {
-                        ApplicationUserRegistrationToken_WorkflowException::InvalidValue => {
+                UserWorkflowPrecedent::ApplicationUserRegistrationToken { application_user_registration_token__precedent } => {
+                    match application_user_registration_token__precedent {
+                        ApplicationUserRegistrationToken_Precedent::InvalidValue => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE)
                             ) {
@@ -466,7 +466,7 @@ where
 
                             return response;
                         }
-                        ApplicationUserRegistrationToken_WorkflowException::NotFound => {
+                        ApplicationUserRegistrationToken_Precedent::NotFound => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND)
                             ) {
@@ -508,7 +508,7 @@ where
 
                             return response;
                         }
-                        ApplicationUserRegistrationToken_WorkflowException::AlreadyExpired => {
+                        ApplicationUserRegistrationToken_Precedent::AlreadyExpired => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED)
                             ) {
@@ -550,7 +550,7 @@ where
 
                             return response;
                         }
-                        ApplicationUserRegistrationToken_WorkflowException::IsNotApproved => {
+                        ApplicationUserRegistrationToken_Precedent::IsNotApproved => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__IS_NOT_APPROVED)
                             ) {
@@ -592,7 +592,7 @@ where
 
                             return response;
                         }
-                        ApplicationUserRegistrationToken_WorkflowException::WrongValue => {
+                        ApplicationUserRegistrationToken_Precedent::WrongValue => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE)
                             ) {

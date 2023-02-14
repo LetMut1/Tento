@@ -1,6 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserResetPasswordToken_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::EntityWorkflowException;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUserResetPasswordToken_Precedent;
+use crate::application_layer::data::user_workflow_precedent::UserWorkflowPrecedent;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::reset_password_by_second_step::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::reset_password_by_second_step::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -182,11 +182,11 @@ where
 
             return response;
         }
-        ActionProcessorResult::EntityWorkflowException { entity_workflow_exception } => {
-            match entity_workflow_exception {
-                EntityWorkflowException::ApplicationUserResetPasswordToken { application_user_reset_password_token__workflow_exception } => {
-                    match application_user_reset_password_token__workflow_exception {
-                        ApplicationUserResetPasswordToken_WorkflowException::InvalidValue => {
+        ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
+            match user_workflow_precedent {
+                UserWorkflowPrecedent::ApplicationUserResetPasswordToken { application_user_reset_password_token__precedent } => {
+                    match application_user_reset_password_token__precedent {
+                        ApplicationUserResetPasswordToken_Precedent::InvalidValue => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__INVALID_VALUE)
                             ) {
@@ -228,7 +228,7 @@ where
 
                             return response;
                         }
-                        ApplicationUserResetPasswordToken_WorkflowException::NotFound => {
+                        ApplicationUserResetPasswordToken_Precedent::NotFound => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND)
                             ) {
@@ -270,7 +270,7 @@ where
 
                             return response;
                         }
-                        ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired => {
+                        ApplicationUserResetPasswordToken_Precedent::AlreadyExpired => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED)
                             ) {
@@ -312,7 +312,7 @@ where
 
                             return response;
                         }
-                        ApplicationUserResetPasswordToken_WorkflowException::AlreadyApproved => {
+                        ApplicationUserResetPasswordToken_Precedent::AlreadyApproved => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED)
                             ) {
@@ -354,7 +354,7 @@ where
 
                             return response;
                         }
-                        ApplicationUserResetPasswordToken_WorkflowException::WrongValue => {
+                        ApplicationUserResetPasswordToken_Precedent::WrongValue => {
                             let data = match rmp_serde::to_vec(
                                 &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE)
                             ) {

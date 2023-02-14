@@ -1,6 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUserResetPasswordToken_WorkflowException;
-use crate::application_layer::data::entity_workflow_exception::ApplicationUser_WorkflowException;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUserResetPasswordToken_Precedent;
+use crate::application_layer::data::user_workflow_precedent::ApplicationUser_Precedent;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
@@ -55,10 +55,10 @@ impl ActionProcessor {
             }
         };
         if !is_valid_value {
-            return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::InvalidValue));
+            return Ok(ActionProcessorResult::application_user_reset_password_token__precedent(ApplicationUserResetPasswordToken_Precedent::InvalidValue));
         }
         if ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
-            return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::InvalidPassword));
+            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::InvalidPassword));
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -87,16 +87,16 @@ impl ActionProcessor {
         let mut application_user_reset_password_token_ = match application_user_reset_password_token {
             Some(application_user_reset_password_token__) => application_user_reset_password_token__,
             None => {
-                return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::NotFound));
+                return Ok(ActionProcessorResult::application_user_reset_password_token__precedent(ApplicationUserResetPasswordToken_Precedent::NotFound));
             }
         };
 
         if !ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
-            return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::AlreadyExpired));
+            return Ok(ActionProcessorResult::application_user_reset_password_token__precedent(ApplicationUserResetPasswordToken_Precedent::AlreadyExpired));
         }
 
         if !application_user_reset_password_token_.get_is_approved() {
-            return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::IsNotApproved));
+            return Ok(ActionProcessorResult::application_user_reset_password_token__precedent(ApplicationUserResetPasswordToken_Precedent::IsNotApproved));
         }
 
         if application_user_reset_password_token_.get_value() != incoming.application_user_reset_password_token_value.as_str() {
@@ -126,7 +126,7 @@ impl ActionProcessor {
                 }
             }
 
-            return Ok(ActionProcessorResult::application_user_reset_password_token__workflow_exception(ApplicationUserResetPasswordToken_WorkflowException::WrongValue));
+            return Ok(ActionProcessorResult::application_user_reset_password_token__precedent(ApplicationUserResetPasswordToken_Precedent::WrongValue));
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -153,7 +153,7 @@ impl ActionProcessor {
         let mut application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
-                return Ok(ActionProcessorResult::application_user__workflow_exception(ApplicationUser_WorkflowException::NotFound));
+                return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::NotFound));
             }
         };
 
