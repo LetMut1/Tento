@@ -317,7 +317,16 @@ where
 
                             let response = ActionResponseCreator::create_not_extended();
 
-                            ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await;
+                            if let Err(mut error_) = ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await {
+                                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error,
+                                    &error_
+                                );
+                            }
 
                             return response;
                         }
@@ -331,7 +340,16 @@ where
 
                     let response = ActionResponseCreator::create_not_extended();
 
-                    ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await;
+                    if let Err(mut error_) = ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await {
+                        error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        unreachable!(
+                            "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                            process does not wait for another write process, and writes immediately.",
+                            &error,
+                            &error_
+                        );
+                    }
 
                     return response;
                 }
