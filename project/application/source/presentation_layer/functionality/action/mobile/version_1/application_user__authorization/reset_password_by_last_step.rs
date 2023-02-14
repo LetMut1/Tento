@@ -49,7 +49,7 @@ where
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
     if !RequestHeaderChecker::is_valid(&request) {
-        let error = ErrorAuditor::new(BaseError::InvalidArgumentError, BacktracePart::new(line!(), file!(), None));
+        let error = ErrorAuditor::new(BaseError::LogicError { logic_error: LogicError::new("TODOQWERTY") },BacktracePart::new(line!(), file!(), None));
 
         let response = ActionResponseCreator::create_bad_request();
 
@@ -57,7 +57,7 @@ where
             error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             unreachable!(
-                "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                 process does not wait for another write process, and writes immediately.",
                 &error,
                 &error_
@@ -81,7 +81,7 @@ where
                 error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 unreachable!(
-                    "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                     process does not wait for another write process, and writes immediately.",
                     &error_,
                     &error__
@@ -106,7 +106,7 @@ where
                 error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 unreachable!(
-                    "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                     process does not wait for another write process, and writes immediately.",
                     &error_,
                     &error__
@@ -122,16 +122,13 @@ where
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {
-            let response = match *error.get_base_error() {
-                BaseError::InvalidArgumentError => ActionResponseCreator::create_bad_request(),
-                _ => ActionResponseCreator::create_internal_server_error()
-            };
+            let response = ActionResponseCreator::create_internal_server_error();
 
             if let Err(mut error_) = ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await {
                 error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 unreachable!(
-                    "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                     process does not wait for another write process, and writes immediately.",
                     &error,
                     &error_
@@ -158,7 +155,7 @@ where
                         error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         unreachable!(
-                            "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                             process does not wait for another write process, and writes immediately.",
                             &error_,
                             &error__
@@ -175,7 +172,7 @@ where
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 unreachable!(
-                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                    "{}. TODO: Write in concurrent way. It is also necessary that the write
                     process does not wait for another write process, and writes immediately.",
                     &error
                 );
@@ -204,7 +201,7 @@ where
                                         error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                         unreachable!(
-                                            "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                                             process does not wait for another write process, and writes immediately.",
                                             &error_,
                                             &error__
@@ -221,7 +218,7 @@ where
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
-                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    "{}. TODO: Write in concurrent way. It is also necessary that the write
                                     process does not wait for another write process, and writes immediately.",
                                     &error
                                 );
@@ -246,7 +243,7 @@ where
                                         error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                         unreachable!(
-                                            "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                                             process does not wait for another write process, and writes immediately.",
                                             &error_,
                                             &error__
@@ -263,7 +260,7 @@ where
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
-                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    "{}. TODO: Write in concurrent way. It is also necessary that the write
                                     process does not wait for another write process, and writes immediately.",
                                     &error
                                 );
@@ -283,7 +280,7 @@ where
                                 error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
-                                    "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                                     process does not wait for another write process, and writes immediately.",
                                     &error,
                                     &error_
@@ -314,7 +311,7 @@ where
                                         error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                         unreachable!(
-                                            "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                                             process does not wait for another write process, and writes immediately.",
                                             &error_,
                                             &error__
@@ -331,7 +328,7 @@ where
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
-                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    "{}. TODO: Write in concurrent way. It is also necessary that the write
                                     process does not wait for another write process, and writes immediately.",
                                     &error
                                 );
@@ -356,7 +353,7 @@ where
                                         error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                         unreachable!(
-                                            "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                                             process does not wait for another write process, and writes immediately.",
                                             &error_,
                                             &error__
@@ -373,7 +370,7 @@ where
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
-                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    "{}. TODO: Write in concurrent way. It is also necessary that the write
                                     process does not wait for another write process, and writes immediately.",
                                     &error
                                 );
@@ -398,7 +395,7 @@ where
                                         error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                         unreachable!(
-                                            "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                                             process does not wait for another write process, and writes immediately.",
                                             &error_,
                                             &error__
@@ -415,7 +412,7 @@ where
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
-                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    "{}. TODO: Write in concurrent way. It is also necessary that the write
                                     process does not wait for another write process, and writes immediately.",
                                     &error
                                 );
@@ -440,7 +437,7 @@ where
                                         error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                         unreachable!(
-                                            "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                                             process does not wait for another write process, and writes immediately.",
                                             &error_,
                                             &error__
@@ -457,7 +454,7 @@ where
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
-                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    "{}. TODO: Write in concurrent way. It is also necessary that the write
                                     process does not wait for another write process, and writes immediately.",
                                     &error
                                 );
@@ -482,7 +479,7 @@ where
                                         error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                         unreachable!(
-                                            "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                                             process does not wait for another write process, and writes immediately.",
                                             &error_,
                                             &error__
@@ -499,7 +496,7 @@ where
                                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
-                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    "{}. TODO: Write in concurrent way. It is also necessary that the write
                                     process does not wait for another write process, and writes immediately.",
                                     &error
                                 );
@@ -519,7 +516,7 @@ where
                                 error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
-                                    "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                                     process does not wait for another write process, and writes immediately.",
                                     &error,
                                     &error_
@@ -542,7 +539,7 @@ where
                         error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         unreachable!(
-                            "{} ({}). TODO: Write in concurent way. It is also necessary that the write
+                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                             process does not wait for another write process, and writes immediately.",
                             &error,
                             &error_

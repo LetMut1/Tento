@@ -81,14 +81,14 @@ impl ActionProcessor {
             limit = Self::LIMIT_MINIMUM_VALUE;
         }
 
-        if !OrderConventionResolver::can_convert(incoming.order) {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::InvalidArgumentError,
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
+        // if !OrderConventionResolver::can_convert(incoming.order) {
+        //     return Err(
+        //         ErrorAuditor::new(
+        //             BaseError::InvalidArgumentError,
+        //             BacktracePart::new(line!(), file!(), None)
+        //         )
+        //     );
+        // }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
             Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,

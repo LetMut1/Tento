@@ -45,7 +45,6 @@ impl Error for ErrorAuditor {}
 
 #[derive(Debug)]
 pub enum BaseError {
-    InvalidArgumentError,
     LogicError {
         logic_error: LogicError
     },
@@ -57,10 +56,6 @@ pub enum BaseError {
 impl Display for BaseError {
     fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         match *self {
-            Self::InvalidArgumentError => {
-                todo!(); // TODO вот здесь ref, по идее
-                write!(formatter, "Invalid argument.")?;
-            }
             Self::LogicError { ref logic_error } => {
                 write!(formatter, "Logic: {}.", logic_error.message)?;
             }

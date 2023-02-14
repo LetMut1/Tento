@@ -274,17 +274,9 @@ impl Channel_PostgresqlRepository {
             if OrderConventionResolver::is_asc(order) {
                 query += " AND c.created_at > $";
             } else {
-                if OrderConventionResolver::is_desc(order) {
-                    query += " AND c.created_at < $";
-                } else {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::InvalidArgumentError,
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
+                query += " AND c.created_at < $";
             }
+
             counter_value = match counter.get_next_value() {
                 Ok(counter_value_) => counter_value_,
                 Err(mut error) => {
@@ -293,6 +285,7 @@ impl Channel_PostgresqlRepository {
                     return Err(error);
                 }
             };
+
             query = query + counter_value.to_string().as_str() + "::TIMESTAMP(6) WITH TIME ZONE";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(created_at_, Type::TEXT);
@@ -503,17 +496,9 @@ impl Channel_PostgresqlRepository {
             if OrderConventionResolver::is_asc(order) {
                 query += " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($";
             } else {
-                if OrderConventionResolver::is_desc(order) {
-                    query += " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) < public.limit_channel_subscribers_quantity($";
-                } else {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::InvalidArgumentError,
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
+                query += " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) < public.limit_channel_subscribers_quantity($";
             }
+
             counter_value = match counter.get_next_value() {
                 Ok(counter_value_) => counter_value_,
                 Err(mut error) => {
@@ -522,6 +507,7 @@ impl Channel_PostgresqlRepository {
                     return Err(error);
                 }
             };
+
             query = query + counter_value.to_string().as_str() + ")";
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity_, Type::INT8);

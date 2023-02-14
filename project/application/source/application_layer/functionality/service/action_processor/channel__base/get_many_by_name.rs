@@ -60,14 +60,14 @@ impl ActionProcessor {
             }
         }
 
-        if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::InvalidArgumentError,
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
+        // if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
+        //     return Err(
+        //         ErrorAuditor::new(
+        //             BaseError::InvalidArgumentError,
+        //             BacktracePart::new(line!(), file!(), None)
+        //         )
+        //     );
+        // }
 
 
 
@@ -81,25 +81,25 @@ impl ActionProcessor {
 
 
 
-        if !Channel_Validator::is_valid_name(incoming.channel_name.as_str()) {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::InvalidArgumentError,
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
+        // if !Channel_Validator::is_valid_name(incoming.channel_name.as_str()) {
+        //     return Err(
+        //         ErrorAuditor::new(
+        //             BaseError::InvalidArgumentError,
+        //             BacktracePart::new(line!(), file!(), None)
+        //         )
+        //     );
+        // }
 
-        if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
-            if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::InvalidArgumentError,
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+        // if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
+        //     if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
+        //         return Err(
+        //             ErrorAuditor::new(
+        //                 BaseError::InvalidArgumentError,
+        //                 BacktracePart::new(line!(), file!(), None)
+        //             )
+        //         );
+        //     }
+        // }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
             Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,

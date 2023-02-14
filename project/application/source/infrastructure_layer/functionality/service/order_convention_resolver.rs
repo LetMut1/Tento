@@ -1,6 +1,4 @@
 pub struct OrderConventionResolver;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 
 impl OrderConventionResolver {
@@ -33,11 +31,10 @@ impl OrderConventionResolver {
             return Ok(Self::DESC);
         }
 
-        return Err(
-            ErrorAuditor::new(
-                BaseError::InvalidArgumentError,
-                BacktracePart::new(line!(), file!(), None)
-            )
-        );
+
+
+
+
+        todo!();
     }
 }
