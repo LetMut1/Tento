@@ -1,6 +1,9 @@
 use crate::domain_layer::data::entity::system_registry::Level;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::OtherError;
+use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::system_registry__creator::SystemRegistry_Creator;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -98,20 +101,26 @@ impl ActionRoundLogger {
             Some(error_auditor_) => {
                 match request.headers().get(header::USER_AGENT) {
                     Some(header_value) => {
-                        todo!();
+                        let header_value_ = match header_value.to_str() {
+                            Ok(header_value__) => header_value__,
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                                        BacktracePart::new(line!(), file!(), None)
+                                    )
+                                );
+                            }
+                        };
 
-
-
-
-
-
-
-
-
-
-
-
-
+                        format!(
+                            "{} {} {} {} - {}",
+                            request.uri().path(),
+                            request.method().as_str(),
+                            response.status().as_u16(),
+                            header_value_,
+                            error_auditor_
+                        )
                     }
                     None => {
                         format!(
