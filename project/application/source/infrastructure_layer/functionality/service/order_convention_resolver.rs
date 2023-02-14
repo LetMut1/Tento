@@ -4,15 +4,17 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 
 impl OrderConventionResolver {
+    const ASC_REPRESENTATION: i8 = 0;
+    const DESC_REPRESENTATION: i8 = 1;
     const ASC: &'static str = "ASC";
     const DESC: &'static str = "DESC";
 
     pub fn is_asc(order: i8) -> bool {
-        return order == 0;
+        return order == Self::ASC_REPRESENTATION;
     }
 
     pub fn is_desc(order: i8) -> bool {
-        return !Self::is_asc(order);
+        return order == Self::DESC_REPRESENTATION;
     }
 
     pub fn can_convert(order:  i8) -> bool {

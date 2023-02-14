@@ -39,10 +39,6 @@ impl ApplicationUser {
         return self.password_hash.as_str();
     }
 
-    pub fn get_created_at<'a>(&'a self) -> &'a str {
-        return self.created_at.as_str();
-    }
-
     pub fn set_password_hash<'a>(&'a mut self, password_hash: String) -> &'a mut Self {
         self.password_hash = password_hash;
 

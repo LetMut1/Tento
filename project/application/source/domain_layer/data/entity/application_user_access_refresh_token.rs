@@ -54,10 +54,6 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         return self.expires_at;
     }
 
-    pub fn get_updated_at<'b>(&'b self) -> &'b str {
-        return self.updated_at.as_str();
-    }
-
     pub fn set_application_user_access_token_id<'b >(&'b mut self, application_user_access_token_id: Cow<'a, str>) -> &'b mut Self {
         self.application_user_access_token_id = application_user_access_token_id;
 

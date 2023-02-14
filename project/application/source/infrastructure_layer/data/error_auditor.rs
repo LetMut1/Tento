@@ -58,39 +58,40 @@ impl Display for BaseError {
     fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         match *self {
             Self::InvalidArgumentError => {
-                write!(formatter, "invalid argument.")?;
+                todo!(); // TODO вот здесь ref, по идее
+                write!(formatter, "Invalid argument.")?;
             }
             Self::LogicError { ref logic_error } => {
-                write!(formatter, "logic: {}.", logic_error.message)?;
+                write!(formatter, "Logic: {}.", logic_error.message)?;
             }
             Self::RuntimeError { runtime_error: ref run_time_error } => {
                 match *run_time_error {
                     RuntimeError::OtherError { ref other_error } => {
-                        write!(formatter, "runtime, other: {}.", other_error.message.as_str())?;
+                        write!(formatter, "Runtime, other: {}.", other_error.message.as_str())?;
                     }
                     RuntimeError::ResourceError { ref resource_error } => {
                         match *resource_error {
                             ResourceError::ConnectionPoolRedisError { ref bb8_redis_error } => {
-                                write!(formatter, "runtime, resource, Redis connection pool : {}.", bb8_redis_error)?;
+                                write!(formatter, "Runtime, resource, Redis connection pool : {}.", bb8_redis_error)?;
                             }
                             ResourceError::ConnectionPoolPostgresqlError { ref bb8_postgresql_error } => {
-                                write!(formatter, "runtime, resource, Postgresql connection pool : {}.", bb8_postgresql_error)?;
+                                write!(formatter, "Runtime, resource, Postgresql connection pool : {}.", bb8_postgresql_error)?;
                             }
                             ResourceError::EmailServerError { ref email_server_error } => {
                                 match *email_server_error {
                                     EmailServerError::EmailError { ref email_error } => {
-                                        write!(formatter, "runtime, resource, email : {}.", email_error)?;
+                                        write!(formatter, "Runtime, resource, email : {}.", email_error)?;
                                     }
                                     EmailServerError::SmtpError { ref smtp_error } => {
-                                        write!(formatter, "runtime, resource, email : {}.", smtp_error)?;
+                                        write!(formatter, "Runtime, resource, email : {}.", smtp_error)?;
                                     }
                                 }
                             }
                             ResourceError::PostgresqlError { ref postgresql_error } => {
-                                write!(formatter, "runtime, resource,  Postgresql : {}.", postgresql_error)?;
+                                write!(formatter, "Runtime, resource,  Postgresql : {}.", postgresql_error)?;
                             }
                             ResourceError::RedisError { ref redis_error } => {
-                                write!(formatter, "runtime, resource, Redis : {}.", redis_error)?;
+                                write!(formatter, "Runtime, resource, Redis : {}.", redis_error)?;
                             }
                         }
                     }

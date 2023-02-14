@@ -1,11 +1,10 @@
 #[allow(dead_code)]
 pub struct SystemRegistry {
     message: String,
-    level: i16,
+    level: Level,
     created_at: String
 }
 
-/// System registry level representation.
 pub enum Level {
     /// 0 as integer.
     Trace,

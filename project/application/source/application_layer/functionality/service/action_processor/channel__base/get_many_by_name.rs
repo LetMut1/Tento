@@ -24,7 +24,7 @@ use std::marker::Sync;
 pub struct ActionProcessor;
 
 impl ActionProcessor {
-    const LIMIT: i8 = 30;
+    const LIMIT: i16 = 50;
 
     pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
@@ -37,8 +37,6 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let mut limit = incoming.limit;
-
         let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
             environment_configuration_resolver, incoming.application_user_access_token_deserialized_form.as_str()
         ).await {
@@ -62,11 +60,7 @@ impl ActionProcessor {
             }
         }
 
-        if limit <= 0 || limit > Self::LIMIT {
-            limit = Self::LIMIT;
-        }
-
-        if !Channel_Validator::is_valid_name(incoming.channel_name.as_str()) {
+        if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
             return Err(
                 ErrorAuditor::new(
                     BaseError::InvalidArgumentError,
@@ -75,16 +69,34 @@ impl ActionProcessor {
             );
         }
 
-        if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
-            if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::InvalidArgumentError,
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        }
+
+
+
+
+
+
+
+
+        // TODO тут через Сущность
+        // if !Channel_Validator::is_valid_name(incoming.channel_name.as_str()) {
+        //     return Err(
+        //         ErrorAuditor::new(
+        //             BaseError::InvalidArgumentError,
+        //             BacktracePart::new(line!(), file!(), None)
+        //         )
+        //     );
+        // }
+
+        // if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
+        //     if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
+        //         return Err(
+        //             ErrorAuditor::new(
+        //                 BaseError::InvalidArgumentError,
+        //                 BacktracePart::new(line!(), file!(), None)
+        //             )
+        //         );
+        //     }
+        // }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
             Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
@@ -99,7 +111,7 @@ impl ActionProcessor {
         };
 
         let channel_registry = match Channel_PostgresqlRepository::per_request_1(
-            &*database_1_postgresql_pooled_connection, incoming.channel_name.as_str(), &incoming.requery_channel_name, limit as i16
+            &*database_1_postgresql_pooled_connection, incoming.channel_name.as_str(), &incoming.requery_channel_name, incoming.limit
         ).await {
             Ok(channel_registry_) => channel_registry_,
             Err(mut error) => {
@@ -119,7 +131,7 @@ pub struct Incoming {
     application_user_access_token_deserialized_form: String,
     channel_name: String,
     requery_channel_name: Option<String>,
-    limit: i8
+    limit: i16
 }
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]

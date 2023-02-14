@@ -9,15 +9,14 @@ IMMUTABLE;
 
 CREATE TABLE public.channel (
     id BIGINT,
-    application_user_id BIGINT,
+    application_user_id BIGINT, -- TODO Добавить здесь внешний ключ на таблицу менеджмента
     name TEXT,
-    personalization_image_path TEXT,
     description TEXT,
     is_private BOOLEAN,
+    orientation SMALLINT[],
+    personalization_image_path TEXT,
     subscribers_quantity BIGINT,
-    public_marks_quantity BIGINT,
-    hidden_marks_quantity BIGINT,
-    reactions_quantity BIGINT,
+    marks_quantity BIGINT,
     viewing_quantity BIGINT,
     created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
@@ -45,12 +44,11 @@ ALTER COLUMN id SET NOT NULL,
 ALTER COLUMN application_user_id SET NOT NULL,
 ALTER COLUMN name SET DATA TYPE TEXT COLLATE "C",
 ALTER COLUMN name SET NOT NULL,
-ALTER COLUMN personalization_image_path SET NOT NULL,
 ALTER COLUMN is_private SET NOT NULL,
+ALTER COLUMN orientation SET NOT NULL,
+ALTER COLUMN personalization_image_path SET NOT NULL,
 ALTER COLUMN subscribers_quantity SET NOT NULL,
-ALTER COLUMN public_marks_quantity SET NOT NULL,
-ALTER COLUMN hidden_marks_quantity SET NOT NULL,
-ALTER COLUMN reactions_quantity SET NOT NULL,
+ALTER COLUMN marks_quantity SET NOT NULL,
 ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel7 PRIMARY KEY USING INDEX channel2,
@@ -58,5 +56,10 @@ ADD CONSTRAINT channel8 FOREIGN KEY (application_user_id)
 REFERENCES public.application_user (id) ON DELETE RESTRICT,
 ADD CONSTRAINT channel9 UNIQUE USING INDEX channel3,
 ADD CONSTRAINT channel10 UNIQUE USING INDEX channel6;
+
+
+
+
+
 
 -- // TODO Оффет делаем как (where id < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод)
