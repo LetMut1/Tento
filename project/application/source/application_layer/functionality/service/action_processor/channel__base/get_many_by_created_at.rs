@@ -63,25 +63,25 @@ impl ActionProcessor {
             }
         }
 
-        // if let Some(ref channel_created_at_) = incoming.channel_created_at {
-        //     if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
-        //         return Err(
-        //             ErrorAuditor::new(
-        //                 BaseError::InvalidArgumentError,
-        //                 BacktracePart::new(line!(), file!(), None)
-        //             )
-        //         );
-        //     }
-        // }
+        if let Some(ref channel_created_at_) = incoming.channel_created_at {
+            if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::InvalidArgumentError,
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        }
 
-        // if !OrderConventionResolver::can_convert(incoming.order) {
-        //     return Err(
-        //         ErrorAuditor::new(
-        //             BaseError::InvalidArgumentError,
-        //             BacktracePart::new(line!(), file!(), None)
-        //         )
-        //     );
-        // }
+        if !OrderConventionResolver::can_convert(incoming.order) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::InvalidArgumentError,
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
 
         if limit <= 0 || limit > Self::LIMIT {
             limit = Self::LIMIT;
