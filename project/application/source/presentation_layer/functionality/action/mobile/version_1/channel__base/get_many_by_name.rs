@@ -49,7 +49,7 @@ where
 
         let response = ActionResponseCreator::create_bad_request();
 
-        ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+        ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await;
 
         return response;
     }
@@ -64,7 +64,7 @@ where
 
             let response = ActionResponseCreator::create_internal_server_error();
 
-            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await;
 
             return response;
         }
@@ -80,7 +80,7 @@ where
 
             let response = ActionResponseCreator::create_internal_server_error();
 
-            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await;
 
             return response;
         }
@@ -96,7 +96,7 @@ where
                 _ => ActionResponseCreator::create_internal_server_error()
             };
 
-            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+            ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await;
 
             return response;
         }
@@ -114,7 +114,7 @@ where
 
                     let response = ActionResponseCreator::create_internal_server_error();
 
-                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await;
 
                     return response;
                 }
@@ -143,7 +143,7 @@ where
 
                                     let response = ActionResponseCreator::create_internal_server_error();
 
-                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await;
 
                                     return response;
                                 }
@@ -168,7 +168,7 @@ where
 
                                     let response = ActionResponseCreator::create_internal_server_error();
 
-                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await;
 
                                     return response;
                                 }
@@ -193,7 +193,7 @@ where
 
                                     let response = ActionResponseCreator::create_internal_server_error();
 
-                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(error_)).await;
+                                    ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await;
 
                                     return response;
                                 }
@@ -213,7 +213,7 @@ where
 
                             let response = ActionResponseCreator::create_not_extended();
 
-                            ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+                            ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await;
 
                             return response;
                         }
@@ -227,7 +227,7 @@ where
 
                     let response = ActionResponseCreator::create_not_extended();
 
-                    ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(error)).await;
+                    ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await;
 
                     return response;
                 }

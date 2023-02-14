@@ -22,7 +22,7 @@ impl ActionRoundLogger {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request<Body>,
         response: &'a Response<Body>,
-        error_auditor: Option<ErrorAuditor>
+        error_auditor: Option<&'a ErrorAuditor>
     ) -> Result<(), ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -43,7 +43,7 @@ impl ActionRoundLogger {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request<Body>,
         response: &'a Response<Body>,
-        error_auditor: Option<ErrorAuditor>
+        error_auditor: Option<&'a ErrorAuditor>
     ) -> Result<(), ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -64,7 +64,7 @@ impl ActionRoundLogger {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request<Body>,
         response: &'a Response<Body>,
-        error_auditor: Option<ErrorAuditor>
+        error_auditor: Option<&'a ErrorAuditor>
     ) -> Result<(), ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -86,7 +86,7 @@ impl ActionRoundLogger {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request<Body>,
         response: &'a Response<Body>,
-        error_auditor: Option<ErrorAuditor>
+        error_auditor: Option<&'a ErrorAuditor>
     ) -> Result<(), ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -119,7 +119,7 @@ impl ActionRoundLogger {
                             request.uri().path(),
                             request.method().as_str(),
                             response.status().as_u16(),
-                            &error_auditor_
+                            error_auditor_
                         )
                     }
                 }
