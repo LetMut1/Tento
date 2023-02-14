@@ -173,7 +173,15 @@ where
 
             let response = ActionResponseCreator::create_ok(data);
 
-            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                unreachable!(
+                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                    process does not wait for another write process, and writes immediately.",
+                    &error
+                );
+            }
 
             return response;
         }
@@ -211,7 +219,15 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error
+                                );
+                            }
 
                             return response;
                         }
@@ -245,7 +261,15 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error
+                                );
+                            }
 
                             return response;
                         }
@@ -279,7 +303,15 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error
+                                );
+                            }
 
                             return response;
                         }
@@ -313,7 +345,15 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error
+                                );
+                            }
 
                             return response;
                         }
@@ -347,7 +387,15 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error
+                                );
+                            }
 
                             return response;
                         }
@@ -397,7 +445,15 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error
+                                );
+                            }
 
                             return response;
                         }
@@ -431,7 +487,15 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error
+                                );
+                            }
 
                             return response;
                         }
@@ -465,7 +529,15 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error
+                                );
+                            }
 
                             return response;
                         }
@@ -499,7 +571,15 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error
+                                );
+                            }
 
                             return response;
                         }
@@ -533,7 +613,15 @@ where
 
                             let response = ActionResponseCreator::create_ok(data);
 
-                            ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await;
+                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{}. TODO: Write in concurent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error
+                                );
+                            }
 
                             return response;
                         }
