@@ -16,7 +16,10 @@ pub enum ActionProcessorResult<T> {
     }
 }
 
-impl<T> ActionProcessorResult<T> {
+impl<T> ActionProcessorResult<T>
+where
+    T: Serialize
+{
     pub fn outcoming(outcoming: T) -> Self {
         return Self::Outcoming { outcoming };
     }

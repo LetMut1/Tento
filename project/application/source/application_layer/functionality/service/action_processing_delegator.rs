@@ -1,4 +1,3 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -40,9 +39,9 @@ impl ActionProcessingDelegator {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming<API>,
+        incoming: ConvertibleParts<API>,
         action: FO
-    ) -> Result<ActionProcessorResult<Outcoming<APO>>, ErrorAuditor>
+    ) -> Result<ActionProcessingDelegatorResult<APO>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -60,7 +59,7 @@ impl ActionProcessingDelegator {
         APO: Serialize + for<'de> Deserialize<'de>
     {
         let mut data: Vec<u8> = vec![];
-        if let Err(error) = rmp_serde::encode::write(&mut data, &incoming.convertible_data) {
+        if let Err(error) = rmp_serde::encode::write(&mut data, &incoming.action_processor_incoming) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
@@ -88,7 +87,7 @@ impl ActionProcessingDelegator {
             body
         ) = response.into_parts();
 
-        let outcoming = if response_parts.status == StatusCode::OK {
+        let action_processing_delegator_result = if response_parts.status == StatusCode::OK {
             let bytes = match to_bytes(body).await {
                 Ok(bytes_) => bytes_,
                 Err(error) => {
@@ -113,29 +112,29 @@ impl ActionProcessingDelegator {
                 }
             };
 
-            Outcoming { parts: response_parts, unified_report: Some(unified_report) }
+            ActionProcessingDelegatorResult { response_parts, unified_report: Some(unified_report) }
         } else {
-            Outcoming { parts: response_parts, unified_report: None }
+            ActionProcessingDelegatorResult { response_parts, unified_report: None }
         };
 
-        return Ok(ActionProcessorResult::outcoming(outcoming));
+        return Ok(action_processing_delegator_result);
     }
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub struct Incoming<T>
+pub struct ConvertibleParts<T>
 where
     T: Serialize + for<'de> Deserialize<'de>
 {
     pub request: Request<Body>,
-    pub convertible_data: T
+    pub action_processor_incoming: T
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub struct Outcoming<T>
+pub struct ActionProcessingDelegatorResult<T>
 where
     T: Serialize + for<'de> Deserialize<'de>
 {
-    pub parts: Parts,
+    pub response_parts: Parts,
     pub unified_report: Option<UnifiedReport<T>>
 }

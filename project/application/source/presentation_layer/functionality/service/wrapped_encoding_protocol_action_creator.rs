@@ -1,6 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::functionality::service::action_processing_delegator::ActionProcessingDelegator;
-use crate::application_layer::functionality::service::action_processing_delegator::Incoming;
+use crate::application_layer::functionality::service::action_processing_delegator::ConvertibleParts;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -73,14 +72,14 @@ impl WrappedEncodingProtocolActionCreator {
             }
         };
 
-        let action_processor_result = match ActionProcessingDelegator::delegate::<'_, _, _, _, API, APO>(
+        let action_processing_delegator_result = match ActionProcessingDelegator::delegate::<'_, _, _, _, API, APO>(
             environment_configuration_resolver,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             redis_connection_pool,
-            Incoming {
+            ConvertibleParts {
                 request,
-                convertible_data: incoming
+                action_processor_incoming: incoming
             },
             wrapped_action
         ).await {
@@ -90,27 +89,20 @@ impl WrappedEncodingProtocolActionCreator {
             }
         };
 
-        match action_processor_result {
-            ActionProcessorResult::Outcoming { outcoming } => {
-                let unified_report = match outcoming.unified_report {
-                    Some(unified_report_) => unified_report_,
-                    None => {
-                        return ActionResponseCreator::create_from_response_parts(outcoming.parts, None);
-                    }
-                };
-
-                let data = match serde_json::to_vec(&unified_report) {
-                    Ok(data_) => data_,
-                    Err(_) => {
-                        return ActionResponseCreator::create_internal_server_error();
-                    }
-                };
-
-                return ActionResponseCreator::create_from_response_parts(outcoming.parts, Some(data));
+        let unified_report = match action_processing_delegator_result.unified_report {
+            Some(unified_report_) => unified_report_,
+            None => {
+                return ActionResponseCreator::create_from_response_parts(action_processing_delegator_result.response_parts, None);
             }
-            ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: _ } => {
-                return ActionResponseCreator::create_not_extended();
+        };
+
+        let data = match serde_json::to_vec(&unified_report) {
+            Ok(data_) => data_,
+            Err(_) => {
+                return ActionResponseCreator::create_internal_server_error();
             }
-        }
+        };
+
+        return ActionResponseCreator::create_from_response_parts(action_processing_delegator_result.response_parts, Some(data));
     }
 }
