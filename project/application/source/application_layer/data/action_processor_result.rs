@@ -1,9 +1,10 @@
+use extern_crate::serde::Serialize;
+use super::user_workflow_precedent::ApplicationUser_Precedent;
 use super::user_workflow_precedent::ApplicationUserAccessRefreshToken_Precedent;
 use super::user_workflow_precedent::ApplicationUserAccessToken_Precedent;
 use super::user_workflow_precedent::ApplicationUserAuthorizationToken_Precedent;
 use super::user_workflow_precedent::ApplicationUserRegistrationToken_Precedent;
 use super::user_workflow_precedent::ApplicationUserResetPasswordToken_Precedent;
-use super::user_workflow_precedent::ApplicationUser_Precedent;
 use super::user_workflow_precedent::UserWorkflowPrecedent;
 
 pub enum ActionProcessorResult<T> {

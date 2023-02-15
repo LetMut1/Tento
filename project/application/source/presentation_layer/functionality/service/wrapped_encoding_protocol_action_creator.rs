@@ -31,7 +31,7 @@ pub struct WrappedEncodingProtocolActionCreator;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl WrappedEncodingProtocolActionCreator {
-    pub async fn create_for_json<'a, T, FO, F, AHID, AHOD>(
+    pub async fn create_for_json<'a, T, FO, F, API, APO>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         mut request: Request<Body>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -52,8 +52,8 @@ impl WrappedEncodingProtocolActionCreator {
             &'a Pool<RedisConnectionManager>
         ) -> F,
         F: Future<Output = Response<Body>>,
-        AHID: Serialize + for<'de> Deserialize<'de>,
-        AHOD: Serialize + for<'de> Deserialize<'de>
+        API: Serialize + for<'de> Deserialize<'de>,
+        APO: Serialize + for<'de> Deserialize<'de>
     {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
@@ -66,14 +66,14 @@ impl WrappedEncodingProtocolActionCreator {
             }
         };
 
-        let incoming = match serde_json::from_slice::<'_, AHID>(bytes.chunk()) {
+        let incoming = match serde_json::from_slice::<'_, API>(bytes.chunk()) {
             Ok(wrapped_incoming_) => wrapped_incoming_,
             Err(_) => {
                 return ActionResponseCreator::create_internal_server_error();
             }
         };
 
-        let action_processor_result = match ActionProcessingDelegator::delegate::<'_, _, _, _, AHID, AHOD>(
+        let action_processor_result = match ActionProcessingDelegator::delegate::<'_, _, _, _, API, APO>(
             environment_configuration_resolver,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,

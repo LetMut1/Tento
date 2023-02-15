@@ -35,14 +35,14 @@ pub struct ActionProcessingDelegator;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl ActionProcessingDelegator {
-    pub async fn delegate<'a, T, FO, F, AHID, AHOD>(
+    pub async fn delegate<'a, T, FO, F, API, APO>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming<AHID>,
+        incoming: Incoming<API>,
         action: FO
-    ) -> Result<ActionProcessorResult<Outcoming<AHOD>>, ErrorAuditor>
+    ) -> Result<ActionProcessorResult<Outcoming<APO>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -56,8 +56,8 @@ impl ActionProcessingDelegator {
             &'a Pool<RedisConnectionManager>
         ) -> F,
         F: Future<Output = Response<Body>>,
-        AHID: Serialize + for<'de> Deserialize<'de>,
-        AHOD: Serialize + for<'de> Deserialize<'de>
+        API: Serialize + for<'de> Deserialize<'de>,
+        APO: Serialize + for<'de> Deserialize<'de>
     {
         let mut data: Vec<u8> = vec![];
         if let Err(error) = rmp_serde::encode::write(&mut data, &incoming.convertible_data) {
@@ -101,7 +101,7 @@ impl ActionProcessingDelegator {
                 }
             };
 
-            let unified_report = match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<AHOD>>(bytes.chunk()) {
+            let unified_report = match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<APO>>(bytes.chunk()) {
                 Ok(unified_report_) => unified_report_,
                 Err(error) => {
                     return Err(
@@ -123,13 +123,19 @@ impl ActionProcessingDelegator {
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub struct Incoming<T> {
+pub struct Incoming<T>
+where
+    T: Serialize + for<'de> Deserialize<'de>
+{
     pub request: Request<Body>,
     pub convertible_data: T
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub struct Outcoming<T> {
+pub struct Outcoming<T>
+where
+    T: Serialize + for<'de> Deserialize<'de>
+{
     pub parts: Parts,
     pub unified_report: Option<UnifiedReport<T>>
 }
