@@ -85,7 +85,7 @@ impl WrappedEncodingProtocolActionCreator {
             wrapped_action
         ).await {
             Ok(action_processor_result_) => action_processor_result_,
-            Err(error) => {
+            Err(_) => {
                 return ActionResponseCreator::create_internal_server_error();
             }
         };
