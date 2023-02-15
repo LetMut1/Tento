@@ -1,7 +1,6 @@
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 
 impl ApplicationUserAuthorizationToken_ExpirationTimeResolver {

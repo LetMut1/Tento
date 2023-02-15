@@ -1,6 +1,5 @@
 use crate::infrastructure_layer::functionality::service::number_row_generator::NumberRowGenerator;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserResetPasswordToken_ValueGenerator;
 
 impl ApplicationUserResetPasswordToken_ValueGenerator {

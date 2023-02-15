@@ -1,6 +1,5 @@
 use crate::domain_layer::data::entity::system_registry::Level;
 
-#[allow(non_camel_case_types)]
 pub struct SystemRegistry_LevelMatcher;
 
 impl SystemRegistry_LevelMatcher {

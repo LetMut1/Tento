@@ -12,7 +12,6 @@ use extern_crate::crypto::sha2::Sha512;
 use extern_crate::hex;
 use extern_crate::rmp_serde;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserAccessToken_SerializationFormResolver;
 
 impl ApplicationUserAccessToken_SerializationFormResolver {
@@ -83,7 +82,6 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
     }
 }
 
-#[allow(non_camel_case_types)]
 struct ApplicationUserAccessToken_Encoder;
 
 impl ApplicationUserAccessToken_Encoder {

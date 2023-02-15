@@ -24,14 +24,12 @@ where
         return Self::Outcoming { outcoming };
     }
 
-    #[allow(non_snake_case)]
     pub fn application_user__precedent(application_user__precedent: ApplicationUser_Precedent) -> Self {
         return Self::UserWorkflowPrecedent {
             user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser { application_user__precedent }
         };
     }
 
-    #[allow(non_snake_case)]
     pub fn application_user_authorization_token__precedent(
         application_user_authorization_token__precedent: ApplicationUserAuthorizationToken_Precedent
     ) -> Self {
@@ -40,7 +38,6 @@ where
         };
     }
 
-    #[allow(non_snake_case)]
     pub fn application_user_registration_token__precedent(
         application_user_registration_token__precedent: ApplicationUserRegistrationToken_Precedent
     ) -> Self {
@@ -51,7 +48,6 @@ where
         };
     }
 
-    #[allow(non_snake_case)]
     pub fn application_user_reset_password_token__precedent(
         application_user_reset_password_token__precedent: ApplicationUserResetPasswordToken_Precedent
     ) -> Self {
@@ -62,7 +58,6 @@ where
         };
     }
 
-    #[allow(non_snake_case)]
     pub fn application_user_access_token__precedent(
         application_user_access_token__precedent: ApplicationUserAccessToken_Precedent
     ) -> Self {
@@ -71,7 +66,6 @@ where
         };
     }
 
-    #[allow(non_snake_case)]
     pub fn application_user_access_refresh_token__precedent(
         application_user_access_refresh_token__precedent: ApplicationUserAccessRefreshToken_Precedent
     ) -> Self {

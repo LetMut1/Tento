@@ -11,7 +11,6 @@ use extern_crate::crypto::sha2::Sha512;
 use extern_crate::hex;
 use extern_crate::rmp_serde;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserAccessRefreshToken_SerializationFormResolver;
 
 impl ApplicationUserAccessRefreshToken_SerializationFormResolver {

@@ -1,6 +1,5 @@
 use extern_crate::uuid::Uuid;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserAccessToken_IdGenerator;
 
 impl ApplicationUserAccessToken_IdGenerator {

@@ -1,7 +1,6 @@
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 
 impl ApplicationUserResetPasswordToken_ExpirationTimeResolver {

@@ -1,10 +1,7 @@
-#[allow(non_camel_case_types)]
 pub struct Channel_Validator;
 
 impl Channel_Validator {
-    #[allow(non_upper_case_globals)]
     const CHANNEL__NAME_MAXIMUM_LENGTH: usize = 75;
-    #[allow(non_upper_case_globals)]
     const CHANNEL__DESCRIPTION_MAXIMUM_LENGTH: usize = 500;
 
     pub fn is_valid_name<'a>(channel_name: &'a str) -> bool {

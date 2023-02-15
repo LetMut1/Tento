@@ -7,7 +7,6 @@ use extern_crate::argon2;
 use extern_crate::argon2::Config;
 use extern_crate::uuid::Uuid;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUser_PasswordHashResolver;
 
 impl ApplicationUser_PasswordHashResolver {
@@ -38,7 +37,6 @@ impl ApplicationUser_PasswordHashResolver {
     }
 }
 
-#[allow(non_camel_case_types)]
 struct ApplicationUser_PasswordEncoder;
 
 impl ApplicationUser_PasswordEncoder {      // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090  // TODO CREATE CUSTOM CONFIG ?

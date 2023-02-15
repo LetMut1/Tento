@@ -10,7 +10,6 @@ use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use std::borrow::Cow;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserAccessRefreshToken_PostgresqlRepository;
 
 impl ApplicationUserAccessRefreshToken_PostgresqlRepository {

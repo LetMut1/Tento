@@ -7,7 +7,6 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 
-#[allow(non_camel_case_types)]
 pub struct SystemRegistry_PostgresqlRepository;
 
 impl SystemRegistry_PostgresqlRepository {

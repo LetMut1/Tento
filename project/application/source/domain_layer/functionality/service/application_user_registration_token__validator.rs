@@ -5,7 +5,6 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::regex::Regex;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserRegistrationToken_Validator;
 
 impl ApplicationUserRegistrationToken_Validator {

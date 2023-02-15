@@ -3,7 +3,6 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserAccessToken_ExpiresAtGenerator;
 
 impl ApplicationUserAccessToken_ExpiresAtGenerator {

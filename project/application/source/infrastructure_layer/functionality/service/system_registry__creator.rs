@@ -16,7 +16,6 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-#[allow(non_camel_case_types)]
 pub struct SystemRegistry_Creator;
 
 impl SystemRegistry_Creator {

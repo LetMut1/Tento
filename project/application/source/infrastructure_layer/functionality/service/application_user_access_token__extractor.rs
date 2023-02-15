@@ -6,8 +6,6 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 
-
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserAccessToken_Extractor;
 
 impl ApplicationUserAccessToken_Extractor {

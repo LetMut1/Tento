@@ -1,4 +1,3 @@
-#[allow(non_snake_case)]
 pub enum UserWorkflowPrecedent {
     ApplicationUser {
         application_user__precedent: ApplicationUser_Precedent
@@ -20,7 +19,6 @@ pub enum UserWorkflowPrecedent {
     }
 }
 
-#[allow(non_camel_case_types)]
 pub enum ApplicationUser_Precedent {
     EmailAlreadyExist,
     InvalidEmail,
@@ -31,14 +29,12 @@ pub enum ApplicationUser_Precedent {
     WrongPassword
 }
 
-#[allow(non_camel_case_types)]
 pub enum ApplicationUserAccessRefreshToken_Precedent {
     AlreadyExpired,
     NotFound,
     WrongDeserializedForm
 }
 
-#[allow(non_camel_case_types)]
 pub enum ApplicationUserAccessToken_Precedent {
     AlreadyExpired,
     InApplicationUserAccessTokenBlackList,
@@ -46,7 +42,6 @@ pub enum ApplicationUserAccessToken_Precedent {
     WrongDeserializedForm
 }
 
-#[allow(non_camel_case_types)]
 pub enum ApplicationUserAuthorizationToken_Precedent {
     AlreadyExpired,
     InvalidValue,
@@ -54,7 +49,6 @@ pub enum ApplicationUserAuthorizationToken_Precedent {
     WrongValue
 }
 
-#[allow(non_camel_case_types)]
 pub enum ApplicationUserRegistrationToken_Precedent {
     AlreadyApproved,
     AlreadyExpired,
@@ -64,7 +58,6 @@ pub enum ApplicationUserRegistrationToken_Precedent {
     WrongValue
 }
 
-#[allow(non_camel_case_types)]
 pub enum ApplicationUserResetPasswordToken_Precedent {
     AlreadyApproved,
     AlreadyExpired,

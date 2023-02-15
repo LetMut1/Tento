@@ -3,7 +3,6 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserAuthorizationToken_WrongEnterTriesQuantityIncrementor;
 
 impl ApplicationUserAuthorizationToken_WrongEnterTriesQuantityIncrementor {

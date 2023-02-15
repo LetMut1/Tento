@@ -5,17 +5,12 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::regex::Regex;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUser_Validator;
 
 impl ApplicationUser_Validator {
-    #[allow(non_upper_case_globals)]
     const APPLICATION_USER__EMAIL_MAXIMUM_LENGTH: usize = 320;
-    #[allow(non_upper_case_globals)]
     const APPLICATION_USER__NICKNAME_MAXIMUM_LENGTH: usize = 55;
-    #[allow(non_upper_case_globals)]
     const APPLICATION_USER__PASSWORD_MINIMUM_LENGTH: usize = 7;
-    #[allow(non_upper_case_globals)]
     const APPLICATION_USER__PASSWORD_MAXIMUM_LENGTH: usize = 65;
 
     pub fn is_valid_email<'a>(application_user_email: &'a str) -> Result<bool, ErrorAuditor> {

@@ -1,16 +1,8 @@
-#[allow(non_snake_case)]
 pub mod application_user__postgresql_repository;
-#[allow(non_snake_case)]
 pub mod application_user_access_refresh_token__postgresql_repository;
-#[allow(non_snake_case)]
-pub mod application_user_device__postgresql_repository;
-#[allow(non_snake_case)]
 pub mod application_user_authorization_token__postgresql_repository;
-#[allow(non_snake_case)]
+pub mod application_user_device__postgresql_repository;
 pub mod application_user_registration_token__postgresql_repository;
-#[allow(non_snake_case)]
 pub mod application_user_reset_password_token__postgresql_repository;
-#[allow(non_snake_case)]
 pub mod channel__postgresql_repository;
-#[allow(non_snake_case)]
 pub mod system_registry__postgresql_repository;

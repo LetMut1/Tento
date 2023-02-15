@@ -1,6 +1,5 @@
 use extern_crate::uuid::Uuid;
 
-#[allow(non_camel_case_types)]
 pub struct ApplicationUserAccessRefreshToken_ObfuscationValueGenerator;
 
 impl ApplicationUserAccessRefreshToken_ObfuscationValueGenerator {
