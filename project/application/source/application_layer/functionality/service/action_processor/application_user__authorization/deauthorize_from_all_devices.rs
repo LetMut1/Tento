@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUserAccessToken_Precedent;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -50,13 +50,13 @@ impl ActionProcessor {
         let application_user_access_token_ = match extractor_result {
             ExtractorResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
             ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                return Ok(ActionProcessorResult::application_user_access_token__precedent(ApplicationUserAccessToken_Precedent::AlreadyExpired));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired));
             }
             ExtractorResult::ApplicationUserAccessTokenWrongDeserializedForm => {
-                return Ok(ActionProcessorResult::application_user_access_token__precedent(ApplicationUserAccessToken_Precedent::WrongDeserializedForm));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_WrongDeserializedForm));
             }
             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                return Ok(ActionProcessorResult::application_user_access_token__precedent(ApplicationUserAccessToken_Precedent::InApplicationUserAccessTokenBlackList));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
             }
         };
 

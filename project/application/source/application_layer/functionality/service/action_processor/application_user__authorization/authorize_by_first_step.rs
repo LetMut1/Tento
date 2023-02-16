@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUser_Precedent;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_authorization_token__value_generator::ApplicationUserAuthorizationToken_ValueGenerator;
@@ -41,7 +41,7 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         if !ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
-            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::InvalidPassword));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_InvalidPassword));
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -93,14 +93,14 @@ impl ActionProcessor {
 
                 application_user_
             } else {
-                return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::InvalidNickname));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_InvalidNickname));
             }
         };
 
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
-                return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::NotFound));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_NotFound));
             }
         };
 
@@ -113,7 +113,7 @@ impl ActionProcessor {
             }
         };
         if !is_valid {
-            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::WrongPassword));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_WrongPassword));
         }
 
         let application_user_id = application_user_.get_id();

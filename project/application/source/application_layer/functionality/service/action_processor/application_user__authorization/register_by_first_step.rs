@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUser_Precedent;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_registration_token__value_generator::ApplicationUserRegistrationToken_ValueGenerator;
@@ -51,7 +51,7 @@ impl ActionProcessor {
             }
         };
         if !is_valid_email {
-            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::InvalidEmail));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_InvalidEmail));
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -77,7 +77,7 @@ impl ActionProcessor {
             }
         };
         if is_exist_2 {
-            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::EmailAlreadyExist));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_EmailAlreadyExist));
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {

@@ -1,6 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUserResetPasswordToken_Precedent;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUser_Precedent;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -64,16 +63,16 @@ impl ActionProcessor {
         let application_user_reset_password_token_ = match application_user_reset_password_token {
             Some(application_user_reset_password_token__) => application_user_reset_password_token__,
             None => {
-                return Ok(ActionProcessorResult::application_user_reset_password_token__precedent(ApplicationUserResetPasswordToken_Precedent::NotFound));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_NotFound));
             }
         };
 
         if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
-            return Ok(ActionProcessorResult::application_user_reset_password_token__precedent(ApplicationUserResetPasswordToken_Precedent::AlreadyExpired));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired));
         }
 
         if application_user_reset_password_token_.get_is_approved() {
-            return Ok(ActionProcessorResult::application_user_reset_password_token__precedent(ApplicationUserResetPasswordToken_Precedent::AlreadyApproved));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved));
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -102,7 +101,7 @@ impl ActionProcessor {
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
-                return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::NotFound));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_NotFound));
             }
         };
 

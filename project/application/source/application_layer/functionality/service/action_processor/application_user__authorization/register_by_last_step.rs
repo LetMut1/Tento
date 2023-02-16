@@ -1,6 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUserRegistrationToken_Precedent;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUser_Precedent;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
@@ -55,11 +54,11 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {                                                                                              // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         if !ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
-            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::InvalidPassword));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_InvalidPassword));
         }
 
         if !ApplicationUser_Validator::is_valid_nickname(incoming.application_user_nickname.as_str()) {
-            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::InvalidNickname));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_InvalidNickname));
         }
 
         let is_valid_email = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {
@@ -71,7 +70,7 @@ impl ActionProcessor {
             }
         };
         if !is_valid_email {
-            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::InvalidEmail));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_InvalidEmail));
         }
 
         let is_valid_value = match ApplicationUserRegistrationToken_Validator::is_valid_value(incoming.application_user_registration_token_value.as_str()) {
@@ -83,7 +82,7 @@ impl ActionProcessor {
             }
         };
         if !is_valid_value {
-            return Ok(ActionProcessorResult::application_user_registration_token__precedent(ApplicationUserRegistrationToken_Precedent::InvalidValue));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_InvalidValue));
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -108,7 +107,7 @@ impl ActionProcessor {
             }
         };
         if is_exist_1 {
-            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::NicknameAlreadyExist));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_NicknameAlreadyExist));
         }
 
         let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(database_1_postgresql_connection, incoming.application_user_email.as_str()).await {
@@ -120,7 +119,7 @@ impl ActionProcessor {
             }
         };
         if is_exist_2 {
-            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::EmailAlreadyExist));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_EmailAlreadyExist));
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -150,15 +149,15 @@ impl ActionProcessor {
         let mut application_user_registration_token_ = match application_user_registration_token {
             Some(application_user_registration_token__) => application_user_registration_token__,
             None => {
-                return Ok(ActionProcessorResult::application_user_registration_token__precedent(ApplicationUserRegistrationToken_Precedent::NotFound));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound));
             }
         };
         if !ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
-            return Ok(ActionProcessorResult::application_user_registration_token__precedent(ApplicationUserRegistrationToken_Precedent::AlreadyExpired));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired));
         }
 
         if !application_user_registration_token_.get_is_approved() {
-            return Ok(ActionProcessorResult::application_user_registration_token__precedent(ApplicationUserRegistrationToken_Precedent::IsNotApproved));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_IsNotApproved));
         }
 
         if application_user_registration_token_.get_value() != incoming.application_user_registration_token_value.as_str() {
@@ -188,7 +187,7 @@ impl ActionProcessor {
                 }
             }
 
-            return Ok(ActionProcessorResult::application_user_registration_token__precedent(ApplicationUserRegistrationToken_Precedent::WrongValue));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_WrongValue));
         }
 
         let application_user_password_hash = match ApplicationUser_PasswordHashResolver::create(incoming.application_user_password.as_str()) {

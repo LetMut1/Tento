@@ -1,6 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUserAccessToken_Precedent;
-use crate::application_layer::data::user_workflow_precedent::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_created_at::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_created_at::Incoming;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -191,156 +190,131 @@ where
         }
         ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
             match user_workflow_precedent {
-                UserWorkflowPrecedent::ApplicationUserAccessToken { application_user_access_token__precedent } => {
-                    match application_user_access_token__precedent {
-                        ApplicationUserAccessToken_Precedent::AlreadyExpired => {
-                            let data = match rmp_serde::to_vec(
-                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED)
-                            ) {
-                                Ok(data_) => data_,
-                                Err(error) => {
-                                    let error_ = ErrorAuditor::new(
-                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    );
-
-                                    let response = ActionResponseCreator::create_internal_server_error();
-
-                                    if let Err(mut error__) = ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
-                                        error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                        unreachable!(
-                                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                                            process does not wait for another write process, and writes immediately.",
-                                            &error_,
-                                            &error__
-                                        );
-                                    }
-
-                                    return response;
-                                }
-                            };
-
-                            let response = ActionResponseCreator::create_ok(data);
-
-                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
-                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                unreachable!(
-                                    "{}. TODO: Write in concurrent way. It is also necessary that the write
-                                    process does not wait for another write process, and writes immediately.",
-                                    &error
-                                );
-                            }
-
-                            return response;
-                        }
-                        ApplicationUserAccessToken_Precedent::WrongDeserializedForm => {
-                            let data = match rmp_serde::to_vec(
-                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__WRONG_DESERIALIZED_FORM)
-                            ) {
-                                Ok(data_) => data_,
-                                Err(error) => {
-                                    let error_ = ErrorAuditor::new(
-                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    );
-
-                                    let response = ActionResponseCreator::create_internal_server_error();
-
-                                    if let Err(mut error__) = ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
-                                        error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                        unreachable!(
-                                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                                            process does not wait for another write process, and writes immediately.",
-                                            &error_,
-                                            &error__
-                                        );
-                                    }
-
-                                    return response;
-                                }
-                            };
-
-                            let response = ActionResponseCreator::create_ok(data);
-
-                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
-                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                unreachable!(
-                                    "{}. TODO: Write in concurrent way. It is also necessary that the write
-                                    process does not wait for another write process, and writes immediately.",
-                                    &error
-                                );
-                            }
-
-                            return response;
-                        }
-                        ApplicationUserAccessToken_Precedent::InApplicationUserAccessTokenBlackList => {
-                            let data = match rmp_serde::to_vec(
-                                &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST)
-                            ) {
-                                Ok(data_) => data_,
-                                Err(error) => {
-                                    let error_ = ErrorAuditor::new(
-                                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                                        BacktracePart::new(line!(), file!(), None)
-                                    );
-
-                                    let response = ActionResponseCreator::create_internal_server_error();
-
-                                    if let Err(mut error__) = ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
-                                        error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                        unreachable!(
-                                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                                            process does not wait for another write process, and writes immediately.",
-                                            &error_,
-                                            &error__
-                                        );
-                                    }
-
-                                    return response;
-                                }
-                            };
-
-                            let response = ActionResponseCreator::create_ok(data);
-
-                            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
-                                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                unreachable!(
-                                    "{}. TODO: Write in concurrent way. It is also necessary that the write
-                                    process does not wait for another write process, and writes immediately.",
-                                    &error
-                                );
-                            }
-
-                            return response;
-                        }
-                        _ => {
-                            let error = ErrorAuditor::new(
-                                BaseError::LogicError { logic_error: LogicError::new("Unreachable state") },
+                UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired => {
+                    let data = match rmp_serde::to_vec(
+                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED)
+                    ) {
+                        Ok(data_) => data_,
+                        Err(error) => {
+                            let error_ = ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                                 BacktracePart::new(line!(), file!(), None)
                             );
 
-                            let response = ActionResponseCreator::create_not_extended();
+                            let response = ActionResponseCreator::create_internal_server_error();
 
-                            if let Err(mut error_) = ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await {
-                                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                            if let Err(mut error__) = ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
+                                error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
                                     "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                                     process does not wait for another write process, and writes immediately.",
-                                    &error,
-                                    &error_
+                                    &error_,
+                                    &error__
                                 );
                             }
 
                             return response;
                         }
+                    };
+
+                    let response = ActionResponseCreator::create_ok(data);
+
+                    if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        unreachable!(
+                            "{}. TODO: Write in concurrent way. It is also necessary that the write
+                            process does not wait for another write process, and writes immediately.",
+                            &error
+                        );
                     }
+
+                    return response;
+                }
+                UserWorkflowPrecedent::ApplicationUserAccessToken_WrongDeserializedForm => {
+                    let data = match rmp_serde::to_vec(
+                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__WRONG_DESERIALIZED_FORM)
+                    ) {
+                        Ok(data_) => data_,
+                        Err(error) => {
+                            let error_ = ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                                BacktracePart::new(line!(), file!(), None)
+                            );
+
+                            let response = ActionResponseCreator::create_internal_server_error();
+
+                            if let Err(mut error__) = ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
+                                error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error_,
+                                    &error__
+                                );
+                            }
+
+                            return response;
+                        }
+                    };
+
+                    let response = ActionResponseCreator::create_ok(data);
+
+                    if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        unreachable!(
+                            "{}. TODO: Write in concurrent way. It is also necessary that the write
+                            process does not wait for another write process, and writes immediately.",
+                            &error
+                        );
+                    }
+
+                    return response;
+                }
+                UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    let data = match rmp_serde::to_vec(
+                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST)
+                    ) {
+                        Ok(data_) => data_,
+                        Err(error) => {
+                            let error_ = ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                                BacktracePart::new(line!(), file!(), None)
+                            );
+
+                            let response = ActionResponseCreator::create_internal_server_error();
+
+                            if let Err(mut error__) = ActionRoundLogger::log_error(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
+                                error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error_,
+                                    &error__
+                                );
+                            }
+
+                            return response;
+                        }
+                    };
+
+                    let response = ActionResponseCreator::create_ok(data);
+
+                    if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        unreachable!(
+                            "{}. TODO: Write in concurrent way. It is also necessary that the write
+                            process does not wait for another write process, and writes immediately.",
+                            &error
+                        );
+                    }
+
+                    return response;
                 }
                 _ => {
                     let error = ErrorAuditor::new(

@@ -1,10 +1,9 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUser_Precedent;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUserAuthorizationToken_Precedent;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__obfuscation_value_generator::ApplicationUserAccessRefreshToken_ObfuscationValueGenerator;
+use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_token__expires_at_generator::ApplicationUserAccessToken_ExpiresAtGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__id_generator::ApplicationUserAccessToken_IdGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
@@ -61,7 +60,7 @@ impl ActionProcessor {
             }
         };
         if !is_valid_value {
-            return Ok(ActionProcessorResult::application_user_authorization_token__precedent(ApplicationUserAuthorizationToken_Precedent::InvalidValue));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAuthorizationToken_InvalidValue));
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -90,12 +89,12 @@ impl ActionProcessor {
         let mut application_user_authorization_token_ = match application_user_authorization_token {
             Some(application_user_authorization_token__) => application_user_authorization_token__,
             None => {
-                return Ok(ActionProcessorResult::application_user_authorization_token__precedent(ApplicationUserAuthorizationToken_Precedent::NotFound));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAuthorizationToken_NotFound));
             }
         };
 
         if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
-            return Ok(ActionProcessorResult::application_user_authorization_token__precedent(ApplicationUserAuthorizationToken_Precedent::AlreadyExpired));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired));
         }
 
         if application_user_authorization_token_.get_value() != incoming.application_user_authorization_token_value.as_str() {
@@ -125,7 +124,7 @@ impl ActionProcessor {
                 }
             }
 
-            return Ok(ActionProcessorResult::application_user_authorization_token__precedent(ApplicationUserAuthorizationToken_Precedent::WrongValue));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAuthorizationToken_WrongValue));
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -150,7 +149,7 @@ impl ActionProcessor {
             }
         };
         if !is_exist {
-            return Ok(ActionProcessorResult::application_user__precedent(ApplicationUser_Precedent::NotFound));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_NotFound));
         }
 
         let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {

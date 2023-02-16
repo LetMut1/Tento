@@ -1,6 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUserAccessRefreshToken_Precedent;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUserAccessToken_Precedent;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__expiration_time_resolver::ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
@@ -57,12 +56,12 @@ impl ActionProcessor {
         let application_user_access_token_ = match serialization_form_resolver_result {
             SerializationFormResolverResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
             SerializationFormResolverResult::ApplicationUserAccessTokenWrongDeserializedForm => {
-                return Ok(ActionProcessorResult::application_user_access_token__precedent(ApplicationUserAccessToken_Precedent::WrongDeserializedForm));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_WrongDeserializedForm));
             }
         };
 
         if !ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token_) {
-            return Ok(ActionProcessorResult::application_user_access_token__precedent(ApplicationUserAccessToken_Precedent::NotExpired));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_NotExpired));
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -96,7 +95,7 @@ impl ActionProcessor {
         let mut application_user_access_refresh_token_ = match application_user_access_refresh_token {
             Some(application_user_access_refresh_token__) => application_user_access_refresh_token__,
             None => {
-                return Ok(ActionProcessorResult::application_user_access_refresh_token__precedent(ApplicationUserAccessRefreshToken_Precedent::NotFound));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_NotFound));
             }
         };
 
@@ -112,7 +111,7 @@ impl ActionProcessor {
             }
         };
         if !is_valid || application_user_access_token_.get_id().as_bytes() != application_user_access_refresh_token_.get_application_user_access_token_id().as_bytes() {
-            return Ok(ActionProcessorResult::application_user_access_refresh_token__precedent(ApplicationUserAccessRefreshToken_Precedent::WrongDeserializedForm));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_WrongDeserializedForm));
         }
 
         if ApplicationUserAccessRefreshToken_ExpirationTimeResolver::is_expired(&application_user_access_refresh_token_) {
@@ -126,7 +125,7 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            return Ok(ActionProcessorResult::application_user_access_refresh_token__precedent(ApplicationUserAccessRefreshToken_Precedent::AlreadyExpired));
+            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired));
         }
 
         let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {

@@ -1,13 +1,9 @@
 use extern_crate::serde::Serialize;
-use super::user_workflow_precedent::ApplicationUser_Precedent;
-use super::user_workflow_precedent::ApplicationUserAccessRefreshToken_Precedent;
-use super::user_workflow_precedent::ApplicationUserAccessToken_Precedent;
-use super::user_workflow_precedent::ApplicationUserAuthorizationToken_Precedent;
-use super::user_workflow_precedent::ApplicationUserRegistrationToken_Precedent;
-use super::user_workflow_precedent::ApplicationUserResetPasswordToken_Precedent;
-use super::user_workflow_precedent::UserWorkflowPrecedent;
 
-pub enum ActionProcessorResult<T> {
+pub enum ActionProcessorResult<T>
+where
+    T: Serialize
+{
     Outcoming {
         outcoming: T
     },
@@ -24,55 +20,40 @@ where
         return Self::Outcoming { outcoming };
     }
 
-    pub fn application_user__precedent(application_user__precedent: ApplicationUser_Precedent) -> Self {
-        return Self::UserWorkflowPrecedent {
-            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser { application_user__precedent }
-        };
+    pub fn user_workflow_precedent(user_workflow_precedent: UserWorkflowPrecedent) -> Self {
+        return Self::UserWorkflowPrecedent { user_workflow_precedent };
     }
+}
 
-    pub fn application_user_authorization_token__precedent(
-        application_user_authorization_token__precedent: ApplicationUserAuthorizationToken_Precedent
-    ) -> Self {
-        return Self::UserWorkflowPrecedent {
-            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAuthorizationToken { application_user_authorization_token__precedent }
-        };
-    }
-
-    pub fn application_user_registration_token__precedent(
-        application_user_registration_token__precedent: ApplicationUserRegistrationToken_Precedent
-    ) -> Self {
-        return Self::UserWorkflowPrecedent {
-            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken {
-                application_user_registration_token__precedent
-            }
-        };
-    }
-
-    pub fn application_user_reset_password_token__precedent(
-        application_user_reset_password_token__precedent: ApplicationUserResetPasswordToken_Precedent
-    ) -> Self {
-        return Self::UserWorkflowPrecedent {
-            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken {
-                application_user_reset_password_token__precedent
-            }
-        };
-    }
-
-    pub fn application_user_access_token__precedent(
-        application_user_access_token__precedent: ApplicationUserAccessToken_Precedent
-    ) -> Self {
-        return Self::UserWorkflowPrecedent {
-            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken { application_user_access_token__precedent }
-        };
-    }
-
-    pub fn application_user_access_refresh_token__precedent(
-        application_user_access_refresh_token__precedent: ApplicationUserAccessRefreshToken_Precedent
-    ) -> Self {
-        return Self::UserWorkflowPrecedent {
-            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessRefreshToken {
-                application_user_access_refresh_token__precedent
-            }
-        };
-    }
+pub enum UserWorkflowPrecedent {
+    ApplicationUser_EmailAlreadyExist,
+    ApplicationUser_InvalidEmail,
+    ApplicationUser_InvalidNickname,
+    ApplicationUser_InvalidPassword,
+    ApplicationUser_NicknameAlreadyExist,
+    ApplicationUser_NotFound,
+    ApplicationUser_WrongPassword,
+    ApplicationUserAccessRefreshToken_AlreadyExpired,
+    ApplicationUserAccessRefreshToken_NotFound,
+    ApplicationUserAccessRefreshToken_WrongDeserializedForm,
+    ApplicationUserAccessToken_AlreadyExpired,
+    ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
+    ApplicationUserAccessToken_NotExpired,
+    ApplicationUserAccessToken_WrongDeserializedForm,
+    ApplicationUserAuthorizationToken_AlreadyExpired,
+    ApplicationUserAuthorizationToken_InvalidValue,
+    ApplicationUserAuthorizationToken_NotFound,
+    ApplicationUserAuthorizationToken_WrongValue,
+    ApplicationUserRegistrationToken_AlreadyApproved,
+    ApplicationUserRegistrationToken_AlreadyExpired,
+    ApplicationUserRegistrationToken_InvalidValue,
+    ApplicationUserRegistrationToken_IsNotApproved,
+    ApplicationUserRegistrationToken_NotFound,
+    ApplicationUserRegistrationToken_WrongValue,
+    ApplicationUserResetPasswordToken_AlreadyApproved,
+    ApplicationUserResetPasswordToken_AlreadyExpired,
+    ApplicationUserResetPasswordToken_InvalidValue,
+    ApplicationUserResetPasswordToken_IsNotApproved,
+    ApplicationUserResetPasswordToken_NotFound,
+    ApplicationUserResetPasswordToken_WrongValue
 }

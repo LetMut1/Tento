@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::user_workflow_precedent::ApplicationUserAccessToken_Precedent;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -26,7 +26,6 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     const LIMIT_MINIMUM_VALUE: i16 = 300;
     const LIMIT_MAXIMUM_VALUE: i16 = 500;
-
 
     // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
     // TODO ЛИБО только от боьшего к меньшему. Либо убирать этот параметр, так как создает много проблем.
@@ -67,13 +66,13 @@ impl ActionProcessor {
         match extractor_result {
             ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {}
             ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                return Ok(ActionProcessorResult::application_user_access_token__precedent(ApplicationUserAccessToken_Precedent::AlreadyExpired));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired));
             }
             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                return Ok(ActionProcessorResult::application_user_access_token__precedent(ApplicationUserAccessToken_Precedent::InApplicationUserAccessTokenBlackList));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
             }
             ExtractorResult::ApplicationUserAccessTokenWrongDeserializedForm => {
-                return Ok(ActionProcessorResult::application_user_access_token__precedent(ApplicationUserAccessToken_Precedent::WrongDeserializedForm));
+                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_WrongDeserializedForm));
             }
         }
 
