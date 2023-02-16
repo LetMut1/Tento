@@ -1,1 +1,1 @@
-DROP TABLE public.system_registry;
+DROP TABLE public.action_round_register;

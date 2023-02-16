@@ -1,10 +1,12 @@
 extern crate application;
 
 use application::application_layer::functionality::service::command_processor::run_server_processor::RunServerProcessor;
+use application::infrastructure_layer::functionality::service::displayer::Display;
+use application::infrastructure_layer::functionality::service::displayer::Displayer;
 
 fn main() -> () {
     if let Err(error) = RunServerProcessor::process(std::file!()) {
-        println!("{}", error);
+        println!("{}", Displayer::display(&error));
     }
 
     return ();
@@ -61,3 +63,7 @@ fn main() -> () {
 
 // - Стоит ли в pub enum ActionProcessorResult<T> сделать Емпти вариант. Обратить внимание на Джсонвреппер.
 // Может быть, возвращать EmptyType за место дженерика (enum без вариантов)
+
+//pub struct LogicError {
+//     message: &'static str                Убрать структуру.
+// }

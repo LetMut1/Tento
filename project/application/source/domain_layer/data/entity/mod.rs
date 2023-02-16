@@ -1,3 +1,4 @@
+pub mod action_round_register;
 pub mod application_user_access_refresh_token;
 pub mod application_user_access_token_black_list;
 pub mod application_user_access_token;
@@ -14,4 +15,3 @@ pub mod channel_feed_publication_reaction;
 pub mod channel_feed_publication;
 pub mod channel_subscription;
 pub mod channel;
-pub mod system_registry;

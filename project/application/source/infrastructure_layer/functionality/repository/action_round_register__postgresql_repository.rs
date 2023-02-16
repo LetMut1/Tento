@@ -7,26 +7,29 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 
-pub struct SystemRegistry_PostgresqlRepository;
+pub struct ActionRoundRegister_PostgresqlRepository;
 
-impl SystemRegistry_PostgresqlRepository {
-    pub async fn create<'a>(database_2_connection: &'a Connection, insert: Insert) -> Result<(), ErrorAuditor> {
+impl ActionRoundRegister_PostgresqlRepository {
+    pub async fn create<'a, 'b>(database_2_connection: &'a Connection, insert: Insert<'b>) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
-            "INSERT INTO public.system_registry AS sr ( \
-                message, \
-                level, \
+            "INSERT INTO public.action_round_register AS arr ( \
+                route, \
+                statuse_code, \
+                context, \
                 created_at \
             ) VALUES ( \
                 $1, \
+                $2, \
                 $2, \
                 current_timestamp(6) \
             );";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert.message, Type::TEXT)
-            .add_parameter(&insert.level, Type::INT2);
+            .add_parameter(&insert.route, Type::TEXT)
+            .add_parameter(&insert.status_code, Type::INT2)
+            .add_parameter(&insert.context, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
@@ -57,7 +60,8 @@ impl SystemRegistry_PostgresqlRepository {
     }
 }
 
-pub struct Insert {
-    pub message: String,
-    pub level: i16
+pub struct Insert<'a> {
+    pub route: &'a str,
+    pub status_code: i16,
+    pub context: Option<String>
 }

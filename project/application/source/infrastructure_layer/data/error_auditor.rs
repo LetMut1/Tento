@@ -31,12 +31,14 @@ impl ErrorAuditor {
     pub fn get_base_error<'a>(&'a self) -> &'a BaseError {
         return &self.base_error;
     }
+
+    pub fn get_backtrace<'a>(&'a self) -> &'a Backtrace {
+        return &self.backtrace;
+    }
 }
 
 impl Display for ErrorAuditor {
-    fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
-        write!(formatter, "{} > {}", &self.backtrace, &self.base_error)?;
-
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -54,53 +56,14 @@ pub enum BaseError {
 }
 
 impl Display for BaseError {
-    fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
-        match *self {
-            Self::LogicError { ref logic_error } => {
-                write!(formatter, "Logic: {}.", logic_error.message)?;
-            }
-            Self::RuntimeError { runtime_error: ref run_time_error } => {
-                match *run_time_error {
-                    RuntimeError::OtherError { ref other_error } => {
-                        write!(formatter, "Runtime, other: {}.", other_error.message.as_str())?;
-                    }
-                    RuntimeError::ResourceError { ref resource_error } => {
-                        match *resource_error {
-                            ResourceError::ConnectionPoolRedisError { ref bb8_redis_error } => {
-                                write!(formatter, "Runtime, resource, Redis connection pool : {}.", bb8_redis_error)?;
-                            }
-                            ResourceError::ConnectionPoolPostgresqlError { ref bb8_postgresql_error } => {
-                                write!(formatter, "Runtime, resource, Postgresql connection pool : {}.", bb8_postgresql_error)?;
-                            }
-                            ResourceError::EmailServerError { ref email_server_error } => {
-                                match *email_server_error {
-                                    EmailServerError::EmailError { ref email_error } => {
-                                        write!(formatter, "Runtime, resource, email : {}.", email_error)?;
-                                    }
-                                    EmailServerError::SmtpError { ref smtp_error } => {
-                                        write!(formatter, "Runtime, resource, email : {}.", smtp_error)?;
-                                    }
-                                }
-                            }
-                            ResourceError::PostgresqlError { ref postgresql_error } => {
-                                write!(formatter, "Runtime, resource,  Postgresql : {}.", postgresql_error)?;
-                            }
-                            ResourceError::RedisError { ref redis_error } => {
-                                write!(formatter, "Runtime, resource, Redis : {}.", redis_error)?;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }
 }
 
 #[derive(Debug)]
 pub struct LogicError {
-    message: &'static str
+    pub message: &'static str
 }
 
 impl LogicError {
@@ -146,6 +109,10 @@ impl OtherError {
         return Self {
             message: format!("{}", error)
         };
+    }
+
+    pub fn get_message<'a>(&'a self) -> &'a str {
+        return self.message.as_str();
     }
 }
 
@@ -213,21 +180,14 @@ impl Backtrace {
 
         return ();
     }
+
+    pub fn get_backtrace_part_registry<'a>(&'a self) -> &'a Vec<BacktracePart> {
+        return &self.backtrace_part_registry;
+    }
 }
 
 impl Display for Backtrace {
-    fn fmt<'a, 'b>(&'a self, formatter: &'b mut Formatter<'_>) -> Result<(), FormatError> {
-        for (index, backtrace_part) in self.backtrace_part_registry.iter().enumerate() {
-            match backtrace_part.context {
-                Some(ref context) => {
-                    writeln!(formatter, "({}){}:{} ({}).", index, backtrace_part.file_path, backtrace_part.line_number, context)?;
-                }
-                None => {
-                    writeln!(formatter, "({}){}:{}.", index, backtrace_part.file_path, backtrace_part.line_number)?;
-                }
-            }
-        }
-
+    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -246,5 +206,17 @@ impl BacktracePart {
             file_path,
             context
         }
+    }
+
+    pub fn get_line_number<'a>(&'a self) -> u32 {
+        return self.line_number;
+    }
+
+    pub fn get_file_path<'a>(&'a self) -> &'static str {
+        return self.file_path;
+    }
+
+    pub fn get_context<'a>(&'a self) -> Option<&'a str> {
+        return self.context.as_deref();
     }
 }
