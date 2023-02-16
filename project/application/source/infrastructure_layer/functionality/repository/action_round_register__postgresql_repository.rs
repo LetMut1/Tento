@@ -27,9 +27,9 @@ impl ActionRoundRegister_PostgresqlRepository {
             );";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert.route, Type::TEXT)
-            .add_parameter(&insert.status_code, Type::INT2)
-            .add_parameter(&insert.context, Type::TEXT);
+            .add_parameter(&insert.action_round_register_route, Type::TEXT)
+            .add_parameter(&insert.action_round_register_status_code, Type::INT2)
+            .add_parameter(&insert.action_round_register_context, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
@@ -61,7 +61,7 @@ impl ActionRoundRegister_PostgresqlRepository {
 }
 
 pub struct Insert<'a> {
-    pub route: &'a str,
-    pub status_code: i16,
-    pub context: Option<String>
+    pub action_round_register_route: &'a str,
+    pub action_round_register_status_code: i16,
+    pub action_round_register_context: Option<String>
 }

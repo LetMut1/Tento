@@ -1,4 +1,3 @@
-pub mod action_round_register__creator;
 pub mod application_user__email_sender;
 pub mod application_user_access_token__extractor;
 pub mod cloud_message_resolver;

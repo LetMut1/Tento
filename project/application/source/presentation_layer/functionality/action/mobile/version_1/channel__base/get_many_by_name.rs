@@ -2,6 +2,7 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name::Incoming;
+use crate::application_layer::functionality::service::action_round_result_writer::ActionRoundResultWriter;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -10,7 +11,6 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
-use crate::presentation_layer::functionality::service::action_round_logger::ActionRoundLogger;
 use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use crate::presentation_layer::functionality::service::unified_report_creator::UnifiedReportCreator;
@@ -48,7 +48,7 @@ where
 
         let response = ActionResponseCreator::create_bad_request();
 
-        if let Err(mut error_) = ActionRoundLogger::log_error_auditor(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await {
+        if let Err(mut error_) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &error).await {
             error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             unreachable!(
@@ -72,7 +72,7 @@ where
 
             let response = ActionResponseCreator::create_internal_server_error();
 
-            if let Err(mut error__) = ActionRoundLogger::log_error_auditor(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
+            if let Err(mut error__) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &error_).await {
                 error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 unreachable!(
@@ -97,7 +97,7 @@ where
 
             let response = ActionResponseCreator::create_internal_server_error();
 
-            if let Err(mut error__) = ActionRoundLogger::log_error_auditor(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
+            if let Err(mut error__) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &error_).await {
                 error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 unreachable!(
@@ -119,7 +119,7 @@ where
         Err(error) => {
             let response = ActionResponseCreator::create_internal_server_error();
 
-            if let Err(mut error_) = ActionRoundLogger::log_error_auditor(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await {
+            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &error).await {
                 error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 unreachable!(
@@ -146,7 +146,7 @@ where
 
                     let response = ActionResponseCreator::create_internal_server_error();
 
-                    if let Err(mut error__) = ActionRoundLogger::log_error_auditor(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
+                    if let Err(mut error__) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &error_).await {
                         error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         unreachable!(
@@ -163,7 +163,7 @@ where
 
             let response = ActionResponseCreator::create_ok(data);
 
-            if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+            if let Err(mut error) = ActionRoundResultWriter::write(database_2_postgresql_connection_pool, &request, &response).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 unreachable!(
@@ -190,7 +190,7 @@ where
 
                             let response = ActionResponseCreator::create_internal_server_error();
 
-                            if let Err(mut error__) = ActionRoundLogger::log_error_auditor(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
+                            if let Err(mut error__) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &error_).await {
                                 error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
@@ -207,7 +207,7 @@ where
 
                     let response = ActionResponseCreator::create_ok(data);
 
-                    if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                    if let Err(mut error) = ActionRoundResultWriter::write(database_2_postgresql_connection_pool, &request, &response).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         unreachable!(
@@ -232,7 +232,7 @@ where
 
                             let response = ActionResponseCreator::create_internal_server_error();
 
-                            if let Err(mut error__) = ActionRoundLogger::log_error_auditor(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
+                            if let Err(mut error__) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &error_).await {
                                 error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
@@ -249,7 +249,7 @@ where
 
                     let response = ActionResponseCreator::create_ok(data);
 
-                    if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                    if let Err(mut error) = ActionRoundResultWriter::write(database_2_postgresql_connection_pool, &request, &response).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         unreachable!(
@@ -274,7 +274,7 @@ where
 
                             let response = ActionResponseCreator::create_internal_server_error();
 
-                            if let Err(mut error__) = ActionRoundLogger::log_error_auditor(database_2_postgresql_connection_pool, &request, &response, Some(&error_)).await {
+                            if let Err(mut error__) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &error_).await {
                                 error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                                 unreachable!(
@@ -291,7 +291,7 @@ where
 
                     let response = ActionResponseCreator::create_ok(data);
 
-                    if let Err(mut error) = ActionRoundLogger::log_info(database_2_postgresql_connection_pool, &request, &response, None).await {
+                    if let Err(mut error) = ActionRoundResultWriter::write(database_2_postgresql_connection_pool, &request, &response).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         unreachable!(
@@ -311,7 +311,7 @@ where
 
                     let response = ActionResponseCreator::create_not_extended();
 
-                    if let Err(mut error_) = ActionRoundLogger::log_fatal_error(database_2_postgresql_connection_pool, &request, &response, Some(&error)).await {
+                    if let Err(mut error_) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &error).await {
                         error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         unreachable!(

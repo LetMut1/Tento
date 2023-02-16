@@ -3,20 +3,20 @@ use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::displayer::Display;
 use crate::infrastructure_layer::functionality::service::displayer::Displayer;
 
-pub trait ActionRoundRegister_CreateContext<T> {
-    type Displayer_: Display<T>;
+pub struct ActionRoundRegister_ContextCreator;
 
-    fn create<'a>(from: &'a T) -> String {
-        return <Self::Displayer_ as Display<T>>::display(from);
+pub trait CreateContext<T> {
+    fn create<'a>(from: &'a T) -> String;
+}
+
+impl CreateContext<InvalidArgument> for ActionRoundRegister_ContextCreator {
+    fn create<'a>(from: &'a InvalidArgument) -> String {
+        return Displayer::display(from);
     }
 }
 
-pub struct ActionRoundRegister_ContextCreator;
-
-impl ActionRoundRegister_CreateContext<InvalidArgument> for ActionRoundRegister_ContextCreator {
-    type Displayer_ = Displayer;
-}
-
-impl ActionRoundRegister_CreateContext<ErrorAuditor> for ActionRoundRegister_ContextCreator {
-    type Displayer_ = Displayer;
+impl CreateContext<ErrorAuditor> for ActionRoundRegister_ContextCreator {
+    fn create<'a>(from: &'a ErrorAuditor) -> String {
+        return Displayer::display(from);
+    }
 }

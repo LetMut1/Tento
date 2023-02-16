@@ -5,15 +5,15 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 
+pub struct Displayer;
+
 pub trait Display<T> {
     fn display<'a>(subject: &'a T) -> String;
 }
 
-pub struct Displayer;
-
 impl Display<ErrorAuditor> for Displayer {
     fn display<'a>(subject: &'a ErrorAuditor) -> String {
-        let mut backtrace_message;
+        let mut backtrace_message = String::new();
         for (index, backtrace_part) in subject
             .get_backtrace().
             get_backtrace_part_registry()
