@@ -8,7 +8,7 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::action::mobile::version_1::application_user__authorization;
 use crate::presentation_layer::functionality::action::mobile::version_1::channel__base;
-use crate::presentation_layer::functionality::action::route_not_found::route_not_found;
+use crate::presentation_layer::functionality::action::route_not_found;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -716,7 +716,7 @@ impl RunServerProcessor {
                     _ => {}
                 }
 
-                return route_not_found().await;
+                return route_not_found::route_not_found().await;
             }
         }
     }
