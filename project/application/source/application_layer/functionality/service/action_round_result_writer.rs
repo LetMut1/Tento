@@ -61,7 +61,7 @@ impl ActionRoundResultWriter {
             database_2_postgresql_connection_pool,
             request,
             response,
-            Some(ActionRoundRegister_ContextCreator::create(subject))
+            Some(<ActionRoundRegister_ContextCreator as CreateContext<E>>::create(subject))
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
