@@ -192,7 +192,9 @@ where
             match user_workflow_precedent {
                 UserWorkflowPrecedent::ApplicationUser_InvalidNickname => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_NICKNAME)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER__INVALID_NICKNAME
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {

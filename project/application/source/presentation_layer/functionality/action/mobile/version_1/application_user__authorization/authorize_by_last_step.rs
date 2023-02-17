@@ -192,7 +192,9 @@ where
             match user_workflow_precedent {
                 UserWorkflowPrecedent::ApplicationUserAuthorizationToken_InvalidValue => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__INVALID_VALUE)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__INVALID_VALUE
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
@@ -236,7 +238,9 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUserAuthorizationToken_NotFound => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
@@ -280,7 +284,9 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
@@ -324,7 +330,9 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUserAuthorizationToken_WrongValue => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
@@ -368,7 +376,9 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUser_NotFound => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {

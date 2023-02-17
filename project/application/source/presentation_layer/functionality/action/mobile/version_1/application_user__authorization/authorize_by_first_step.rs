@@ -195,7 +195,9 @@ where
                 UserWorkflowPrecedent::ApplicationUser_NotFound |
                 UserWorkflowPrecedent::ApplicationUser_WrongPassword => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {

@@ -190,7 +190,9 @@ where
             match user_workflow_precedent {
                 UserWorkflowPrecedent::ApplicationUser_InvalidEmail => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
@@ -234,7 +236,9 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUser_EmailAlreadyExist => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__EMAIL_ALREADY_EXIST)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER__EMAIL_ALREADY_EXIST
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {

@@ -190,7 +190,9 @@ where
             match user_workflow_precedent {
                 UserWorkflowPrecedent::ApplicationUser_InvalidEmail => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
@@ -234,7 +236,9 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
@@ -278,7 +282,9 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
@@ -322,7 +328,9 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyApproved => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {

@@ -190,7 +190,9 @@ where
             match user_workflow_precedent {
                 UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
@@ -234,7 +236,9 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUserAccessToken_WrongDeserializedForm => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__WRONG_DESERIALIZED_FORM)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__WRONG_DESERIALIZED_FORM
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
@@ -278,7 +282,9 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST)
+                        &UnifiedReportCreator::create_with_communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+                        )
                     ) {
                         Ok(data_) => data_,
                         Err(error) => {
