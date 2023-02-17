@@ -1,3 +1,4 @@
 pub enum InvalidArgument {
-    HttpHeaders
+    HttpHeaders,
+    HttpRoute
 }

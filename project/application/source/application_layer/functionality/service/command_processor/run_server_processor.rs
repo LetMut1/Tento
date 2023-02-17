@@ -716,7 +716,9 @@ impl RunServerProcessor {
                     _ => {}
                 }
 
-                return route_not_found::route_not_found().await;
+                return route_not_found::route_not_found(
+                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                ).await;
             }
         }
     }

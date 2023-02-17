@@ -9,6 +9,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
 use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
@@ -47,18 +48,15 @@ where
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
     if !RequestHeaderChecker::is_valid(&request) {
-        let error = ErrorAuditor::new(BaseError::LogicError { logic_error: LogicError::new("TODOQWERTY") },BacktracePart::new(line!(), file!(), None));
-
         let response = ActionResponseCreator::create_bad_request();
 
-        if let Err(mut error_) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &error).await {
-            error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        if let Err(mut error) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &InvalidArgument::HttpHeaders).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             unreachable!(
-                "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                "{}. TODO: Write in concurrent way. It is also necessary that the write
                 process does not wait for another write process, and writes immediately.",
                 &error,
-                &error_
             );
         }
 
@@ -496,6 +494,21 @@ where
                     return response;
                 }
             }
+        }
+        ActionProcessorResult::InvalidArgument { invalid_argument } => {
+            let response = ActionResponseCreator::create_bad_request();
+
+            if let Err(mut error) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &invalid_argument).await {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                unreachable!(
+                    "{}. TODO: Write in concurrent way. It is also necessary that the write
+                    process does not wait for another write process, and writes immediately.",
+                    &error
+                );
+            }
+
+            return response;
         }
     }
 }
