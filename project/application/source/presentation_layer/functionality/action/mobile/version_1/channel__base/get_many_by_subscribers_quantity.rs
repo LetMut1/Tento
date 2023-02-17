@@ -61,7 +61,9 @@ where
     if !RequestHeaderChecker::is_valid(&request) {
         let response = ActionResponseCreator::create_bad_request();
 
-        if let Err(mut error) = ActionRoundResultWriter::write_with_context(database_2_postgresql_connection_pool, &request, &response, &InvalidArgument::HttpHeaders).await {
+        if let Err(mut error) = ActionRoundResultWriter::write_with_context(
+            database_2_postgresql_connection_pool, &request, &response, &InvalidArgument::HttpHeaders
+        ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             unreachable!(
