@@ -1,7 +1,6 @@
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::LogicError;
 
 pub struct Counter<T> {
     value: T,
@@ -31,7 +30,7 @@ impl Counter<i16> {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new("Out of range for `i16` type.") },
+                        BaseError::LogicError { message: "Out of range for `i16` type." },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

@@ -2,7 +2,6 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -70,7 +69,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         if row_registry.is_empty() {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::LogicError { logic_error: LogicError::new("ApplicationUserRegistrationToken can not be inserted into Postgresql database.") },
+                    BaseError::LogicError { message: "ApplicationUserRegistrationToken can not be inserted into Postgresql database." },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -170,7 +169,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             if row_registry.is_empty() {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new("ApplicationUserRegistrationToken can not be updated in Postgresql database.") },
+                        BaseError::LogicError { message: "ApplicationUserRegistrationToken can not be updated in Postgresql database." },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -242,7 +241,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             if row_registry.is_empty() {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new("ApplicationUserRegistrationToken can not be updated in Postgresql database.") },
+                        BaseError::LogicError { message: "ApplicationUserRegistrationToken can not be updated in Postgresql database." },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

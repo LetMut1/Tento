@@ -48,7 +48,7 @@ impl Error for ErrorAuditor {}
 #[derive(Debug)]
 pub enum BaseError {
     LogicError {
-        logic_error: LogicError
+        message: &'static str
     },
     RuntimeError {
         runtime_error: RuntimeError
@@ -56,25 +56,6 @@ pub enum BaseError {
 }
 
 impl Display for BaseError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
-        return Ok(());
-    }
-}
-
-#[derive(Debug)]
-pub struct LogicError {
-    pub message: &'static str
-}
-
-impl LogicError {
-    pub fn new(message: &'static str) -> Self {
-        return Self {
-            message
-        };
-    }
-}
-
-impl Display for LogicError {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());
     }

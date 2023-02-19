@@ -41,8 +41,8 @@ impl Display<ErrorAuditor> for Displayer {
         }
 
         let error_message = match *subject.get_base_error() {
-            BaseError::LogicError { ref logic_error } => {
-                format!("Error, logic: {}.", logic_error.message)
+            BaseError::LogicError { message } => {
+                format!("Error, logic: {}.", message)
             }
             BaseError::RuntimeError { runtime_error: ref run_time_error } => {
                 match *run_time_error {

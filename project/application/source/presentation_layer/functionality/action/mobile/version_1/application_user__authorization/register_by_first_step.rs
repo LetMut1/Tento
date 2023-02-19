@@ -6,7 +6,6 @@ use crate::application_layer::functionality::service::action_round_result_writer
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
@@ -282,7 +281,7 @@ where
                 }
                 _ => {
                     let error = ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new("Unreachable state") },
+                        BaseError::LogicError { message: "Unreachable state." },
                         BacktracePart::new(line!(), file!(), None)
                     );
 

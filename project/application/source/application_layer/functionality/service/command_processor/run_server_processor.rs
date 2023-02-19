@@ -1,7 +1,6 @@
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
@@ -70,7 +69,7 @@ impl RunServerProcessor {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new("The directory does not exist.") },
+                        BaseError::LogicError { message: "The directory does not exist." },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -123,7 +122,7 @@ impl RunServerProcessor {
                 } else {
                     return Err(
                         ErrorAuditor::new(
-                            BaseError::LogicError { logic_error: LogicError::new("Any ....env files does not exist.") },
+                            BaseError::LogicError { message: "Any ....env files does not exist." },
                             BacktracePart::new(line!(), file!(), None)
                         )
                     );
@@ -162,7 +161,7 @@ impl RunServerProcessor {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new("Invalid socket address.") },
+                        BaseError::LogicError { message: "Invalid socket address." },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -339,7 +338,7 @@ impl RunServerProcessor {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new("Invalid socket address.") },
+                        BaseError::LogicError { message: "Invalid socket address." },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );

@@ -1,7 +1,6 @@
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::LogicError;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::chrono::DateTime;
@@ -42,7 +41,7 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new("Too big date must not be added.") },
+                        BaseError::LogicError { message: "Too big date must not be added." },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -79,7 +78,7 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new("Too big quantity of minutes must not be added.") },
+                        BaseError::LogicError { message: "Too big quantity of minutes must not be added." },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
@@ -93,7 +92,7 @@ impl DateTimeResolver {     // TODO TODO  TODO  TODO  TODO  НУЖНО, ЧТОБ
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError { logic_error: LogicError::new("Too big quantity of minutes must not be added.") },
+                        BaseError::LogicError { message: "Too big quantity of minutes must not be added." },
                         BacktracePart::new(line!(), file!(), None)
                     )
                 );
