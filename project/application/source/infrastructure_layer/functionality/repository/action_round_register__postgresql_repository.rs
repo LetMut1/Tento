@@ -16,7 +16,7 @@ impl ActionRoundRegister_PostgresqlRepository {
         let query =
             "INSERT INTO public.action_round_register AS arr ( \
                 route, \
-                statuse_code, \
+                status_code, \
                 context, \
                 created_at \
             ) VALUES ( \
