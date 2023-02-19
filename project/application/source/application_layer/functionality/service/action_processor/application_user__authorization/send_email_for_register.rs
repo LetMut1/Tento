@@ -8,7 +8,6 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::ApplicationUserRegistrationToken_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -73,7 +72,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
-        let mut application_user_registration_token_ = match application_user_registration_token {
+        let application_user_registration_token_ = match application_user_registration_token {
             Some(application_user_registration_token__) => application_user_registration_token__,
             None => {
                 return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound));
@@ -81,21 +80,19 @@ impl ActionProcessor {
         };
 
         if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
+            if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
+                database_2_postgresql_connection, application_user_registration_token_.get_application_user_email()
+            ).await {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+
             return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired));
         }
 
         if application_user_registration_token_.get_is_approved() {
             return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyApproved));
-        }
-
-        if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
-            database_2_postgresql_connection,
-            &mut application_user_registration_token_,
-            Update { application_user_registration_token_expires_at: true }
-        ).await {
-            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-            return Err(error);
         }
 
         if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_token(

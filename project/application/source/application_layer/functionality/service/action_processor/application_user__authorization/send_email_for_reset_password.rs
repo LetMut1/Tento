@@ -49,9 +49,10 @@ impl ActionProcessor {
                 );
             }
         };
+        let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
-            &*database_2_postgresql_pooled_connection, incoming.application_user_id
+            database_2_postgresql_connection, incoming.application_user_id
         ).await {
             Ok(application_user_reset_password_token_) => application_user_reset_password_token_,
             Err(mut error) => {
@@ -68,6 +69,14 @@ impl ActionProcessor {
         };
 
         if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
+            if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::delete(
+                database_2_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
+            ).await {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+
             return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired));
         }
 

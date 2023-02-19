@@ -90,7 +90,15 @@ impl ActionProcessor {
             }
         };
 
-        if !ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
+        if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
+            if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::delete(
+                database_2_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
+            ).await {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+
             return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired));
         }
 

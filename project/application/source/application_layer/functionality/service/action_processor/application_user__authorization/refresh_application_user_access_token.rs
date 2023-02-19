@@ -144,8 +144,8 @@ impl ActionProcessor {
         );
 
         application_user_access_refresh_token_
-                .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_new.get_id()))
-                .set_obfuscation_value(ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate());
+            .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_new.get_id()))
+            .set_obfuscation_value(ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate());
 
         let update = Update {
             application_user_access_refresh_token_expires_at: true,

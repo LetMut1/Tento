@@ -94,6 +94,14 @@ impl ActionProcessor {
         };
 
         if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
+            if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::delete(
+                database_2_postgresql_connection, application_user_authorization_token_.get_application_user_id(), application_user_authorization_token_.get_application_user_device_id()
+            ).await {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+
             return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired));
         }
 
