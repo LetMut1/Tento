@@ -94,7 +94,7 @@ impl ActionProcessor {
             return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired));
         }
 
-        if !application_user_registration_token_.get_is_approved() {
+        if application_user_registration_token_.get_is_approved() {
             return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyApproved));
         }
 
