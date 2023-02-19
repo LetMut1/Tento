@@ -22,7 +22,7 @@ impl ActionRoundRegister_PostgresqlRepository {
             ) VALUES ( \
                 $1, \
                 $2, \
-                $2, \
+                $3, \
                 current_timestamp(6) \
             );";
 
