@@ -21,6 +21,8 @@ impl ApplicationUserRegistrationToken_Validator {
             }
         };
 
-        return Ok(regex.is_match(application_user_registration_token_value));
+        return Ok(
+            regex.is_match(application_user_registration_token_value)
+        );
     }
 }
