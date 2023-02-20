@@ -146,19 +146,16 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        let row_registry = match database_1_connection.query(
+        if let Err(error) = database_1_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
 
         return Ok(());
     }
