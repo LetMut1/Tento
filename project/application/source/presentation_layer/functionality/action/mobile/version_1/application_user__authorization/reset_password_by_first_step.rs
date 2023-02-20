@@ -9,11 +9,12 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
+use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::presentation_layer::data::unified_report::UnifiedReport;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
 use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
-use crate::presentation_layer::functionality::service::unified_report_creator::UnifiedReportCreator;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -146,7 +147,7 @@ where
 
     match action_processor_result {
         ActionProcessorResult::Outcoming { outcoming } => {
-            let data = match rmp_serde::to_vec(&UnifiedReportCreator::create_with_data(outcoming)) {
+            let data = match rmp_serde::to_vec(&UnifiedReport::data(outcoming)) {
                 Ok(data_) => data_,
                 Err(error) => {
                     let error_ = ErrorAuditor::new(
@@ -191,7 +192,7 @@ where
             match user_workflow_precedent {
                 UserWorkflowPrecedent::ApplicationUser_InvalidEmail => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(
+                        &UnifiedReport::<Void>::communication_code(
                             CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL
                         )
                     ) {
@@ -237,7 +238,7 @@ where
                 }
                 UserWorkflowPrecedent::ApplicationUser_NotFound => {
                     let data = match rmp_serde::to_vec(
-                        &UnifiedReportCreator::create_with_communication_code(
+                        &UnifiedReport::<Void>::communication_code(
                             CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND
                         )
                     ) {
