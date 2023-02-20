@@ -1,3 +1,4 @@
+use crate::infrastructure_layer::data::void::Void;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::serde::Serialize;
 
@@ -7,12 +8,12 @@ use extern_crate::serde::Deserialize;
 pub struct UnifiedReportCreator;
 
 impl UnifiedReportCreator {
-    pub fn create_empty() -> UnifiedReport<()> {
+    pub fn create_empty() -> UnifiedReport<Void> {
         return UnifiedReport::empty();
     }
 
-    pub fn create_with_communication_code(communication_code: i64) -> UnifiedReport<()> {
-        return UnifiedReport::communication_code(communication_code)
+    pub fn create_with_communication_code(communication_code: i64) -> UnifiedReport<Void> {
+        return UnifiedReport::communication_code(communication_code);
     }
 }
 

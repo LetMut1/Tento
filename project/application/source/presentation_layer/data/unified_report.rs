@@ -69,7 +69,7 @@ where
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
-pub struct Data<S>
+struct Data<S>
 {
     data: Option<S>
 }
