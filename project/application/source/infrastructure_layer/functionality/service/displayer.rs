@@ -14,9 +14,9 @@ pub trait Display<T> {
 impl Display<ErrorAuditor> for Displayer {
     fn display<'a>(subject: &'a ErrorAuditor) -> String {
         let mut backtrace_message = String::new();
-        for (index, backtrace_part) in subject
-            .get_backtrace().
-            get_backtrace_part_registry()
+        '_a: for (index, backtrace_part) in subject
+            .get_backtrace()
+            .get_backtrace_part_registry()
             .iter()
             .enumerate() {
             if index == 0 {

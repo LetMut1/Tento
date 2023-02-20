@@ -66,15 +66,6 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
             }
         };
 
-        if row_registry.is_empty() {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::LogicError { message: "ApplicationUserResetPasswordToken can not be inserted into Postgresql database." },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
-
         let application_user_reset_password_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
             Ok(application_user_reset_password_token_expires_at_) => application_user_reset_password_token_expires_at_,
             Err(error) => {
@@ -166,15 +157,6 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                 }
             };
 
-            if row_registry.is_empty() {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::LogicError { message: "ApplicationUserResetPasswordToken can not be updated in Postgresql database." },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-
             let application_user_reset_password_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
                 Ok(application_user_reset_password_token_token_expires_at_) => application_user_reset_password_token_token_expires_at_,
                 Err(error) => {
@@ -237,15 +219,6 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                     );
                 }
             };
-
-            if row_registry.is_empty() {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::LogicError { message: "ApplicationUserResetPasswordToken can not be updated in Postgresql database." },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
         }
 
         return Ok(());

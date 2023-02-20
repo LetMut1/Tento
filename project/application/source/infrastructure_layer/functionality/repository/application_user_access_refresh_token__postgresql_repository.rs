@@ -74,15 +74,6 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             }
         };
 
-        if row_registry.is_empty() {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::LogicError { message: "ApplicationUserAccessRefreshToken can not be inserted into Postgresql database." },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
-
         let application_user_access_refresh_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
             Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
             Err(error) => {
@@ -189,15 +180,6 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     }
                 };
 
-                if row_registry.is_empty() {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::LogicError { message: "ApplicationUserAccessRefreshToken can not be updated into Postgresql database." },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-
                 let application_user_access_refresh_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
                     Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
                     Err(error) => {
@@ -276,15 +258,6 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     }
                 };
 
-                if row_registry.is_empty() {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::LogicError { message: "ApplicationUserAccessRefreshToken can not be updated into Postgresql database." },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-
                 let application_user_access_refresh_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
                     Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
                     Err(error) => {
@@ -350,15 +323,6 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                     }
                 };
 
-                if row_registry.is_empty() {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::LogicError { message: "ApplicationUserAccessRefreshToken can not be updated into Postgresql database." },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-
                 let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(0) {
                     Ok(application_user_access_refresh_token_updated_at_) => application_user_access_refresh_token_updated_at_,
                     Err(error) => {
@@ -419,15 +383,6 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                         );
                     }
                 };
-
-                if row_registry.is_empty() {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::LogicError { message: "ApplicationUserAccessRefreshToken can not be updated in Postgresql database." },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
             }
         };
 

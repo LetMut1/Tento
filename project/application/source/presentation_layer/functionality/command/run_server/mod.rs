@@ -64,18 +64,5 @@ fn main() -> () {
 // Может быть, возвращать EmptyType за место дженерика (enum без вариантов)
 
 
-// if row_registry.is_empty() {
-//     return Err(
-//         ErrorAuditor::new(
-//             BaseError::LogicError { message: "ApplicationUserAccessRefreshToken can not be updated in Postgresql database." },
-//             BacktracePart::new(line!(), file!(), None)
-//         )
-//     );
-// }    нужно или нет, понять
-
-
-
-// pub struct Counter<T> {   можно ли написать через дженерики?
-
 
 // // - DateTimeResolver - посмотреть и понять, как переработать после написания токенов. DateTimeResolver ПОсмотреть, какие там методы нужно оставить. если теперь все сущности для бвстроты рассчетов экспирации имеют ИниксТАйм время.

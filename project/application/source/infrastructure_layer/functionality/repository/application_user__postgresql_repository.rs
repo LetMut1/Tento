@@ -65,15 +65,6 @@ impl ApplicationUser_PostgresqlRepository {
             }
         };
 
-        if row_registry.is_empty() {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::LogicError { message: "ApplicationUser can not be inserted into Postgresql database." },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
-
         let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
             Ok(application_user_id_) => application_user_id_,
             Err(error) => {
@@ -168,15 +159,6 @@ impl ApplicationUser_PostgresqlRepository {
                 );
             }
         };
-
-        if row_registry.is_empty() {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::LogicError { message: "ApplicationUser can not be updated in Postgresql database." },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
 
         return Ok(());
     }
