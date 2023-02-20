@@ -1,5 +1,6 @@
 CREATE TABLE public.action_round_register (
     route TEXT,
+    method TEXT,
     status_code SMALLINT,
     context TEXT,
     created_at TIMESTAMP(6) WITH TIME ZONE
@@ -11,5 +12,6 @@ WHERE status_code >= 400;
 
 ALTER TABLE ONLY public.action_round_register
 ALTER COLUMN route SET NOT NULL,
+ALTER COLUMN method SET NOT NULL,
 ALTER COLUMN status_code SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL;

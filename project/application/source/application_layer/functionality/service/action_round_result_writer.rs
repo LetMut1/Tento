@@ -106,6 +106,7 @@ impl ActionRoundResultWriter {
 
         let insert = Insert {
             action_round_register_route: request.uri().path(),
+            action_round_register_method: request.method().as_str(),
             action_round_register_status_code,
             action_round_register_context
         };

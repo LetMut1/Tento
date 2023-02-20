@@ -1,4 +1,3 @@
-#[allow(dead_code)]
 pub struct Channel {
     id: i64,
     application_user_id: i64,

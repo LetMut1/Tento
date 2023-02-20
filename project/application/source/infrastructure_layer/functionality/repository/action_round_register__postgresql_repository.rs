@@ -16,6 +16,7 @@ impl ActionRoundRegister_PostgresqlRepository {
         let query =
             "INSERT INTO public.action_round_register AS arr ( \
                 route, \
+                method, \
                 status_code, \
                 context, \
                 created_at \
@@ -23,11 +24,13 @@ impl ActionRoundRegister_PostgresqlRepository {
                 $1, \
                 $2, \
                 $3, \
+                $4, \
                 current_timestamp(6) \
             );";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.action_round_register_route, Type::TEXT)
+            .add_parameter(&insert.action_round_register_method, Type::TEXT)
             .add_parameter(&insert.action_round_register_status_code, Type::INT2)
             .add_parameter(&insert.action_round_register_context, Type::TEXT);
 
@@ -62,6 +65,7 @@ impl ActionRoundRegister_PostgresqlRepository {
 
 pub struct Insert<'a> {
     pub action_round_register_route: &'a str,
+    pub action_round_register_method: &'a str,
     pub action_round_register_status_code: i16,
     pub action_round_register_context: Option<String>
 }
