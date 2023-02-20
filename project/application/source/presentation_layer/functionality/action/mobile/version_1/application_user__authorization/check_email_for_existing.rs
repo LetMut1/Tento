@@ -1,5 +1,4 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::check_email_for_existing::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::check_email_for_existing::Incoming;
 use crate::application_layer::functionality::service::action_round_result_writer::ActionRoundResultWriter;
@@ -9,11 +8,9 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
-use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;

@@ -94,7 +94,7 @@ impl ActionProcessor {
 
                 application_user_
             } else {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_InvalidNickname));
+                return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Nickname });
             }
         };
 

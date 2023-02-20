@@ -59,7 +59,7 @@ impl ActionProcessor {
         }
 
         if !ApplicationUser_Validator::is_valid_nickname(incoming.application_user_nickname.as_str()) {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_InvalidNickname));
+            return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Nickname });
         }
 
         let is_valid_email = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {

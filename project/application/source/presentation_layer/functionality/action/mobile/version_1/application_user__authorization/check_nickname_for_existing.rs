@@ -1,5 +1,4 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::check_nickname_for_existing::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::check_nickname_for_existing::Incoming;
 use crate::application_layer::functionality::service::action_round_result_writer::ActionRoundResultWriter;
@@ -9,11 +8,9 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
-use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -211,78 +208,28 @@ where
 
             return response;
         }
-        ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
-            match user_workflow_precedent {
-                UserWorkflowPrecedent::ApplicationUser_InvalidNickname => {
-                    let data = match rmp_serde::to_vec(
-                        &UnifiedReport::<Void>::communication_code(
-                            CommunicationCodeRegistry::APPLICATION_USER__INVALID_NICKNAME
-                        )
-                    ) {
-                        Ok(data_) => data_,
-                        Err(error) => {
-                            let error_ = ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                                BacktracePart::new(line!(), file!(), None)
-                            );
+        ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: _ } => {
+            let error = ErrorAuditor::new(
+                BaseError::LogicError { message: "Unreachable state." },
+                BacktracePart::new(line!(), file!(), None)
+            );
 
-                            let response = ActionResponseCreator::create_internal_server_error();
+            let response = ActionResponseCreator::create_not_extended();
 
-                            if let Err(mut error__) = ActionRoundResultWriter::write_with_context(
-                                database_2_postgresql_connection_pool, &request, &response, &error_
-                            ).await {
-                                error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                database_2_postgresql_connection_pool, &request, &response, &error
+            ).await {
+                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                unreachable!(
-                                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                                    process does not wait for another write process, and writes immediately.",
-                                    &error_,
-                                    &error__
-                                );
-                            }
-
-                            return response;
-                        }
-                    };
-
-                    let response = ActionResponseCreator::create_ok(data);
-
-                    if let Err(mut error) = ActionRoundResultWriter::write(database_2_postgresql_connection_pool, &request, &response).await {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        unreachable!(
-                            "{}. TODO: Write in concurrent way. It is also necessary that the write
-                            process does not wait for another write process, and writes immediately.",
-                            &error
-                        );
-                    }
-
-                    return response;
-                }
-                _ => {
-                    let error = ErrorAuditor::new(
-                        BaseError::LogicError { message: "Unreachable state." },
-                        BacktracePart::new(line!(), file!(), None)
-                    );
-
-                    let response = ActionResponseCreator::create_not_extended();
-
-                    if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
-                        database_2_postgresql_connection_pool, &request, &response, &error
-                    ).await {
-                        error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        unreachable!(
-                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                            process does not wait for another write process, and writes immediately.",
-                            &error,
-                            &error_
-                        );
-                    }
-
-                    return response;
-                }
+                unreachable!(
+                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                    process does not wait for another write process, and writes immediately.",
+                    &error,
+                    &error_
+                );
             }
+
+            return response;
         }
         ActionProcessorResult::InvalidArgument { invalid_argument } => {
             let response = ActionResponseCreator::create_bad_request();

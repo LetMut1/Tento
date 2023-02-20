@@ -105,7 +105,7 @@ struct Outcoming {
 }
 ```
 ```
-Communication codes: absent
+Communication codes: absent.
 ```
  - ## /v1/m/au/cnfe (check_nickname_for_existing) POST (GET functional)
 ```
@@ -124,8 +124,7 @@ struct Outcoming {
 }
 ```
 ```
-Communication codes:
-- APPLICATION_USER__INVALID_NICKNAME
+Communication codes: absent.
 ```
  - ## /v1/m/au/rbfs (register_by_first_step) POST
 ```
@@ -190,7 +189,6 @@ struct Outcoming {
 ```
 ```
 Communication codes:
-- APPLICATION_USER__INVALID_NICKNAME
 - APPLICATION_USER__NICKNAME_ALREADY_EXIST
 - APPLICATION_USER__EMAIL_ALREADY_EXIST
 - APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE

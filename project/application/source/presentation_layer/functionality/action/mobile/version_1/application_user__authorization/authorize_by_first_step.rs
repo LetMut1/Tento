@@ -213,7 +213,6 @@ where
         }
         ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
             match user_workflow_precedent {
-                UserWorkflowPrecedent::ApplicationUser_InvalidNickname |
                 UserWorkflowPrecedent::ApplicationUser_NotFound |
                 UserWorkflowPrecedent::ApplicationUser_WrongPassword => {
                     let data = match rmp_serde::to_vec(

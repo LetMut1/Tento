@@ -32,7 +32,6 @@ where
 
 pub enum UserWorkflowPrecedent {
     ApplicationUser_EmailAlreadyExist,
-    ApplicationUser_InvalidNickname,
     ApplicationUser_NicknameAlreadyExist,
     ApplicationUser_NotFound,
     ApplicationUser_WrongPassword,
