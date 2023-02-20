@@ -144,7 +144,7 @@ where
     };
 
     match action_processor_result {
-        ActionProcessorResult::Outcoming { outcoming: _ } => {
+        ActionProcessorResult::Empty => {
             let data = match rmp_serde::to_vec(&UnifiedReport::<Void>::empty()) {
                 Ok(data_) => data_,
                 Err(error) => {
@@ -181,6 +181,29 @@ where
                     "{}. TODO: Write in concurrent way. It is also necessary that the write
                     process does not wait for another write process, and writes immediately.",
                     &error
+                );
+            }
+
+            return response;
+        }
+        ActionProcessorResult::Outcoming { outcoming: _ } => {
+            let error = ErrorAuditor::new(
+                BaseError::LogicError { message: "Unreachable state." },
+                BacktracePart::new(line!(), file!(), None)
+            );
+
+            let response = ActionResponseCreator::create_not_extended();
+
+            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                database_2_postgresql_connection_pool, &request, &response, &error
+            ).await {
+                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                unreachable!(
+                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                    process does not wait for another write process, and writes immediately.",
+                    &error,
+                    &error_
                 );
             }
 

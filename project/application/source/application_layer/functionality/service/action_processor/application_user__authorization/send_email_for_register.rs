@@ -7,6 +7,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::ApplicationUserRegistrationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -30,7 +31,7 @@ impl ActionProcessor {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionProcessorResult<()>, ErrorAuditor>
+    ) -> Result<ActionProcessorResult<Void>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -105,7 +106,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        return Ok(ActionProcessorResult::outcoming(()));
+        return Ok(ActionProcessorResult::Empty);
     }
 }
 
