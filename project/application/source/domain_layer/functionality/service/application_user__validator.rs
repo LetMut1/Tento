@@ -14,7 +14,7 @@ impl ApplicationUser_Validator {
     const APPLICATION_USER__PASSWORD_MAXIMUM_LENGTH: usize = 65;
 
     pub fn is_valid_email<'a>(application_user_email: &'a str) -> Result<bool, ErrorAuditor> {
-        let regex = match Regex::new(r"\S+@\S+") {
+        let regex = match Regex::new(r"\S+@{1}\S+") {
             Ok(regex_) => regex_,
             Err(error) => {
                 return Err(
