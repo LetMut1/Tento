@@ -2,7 +2,6 @@
  - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
  - Every request should contain this `HTTP header`s:
  ```
- - user-agent: ... (https://www.scientiamobile.com/correctly-form-user-agents-for-mobile-apps/)
  - content-type: application/octet-stream
  - content-length: ...
  - x-content-type-options: nosniff

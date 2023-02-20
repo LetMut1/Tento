@@ -9,10 +9,6 @@ impl RequestHeaderChecker {
     pub fn is_valid<'a>(request: &'a Request<Body>) -> bool {
         let header_map = request.headers();
 
-        if let None = header_map.get(header::USER_AGENT) {
-            return false;
-        }
-
         let header_value_content_type = match header_map.get(header::CONTENT_TYPE) {
             Some(header_value_content_type_) => header_value_content_type_,
             None => {
