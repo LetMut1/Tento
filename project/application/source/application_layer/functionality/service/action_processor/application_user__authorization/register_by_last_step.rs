@@ -55,7 +55,7 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {                                                                                              // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
         if !ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_InvalidPassword));
+            return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }
 
         if !ApplicationUser_Validator::is_valid_nickname(incoming.application_user_nickname.as_str()) {

@@ -8,7 +8,6 @@ impl CommunicationCodeRegistry {
     pub const APPLICATION_USER__NOT_FOUND: i64 = 2;
     pub const APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD: i64 = 3;
     pub const APPLICATION_USER__INVALID_NICKNAME: i64 = 4;
-    pub const APPLICATION_USER__INVALID_PASSWORD: i64 = 5;
 
     /// Codes for Application_user_registration_token context.
     /// [1000, 1999]
