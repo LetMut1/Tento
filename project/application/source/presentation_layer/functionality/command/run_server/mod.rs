@@ -59,6 +59,22 @@ fn main() -> () {
 
 // OrderConventionResolver::is_asc - разобраться с этим. В аппликейшене конвертировать в енам, в репозитории принимать енам, так уйдем от ошибок конветации в инфраструктурре
 
-// - Проверить, почему пропускает @@ для правил валидации емейла.
-
 // Написать мессаджпак сервис и валидатор для фронта.
+
+
+// Удалить.
+// impl<T> ActionProcessorResult<T>
+// where
+//     T: Serialize
+// {
+//     pub fn outcoming(outcoming: T) -> Self {
+//         return Self::Outcoming { outcoming };
+//     }
+
+//     pub fn user_workflow_precedent(user_workflow_precedent: UserWorkflowPrecedent) -> Self {
+//         return Self::UserWorkflowPrecedent { user_workflow_precedent };
+//     }
+// }
+
+
+// Запретить постоянно отправлять письма для токенов. Хранить время отправки письма в бд для каждого токена

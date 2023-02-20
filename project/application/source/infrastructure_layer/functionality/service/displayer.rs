@@ -86,8 +86,9 @@ impl Display<ErrorAuditor> for Displayer {
 impl Display<InvalidArgument> for Displayer {
     fn display<'a>(subject: &'a InvalidArgument) -> String {
         let message_part = match *subject {
-            InvalidArgument::HttpHeaders => "Http header.",
-            InvalidArgument::HttpRoute => "Http route."
+            InvalidArgument::ApplicationUser_Email => "ApplicationUser_Email",
+            InvalidArgument::HttpHeaders => "HttpHeader.",
+            InvalidArgument::HttpRoute => "HttpRoute."
         };
 
         return format!("Invalid argument: {}", message_part);

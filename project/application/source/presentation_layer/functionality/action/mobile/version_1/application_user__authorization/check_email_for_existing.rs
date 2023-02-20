@@ -211,78 +211,28 @@ where
 
             return response;
         }
-        ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
-            match user_workflow_precedent {
-                UserWorkflowPrecedent::ApplicationUser_InvalidEmail => {
-                    let data = match rmp_serde::to_vec(
-                        &UnifiedReport::<Void>::communication_code(
-                            CommunicationCodeRegistry::APPLICATION_USER__INVALID_EMAIL
-                        )
-                    ) {
-                        Ok(data_) => data_,
-                        Err(error) => {
-                            let error_ = ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                                BacktracePart::new(line!(), file!(), None)
-                            );
+        ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: _ } => {
+            let error = ErrorAuditor::new(
+                BaseError::LogicError { message: "Unreachable state." },
+                BacktracePart::new(line!(), file!(), None)
+            );
 
-                            let response = ActionResponseCreator::create_internal_server_error();
+            let response = ActionResponseCreator::create_not_extended();
 
-                            if let Err(mut error__) = ActionRoundResultWriter::write_with_context(
-                                database_2_postgresql_connection_pool, &request, &response, &error_
-                            ).await {
-                                error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                database_2_postgresql_connection_pool, &request, &response, &error
+            ).await {
+                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                                unreachable!(
-                                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                                    process does not wait for another write process, and writes immediately.",
-                                    &error_,
-                                    &error__
-                                );
-                            }
-
-                            return response;
-                        }
-                    };
-
-                    let response = ActionResponseCreator::create_ok(data);
-
-                    if let Err(mut error) = ActionRoundResultWriter::write(database_2_postgresql_connection_pool, &request, &response).await {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        unreachable!(
-                            "{}. TODO: Write in concurrent way. It is also necessary that the write
-                            process does not wait for another write process, and writes immediately.",
-                            &error
-                        );
-                    }
-
-                    return response;
-                }
-                _ => {
-                    let error = ErrorAuditor::new(
-                        BaseError::LogicError { message: "Unreachable state." },
-                        BacktracePart::new(line!(), file!(), None)
-                    );
-
-                    let response = ActionResponseCreator::create_not_extended();
-
-                    if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
-                        database_2_postgresql_connection_pool, &request, &response, &error
-                    ).await {
-                        error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        unreachable!(
-                            "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                            process does not wait for another write process, and writes immediately.",
-                            &error,
-                            &error_
-                        );
-                    }
-
-                    return response;
-                }
+                unreachable!(
+                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                    process does not wait for another write process, and writes immediately.",
+                    &error,
+                    &error_
+                );
             }
+
+            return response;
         }
         ActionProcessorResult::InvalidArgument { invalid_argument } => {
             let response = ActionResponseCreator::create_bad_request();

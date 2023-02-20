@@ -38,7 +38,7 @@ struct Data<S>
 ```
 /project/application/source/presentation_layer/functionality/service/communication_code_registry.rs
 ```
-- `HTTP status code` unequal to `200` (it is `400`, `401`, ... `500`) have not got `HTTP body`
+- `HTTP status code` unequal to `200` (it is [`400`, `599`]) have not got `HTTP body`
 
 <br/><br/>
 
@@ -105,8 +105,7 @@ struct Outcoming {
 }
 ```
 ```
-Communication codes:
-- APPLICATION_USER__INVALID_EMAIL
+Communication codes: absent
 ```
  - ## /v1/m/au/cnfe (check_nickname_for_existing) POST (GET functional)
 ```
@@ -143,7 +142,6 @@ Result data: absent.
 ```
 ```
 Communication codes:
-- APPLICATION_USER__INVALID_EMAIL
 - APPLICATION_USER__EMAIL_ALREADY_EXIST
 ```
 - ## /v1/m/au/rbss (register_by_second_step) POST
@@ -162,7 +160,6 @@ Result data: absent.
 ```
 ```
 Communication codes:
-- APPLICATION_USER__INVALID_EMAIL
 - APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE
 - APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
@@ -195,7 +192,6 @@ struct Outcoming {
 Communication codes:
 - APPLICATION_USER__INVALID_PASSWORD
 - APPLICATION_USER__INVALID_NICKNAME
-- APPLICATION_USER__INVALID_EMAIL
 - APPLICATION_USER__NICKNAME_ALREADY_EXIST
 - APPLICATION_USER__EMAIL_ALREADY_EXIST
 - APPLICATION_USER_REGISTRATION_TOKEN__INVALID_VALUE
@@ -219,7 +215,6 @@ Result data: absent.
 ```
 ```
 Communication codes:
-- APPLICATION_USER__INVALID_EMAIL
 - APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
@@ -311,7 +306,6 @@ struct Outcoming {
 ```
 ```
 Communication codes:
-- APPLICATION_USER__INVALID_EMAIL
 - APPLICATION_USER__NOT_FOUND
 ```
  - ## /v1/m/au/rpbss (reset_password_by_second_step) POST
