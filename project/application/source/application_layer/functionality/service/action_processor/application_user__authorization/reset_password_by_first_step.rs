@@ -158,7 +158,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        return Ok(ActionProcessorResult::outcoming(Outcoming { application_user_id: application_user_.get_id() }));
+        return Ok(ActionProcessorResult::Outcoming { outcoming: Outcoming { application_user_id: application_user_.get_id() } });
     }
 }
 

@@ -295,9 +295,12 @@ impl ActionProcessor {
         };
 
         return Ok(
-            ActionProcessorResult::outcoming(
-                Outcoming { application_user_access_token_deserialized_form, application_user_access_refresh_token_deserialized_form }
-            )
+            ActionProcessorResult::Outcoming {
+                outcoming: Outcoming {
+                    application_user_access_token_deserialized_form,
+                    application_user_access_refresh_token_deserialized_form
+                }
+            }
         );
     }
 }

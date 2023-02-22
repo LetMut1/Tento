@@ -92,7 +92,7 @@ impl ActionProcessor {
             }
         };
 
-        return Ok(ActionProcessorResult::outcoming(Outcoming { channel_registry }));
+        return Ok(ActionProcessorResult::Outcoming { outcoming: Outcoming { channel_registry } });
     }
 }
 

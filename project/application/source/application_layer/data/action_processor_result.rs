@@ -21,9 +21,6 @@ impl<T> ActionProcessorResult<T>
 where
     T: Serialize
 {
-    pub fn outcoming(outcoming: T) -> Self {
-        return Self::Outcoming { outcoming };
-    }
 
     pub fn user_workflow_precedent(user_workflow_precedent: UserWorkflowPrecedent) -> Self {
         return Self::UserWorkflowPrecedent { user_workflow_precedent };

@@ -56,7 +56,7 @@ impl ActionProcessor {
             }
         };
 
-        return Ok(ActionProcessorResult::outcoming(Outcoming { result: is_exist }));
+        return Ok(ActionProcessorResult::Outcoming { outcoming: Outcoming { result: is_exist } });
     }
 }
 
