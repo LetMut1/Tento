@@ -54,7 +54,7 @@ Deauthorizes application user from one device.
 ```rust
 Request data:
 struct Incoming {
-    aapplication_user_access_token_deserialized_form: String
+    application_user_access_token_deserialized_form: String
 }
 ```
 ```
@@ -72,7 +72,7 @@ Deauthorizes application user from all devices.
 ```rust
 Request data:
 struct Incoming {
-    aapplication_user_access_token_deserialized_form: String
+    application_user_access_token_deserialized_form: String
 }
 ```
 ```
@@ -180,7 +180,7 @@ struct Incoming {
 ```rust
 Result data:
 struct Outcoming {
-    aapplication_user_access_token_deserialized_form: String,
+    application_user_access_token_deserialized_form: String,
     application_user_access_refresh_token_deserialized_form: String
 }
 ```
@@ -249,7 +249,7 @@ struct Incoming {
 ```rust
 Result data:
 struct Outcoming {
-    aapplication_user_access_token_deserialized_form: String,
+    application_user_access_token_deserialized_form: String,
     application_user_access_refresh_token_deserialized_form: String
 }
 ```
@@ -371,14 +371,14 @@ Refreshs application user access token.
 ```rust
 Request data:
 struct Incoming {
-    aapplication_user_access_token_deserialized_form: String,
+    application_user_access_token_deserialized_form: String,
     application_user_access_refresh_token_deserialized_form: String
 }
 ```
 ```rust
 Result data:
 struct Outcoming {
-    aapplication_user_access_token_deserialized_form: String,
+    application_user_access_token_deserialized_form: String,
     application_user_access_refresh_token_deserialized_form: String
 }
 ```
