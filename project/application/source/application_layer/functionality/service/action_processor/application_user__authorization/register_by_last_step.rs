@@ -108,7 +108,7 @@ impl ActionProcessor {
             }
         };
         if is_exist_1 {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_NicknameAlreadyExist));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NicknameAlreadyExist });
         }
 
         let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(database_1_postgresql_connection, incoming.application_user_email.as_str()).await {
@@ -120,7 +120,7 @@ impl ActionProcessor {
             }
         };
         if is_exist_2 {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_EmailAlreadyExist));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_EmailAlreadyExist });
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -150,7 +150,7 @@ impl ActionProcessor {
         let mut application_user_registration_token_ = match application_user_registration_token {
             Some(application_user_registration_token__) => application_user_registration_token__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound });
             }
         };
         if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
@@ -162,11 +162,11 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired });
         }
 
         if !application_user_registration_token_.get_is_approved() {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_IsNotApproved));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_IsNotApproved });
         }
 
         if application_user_registration_token_.get_value() != incoming.application_user_registration_token_value.as_str() {
@@ -196,7 +196,7 @@ impl ActionProcessor {
                 }
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_WrongValue));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_WrongValue });
         }
 
         let application_user_password_hash = match ApplicationUser_PasswordHashResolver::create(incoming.application_user_password.as_str()) {

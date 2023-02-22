@@ -79,7 +79,7 @@ impl ActionProcessor {
             }
         };
         if is_exist_2 {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_EmailAlreadyExist));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_EmailAlreadyExist });
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {

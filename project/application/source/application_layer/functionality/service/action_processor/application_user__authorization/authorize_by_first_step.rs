@@ -102,7 +102,7 @@ impl ActionProcessor {
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound });
             }
         };
 
@@ -115,7 +115,7 @@ impl ActionProcessor {
             }
         };
         if !is_valid {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_WrongPassword));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_WrongPassword });
         }
 
         let application_user_id = application_user_.get_id();

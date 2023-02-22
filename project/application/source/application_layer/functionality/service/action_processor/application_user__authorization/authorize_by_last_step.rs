@@ -90,7 +90,7 @@ impl ActionProcessor {
         let mut application_user_authorization_token_ = match application_user_authorization_token {
             Some(application_user_authorization_token__) => application_user_authorization_token__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAuthorizationToken_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAuthorizationToken_NotFound });
             }
         };
 
@@ -103,7 +103,7 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired });
         }
 
         if application_user_authorization_token_.get_value() != incoming.application_user_authorization_token_value.as_str() {
@@ -133,7 +133,7 @@ impl ActionProcessor {
                 }
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAuthorizationToken_WrongValue));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAuthorizationToken_WrongValue });
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -158,7 +158,7 @@ impl ActionProcessor {
             }
         };
         if !is_exist {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_NotFound));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound });
         }
 
         let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {

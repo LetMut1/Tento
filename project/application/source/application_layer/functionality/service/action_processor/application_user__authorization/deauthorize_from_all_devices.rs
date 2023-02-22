@@ -52,13 +52,13 @@ impl ActionProcessor {
         let application_user_access_token_ = match extractor_result {
             ExtractorResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
             ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired });
             }
             ExtractorResult::ApplicationUserAccessTokenInvalidDeserializedForm => {
                 return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
             }
             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList });
             }
         };
 

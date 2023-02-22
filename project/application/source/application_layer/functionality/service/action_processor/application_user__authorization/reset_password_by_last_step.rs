@@ -89,7 +89,7 @@ impl ActionProcessor {
         let mut application_user_reset_password_token_ = match application_user_reset_password_token {
             Some(application_user_reset_password_token__) => application_user_reset_password_token__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_NotFound });
             }
         };
 
@@ -102,11 +102,11 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired });
         }
 
         if !application_user_reset_password_token_.get_is_approved() {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_IsNotApproved));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_IsNotApproved });
         }
 
         if application_user_reset_password_token_.get_value() != incoming.application_user_reset_password_token_value.as_str() {
@@ -136,7 +136,7 @@ impl ActionProcessor {
                 }
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_WrongValue));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_WrongValue });
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -163,7 +163,7 @@ impl ActionProcessor {
         let mut application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound });
             }
         };
 

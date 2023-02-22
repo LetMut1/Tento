@@ -77,7 +77,7 @@ impl ActionProcessor {
         let application_user_registration_token_ = match application_user_registration_token {
             Some(application_user_registration_token__) => application_user_registration_token__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound });
             }
         };
 
@@ -90,11 +90,11 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired });
         }
 
         if application_user_registration_token_.get_is_approved() {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyApproved));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyApproved });
         }
 
         if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_token(

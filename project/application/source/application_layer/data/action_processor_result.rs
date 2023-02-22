@@ -17,16 +17,6 @@ where
     }
 }
 
-impl<T> ActionProcessorResult<T>
-where
-    T: Serialize
-{
-
-    pub fn user_workflow_precedent(user_workflow_precedent: UserWorkflowPrecedent) -> Self {
-        return Self::UserWorkflowPrecedent { user_workflow_precedent };
-    }
-}
-
 pub enum UserWorkflowPrecedent {
     ApplicationUser_EmailAlreadyExist,
     ApplicationUser_NicknameAlreadyExist,

@@ -65,7 +65,7 @@ impl ActionProcessor {
         let application_user_authorization_token_ = match application_user_authorization_token {
             Some(application_user_authorization_token__) => application_user_authorization_token__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAuthorizationToken_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAuthorizationToken_NotFound });
             }
         };
 
@@ -78,7 +78,7 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired });
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -106,7 +106,7 @@ impl ActionProcessor {
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound });
             }
         };
 

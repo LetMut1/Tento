@@ -50,10 +50,10 @@ impl ActionProcessor {
         match extractor_result {
             ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {}
             ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired });
             }
             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList });
             }
             ExtractorResult::ApplicationUserAccessTokenInvalidDeserializedForm => {
                 return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });

@@ -88,7 +88,7 @@ impl ActionProcessor {
         let mut application_user_registration_token_ = match application_user_registration_token {
             Some(application_user_registration_token__) => application_user_registration_token__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound });
             }
         };
 
@@ -101,11 +101,11 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired });
         }
 
         if application_user_registration_token_.get_is_approved() {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyApproved));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyApproved });
         }
 
         if application_user_registration_token_.get_value().as_bytes() != incoming.application_user_registration_token_value.as_bytes() {
@@ -135,7 +135,7 @@ impl ActionProcessor {
                 }
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserRegistrationToken_WrongValue));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_WrongValue });
         }
 
         application_user_registration_token_.set_is_approved(true);

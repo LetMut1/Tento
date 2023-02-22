@@ -78,7 +78,7 @@ impl ActionProcessor {
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUser_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound });
             }
         };
 

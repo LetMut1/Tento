@@ -62,7 +62,7 @@ impl ActionProcessor {
         };
 
         if !ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token_) {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessToken_NotExpired));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_NotExpired });
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -96,7 +96,7 @@ impl ActionProcessor {
         let mut application_user_access_refresh_token_ = match application_user_access_refresh_token {
             Some(application_user_access_refresh_token__) => application_user_access_refresh_token__,
             None => {
-                return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_NotFound));
+                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_NotFound });
             }
         };
 
@@ -127,7 +127,7 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired));
+            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired });
         }
 
         let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {
