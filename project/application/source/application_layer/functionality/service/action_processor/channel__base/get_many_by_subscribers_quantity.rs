@@ -72,8 +72,8 @@ impl ActionProcessor {
             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                 return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList });
             }
-            ExtractorResult::ApplicationUserAccessTokenInvalidDeserializedForm => {
-                return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
+            ExtractorResult::InvalidArgument { invalid_argument } => {
+                return Ok(ActionProcessorResult::InvalidArgument { invalid_argument });
             }
         }
 

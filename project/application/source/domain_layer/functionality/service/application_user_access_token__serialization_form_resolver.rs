@@ -4,6 +4,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::base64;
 use extern_crate::crypto::hmac::Hmac;
@@ -51,7 +52,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
 
         if token_part_registry.len() != 2
             || !ApplicationUserAccessToken_Encoder::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
-            return Ok(SerializationFormResolverResult::ApplicationUserAccessTokenInvalidDeserializedForm);
+            return Ok(SerializationFormResolverResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
         }
 
         let data = match base64::decode_config(token_part_registry[0].as_bytes(), base64::STANDARD) {
@@ -112,5 +113,7 @@ pub enum SerializationFormResolverResult {
     ApplicationUserAccessToken {
         application_user_access_token: ApplicationUserAccessToken<'static>
     },
-    ApplicationUserAccessTokenInvalidDeserializedForm
+    InvalidArgument {
+        invalid_argument: InvalidArgument
+    }
 }

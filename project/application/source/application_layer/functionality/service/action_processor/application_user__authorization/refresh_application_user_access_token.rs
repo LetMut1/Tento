@@ -56,8 +56,8 @@ impl ActionProcessor {
         };
         let application_user_access_token_ = match serialization_form_resolver_result {
             SerializationFormResolverResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
-            SerializationFormResolverResult::ApplicationUserAccessTokenInvalidDeserializedForm => {
-                return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
+            SerializationFormResolverResult::InvalidArgument { invalid_argument } => {
+                return Ok(ActionProcessorResult::InvalidArgument { invalid_argument });
             }
         };
 

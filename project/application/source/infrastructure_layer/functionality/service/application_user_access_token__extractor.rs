@@ -4,6 +4,7 @@ use crate::domain_layer::functionality::service::application_user_access_token__
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::SerializationFormResolverResult;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 
 pub struct ApplicationUserAccessToken_Extractor;
@@ -25,8 +26,8 @@ impl ApplicationUserAccessToken_Extractor {
         };
         let application_user_access_token_ = match serialization_form_resolver_result {
             SerializationFormResolverResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
-            SerializationFormResolverResult::ApplicationUserAccessTokenInvalidDeserializedForm => {
-                return Ok(ExtractorResult::ApplicationUserAccessTokenInvalidDeserializedForm);
+            SerializationFormResolverResult::InvalidArgument { invalid_argument } => {
+                return Ok(ExtractorResult::InvalidArgument { invalid_argument });
             }
         };
 
@@ -43,8 +44,10 @@ pub enum ExtractorResult {
         application_user_access_token: ApplicationUserAccessToken<'static>
     },
     ApplicationUserAccessTokenAlreadyExpired,
-    ApplicationUserAccessTokenInvalidDeserializedForm,
     /// Not yet used due to the fact that there is no such flow yet. More
     /// information in ApplicationUserAccessTokenBlackList entity.
-    ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList
+    ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList,
+    InvalidArgument {
+        invalid_argument: InvalidArgument
+    }
 }
