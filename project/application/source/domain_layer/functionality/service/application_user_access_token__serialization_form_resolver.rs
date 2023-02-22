@@ -51,7 +51,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
 
         if token_part_registry.len() != 2
             || !ApplicationUserAccessToken_Encoder::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
-            return Ok(SerializationFormResolverResult::ApplicationUserAccessTokenWrongDeserializedForm);
+            return Ok(SerializationFormResolverResult::ApplicationUserAccessTokenInvalidDeserializedForm);
         }
 
         let data = match base64::decode_config(token_part_registry[0].as_bytes(), base64::STANDARD) {
@@ -112,5 +112,5 @@ pub enum SerializationFormResolverResult {
     ApplicationUserAccessToken {
         application_user_access_token: ApplicationUserAccessToken<'static>
     },
-    ApplicationUserAccessTokenWrongDeserializedForm
+    ApplicationUserAccessTokenInvalidDeserializedForm
 }

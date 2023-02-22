@@ -25,16 +25,16 @@ impl ApplicationUserAccessToken_Extractor {
         };
         let application_user_access_token_ = match serialization_form_resolver_result {
             SerializationFormResolverResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
-            SerializationFormResolverResult::ApplicationUserAccessTokenWrongDeserializedForm => {
-                return Ok(ExtractorResult::ApplicationUserAccessTokenWrongDeserializedForm);
+            SerializationFormResolverResult::ApplicationUserAccessTokenInvalidDeserializedForm => {
+                return Ok(ExtractorResult::ApplicationUserAccessTokenInvalidDeserializedForm);
             }
         };
 
-        if !ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token_) {
-            return Ok(ExtractorResult::ApplicationUserAccessToken { application_user_access_token: application_user_access_token_ });
+        if ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token_) {
+            return Ok(ExtractorResult::ApplicationUserAccessTokenAlreadyExpired);
         }
 
-        return Ok(ExtractorResult::ApplicationUserAccessTokenAlreadyExpired);
+        return Ok(ExtractorResult::ApplicationUserAccessToken { application_user_access_token: application_user_access_token_ });
     }
 }
 
@@ -43,7 +43,7 @@ pub enum ExtractorResult {
         application_user_access_token: ApplicationUserAccessToken<'static>
     },
     ApplicationUserAccessTokenAlreadyExpired,
-    ApplicationUserAccessTokenWrongDeserializedForm,
+    ApplicationUserAccessTokenInvalidDeserializedForm,
     /// Not yet used due to the fact that there is no such flow yet. More
     /// information in ApplicationUserAccessTokenBlackList entity.
     ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList
