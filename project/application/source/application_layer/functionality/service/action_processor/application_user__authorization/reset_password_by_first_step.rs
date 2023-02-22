@@ -113,16 +113,16 @@ impl ActionProcessor {
                         .set_value(ApplicationUserResetPasswordToken_ValueGenerator::generate())
                         .set_wrong_enter_tries_quantity(0)
                         .set_is_approved(false);
-                }
 
-                if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
-                    database_2_postgresql_connection,
-                    &mut application_user_reset_password_token__,
-                    Update { application_user_reset_password_token_expires_at: true }
-                ).await {
-                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                    if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
+                        database_2_postgresql_connection,
+                        &mut application_user_reset_password_token__,
+                        Update { application_user_reset_password_token_expires_at: true }
+                    ).await {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                    return Err(error);
+                        return Err(error);
+                    }
                 }
 
                 application_user_reset_password_token__

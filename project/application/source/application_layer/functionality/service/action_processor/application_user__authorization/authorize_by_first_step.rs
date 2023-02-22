@@ -2,6 +2,7 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
+use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__value_generator::ApplicationUserAuthorizationToken_ValueGenerator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -144,14 +145,20 @@ impl ActionProcessor {
         };
         let application_user_authorization_token_ = match application_user_authorization_token {
             Some(mut application_user_authorization_token__) => {
-                if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::update(
-                    database_2_postgresql_connection,
-                    &mut application_user_authorization_token__,
-                    Update { application_user_authorization_token_expires_at: true }
-                ).await {
-                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token__) {
+                    application_user_authorization_token__
+                        .set_value(ApplicationUserAuthorizationToken_ValueGenerator::generate())
+                        .set_wrong_enter_tries_quantity(0);
 
-                    return Err(error);
+                    if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::update(
+                        database_2_postgresql_connection,
+                        &mut application_user_authorization_token__,
+                        Update { application_user_authorization_token_expires_at: true }
+                    ).await {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        return Err(error);
+                    }
                 }
 
                 application_user_authorization_token__
