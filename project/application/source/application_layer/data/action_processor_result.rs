@@ -37,7 +37,6 @@ pub enum UserWorkflowPrecedent {
     ApplicationUser_WrongPassword,
     ApplicationUserAccessRefreshToken_AlreadyExpired,
     ApplicationUserAccessRefreshToken_NotFound,
-    ApplicationUserAccessRefreshToken_WrongDeserializedForm,
     ApplicationUserAccessToken_AlreadyExpired,
     ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
     ApplicationUserAccessToken_NotExpired,

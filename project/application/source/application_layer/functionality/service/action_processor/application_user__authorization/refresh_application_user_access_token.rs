@@ -111,8 +111,9 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
-        if !is_valid || application_user_access_token_.get_id().as_bytes() != application_user_access_refresh_token_.get_application_user_access_token_id().as_bytes() {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_WrongDeserializedForm));
+        if !is_valid
+            || application_user_access_token_.get_id().as_bytes() != application_user_access_refresh_token_.get_application_user_access_token_id().as_bytes() {
+            return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm });
         }
 
         if ApplicationUserAccessRefreshToken_ExpirationTimeResolver::is_expired(&application_user_access_refresh_token_) {

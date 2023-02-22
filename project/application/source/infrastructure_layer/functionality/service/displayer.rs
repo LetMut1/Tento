@@ -89,10 +89,11 @@ impl Display<InvalidArgument> for Displayer {
             InvalidArgument::ApplicationUser_Email => "ApplicationUser_Email",
             InvalidArgument::ApplicationUser_Nickname => "ApplicationUser_Nickname",
             InvalidArgument::ApplicationUser_Password => "ApplicationUser_Password",
+            InvalidArgument::ApplicationUserAccessToken_DeserializedForm => "ApplicationUserAccessToken_DeserializedForm",
             InvalidArgument::ApplicationUserAuthorizationToken_Value => "ApplicationUserAuthorizationToken_Value",
             InvalidArgument::ApplicationUserRegistrationToken_Value => "ApplicationUserRegistrationToken_Value",
             InvalidArgument::ApplicationUserResetPasswordToken_Value => "ApplicationUserResetPasswordToken_Value",
-            InvalidArgument::ApplicationUserAccessToken_DeserializedForm => "ApplicationUserAccessToken_DeserializedForm",
+            InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm => "ApplicationUserAccessRefreshToken_DeserializedForm",
             InvalidArgument::HttpHeaders => "HttpHeader.",
             InvalidArgument::HttpRoute => "HttpRoute."
         };
