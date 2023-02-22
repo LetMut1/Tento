@@ -47,7 +47,6 @@ pub enum UserWorkflowPrecedent {
     ApplicationUserAuthorizationToken_WrongValue,
     ApplicationUserRegistrationToken_AlreadyApproved,
     ApplicationUserRegistrationToken_AlreadyExpired,
-    ApplicationUserRegistrationToken_InvalidValue,
     ApplicationUserRegistrationToken_IsNotApproved,
     ApplicationUserRegistrationToken_NotFound,
     ApplicationUserRegistrationToken_WrongValue,

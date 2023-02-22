@@ -90,6 +90,7 @@ impl Display<InvalidArgument> for Displayer {
             InvalidArgument::ApplicationUser_Nickname => "ApplicationUser_Nickname",
             InvalidArgument::ApplicationUser_Password => "ApplicationUser_Password",
             InvalidArgument::ApplicationUserAuthorizationToken_Value => "ApplicationUserAuthorizationToken_Value",
+            InvalidArgument::ApplicationUserRegistrationToken_Value => "ApplicationUserRegistrationToken_Value",
             InvalidArgument::HttpHeaders => "HttpHeader.",
             InvalidArgument::HttpRoute => "HttpRoute."
         };
