@@ -1,6 +1,6 @@
 use crate::application_layer::functionality::service::action_round_result_writer::ActionRoundResultWriter;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;

@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use extern_crate::serde::Serialize;
 
 pub enum ActionProcessorResult<T>

@@ -4,7 +4,7 @@ use crate::domain_layer::functionality::service::application_user_access_token__
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::SerializationFormResolverResult;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 
 pub struct ApplicationUserAccessToken_Extractor;

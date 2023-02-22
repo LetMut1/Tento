@@ -1,4 +1,5 @@
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use super::invalid_argument_result::InvalidArgument;
+use super::invalid_argument_result::InvalidArgumentResult;
 
 pub enum SortOrder {
     Asc,
@@ -11,9 +12,15 @@ impl SortOrder {
     const ASC: &'static str = "ASC";
     const DESC: &'static str = "DESC";
 
-    pub fn new(sort_order: i8) -> Result<Self, ErrorAuditor> {
-        todo!()
+    pub fn new(sort_order_representation: i8) -> InvalidArgumentResult<Self> {
+        if sort_order_representation == Self::ASC_REPRESENTATION {
+            return InvalidArgumentResult::Ok { subject: SortOrder::Asc };
+        }
 
-        // уалить ОрдерКОнвентионРезолвер
+        if sort_order_representation == Self::DESC_REPRESENTATION {
+            return InvalidArgumentResult::Ok { subject: SortOrder::Desc };
+        }
+
+        return InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::SortOrderRepresentation };
     }
 }

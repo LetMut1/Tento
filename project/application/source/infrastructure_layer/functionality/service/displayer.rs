@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::error_auditor::EmailServerError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 
 pub struct Displayer;
 
@@ -94,10 +94,11 @@ impl Display<InvalidArgument> for Displayer {
             InvalidArgument::ApplicationUserRegistrationToken_Value => "ApplicationUserRegistrationToken_Value",
             InvalidArgument::ApplicationUserResetPasswordToken_Value => "ApplicationUserResetPasswordToken_Value",
             InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm => "ApplicationUserAccessRefreshToken_DeserializedForm",
-            InvalidArgument::HttpHeaders => "HttpHeader.",
-            InvalidArgument::HttpRoute => "HttpRoute."
+            InvalidArgument::HttpHeaders => "HttpHeader",
+            InvalidArgument::HttpRoute => "HttpRoute",
+            InvalidArgument::SortOrderRepresentation => "SortOrderRepresentation"
         };
 
-        return format!("Invalid argument: {}", message_part);
+        return format!("Invalid argument: {}.", message_part);
     }
 }

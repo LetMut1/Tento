@@ -1,5 +1,5 @@
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::displayer::Display;
 use crate::infrastructure_layer::functionality::service::displayer::Displayer;
 

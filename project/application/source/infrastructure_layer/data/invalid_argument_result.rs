@@ -1,3 +1,12 @@
+pub enum InvalidArgumentResult<T> {
+    Ok {
+        subject: T
+    },
+    InvalidArgument {
+        invalid_argument: InvalidArgument
+    }
+}
+
 pub enum InvalidArgument {
     ApplicationUser_Email,
     ApplicationUser_Nickname,
@@ -8,5 +17,6 @@ pub enum InvalidArgument {
     ApplicationUserRegistrationToken_Value,
     ApplicationUserResetPasswordToken_Value,
     HttpHeaders,
-    HttpRoute
+    HttpRoute,
+    SortOrderRepresentation
 }
