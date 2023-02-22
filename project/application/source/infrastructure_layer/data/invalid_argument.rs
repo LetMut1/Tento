@@ -4,6 +4,7 @@ pub enum InvalidArgument {
     ApplicationUser_Password,
     ApplicationUserAuthorizationToken_Value,
     ApplicationUserRegistrationToken_Value,
+    ApplicationUserResetPasswordToken_Value,
     HttpHeaders,
     HttpRoute
 }

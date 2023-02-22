@@ -9,6 +9,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::ApplicationUserResetPasswordToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::Update;
@@ -45,7 +46,7 @@ impl ActionProcessor {
             }
         };
         if !is_valid_value {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_InvalidValue));
+            return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserResetPasswordToken_Value });
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {

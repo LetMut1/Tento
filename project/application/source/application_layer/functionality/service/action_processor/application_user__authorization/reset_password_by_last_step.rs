@@ -56,8 +56,9 @@ impl ActionProcessor {
             }
         };
         if !is_valid_value {
-            return Ok(ActionProcessorResult::user_workflow_precedent(UserWorkflowPrecedent::ApplicationUserResetPasswordToken_InvalidValue));
+            return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserResetPasswordToken_Value });
         }
+
         if ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
             return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }
