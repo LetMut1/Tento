@@ -25,7 +25,7 @@ use extern_crate::tokio_postgres::NoTls;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
-use extern_crate::tokio;
+use extern_crate::tokio::runtime::Builder;
 use extern_crate::tokio::signal;
 use std::clone::Clone;
 use std::marker::Send;
@@ -44,7 +44,23 @@ impl RunServerProcessor {
             }
         };
 
-        if let Err(mut error) = Self::run_http_server(&environment_configuration) {
+        let runtime = match Builder::new_multi_thread()
+            .enable_all()
+            .build() {
+            Ok(runtime_) => runtime_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if let Err(mut error) = runtime.block_on(
+            Self::run_http_server(&environment_configuration)
+        ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
@@ -53,9 +69,7 @@ impl RunServerProcessor {
         return Ok(());
     }
 
-    // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
-    #[tokio::main]
-    async fn run_http_server<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
+    async fn run_http_server<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
         let postgresql_connection_pool_workflow_type_aggregator = if environment_configuration.is_production_environment() {
             todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
         } else {
