@@ -7,8 +7,8 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::sort_order::SortOrder;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
-use crate::infrastructure_layer::functionality::service::order_convention_resolver::OrderConventionResolver;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
@@ -245,7 +245,7 @@ impl Channel_PostgresqlRepository {
     pub async fn per_request_2<'a>(
         database_1_connection: &'a Connection,
         channel_created_at: &'a Option<String>,
-        order: i8,
+        sort_order: SortOrder,
         limit: i16
     ) -> Result<Option<Vec<GetManyByCreatedAtChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -270,10 +270,13 @@ impl Channel_PostgresqlRepository {
             .to_string();
 
         if let Some(created_at_) = channel_created_at {
-            if OrderConventionResolver::is_asc(order) {
-                query += " AND c.created_at > $";
-            } else {
-                query += " AND c.created_at < $";
+            match sort_order {
+                SortOrder::Asc => {
+                    query += " AND c.created_at > $";
+                }
+                SortOrder::Desc => {
+                    query += " AND c.created_at < $";
+                }
             }
 
             counter_value = match counter.get_next_value() {
@@ -290,14 +293,6 @@ impl Channel_PostgresqlRepository {
             prepared_statemant_parameter_convertation_resolver.add_parameter(created_at_, Type::TEXT);
         }
 
-        let order_ = match OrderConventionResolver::convert(order) {
-            Ok(order__) => order__,
-            Err(mut error) => {
-                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                return Err(error);
-            }
-        };
         counter_value = match counter.get_next_value() {
             Ok(counter_value_) => counter_value_,
             Err(mut error) => {
@@ -306,7 +301,7 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         };
-        query = query + " ORDER BY c.created_at " + order_ + " LIMIT $" + counter_value.to_string().as_str() + ";";
+        query = query + " ORDER BY c.created_at " + sort_order.convert() + " LIMIT $" + counter_value.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
@@ -474,7 +469,7 @@ impl Channel_PostgresqlRepository {
     pub async fn per_request_3<'a>(
         database_1_connection: &'a Connection,
         channel_subscribers_quantity: Option<i64>,
-        order: i8,
+        sort_order: SortOrder,
         limit: i16
     ) -> Result<Option<Vec<GetManyBySubscribersQuantityChannel>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -492,10 +487,13 @@ impl Channel_PostgresqlRepository {
             .to_string();
 
         if let Some(ref subscribers_quantity_) = channel_subscribers_quantity {
-            if OrderConventionResolver::is_asc(order) {
-                query += " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($";
-            } else {
-                query += " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) < public.limit_channel_subscribers_quantity($";
+            match sort_order {
+                SortOrder::Asc => {
+                    query += " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) > public.limit_channel_subscribers_quantity($";
+                }
+                SortOrder::Desc => {
+                    query += " AND public.limit_channel_subscribers_quantity(c.subscribers_quantity) < public.limit_channel_subscribers_quantity($";
+                }
             }
 
             counter_value = match counter.get_next_value() {
@@ -512,14 +510,6 @@ impl Channel_PostgresqlRepository {
             prepared_statemant_parameter_convertation_resolver.add_parameter(subscribers_quantity_, Type::INT8);
         }
 
-        let order_ = match OrderConventionResolver::convert(order) {
-            Ok(order__) => order__,
-            Err(mut error) => {
-                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                return Err(error);
-            }
-        };
         counter_value = match counter.get_next_value() {
             Ok(counter_value_) => counter_value_,
             Err(mut error) => {
@@ -528,7 +518,7 @@ impl Channel_PostgresqlRepository {
                 return Err(error);
             }
         };
-        query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + order_ +" LIMIT $" + counter_value.to_string().as_str() + ";";
+        query = query + " ORDER BY public.limit_channel_subscribers_quantity(c.subscribers_quantity) " + sort_order.convert() +" LIMIT $" + counter_value.to_string().as_str() + ";";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 

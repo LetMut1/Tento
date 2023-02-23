@@ -18,5 +18,7 @@ pub enum InvalidArgument {
     ApplicationUserResetPasswordToken_Value,
     HttpHeaders,
     HttpRoute,
-    SortOrderRepresentation
+    Limit,
+    SortOrderRepresentation,
+    Timestamp
 }

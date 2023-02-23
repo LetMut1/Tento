@@ -7,12 +7,12 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::sort_order::SortOrder;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
-use crate::infrastructure_layer::functionality::service::order_convention_resolver::OrderConventionResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
@@ -27,7 +27,7 @@ use std::marker::Sync;
 pub struct ActionProcessor;
 
 impl ActionProcessor {
-    const LIMIT: i8 = 30;
+    const LIMIT: i16 = 50;
 
     pub async fn process<'a, T>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
@@ -40,8 +40,6 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let mut limit = incoming.limit;
-
         let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
             environment_configuration_resolver, incoming.application_user_access_token_deserialized_form.as_str()
         ).await {
@@ -81,28 +79,21 @@ impl ActionProcessor {
             }
         };
 
-        // if let Some(ref channel_created_at_) = incoming.channel_created_at {
-        //     if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
-        //         return Err(
-        //             ErrorAuditor::new(
-        //                 BaseError::InvalidArgumentError,
-        //                 BacktracePart::new(line!(), file!(), None)
-        //             )
-        //         );
-        //     }
-        // }
+        if let Some(ref channel_created_at_) = incoming.channel_created_at {
+            if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Timestamp })
+            }
+        }
 
-        // if !OrderConventionResolver::can_convert(incoming.order) {
-        //     return Err(
-        //         ErrorAuditor::new(
-        //             BaseError::InvalidArgumentError,
-        //             BacktracePart::new(line!(), file!(), None)
-        //         )
-        //     );
-        // }
+        let sort_order = match SortOrder::new(incoming.sort_order) {
+            ArgumentResult::Ok { subject: sort_order_ } => sort_order_,
+            ArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
+            }
+        };
 
-        if limit <= 0 || limit > Self::LIMIT {
-            limit = Self::LIMIT;
+        if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Limit });
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -118,7 +109,7 @@ impl ActionProcessor {
         };
 
         let channel_registry = match Channel_PostgresqlRepository::per_request_2(
-            &*database_1_postgresql_pooled_connection, &incoming.channel_created_at, incoming.order, limit as i16
+            &*database_1_postgresql_pooled_connection, &incoming.channel_created_at, sort_order, incoming.limit
         ).await {
             Ok(channel_registry_) => channel_registry_,
             Err(mut error) => {
@@ -137,8 +128,8 @@ impl ActionProcessor {
 pub struct Incoming {
     application_user_access_token_deserialized_form: String,
     channel_created_at:  Option<String>,
-    order: i8,
-    limit: i8
+    sort_order: i8,
+    limit: i16
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]

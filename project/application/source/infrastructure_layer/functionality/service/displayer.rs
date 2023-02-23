@@ -96,7 +96,9 @@ impl Display<InvalidArgument> for Displayer {
             InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm => "ApplicationUserAccessRefreshToken_DeserializedForm",
             InvalidArgument::HttpHeaders => "HttpHeader",
             InvalidArgument::HttpRoute => "HttpRoute",
-            InvalidArgument::SortOrderRepresentation => "SortOrderRepresentation"
+            InvalidArgument::Limit => "Limit",
+            InvalidArgument::SortOrderRepresentation => "SortOrderRepresentation",
+            InvalidArgument::Timestamp => "Timestamp"
         };
 
         return format!("Invalid argument: {}.", message_part);

@@ -23,4 +23,11 @@ impl SortOrder {
 
         return ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::SortOrderRepresentation };
     }
+
+    pub fn convert(self) -> &'static str {
+        return match self {
+            Self::Asc => Self::ASC,
+            Self::Desc => Self::DESC
+        }
+    }
 }
