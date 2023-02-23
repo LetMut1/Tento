@@ -165,7 +165,7 @@ impl RunServerProcessor {
 
                                     return Ok::<_, HyperError>(
                                         Self::resolve(
-                                            &environment_configuration__,           // TODO TODO TODO Возможно ли как-то передать &'a environment_configuration без клонирования.
+                                            &environment_configuration__, // TODO TODO TODO Возможно ли как-то передать &'a environment_configuration без клонирования.. Если реализовать трейт Клон для этго объекта с println, то на каждый запрос пишется 2 строки. Это нужно исправить.
                                             requset,
                                             &database_1_postgresql_connection_pool_,
                                             &database_2_postgresql_connection_pool_,
