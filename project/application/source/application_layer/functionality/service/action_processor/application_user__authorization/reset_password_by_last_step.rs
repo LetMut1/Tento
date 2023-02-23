@@ -233,7 +233,7 @@ impl ActionProcessor {
 
         CloudMessageResolver::deauthorize_application_user_from_all_devices();
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Empty });
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Void });
     }
 }
 

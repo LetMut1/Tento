@@ -39,114 +39,87 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        todo!();
-        // let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
-        //     environment_configuration_resolver, incoming.application_user_access_token_deserialized_form.as_str()
-        // ).await {
-        //     Ok(extractor_result_) => extractor_result_,
-        //     Err(mut error) => {
-        //         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
+            environment_configuration_resolver, incoming.application_user_access_token_deserialized_form.as_str()
+        ).await {
+            Ok(extractor_result_) => extractor_result_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-        //         return Err(error);
-        //     }
-        // };
-        // match extractor_result {
-        //     ArgumentResult::Ok { subject: extractor_result_ } => {
-        //         match extractor_result_ {
-        //             ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {},
-        //             ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-        //                 return Ok(
-        //                     ArgumentResult::Ok {
-        //                         subject: ActionProcessorResult::UserWorkflowPrecedent {
-        //                             user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired
-        //                         }
-        //                     }
-        //                 );
-        //             }
-        //             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-        //                 return Ok(
-        //                     ArgumentResult::Ok {
-        //                         subject: ActionProcessorResult::UserWorkflowPrecedent {
-        //                             user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
-        //                         }
-        //                     }
-        //                 );
-        //             }
-        //         }
-        //     }
-        //     ArgumentResult::InvalidArgument { invalid_argument } => {
-        //         return Ok(ArgumentResult::InvalidArgument { invalid_argument });
-        //     }
-        // };
+                return Err(error);
+            }
+        };
+        match extractor_result {
+            ArgumentResult::Ok { subject: extractor_result_ } => {
+                match extractor_result_ {
+                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {},
+                    ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                        return Ok(
+                            ArgumentResult::Ok {
+                                subject: ActionProcessorResult::UserWorkflowPrecedent {
+                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired
+                                }
+                            }
+                        );
+                    }
+                    ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                        return Ok(
+                            ArgumentResult::Ok {
+                                subject: ActionProcessorResult::UserWorkflowPrecedent {
+                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
+                                }
+                            }
+                        );
+                    }
+                }
+            }
+            ArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
+            }
+        };
 
-        // // if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
-        // //     return Err(
-        // //         ErrorAuditor::new(
-        // //             BaseError::InvalidArgumentError,
-        // //             BacktracePart::new(line!(), file!(), None)
-        // //         )
-        // //     );
-        // // }
+        if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Limit });
+        }
 
+        if !Channel_Validator::is_valid_name(incoming.channel_name.as_str()) {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
+        }
 
+        if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
+            if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
+            }
+        }
 
+        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
 
+        let channel_registry = match Channel_PostgresqlRepository::find_1(
+            &*database_1_postgresql_pooled_connection, incoming.channel_name.as_str(), &incoming.requery_channel_name, incoming.limit
+        ).await {
+            Ok(channel_registry_) => channel_registry_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
+                return Err(error);
+            }
+        };
 
-
-
-
-        // // TODO
-
-
-
-        // // if !Channel_Validator::is_valid_name(incoming.channel_name.as_str()) {
-        // //     return Err(
-        // //         ErrorAuditor::new(
-        // //             BaseError::InvalidArgumentError,
-        // //             BacktracePart::new(line!(), file!(), None)
-        // //         )
-        // //     );
-        // // }
-
-        // // if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
-        // //     if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
-        // //         return Err(
-        // //             ErrorAuditor::new(
-        // //                 BaseError::InvalidArgumentError,
-        // //                 BacktracePart::new(line!(), file!(), None)
-        // //             )
-        // //         );
-        // //     }
-        // // }
-
-        // let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
-        //     Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
-        //     Err(error) => {
-        //         return Err(
-        //             ErrorAuditor::new(
-        //                 BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-        //                 BacktracePart::new(line!(), file!(), None)
-        //             )
-        //         );
-        //     }
-        // };
-
-        // let channel_registry = match Channel_PostgresqlRepository::per_request_1(
-        //     &*database_1_postgresql_pooled_connection, incoming.channel_name.as_str(), &incoming.requery_channel_name, incoming.limit
-        // ).await {
-        //     Ok(channel_registry_) => channel_registry_,
-        //     Err(mut error) => {
-        //         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-        //         return Err(error);
-        //     }
-        // };
-
-        // return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { channel_registry } } });
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { channel_registry } } });
     }
 }
 
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
@@ -159,7 +132,7 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    channel_registry: Option<Vec<Channel>>
+    channel_registry: Vec<Channel>
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
@@ -168,11 +141,5 @@ pub struct Outcoming {
 pub struct Channel {
     pub channel_id: i64,
     pub channel_name: String,
-    pub channel_personalization_image_path: String,
-    pub channel_subscribers_quantity: i64,
-    pub channel_public_marks_quantity: i64,
-    pub channel_hidden_marks_quantity: i64,
-    pub channel_reactions_quantity: i64,
-    pub channel_viewing_quantity: i64,
-    pub channel_created_at: String
+    pub channel_personalization_image_path: String
 }

@@ -165,7 +165,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Empty });
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Void });
     }
 }
 

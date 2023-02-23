@@ -144,7 +144,7 @@ where
     };
 
     match action_processor_result {
-        ActionProcessorResult::Empty => {
+        ActionProcessorResult::Void => {
             let data = match rmp_serde::to_vec(&UnifiedReport::<Void>::empty()) {
                 Ok(data_) => data_,
                 Err(error) => {
@@ -437,7 +437,7 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
-    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, ()>(
+    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Void>(
         environment_configuration_resolver,
         request,
         database_1_postgresql_connection_pool,

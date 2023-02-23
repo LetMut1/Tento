@@ -118,7 +118,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        return Ok(ActionProcessorResult::Empty);
+        return Ok(ActionProcessorResult::Void);
     }
 }
 

@@ -605,24 +605,6 @@ impl RunServerProcessor {
                     environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
-            ("/v1/m/c/gmbca", &Method::POST) => {
-                return channel__base::get_many_by_created_at::get_many_by_created_at(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
-                ).await;
-            }
-            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
-            ("/v1/m/c/gmbsq", &Method::POST) => {
-                return channel__base::get_many_by_subscribers_quantity::get_many_by_subscribers_quantity(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
-                ).await;
-            }
-            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
-            ("/v1/m/c/gmbir", &Method::POST) => {
-                return channel__base::get_many_by_id_registry::get_many_by_id_registry(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
-                ).await;
-            }
             // Area for not existing routes.
             _ => {
                 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
@@ -708,6 +690,12 @@ impl RunServerProcessor {
                     }
                     ("/v1/m/au/dfad_", &Method::POST) => {
                         return application_user__authorization::deauthorize_from_all_devices::deauthorize_from_all_devices_(
+                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                        ).await;
+                    }
+                    // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
+                    ("/v1/m/c/gmbn_", &Method::POST) => {
+                        return channel__base::get_many_by_name::get_many_by_name_(
                             environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }

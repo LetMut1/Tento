@@ -4,7 +4,7 @@ pub enum ActionProcessorResult<T>
 where
     T: Serialize
 {
-    Empty,
+    Void,
     Outcoming {
         outcoming: T
     },

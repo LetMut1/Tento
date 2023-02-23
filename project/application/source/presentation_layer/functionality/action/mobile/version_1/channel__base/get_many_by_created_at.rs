@@ -32,18 +32,10 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-
-    // TODO ПРоставить в Хендлерах валидацию входящих параметров !!!!!!!!!!!!!!!!!!!!! ( Я проверил каждый экшн Авторизации, а сюда еще не дошли руки)
-    // TODO ПРоставить в Хендлерах валидацию входящих параметров !!!!!!!!!!!!!!!!!!!!! ( Я проверил каждый экшн Авторизации, а сюда еще не дошли руки)
-    // TODO ПРоставить в Хендлерах валидацию входящих параметров !!!!!!!!!!!!!!!!!!!!! ( Я проверил каждый экшн Авторизации, а сюда еще не дошли руки)
-    // TODO ПРоставить в Хендлерах валидацию входящих параметров !!!!!!!!!!!!!!!!!!!!! ( Я проверил каждый экшн Авторизации, а сюда еще не дошли руки)
-    // TODO ПРоставить в Хендлерах валидацию входящих параметров !!!!!!!!!!!!!!!!!!!!! ( Я проверил каждый экшн Авторизации, а сюда еще не дошли руки)
-    // TODO ПРоставить в Хендлерах валидацию входящих параметров !!!!!!!!!!!!!!!!!!!!! ( Я проверил каждый экшн Авторизации, а сюда еще не дошли руки)
-
-
-
-
-
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_created_at::Outcoming;
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
 pub async fn get_many_by_created_at<'a, T>(
     environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
@@ -176,7 +168,7 @@ where
     };
 
     match action_processor_result_ {
-        ActionProcessorResult::Empty => {
+        ActionProcessorResult::Void => {
             let error = ErrorAuditor::new(
                 BaseError::LogicError { message: "Unreachable state." },
                 BacktracePart::new(line!(), file!(), None)
@@ -361,4 +353,28 @@ where
             }
         }
     }
+}
+
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+pub async fn get_many_by_created_at_<'a, T>(
+    environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+    request: Request<Body>,
+    database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    redis_connection_pool: &'a Pool<RedisConnectionManager>
+) -> Response<Body>
+where
+    T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+    <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+    <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+    <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+{
+    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
+        environment_configuration_resolver,
+        request,
+        database_1_postgresql_connection_pool,
+        database_2_postgresql_connection_pool,
+        redis_connection_pool,
+        get_many_by_created_at
+    ).await;
 }

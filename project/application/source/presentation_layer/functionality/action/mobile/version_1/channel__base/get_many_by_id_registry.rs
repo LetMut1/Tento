@@ -172,7 +172,7 @@ where
     };
 
     match action_processor_result_ {
-        ActionProcessorResult::Empty => {
+        ActionProcessorResult::Void => {
             let error = ErrorAuditor::new(
                 BaseError::LogicError { message: "Unreachable state." },
                 BacktracePart::new(line!(), file!(), None)
