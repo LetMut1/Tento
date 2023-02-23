@@ -44,7 +44,7 @@ impl RunServerProcessor {
             }
         };
 
-        if let Err(mut error) = Self::run_http_server(environment_configuration) {
+        if let Err(mut error) = Self::run_http_server(&environment_configuration) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
@@ -56,7 +56,7 @@ impl RunServerProcessor {
     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     // TODO написать без макроса
     #[tokio::main]
-    async fn run_http_server(environment_configuration: EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
+    async fn run_http_server<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
         let postgresql_connection_pool_workflow_type_aggregator = if environment_configuration.is_production_environment() {
             todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
         } else {
