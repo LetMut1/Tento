@@ -1,11 +1,12 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::infrastructure_layer::data::argument_result::ArgumentResult;
+use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
@@ -32,7 +33,7 @@ impl ActionProcessor {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
+    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -52,17 +53,33 @@ impl ActionProcessor {
             }
         };
         match extractor_result {
-            ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {}
-            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired });
+            ArgumentResult::Ok { subject: extractor_result_ } => {
+                match extractor_result_ {
+                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {},
+                    ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                        return Ok(
+                            ArgumentResult::Ok {
+                                subject: ActionProcessorResult::UserWorkflowPrecedent {
+                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired
+                                }
+                            }
+                        );
+                    }
+                    ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                        return Ok(
+                            ArgumentResult::Ok {
+                                subject: ActionProcessorResult::UserWorkflowPrecedent {
+                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
+                                }
+                            }
+                        );
+                    }
+                }
             }
-            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList });
+            ArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
             }
-            ExtractorResult::InvalidArgument { invalid_argument } => {
-                return Ok(ActionProcessorResult::InvalidArgument { invalid_argument });
-            }
-        }
+        };
 
         // if let Some(ref channel_created_at_) = incoming.channel_created_at {
         //     if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
@@ -111,7 +128,7 @@ impl ActionProcessor {
             }
         };
 
-        return Ok(ActionProcessorResult::Outcoming { outcoming: Outcoming { channel_registry } });
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { channel_registry } } });
     }
 }
 

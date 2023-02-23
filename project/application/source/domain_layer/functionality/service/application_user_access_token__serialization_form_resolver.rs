@@ -1,10 +1,11 @@
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::infrastructure_layer::data::argument_result::ArgumentResult;
+use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use extern_crate::base64;
 use extern_crate::crypto::hmac::Hmac;
@@ -45,14 +46,14 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
     pub fn deserialize<'a>(
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         application_user_access_token_deserialized_form: &'a str
-    ) -> Result<SerializationFormResolverResult, ErrorAuditor> {
+    ) -> Result<ArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
         let token_part_registry = application_user_access_token_deserialized_form
             .split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR)
             .collect::<Vec<&'_ str>>();                                                         // TODO проверить, правильно ли вот тут вообще
 
         if token_part_registry.len() != 2
             || !ApplicationUserAccessToken_Encoder::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
-            return Ok(SerializationFormResolverResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
         }
 
         let data = match base64::decode_config(token_part_registry[0].as_bytes(), base64::STANDARD) {
@@ -79,7 +80,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
             }
         };
 
-        return Ok(SerializationFormResolverResult::ApplicationUserAccessToken { application_user_access_token });
+        return Ok(ArgumentResult::Ok { subject: application_user_access_token });
     }
 }
 
@@ -106,14 +107,5 @@ impl ApplicationUserAccessToken_Encoder {
     ) -> bool {
         return Self::create(environment_configuration_resolver, application_user_access_token_serialized).as_bytes()
             == application_user_access_token_signature.as_bytes();
-    }
-}
-
-pub enum SerializationFormResolverResult {
-    ApplicationUserAccessToken {
-        application_user_access_token: ApplicationUserAccessToken<'static>
-    },
-    InvalidArgument {
-        invalid_argument: InvalidArgument
     }
 }

@@ -3,12 +3,12 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_reset_password::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_reset_password::Incoming;
 use crate::application_layer::functionality::service::action_round_result_writer::ActionRoundResultWriter;
+use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
@@ -419,23 +419,6 @@ where
                     return response;
                 }
             }
-        }
-        ActionProcessorResult::InvalidArgument { invalid_argument } => {
-            let response = ActionResponseCreator::create_bad_request();
-
-            if let Err(mut error) = ActionRoundResultWriter::write_with_context(
-                database_2_postgresql_connection_pool, &request, &response, &invalid_argument
-            ).await {
-                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                unreachable!(
-                    "{}. TODO: Write in concurrent way. It is also necessary that the write
-                    process does not wait for another write process, and writes immediately.",
-                    &error
-                );
-            }
-
-            return response;
         }
     }
 }

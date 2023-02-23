@@ -1,5 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -31,7 +32,7 @@ impl ActionProcessor {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionProcessorResult<Void>, ErrorAuditor>
+    ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -49,15 +50,31 @@ impl ActionProcessor {
             }
         };
         let application_user_access_token_ = match extractor_result {
-            ExtractorResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
-            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired });
+            ArgumentResult::Ok { subject: extractor_result_ } => {
+                match extractor_result_ {
+                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
+                    ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                        return Ok(
+                            ArgumentResult::Ok {
+                                subject: ActionProcessorResult::UserWorkflowPrecedent {
+                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired
+                                }
+                            }
+                        );
+                    }
+                    ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                        return Ok(
+                            ArgumentResult::Ok {
+                                subject: ActionProcessorResult::UserWorkflowPrecedent {
+                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
+                                }
+                            }
+                        );
+                    }
+                }
             }
-            ExtractorResult::InvalidArgument { invalid_argument } => {
-                return Ok(ActionProcessorResult::InvalidArgument { invalid_argument });
-            }
-            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList });
+            ArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
             }
         };
 
@@ -83,7 +100,7 @@ impl ActionProcessor {
 
         CloudMessageResolver::deauthorize_application_user_from_all_devices();
 
-        return Ok(ActionProcessorResult::Empty);
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Empty });
     }
 }
 

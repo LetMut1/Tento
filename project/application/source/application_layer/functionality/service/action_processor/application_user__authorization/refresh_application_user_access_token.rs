@@ -8,13 +8,13 @@ use crate::domain_layer::functionality::service::application_user_access_token__
 use crate::domain_layer::functionality::service::application_user_access_token__expires_at_generator::ApplicationUserAccessToken_ExpiresAtGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__id_generator::ApplicationUserAccessToken_IdGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
-use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::SerializationFormResolverResult;
+use crate::infrastructure_layer::data::argument_result::ArgumentResult;
+use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::ApplicationUserAccessRefreshToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
@@ -37,32 +37,38 @@ impl ActionProcessor {
         environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionProcessorResult<Outcoming>, ErrorAuditor>
+    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let serialization_form_resolver_result = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(
+        let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(
             environment_configuration_resolver, incoming.application_user_access_token_deserialized_form.as_str()
         ) {
-            Ok(serialization_form_resolver_result_) => serialization_form_resolver_result_,
+            Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
         };
-        let application_user_access_token_ = match serialization_form_resolver_result {
-            SerializationFormResolverResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
-            SerializationFormResolverResult::InvalidArgument { invalid_argument } => {
-                return Ok(ActionProcessorResult::InvalidArgument { invalid_argument });
+        let application_user_access_token_ = match application_user_access_token {
+            ArgumentResult::Ok { subject: application_user_access_token__ } => application_user_access_token__,
+            ArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
             }
         };
 
         if !ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token_) {
-            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_NotExpired });
+            return Ok(
+                ArgumentResult::Ok {
+                    subject: ActionProcessorResult::UserWorkflowPrecedent {
+                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_NotExpired
+                    }
+                }
+            );
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -96,7 +102,13 @@ impl ActionProcessor {
         let mut application_user_access_refresh_token_ = match application_user_access_refresh_token {
             Some(application_user_access_refresh_token__) => application_user_access_refresh_token__,
             None => {
-                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_NotFound });
+                return Ok(
+                    ArgumentResult::Ok {
+                        subject: ActionProcessorResult::UserWorkflowPrecedent {
+                            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_NotFound
+                        }
+                    }
+                );
             }
         };
 
@@ -113,7 +125,7 @@ impl ActionProcessor {
         };
         if !is_valid
             || application_user_access_token_.get_id().as_bytes() != application_user_access_refresh_token_.get_application_user_access_token_id().as_bytes() {
-            return Ok(ActionProcessorResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm });
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm });
         }
 
         if ApplicationUserAccessRefreshToken_ExpirationTimeResolver::is_expired(&application_user_access_refresh_token_) {
@@ -127,7 +139,13 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired });
+            return Ok(
+                ArgumentResult::Ok {
+                    subject: ActionProcessorResult::UserWorkflowPrecedent {
+                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired
+                    }
+                }
+            );
         }
 
         let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {
@@ -183,10 +201,12 @@ impl ActionProcessor {
         };
 
         return Ok(
-            ActionProcessorResult::Outcoming {
-                 outcoming: Outcoming {
-                    application_user_access_token_deserialized_form: application_user_access_token_deserialized_form_new,
-                    application_user_access_refresh_token_deserialized_form: application_user_access_refresh_token_deserialized_form_new
+            ArgumentResult::Ok {
+                subject: ActionProcessorResult::Outcoming {
+                    outcoming: Outcoming {
+                       application_user_access_token_deserialized_form: application_user_access_token_deserialized_form_new,
+                       application_user_access_refresh_token_deserialized_form: application_user_access_refresh_token_deserialized_form_new
+                    }
                 }
             }
         );

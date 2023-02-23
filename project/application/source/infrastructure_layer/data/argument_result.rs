@@ -1,4 +1,4 @@
-pub enum InvalidArgumentResult<T> {
+pub enum ArgumentResult<T> {
     Ok {
         subject: T
     },

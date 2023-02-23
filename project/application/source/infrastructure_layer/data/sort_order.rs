@@ -1,5 +1,5 @@
-use super::invalid_argument_result::InvalidArgument;
-use super::invalid_argument_result::InvalidArgumentResult;
+use super::argument_result::ArgumentResult;
+use super::argument_result::InvalidArgument;
 
 pub enum SortOrder {
     Asc,
@@ -12,15 +12,15 @@ impl SortOrder {
     const ASC: &'static str = "ASC";
     const DESC: &'static str = "DESC";
 
-    pub fn new(sort_order_representation: i8) -> InvalidArgumentResult<Self> {
+    pub fn new(sort_order_representation: i8) -> ArgumentResult<Self> {
         if sort_order_representation == Self::ASC_REPRESENTATION {
-            return InvalidArgumentResult::Ok { subject: SortOrder::Asc };
+            return ArgumentResult::Ok { subject: SortOrder::Asc };
         }
 
         if sort_order_representation == Self::DESC_REPRESENTATION {
-            return InvalidArgumentResult::Ok { subject: SortOrder::Desc };
+            return ArgumentResult::Ok { subject: SortOrder::Desc };
         }
 
-        return InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::SortOrderRepresentation };
+        return ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::SortOrderRepresentation };
     }
 }

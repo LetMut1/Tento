@@ -1,4 +1,3 @@
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use extern_crate::serde::Serialize;
 
 pub enum ActionProcessorResult<T>
@@ -11,9 +10,6 @@ where
     },
     UserWorkflowPrecedent {
         user_workflow_precedent: UserWorkflowPrecedent
-    },
-    InvalidArgument {
-        invalid_argument: InvalidArgument
     }
 }
 
