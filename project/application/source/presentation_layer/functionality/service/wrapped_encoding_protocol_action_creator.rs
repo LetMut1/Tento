@@ -1,6 +1,6 @@
 use crate::application_layer::functionality::service::action_processing_delegator::ActionProcessingDelegator;
 use crate::application_layer::functionality::service::action_processing_delegator::ConvertibleParts;
-use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;

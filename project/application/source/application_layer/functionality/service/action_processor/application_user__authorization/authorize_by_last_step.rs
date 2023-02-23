@@ -12,6 +12,7 @@ use crate::domain_layer::functionality::service::application_user_authorization_
 use crate::domain_layer::functionality::service::application_user_authorization_token__wrong_enter_tries_quantity_incrementor::ApplicationUserAuthorizationToken_WrongEnterTriesQuantityIncrementor;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -22,10 +23,9 @@ use crate::infrastructure_layer::functionality::repository::application_user_acc
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Update as ApplicationUserAccessRefreshTokenUpdate;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::ApplicationUserAuthorizationToken_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::Update as ApplicationUserAuthorizationTokenUpdate;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::ApplicationUserDevice_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
-use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::Update as ApplicationUserAuthorizationTokenUpdate;
-use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;

@@ -1,10 +1,10 @@
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::EmailServerError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use extern_crate::lettre_email::EmailBuilder;
 use extern_crate::lettre::ClientSecurity;
 use extern_crate::lettre::smtp::authentication::Credentials;

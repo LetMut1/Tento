@@ -5,6 +5,7 @@ use crate::domain_layer::functionality::service::application_user_registration_t
 use crate::domain_layer::functionality::service::application_user_registration_token__value_generator::ApplicationUserRegistrationToken_ValueGenerator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -16,7 +17,6 @@ use crate::infrastructure_layer::functionality::repository::application_user_reg
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
-use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;

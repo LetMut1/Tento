@@ -1,7 +1,7 @@
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::email_sender::EmailSender as BaseEmailSender;
-use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 
 pub struct ApplicationUser_EmailSender;
 
