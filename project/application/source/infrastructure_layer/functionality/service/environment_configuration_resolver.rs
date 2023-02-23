@@ -7,9 +7,6 @@ use std::net::SocketAddr;
 pub struct EnvironmentConfigurationResolver {
     is_production_environment: bool,
     application_server_socket_address: SocketAddr,
-    logger_roller_log_file_name: String,
-    logger_log_file_name: String,
-    logger_encoder_pattern: String,
     security_auart_encoding_private_key: String,
     security_auat_signature_encoding_private_key: String,
     resource_database_1_postgresql_configuration: Config,
@@ -20,9 +17,6 @@ pub struct EnvironmentConfigurationResolver {
 
 impl EnvironmentConfigurationResolver {
     pub const APPLICATION_SERVER_SOCKET_ADDRESS_KEY: &'static str = "APPLICATION_SERVER_SOCKET_ADDRESS";
-    pub const LOGGER_ROLLER_LOG_FILE_NAME_KEY: &'static str = "LOGGER_ROLLER_LOG_FILE_NAME";
-    pub const LOGGER_LOG_FILE_NAME_KEY: &'static str = "LOGGER_LOG_FILE_NAME";
-    pub const LOGGER_ENCODER_PATTERN_KEY: &'static str = "LOGGER_ENCODER_PATTERN";
     pub const SECURITY_AUART_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_AUART_ENCODING_PRIVATE_KEY";
     pub const SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY";
     pub const RESOURCE_DATABASE_1_POSTGRESQL_URL_KEY: &'static str = "RESOURCE_DATABASE_1_POSTGRESQL_URL";
@@ -33,9 +27,6 @@ impl EnvironmentConfigurationResolver {
     pub fn new(
         is_production_environment: bool,
         application_server_socket_address: SocketAddr,
-        logger_roller_log_file_name: String,
-        logger_log_file_name: String,
-        logger_encoder_pattern: String,
         security_auart_encoding_private_key: String,
         security_auat_signature_encoding_private_key: String,
         resource_database_1_postgresql_configuration: Config,
@@ -46,9 +37,6 @@ impl EnvironmentConfigurationResolver {
         return Self {
             is_production_environment,
             application_server_socket_address,
-            logger_roller_log_file_name,
-            logger_log_file_name,
-            logger_encoder_pattern,
             security_auart_encoding_private_key,
             security_auat_signature_encoding_private_key,
             resource_database_1_postgresql_configuration,
@@ -64,18 +52,6 @@ impl EnvironmentConfigurationResolver {
 
     pub fn get_application_server_socket_address<'a>(&'a self) -> &'a SocketAddr {
         return &self.application_server_socket_address;
-    }
-
-    pub fn get_logger_roller_log_file_name<'a>(&'a self) -> &'a str {
-        return self.logger_roller_log_file_name.as_str();
-    }
-
-    pub fn get_logger_log_file_name<'a>(&'a self) -> &'a str {
-        return self.logger_log_file_name.as_str();
-    }
-
-    pub fn get_logger_encoder_pattern<'a>(&'a self) -> &'a str {
-        return self.logger_encoder_pattern.as_str();
     }
 
     pub fn get_security_auart_encoding_private_key<'a>(&'a self) -> &'a str {

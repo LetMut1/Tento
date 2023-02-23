@@ -169,45 +169,6 @@ impl RunServerProcessor {
         };
         env::remove_var(EnvironmentConfigurationResolver::APPLICATION_SERVER_SOCKET_ADDRESS_KEY);            // TODO TODO TODO TODO TODOenv::remove_var can PANIC. Подумать, что делать. Использовать другой крейт (toml), или написать свой парсер. Паника - всегжа плохо
 
-        let logger_roller_log_file_name = match env::var(EnvironmentConfigurationResolver::LOGGER_ROLLER_LOG_FILE_NAME_KEY) {
-            Ok(logger_roller_log_file_name_) => logger_roller_log_file_name_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-        env::remove_var(EnvironmentConfigurationResolver::LOGGER_ROLLER_LOG_FILE_NAME_KEY);
-
-        let logger_log_file_name = match env::var(EnvironmentConfigurationResolver::LOGGER_LOG_FILE_NAME_KEY) {
-            Ok(logger_log_file_name_) => logger_log_file_name_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-        env::remove_var(EnvironmentConfigurationResolver::LOGGER_LOG_FILE_NAME_KEY);
-
-        let logger_encoder_pattern = match env::var(EnvironmentConfigurationResolver::LOGGER_ENCODER_PATTERN_KEY) {
-            Ok(logger_encoder_pattern_) => logger_encoder_pattern_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-        env::remove_var(EnvironmentConfigurationResolver::LOGGER_ENCODER_PATTERN_KEY);
-
         let security_auart_encoding_private_key = match env::var(EnvironmentConfigurationResolver::SECURITY_AUART_ENCODING_PRIVATE_KEY_KEY) {
             Ok(security_auart_encoding_private_key_) => security_auart_encoding_private_key_,
             Err(error) => {
@@ -350,9 +311,6 @@ impl RunServerProcessor {
             EnvironmentConfigurationResolver::new(
                 is_production_environment,
                 application_server_socket_address_,
-                logger_roller_log_file_name,
-                logger_log_file_name,
-                logger_encoder_pattern,
                 security_auart_encoding_private_key,
                 security_auat_signature_encoding_private_key,
                 resource_database_1_postgresql_configuration,
