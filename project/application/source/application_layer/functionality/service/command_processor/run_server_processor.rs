@@ -45,8 +45,8 @@ impl RunServerProcessor {
     const LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
     pub fn process(binary_file_path: &'static str) -> Result<(), ErrorAuditor> {
-        let environment_configuration_resolver = match Self::load_environment_configuration_resolver(binary_file_path) {
-            Ok(environment_configuration_resolver_) => environment_configuration_resolver_,
+        let environment_configuration = match Self::load_environment_configuration(binary_file_path) {
+            Ok(environment_configuration_) => environment_configuration_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -54,7 +54,7 @@ impl RunServerProcessor {
             }
         };
 
-        if let Err(mut error) = Self::run_http_server(environment_configuration_resolver) {
+        if let Err(mut error) = Self::run_http_server(environment_configuration) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
@@ -63,7 +63,7 @@ impl RunServerProcessor {
         return Ok(());
     }
 
-    fn load_environment_configuration_resolver<'a>(binary_file_path: &'a str) -> Result<EnvironmentConfiguration, ErrorAuditor> {
+    fn load_environment_configuration<'a>(binary_file_path: &'a str) -> Result<EnvironmentConfiguration, ErrorAuditor> {
         let file_path = match Path::new(binary_file_path).parent() {
             Some(file_path_) => file_path_,
             None => {
@@ -324,14 +324,14 @@ impl RunServerProcessor {
     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     // TODO написать без макроса
     #[tokio::main]
-    async fn run_http_server(environment_configuration_resolver: EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
-        let postgresql_connection_pool_workflow_type_aggregator = if environment_configuration_resolver.is_production_environment() {
+    async fn run_http_server(environment_configuration: EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
+        let postgresql_connection_pool_workflow_type_aggregator = if environment_configuration.is_production_environment() {
             todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
         } else {
             let database_1_postgresql_connection_pool = match Pool::builder()
                 .build(
                     PostgresqlConnectionManager::new(
-                        environment_configuration_resolver.get_resource_database_1_postgresql_configuration().clone(), NoTls
+                        environment_configuration.get_resource_database_1_postgresql_configuration().clone(), NoTls
                     )
                 ).await {         // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
                 Ok(database_1_postgresql_connection_pool_) => database_1_postgresql_connection_pool_,
@@ -348,7 +348,7 @@ impl RunServerProcessor {
             let database_2_postgresql_connection_pool = match Pool::builder()
                 .build(
                     PostgresqlConnectionManager::new(
-                        environment_configuration_resolver.get_resource_database_2_postgresql_configuration().clone(), NoTls
+                        environment_configuration.get_resource_database_2_postgresql_configuration().clone(), NoTls
                     )
                 ).await {
                 Ok(database_2_postgresql_connection_pool_) => database_2_postgresql_connection_pool_,
@@ -365,7 +365,7 @@ impl RunServerProcessor {
             PostgresqlConnectionPoolWorkflowTypeAggregator::LocalDevelopment { database_1_postgresql_connection_pool, database_2_postgresql_connection_pool }
         };
 
-        let redis_connection_manager = match RedisConnectionManager::new(environment_configuration_resolver.get_resource_redis_url().clone()) {
+        let redis_connection_manager = match RedisConnectionManager::new(environment_configuration.get_resource_redis_url().clone()) {
             Ok(redis_connection_manager_) => redis_connection_manager_,
             Err(error) => {
                 return Err(
@@ -390,12 +390,12 @@ impl RunServerProcessor {
             }
         };
 
-        let builder = Server::bind(environment_configuration_resolver.get_application_server_socket_address());
+        let builder = Server::bind(environment_configuration.get_application_server_socket_address());
 
         // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
         let service = make_service_fn(
             move |_: &AddrStream| {
-                let environment_configuration_resolver_ = environment_configuration_resolver.clone();
+                let environment_configuration_ = environment_configuration.clone();
 
                 let postgresql_connection_pool_workflow_type_aggregator_ = postgresql_connection_pool_workflow_type_aggregator.clone();
 
@@ -405,7 +405,7 @@ impl RunServerProcessor {
                     return Ok::<_, HyperError>(
                         service_fn(
                             move |requset| {
-                                let environment_configuration_resolver__ = environment_configuration_resolver_.clone();
+                                let environment_configuration__ = environment_configuration_.clone();
 
                                 let postgresql_connection_pool_workflow_type_aggregator__ = postgresql_connection_pool_workflow_type_aggregator_.clone();
 
@@ -420,7 +420,7 @@ impl RunServerProcessor {
 
                                     return Ok::<_, HyperError>(
                                         Self::resolve(
-                                            &environment_configuration_resolver__,
+                                            &environment_configuration__,
                                             requset,
                                             &database_1_postgresql_connection_pool_,
                                             &database_2_postgresql_connection_pool_,
@@ -460,7 +460,7 @@ impl RunServerProcessor {
     }
 
     async fn resolve<'a, T>(   // TODO Можно ли пробростить ЛОггер как объект? Нужно ли?  (Лог4рс делает так, чтобы все крееты, на основе этого лога могли писать в общий лог) // TODO TODO  TODO Пути через константы?
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         request: Request<Body>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -477,90 +477,90 @@ impl RunServerProcessor {
             // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
             ("/v1/m/au/cnfe", &Method::POST) => {
                 return application_user__authorization::check_nickname_for_existing::check_nickname_for_existing(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
             ("/v1/m/au/cefe", &Method::POST) => {
                 return application_user__authorization::check_email_for_existing::check_email_for_existing(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/rbfs", &Method::POST) => {
                 return application_user__authorization::register_by_first_step::register_by_first_step(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/rbss", &Method::POST) => {
                 return application_user__authorization::register_by_second_step::register_by_second_step(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/rbls", &Method::POST) => {
                 return application_user__authorization::register_by_last_step::register_by_last_step(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/sefr", &Method::POST) => {
                 return application_user__authorization::send_email_for_register::send_email_for_register(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/abfs", &Method::POST) => {
                 return application_user__authorization::authorize_by_first_step::authorize_by_first_step(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/abls", &Method::POST) => {
                 return application_user__authorization::authorize_by_last_step::authorize_by_last_step(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/sefa", &Method::POST) => {
                 return application_user__authorization::send_email_for_authorize::send_email_for_authorize(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/rpbfs", &Method::POST) => {
                 return application_user__authorization::reset_password_by_first_step::reset_password_by_first_step(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/rpbss", &Method::POST) => {
                 return application_user__authorization::reset_password_by_second_step::reset_password_by_second_step(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/rpbls", &Method::POST) => {
                 return application_user__authorization::reset_password_by_last_step::reset_password_by_last_step(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/sefrp", &Method::POST) => {
                 return application_user__authorization::send_email_for_reset_password::send_email_for_reset_password(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/rauat", &Method::POST) => {
                 return application_user__authorization::refresh_application_user_access_token::refresh_application_user_access_token(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             // Area for existing routes with authorized user.
             ("/v1/m/au/dfod", &Method::POST) => {
                 return application_user__authorization::deauthorize_from_one_device::deauthorize_from_one_device(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             ("/v1/m/au/dfad", &Method::POST) => {
                 return application_user__authorization::deauthorize_from_all_devices::deauthorize_from_all_devices(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
             ("/v1/m/c/gmbn", &Method::POST) => {
                 return channel__base::get_many_by_name::get_many_by_name(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             // Area for not existing routes.
@@ -571,90 +571,90 @@ impl RunServerProcessor {
                     // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
                     ("/v1/m/au/cnfe_", &Method::POST) => {
                         return application_user__authorization::check_nickname_for_existing::check_nickname_for_existing_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
                     ("/v1/m/au/cefe_", &Method::POST) => {
                         return application_user__authorization::check_email_for_existing::check_email_for_existing_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/rbfs_", &Method::POST) => {
                         return application_user__authorization::register_by_first_step::register_by_first_step_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/rbss_", &Method::POST) => {
                         return application_user__authorization::register_by_second_step::register_by_second_step_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/rbls_", &Method::POST) => {
                         return application_user__authorization::register_by_last_step::register_by_last_step_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/sefr_", &Method::POST) => {
                         return application_user__authorization::send_email_for_register::send_email_for_register_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/abfs_", &Method::POST) => {
                         return application_user__authorization::authorize_by_first_step::authorize_by_first_step_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/abls_", &Method::POST) => {
                         return application_user__authorization::authorize_by_last_step::authorize_by_last_step_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/sefa_", &Method::POST) => {
                         return application_user__authorization::send_email_for_authorize::send_email_for_authorize_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/rpbfs_", &Method::POST) => {
                         return application_user__authorization::reset_password_by_first_step::reset_password_by_first_step_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/rpbss_", &Method::POST) => {
                         return application_user__authorization::reset_password_by_second_step::reset_password_by_second_step_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/rpbls_", &Method::POST) => {
                         return application_user__authorization::reset_password_by_last_step::reset_password_by_last_step_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/sefrp_", &Method::POST) => {
                         return application_user__authorization::send_email_for_reset_password::send_email_for_reset_password_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/rauat_", &Method::POST) => {
                         return application_user__authorization::refresh_application_user_access_token::refresh_application_user_access_token_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     // Area for existing routes with authorized user.
                     ("/v1/m/au/dfod_", &Method::POST) => {
                         return application_user__authorization::deauthorize_from_one_device::deauthorize_from_one_device_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     ("/v1/m/au/dfad_", &Method::POST) => {
                         return application_user__authorization::deauthorize_from_all_devices::deauthorize_from_all_devices_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
                     ("/v1/m/c/gmbn_", &Method::POST) => {
                         return channel__base::get_many_by_name::get_many_by_name_(
-                            environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     // Area for not existing routes.
@@ -662,7 +662,7 @@ impl RunServerProcessor {
                 }
 
                 return route_not_found::route_not_found(
-                    environment_configuration_resolver, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
         }

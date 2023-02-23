@@ -30,7 +30,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
@@ -117,7 +117,7 @@ impl ActionProcessor {
         }
 
         if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_token(
-            environment_configuration_resolver,
+            environment_configuration,
             application_user_registration_token_.get_value(),
             incoming.application_user_email.as_str()
         ) {

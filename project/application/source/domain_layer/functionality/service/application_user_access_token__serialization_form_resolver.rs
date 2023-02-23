@@ -20,7 +20,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
     pub fn serialize<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>
     ) -> Result<String, ErrorAuditor> {
         let mut data: Vec<u8> = vec![];
@@ -35,7 +35,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
         let application_user_access_token_serialized = base64::encode_config(data.as_slice(), base64::STANDARD);  // TODO TODO TODO TODO TODO Можно ли здесь использовать Бэйс64 на байтф мессаджПака?
 
         let application_user_access_token_signature = ApplicationUserAccessToken_Encoder::create(
-            environment_configuration_resolver, application_user_access_token_serialized.as_str()
+            environment_configuration, application_user_access_token_serialized.as_str()
         );
 
         let application_user_access_token_deserialized_form = application_user_access_token_serialized + Self::TOKEN_PARTS_SEPARATOR + application_user_access_token_signature.as_str();
@@ -44,7 +44,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
     }
 
     pub fn deserialize<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_deserialized_form: &'a str
     ) -> Result<ArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
         let token_part_registry = application_user_access_token_deserialized_form
@@ -52,7 +52,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
             .collect::<Vec<&'_ str>>();                                                         // TODO проверить, правильно ли вот тут вообще
 
         if token_part_registry.len() != 2
-            || !ApplicationUserAccessToken_Encoder::is_valid(environment_configuration_resolver, token_part_registry[0], token_part_registry[1]) {
+            || !ApplicationUserAccessToken_Encoder::is_valid(environment_configuration, token_part_registry[0], token_part_registry[1]) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
         }
 
@@ -88,12 +88,12 @@ struct ApplicationUserAccessToken_Encoder;
 
 impl ApplicationUserAccessToken_Encoder {
     fn create<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_serialized: &'a str
     ) -> String {
         let mut hmac = Hmac::new(
             Sha512::new(),
-            environment_configuration_resolver.get_security_auat_signature_encoding_private_key().as_bytes()
+            environment_configuration.get_security_auat_signature_encoding_private_key().as_bytes()
         );
         hmac.input(application_user_access_token_serialized.as_bytes());
 
@@ -101,11 +101,11 @@ impl ApplicationUserAccessToken_Encoder {
     }
 
     fn is_valid<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_serialized: &'a str,
         application_user_access_token_signature: &'a str
     ) -> bool {
-        return Self::create(environment_configuration_resolver, application_user_access_token_serialized).as_bytes()
+        return Self::create(environment_configuration, application_user_access_token_serialized).as_bytes()
             == application_user_access_token_signature.as_bytes();
     }
 }

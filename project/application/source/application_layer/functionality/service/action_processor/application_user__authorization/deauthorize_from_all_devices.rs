@@ -29,7 +29,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(                         // TODO TODO TODO УДАляются ли АккессТокены все при массовом разлогине? Если не удаляются, можно просто при Ектракте АккессТокена использовать проверку на наличие рефреша, если нет, значит произошел разлогин.
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
@@ -40,7 +40,7 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
-            environment_configuration_resolver, incoming.application_user_access_token_deserialized_form.as_str()
+            environment_configuration, incoming.application_user_access_token_deserialized_form.as_str()
         ).await {
             Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {

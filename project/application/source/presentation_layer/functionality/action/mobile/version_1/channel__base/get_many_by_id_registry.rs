@@ -42,7 +42,7 @@ use std::marker::Sync;
 
 
 pub async fn get_many_by_id_registry<'a, T>(
-    environment_configuration_resolver: &'a EnvironmentConfiguration,
+    environment_configuration: &'a EnvironmentConfiguration,
     mut request: Request<Body>,
     database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -127,7 +127,7 @@ where
     };
 
     let action_processor_result = match ActionProcessor::process(
-        environment_configuration_resolver, database_1_postgresql_connection_pool, incoming
+        environment_configuration, database_1_postgresql_connection_pool, incoming
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {

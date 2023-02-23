@@ -38,7 +38,7 @@ use crate::application_layer::functionality::service::action_processor::applicat
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
 pub async fn refresh_application_user_access_token<'a, T>(
-    environment_configuration_resolver: &'a EnvironmentConfiguration,
+    environment_configuration: &'a EnvironmentConfiguration,
     mut request: Request<Body>,
     _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -123,7 +123,7 @@ where
     };
 
     let action_processor_result = match ActionProcessor::process(
-        environment_configuration_resolver, database_2_postgresql_connection_pool, incoming
+        environment_configuration, database_2_postgresql_connection_pool, incoming
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {
@@ -403,7 +403,7 @@ where
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub async fn refresh_application_user_access_token_<'a, T>(
-    environment_configuration_resolver: &'a EnvironmentConfiguration,
+    environment_configuration: &'a EnvironmentConfiguration,
     request: Request<Body>,
     database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -416,7 +416,7 @@ where
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
     return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
-        environment_configuration_resolver,
+        environment_configuration,
         request,
         database_1_postgresql_connection_pool,
         database_2_postgresql_connection_pool,

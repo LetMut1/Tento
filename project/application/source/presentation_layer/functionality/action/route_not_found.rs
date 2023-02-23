@@ -17,7 +17,7 @@ use std::marker::Send;
 use std::marker::Sync;
 
 pub async fn route_not_found<'a, T>(
-    _environment_configuration_resolver: &'a EnvironmentConfiguration,
+    _environment_configuration: &'a EnvironmentConfiguration,
     request: Request<Body>,
     _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

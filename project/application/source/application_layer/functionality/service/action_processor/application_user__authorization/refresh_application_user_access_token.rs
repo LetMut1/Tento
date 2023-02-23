@@ -34,7 +34,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
@@ -45,7 +45,7 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(
-            environment_configuration_resolver, incoming.application_user_access_token_deserialized_form.as_str()
+            environment_configuration, incoming.application_user_access_token_deserialized_form.as_str()
         ) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
@@ -113,7 +113,7 @@ impl ActionProcessor {
         };
 
         let is_valid = match ApplicationUserAccessRefreshToken_SerializationFormResolver::is_valid(
-            environment_configuration_resolver, &application_user_access_refresh_token_,
+            environment_configuration, &application_user_access_refresh_token_,
             incoming.application_user_access_refresh_token_deserialized_form.as_str()
         ) {
             Ok(is_valid_) => is_valid_,
@@ -182,7 +182,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        let application_user_access_token_deserialized_form_new = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration_resolver, &application_user_access_token_new) {
+        let application_user_access_token_deserialized_form_new = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration, &application_user_access_token_new) {
             Ok(application_user_access_token_deserialized_form_new_) => application_user_access_token_deserialized_form_new_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -191,7 +191,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_deserialized_form_new = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(environment_configuration_resolver, &application_user_access_refresh_token_) {
+        let application_user_access_refresh_token_deserialized_form_new = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(environment_configuration, &application_user_access_refresh_token_) {
             Ok(application_user_access_refresh_token_deserialized_form_new_) => application_user_access_refresh_token_deserialized_form_new_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

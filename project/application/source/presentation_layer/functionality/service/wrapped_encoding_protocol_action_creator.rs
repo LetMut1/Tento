@@ -31,7 +31,7 @@ pub struct WrappedEncodingProtocolActionCreator;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl WrappedEncodingProtocolActionCreator {
     pub async fn create_for_json<'a, T, FO, F, API, APO>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         mut request: Request<Body>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -73,7 +73,7 @@ impl WrappedEncodingProtocolActionCreator {
         };
 
         let action_processing_delegator_result = match ActionProcessingDelegator::delegate::<'_, _, _, _, API, APO>(
-            environment_configuration_resolver,
+            environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             redis_connection_pool,

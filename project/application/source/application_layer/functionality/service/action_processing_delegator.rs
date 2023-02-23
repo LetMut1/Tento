@@ -35,7 +35,7 @@ pub struct ActionProcessingDelegator;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl ActionProcessingDelegator {
     pub async fn delegate<'a, T, FO, F, API, APO>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -75,7 +75,7 @@ impl ActionProcessingDelegator {
         let request = Request::from_parts(request_parts, Body::from(data));
 
         let response = action(
-            environment_configuration_resolver,
+            environment_configuration,
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,

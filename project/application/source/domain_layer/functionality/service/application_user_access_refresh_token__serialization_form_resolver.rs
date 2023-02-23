@@ -15,7 +15,7 @@ pub struct ApplicationUserAccessRefreshToken_SerializationFormResolver;
 
 impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
     pub fn encode<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<String, ErrorAuditor> {
         let mut data: Vec<u8> = vec![];
@@ -30,7 +30,7 @@ impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
 
         let mut hmac = Hmac::new(
             Sha512::new(),
-            environment_configuration_resolver.get_security_auart_encoding_private_key().as_bytes()
+            environment_configuration.get_security_auart_encoding_private_key().as_bytes()
         );
         hmac.input(data.as_slice());
 
@@ -40,12 +40,12 @@ impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
     }
 
     pub fn is_valid<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_deserialized_form: &'a str
     ) -> Result<bool, ErrorAuditor> {
         let application_user_access_refresh_token_deserialized_form_ = match Self::encode(
-            environment_configuration_resolver, application_user_access_refresh_token
+            environment_configuration, application_user_access_refresh_token
         ) {
             Ok(application_user_access_refresh_token_deserialized_form__) => application_user_access_refresh_token_deserialized_form__,
             Err(mut error) => {

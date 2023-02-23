@@ -31,7 +31,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
@@ -158,7 +158,7 @@ impl ActionProcessor {
         };
 
         if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_reset_password_token(
-            environment_configuration_resolver, application_user_reset_password_token_.get_value(), application_user_.get_email()
+            environment_configuration, application_user_reset_password_token_.get_value(), application_user_.get_email()
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

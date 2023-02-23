@@ -10,11 +10,11 @@ pub struct ApplicationUserAccessToken_Extractor;
 
 impl ApplicationUserAccessToken_Extractor {
     pub async fn extract<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_deserialized_form: &'a str
     ) -> Result<ArgumentResult<ExtractorResult>, ErrorAuditor> {
         let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(
-            environment_configuration_resolver, application_user_access_token_deserialized_form
+            environment_configuration, application_user_access_token_deserialized_form
         ) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {

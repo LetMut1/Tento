@@ -7,12 +7,12 @@ pub struct ApplicationUser_EmailSender;
 
 impl ApplicationUser_EmailSender {     // TODO все &'static str в константы? Тогда пройтись по всему приложению и проверить, везде ли так.
     pub fn send_application_user_authorization_token<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_authorization_token_value: &'a str,
         application_user_email: &'a str
     ) -> Result<(), ErrorAuditor> {
         if let Err(mut error) = BaseEmailSender::send(
-            environment_configuration_resolver,
+            environment_configuration,
             "Log in confirmation", "Your code: ".to_string() + application_user_authorization_token_value,
             application_user_email
         ) {
@@ -25,12 +25,12 @@ impl ApplicationUser_EmailSender {     // TODO все &'static str в конст
     }
 
     pub fn send_application_user_registration_token<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_registration_token_value: &'a str,
         application_user_email: &'a str
     ) -> Result<(), ErrorAuditor> {
         if let Err(mut error) = BaseEmailSender::send(
-            environment_configuration_resolver,
+            environment_configuration,
             "Registration confirmation",
             "Your code: ".to_string() + application_user_registration_token_value,
             application_user_email
@@ -44,12 +44,12 @@ impl ApplicationUser_EmailSender {     // TODO все &'static str в конст
     }
 
     pub fn send_application_user_reset_password_token<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_reset_password_token_value: &'a str,
         application_user_email: &'a str
     ) -> Result<(), ErrorAuditor> {
         if let Err(mut error) = BaseEmailSender::send(
-            environment_configuration_resolver,
+            environment_configuration,
             "Reset password confirmation",
             "Your code: ".to_string() + application_user_reset_password_token_value,
             application_user_email

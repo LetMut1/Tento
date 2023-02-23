@@ -29,7 +29,7 @@ impl ActionProcessor {
     const LIMIT: i16 = 50;
 
     pub async fn process<'a, T>(
-        environment_configuration_resolver: &'a EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
@@ -40,7 +40,7 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
-            environment_configuration_resolver, incoming.application_user_access_token_deserialized_form.as_str()
+            environment_configuration, incoming.application_user_access_token_deserialized_form.as_str()
         ).await {
             Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {
