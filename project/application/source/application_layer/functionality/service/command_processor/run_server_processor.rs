@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use crate::presentation_layer::functionality::action::mobile::version_1::application_user__authorization;
 use crate::presentation_layer::functionality::action::mobile::version_1::channel__base;
 use crate::presentation_layer::functionality::action::route_not_found;
@@ -63,7 +63,7 @@ impl RunServerProcessor {
         return Ok(());
     }
 
-    fn load_environment_configuration_resolver<'a>(binary_file_path: &'a str) -> Result<EnvironmentConfigurationResolver, ErrorAuditor> {
+    fn load_environment_configuration_resolver<'a>(binary_file_path: &'a str) -> Result<EnvironmentConfiguration, ErrorAuditor> {
         let file_path = match Path::new(binary_file_path).parent() {
             Some(file_path_) => file_path_,
             None => {
@@ -132,7 +132,7 @@ impl RunServerProcessor {
             false
         };
 
-        let application_server_socket_address = match env::var(EnvironmentConfigurationResolver::APPLICATION_SERVER_SOCKET_ADDRESS_KEY) {
+        let application_server_socket_address = match env::var(EnvironmentConfiguration::APPLICATION_SERVER_SOCKET_ADDRESS_KEY) {
             Ok(application_server_socket_address_) => application_server_socket_address_,
             Err(error) => {
                 return Err(
@@ -167,9 +167,9 @@ impl RunServerProcessor {
                 );
             }
         };
-        env::remove_var(EnvironmentConfigurationResolver::APPLICATION_SERVER_SOCKET_ADDRESS_KEY);            // TODO TODO TODO TODO TODOenv::remove_var can PANIC. Подумать, что делать. Использовать другой крейт (toml), или написать свой парсер. Паника - всегжа плохо
+        env::remove_var(EnvironmentConfiguration::APPLICATION_SERVER_SOCKET_ADDRESS_KEY);            // TODO TODO TODO TODO TODOenv::remove_var can PANIC. Подумать, что делать. Использовать другой крейт (toml), или написать свой парсер. Паника - всегжа плохо
 
-        let security_auart_encoding_private_key = match env::var(EnvironmentConfigurationResolver::SECURITY_AUART_ENCODING_PRIVATE_KEY_KEY) {
+        let security_auart_encoding_private_key = match env::var(EnvironmentConfiguration::SECURITY_AUART_ENCODING_PRIVATE_KEY_KEY) {
             Ok(security_auart_encoding_private_key_) => security_auart_encoding_private_key_,
             Err(error) => {
                 return Err(
@@ -180,9 +180,9 @@ impl RunServerProcessor {
                 );
             }
         };
-        env::remove_var(EnvironmentConfigurationResolver::SECURITY_AUART_ENCODING_PRIVATE_KEY_KEY);
+        env::remove_var(EnvironmentConfiguration::SECURITY_AUART_ENCODING_PRIVATE_KEY_KEY);
 
-        let security_auat_signature_encoding_private_key = match env::var(EnvironmentConfigurationResolver::SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY) {
+        let security_auat_signature_encoding_private_key = match env::var(EnvironmentConfiguration::SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY) {
             Ok(security_auat_signature_encoding_private_key_) => security_auat_signature_encoding_private_key_,
             Err(error) => {
                 return Err(
@@ -193,9 +193,9 @@ impl RunServerProcessor {
                 );
             }
         };
-        env::remove_var(EnvironmentConfigurationResolver::SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY);
+        env::remove_var(EnvironmentConfiguration::SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY);
 
-        let resource_database_1_postgresql_url = match env::var(EnvironmentConfigurationResolver::RESOURCE_DATABASE_1_POSTGRESQL_URL_KEY) {
+        let resource_database_1_postgresql_url = match env::var(EnvironmentConfiguration::RESOURCE_DATABASE_1_POSTGRESQL_URL_KEY) {
             Ok(resource_database_1_postgresql_url_) => resource_database_1_postgresql_url_,
             Err(error) => {
                 return Err(
@@ -218,9 +218,9 @@ impl RunServerProcessor {
                 );
             }
         };
-        env::remove_var(EnvironmentConfigurationResolver::RESOURCE_DATABASE_1_POSTGRESQL_URL_KEY);
+        env::remove_var(EnvironmentConfiguration::RESOURCE_DATABASE_1_POSTGRESQL_URL_KEY);
 
-        let resource_database_2_postgresql_url = match env::var(EnvironmentConfigurationResolver::RESOURCE_DATABASE_2_POSTGRESQL_URL_KEY) {
+        let resource_database_2_postgresql_url = match env::var(EnvironmentConfiguration::RESOURCE_DATABASE_2_POSTGRESQL_URL_KEY) {
             Ok(resource_database_2_postgresql_url_) =>  resource_database_2_postgresql_url_,
             Err(error) => {
                 return Err(
@@ -243,9 +243,9 @@ impl RunServerProcessor {
                 );
             }
         };
-        env::remove_var(EnvironmentConfigurationResolver::RESOURCE_DATABASE_2_POSTGRESQL_URL_KEY);
+        env::remove_var(EnvironmentConfiguration::RESOURCE_DATABASE_2_POSTGRESQL_URL_KEY);
 
-        let resource_redis_url = match env::var(EnvironmentConfigurationResolver::RESOURCE_REDIS_URL_KEY) {
+        let resource_redis_url = match env::var(EnvironmentConfiguration::RESOURCE_REDIS_URL_KEY) {
             Ok(resource_redis_url_) => resource_redis_url_,
             Err(error) => {
                 return Err(
@@ -268,9 +268,9 @@ impl RunServerProcessor {
                 );
             }
         };
-        env::remove_var(EnvironmentConfigurationResolver::RESOURCE_REDIS_URL_KEY);
+        env::remove_var(EnvironmentConfiguration::RESOURCE_REDIS_URL_KEY);
 
-        let resource_email_server_socket_address = match env::var(EnvironmentConfigurationResolver::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY) {
+        let resource_email_server_socket_address = match env::var(EnvironmentConfiguration::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY) {
             Ok(resource_email_server_socket_address_) => resource_email_server_socket_address_,
             Err(error) => {
                 return Err(
@@ -305,10 +305,10 @@ impl RunServerProcessor {
                 );
             }
         };
-        env::remove_var(EnvironmentConfigurationResolver::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY);
+        env::remove_var(EnvironmentConfiguration::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY);
 
         return Ok(
-            EnvironmentConfigurationResolver::new(
+            EnvironmentConfiguration::new(
                 is_production_environment,
                 application_server_socket_address_,
                 security_auart_encoding_private_key,
@@ -324,7 +324,7 @@ impl RunServerProcessor {
     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     // TODO написать без макроса
     #[tokio::main]
-    async fn run_http_server(environment_configuration_resolver: EnvironmentConfigurationResolver) -> Result<(), ErrorAuditor> {
+    async fn run_http_server(environment_configuration_resolver: EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
         let postgresql_connection_pool_workflow_type_aggregator = if environment_configuration_resolver.is_production_environment() {
             todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
         } else {
@@ -460,7 +460,7 @@ impl RunServerProcessor {
     }
 
     async fn resolve<'a, T>(   // TODO Можно ли пробростить ЛОггер как объект? Нужно ли?  (Лог4рс делает так, чтобы все крееты, на основе этого лога могли писать в общий лог) // TODO TODO  TODO Пути через константы?
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         request: Request<Body>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

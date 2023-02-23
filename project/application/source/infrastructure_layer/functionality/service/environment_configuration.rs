@@ -4,7 +4,7 @@ use std::clone::Clone;
 use std::net::SocketAddr;
 
 #[derive(Clone)]
-pub struct EnvironmentConfigurationResolver {
+pub struct EnvironmentConfiguration {
     is_production_environment: bool,
     application_server_socket_address: SocketAddr,
     security_auart_encoding_private_key: String,
@@ -15,7 +15,7 @@ pub struct EnvironmentConfigurationResolver {
     resource_email_server_socket_address: SocketAddr
 }
 
-impl EnvironmentConfigurationResolver {
+impl EnvironmentConfiguration {
     pub const APPLICATION_SERVER_SOCKET_ADDRESS_KEY: &'static str = "APPLICATION_SERVER_SOCKET_ADDRESS";
     pub const SECURITY_AUART_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_AUART_ENCODING_PRIVATE_KEY";
     pub const SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY";

@@ -10,7 +10,7 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
-use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
@@ -28,7 +28,7 @@ impl ActionProcessor {
     const CHANNEL_ID_REGISTRY_LENGTH_LIMIT: usize = 30;
 
     pub async fn process<'a, T>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
     ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>

@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use extern_crate::base64;
 use extern_crate::crypto::hmac::Hmac;
 use extern_crate::crypto::mac::Mac;
@@ -20,7 +20,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
     pub fn serialize<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>
     ) -> Result<String, ErrorAuditor> {
         let mut data: Vec<u8> = vec![];
@@ -44,7 +44,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
     }
 
     pub fn deserialize<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         application_user_access_token_deserialized_form: &'a str
     ) -> Result<ArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
         let token_part_registry = application_user_access_token_deserialized_form
@@ -88,7 +88,7 @@ struct ApplicationUserAccessToken_Encoder;
 
 impl ApplicationUserAccessToken_Encoder {
     fn create<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         application_user_access_token_serialized: &'a str
     ) -> String {
         let mut hmac = Hmac::new(
@@ -101,7 +101,7 @@ impl ApplicationUserAccessToken_Encoder {
     }
 
     fn is_valid<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         application_user_access_token_serialized: &'a str,
         application_user_access_token_signature: &'a str
     ) -> bool {

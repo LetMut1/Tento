@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::error_auditor::EmailServerError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use extern_crate::lettre_email::EmailBuilder;
 use extern_crate::lettre::ClientSecurity;
 use extern_crate::lettre::smtp::authentication::Credentials;
@@ -19,7 +19,7 @@ pub struct EmailSender;
 
 impl EmailSender {   // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         subject: &'a str,
         body: String,
         to: &'a str

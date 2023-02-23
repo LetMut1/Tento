@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -35,7 +35,7 @@ pub struct ActionProcessingDelegator;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl ActionProcessingDelegator {
     pub async fn delegate<'a, T, FO, F, API, APO>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -48,7 +48,7 @@ impl ActionProcessingDelegator {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         FO: FnOnce(
-            &'a EnvironmentConfigurationResolver,
+            &'a EnvironmentConfiguration,
             Request<Body>,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<PostgresqlConnectionManager<T>>,

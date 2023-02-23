@@ -11,7 +11,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
 use crate::presentation_layer::functionality::service::communication_code_registry::CommunicationCodeRegistry;
@@ -36,7 +36,7 @@ use std::marker::Sync;
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
 pub async fn send_email_for_register<'a, T>(
-    environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+    environment_configuration_resolver: &'a EnvironmentConfiguration,
     mut request: Request<Body>,
     _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -401,7 +401,7 @@ where
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub async fn send_email_for_register_<'a, T>(
-    environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+    environment_configuration_resolver: &'a EnvironmentConfiguration,
     request: Request<Body>,
     database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

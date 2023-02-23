@@ -1,7 +1,7 @@
 use crate::application_layer::functionality::service::action_round_result_writer::ActionRoundResultWriter;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
-use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -17,7 +17,7 @@ use std::marker::Send;
 use std::marker::Sync;
 
 pub async fn route_not_found<'a, T>(
-    _environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+    _environment_configuration_resolver: &'a EnvironmentConfiguration,
     request: Request<Body>,
     _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

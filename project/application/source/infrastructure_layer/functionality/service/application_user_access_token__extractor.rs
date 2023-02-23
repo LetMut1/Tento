@@ -4,13 +4,13 @@ use crate::domain_layer::functionality::service::application_user_access_token__
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 
 pub struct ApplicationUserAccessToken_Extractor;
 
 impl ApplicationUserAccessToken_Extractor {
     pub async fn extract<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         application_user_access_token_deserialized_form: &'a str
     ) -> Result<ArgumentResult<ExtractorResult>, ErrorAuditor> {
         let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(

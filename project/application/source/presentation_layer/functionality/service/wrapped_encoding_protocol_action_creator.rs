@@ -1,6 +1,6 @@
 use crate::application_layer::functionality::service::action_processing_delegator::ActionProcessingDelegator;
 use crate::application_layer::functionality::service::action_processing_delegator::ConvertibleParts;
-use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -31,7 +31,7 @@ pub struct WrappedEncodingProtocolActionCreator;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl WrappedEncodingProtocolActionCreator {
     pub async fn create_for_json<'a, T, FO, F, API, APO>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         mut request: Request<Body>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -44,7 +44,7 @@ impl WrappedEncodingProtocolActionCreator {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         FO: FnOnce(
-            &'a EnvironmentConfigurationResolver,
+            &'a EnvironmentConfiguration,
             Request<Body>,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<PostgresqlConnectionManager<T>>,

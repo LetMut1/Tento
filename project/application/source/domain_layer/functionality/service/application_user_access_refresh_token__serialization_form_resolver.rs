@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::service::environment_configuration_resolver::EnvironmentConfigurationResolver;
+use crate::infrastructure_layer::functionality::service::environment_configuration::EnvironmentConfiguration;
 use extern_crate::crypto::hmac::Hmac;
 use extern_crate::crypto::mac::Mac;
 use extern_crate::crypto::sha2::Sha512;
@@ -15,7 +15,7 @@ pub struct ApplicationUserAccessRefreshToken_SerializationFormResolver;
 
 impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
     pub fn encode<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<String, ErrorAuditor> {
         let mut data: Vec<u8> = vec![];
@@ -40,7 +40,7 @@ impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
     }
 
     pub fn is_valid<'a>(
-        environment_configuration_resolver: &'a EnvironmentConfigurationResolver,
+        environment_configuration_resolver: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_deserialized_form: &'a str
     ) -> Result<bool, ErrorAuditor> {
