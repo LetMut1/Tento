@@ -54,7 +54,6 @@ impl RunServerProcessor {
     }
 
     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
-    // TODO написать без макроса
     #[tokio::main]
     async fn run_http_server<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
         let postgresql_connection_pool_workflow_type_aggregator = if environment_configuration.is_production_environment() {
@@ -152,7 +151,7 @@ impl RunServerProcessor {
 
                                     return Ok::<_, HyperError>(
                                         Self::resolve(
-                                            &environment_configuration__,
+                                            &environment_configuration__,           // TODO TODO TODO Возможно ли как-то передать &'a environment_configuration без клонирования.
                                             requset,
                                             &database_1_postgresql_connection_pool_,
                                             &database_2_postgresql_connection_pool_,
