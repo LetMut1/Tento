@@ -9,4 +9,6 @@ pub mod email_sender;
 pub mod environment_configuration__creator;
 pub mod number_row_generator;
 pub mod postgrasql_transaction_manager;
+pub mod postgressql_connection_pool_creator;
 pub mod prepared_statemant_parameter_convertation_resolver;
+pub mod redis_connection_pool_creator;

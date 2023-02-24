@@ -1,3 +1,4 @@
+use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -37,7 +38,7 @@ impl EnvironmentConfiguration_Creator {
             Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME)
         );
 
-        let is_production_environment = if production_environment_file_path_buffer.exists() {
+        let environment = if production_environment_file_path_buffer.exists() {
             if let Err(error) = dotenv::from_path(production_environment_file_path_buffer.as_path()) {
                 return Err(
                     ErrorAuditor::new(
@@ -47,14 +48,14 @@ impl EnvironmentConfiguration_Creator {
                 );
             }
 
-            true
+            Environment::Production
         } else {
-            let development_local_environment_file_path_buffer = file_path.join(
+            let local_development_environment_file_path_buffer = file_path.join(
                 Path::new(Self::LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME)
             );
 
-            if development_local_environment_file_path_buffer.exists() {
-                if let Err(error) = dotenv::from_path(development_local_environment_file_path_buffer.as_path()) {
+            if local_development_environment_file_path_buffer.exists() {
+                if let Err(error) = dotenv::from_path(local_development_environment_file_path_buffer.as_path()) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
@@ -62,6 +63,8 @@ impl EnvironmentConfiguration_Creator {
                         )
                     );
                 }
+
+                Environment::LocalDevelopment
             } else {
                 let development_environment_file_path_buffer = file_path.join(
                     Path::new(Self::DEVELOPMENT_ENVIRONMENT_FILE_NAME)
@@ -84,9 +87,9 @@ impl EnvironmentConfiguration_Creator {
                         )
                     );
                 }
-            }
 
-            false
+                Environment::Development
+            }
         };
 
         let application_server_socket_address = match env::var(EnvironmentConfiguration::APPLICATION_SERVER_SOCKET_ADDRESS_KEY) {
@@ -266,7 +269,7 @@ impl EnvironmentConfiguration_Creator {
 
         return Ok(
             EnvironmentConfiguration::new(
-                is_production_environment,
+                environment,
                 application_server_socket_address_,
                 security_auart_encoding_private_key,
                 security_auat_signature_encoding_private_key,

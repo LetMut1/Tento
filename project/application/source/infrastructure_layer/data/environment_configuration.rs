@@ -5,7 +5,7 @@ use std::net::SocketAddr;
 
 #[derive(Clone)]
 pub struct EnvironmentConfiguration {
-    is_production_environment: bool,
+    environment: Environment,
     application_server_socket_address: SocketAddr,
     security_auart_encoding_private_key: String,
     security_auat_signature_encoding_private_key: String,
@@ -25,7 +25,7 @@ impl EnvironmentConfiguration {
     pub const RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY: &'static str = "RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS";
 
     pub fn new(
-        is_production_environment: bool,
+        environment: Environment,
         application_server_socket_address: SocketAddr,
         security_auart_encoding_private_key: String,
         security_auat_signature_encoding_private_key: String,
@@ -35,7 +35,7 @@ impl EnvironmentConfiguration {
         resource_email_server_socket_address: SocketAddr
     ) -> Self {
         return Self {
-            is_production_environment,
+            environment,
             application_server_socket_address,
             security_auart_encoding_private_key,
             security_auat_signature_encoding_private_key,
@@ -46,8 +46,8 @@ impl EnvironmentConfiguration {
         };
     }
 
-    pub fn is_production_environment<'a>(&'a self) -> bool {
-        return self.is_production_environment;
+    pub fn get_environment<'a>(&'a self) -> &'a Environment {
+        return &self.environment;
     }
 
     pub fn get_application_server_socket_address<'a>(&'a self) -> &'a SocketAddr {
@@ -77,4 +77,11 @@ impl EnvironmentConfiguration {
     pub fn get_resource_email_server_socket_address<'a>(&'a self) -> &'a SocketAddr {
         return &self.resource_email_server_socket_address;
     }
+}
+
+#[derive(Clone)]
+pub enum Environment {
+    Production,
+    Development,
+    LocalDevelopment
 }

@@ -1,3 +1,4 @@
+use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -7,10 +8,10 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::lettre_email::EmailBuilder;
 use extern_crate::lettre::ClientSecurity;
-use extern_crate::lettre::smtp::authentication::Credentials;
-use extern_crate::lettre::smtp::authentication::Mechanism;
-use extern_crate::lettre::smtp::ConnectionReuseParameters;
-use extern_crate::lettre::smtp::extension::ClientId;
+// use extern_crate::lettre::smtp::authentication::Credentials;
+// use extern_crate::lettre::smtp::authentication::Mechanism;
+// use extern_crate::lettre::smtp::ConnectionReuseParameters;
+// use extern_crate::lettre::smtp::extension::ClientId;
 use extern_crate::lettre::smtp::SmtpClient;
 use extern_crate::lettre::Transport;
 use std::convert::Into;
@@ -49,52 +50,57 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             }
         };
 
-        let smtp_client = if environment_configuration.is_production_environment() {
-            let smtp_client_= match SmtpClient::new_simple("TODO") {                         // TODO НАСТРОИТЬ В Препроде!!!!!!!!!!!!!!!!!!!!!
-                Ok(smtp_client__) => smtp_client__,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError {
-                                runtime_error: RuntimeError::ResourceError {
-                                    resource_error: ResourceError::EmailServerError {
-                                        email_server_error: EmailServerError::SmtpError {
-                                            smtp_error: error
-                                        }
-                                    }
-                                }
-                            },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
+        let smtp_client = match *environment_configuration.get_environment() {
+            Environment::Production => {
+                todo!();
+                // let smtp_client_= match SmtpClient::new_simple("TODO") {                         // TODO НАСТРОИТЬ В Препроде!!!!!!!!!!!!!!!!!!!!!
+                //     Ok(smtp_client__) => smtp_client__,
+                //     Err(error) => {
+                //         return Err(
+                //             ErrorAuditor::new(
+                //                 BaseError::RuntimeError {
+                //                     runtime_error: RuntimeError::ResourceError {
+                //                         resource_error: ResourceError::EmailServerError {
+                //                             email_server_error: EmailServerError::SmtpError {
+                //                                 smtp_error: error
+                //                             }
+                //                         }
+                //                     }
+                //                 },
+                //                 BacktracePart::new(line!(), file!(), None)
+                //             )
+                //         );
+                //     }
+                // };
 
-            smtp_client_.hello_name(ClientId::Domain("TODO".to_string())) // TODO
-                .credentials(Credentials::new("usToDO".to_string(), "pasTODO".to_string())) // TODO
-                .smtp_utf8(true)
-                .authentication_mechanism(Mechanism::Plain)// TODO
-                .connection_reuse(ConnectionReuseParameters::NoReuse)// TODO
-        } else {
-            match SmtpClient::new(
-                *environment_configuration.get_resource_email_server_socket_address(), ClientSecurity::None
-            ) {
-                Ok(smtp_client_) => smtp_client_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError {
-                                runtime_error: RuntimeError::ResourceError {
-                                    resource_error: ResourceError::EmailServerError {
-                                        email_server_error: EmailServerError::SmtpError {
-                                            smtp_error: error
+                // smtp_client_.hello_name(ClientId::Domain("TODO".to_string())) // TODO
+                //     .credentials(Credentials::new("usToDO".to_string(), "pasTODO".to_string())) // TODO
+                //     .smtp_utf8(true)
+                //     .authentication_mechanism(Mechanism::Plain)// TODO
+                //     .connection_reuse(ConnectionReuseParameters::NoReuse)// TODO
+            }
+            Environment::Development |
+            Environment::LocalDevelopment => {
+                match SmtpClient::new(
+                    *environment_configuration.get_resource_email_server_socket_address(), ClientSecurity::None
+                ) {
+                    Ok(smtp_client_) => smtp_client_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError {
+                                    runtime_error: RuntimeError::ResourceError {
+                                        resource_error: ResourceError::EmailServerError {
+                                            email_server_error: EmailServerError::SmtpError {
+                                                smtp_error: error
+                                            }
                                         }
                                     }
-                                }
-                            },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
+                                },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
                 }
             }
         };

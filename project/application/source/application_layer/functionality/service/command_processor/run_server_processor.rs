@@ -1,11 +1,13 @@
+use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::environment_configuration__creator::EnvironmentConfiguration_Creator;
+use crate::infrastructure_layer::functionality::service::postgressql_connection_pool_creator::PostgresqlConnectionPoolCreator;
+use crate::infrastructure_layer::functionality::service::redis_connection_pool_creator::RedisConnectionPoolCreator;
 use crate::presentation_layer::functionality::action::mobile::version_1::application_user__authorization;
 use crate::presentation_layer::functionality::action::mobile::version_1::channel__base;
 use crate::presentation_layer::functionality::action::route_not_found;
@@ -70,68 +72,49 @@ impl RunServerProcessor {
     }
 
     async fn run_http_server<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
-        let postgresql_connection_pool_workflow_type_aggregator = if environment_configuration.is_production_environment() {
-            todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-        } else {
-            let database_1_postgresql_connection_pool = match Pool::builder()
-                .build(
-                    PostgresqlConnectionManager::new(
-                        environment_configuration.get_resource_database_1_postgresql_configuration().clone(), NoTls
-                    )
-                ).await {         // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-                Ok(database_1_postgresql_connection_pool_) => database_1_postgresql_connection_pool_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
-
-            let database_2_postgresql_connection_pool = match Pool::builder()
-                .build(
-                    PostgresqlConnectionManager::new(
-                        environment_configuration.get_resource_database_2_postgresql_configuration().clone(), NoTls
-                    )
+        let postgresql_connection_pool_workflow_type_aggregator = match *environment_configuration.get_environment() {
+            Environment::Production => {
+                todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+            }
+            Environment::Development |
+            Environment::LocalDevelopment => {
+                let database_1_postgresql_connection_pool = match PostgresqlConnectionPoolCreator::<NoTls>::create(
+                    environment_configuration.get_environment(),
+                    environment_configuration.get_resource_database_1_postgresql_configuration()
                 ).await {
-                Ok(database_2_postgresql_connection_pool_) => database_2_postgresql_connection_pool_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
+                    Ok(database_1_postgresql_connection_pool_) => database_1_postgresql_connection_pool_,
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-            PostgresqlConnectionPoolWorkflowTypeAggregator::LocalDevelopment { database_1_postgresql_connection_pool, database_2_postgresql_connection_pool }
-        };
+                        return Err(error);
+                    }
+                };
 
-        let redis_connection_manager = match RedisConnectionManager::new(environment_configuration.get_resource_redis_url().clone()) {
-            Ok(redis_connection_manager_) => redis_connection_manager_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
+                let database_2_postgresql_connection_pool = match PostgresqlConnectionPoolCreator::<NoTls>::create(
+                    environment_configuration.get_environment(),
+                    environment_configuration.get_resource_database_2_postgresql_configuration()
+                ).await {
+                    Ok(database_2_postgresql_connection_pool_) => database_2_postgresql_connection_pool_,
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        return Err(error);
+                    }
+                };
+
+                PostgresqlConnectionPoolWorkflowTypeAggregator::LocalDevelopment { database_1_postgresql_connection_pool, database_2_postgresql_connection_pool }
             }
         };
 
-        let redis_connection_pool = match Pool::builder()      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
-            .build(redis_connection_manager).await {
+        let redis_connection_pool = match RedisConnectionPoolCreator::create(
+            environment_configuration.get_environment(),
+            environment_configuration.get_resource_redis_url()
+        ).await {
             Ok(redis_connection_pool_) => redis_connection_pool_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
             }
         };
 
