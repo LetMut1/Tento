@@ -7,11 +7,12 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
+use std::borrow::Cow;
 
 pub struct ApplicationUser_PostgresqlRepository;
 
 impl ApplicationUser_PostgresqlRepository {
-    pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<ApplicationUser, ErrorAuditor> {
+    pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<ApplicationUser<'static>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -91,8 +92,8 @@ impl ApplicationUser_PostgresqlRepository {
 
         let application_user = ApplicationUser::new(
             application_user_id,
-            insert.application_user_email,
-            insert.application_user_nickname,
+            Cow::Owned(insert.application_user_email),
+            Cow::Owned(insert.application_user_nickname),
             insert.application_user_password_hash,
             application_user_created_at
         );
@@ -100,7 +101,7 @@ impl ApplicationUser_PostgresqlRepository {
         return Ok(application_user);
     }
 
-    pub async fn update<'a>(database_1_connection: &'a Connection, application_user: &'a ApplicationUser) -> Result<(), ErrorAuditor> {
+    pub async fn update<'a>(database_1_connection: &'a Connection, application_user: &'a ApplicationUser<'_>) -> Result<(), ErrorAuditor> {
         let application_user_id = application_user.get_id();
 
         let application_user_email = application_user.get_email();
@@ -298,7 +299,7 @@ impl ApplicationUser_PostgresqlRepository {
         return Ok(true);
     }
 
-    pub async fn find_1<'a>(database_1_connection: &'a Connection, application_user_nickname: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, application_user_nickname: &'a str) -> Result<Option<ApplicationUser<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -396,8 +397,8 @@ impl ApplicationUser_PostgresqlRepository {
             Some(
                 ApplicationUser::new(
                     application_user_id,
-                    application_user_email,
-                    application_user_nickname,
+                    Cow::Owned(application_user_email),
+                    Cow::Borrowed(application_user_nickname),
                     application_user_password_hash,
                     application_user_created_at,
                 )
@@ -405,7 +406,7 @@ impl ApplicationUser_PostgresqlRepository {
         );
     }
 
-    pub async fn find_2<'a>(database_1_connection: &'a Connection, application_user_email: String) -> Result<Option<ApplicationUser>, ErrorAuditor> {
+    pub async fn find_2<'a>(database_1_connection: &'a Connection, application_user_email: &'a str) -> Result<Option<ApplicationUser<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -503,8 +504,8 @@ impl ApplicationUser_PostgresqlRepository {
             Some(
                 ApplicationUser::new(
                     application_user_id,
-                    application_user_email,
-                    application_user_nickname,
+                    Cow::Borrowed(application_user_email),
+                    Cow::Owned(application_user_nickname),
                     application_user_password_hash,
                     application_user_created_at,
                 )
@@ -512,7 +513,7 @@ impl ApplicationUser_PostgresqlRepository {
         );
     }
 
-    pub async fn find_3<'a>(database_1_connection: &'a Connection, application_user_id: i64) -> Result<Option<ApplicationUser>, ErrorAuditor> {
+    pub async fn find_3<'a>(database_1_connection: &'a Connection, application_user_id: i64) -> Result<Option<ApplicationUser<'static>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -610,8 +611,8 @@ impl ApplicationUser_PostgresqlRepository {
             Some(
                 ApplicationUser::new(
                     application_user_id,
-                    application_user_email,
-                    application_user_nickname,
+                    Cow::Owned(application_user_email),
+                    Cow::Owned(application_user_nickname),
                     application_user_password_hash,
                     application_user_created_at,
                 )

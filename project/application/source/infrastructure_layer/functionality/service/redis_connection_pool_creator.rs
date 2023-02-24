@@ -13,7 +13,7 @@ pub struct RedisConnectionPoolCreator;
 
 impl RedisConnectionPoolCreator {
     pub async fn create<'a>(environment: &'a Environment, connection_info: &'a ConnectionInfo) -> Result<Pool<RedisConnectionManager>, ErrorAuditor> {
-        match *environment {
+        let redis_connection_pool = match *environment {
             Environment::Production => {
                 todo!();
             }
@@ -31,10 +31,10 @@ impl RedisConnectionPoolCreator {
                     }
                 };
 
-                return match Pool::builder()      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                let redis_connection_pool_ = match Pool::builder()      // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
                     .build(redis_connection_manager)
                     .await {
-                    Ok(redis_connection_pool_) => Ok(redis_connection_pool_),
+                    Ok(redis_connection_pool__) => redis_connection_pool__,
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
@@ -44,7 +44,11 @@ impl RedisConnectionPoolCreator {
                         );
                     }
                 };
+
+                redis_connection_pool_
             }
-        }
+        };
+
+        return Ok(redis_connection_pool);
     }
 }

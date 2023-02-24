@@ -7,7 +7,7 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
 use crate::infrastructure_layer::functionality::service::environment_configuration__creator::EnvironmentConfiguration_Creator;
-use crate::infrastructure_layer::functionality::service::postgressql_connection_pool_creator::PostgresqlConnectionPoolCreator;
+use crate::infrastructure_layer::functionality::service::postgresql_connection_pool_creator::PostgresqlConnectionPoolCreator;
 use crate::infrastructure_layer::functionality::service::redis_connection_pool_creator::RedisConnectionPoolCreator;
 use crate::presentation_layer::functionality::action::mobile::version_1::application_user__authorization;
 use crate::presentation_layer::functionality::action::mobile::version_1::channel__base;
@@ -48,7 +48,7 @@ impl RunServerProcessor {
         };
 
         let runtime = match Builder::new_multi_thread()
-            .enable_all()
+            .enable_io()
             .build() {
             Ok(runtime_) => runtime_,
             Err(error) => {
@@ -73,7 +73,7 @@ impl RunServerProcessor {
     }
 
     async fn run_http_server<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
-        let postgresql_connection_pool_workflow_type_aggregator = match *environment_configuration.get_environment() {
+        let postgresql_connection_pool_aggregator = match *environment_configuration.get_environment() {
             Environment::Production => {
                 todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
             }
@@ -103,7 +103,7 @@ impl RunServerProcessor {
                     }
                 };
 
-                PostgresqlConnectionPoolWorkflowTypeAggregator::LocalDevelopment { database_1_postgresql_connection_pool, database_2_postgresql_connection_pool }
+                PostgresqlConnectionPoolAggregator::LocalDevelopment { database_1_postgresql_connection_pool, database_2_postgresql_connection_pool }
             }
         };
 
@@ -126,7 +126,7 @@ impl RunServerProcessor {
             move |_: &AddrStream| {
                 let environment_configuration_ = environment_configuration.clone();
 
-                let postgresql_connection_pool_workflow_type_aggregator_ = postgresql_connection_pool_workflow_type_aggregator.clone();
+                let postgresql_connection_pool_aggregator_ = postgresql_connection_pool_aggregator.clone();
 
                 let redis_connection_pool_ = redis_connection_pool.clone();
 
@@ -136,13 +136,13 @@ impl RunServerProcessor {
                             move |requset| {
                                 let environment_configuration__ = environment_configuration_.clone();
 
-                                let postgresql_connection_pool_workflow_type_aggregator__ = postgresql_connection_pool_workflow_type_aggregator_.clone();
+                                let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
 
                                 let redis_connection_pool__ = redis_connection_pool_.clone();
 
                                 return async move {
-                                    let (database_1_postgresql_connection_pool_, database_2_postgresql_connection_pool_) = match postgresql_connection_pool_workflow_type_aggregator__ {
-                                        PostgresqlConnectionPoolWorkflowTypeAggregator::LocalDevelopment {
+                                    let (database_1_postgresql_connection_pool_, database_2_postgresql_connection_pool_) = match postgresql_connection_pool_aggregator__ {
+                                        PostgresqlConnectionPoolAggregator::LocalDevelopment {
                                             database_1_postgresql_connection_pool, database_2_postgresql_connection_pool
                                         } => (database_1_postgresql_connection_pool, database_2_postgresql_connection_pool)
                                     };
@@ -399,7 +399,7 @@ impl RunServerProcessor {
 }
 
 #[derive(Clone)]
-enum PostgresqlConnectionPoolWorkflowTypeAggregator {
+enum PostgresqlConnectionPoolAggregator {
     LocalDevelopment {
         database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
         database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>

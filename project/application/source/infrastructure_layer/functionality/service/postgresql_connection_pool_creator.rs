@@ -16,18 +16,23 @@ pub struct PostgresqlConnectionPoolCreator<T> {
 }
 
 impl PostgresqlConnectionPoolCreator<NoTls> {
-    pub async fn create<'a>(environment: &'a Environment, configuraion: &'a Config) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, ErrorAuditor> {
-        match *environment {
+    pub async fn create<'a>(environment: &'a Environment, configuration: &'a Config) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, ErrorAuditor> {
+        let postgresql_connection_pool = match *environment {
             Environment::Production => {
-                todo!();
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::LogicError { message: "NoTls should be only not in production environment." },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
             }
             Environment::Development |
             Environment::LocalDevelopment => {
-                return match Pool::builder()
+                let postgresql_connection_pool_ = match Pool::builder()
                     .build(
-                        PostgresqlConnectionManager::new(configuraion.clone(), NoTls)
+                        PostgresqlConnectionManager::new(configuration.clone(), NoTls)
                     ).await {
-                    Ok(database_1_postgresql_connection_pool_) => Ok(database_1_postgresql_connection_pool_),
+                    Ok(postgresql_connection_pool__) => postgresql_connection_pool__,
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
@@ -36,8 +41,12 @@ impl PostgresqlConnectionPoolCreator<NoTls> {
                             )
                         );
                     }
-                }
+                };
+
+                postgresql_connection_pool_
             }
-        }
+        };
+
+        return Ok(postgresql_connection_pool);
     }
 }

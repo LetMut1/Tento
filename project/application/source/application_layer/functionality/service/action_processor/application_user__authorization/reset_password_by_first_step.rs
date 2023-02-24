@@ -67,7 +67,7 @@ impl ActionProcessor {
         };
 
         let application_user = match ApplicationUser_PostgresqlRepository::find_2(
-            &*database_1_postgresql_pooled_connection, incoming.application_user_email
+            &*database_1_postgresql_pooled_connection, incoming.application_user_email.as_str()
         ).await {
             Ok(application_user_) => application_user_,
             Err(mut error) => {

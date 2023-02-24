@@ -70,7 +70,7 @@ impl ActionProcessor {
         };
         let application_user = if is_valid_email {
             let application_user_ = match ApplicationUser_PostgresqlRepository::find_2(
-                database_1_postgresql_connection, incoming.application_user_email_or_application_user_nickname
+                database_1_postgresql_connection, incoming.application_user_email_or_application_user_nickname.as_str()
             ).await {
                 Ok(application_user__) => application_user__,
                 Err(mut error) => {
@@ -84,7 +84,7 @@ impl ActionProcessor {
         } else {
             if ApplicationUser_Validator::is_valid_nickname(incoming.application_user_email_or_application_user_nickname.as_str()) {
                 let application_user_ = match ApplicationUser_PostgresqlRepository::find_1(
-                    database_1_postgresql_connection, incoming.application_user_email_or_application_user_nickname
+                    database_1_postgresql_connection, incoming.application_user_email_or_application_user_nickname.as_str()
                 ).await {
                     Ok(application_user__) => application_user__,
                     Err(mut error) => {
