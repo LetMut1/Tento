@@ -244,6 +244,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "create_fixtures"
+version = "0.1.0"
+dependencies = [
+ "application",
+]
+
+[[package]]
 name = "crossbeam-utils"
 version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
