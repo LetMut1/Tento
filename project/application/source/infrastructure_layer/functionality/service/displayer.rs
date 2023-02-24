@@ -22,19 +22,19 @@ impl Display<ErrorAuditor> for Displayer {
             if index == 0 {
                 backtrace_message = match backtrace_part.get_context() {
                     Some(context) => {
-                        format!("({}){}:{} ({}).\n", index, backtrace_part.get_file_path(), backtrace_part.get_line_number(), context)
+                        format!("({}) {}:{} ({}).\n", index, backtrace_part.get_file_path(), backtrace_part.get_line_number(), context)
                     }
                     None => {
-                        format!("({}){}:{}.\n", index, backtrace_part.get_file_path(), backtrace_part.get_line_number())
+                        format!("({}) {}:{}.\n", index, backtrace_part.get_file_path(), backtrace_part.get_line_number())
                     }
                 };
             } else {
                 backtrace_message = match backtrace_part.get_context() {
                     Some(context) => {
-                        format!("{}({}){}:{} ({})\n.", backtrace_message.as_str(), index, backtrace_part.get_file_path(), backtrace_part.get_line_number(), context)
+                        format!("{}({}) {}:{} ({})\n.", backtrace_message.as_str(), index, backtrace_part.get_file_path(), backtrace_part.get_line_number(), context)
                     }
                     None => {
-                        format!("{}({}){}:{}.\n", backtrace_message.as_str(), index, backtrace_part.get_file_path(), backtrace_part.get_line_number())
+                        format!("{}({}) {}:{}.\n", backtrace_message.as_str(), index, backtrace_part.get_file_path(), backtrace_part.get_line_number())
                     }
                 }
             };
