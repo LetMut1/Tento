@@ -18,3 +18,7 @@ required-features = []
 
 [dependencies]
 application = { path = "./../../../..", package = "application", version = "0.1.0", default-features = true, features = [], optional = false }
+
+[features]
+default = []
+facilitate_non_automatic_functional_testing = ["application/facilitate_non_automatic_functional_testing"]
