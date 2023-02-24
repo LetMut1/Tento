@@ -1,36 +1,40 @@
+use crate::application_layer::data::action_processor_result::ActionProcessorResult;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
+use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
+use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_authorization_token__value_generator::ApplicationUserAuthorizationToken_ValueGenerator;
+use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
+use crate::infrastructure_layer::data::argument_result::ArgumentResult;
+use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
-use crate::infrastructure_layer::functionality::service::environment_configuration__creator::EnvironmentConfiguration_Creator;
-use crate::infrastructure_layer::functionality::service::postgresql_connection_pool_creator::PostgresqlConnectionPoolCreator;
-use extern_crate::tokio_postgres::NoTls;
-use extern_crate::tokio::runtime::Builder;
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::Insert as ApplicationUserInsert;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
-use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
-use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::application_user_authorization_token__value_generator::ApplicationUserAuthorizationToken_ValueGenerator;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
-use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::ApplicationUserAuthorizationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::Update;
+use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::ApplicationUserDevice_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
+use crate::infrastructure_layer::functionality::service::environment_configuration__creator::EnvironmentConfiguration_Creator;
+use crate::infrastructure_layer::functionality::service::postgresql_connection_pool_creator::PostgresqlConnectionPoolCreator;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
+use extern_crate::tokio_postgres::NoTls;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
+use extern_crate::tokio::runtime::Builder;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -112,7 +116,7 @@ impl CreateFixturesProcessor {
         if !is_valid_email {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::LogicError { message: "Application user email should be valid." },
+                    BaseError::LogicError { message: "Application_user_email should be valid." },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -121,7 +125,7 @@ impl CreateFixturesProcessor {
         if !ApplicationUser_Validator::is_valid_nickname(Self::APPLICATION_USER__NICKANME) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::LogicError { message: "Application user nickname should be valid." },
+                    BaseError::LogicError { message: "Application_user_nickname should be valid." },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -130,7 +134,16 @@ impl CreateFixturesProcessor {
         if !ApplicationUser_Validator::is_valid_password(Self::APPLICATION_USER__PASSWORD) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::LogicError { message: "Application user password should be valid." },
+                    BaseError::LogicError { message: "Application_user_password should be valid." },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
+
+        if !ApplicationUserDevice_Validator::is_valid_id(Self::APPLICATION_USER_DEVICE__ID) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::LogicError { message: "Application_user_device id should be valid." },
                     BacktracePart::new(line!(), file!(), None)
                 )
             );
@@ -176,7 +189,8 @@ impl CreateFixturesProcessor {
                     application_user_nickname: Self::APPLICATION_USER__NICKANME.to_string(),
                     application_user_password_hash,
                 };
-                let application_user = match ApplicationUser_PostgresqlRepository::create(database_1_postgresql_connection, application_user_insert).await {
+
+                let application_user__ = match ApplicationUser_PostgresqlRepository::create(database_1_postgresql_connection, application_user_insert).await {
                     Ok(application_user_) => application_user_,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -184,21 +198,24 @@ impl CreateFixturesProcessor {
                         return Err(error);
                     }
                 };
+
+                application_user__
             }
         };
 
         let application_user_device_insert = ApplicationUserDeviceInsert {
-            application_user_device_id: Self::a,
-            application_user_id: application_user.get_id()
+            application_user_device_id: Self::APPLICATION_USER_DEVICE__ID.to_string(),
+            application_user_id: application_user_.get_id()
         };
-        let application_user_device = match ApplicationUserDevice_PostgresqlRepository::create(database_1_postgresql_connection, application_user_device_insert).await {
-            Ok(application_user_device_) => application_user_device_,
-            Err(mut error) => {
-                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                return Err(error);
-            }
+        if let Err(mut error) = ApplicationUserDevice_PostgresqlRepository::create(database_1_postgresql_connection, application_user_device_insert).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
         };
+
+
+        // Создать канал
 
         return Ok(());
     }
