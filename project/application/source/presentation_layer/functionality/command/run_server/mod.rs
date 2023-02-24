@@ -5,7 +5,7 @@ use application::infrastructure_layer::functionality::service::displayer::Displa
 use application::infrastructure_layer::functionality::service::displayer::Displayer;
 
 fn main() -> () {
-    if let Err(error) = RunServerProcessor::process(std::file!()) {
+    if let Err(error) = RunServerProcessor::process() {
         println!("{}", Displayer::display(&error));
     }
 
