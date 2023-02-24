@@ -82,7 +82,7 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             Environment::Development |
             Environment::LocalDevelopment => {
                 match SmtpClient::new(
-                    *environment_configuration.get_resource_email_server_socket_address(), ClientSecurity::None
+                    *environment_configuration.get_email_server_socket_address(), ClientSecurity::None
                 ) {
                     Ok(smtp_client_) => smtp_client_,
                     Err(error) => {

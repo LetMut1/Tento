@@ -9,40 +9,40 @@ pub struct EnvironmentConfiguration {
     application_server_socket_address: SocketAddr,
     security_auart_encoding_private_key: String,
     security_auat_signature_encoding_private_key: String,
-    resource_database_1_postgresql_configuration: Config,
-    resource_database_2_postgresql_configuration: Config,
-    resource_redis_connection_info: ConnectionInfo,
-    resource_email_server_socket_address: SocketAddr
+    database_1_postgresql_configuration: Config,
+    database_2_postgresql_configuration: Config,
+    redis_connection_info: ConnectionInfo,
+    email_server_socket_address: SocketAddr
 }
 
 impl EnvironmentConfiguration {
     pub const APPLICATION_SERVER_SOCKET_ADDRESS_KEY: &'static str = "APPLICATION_SERVER_SOCKET_ADDRESS";
     pub const SECURITY_AUART_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_AUART_ENCODING_PRIVATE_KEY";
     pub const SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY: &'static str = "SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY";
-    pub const RESOURCE_DATABASE_1_POSTGRESQL_URL_KEY: &'static str = "RESOURCE_DATABASE_1_POSTGRESQL_URL";
-    pub const RESOURCE_DATABASE_2_POSTGRESQL_URL_KEY: &'static str = "RESOURCE_DATABASE_2_POSTGRESQL_URL";
-    pub const RESOURCE_REDIS_URL_KEY: &'static str = "RESOURCE_REDIS_URL";
-    pub const RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY: &'static str = "RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS";
+    pub const DATABASE_1_POSTGRESQL_URL_KEY: &'static str = "DATABASE_1_POSTGRESQL_URL";
+    pub const DATABASE_2_POSTGRESQL_URL_KEY: &'static str = "DATABASE_2_POSTGRESQL_URL";
+    pub const REDIS_URL_KEY: &'static str = "REDIS_URL";
+    pub const EMAIL_SERVER_SOCKET_ADDRESS_KEY: &'static str = "EMAIL_SERVER_SOCKET_ADDRESS";
 
     pub fn new(
         environment: Environment,
         application_server_socket_address: SocketAddr,
         security_auart_encoding_private_key: String,
         security_auat_signature_encoding_private_key: String,
-        resource_database_1_postgresql_configuration: Config,
-        resource_database_2_postgresql_configuration: Config,
-        resource_redis_connection_info: ConnectionInfo,
-        resource_email_server_socket_address: SocketAddr
+        database_1_postgresql_configuration: Config,
+        database_2_postgresql_configuration: Config,
+        redis_connection_info: ConnectionInfo,
+        email_server_socket_address: SocketAddr
     ) -> Self {
         return Self {
             environment,
             application_server_socket_address,
             security_auart_encoding_private_key,
             security_auat_signature_encoding_private_key,
-            resource_database_1_postgresql_configuration,
-            resource_database_2_postgresql_configuration,
-            resource_redis_connection_info,
-            resource_email_server_socket_address
+            database_1_postgresql_configuration,
+            database_2_postgresql_configuration,
+            redis_connection_info,
+            email_server_socket_address
         };
     }
 
@@ -62,20 +62,20 @@ impl EnvironmentConfiguration {
         return self.security_auat_signature_encoding_private_key.as_str();
     }
 
-    pub fn get_resource_database_1_postgresql_configuration<'a>(&'a self) -> &'a Config {
-        return &self.resource_database_1_postgresql_configuration;
+    pub fn get_database_1_postgresql_configuration<'a>(&'a self) -> &'a Config {
+        return &self.database_1_postgresql_configuration;
     }
 
-    pub fn get_resource_database_2_postgresql_configuration<'a>(&'a self) -> &'a Config {
-        return &self.resource_database_2_postgresql_configuration;
+    pub fn get_database_2_postgresql_configuration<'a>(&'a self) -> &'a Config {
+        return &self.database_2_postgresql_configuration;
     }
 
-    pub fn get_resource_redis_url<'a>(&'a self) -> &'a ConnectionInfo {
-        return &self.resource_redis_connection_info;
+    pub fn get_redis_url<'a>(&'a self) -> &'a ConnectionInfo {
+        return &self.redis_connection_info;
     }
 
-    pub fn get_resource_email_server_socket_address<'a>(&'a self) -> &'a SocketAddr {
-        return &self.resource_email_server_socket_address;
+    pub fn get_email_server_socket_address<'a>(&'a self) -> &'a SocketAddr {
+        return &self.email_server_socket_address;
     }
 }
 

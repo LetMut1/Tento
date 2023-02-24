@@ -81,7 +81,7 @@ impl RunServerProcessor {
             Environment::LocalDevelopment => {
                 let database_1_postgresql_connection_pool = match PostgresqlConnectionPoolCreator::<NoTls>::create(
                     environment_configuration.get_environment(),
-                    environment_configuration.get_resource_database_1_postgresql_configuration()
+                    environment_configuration.get_database_1_postgresql_configuration()
                 ).await {
                     Ok(database_1_postgresql_connection_pool_) => database_1_postgresql_connection_pool_,
                     Err(mut error) => {
@@ -93,7 +93,7 @@ impl RunServerProcessor {
 
                 let database_2_postgresql_connection_pool = match PostgresqlConnectionPoolCreator::<NoTls>::create(
                     environment_configuration.get_environment(),
-                    environment_configuration.get_resource_database_2_postgresql_configuration()
+                    environment_configuration.get_database_2_postgresql_configuration()
                 ).await {
                     Ok(database_2_postgresql_connection_pool_) => database_2_postgresql_connection_pool_,
                     Err(mut error) => {
@@ -109,7 +109,7 @@ impl RunServerProcessor {
 
         let redis_connection_pool = match RedisConnectionPoolCreator::create(
             environment_configuration.get_environment(),
-            environment_configuration.get_resource_redis_url()
+            environment_configuration.get_redis_url()
         ).await {
             Ok(redis_connection_pool_) => redis_connection_pool_,
             Err(mut error) => {

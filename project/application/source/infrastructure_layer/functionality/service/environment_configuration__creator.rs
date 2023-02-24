@@ -155,7 +155,7 @@ impl EnvironmentConfiguration_Creator {
         };
         env::remove_var(EnvironmentConfiguration::SECURITY_AUAT_SIGNATURE_ENCODING_PRIVATE_KEY_KEY);
 
-        let resource_database_1_postgresql_url = match env::var(EnvironmentConfiguration::RESOURCE_DATABASE_1_POSTGRESQL_URL_KEY) {
+        let resource_database_1_postgresql_url = match env::var(EnvironmentConfiguration::DATABASE_1_POSTGRESQL_URL_KEY) {
             Ok(resource_database_1_postgresql_url_) => resource_database_1_postgresql_url_,
             Err(error) => {
                 return Err(
@@ -178,9 +178,9 @@ impl EnvironmentConfiguration_Creator {
                 );
             }
         };
-        env::remove_var(EnvironmentConfiguration::RESOURCE_DATABASE_1_POSTGRESQL_URL_KEY);
+        env::remove_var(EnvironmentConfiguration::DATABASE_1_POSTGRESQL_URL_KEY);
 
-        let resource_database_2_postgresql_url = match env::var(EnvironmentConfiguration::RESOURCE_DATABASE_2_POSTGRESQL_URL_KEY) {
+        let resource_database_2_postgresql_url = match env::var(EnvironmentConfiguration::DATABASE_2_POSTGRESQL_URL_KEY) {
             Ok(resource_database_2_postgresql_url_) =>  resource_database_2_postgresql_url_,
             Err(error) => {
                 return Err(
@@ -203,9 +203,9 @@ impl EnvironmentConfiguration_Creator {
                 );
             }
         };
-        env::remove_var(EnvironmentConfiguration::RESOURCE_DATABASE_2_POSTGRESQL_URL_KEY);
+        env::remove_var(EnvironmentConfiguration::DATABASE_2_POSTGRESQL_URL_KEY);
 
-        let resource_redis_url = match env::var(EnvironmentConfiguration::RESOURCE_REDIS_URL_KEY) {
+        let resource_redis_url = match env::var(EnvironmentConfiguration::REDIS_URL_KEY) {
             Ok(resource_redis_url_) => resource_redis_url_,
             Err(error) => {
                 return Err(
@@ -228,9 +228,9 @@ impl EnvironmentConfiguration_Creator {
                 );
             }
         };
-        env::remove_var(EnvironmentConfiguration::RESOURCE_REDIS_URL_KEY);
+        env::remove_var(EnvironmentConfiguration::REDIS_URL_KEY);
 
-        let resource_email_server_socket_address = match env::var(EnvironmentConfiguration::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY) {
+        let resource_email_server_socket_address = match env::var(EnvironmentConfiguration::EMAIL_SERVER_SOCKET_ADDRESS_KEY) {
             Ok(resource_email_server_socket_address_) => resource_email_server_socket_address_,
             Err(error) => {
                 return Err(
@@ -265,7 +265,7 @@ impl EnvironmentConfiguration_Creator {
                 );
             }
         };
-        env::remove_var(EnvironmentConfiguration::RESOURCE_EMAIL_SERVER_SOCKET_ADDRESS_KEY);
+        env::remove_var(EnvironmentConfiguration::EMAIL_SERVER_SOCKET_ADDRESS_KEY);
 
         return Ok(
             EnvironmentConfiguration::new(
