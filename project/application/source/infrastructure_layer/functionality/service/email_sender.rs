@@ -81,10 +81,10 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
             }
             Environment::Development |
             Environment::LocalDevelopment => {
-                match SmtpClient::new(
+                let smtp_client_ = match SmtpClient::new(
                     *environment_configuration.get_email_server_socket_address(), ClientSecurity::None
                 ) {
-                    Ok(smtp_client_) => smtp_client_,
+                    Ok(smtp_client__) => smtp_client__,
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
@@ -101,7 +101,9 @@ impl EmailSender {   // TODO В предпродакшене, когда буд�
                             )
                         );
                     }
-                }
+                };
+
+                smtp_client_
             }
         };
 

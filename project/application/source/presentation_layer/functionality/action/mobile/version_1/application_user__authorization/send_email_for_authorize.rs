@@ -3,6 +3,7 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_authorize::ActionProcessor;
 use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_authorize::Incoming;
 use crate::application_layer::functionality::service::action_round_result_writer::ActionRoundResultWriter;
+use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -143,7 +144,28 @@ where
         }
     };
 
-    match action_processor_result {
+    let action_processor_result_ = match action_processor_result {
+        ArgumentResult::Ok { subject: action_processor_result__ } => action_processor_result__,
+        ArgumentResult::InvalidArgument { invalid_argument } => {
+            let response = ActionResponseCreator::create_bad_request();
+
+            if let Err(mut error) = ActionRoundResultWriter::write_with_context(
+                database_2_postgresql_connection_pool, &request, &response, &invalid_argument
+            ).await {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                unreachable!(
+                    "{}. TODO: Write in concurrent way. It is also necessary that the write
+                    process does not wait for another write process, and writes immediately.",
+                    &error
+                );
+            }
+
+            return response;
+        }
+    };
+
+    match action_processor_result_ {
         ActionProcessorResult::Void => {
             let data = match rmp_serde::to_vec(&UnifiedReport::<Void>::empty()) {
                 Ok(data_) => data_,

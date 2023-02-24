@@ -92,6 +92,7 @@ impl Display<InvalidArgument> for Displayer {
             InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm => "ApplicationUserAccessRefreshToken_DeserializedForm",
             InvalidArgument::ApplicationUserAccessToken_DeserializedForm => "ApplicationUserAccessToken_DeserializedForm",
             InvalidArgument::ApplicationUserAuthorizationToken_Value => "ApplicationUserAuthorizationToken_Value",
+            InvalidArgument::ApplicationUserDevice_Id => "ApplicationUserDevice_Id",
             InvalidArgument::ApplicationUserRegistrationToken_Value => "ApplicationUserRegistrationToken_Value",
             InvalidArgument::ApplicationUserResetPasswordToken_Value => "ApplicationUserResetPasswordToken_Value",
             InvalidArgument::Channel_Name => "Channel_Name",

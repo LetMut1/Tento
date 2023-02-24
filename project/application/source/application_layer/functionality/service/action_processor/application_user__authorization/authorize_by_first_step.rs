@@ -4,6 +4,7 @@ use crate::domain_layer::functionality::service::application_user__password_hash
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__value_generator::ApplicationUserAuthorizationToken_ValueGenerator;
+use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -131,7 +132,9 @@ impl ActionProcessor {
             );
         }
 
-        let application_user_id = application_user_.get_id();
+        if !ApplicationUserDevice_Validator::is_valid_id(incoming.application_user_device_id.as_str()) {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
+        }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
@@ -147,7 +150,7 @@ impl ActionProcessor {
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, application_user_id, incoming.application_user_device_id.as_str()
+            database_2_postgresql_connection, application_user_.get_id(), incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_authorization_token_) => application_user_authorization_token_,
             Err(mut error) => {
@@ -178,7 +181,7 @@ impl ActionProcessor {
             }
             None => {
                 let insert = Insert {
-                    application_user_id,
+                    application_user_id: application_user_.get_id(),
                     application_user_device_id: incoming.application_user_device_id.as_str(),
                     application_user_authorization_token_value: ApplicationUserAuthorizationToken_ValueGenerator::generate(),
                     application_user_authorization_token_wrong_enter_tries_quantity: 0
@@ -205,7 +208,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { application_user_id } } });
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { application_user_id: application_user_.get_id() } } });
     }
 }
 
