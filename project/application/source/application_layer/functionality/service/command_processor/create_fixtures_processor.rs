@@ -62,7 +62,7 @@ impl CreateFixturesProcessor {
         }
 
         let runtime = match Builder::new_current_thread()
-            .enable_io()
+            .enable_all()
             .build() {
             Ok(runtime_) => runtime_,
             Err(error) => {
