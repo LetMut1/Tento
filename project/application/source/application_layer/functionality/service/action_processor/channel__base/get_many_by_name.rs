@@ -104,7 +104,7 @@ impl ActionProcessor {
             }
         };
 
-        let channel_registry = match Channel_PostgresqlRepository::find_1(
+        let channel_registry = match Channel_PostgresqlRepository::request_find_1(
             &*database_1_postgresql_pooled_connection, incoming.channel_name.as_str(), &incoming.requery_channel_name, incoming.limit
         ).await {
             Ok(channel_registry_) => channel_registry_,

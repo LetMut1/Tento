@@ -1,7 +1,9 @@
-pub struct Channel {
+use std::borrow::Cow;
+
+pub struct Channel<'a> {
     id: i64,
     application_user_id: i64,
-    name: String,
+    name: Cow<'a, str>,
     description: Option<String>,
     is_private: bool,
     orientation: Vec<i16>,
@@ -12,11 +14,11 @@ pub struct Channel {
     created_at: String
 }
 
-impl Channel {
+impl<'a> Channel<'a> {
     pub fn new(
         id: i64,
         application_user_id: i64,
-        name: String,
+        name: Cow<'a, str>,
         description: Option<String>,
         is_private: bool,
         orientation: Vec<i16>,
