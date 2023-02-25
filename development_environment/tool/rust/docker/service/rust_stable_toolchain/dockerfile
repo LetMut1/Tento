@@ -13,6 +13,7 @@ rustup component add \
 apt-get update && \
                              # TODO TODO TODO для чего pkg-config, libssl-dev? МОжно ли без них?
 apt-get install -y \
+    cron \
     pkg-config \
     libssl-dev && \
 cargo install diesel_cli --no-default-features --features postgres
