@@ -387,7 +387,7 @@ impl RunServerProcessor {
                         ).await;
                     }
                     // GET functional, but POST is used.
-                    ("/v1/m/c/gbi", &Method::POST) => {
+                    ("/v1/m/c/gbi_", &Method::POST) => {
                         return channel__base::get_by_id::get_by_id_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;

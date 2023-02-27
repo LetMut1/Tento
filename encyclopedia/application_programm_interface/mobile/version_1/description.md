@@ -96,15 +96,15 @@ struct Incoming {
 ```rust
 Result data:
 struct Outcoming {
-    pub application_user_id: i64,
-    pub channel_name: String,
-    pub channel_description: Option<String>,
-    pub channel_is_private: bool,
-    pub channel_orientation: Vec<i16>,
-    pub channel_personalization_image_path: String,
-    pub channel_subscribers_quantity: i64,
-    pub channel_marks_quantity: i64,
-    pub channel_viewing_quantity: i64
+    application_user_id: i64,
+    channel_name: String,
+    channel_description: Option<String>,
+    channel_is_private: bool,
+    channel_orientation: Vec<i16>,
+    channel_personalization_image_path: String,
+    channel_subscribers_quantity: i64,
+    channel_marks_quantity: i64,
+    channel_viewing_quantity: i64
 }
 ```
 ```
@@ -113,6 +113,43 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 - CHANNEL__NOT_FOUND
 - CHANNEL__IS_PRIVATE
+```
+ - ## /v1/m/c/gmbn (get_many_by_name)
+```
+Returns channels data by name.
+```
+```rust
+Request data:
+struct Incoming {
+    application_user_access_token_deserialized_form: String,
+    channel_name: String,
+    requery_channel_name: Option<String>,
+    limit: i16
+}
+```
+```
+Incoming parameters validation rule:
+- requery_channel_name:
+    same as channel_name
+- limit:
+    [1, 50] values
+```
+```rust
+Result data:
+struct Outcoming {
+    channel_registry: Vec<Channel>
+}
+
+struct Channel {
+    channel_id: i64,
+    channel_name: String,
+    channel_personalization_image_path: String
+}
+```
+```
+Communication codes:
+- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
 <br/><br/>
 
@@ -458,7 +495,10 @@ Can not be empty.
 
 Can not contain whitespace character.
 ```
-
+ - ## channel_name
+```
+75 - maximum number of characters.
+```
 
 
 
