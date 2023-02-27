@@ -203,13 +203,13 @@ impl RunServerProcessor {
     {
         match (request.uri().path(), request.method()) {
             // Area for existing routes with not authorized user.
-            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
+            // GET functional, but POST is used.
             ("/v1/m/au/cnfe", &Method::POST) => {
                 return application_user__authorization::check_nickname_for_existing::check_nickname_for_existing(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
+            // GET functional, but POST is used.
             ("/v1/m/au/cefe", &Method::POST) => {
                 return application_user__authorization::check_email_for_existing::check_email_for_existing(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
@@ -286,7 +286,13 @@ impl RunServerProcessor {
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
+            // GET functional, but POST is used.
+            ("/v1/m/c/gbi", &Method::POST) => {
+                return channel__base::get_by_id::get_by_id(
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                ).await;
+            }
+            // GET functional, but POST is used.
             ("/v1/m/c/gmbn", &Method::POST) => {
                 return channel__base::get_many_by_name::get_many_by_name(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
@@ -297,13 +303,13 @@ impl RunServerProcessor {
                 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
                 match (request.uri().path(), request.method()) {
                     // Area for existing routes with not authorized user.
-                    // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
+                    // GET functional, but POST is used.
                     ("/v1/m/au/cnfe_", &Method::POST) => {
                         return application_user__authorization::check_nickname_for_existing::check_nickname_for_existing_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
+                    // GET functional, but POST is used.
                     ("/v1/m/au/cefe_", &Method::POST) => {
                         return application_user__authorization::check_email_for_existing::check_email_for_existing_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
@@ -380,7 +386,13 @@ impl RunServerProcessor {
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    // GET functional, but POST is used. This is because there is a restriction on mobile frontend.
+                    // GET functional, but POST is used.
+                    ("/v1/m/c/gbi", &Method::POST) => {
+                        return channel__base::get_by_id::get_by_id_(
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                        ).await;
+                    }
+                    // GET functional, but POST is used.
                     ("/v1/m/c/gmbn_", &Method::POST) => {
                         return channel__base::get_many_by_name::get_many_by_name_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool

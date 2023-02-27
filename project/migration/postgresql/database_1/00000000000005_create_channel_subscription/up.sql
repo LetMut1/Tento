@@ -1,5 +1,5 @@
 CREATE TABLE public.channel_subscription (
-    id BIGINT,
+    id BIGINT,            -- TODO  Нужен ли ?
     channel_id BIGINT,
     application_user_id BIGINT,
     created_at TIMESTAMP(6) WITH TIME ZONE

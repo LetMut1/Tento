@@ -48,6 +48,10 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }
 
+        if !ApplicationUserDevice_Validator::is_valid_id(incoming.application_user_device_id.as_str()) {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
+        }
+
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
             Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
@@ -130,10 +134,6 @@ impl ActionProcessor {
                     }
                 }
             );
-        }
-
-        if !ApplicationUserDevice_Validator::is_valid_id(incoming.application_user_device_id.as_str()) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {

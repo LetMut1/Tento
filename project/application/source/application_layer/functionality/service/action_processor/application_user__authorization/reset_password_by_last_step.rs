@@ -60,6 +60,10 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserResetPasswordToken_Value });
         }
 
+        if !ApplicationUser_Validator::is_valid_id(incoming.application_user_id) {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Id });
+        }
+
         if ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }

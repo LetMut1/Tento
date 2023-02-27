@@ -87,6 +87,7 @@ impl Display<InvalidArgument> for Displayer {
     fn display<'a>(subject: &'a InvalidArgument) -> String {
         let message_part = match *subject {
             InvalidArgument::ApplicationUser_Email => "ApplicationUser_Email",
+            InvalidArgument::ApplicationUser_Id => "ApplicationUser_Id",
             InvalidArgument::ApplicationUser_Nickname => "ApplicationUser_Nickname",
             InvalidArgument::ApplicationUser_Password => "ApplicationUser_Password",
             InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm => "ApplicationUserAccessRefreshToken_DeserializedForm",
@@ -95,6 +96,7 @@ impl Display<InvalidArgument> for Displayer {
             InvalidArgument::ApplicationUserDevice_Id => "ApplicationUserDevice_Id",
             InvalidArgument::ApplicationUserRegistrationToken_Value => "ApplicationUserRegistrationToken_Value",
             InvalidArgument::ApplicationUserResetPasswordToken_Value => "ApplicationUserResetPasswordToken_Value",
+            InvalidArgument::Channel_Id => "Channel_Id",
             InvalidArgument::Channel_Name => "Channel_Name",
             InvalidArgument::HttpHeaders => "HttpHeader",
             InvalidArgument::HttpRoute => "HttpRoute",

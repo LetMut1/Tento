@@ -1,6 +1,9 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
+use crate::infrastructure_layer::data::argument_result::ArgumentResult;
+use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -27,18 +30,22 @@ use extern_crate::serde::Serialize;
 pub struct ActionProcessor;
 
 impl ActionProcessor {
-    pub async fn process<'a, T>(
+    pub async fn process<'a, T>(            // TODO Защита от частого посыла емэй
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ActionProcessorResult<Void>, ErrorAuditor>
+    ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-    {                                                           // TODO Защита от частого посыла емэй
+    {
+        if !ApplicationUser_Validator::is_valid_id(incoming.application_user_id) {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Id });
+        }
+
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
@@ -65,7 +72,13 @@ impl ActionProcessor {
         let application_user_reset_password_token_ = match application_user_reset_password_token {
             Some(application_user_reset_password_token__) => application_user_reset_password_token__,
             None => {
-                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_NotFound });
+                return Ok(
+                    ArgumentResult::Ok {
+                        subject: ActionProcessorResult::UserWorkflowPrecedent {
+                            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_NotFound
+                        }
+                    }
+                );
             }
         };
 
@@ -78,11 +91,23 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired });
+            return Ok(
+                ArgumentResult::Ok {
+                    subject: ActionProcessorResult::UserWorkflowPrecedent {
+                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired
+                    }
+                }
+            );
         }
 
         if application_user_reset_password_token_.get_is_approved() {
-            return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved });
+            return Ok(
+                ArgumentResult::Ok {
+                    subject: ActionProcessorResult::UserWorkflowPrecedent {
+                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved
+                    }
+                }
+            );
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -111,7 +136,13 @@ impl ActionProcessor {
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
-                return Ok(ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound });
+                return Ok(
+                    ArgumentResult::Ok {
+                        subject: ActionProcessorResult::UserWorkflowPrecedent {
+                            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound
+                        }
+                    }
+                );
             }
         };
 
@@ -123,7 +154,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        return Ok(ActionProcessorResult::Void);
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Void });
     }
 }
 

@@ -42,4 +42,40 @@ impl<'a> Channel<'a> {
             created_at
         };
     }
+
+    pub fn into_inner(self) -> (
+        i64,
+        i64,
+        Cow<'a, str>,
+        Option<String>,
+        bool,
+        Vec<i16>,
+        String,
+        i64,
+        i64,
+        i64,
+        String
+    ) {
+        return (
+            self.id,
+            self.application_user_id,
+            self.name,
+            self.description,
+            self.is_private,
+            self.orientation,
+            self.personalization_image_path,
+            self.subscribers_quantity,
+            self.marks_quantity,
+            self.viewing_quantity,
+            self.created_at
+        );
+    }
+
+    pub fn get_id<'b>(&'b self) -> i64 {
+        return self.id;
+    }
+
+    pub fn get_is_private<'b>(&'b self) -> bool {
+        return self.is_private;
+    }
 }

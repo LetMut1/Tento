@@ -147,7 +147,7 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    channel_registry: Option<Vec<Channel>>
+    channel_registry: Vec<Channel>
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]

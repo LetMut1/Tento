@@ -699,15 +699,3 @@ impl CommonPostgresqlRepository {
         // return Ok(Some(channel_registry));
     }
 }
-
-pub struct Insert {
-    pub application_user_id: i64,
-    pub channel_name: String,
-    pub channel_description: Option<String>,
-    pub channel_is_private: bool,
-    pub channel_orientation: Vec<i16>,
-    pub channel_personalization_image_path: String,
-    pub channel_subscribers_quantity: i64,
-    pub channel_marks_quantity: i64,
-    pub channel_viewing_quantity: i64,
-}

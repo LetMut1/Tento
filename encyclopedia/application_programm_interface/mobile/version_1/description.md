@@ -45,8 +45,7 @@ struct Data<S>
 # API for authorized application user.
 ```
  Every endpoint at this area requires an existing of access token.
- ```
-
+```
  - ## /v1/m/au/dfod (deauthorize_from_one_device) POST                              БЫВШИЙ log_out_from_one_device. УДАЛИТЬ
 ```
 Deauthorizes application user from one device.
@@ -82,6 +81,38 @@ Result data: absent.
 Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+```
+ - ## /v1/m/c/gbi (get_by_id)
+```
+Returns channel data by id.
+```
+```rust
+Request data:
+struct Incoming {
+    application_user_access_token_deserialized_form: String,
+    channel_id: i64
+}
+```
+```rust
+Result data:
+struct Outcoming {
+    pub application_user_id: i64,
+    pub channel_name: String,
+    pub channel_description: Option<String>,
+    pub channel_is_private: bool,
+    pub channel_orientation: Vec<i16>,
+    pub channel_personalization_image_path: String,
+    pub channel_subscribers_quantity: i64,
+    pub channel_marks_quantity: i64,
+    pub channel_viewing_quantity: i64
+}
+```
+```
+Communication codes:
+- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+- CHANNEL__NOT_FOUND
+- CHANNEL__IS_PRIVATE
 ```
 <br/><br/>
 

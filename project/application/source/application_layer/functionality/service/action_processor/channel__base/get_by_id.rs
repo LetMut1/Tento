@@ -1,0 +1,196 @@
+use crate::application_layer::data::action_processor_result::ActionProcessorResult;
+use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
+use crate::infrastructure_layer::data::argument_result::ArgumentResult;
+use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::ChannelSubscription_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
+use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
+use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use extern_crate::bb8::Pool;
+use extern_crate::serde::Deserialize;
+use extern_crate::serde::Serialize;
+use extern_crate::tokio_postgres::Socket;
+use extern_crate::tokio_postgres::tls::MakeTlsConnect;
+use extern_crate::tokio_postgres::tls::TlsConnect;
+use std::clone::Clone;
+use std::marker::Send;
+use std::marker::Sync;
+
+pub struct ActionProcessor;
+
+impl ActionProcessor {
+    pub async fn process<'a, T>(
+        environment_configuration: &'a EnvironmentConfiguration,
+        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        incoming: Incoming
+    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
+            environment_configuration, incoming.application_user_access_token_deserialized_form.as_str()
+        ).await {
+            Ok(extractor_result_) => extractor_result_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+        let application_user_access_token = match extractor_result {
+            ArgumentResult::Ok { subject: extractor_result_ } => {
+                let application_user_access_token_ = match extractor_result_ {
+                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token: application_user_access_token__ } => application_user_access_token__,
+                    ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                        return Ok(
+                            ArgumentResult::Ok {
+                                subject: ActionProcessorResult::UserWorkflowPrecedent {
+                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired
+                                }
+                            }
+                        );
+                    }
+                    ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                        return Ok(
+                            ArgumentResult::Ok {
+                                subject: ActionProcessorResult::UserWorkflowPrecedent {
+                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
+                                }
+                            }
+                        );
+                    }
+                };
+
+                application_user_access_token_
+            }
+            ArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
+            }
+        };
+
+        if !Channel_Validator::is_valid_id(incoming.channel_id) {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Id });
+        }
+
+        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let channel = match Channel_PostgresqlRepository::find_1(
+            &*database_1_postgresql_pooled_connection, incoming.channel_id
+        ).await {
+            Ok(channel_) => channel_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let channel_ = match channel {
+            Some(channel_) => channel_,
+            None => {
+                return Ok(
+                    ArgumentResult::Ok {
+                        subject: ActionProcessorResult::UserWorkflowPrecedent {
+                            user_workflow_precedent: UserWorkflowPrecedent::Channel_NotFound
+                        }
+                    }
+                );
+            }
+        };
+
+        if channel_.get_is_private() {
+            let is_exist = match ChannelSubscription_PostgresqlRepository::is_exist(
+                &*database_1_postgresql_pooled_connection, channel_.get_id(), application_user_access_token.get_application_user_id()
+            ).await {
+                Ok(channel_) => channel_,
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                    return Err(error);
+                }
+            };
+
+            if !is_exist {
+                return Ok(
+                    ArgumentResult::Ok {
+                        subject: ActionProcessorResult::UserWorkflowPrecedent {
+                            user_workflow_precedent: UserWorkflowPrecedent::Channel_IsPrivate
+                        }
+                    }
+                );
+            }
+        }
+
+        let (
+            _channel_id,
+            application_user_id,
+            channel_name,
+            channel_description,
+            channel_is_private,
+            channel_orientation,
+            channel_personalization_image_path,
+            channel_subscribers_quantity,
+            channel_marks_quantity,
+            channel_viewing_quantity,
+            _channel_created_at
+        ) = channel_.into_inner();
+
+        let outcoming = Outcoming {
+            application_user_id,
+            channel_name: channel_name.into_owned(),
+            channel_description,
+            channel_is_private,
+            channel_orientation,
+            channel_personalization_image_path,
+            channel_subscribers_quantity,
+            channel_marks_quantity,
+            channel_viewing_quantity
+        };
+
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
+    }
+}
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Incoming {
+    application_user_access_token_deserialized_form: String,
+    channel_id: i64
+}
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Outcoming {
+    pub application_user_id: i64,
+    pub channel_name: String,
+    pub channel_description: Option<String>,
+    pub channel_is_private: bool,
+    pub channel_orientation: Vec<i16>,
+    pub channel_personalization_image_path: String,
+    pub channel_subscribers_quantity: i64,
+    pub channel_marks_quantity: i64,
+    pub channel_viewing_quantity: i64
+}

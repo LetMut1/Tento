@@ -9,6 +9,7 @@ pub enum ArgumentResult<T> {
 
 pub enum InvalidArgument {
     ApplicationUser_Email,
+    ApplicationUser_Id,
     ApplicationUser_Nickname,
     ApplicationUser_Password,
     ApplicationUserAccessRefreshToken_DeserializedForm,
@@ -17,6 +18,7 @@ pub enum InvalidArgument {
     ApplicationUserDevice_Id,
     ApplicationUserRegistrationToken_Value,
     ApplicationUserResetPasswordToken_Value,
+    Channel_Id,
     Channel_Name,
     HttpHeaders,
     HttpRoute,

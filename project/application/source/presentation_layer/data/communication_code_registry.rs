@@ -40,4 +40,9 @@ impl CommunicationCodeRegistry {
     /// [5000, 5999]
     pub const APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND: i64 = 5000;
     pub const APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED: i64 = 5001;
+
+    /// Codes for Channel context.
+    /// [6000, 6999]
+    pub const CHANNEL__NOT_FOUND: i64 = 6000;
+    pub const CHANNEL__IS_PRIVATE: i64 = 6001;
 }

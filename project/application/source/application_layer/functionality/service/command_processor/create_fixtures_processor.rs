@@ -278,7 +278,7 @@ impl CreateFixturesProcessor {
                     );
                 }
 
-                let channel = match Channel_PostgresqlRepository::find_1(
+                let channel = match Channel_PostgresqlRepository::find_2(
                     database_1_postgresql_connection, channel_name.as_str()
                 ).await {
                     Ok(channel_) => channel_,

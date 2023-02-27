@@ -1,3 +1,4 @@
+pub mod get_by_id;
 pub mod get_many_by_created_at;
 pub mod get_many_by_id_registry;
 pub mod get_many_by_name;

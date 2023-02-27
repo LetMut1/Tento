@@ -1,7 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_reset_password::ActionProcessor;
-use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_reset_password::Incoming;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_by_id::ActionProcessor;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_by_id::Incoming;
 use crate::application_layer::functionality::service::action_round_result_writer::ActionRoundResultWriter;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -33,9 +33,11 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use crate::application_layer::functionality::service::action_processor::channel__base::get_by_id::Outcoming;
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
-pub async fn send_email_for_reset_password<'a, T>(
+pub async fn get_by_id<'a, T>(
     environment_configuration: &'a EnvironmentConfiguration,
     mut request: Request<Body>,
     database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -121,7 +123,7 @@ where
     };
 
     let action_processor_result = match ActionProcessor::process(
-        environment_configuration, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, incoming
+        environment_configuration, database_1_postgresql_connection_pool, incoming
     ).await {
         Ok(action_processor_result_) => action_processor_result_,
         Err(error) => {
@@ -167,7 +169,30 @@ where
 
     match action_processor_result_ {
         ActionProcessorResult::Void => {
-            let data = match rmp_serde::to_vec(&UnifiedReport::<Void>::empty()) {
+            let error = ErrorAuditor::new(
+                BaseError::LogicError { message: "Unreachable state." },
+                BacktracePart::new(line!(), file!(), None)
+            );
+
+            let response = ActionResponseCreator::create_not_extended();
+
+            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                database_2_postgresql_connection_pool, &request, &response, &error
+            ).await {
+                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                unreachable!(
+                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                    process does not wait for another write process, and writes immediately.",
+                    &error,
+                    &error_
+                );
+            }
+
+            return response;
+        }
+        ActionProcessorResult::Outcoming { outcoming } => {
+            let data = match rmp_serde::to_vec(&UnifiedReport::data(outcoming)) {
                 Ok(data_) => data_,
                 Err(error) => {
                     let error_ = ErrorAuditor::new(
@@ -208,35 +233,12 @@ where
 
             return response;
         }
-        ActionProcessorResult::Outcoming { outcoming: _ } => {
-            let error = ErrorAuditor::new(
-                BaseError::LogicError { message: "Unreachable state." },
-                BacktracePart::new(line!(), file!(), None)
-            );
-
-            let response = ActionResponseCreator::create_not_extended();
-
-            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
-                database_2_postgresql_connection_pool, &request, &response, &error
-            ).await {
-                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                unreachable!(
-                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                    process does not wait for another write process, and writes immediately.",
-                    &error,
-                    &error_
-                );
-            }
-
-            return response;
-        }
         ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
             match user_workflow_precedent {
-                UserWorkflowPrecedent::ApplicationUser_NotFound => {
+                UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired => {
                     let data = match rmp_serde::to_vec(
                         &UnifiedReport::<Void>::communication_code(
-                            CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND
+                            CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
                         )
                     ) {
                         Ok(data_) => data_,
@@ -279,10 +281,10 @@ where
 
                     return response;
                 }
-                UserWorkflowPrecedent::ApplicationUserResetPasswordToken_NotFound => {
+                UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                     let data = match rmp_serde::to_vec(
                         &UnifiedReport::<Void>::communication_code(
-                            CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND
+                            CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
                         )
                     ) {
                         Ok(data_) => data_,
@@ -325,10 +327,10 @@ where
 
                     return response;
                 }
-                UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                UserWorkflowPrecedent::Channel_NotFound => {
                     let data = match rmp_serde::to_vec(
                         &UnifiedReport::<Void>::communication_code(
-                            CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED
+                            CommunicationCodeRegistry::CHANNEL__NOT_FOUND
                         )
                     ) {
                         Ok(data_) => data_,
@@ -371,10 +373,10 @@ where
 
                     return response;
                 }
-                UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved => {
+                UserWorkflowPrecedent::Channel_IsPrivate => {
                     let data = match rmp_serde::to_vec(
                         &UnifiedReport::<Void>::communication_code(
-                            CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED
+                            CommunicationCodeRegistry::CHANNEL__IS_PRIVATE
                         )
                     ) {
                         Ok(data_) => data_,
@@ -446,7 +448,7 @@ where
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub async fn send_email_for_reset_password_<'a, T>(
+pub async fn get_by_id_<'a, T>(
     environment_configuration: &'a EnvironmentConfiguration,
     request: Request<Body>,
     database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -459,12 +461,12 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
-    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Void>(
+    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
         environment_configuration,
         request,
         database_1_postgresql_connection_pool,
         database_2_postgresql_connection_pool,
         redis_connection_pool,
-        send_email_for_reset_password
+        get_by_id
     ).await;
 }
