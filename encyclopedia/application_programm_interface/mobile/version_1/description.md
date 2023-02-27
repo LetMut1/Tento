@@ -128,11 +128,11 @@ struct Incoming {
 }
 ```
 ```
+requery_channel_name - an alternative for offset. Used only for requering with persistent channel_name. The value must be equal to the last channel_name of Channel registry in received early response.
+
 Incoming parameters validation rule:
-- requery_channel_name:
-    same as channel_name
-- limit:
-    [1, 50] values
+requery_channel_name: same as channel_name.
+limit: [1, 50] values
 ```
 ```rust
 Result data:
@@ -505,60 +505,7 @@ Can not contain whitespace character.
 
 
 
-<!-- ## /v1/m/a/c/gmbn GET
-Returns Channel registry by Channel Name.
-### Request Query parameters:
-```
-'cn': string; - 'channel_name'
-```
-```
-'rcn': string; - 'requery_channel_name', optional.
-
-An alternative for Offset. Used only for requering with persistent 'cn'. The value must be equal to the last Channel Name of Channel registry in
-received early response.
-```
-```
-'l': integer; - 'limit'.
-
->0 && <=30
-```
-### Response parameters:
--PAYLOAD-:
-```
-'cr': array(object_1); - 'channel_registry', nullable.
-```
-object_1:
-```
-'ci': integer; - 'channel_id'.
-```
-```
-'cn': string; - 'channel_name'.
-```
-```
-'cpip': string; - 'channel_personalization_image_path'.
-```
-```
-'csq': integer; - 'channel_subscribers_quantity'.
-```
-```
-'cpmq': integer; - 'channel_public_marks_quantity'.
-```
-```
-'chmq': integer; - 'channel_hidden_marks_quantity'.
-```
-```
-'crq': integer; - 'channel_reactions_quantity'.
-```
-```
-'cvq': integer; - 'channel_viewing_quantity'.
-```
-```
-'cca': string; - 'channel_created_at'.
-```
--ERROR_CODE-:
-```
-is absent.
-```
+<!--
 ## /v1/m/a/c/gmbca GET
 Returns Channel registry by Channel Created_at.
 ### Request Quey parameters:
