@@ -1,25 +1,25 @@
 # Request standards
  - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
  - Every request should contain this `HTTP header`s:
- ```
- - content-type: application/octet-stream
- - content-length: ...
- - x-content-type-options: nosniff
- ```
- - Values of variable for ``order``ing looks like:
+```
+- content-type: application/octet-stream
+- content-length: ...
+- x-content-type-options: nosniff
+```
+ - Values of variable for `sort_order` looks like:
 ```
 0 - is equal to 'ASC'
 1 - is equal to 'DESC'
 ```
 
 # Response standards
- - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
- - Every response should contain this `HTTP header`s:
- ```
- - content-type: application/octet-stream
- - x-content-type-options: nosniff
- - content-length: ...
- ```
+- All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
+- Every response should contain this `HTTP header`s:
+```
+- content-type: application/octet-stream
+- x-content-type-options: nosniff
+- content-length: ...
+```
  - The permanent general structure of the each response with `HTTP status code` equal to `200` looks like:
 ```rust
 struct UnifiedReport<S>
