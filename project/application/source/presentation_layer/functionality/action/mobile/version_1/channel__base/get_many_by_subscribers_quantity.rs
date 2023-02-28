@@ -12,6 +12,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
+use crate::infrastructure_layer::functionality::service::message_pack_encoder::MessagePackEncoder;
 use crate::presentation_layer::data::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
@@ -104,26 +105,21 @@ where
         }
     };
 
-    let incoming = match rmp_serde::from_read_ref::<'_, [u8], Incoming>(bytes.chunk()) {
+    let incoming = match MessagePackEncoder::decode::<'_, Incoming>(bytes.chunk()) {
         Ok(incoming_) => incoming_,
         Err(error) => {
-            let error_ = ErrorAuditor::new(
-                BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                BacktracePart::new(line!(), file!(), None)
-            );
-
             let response = ActionResponseCreator::create_internal_server_error();
 
-            if let Err(mut error__) = ActionRoundResultWriter::write_with_context(
-                database_2_postgresql_connection_pool, &request, &response, &error_
+            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                database_2_postgresql_connection_pool, &request, &response, &error
             ).await {
-                error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 unreachable!(
                     "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                     process does not wait for another write process, and writes immediately.",
-                    &error_,
-                    &error__
+                    &error,
+                    &error_
                 );
             }
 

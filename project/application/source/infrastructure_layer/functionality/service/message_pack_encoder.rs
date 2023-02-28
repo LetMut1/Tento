@@ -31,7 +31,7 @@ impl MessagePackEncoder {
 
     pub fn decode<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor>
     where
-        T: for<'de> Deserialize<'de>
+        T: Deserialize<'a>
     {
         let subject = match rmp_serde::from_read_ref::<'_, [u8], T>(data) {
             Ok(subject_) => subject_,
