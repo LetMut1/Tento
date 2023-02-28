@@ -197,26 +197,21 @@ where
             return response;
         }
         ActionProcessorResult::Outcoming { outcoming } => {
-            let data = match rmp_serde::to_vec(&UnifiedReport::data(outcoming)) {
+            let data = match MessagePackEncoder::encode(&UnifiedReport::data(outcoming)) {
                 Ok(data_) => data_,
                 Err(error) => {
-                    let error_ = ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    );
-
                     let response = ActionResponseCreator::create_internal_server_error();
 
-                    if let Err(mut error__) = ActionRoundResultWriter::write_with_context(
-                        database_2_postgresql_connection_pool, &request, &response, &error_
+                    if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                        database_2_postgresql_connection_pool, &request, &response, &error
                     ).await {
-                        error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+                        error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         unreachable!(
                             "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                             process does not wait for another write process, and writes immediately.",
-                            &error_,
-                            &error__
+                            &error,
+                            &error_
                         );
                     }
 
