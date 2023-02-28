@@ -7,10 +7,10 @@ use extern_crate::rmp_serde;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 
-pub struct MessagePackEncoder;
+pub struct MessagePackSerializer;
 
-impl MessagePackEncoder {
-    pub fn encode<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>
+impl MessagePackSerializer {
+    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>
     where
         T: Serialize
     {
@@ -29,7 +29,7 @@ impl MessagePackEncoder {
         return Ok(data);
     }
 
-    pub fn decode<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor>
+    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor>
     where
         T: Deserialize<'a>
     {

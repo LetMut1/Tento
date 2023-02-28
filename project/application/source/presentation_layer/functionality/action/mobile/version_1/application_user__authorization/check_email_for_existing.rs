@@ -10,7 +10,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::service::message_pack_encoder::MessagePackEncoder;
+use crate::infrastructure_layer::functionality::service::message_pack_serializer::MessagePackSerializer;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
@@ -92,7 +92,7 @@ where
         }
     };
 
-    let incoming = match MessagePackEncoder::decode::<'_, Incoming>(bytes.chunk()) {
+    let incoming = match MessagePackSerializer::deserialize::<'_, Incoming>(bytes.chunk()) {
         Ok(incoming_) => incoming_,
         Err(error) => {
             let response = ActionResponseCreator::create_internal_server_error();
@@ -184,7 +184,7 @@ where
             return response;
         }
         ActionProcessorResult::Outcoming { outcoming } => {
-            let data = match MessagePackEncoder::encode(&UnifiedReport::data(outcoming)) {
+            let data = match MessagePackSerializer::serialize(&UnifiedReport::data(outcoming)) {
                 Ok(data_) => data_,
                 Err(error) => {
                     let response = ActionResponseCreator::create_internal_server_error();
