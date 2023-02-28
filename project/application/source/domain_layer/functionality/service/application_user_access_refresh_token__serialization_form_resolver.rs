@@ -1,15 +1,12 @@
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::service::message_pack_encoder::MessagePackEncoder;
 use extern_crate::crypto::hmac::Hmac;
 use extern_crate::crypto::mac::Mac;
 use extern_crate::crypto::sha2::Sha512;
 use extern_crate::hex;
-use extern_crate::rmp_serde;
 
 pub struct ApplicationUserAccessRefreshToken_SerializationFormResolver;
 
@@ -18,15 +15,14 @@ impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<String, ErrorAuditor> {
-        let mut data: Vec<u8> = vec![];
-        if let Err(error) = rmp_serde::encode::write(&mut data, application_user_access_refresh_token) {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
+        let data = match MessagePackEncoder::encode(application_user_access_refresh_token) {
+            Ok(data_) => data_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
 
         let mut hmac = Hmac::new(
             Sha512::new(),

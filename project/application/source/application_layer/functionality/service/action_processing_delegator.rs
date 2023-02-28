@@ -4,6 +4,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::service::message_pack_encoder::MessagePackEncoder;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -17,7 +18,6 @@ use extern_crate::hyper::Body;
 use extern_crate::hyper::body::to_bytes;
 use extern_crate::hyper::Request;
 use extern_crate::hyper::Response;
-use extern_crate::rmp_serde;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::Socket;
@@ -58,15 +58,14 @@ impl ActionProcessingDelegator {
         API: Serialize + for<'de> Deserialize<'de>,
         APO: Serialize + for<'de> Deserialize<'de>
     {
-        let mut data: Vec<u8> = vec![];
-        if let Err(error) = rmp_serde::encode::write(&mut data, &incoming.action_processor_incoming) {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
+        let data = match MessagePackEncoder::encode(&incoming.action_processor_incoming) {
+            Ok(data_) => data_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
 
         let mut request_parts = incoming.request.into_parts().0;
         request_parts.headers.remove(header::CONTENT_LENGTH);
@@ -100,15 +99,12 @@ impl ActionProcessingDelegator {
                 }
             };
 
-            let unified_report = match rmp_serde::from_read_ref::<'_, [u8], UnifiedReport<APO>>(bytes.chunk()) {
+            let unified_report = match MessagePackEncoder::decode::<'_, UnifiedReport<APO>>(bytes.chunk()) {
                 Ok(unified_report_) => unified_report_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                    return Err(error);
                 }
             };
 

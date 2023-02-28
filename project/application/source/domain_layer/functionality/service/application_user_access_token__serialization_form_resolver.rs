@@ -7,12 +7,12 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::service::message_pack_encoder::MessagePackEncoder;
 use extern_crate::base64;
 use extern_crate::crypto::hmac::Hmac;
 use extern_crate::crypto::mac::Mac;
 use extern_crate::crypto::sha2::Sha512;
 use extern_crate::hex;
-use extern_crate::rmp_serde;
 
 pub struct ApplicationUserAccessToken_SerializationFormResolver;
 
@@ -23,15 +23,15 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>
     ) -> Result<String, ErrorAuditor> {
-        let mut data: Vec<u8> = vec![];
-        if let Err(error) = rmp_serde::encode::write(&mut data, application_user_access_token) {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
+        let data = match MessagePackEncoder::encode(application_user_access_token) {
+            Ok(data_) => data_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
         let application_user_access_token_serialized = base64::encode_config(data.as_slice(), base64::STANDARD);  // TODO TODO TODO TODO TODO Можно ли здесь использовать Бэйс64 на байтф мессаджПака?
 
         let application_user_access_token_signature = ApplicationUserAccessToken_Encoder::create(
@@ -68,15 +68,12 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
             }
         };
 
-        let application_user_access_token = match rmp_serde::from_read_ref::<'_, [u8], ApplicationUserAccessToken<'static>>(data.as_slice()) {
+        let application_user_access_token = match MessagePackEncoder::decode::<'_, ApplicationUserAccessToken<'static>>(data.as_slice()) {
             Ok(application_user_access_token_) => application_user_access_token_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
             }
         };
 
