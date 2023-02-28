@@ -7,6 +7,7 @@ pub mod date_time_resolver;
 pub mod displayer;
 pub mod email_sender;
 pub mod environment_configuration__creator;
+pub mod message_pack_encoder;
 pub mod number_row_generator;
 pub mod postgrasql_transaction_manager;
 pub mod postgresql_connection_pool_creator;
