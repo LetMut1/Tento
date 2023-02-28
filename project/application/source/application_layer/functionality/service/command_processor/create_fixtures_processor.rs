@@ -28,8 +28,8 @@ use std::clone::Clone;
 pub struct CreateFixturesProcessor;
 
 impl CreateFixturesProcessor {
-    const QUANTITY_OF_APPLICATION_USERS: u8 = 100;
-    const QUANTITY_OF_CHANNELS: u8 = 15;
+    const QUANTITY_OF_APPLICATION_USERS: u16 = 1000;
+    const QUANTITY_OF_CHANNELS: u8 = 5;
     const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
     const APPLICATION_USER_DEVICE__ID: &'static str = "device";
     const ASCII_CHARACTER_REGISTRY: [char; 26] = [
@@ -142,7 +142,7 @@ impl CreateFixturesProcessor {
         '_a: for _i in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
             let mut application_user_nickname = String::new();
 
-            '_b: for _j in 1..=thread_rng().gen_range::<usize, _>(3..=ApplicationUser_Validator::APPLICATION_USER__NICKNAME_MAXIMUM_LENGTH) {
+            '_b: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=ApplicationUser_Validator::APPLICATION_USER__NICKNAME_MAXIMUM_LENGTH) {
                 let character = Self::ASCII_CHARACTER_REGISTRY[
                     thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                 ];
@@ -225,7 +225,7 @@ impl CreateFixturesProcessor {
             'b: for _t in 1..=Self::QUANTITY_OF_CHANNELS {
                 let mut channel_name = String::new();
 
-                '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(3..=Channel_Validator::CHANNEL__NAME_MAXIMUM_LENGTH) {
+                '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Validator::CHANNEL__NAME_MAXIMUM_LENGTH) {
                     let character = Self::ASCII_CHARACTER_REGISTRY[
                         thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                     ];
@@ -245,7 +245,7 @@ impl CreateFixturesProcessor {
                 let channel_description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
                     let mut channel_description_ = String::new();
 
-                    '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(3..=Channel_Validator::CHANNEL__DESCRIPTION_MAXIMUM_LENGTH) {
+                    '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Validator::CHANNEL__DESCRIPTION_MAXIMUM_LENGTH) {
                         let character = Self::ASCII_CHARACTER_REGISTRY[
                             thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                         ];
@@ -295,7 +295,7 @@ impl CreateFixturesProcessor {
                     }
                     None => {
                         let channel_insert = ChannelInsert {
-                            application_user_id: application_user_.get_id(),
+                            channel_owner: application_user_.get_id(),
                             channel_name,
                             channel_description,
                             channel_is_private: false,

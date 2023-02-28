@@ -9,8 +9,9 @@ IMMUTABLE;
 
 CREATE TABLE public.channel (
     id BIGINT,
-    application_user_id BIGINT, -- TODO Добавить здесь внешний ключ на таблицу менеджмента
+    owner BIGINT,
     name TEXT,
+    link TEXT,
     description TEXT,
     is_private BOOLEAN,
     orientation SMALLINT[],
@@ -41,9 +42,11 @@ USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items
 
 ALTER TABLE ONLY public.channel
 ALTER COLUMN id SET NOT NULL,
-ALTER COLUMN application_user_id SET NOT NULL,
+ALTER COLUMN owner SET NOT NULL,
 ALTER COLUMN name SET DATA TYPE TEXT COLLATE "C",
 ALTER COLUMN name SET NOT NULL,
+ALTER COLUMN link SET DATA TYPE TEXT COLLATE "C",
+ALTER COLUMN link SET NOT NULL,
 ALTER COLUMN is_private SET NOT NULL,
 ALTER COLUMN orientation SET NOT NULL,
 ALTER COLUMN personalization_image_path SET NOT NULL,
@@ -52,11 +55,12 @@ ALTER COLUMN marks_quantity SET NOT NULL,
 ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel7 PRIMARY KEY USING INDEX channel2,
-ADD CONSTRAINT channel8 FOREIGN KEY (application_user_id)
+ADD CONSTRAINT channel8 FOREIGN KEY (owner)
 REFERENCES public.application_user (id) ON DELETE RESTRICT,
 ADD CONSTRAINT channel9 UNIQUE USING INDEX channel3,
 ADD CONSTRAINT channel10 UNIQUE USING INDEX channel6;
 
+COMMENT ON COLUMN public.channel.owner IS 'application_user_id';
 
 
 

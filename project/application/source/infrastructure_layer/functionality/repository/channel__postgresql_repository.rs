@@ -18,7 +18,7 @@ impl Channel_PostgresqlRepository {
         let query =
             "INSERT INTO public.channel AS c ( \
                 id, \
-                application_user_id, \
+                owner, \
                 name, \
                 description, \
                 is_private, \
@@ -46,7 +46,7 @@ impl Channel_PostgresqlRepository {
                 c.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert.application_user_id, Type::INT8)
+            .add_parameter(&insert.channel_owner, Type::INT8)
             .add_parameter(&insert.channel_name, Type::TEXT)
             .add_parameter(&insert.channel_description, Type::TEXT)
             .add_parameter(&insert.channel_is_private, Type::BOOL)
@@ -111,7 +111,7 @@ impl Channel_PostgresqlRepository {
         return Ok(
             Channel::new(
                 channel_id,
-                insert.application_user_id,
+                insert.channel_owner,
                 Cow::Owned(insert.channel_name),
                 insert.channel_description,
                 insert.channel_is_private,
@@ -130,11 +130,11 @@ impl Channel_PostgresqlRepository {
 
         let query =
             "SELECT \
-                c.application_user_id AS aui, \
+                c.owner AS ow, \
                 c.name AS n, \
                 c.description AS d, \
                 c.is_private AS ip, \
-                c.orientation AS o, \
+                c.orientation AS or, \
                 c.personalization_image_path AS pip, \
                 c.subscribers_quantity, \
                 c.marks_quantity AS mq, \
@@ -177,8 +177,8 @@ impl Channel_PostgresqlRepository {
             return Ok(None);
         }
 
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => application_user_id_,
+        let channel_owner = match row_registry[0].try_get::<'_, usize, i64>(0) {
+            Ok(channel_owner) => channel_owner,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -301,7 +301,7 @@ impl Channel_PostgresqlRepository {
             Some(
                 Channel::new(
                     channel_id,
-                    application_user_id,
+                    channel_owner,
                     Cow::Owned(channel_name),
                     channel_description,
                     channel_is_private,
@@ -322,10 +322,10 @@ impl Channel_PostgresqlRepository {
         let query =
             "SELECT \
                 c.id AS i, \
-                c.application_user_id AS aui, \
+                c.owner AS ow, \
                 c.description AS d, \
                 c.is_private AS ip, \
-                c.orientation AS o, \
+                c.orientation AS or, \
                 c.personalization_image_path AS pip, \
                 c.subscribers_quantity, \
                 c.marks_quantity AS mq, \
@@ -380,8 +380,8 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(1) {
-            Ok(application_user_id_) => application_user_id_,
+        let channel_owner = match row_registry[0].try_get::<'_, usize, i64>(1) {
+            Ok(channel_owner_) => channel_owner_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -492,7 +492,7 @@ impl Channel_PostgresqlRepository {
             Some(
                 Channel::new(
                     channel_id,
-                    application_user_id,
+                    channel_owner,
                     Cow::Borrowed(channel_name),
                     channel_description,
                     channel_is_private,
@@ -509,7 +509,7 @@ impl Channel_PostgresqlRepository {
 }
 
 pub struct Insert {
-    pub application_user_id: i64,
+    pub channel_owner: i64,
     pub channel_name: String,
     pub channel_description: Option<String>,
     pub channel_is_private: bool,

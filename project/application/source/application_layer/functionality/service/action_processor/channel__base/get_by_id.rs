@@ -48,6 +48,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let application_user_access_token = match extractor_result {
             ArgumentResult::Ok { subject: extractor_result_ } => {
                 let application_user_access_token_ = match extractor_result_ {
@@ -131,7 +132,8 @@ impl ActionProcessor {
                 }
             };
 
-            if !is_exist {
+            if !is_exist
+                && application_user_access_token.get_application_user_id() != channel_.get_owner() {
                 return Ok(
                     ArgumentResult::Ok {
                         subject: ActionProcessorResult::UserWorkflowPrecedent {
@@ -144,7 +146,7 @@ impl ActionProcessor {
 
         let (
             _channel_id,
-            application_user_id,
+            channel_owner,
             channel_name,
             channel_description,
             channel_is_private,
@@ -157,7 +159,7 @@ impl ActionProcessor {
         ) = channel_.into_inner();
 
         let outcoming = Outcoming {
-            application_user_id,
+            channel_owner,
             channel_name: channel_name.into_owned(),
             channel_description,
             channel_is_private,
@@ -184,7 +186,7 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    pub application_user_id: i64,
+    pub channel_owner: i64,
     pub channel_name: String,
     pub channel_description: Option<String>,
     pub channel_is_private: bool,

@@ -96,7 +96,7 @@ struct Incoming {
 ```rust
 Result data:
 struct Outcoming {
-    application_user_id: i64,
+    channel_owner: i64,
     channel_name: String,
     channel_description: Option<String>,
     channel_is_private: bool,

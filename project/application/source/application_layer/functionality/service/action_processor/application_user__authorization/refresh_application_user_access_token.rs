@@ -54,6 +54,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let application_user_access_token_ = match application_user_access_token {
             ArgumentResult::Ok { subject: application_user_access_token__ } => application_user_access_token__,
             ArgumentResult::InvalidArgument { invalid_argument } => {

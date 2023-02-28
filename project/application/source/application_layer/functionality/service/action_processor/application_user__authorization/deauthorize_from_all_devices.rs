@@ -49,10 +49,11 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
-        let application_user_access_token_ = match extractor_result {
+
+        let application_user_access_token = match extractor_result {
             ArgumentResult::Ok { subject: extractor_result_ } => {
-                match extractor_result_ {
-                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token } => application_user_access_token,
+                let application_user_access_token_ = match extractor_result_ {
+                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token: application_user_access_token__ } => application_user_access_token__,
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                         return Ok(
                             ArgumentResult::Ok {
@@ -71,7 +72,9 @@ impl ActionProcessor {
                             }
                         );
                     }
-                }
+                };
+
+                application_user_access_token_
             }
             ArgumentResult::InvalidArgument { invalid_argument } => {
                 return Ok(ArgumentResult::InvalidArgument { invalid_argument });
@@ -91,7 +94,7 @@ impl ActionProcessor {
         };
 
         if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_2(
-            &*database_2_postgresql_pooled_connection, application_user_access_token_.get_application_user_id()
+            &*database_2_postgresql_pooled_connection, application_user_access_token.get_application_user_id()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

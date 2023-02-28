@@ -2,7 +2,8 @@ use std::borrow::Cow;
 
 pub struct Channel<'a> {
     id: i64,
-    application_user_id: i64,
+    /// application_user_id
+    owner: i64,
     name: Cow<'a, str>,
     description: Option<String>,
     is_private: bool,
@@ -17,7 +18,7 @@ pub struct Channel<'a> {
 impl<'a> Channel<'a> {
     pub fn new(
         id: i64,
-        application_user_id: i64,
+        owner: i64,
         name: Cow<'a, str>,
         description: Option<String>,
         is_private: bool,
@@ -30,7 +31,7 @@ impl<'a> Channel<'a> {
     ) -> Self {
         return Self {
             id,
-            application_user_id,
+            owner,
             name,
             description,
             is_private,
@@ -58,7 +59,7 @@ impl<'a> Channel<'a> {
     ) {
         return (
             self.id,
-            self.application_user_id,
+            self.owner,
             self.name,
             self.description,
             self.is_private,
@@ -73,6 +74,10 @@ impl<'a> Channel<'a> {
 
     pub fn get_id<'b>(&'b self) -> i64 {
         return self.id;
+    }
+
+    pub fn get_owner<'b>(&'b self) -> i64 {
+        return self.owner;
     }
 
     pub fn get_is_private<'b>(&'b self) -> bool {

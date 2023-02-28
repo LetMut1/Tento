@@ -49,6 +49,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         match extractor_result {
             ArgumentResult::Ok { subject: extractor_result_ } => {
                 match extractor_result_ {
