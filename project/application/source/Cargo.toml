@@ -1,7 +1,7 @@
 [package]
 name = "application"
 version = "0.1.0"
-authors = ["zda"]
+authors.workspace = true
 edition = "2021"
 
 [lib]

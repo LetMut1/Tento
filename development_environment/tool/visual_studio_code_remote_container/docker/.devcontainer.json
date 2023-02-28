@@ -5,7 +5,7 @@
     "extensions": [
 		"rust-lang.rust-analyzer",
 		"ms-azuretools.vscode-docker",
-		"bungcip.better-toml",
+		"tamasfe.even-better-toml",
 		"irongeek.vscode-env",
 		"ue.alphabetical-sorter",
 		"eamodio.gitlens"
