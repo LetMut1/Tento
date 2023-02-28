@@ -16,3 +16,6 @@ harness = true
 edition = "2021"
 crate-type = ["lib", "staticlib"]
 required-features = []
+
+[dependencies]
+application = { path = "./../..", package = "application", version = "0.1.0", default-features = true, features = [], optional = false }

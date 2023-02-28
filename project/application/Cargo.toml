@@ -17,6 +17,9 @@ default-members = [
     "./source/presentation_layer/functionality/command/run_server"
 ]
 
+[workspace.package]
+authors = ["Zimin Dmitriy <dimazimin96@yandex.ru>"]
+
 [profile.dev]
 opt-level = 0
 debug = true
