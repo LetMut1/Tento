@@ -25,7 +25,6 @@ use extern_crate::hyper::Body;
 use extern_crate::hyper::body::to_bytes;
 use extern_crate::hyper::Request;
 use extern_crate::hyper::Response;
-use extern_crate::rmp_serde;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
