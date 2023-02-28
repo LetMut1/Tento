@@ -1,0 +1,18 @@
+[package]
+name = "integration_module"
+version = "0.1.0"
+authors = ["zda"]
+edition = "2021"
+
+[lib]
+name = "integration_module"
+path = "./mod.rs"
+test = true
+doctest = true
+bench = true
+doc = true
+proc-macro = false
+harness = true
+edition = "2021"
+crate-type = ["lib", "staticlib"]
+required-features = []
