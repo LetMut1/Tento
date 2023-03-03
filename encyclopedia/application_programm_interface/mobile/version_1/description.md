@@ -98,6 +98,7 @@ Result data:
 struct Outcoming {
     channel_owner: i64,
     channel_name: String,
+    channel_linked_name: String,
     channel_description: Option<String>,
     channel_is_private: bool,
     channel_orientation: Vec<i16>,
@@ -116,7 +117,7 @@ Communication codes:
 ```
  - ## /v1/m/c/gmbn (get_many_by_name)
 ```
-Returns channels data by name.
+Returns channels data by name. Only for channels with is_private: true
 ```
 ```rust
 Request data:

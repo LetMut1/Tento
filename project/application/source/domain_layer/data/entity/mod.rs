@@ -13,5 +13,7 @@ pub mod application_user;
 pub mod channel_feed_publication_mark;
 pub mod channel_feed_publication_reaction;
 pub mod channel_feed_publication;
+pub mod channel_inner_link;
+pub mod channel_outer_link;
 pub mod channel_subscription;
 pub mod channel;

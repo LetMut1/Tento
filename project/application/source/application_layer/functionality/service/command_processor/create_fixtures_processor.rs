@@ -28,7 +28,7 @@ use std::clone::Clone;
 pub struct CreateFixturesProcessor;
 
 impl CreateFixturesProcessor {
-    const QUANTITY_OF_APPLICATION_USERS: u16 = 1000;
+    const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
     const QUANTITY_OF_CHANNELS: u8 = 5;
     const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
     const APPLICATION_USER_DEVICE__ID: &'static str = "device";
@@ -242,6 +242,17 @@ impl CreateFixturesProcessor {
                     );
                 }
 
+                let channel_linked_name = channel_name.clone();
+
+                if !Channel_Validator::is_valid_linked_name(channel_linked_name.as_str()) {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::LogicError { message: "Channel linked name should be valid." },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+
                 let channel_description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
                     let mut channel_description_ = String::new();
 
@@ -297,6 +308,7 @@ impl CreateFixturesProcessor {
                         let channel_insert = ChannelInsert {
                             channel_owner: application_user_.get_id(),
                             channel_name,
+                            channel_linked_name,
                             channel_description,
                             channel_is_private: false,
                             channel_orientation,

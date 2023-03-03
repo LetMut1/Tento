@@ -20,6 +20,7 @@ impl Channel_PostgresqlRepository {
                 id, \
                 owner, \
                 name, \
+                linked_name, \
                 description, \
                 is_private, \
                 orientation, \
@@ -39,6 +40,7 @@ impl Channel_PostgresqlRepository {
                 $7, \
                 $8, \
                 $9, \
+                $10, \
                 current_timestamp(6) \
             ) \
             RETURNING \
@@ -48,6 +50,7 @@ impl Channel_PostgresqlRepository {
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.channel_owner, Type::INT8)
             .add_parameter(&insert.channel_name, Type::TEXT)
+            .add_parameter(&insert.channel_linked_name, Type::TEXT)
             .add_parameter(&insert.channel_description, Type::TEXT)
             .add_parameter(&insert.channel_is_private, Type::BOOL)
             .add_parameter(&insert.channel_orientation, Type::INT2_ARRAY)
@@ -113,6 +116,7 @@ impl Channel_PostgresqlRepository {
                 channel_id,
                 insert.channel_owner,
                 Cow::Owned(insert.channel_name),
+                insert.channel_linked_name,
                 insert.channel_description,
                 insert.channel_is_private,
                 insert.channel_orientation,
@@ -132,6 +136,7 @@ impl Channel_PostgresqlRepository {
             "SELECT \
                 c.owner AS ow, \
                 c.name AS n, \
+                c.linked_name AS ln, \
                 c.description AS d, \
                 c.is_private AS ip, \
                 c.orientation AS or, \
@@ -201,7 +206,19 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(2) {
+        let channel_linked_name = match row_registry[0].try_get::<'_, usize, String>(2) {
+            Ok(channel_linked_name_) => channel_linked_name_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3) {
             Ok(channel_description_) => channel_description_,
             Err(error) => {
                 return Err(
@@ -213,7 +230,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_is_private = match row_registry[0].try_get::<'_, usize, bool>(3) {
+        let channel_is_private = match row_registry[0].try_get::<'_, usize, bool>(4) {
             Ok(channel_is_private_) => channel_is_private_,
             Err(error) => {
                 return Err(
@@ -225,7 +242,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_orientation = match row_registry[0].try_get::<'_, usize, Vec<i16>>(4) {
+        let channel_orientation = match row_registry[0].try_get::<'_, usize, Vec<i16>>(5) {
             Ok(channel_orientation_) => channel_orientation_,
             Err(error) => {
                 return Err(
@@ -237,7 +254,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_personalization_image_path = match row_registry[0].try_get::<'_, usize, String>(5) {
+        let channel_personalization_image_path = match row_registry[0].try_get::<'_, usize, String>(6) {
             Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
             Err(error) => {
                 return Err(
@@ -249,7 +266,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_subscribers_quantity = match row_registry[0].try_get::<'_, usize, i64>(6) {
+        let channel_subscribers_quantity = match row_registry[0].try_get::<'_, usize, i64>(7) {
             Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
             Err(error) => {
                 return Err(
@@ -261,7 +278,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_marks_quantity = match row_registry[0].try_get::<'_, usize, i64>(7) {
+        let channel_marks_quantity = match row_registry[0].try_get::<'_, usize, i64>(8) {
             Ok(channel_marks_quantity_) => channel_marks_quantity_,
             Err(error) => {
                 return Err(
@@ -273,7 +290,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_viewing_quantity = match row_registry[0].try_get::<'_, usize, i64>(8) {
+        let channel_viewing_quantity = match row_registry[0].try_get::<'_, usize, i64>(9) {
             Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
             Err(error) => {
                 return Err(
@@ -285,7 +302,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(9) {
+        let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(10) {
             Ok(channel_created_at_) => channel_created_at_,
             Err(error) => {
                 return Err(
@@ -303,6 +320,7 @@ impl Channel_PostgresqlRepository {
                     channel_id,
                     channel_owner,
                     Cow::Owned(channel_name),
+                    channel_linked_name,
                     channel_description,
                     channel_is_private,
                     channel_orientation,
@@ -323,6 +341,7 @@ impl Channel_PostgresqlRepository {
             "SELECT \
                 c.id AS i, \
                 c.owner AS ow, \
+                c.linked_name AS ln, \
                 c.description AS d, \
                 c.is_private AS ip, \
                 c.orientation AS or, \
@@ -392,7 +411,19 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(2) {
+        let channel_linked_name = match row_registry[0].try_get::<'_, usize, String>(2) {
+            Ok(channel_linked_name_) => channel_linked_name_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3) {
             Ok(channel_description_) => channel_description_,
             Err(error) => {
                 return Err(
@@ -404,7 +435,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_is_private = match row_registry[0].try_get::<'_, usize, bool>(3) {
+        let channel_is_private = match row_registry[0].try_get::<'_, usize, bool>(4) {
             Ok(channel_is_private_) => channel_is_private_,
             Err(error) => {
                 return Err(
@@ -416,7 +447,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_orientation = match row_registry[0].try_get::<'_, usize, Vec<i16>>(4) {
+        let channel_orientation = match row_registry[0].try_get::<'_, usize, Vec<i16>>(5) {
             Ok(channel_orientation_) => channel_orientation_,
             Err(error) => {
                 return Err(
@@ -428,7 +459,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_personalization_image_path = match row_registry[0].try_get::<'_, usize, String>(5) {
+        let channel_personalization_image_path = match row_registry[0].try_get::<'_, usize, String>(6) {
             Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
             Err(error) => {
                 return Err(
@@ -440,7 +471,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_subscribers_quantity = match row_registry[0].try_get::<'_, usize, i64>(6) {
+        let channel_subscribers_quantity = match row_registry[0].try_get::<'_, usize, i64>(7) {
             Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
             Err(error) => {
                 return Err(
@@ -452,7 +483,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_marks_quantity = match row_registry[0].try_get::<'_, usize, i64>(7) {
+        let channel_marks_quantity = match row_registry[0].try_get::<'_, usize, i64>(8) {
             Ok(channel_marks_quantity_) => channel_marks_quantity_,
             Err(error) => {
                 return Err(
@@ -464,7 +495,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_viewing_quantity = match row_registry[0].try_get::<'_, usize, i64>(8) {
+        let channel_viewing_quantity = match row_registry[0].try_get::<'_, usize, i64>(9) {
             Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
             Err(error) => {
                 return Err(
@@ -476,7 +507,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(9) {
+        let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(10) {
             Ok(channel_created_at_) => channel_created_at_,
             Err(error) => {
                 return Err(
@@ -494,6 +525,7 @@ impl Channel_PostgresqlRepository {
                     channel_id,
                     channel_owner,
                     Cow::Borrowed(channel_name),
+                    channel_linked_name,
                     channel_description,
                     channel_is_private,
                     channel_orientation,
@@ -511,6 +543,7 @@ impl Channel_PostgresqlRepository {
 pub struct Insert {
     pub channel_owner: i64,
     pub channel_name: String,
+    pub channel_linked_name: String,
     pub channel_description: Option<String>,
     pub channel_is_private: bool,
     pub channel_orientation: Vec<i16>,

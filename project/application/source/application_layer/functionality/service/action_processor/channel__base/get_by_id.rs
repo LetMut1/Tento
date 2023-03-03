@@ -148,6 +148,7 @@ impl ActionProcessor {
             _channel_id,
             channel_owner,
             channel_name,
+            channel_linked_name,
             channel_description,
             channel_is_private,
             channel_orientation,
@@ -161,6 +162,7 @@ impl ActionProcessor {
         let outcoming = Outcoming {
             channel_owner,
             channel_name: channel_name.into_owned(),
+            channel_linked_name,
             channel_description,
             channel_is_private,
             channel_orientation,
@@ -188,6 +190,7 @@ pub struct Incoming {
 pub struct Outcoming {
     pub channel_owner: i64,
     pub channel_name: String,
+    pub channel_linked_name: String,
     pub channel_description: Option<String>,
     pub channel_is_private: bool,
     pub channel_orientation: Vec<i16>,

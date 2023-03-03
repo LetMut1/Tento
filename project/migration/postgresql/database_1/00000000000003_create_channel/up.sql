@@ -7,11 +7,11 @@ $$
 LANGUAGE plpgsql
 IMMUTABLE;
 
-CREATE TABLE public.channel (
+CREATE TABLE public.channel (       -- // TODO Оффет делаем как (where id < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод)
     id BIGINT,
     owner BIGINT,
     name TEXT,
-    link TEXT,
+    linked_name TEXT,
     description TEXT,
     is_private BOOLEAN,
     orientation SMALLINT[],
@@ -29,15 +29,18 @@ CREATE UNIQUE INDEX channel2 ON public.channel
 USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 CREATE UNIQUE INDEX channel3 ON public.channel
-USING btree (name COLLATE "C" ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
+USING btree (name COLLATE "C" ASC NULLS LAST) WITH (fillfactor = 80, deduplicate_items = on);
 
-CREATE INDEX channel4 ON public.channel
-USING btree (is_private ASC NULLS LAST) WITH (fillfactor = 85, deduplicate_items = on);
+CREATE UNIQUE INDEX channel4 ON public.channel
+USING btree (linked_name ASC NULLS LAST) WITH (fillfactor = 80, deduplicate_items = on);
 
 CREATE INDEX channel5 ON public.channel
+USING btree (is_private ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
+
+CREATE INDEX channel6 ON public.channel
 USING btree (public.limit_channel_subscribers_quantity(subscribers_quantity) ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
 
-CREATE UNIQUE INDEX channel6 ON public.channel
+CREATE UNIQUE INDEX channel7 ON public.channel
 USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.channel
@@ -45,8 +48,7 @@ ALTER COLUMN id SET NOT NULL,
 ALTER COLUMN owner SET NOT NULL,
 ALTER COLUMN name SET DATA TYPE TEXT COLLATE "C",
 ALTER COLUMN name SET NOT NULL,
-ALTER COLUMN link SET DATA TYPE TEXT COLLATE "C",
-ALTER COLUMN link SET NOT NULL,
+ALTER COLUMN linked_name SET NOT NULL,
 ALTER COLUMN is_private SET NOT NULL,
 ALTER COLUMN orientation SET NOT NULL,
 ALTER COLUMN personalization_image_path SET NOT NULL,
@@ -54,16 +56,11 @@ ALTER COLUMN subscribers_quantity SET NOT NULL,
 ALTER COLUMN marks_quantity SET NOT NULL,
 ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
-ADD CONSTRAINT channel7 PRIMARY KEY USING INDEX channel2,
-ADD CONSTRAINT channel8 FOREIGN KEY (owner)
+ADD CONSTRAINT channel8 PRIMARY KEY USING INDEX channel2,
+ADD CONSTRAINT channel9 FOREIGN KEY (owner)
 REFERENCES public.application_user (id) ON DELETE RESTRICT,
-ADD CONSTRAINT channel9 UNIQUE USING INDEX channel3,
-ADD CONSTRAINT channel10 UNIQUE USING INDEX channel6;
+ADD CONSTRAINT channel10 UNIQUE USING INDEX channel3,
+ADD CONSTRAINT channel11 UNIQUE USING INDEX channel4,
+ADD CONSTRAINT channel12 UNIQUE USING INDEX channel7;
 
-COMMENT ON COLUMN public.channel.owner IS 'application_user_id';
-
-
-
-
-
--- // TODO Оффет делаем как (where id < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод)
+COMMENT ON COLUMN public.channel.owner IS 'public.application_user.id';
