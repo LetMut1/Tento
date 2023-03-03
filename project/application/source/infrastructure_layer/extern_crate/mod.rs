@@ -24,4 +24,6 @@ pub use tokio;
 pub use uuid;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
+pub use const_format;
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub use serde_json;

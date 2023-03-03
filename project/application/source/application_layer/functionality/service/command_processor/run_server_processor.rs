@@ -9,6 +9,7 @@ use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGUR
 use crate::infrastructure_layer::functionality::service::environment_configuration__creator::EnvironmentConfiguration_Creator;
 use crate::infrastructure_layer::functionality::service::postgresql_connection_pool_creator::PostgresqlConnectionPoolCreator;
 use crate::infrastructure_layer::functionality::service::redis_connection_pool_creator::RedisConnectionPoolCreator;
+use crate::presentation_layer::data::http_route_registry::HttpRouteRegistry;
 use crate::presentation_layer::functionality::action::mobile::version_1::application_user__authorization;
 use crate::presentation_layer::functionality::action::mobile::version_1::channel__base;
 use crate::presentation_layer::functionality::action::route_not_found;
@@ -201,99 +202,103 @@ impl RunServerProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        match (request.uri().path(), request.method()) {
+        let route = request.uri().path();
+
+        let method = request.method();
+
+        match (route, method) {
             // Area for existing routes with not authorized user.
             // GET functional, but POST is used.
-            ("/v1/m/au/cnfe", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING, &Method::POST) => {
                 return application_user__authorization::check_nickname_for_existing::check_nickname_for_existing(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             // GET functional, but POST is used.
-            ("/v1/m/au/cefe", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING, &Method::POST) => {
                 return application_user__authorization::check_email_for_existing::check_email_for_existing(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/rbfs", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP, &Method::POST) => {
                 return application_user__authorization::register_by_first_step::register_by_first_step(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/rbss", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP, &Method::POST) => {
                 return application_user__authorization::register_by_second_step::register_by_second_step(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/rbls", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP, &Method::POST) => {
                 return application_user__authorization::register_by_last_step::register_by_last_step(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/sefr", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER, &Method::POST) => {
                 return application_user__authorization::send_email_for_register::send_email_for_register(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/abfs", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP, &Method::POST) => {
                 return application_user__authorization::authorize_by_first_step::authorize_by_first_step(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/abls", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP, &Method::POST) => {
                 return application_user__authorization::authorize_by_last_step::authorize_by_last_step(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/sefa", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE, &Method::POST) => {
                 return application_user__authorization::send_email_for_authorize::send_email_for_authorize(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/rpbfs", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP, &Method::POST) => {
                 return application_user__authorization::reset_password_by_first_step::reset_password_by_first_step(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/rpbss", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP, &Method::POST) => {
                 return application_user__authorization::reset_password_by_second_step::reset_password_by_second_step(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/rpbls", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP, &Method::POST) => {
                 return application_user__authorization::reset_password_by_last_step::reset_password_by_last_step(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/sefrp", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD, &Method::POST) => {
                 return application_user__authorization::send_email_for_reset_password::send_email_for_reset_password(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/rauat", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN, &Method::POST) => {
                 return application_user__authorization::refresh_application_user_access_token::refresh_application_user_access_token(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             // Area for existing routes with authorized user.
-            ("/v1/m/au/dfod", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE, &Method::POST) => {
                 return application_user__authorization::deauthorize_from_one_device::deauthorize_from_one_device(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            ("/v1/m/au/dfad", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE, &Method::POST) => {
                 return application_user__authorization::deauthorize_from_all_devices::deauthorize_from_all_devices(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             // GET functional, but POST is used.
-            ("/v1/m/c/gbi", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID, &Method::POST) => {
                 return channel__base::get_by_id::get_by_id(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             // GET functional, but POST is used.
-            ("/v1/m/c/gmbn", &Method::POST) => {
+            (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME, &Method::POST) => {
                 return channel__base::get_many_by_name::get_many_by_name(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
@@ -301,99 +306,99 @@ impl RunServerProcessor {
             // Area for not existing routes.
             _ => {
                 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-                match (request.uri().path(), request.method()) {
+                match (route, method) {
                     // Area for existing routes with not authorized user.
                     // GET functional, but POST is used.
-                    ("/v1/m/au/cnfe_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_, &Method::POST) => {
                         return application_user__authorization::check_nickname_for_existing::check_nickname_for_existing_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     // GET functional, but POST is used.
-                    ("/v1/m/au/cefe_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_, &Method::POST) => {
                         return application_user__authorization::check_email_for_existing::check_email_for_existing_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/rbfs_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP_, &Method::POST) => {
                         return application_user__authorization::register_by_first_step::register_by_first_step_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/rbss_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP_, &Method::POST) => {
                         return application_user__authorization::register_by_second_step::register_by_second_step_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/rbls_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP_, &Method::POST) => {
                         return application_user__authorization::register_by_last_step::register_by_last_step_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/sefr_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER_, &Method::POST) => {
                         return application_user__authorization::send_email_for_register::send_email_for_register_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/abfs_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP_, &Method::POST) => {
                         return application_user__authorization::authorize_by_first_step::authorize_by_first_step_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/abls_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP_, &Method::POST) => {
                         return application_user__authorization::authorize_by_last_step::authorize_by_last_step_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/sefa_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE_, &Method::POST) => {
                         return application_user__authorization::send_email_for_authorize::send_email_for_authorize_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/rpbfs_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_, &Method::POST) => {
                         return application_user__authorization::reset_password_by_first_step::reset_password_by_first_step_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/rpbss_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_, &Method::POST) => {
                         return application_user__authorization::reset_password_by_second_step::reset_password_by_second_step_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/rpbls_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_, &Method::POST) => {
                         return application_user__authorization::reset_password_by_last_step::reset_password_by_last_step_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/sefrp_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_, &Method::POST) => {
                         return application_user__authorization::send_email_for_reset_password::send_email_for_reset_password_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/rauat_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_, &Method::POST) => {
                         return application_user__authorization::refresh_application_user_access_token::refresh_application_user_access_token_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     // Area for existing routes with authorized user.
-                    ("/v1/m/au/dfod_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_, &Method::POST) => {
                         return application_user__authorization::deauthorize_from_one_device::deauthorize_from_one_device_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    ("/v1/m/au/dfad_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_, &Method::POST) => {
                         return application_user__authorization::deauthorize_from_all_devices::deauthorize_from_all_devices_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     // GET functional, but POST is used.
-                    ("/v1/m/c/gbi_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID_, &Method::POST) => {
                         return channel__base::get_by_id::get_by_id_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     // GET functional, but POST is used.
-                    ("/v1/m/c/gmbn_", &Method::POST) => {
+                    (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_, &Method::POST) => {
                         return channel__base::get_many_by_name::get_many_by_name_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;

@@ -39,11 +39,16 @@ redis = { package = "redis", version = "^0.21", default-features = true, feature
 regex = { package = "regex", version = "^1.4", default-features = true, features = [], optional = false }
 rmp_serde = { package = "rmp-serde", version = "^0.15", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "^1.0", default-features = true, features = ["derive"], optional = false }
-serde_json = { version = "^1.0", default-features = true, features = [], optional = true }
 tokio = { package = "tokio", version = "^1.16", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 tokio_postgres = { package = "tokio-postgres", version = "^0.7", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
 
+const_format = { version = "^0.2.30", default-features = true, features = [], optional = true }
+serde_json = { version = "^1.0", default-features = true, features = [], optional = true }
+
 [features]
 default = []
-facilitate_non_automatic_functional_testing = ["serde_json"]
+facilitate_non_automatic_functional_testing = [
+    "const_format",
+    "serde_json"
+]
