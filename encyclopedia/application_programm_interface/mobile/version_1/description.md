@@ -34,9 +34,13 @@ struct Data<S>
 }
 ```
 - `Result data` structures written under each API endpoint will be nested in the `data` field in the `struct Data<S>`.
-- Existing values for `communication_code` can be founded here:
+- Existing `communication_code`s can be founded here:
 ```
 /project/application/source/presentation_layer/data/communication_code_registry.rs
+```
+- Existing `http_route`s can be founded here:
+```
+/project/application/source/presentation_layer/data/http_route_registry.rs
 ```
 - `HTTP status code` unequal to `200` (it is [`400`, `599`]) have not got `HTTP body`
 
@@ -46,7 +50,7 @@ struct Data<S>
 ```
  Every endpoint at this area requires an existing of access token.
 ```
- - ## /v1/m/au/dfod (deauthorize_from_one_device) POST                              БЫВШИЙ log_out_from_one_device. УДАЛИТЬ
+ - ## VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE POST
 ```
 Deauthorizes application user from one device.
 ```
@@ -64,7 +68,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
- - ## /v1/m/au/dfad (deauthorize_from_all_devices) POST                                 БЫВШИЙ log_out_from_all_device. УДАЛИТЬ
+ - ## VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE POST
 ```
 Deauthorizes application user from all devices.
 ```
@@ -82,7 +86,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
- - ## /v1/m/c/gbi (get_by_id)
+ - ## VERSION_1__CHANNEL__GET_ONE_BY_ID POST (GET functional)
 ```
 Returns channel data by id.
 ```
@@ -115,9 +119,9 @@ Communication codes:
 - CHANNEL__NOT_FOUND
 - CHANNEL__IS_PRIVATE
 ```
- - ## /v1/m/c/gmbn (get_many_by_name)
+ - ## VERSION_1__CHANNEL__GET_MANY_BY_NAME POST (GET functional)
 ```
-Returns channels data by name. Only for channels with is_private: true
+Returns channels data by name. Returns only not private channels (is_private: false).
 ```
 ```rust
 Request data:
@@ -132,8 +136,10 @@ struct Incoming {
 requery_channel_name - an alternative for offset. Used only for requering with persistent channel_name. The value must be equal to the last channel_name of Channel registry in received early response.
 
 Incoming parameters validation rule:
-requery_channel_name: same as channel_name.
-limit: [1, 50] values
+requery_channel_name:
+- same as channel_name.
+limit:
+- [1, 50] values.
 ```
 ```rust
 Result data:
@@ -155,7 +161,7 @@ Communication codes:
 <br/><br/>
 
 # API for not authorized application user.
- - ## /v1/m/au/cefe (check_email_for_existing) POST (GET functional)
+ - ## VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING POST (GET functional)
 ```
 Checks application user email for existing.
 ```
@@ -174,7 +180,7 @@ struct Outcoming {
 ```
 Communication codes: absent.
 ```
- - ## /v1/m/au/cnfe (check_nickname_for_existing) POST (GET functional)
+ - ## VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING POST (GET functional)
 ```
 Checks application user nickname for existing.
 ```
@@ -193,7 +199,7 @@ struct Outcoming {
 ```
 Communication codes: absent.
 ```
- - ## /v1/m/au/rbfs (register_by_first_step) POST
+ - ## VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP POST
 ```
 Registers application user for the first step and sends email to user.
 ```
@@ -210,7 +216,7 @@ Result data: absent.
 Communication codes:
 - APPLICATION_USER__EMAIL_ALREADY_EXIST
 ```
-- ## /v1/m/au/rbss (register_by_second_step) POST
+- ## VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP POST
 ```
 Registers application user for the second step through token value approving.
 ```
@@ -232,7 +238,7 @@ Communication codes:
 - APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE
 ```
 
- - ## /v1/m/au/rbls (register_by_last_step) POST
+ - ## VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP POST
 ```
 Registers application user for the last step.
 ```
@@ -262,7 +268,7 @@ Communication codes:
 - APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
 ```
- - ## /v1/m/au/sefr (send_email_for_register) POST
+ - ## VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER POST
 ```
 Sends email for register. (Should be used only if the user does not receive an email.)
 ```
@@ -281,7 +287,7 @@ Communication codes:
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
 ```
- - ## /v1/m/au/abfs (authorize_by_first_step) POST                             БЫВШИЙ log_in_by_first_step. УДАЛИТЬ
+ - ## VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP POST
 ```
 Authorizes application user for the firs step and send email to user.
 ```
@@ -303,7 +309,7 @@ struct Outcoming {
 Communication codes:
 - APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
 ```
- - ## /v1/m/au/abls (authorize_by_last_step) POST                       БЫВШИЙ (log_in_by_last_step). УДАЛИТЬ
+ - ## VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP POST
 ```
 Authorizes application user for the last step.
 ```
@@ -329,7 +335,7 @@ Communication codes:
 - APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE
 - APPLICATION_USER__NOT_FOUND
 ```
- - ## /v1/m/au/sefa (send_email_for_authorize) POST                                 БЫВШИЙ (send_email_for_log_in). УДАЛИТЬ
+ - ## VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE POST
 ```
 Sends email for authorization. (Should be used only if the user does not receive an email.)
 ```
@@ -349,7 +355,7 @@ Communication codes:
 - APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
 - APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
 ```
- - ## /v1/m/au/rpbfs (reset_password_by_first_step) POST
+ - ## VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP POST
 ```
 Resets application user password for the first step and send email to user.
 ```
@@ -369,7 +375,7 @@ struct Outcoming {
 Communication codes:
 - APPLICATION_USER__NOT_FOUND
 ```
- - ## /v1/m/au/rpbss (reset_password_by_second_step) POST
+ - ## VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP POST
 ```
 Resets application user password for the second step through token value approving.
 ```
@@ -390,7 +396,7 @@ Communication codes:
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE
 ```
- - ## /v1/m/au/rpbls (reset_password_by_last_step) POST
+ - ## VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP POST
 ```
 Resets application user password for the last step.
 ```
@@ -413,7 +419,7 @@ Communication codes:
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__IS_NOT_APPROVED
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE
 ```
- - ## /v1/m/au/sefrp (send_email_for_reset_password) POST
+ - ## VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD POST
 ```
 Sends email for reset password.  (Should be used only if the user does not receive an email.)
 ```
@@ -433,7 +439,7 @@ Communication codes:
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED
 ```
- - ## /v1/m/au/rauat (refresh_application_user_access_token) POST
+ - ## VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN POST
 ```
 Refreshs application user access token.
 ```
