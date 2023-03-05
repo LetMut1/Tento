@@ -26,7 +26,7 @@ use std::marker::Sync;
 pub struct ActionProcessor;
 
 impl ActionProcessor {
-    const LIMIT: i16 = 50;
+    const LIMIT: i16 = 100;
 
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
@@ -142,5 +142,6 @@ pub struct Outcoming {
 pub struct Channel {
     pub channel_id: i64,
     pub channel_name: String,
+    pub channel_linked_name: String,
     pub channel_personalization_image_path: String
 }

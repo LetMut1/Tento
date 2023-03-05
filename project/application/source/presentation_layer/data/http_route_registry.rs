@@ -22,6 +22,7 @@ impl HttpRouteRegistry {
     pub const VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE: &'static str = "/1/16";
     pub const VERSION_1__CHANNEL__GET_ONE_BY_ID: &'static str = "/1/17";
     pub const VERSION_1__CHANNEL__GET_MANY_BY_NAME: &'static str = "/1/18";
+    pub const VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION: &'static str = "/1/19";
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
@@ -45,4 +46,5 @@ impl HttpRouteRegistry {
     pub const VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE, HttpRouteRegistry::CONCATENATING_PART);
     pub const VERSION_1__CHANNEL__GET_ONE_BY_ID_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID, HttpRouteRegistry::CONCATENATING_PART);
     pub const VERSION_1__CHANNEL__GET_MANY_BY_NAME_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME, HttpRouteRegistry::CONCATENATING_PART);
+    pub const VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION, HttpRouteRegistry::CONCATENATING_PART);
 }

@@ -121,7 +121,7 @@ Communication codes:
 ```
  - ## VERSION_1__CHANNEL__GET_MANY_BY_NAME POST (GET functional)
 ```
-Returns channels data by name. Returns only not private channels (is_private: false).
+Returns channels by name. Returns only public channels (is_private: false).
 ```
 ```rust
 Request data:
@@ -133,13 +133,13 @@ struct Incoming {
 }
 ```
 ```
-requery_channel_name - an alternative for offset. Used only for requering with persistent channel_name. The value must be equal to the last channel_name of Channel registry in received early response.
+requery_channel_name - an alternative for offset. Used only for requering with persistent channel_name. The value must be equal to the last channel_name of channel registry in received early response.
 
 Incoming parameters validation rule:
 requery_channel_name:
 - same as channel_name.
 limit:
-- [1, 50] values.
+- [1, 100] values.
 ```
 ```rust
 Result data:
@@ -150,6 +150,7 @@ struct Outcoming {
 struct Channel {
     channel_id: i64,
     channel_name: String,
+    channel_linked_name: String,
     channel_personalization_image_path: String
 }
 ```
@@ -158,6 +159,53 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
+
+
+
+
+
+ - ## VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION POST (GET functional)
+```
+Returns channels . Returns only not private channels (is_private: false).
+```
+```rust
+Request data:
+struct Incoming {
+    application_user_access_token_deserialized_form: String,
+    requery_channel_id: Option<i64>,
+    limit: i16
+}
+```
+```
+requery_channel_id - an alternative for offset. The value must be equal to the last channel_id of channel registry in received early response.
+
+Incoming parameters validation rule:
+requery_channel_id:
+- same as channel_id.
+limit:
+- [1, 100] values.
+```
+```rust
+Result data:
+struct Outcoming {
+    channel_registry: Vec<Channel>
+}
+
+struct Channel {
+    channel_id: i64,
+    channel_name: String,
+    channel_linked_name: String,
+    channel_personalization_image_path: String
+}
+```
+```
+Communication codes:
+- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+```
+
+
+
 <br/><br/>
 
 # API for not authorized application user.
@@ -476,6 +524,10 @@ Communication codes:
 ```
 ^[0-9]{6}$ - regular expression.
 ```
+ - ## application_user_id
+```
+>= 0
+```
  - ## application_user_email
 ```
 (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]) - regular expression.
@@ -501,6 +553,10 @@ Can not be empty.
 65 - maximum number of characters.
 
 Can not contain whitespace character.
+```
+ - ## channel_id
+```
+>= 0
 ```
  - ## channel_name
 ```

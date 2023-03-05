@@ -208,13 +208,13 @@ impl RunServerProcessor {
 
         match (route, method) {
             // Area for existing routes with not authorized user.
-            // GET functional, but POST is used.
+            // GET functional.
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING, &Method::POST) => {
                 return application_user__authorization::check_nickname_for_existing::check_nickname_for_existing(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            // GET functional, but POST is used.
+            // GET functional.
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING, &Method::POST) => {
                 return application_user__authorization::check_email_for_existing::check_email_for_existing(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
@@ -291,15 +291,21 @@ impl RunServerProcessor {
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            // GET functional, but POST is used.
+            // GET functional.
             (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID, &Method::POST) => {
                 return channel__base::get_by_id::get_by_id(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
-            // GET functional, but POST is used.
+            // GET functional.
             (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME, &Method::POST) => {
                 return channel__base::get_many_by_name::get_many_by_name(
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                ).await;
+            }
+            // GET functional.
+            (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION, &Method::POST) => {
+                return channel__base::get_many_by_subscription::get_many_by_subscription(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -308,13 +314,13 @@ impl RunServerProcessor {
                 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
                 match (route, method) {
                     // Area for existing routes with not authorized user.
-                    // GET functional, but POST is used.
+                    // GET functional.
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_, &Method::POST) => {
                         return application_user__authorization::check_nickname_for_existing::check_nickname_for_existing_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    // GET functional, but POST is used.
+                    // GET functional.
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_, &Method::POST) => {
                         return application_user__authorization::check_email_for_existing::check_email_for_existing_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
@@ -391,15 +397,21 @@ impl RunServerProcessor {
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    // GET functional, but POST is used.
+                    // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID_, &Method::POST) => {
                         return channel__base::get_by_id::get_by_id_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
-                    // GET functional, but POST is used.
+                    // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_, &Method::POST) => {
                         return channel__base::get_many_by_name::get_many_by_name_(
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                        ).await;
+                    }
+                    // GET functional.
+                    (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION_, &Method::POST) => {
+                        return channel__base::get_many_by_subscription::get_many_by_subscription_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }

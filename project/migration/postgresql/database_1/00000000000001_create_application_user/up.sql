@@ -27,5 +27,3 @@ ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT application_user5 PRIMARY KEY USING INDEX application_user2,
 ADD CONSTRAINT application_user6 UNIQUE USING INDEX application_user3,
 ADD CONSTRAINT application_user7 UNIQUE USING INDEX application_user4;
-
--- // TODO нужно ли ДатаПоследнегоВхода-Выхода. По идее, да. Но это нагруза на Бд. С другой стороны, видимость пользтвателелй и активноти. Подумать, что нужно еще

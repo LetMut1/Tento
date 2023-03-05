@@ -2,6 +2,7 @@ use crate::application_layer::functionality::service::action_processor::channel_
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_id_registry::Channel as GetManyByIdRegistryChannel;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name::Channel as GetManyByNameChannel;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_subscribers_quantity::Channel as GetManyBySubscribersQuantityChannel;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_subscription::Channel as GetManyBySubscriptionChannel;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -39,6 +40,7 @@ impl CommonPostgresqlRepository {
             "SELECT \
                 c.id AS i, \
                 c.name AS n, \
+                c.linked_name AS ln, \
                 c.personalization_image_path AS pip \
             FROM public.channel c \
             WHERE c.is_private = FALSE AND c.name LIKE ${}",
@@ -58,6 +60,7 @@ impl CommonPostgresqlRepository {
                     return Err(error);
                 }
             };
+
             query =  format!("{} AND c.name > ${}", query.as_str(), counter_value);
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_channel_name_, Type::TEXT);
@@ -71,6 +74,7 @@ impl CommonPostgresqlRepository {
                 return Err(error);
             }
         };
+
         query = format!("{} ORDER BY c.name ASC LIMIT ${};", query.as_str(), counter_value);
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
@@ -134,7 +138,19 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_personalization_image_path = match row.try_get::<'_, usize, String>(2) {
+            let channel_linked_name = match row.try_get::<'_, usize, String>(2) {
+                Ok(channel_name__) => channel_name__,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_personalization_image_path = match row.try_get::<'_, usize, String>(3) {
                 Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
                 Err(error) => {
                     return Err(
@@ -149,6 +165,7 @@ impl CommonPostgresqlRepository {
             let channel = GetManyByNameChannel {
                 channel_id,
                 channel_name: channel_name_,
+                channel_linked_name,
                 channel_personalization_image_path,
             };
 
@@ -159,6 +176,168 @@ impl CommonPostgresqlRepository {
     }
 
     pub async fn request_find_2<'a>(
+        database_1_connection: &'a Connection,
+        application_user_id: i64,
+        requery_channel_id: Option<i64>,
+        limit: i16
+    ) -> Result<Vec<GetManyBySubscriptionChannel>, ErrorAuditor> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let mut counter = Counter::new_classic();
+
+        let mut counter_value = match counter.get_next_value() {
+            Ok(counter_value_) => counter_value_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let mut query = format!(
+            "SELECT \
+                c.id AS i, \
+                c.name AS n, \
+                c.linked_name AS ln, \
+                c.personalization_image_path AS pip \
+            FROM public.channel c INNER JOIN public.channel_subscription cs \
+            ON c.id = cs.channel_id \
+            WHERE cs.application_user_id = ${}",
+            counter_value
+        );
+
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
+
+        if let Some(ref requery_channel_id_) = requery_channel_id {
+            counter_value = match counter.get_next_value() {
+                Ok(counter_value_) => counter_value_,
+                Err(mut error) => {
+                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                    return Err(error);
+                }
+            };
+
+            query =  format!("{} AND cs.channel_id > ${}", query.as_str(), counter_value);
+
+            prepared_statemant_parameter_convertation_resolver.add_parameter(requery_channel_id_, Type::INT8);
+        }
+
+        counter_value = match counter.get_next_value() {
+            Ok(counter_value_) => counter_value_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        query = format!(
+            "{} ORDER BY cs.channel_id ASC \
+            LIMIT ${};",
+            query.as_str(),
+            counter_value
+        );
+
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
+
+        let statement = match database_1_connection.prepare_typed(
+            query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let row_registry = match database_1_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let mut channel_registry: Vec<GetManyBySubscriptionChannel> = vec![];
+
+        if row_registry.is_empty() {
+            return Ok(channel_registry);
+        }
+
+        '_a: for row in row_registry.iter() {
+            let channel_id = match row.try_get::<'_, usize, i64>(0) {
+                Ok(channel_id_) => channel_id_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_name = match row.try_get::<'_, usize, String>(1) {
+                Ok(channel_name_) => channel_name_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_linked_name = match row.try_get::<'_, usize, String>(2) {
+                Ok(channel_name__) => channel_name__,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_personalization_image_path = match row.try_get::<'_, usize, String>(3) {
+                Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel = GetManyBySubscriptionChannel {
+                channel_id,
+                channel_name,
+                channel_linked_name,
+                channel_personalization_image_path,
+            };
+
+            channel_registry.push(channel);
+        }
+
+        return Ok(channel_registry);
+    }
+
+    pub async fn request_find_x<'a>(
         database_1_connection: &'a Connection,
         channel_created_at: &'a Option<String>,
         sort_order: SortOrder,
@@ -384,7 +563,7 @@ impl CommonPostgresqlRepository {
         // return Ok(Some(channel_registry));
     }
 
-    pub async fn request_find_3<'a>(
+    pub async fn request_find_xx<'a>(
         database_1_connection: &'a Connection,
         channel_subscribers_quantity: Option<i64>,
         sort_order: SortOrder,
@@ -511,7 +690,7 @@ impl CommonPostgresqlRepository {
         // return Ok(Some(channel_registry));
     }
 
-    pub async fn request_find_4<'a>(
+    pub async fn request_find_xxx<'a>(
         database_1_connection: &'a Connection,
         id_registry: &'a Vec<i64>
     ) -> Result<Option<Vec<GetManyByIdRegistryChannel>>, ErrorAuditor> {
