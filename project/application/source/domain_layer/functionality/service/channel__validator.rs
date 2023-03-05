@@ -9,7 +9,8 @@ impl Channel_Validator {
     }
 
     pub fn is_valid_name<'a>(channel_name: &'a str) -> bool {
-        return channel_name.chars().count() <= Self::CHANNEL__NAME_MAXIMUM_LENGTH;
+        return channel_name.chars().count() <= Self::CHANNEL__NAME_MAXIMUM_LENGTH
+            && !channel_name.is_empty();
     }
 
     pub fn is_valid_linked_name<'a>(channel_linked_name: &'a str) -> bool {
