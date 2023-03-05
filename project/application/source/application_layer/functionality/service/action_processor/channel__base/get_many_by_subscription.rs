@@ -40,45 +40,46 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
-            environment_configuration, incoming.application_user_access_token_deserialized_form.as_str()
-        ).await {
-            Ok(extractor_result_) => extractor_result_,
-            Err(mut error) => {
-                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        todo!();
+        // let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
+        //     environment_configuration, incoming.application_user_access_token_deserialized_form.as_str()
+        // ).await {
+        //     Ok(extractor_result_) => extractor_result_,
+        //     Err(mut error) => {
+        //         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-                return Err(error);
-            }
-        };
+        //         return Err(error);
+        //     }
+        // };
 
-        match extractor_result {
-            ArgumentResult::Ok { subject: extractor_result_ } => {
-                match extractor_result_ {
-                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {},
-                    ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(
-                            ArgumentResult::Ok {
-                                subject: ActionProcessorResult::UserWorkflowPrecedent {
-                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired
-                                }
-                            }
-                        );
-                    }
-                    ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(
-                            ArgumentResult::Ok {
-                                subject: ActionProcessorResult::UserWorkflowPrecedent {
-                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
-                                }
-                            }
-                        );
-                    }
-                }
-            }
-            ArgumentResult::InvalidArgument { invalid_argument } => {
-                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
-            }
-        };
+        // match extractor_result {
+        //     ArgumentResult::Ok { subject: extractor_result_ } => {
+        //         match extractor_result_ {
+        //             ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {},
+        //             ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+        //                 return Ok(
+        //                     ArgumentResult::Ok {
+        //                         subject: ActionProcessorResult::UserWorkflowPrecedent {
+        //                             user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired
+        //                         }
+        //                     }
+        //                 );
+        //             }
+        //             ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+        //                 return Ok(
+        //                     ArgumentResult::Ok {
+        //                         subject: ActionProcessorResult::UserWorkflowPrecedent {
+        //                             user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
+        //                         }
+        //                     }
+        //                 );
+        //             }
+        //         }
+        //     }
+        //     ArgumentResult::InvalidArgument { invalid_argument } => {
+        //         return Ok(ArgumentResult::InvalidArgument { invalid_argument });
+        //     }
+        // };
 
     //     if let Some(ref channel_created_at_) = incoming.channel_created_at {
     //         if !DateTimeResolver::is_valid_timestamp(channel_created_at_.as_str()) {
