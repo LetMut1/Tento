@@ -19,6 +19,7 @@ pub struct CommonPostgresqlRepository;
 impl CommonPostgresqlRepository {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
+        application_user_id: i64,
         channel_name: &'a str,
         requery_channel_name: &'a Option<String>,
         limit: i16
@@ -36,20 +37,35 @@ impl CommonPostgresqlRepository {
             }
         };
 
+        let counter_value_1 = counter_value;
+
+        counter_value = match counter.get_next_value() {
+            Ok(counter_value_) => counter_value_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
         let mut query = format!(
             "SELECT \
                 c.id AS i, \
                 c.name AS n, \
                 c.linked_name AS ln, \
                 c.personalization_image_path AS pip \
-            FROM public.channel c \
-            WHERE c.is_private = FALSE AND c.name LIKE ${}",
+            FROM public.channel c LEFT OUTER JOIN public.channel_subscription cs \
+            ON cs.application_user_id = ${} AND c.id = cs.channel_id \
+            WHERE cs.channel_id IS NULL AND c.is_private = FALSE AND c.name LIKE ${}",
+            counter_value_1,
             counter_value
         );
 
         let wildcard = format!("{}%", channel_name);
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&application_user_id, Type::INT8)
+            .add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_channel_name_) = requery_channel_name {
             counter_value = match counter.get_next_value() {
@@ -61,7 +77,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            query =  format!("{} AND c.name > ${}", query.as_str(), counter_value);
+            query = format!("{} AND c.name > ${}", query.as_str(), counter_value);
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_channel_name_, Type::TEXT);
         }
@@ -229,7 +245,6 @@ impl CommonPostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&application_user_id, Type::INT8)
-            .add_parameter(&application_user_id, Type::INT8)
             .add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_channel_name_) = requery_channel_name {
@@ -242,7 +257,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            query =  format!("{} AND c.name > ${}", query.as_str(), counter_value);
+            query = format!("{} AND c.name > ${}", query.as_str(), counter_value);
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_channel_name_, Type::TEXT);
         }
@@ -404,7 +419,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            query =  format!(
+            query = format!(
                 "{} \
                 WHERE cs.channel_id > ${}",
                 query.as_str(),

@@ -134,6 +134,7 @@ impl ActionProcessor {
                         Some(search_in_all_) => {
                             let channel_registry = match CommonPostgresqlRepository::find_1(
                                 database_1_postgresql_connection,
+                                application_user_access_token.get_application_user_id(),
                                 search_in_all_.channel_name.as_str(),
                                 &search_in_all_.requery_channel_name,
                                 search_in_all_.limit
@@ -189,7 +190,11 @@ impl ActionProcessor {
                             };
 
                             let channel_registry = match CommonPostgresqlRepository::find_1(
-                                &*database_1_postgresql_pooled_connection, search_in_all_.channel_name.as_str(), &search_in_all_.requery_channel_name, search_in_all_.limit
+                                &*database_1_postgresql_pooled_connection,
+                                application_user_access_token.get_application_user_id(),
+                                search_in_all_.channel_name.as_str(),
+                                &search_in_all_.requery_channel_name,
+                                search_in_all_.limit
                             ).await {
                                 Ok(channel_registry_) => channel_registry_,
                                 Err(mut error) => {
