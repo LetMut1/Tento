@@ -1,5 +1,6 @@
-use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name::Channel as GetManyByNameChannel;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name_in_subscriptions::Channel as GetManyByNameInSubscriptionChannel;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_subscription::Channel as GetManyBySubscriptionChannel;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_public_by_name::Channel as GetManyPublicByNameChannel;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -15,27 +16,15 @@ pub struct CommonPostgresqlRepository;
 impl CommonPostgresqlRepository {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        application_user_id: i64,
         channel_name: &'a str,
         requery_channel_name: &'a Option<String>,
         limit: i16
-    ) -> Result<Vec<GetManyByNameChannel>, ErrorAuditor> {
+    ) -> Result<Vec<GetManyPublicByNameChannel>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
 
         let mut counter_value = match counter.get_next_value() {
-            Ok(counter_value_) => counter_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                return Err(error);
-            }
-        };
-
-        let counter_value_1 = counter_value;
-
-        counter_value = match counter.get_next_value() {
             Ok(counter_value_) => counter_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -50,18 +39,14 @@ impl CommonPostgresqlRepository {
                 c.name AS n, \
                 c.linked_name AS ln, \
                 c.personalization_image_path AS pip \
-            FROM public.channel c LEFT OUTER JOIN public.channel_subscription cs \
-            ON cs.application_user_id = ${} AND c.id = cs.channel_id \
-            WHERE cs.channel_id IS NULL AND c.is_private = FALSE AND c.name LIKE ${}",
-            counter_value_1,
+            FROM public.channel c \
+            WHERE c.is_private = FALSE AND c.name LIKE ${}",
             counter_value
         );
 
         let wildcard = format!("{}%", channel_name);
 
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_id, Type::INT8)
-            .add_parameter(&wildcard, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_channel_name_) = requery_channel_name {
             counter_value = match counter.get_next_value() {
@@ -125,7 +110,7 @@ impl CommonPostgresqlRepository {
             }
         };
 
-        let mut channel_registry: Vec<GetManyByNameChannel> = vec![];
+        let mut channel_registry: Vec<GetManyPublicByNameChannel> = vec![];
 
         if row_registry.is_empty() {
             return Ok(channel_registry);
@@ -180,7 +165,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel = GetManyByNameChannel {
+            let channel = GetManyPublicByNameChannel {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
@@ -199,7 +184,7 @@ impl CommonPostgresqlRepository {
         channel_name: &'a str,
         requery_channel_name: &'a Option<String>,
         limit: i16
-    ) -> Result<Vec<GetManyByNameChannel>, ErrorAuditor> {
+    ) -> Result<Vec<GetManyByNameInSubscriptionChannel>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -305,7 +290,7 @@ impl CommonPostgresqlRepository {
             }
         };
 
-        let mut channel_registry: Vec<GetManyByNameChannel> = vec![];
+        let mut channel_registry: Vec<GetManyByNameInSubscriptionChannel> = vec![];
 
         if row_registry.is_empty() {
             return Ok(channel_registry);
@@ -360,7 +345,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel = GetManyByNameChannel {
+            let channel = GetManyByNameInSubscriptionChannel {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,

@@ -1,7 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name::ActionProcessor;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name::Incoming;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_public_by_name::ActionProcessor;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_public_by_name::Incoming;
 use crate::application_layer::functionality::service::action_round_result_writer::ActionRoundResultWriter;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -33,11 +33,11 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name::Outcoming;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_many_public_by_name::Outcoming;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
-pub async fn get_many_by_name<'a, T>(
+pub async fn get_many_public_by_name<'a, T>(
     environment_configuration: &'a EnvironmentConfiguration,
     mut request: Request<Body>,
     database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -336,7 +336,7 @@ where
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub async fn get_many_by_name_<'a, T>(
+pub async fn get_many_public_by_name_<'a, T>(
     environment_configuration: &'a EnvironmentConfiguration,
     request: Request<Body>,
     database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -355,6 +355,6 @@ where
         database_1_postgresql_connection_pool,
         database_2_postgresql_connection_pool,
         redis_connection_pool,
-        get_many_by_name
+        get_many_public_by_name
     ).await;
 }

@@ -298,14 +298,20 @@ impl RunServerProcessor {
                 ).await;
             }
             // GET functional.
-            (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME, &Method::POST) => {
-                return channel__base::get_many_by_name::get_many_by_name(
+            (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS, &Method::POST) => {
+                return channel__base::get_many_by_name_in_subscriptions::get_many_by_name_in_subscriptions(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             // GET functional.
             (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION, &Method::POST) => {
                 return channel__base::get_many_by_subscription::get_many_by_subscription(
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                ).await;
+            }
+            // GET functional.
+            (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME, &Method::POST) => {
+                return channel__base::get_many_public_by_name::get_many_public_by_name(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -404,14 +410,20 @@ impl RunServerProcessor {
                         ).await;
                     }
                     // GET functional.
-                    (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_, &Method::POST) => {
-                        return channel__base::get_many_by_name::get_many_by_name_(
+                    (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_, &Method::POST) => {
+                        return channel__base::get_many_by_name_in_subscriptions::get_many_by_name_in_subscriptions_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION_, &Method::POST) => {
                         return channel__base::get_many_by_subscription::get_many_by_subscription_(
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                        ).await;
+                    }
+                    // GET functional.
+                    (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME_, &Method::POST) => {
+                        return channel__base::get_many_public_by_name::get_many_public_by_name_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
