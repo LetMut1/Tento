@@ -153,7 +153,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_personalization_image_path = match row.try_get::<'_, usize, String>(3) {
+            let channel_personalization_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
                 Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
                 Err(error) => {
                     return Err(
@@ -333,7 +333,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_personalization_image_path = match row.try_get::<'_, usize, String>(3) {
+            let channel_personalization_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
                 Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
                 Err(error) => {
                     return Err(
@@ -500,7 +500,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_personalization_image_path = match row.try_get::<'_, usize, String>(3) {
+            let channel_personalization_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
                 Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
                 Err(error) => {
                     return Err(

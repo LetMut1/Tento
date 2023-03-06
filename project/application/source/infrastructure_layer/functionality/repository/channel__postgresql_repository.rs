@@ -254,7 +254,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_personalization_image_path = match row_registry[0].try_get::<'_, usize, String>(6) {
+        let channel_personalization_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(6) {
             Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
             Err(error) => {
                 return Err(
@@ -459,7 +459,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_personalization_image_path = match row_registry[0].try_get::<'_, usize, String>(6) {
+        let channel_personalization_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(6) {
             Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
             Err(error) => {
                 return Err(
@@ -547,7 +547,7 @@ pub struct Insert {
     pub channel_description: Option<String>,
     pub channel_is_private: bool,
     pub channel_orientation: Vec<i16>,
-    pub channel_personalization_image_path: String,
+    pub channel_personalization_image_path: Option<String>,
     pub channel_subscribers_quantity: i64,
     pub channel_marks_quantity: i64,
     pub channel_viewing_quantity: i64,

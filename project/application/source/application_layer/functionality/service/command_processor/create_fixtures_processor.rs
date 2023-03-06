@@ -312,7 +312,7 @@ impl CreateFixturesProcessor {
                             channel_description,
                             channel_is_private: false,
                             channel_orientation,
-                            channel_personalization_image_path: "personalization_image_path stab".to_string(),
+                            channel_personalization_image_path: Some("personalization_image_path stab".to_string()),
                             channel_subscribers_quantity: 0,
                             channel_marks_quantity: 0,
                             channel_viewing_quantity: 0
