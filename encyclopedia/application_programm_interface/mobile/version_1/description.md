@@ -119,32 +119,69 @@ Communication codes:
 - CHANNEL__NOT_FOUND
 - CHANNEL__IS_PRIVATE
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
  - ## VERSION_1__CHANNEL__GET_MANY_BY_NAME POST (GET functional)
 ```
-Returns channels by name. Returns only public channels (is_private: false).
+Returns channels by name.
 ```
 ```rust
 Request data:
 struct Incoming {
     application_user_access_token_deserialized_form: String,
+    search_in_subscriptions: Option<SearchInSubscriptions>,
+    search_in_all: Option<SearchInAll>
+}
+
+struct SearchInSubscriptions {
+    channel_name: String,
+    requery_channel_name: Option<String>,
+    limit: i16
+}
+
+struct SearchInAll {
     channel_name: String,
     requery_channel_name: Option<String>,
     limit: i16
 }
 ```
 ```
-requery_channel_name - an alternative for offset. Used only for requering with persistent channel_name. The value must be equal to the last channel_name of channel registry in received early response.
+If we have already requested information about ALL channels to which the user is subscribed through some other method, then the search for the channels to which the user is subscribed must occur on the front side - that is, search_in_subscription must be equal to null.
+
+If we have not yet requested information about ALL channels to which the user is subscribed, then the first search request must have search_in_subscribers and search_in_all with the same parameters. The first request is the request where .channel_name changes its value.
+If the number of records in search_in_subscribers_result is equal to the search_in_subscribers.limit value, then not all entities were returned according to the specified parameters. If the user continues to make additional requests after that, then search_in_subscribers must not be null, and search_in_all must be null.
+If the number of entries in search_in_subscribers_result is less than search_in_subscribers.limit, it means that all entities with the specified parameters have already been returned. If after that the user continues to make additional requests, then search_in_subscribers should already be equal to null, and search_in_all should not be equal to null.
+The idea is to first query all channels the user is subscribed to, and then query all public channels that the user is not subscribed to.
+
+search_in_subscriptions.requery_channel_name and search_in_all.requery_channel_name - an alternative for offset. Used only for requering (make additioanl request) with persistent .channel_name. The value must be equal to the last channel_name of channel registry in received early response.
 
 Incoming parameters validation rule:
-requery_channel_name:
-- same as channel_name.
-limit:
-- [1, 100] values.
+- search_in_subscriptions and search_in_all can not be null at the same time.
+- search_in_subscriptions.requery_channel_name:
+    -- same as channel_name.
+- search_in_subscriptions.limit:
+    -- [1, 100] values.
+- search_in_all.requery_channel_name:
+    -- same as channel_name.
+- search_in_all.limit:
+    -- [1, 100] values.
 ```
 ```rust
 Result data:
 struct Outcoming {
-    channel_registry: Vec<Channel>
+    search_in_subscriptions_result: Option<Vec<Channel>>,
+    search_in_all_result: Option<Vec<Channel>>
 }
 
 struct Channel {
@@ -159,14 +196,9 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
-
-
-
-
-
  - ## VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION POST (GET functional)
 ```
-Returns channels . Returns only not private channels (is_private: false).
+Returns channels by subscription.
 ```
 ```rust
 Request data:
@@ -180,10 +212,10 @@ struct Incoming {
 requery_channel_id - an alternative for offset. The value must be equal to the last channel_id of channel registry in received early response.
 
 Incoming parameters validation rule:
-requery_channel_id:
-- same as channel_id.
-limit:
-- [1, 100] values.
+- requery_channel_id:
+    -- same as channel_id.
+- limit:
+    -- [1, 100] values.
 ```
 ```rust
 Result data:
@@ -203,9 +235,6 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
-
-
-
 <br/><br/>
 
 # API for not authorized application user.

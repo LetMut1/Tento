@@ -23,6 +23,7 @@ pub enum InvalidArgument {
     HttpHeaders,
     HttpRoute,
     Limit,
+    SearchParameter,
     SortOrderRepresentation,
     Timestamp
 }

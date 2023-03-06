@@ -101,6 +101,7 @@ impl Display<InvalidArgument> for Displayer {
             InvalidArgument::HttpHeaders => "HttpHeader",
             InvalidArgument::HttpRoute => "HttpRoute",
             InvalidArgument::Limit => "Limit",
+            InvalidArgument::SearchParameter => "SearchParameter",
             InvalidArgument::SortOrderRepresentation => "SortOrderRepresentation",
             InvalidArgument::Timestamp => "Timestamp"
         };

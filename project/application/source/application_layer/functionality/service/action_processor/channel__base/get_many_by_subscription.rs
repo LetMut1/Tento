@@ -103,7 +103,7 @@ impl ActionProcessor {
             }
         };
 
-        let channel_registry = match CommonPostgresqlRepository::request_find_2(
+        let channel_registry = match CommonPostgresqlRepository::find_3(
             &*database_1_postgresql_pooled_connection,
             application_user_access_token.get_application_user_id(),
             incoming.requery_channel_id,
@@ -129,6 +129,7 @@ pub struct Incoming {
     requery_channel_id: Option<i64>,
     limit: i16
 }
+
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]

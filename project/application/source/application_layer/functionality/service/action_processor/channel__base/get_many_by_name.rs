@@ -50,10 +50,10 @@ impl ActionProcessor {
             }
         };
 
-        match extractor_result {
+        let application_user_access_token = match extractor_result {
             ArgumentResult::Ok { subject: extractor_result_ } => {
-                match extractor_result_ {
-                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token: _ } => {},
+                let application_user_access_token_ = match extractor_result_ {
+                    ExtractorResult::ApplicationUserAccessToken { application_user_access_token: application_user_access_token__ } => application_user_access_token__,
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                         return Ok(
                             ArgumentResult::Ok {
@@ -72,51 +72,149 @@ impl ActionProcessor {
                             }
                         );
                     }
-                }
+                };
+
+                application_user_access_token_
             }
             ArgumentResult::InvalidArgument { invalid_argument } => {
                 return Ok(ArgumentResult::InvalidArgument { invalid_argument });
             }
         };
 
-        if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Limit });
-        }
+        if let Some(ref search_in_subscription_) = incoming.search_in_subscriptions {
+            if search_in_subscription_.limit <= 0 || search_in_subscription_.limit > Self::LIMIT {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Limit });
+            }
 
-        if !Channel_Validator::is_valid_name(incoming.channel_name.as_str()) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
-        }
-
-        if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
-            if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
+            if !Channel_Validator::is_valid_name(search_in_subscription_.channel_name.as_str()) {
                 return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
             }
+
+            if let Some(ref requery_channel_name_) = search_in_subscription_.requery_channel_name {
+                if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
+                    return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
+                }
+            }
         }
 
-        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
-            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
+        if let Some(ref search_in_all_) = incoming.search_in_all {
+            if search_in_all_.limit <= 0 || search_in_all_.limit > Self::LIMIT {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Limit });
+            }
+
+            if !Channel_Validator::is_valid_name(search_in_all_.channel_name.as_str()) {
+                return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
+            }
+
+            if let Some(ref requery_channel_name_) = search_in_all_.requery_channel_name {
+                if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
+                    return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
+                }
+            }
+        }
+
+        let outcoming = {
+            match incoming.search_in_subscriptions {
+                Some(search_in_subscription_) => {
+                    let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+                        Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
+                        Err(error) => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                                    BacktracePart::new(line!(), file!(), None)
+                                )
+                            );
+                        }
+                    };
+
+                    let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
+
+                    let search_in_all_result = match incoming.search_in_all {
+                        Some(search_in_all_) => {
+                            let channel_registry = match CommonPostgresqlRepository::find_1(
+                                database_1_postgresql_connection,
+                                search_in_all_.channel_name.as_str(),
+                                &search_in_all_.requery_channel_name,
+                                search_in_all_.limit
+                            ).await {
+                                Ok(channel_registry_) => channel_registry_,
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                    return Err(error);
+                                }
+                            };
+
+                            Some(channel_registry)
+                        }
+                        None => {
+                            None
+                        }
+                    };
+
+                    let channel_registry = match CommonPostgresqlRepository::find_2(
+                        database_1_postgresql_connection,
+                        application_user_access_token.get_application_user_id(),
+                        search_in_subscription_.channel_name.as_str(),
+                        &search_in_subscription_.requery_channel_name,
+                        search_in_subscription_.limit
+                    ).await {
+                        Ok(channel_registry_) => channel_registry_,
+                        Err(mut error) => {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    };
+
+                    Outcoming {
+                        search_in_subscriptions_result: Some(channel_registry),
+                        search_in_all_result
+                    }
+                }
+                None => {
+                    let search_in_all_result = match incoming.search_in_all {
+                        Some(search_in_all_) => {
+                            let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+                                Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
+                                Err(error) => {
+                                    return Err(
+                                        ErrorAuditor::new(
+                                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                                            BacktracePart::new(line!(), file!(), None)
+                                        )
+                                    );
+                                }
+                            };
+
+                            let channel_registry = match CommonPostgresqlRepository::find_1(
+                                &*database_1_postgresql_pooled_connection, search_in_all_.channel_name.as_str(), &search_in_all_.requery_channel_name, search_in_all_.limit
+                            ).await {
+                                Ok(channel_registry_) => channel_registry_,
+                                Err(mut error) => {
+                                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                    return Err(error);
+                                }
+                            };
+
+                            Some(channel_registry)
+                        }
+                        None => {
+                            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::SearchParameter });
+                        }
+                    };
+
+                    Outcoming {
+                        search_in_all_result,
+                        search_in_subscriptions_result: None
+                    }
+                }
             }
         };
 
-        let channel_registry = match CommonPostgresqlRepository::request_find_1(
-            &*database_1_postgresql_pooled_connection, incoming.channel_name.as_str(), &incoming.requery_channel_name, incoming.limit
-        ).await {
-            Ok(channel_registry_) => channel_registry_,
-            Err(mut error) => {
-                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                return Err(error);
-            }
-        };
-
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { channel_registry } } });
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
     }
 }
 
@@ -125,15 +223,34 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_access_token_deserialized_form: String,
+    search_in_subscriptions: Option<SearchInSubscriptions>,
+    search_in_all: Option<SearchInAll>
+}
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+struct SearchInSubscriptions {
     channel_name: String,
     requery_channel_name: Option<String>,
     limit: i16
 }
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+struct SearchInAll {
+    channel_name: String,
+    requery_channel_name: Option<String>,
+    limit: i16
+}
+
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    channel_registry: Vec<Channel>
+    search_in_subscriptions_result: Option<Vec<Channel>>,
+    search_in_all_result: Option<Vec<Channel>>
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
