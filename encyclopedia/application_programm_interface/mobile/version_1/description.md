@@ -149,7 +149,7 @@ If we have already requested information about ALL channels to which the user is
 If we have not yet requested information about ALL channels to which the user is subscribed, then the first search request must have search_in_subscribers and search_in_all with the same parameters. The first request is the request where .channel_name changes its value.
 If the number of records in search_in_subscribers_result is equal to the search_in_subscribers.limit value, then not all entities were returned according to the specified parameters. If the user continues to make additional requests after that, then search_in_subscribers must not be null, and search_in_all must be null.
 If the number of entries in search_in_subscribers_result is less than search_in_subscribers.limit, it means that all entities with the specified parameters have already been returned. If after that the user continues to make additional requests, then search_in_subscribers should already be equal to null, and search_in_all should not be equal to null.
-The idea is to first query all channels the user is subscribed to, and then query all public channels that the user is not subscribed to.
+The idea is to first query all channels the user is subscribed to, and then query all public channels, and the same channels can be in the results of both requests (this problem needs to be solved by the frontend).
 
 search_in_subscriptions.requery_channel_name and search_in_all.requery_channel_name - an alternative for offset. Used only for requering (make additioanl request) with persistent .channel_name. The value must be equal to the last channel_name of channel registry in received early response.
 
