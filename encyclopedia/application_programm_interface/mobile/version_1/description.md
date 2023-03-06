@@ -119,19 +119,6 @@ Communication codes:
 - CHANNEL__NOT_FOUND
 - CHANNEL__IS_PRIVATE
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
  - ## VERSION_1__CHANNEL__GET_MANY_BY_NAME POST (GET functional)
 ```
 Returns channels by name.
