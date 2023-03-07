@@ -38,6 +38,7 @@ impl CommonPostgresqlRepository {
                 c.id AS i, \
                 c.name AS n, \
                 c.linked_name AS ln, \
+                c.cover_image_path AS cip, \
                 c.background_image_path AS bip \
             FROM public.channel c \
             WHERE c.is_private = FALSE AND c.name LIKE ${}",
@@ -153,7 +154,19 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+                Ok(channel_cover_image_path_) => channel_cover_image_path_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(4) {
                 Ok(channel_background_image_path_) => channel_background_image_path_,
                 Err(error) => {
                     return Err(
@@ -169,6 +182,7 @@ impl CommonPostgresqlRepository {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
+                channel_cover_image_path,
                 channel_background_image_path,
             };
 
@@ -214,6 +228,7 @@ impl CommonPostgresqlRepository {
                 c.id AS i, \
                 c.name AS n, \
                 c.linked_name AS ln, \
+                c.cover_image_path AS cip, \
                 c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
             ON cs.application_user_id = ${} AND c.id = cs.channel_id \
@@ -333,7 +348,19 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+                Ok(channel_cover_image_path_) => channel_cover_image_path_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(4) {
                 Ok(channel_background_image_path_) => channel_background_image_path_,
                 Err(error) => {
                     return Err(
@@ -349,6 +376,7 @@ impl CommonPostgresqlRepository {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
+                channel_cover_image_path,
                 channel_background_image_path,
             };
 
@@ -382,6 +410,7 @@ impl CommonPostgresqlRepository {
                 c.id AS i, \
                 c.name AS n, \
                 c.linked_name AS ln, \
+                c.cover_image_path AS cip, \
                 c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
             ON cs.application_user_id = ${} AND c.id = cs.channel_id",
@@ -500,7 +529,19 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+                Ok(channel_cover_image_path_) => channel_cover_image_path_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(4) {
                 Ok(channel_background_image_path_) => channel_background_image_path_,
                 Err(error) => {
                     return Err(
@@ -516,6 +557,7 @@ impl CommonPostgresqlRepository {
                 channel_id,
                 channel_name,
                 channel_linked_name,
+                channel_cover_image_path,
                 channel_background_image_path,
             };
 

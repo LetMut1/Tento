@@ -106,6 +106,7 @@ struct Outcoming {
     channel_description: Option<String>,
     channel_is_private: bool,
     channel_orientation: Vec<i16>,
+    channel_cover_image_path: Option<String>,
     channel_background_image_path: Option<String>,
     channel_subscribers_quantity: i64,
     channel_marks_quantity: i64,
@@ -151,6 +152,7 @@ struct Channel {
     channel_id: i64,
     channel_name: String,
     channel_linked_name: String,
+    channel_cover_image_path: Option<String>,
     channel_background_image_path: Option<String>
 }
 ```
@@ -190,6 +192,7 @@ struct Channel {
     channel_id: i64,
     channel_name: String,
     channel_linked_name: String,
+    channel_cover_image_path: Option<String>,
     channel_background_image_path: Option<String>
 }
 ```
@@ -230,6 +233,7 @@ struct Channel {
     channel_id: i64,
     channel_name: String,
     channel_linked_name: String,
+    channel_cover_image_path: Option<String>,
     channel_background_image_path: Option<String>
 }
 ```

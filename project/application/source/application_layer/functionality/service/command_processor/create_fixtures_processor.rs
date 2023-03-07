@@ -28,6 +28,7 @@ use std::clone::Clone;
 pub struct CreateFixturesProcessor;
 
 impl CreateFixturesProcessor {
+    const STUB: &'static str = "s_t_u_b";
     const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
     const QUANTITY_OF_CHANNELS: u8 = 5;
     const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
@@ -312,7 +313,8 @@ impl CreateFixturesProcessor {
                             channel_description,
                             channel_is_private: false,
                             channel_orientation,
-                            channel_background_image_path: Some("s_t_a_b".to_string()),
+                            channel_cover_image_path: Some(Self::STUB.to_string()),
+                            channel_background_image_path: Some(Self::STUB.to_string()),
                             channel_subscribers_quantity: 0,
                             channel_marks_quantity: 0,
                             channel_viewing_quantity: 0
