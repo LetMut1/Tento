@@ -150,5 +150,5 @@ pub struct Channel {
     pub channel_id: i64,
     pub channel_name: String,
     pub channel_linked_name: String,
-    pub channel_personalization_image_path: Option<String>
+    pub channel_background_image_path: Option<String>
 }

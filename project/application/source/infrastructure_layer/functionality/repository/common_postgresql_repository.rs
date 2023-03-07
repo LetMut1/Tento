@@ -38,7 +38,7 @@ impl CommonPostgresqlRepository {
                 c.id AS i, \
                 c.name AS n, \
                 c.linked_name AS ln, \
-                c.personalization_image_path AS pip \
+                c.background_image_path AS bip \
             FROM public.channel c \
             WHERE c.is_private = FALSE AND c.name LIKE ${}",
             counter_value
@@ -153,8 +153,8 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_personalization_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
-                Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+                Ok(channel_background_image_path_) => channel_background_image_path_,
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -169,7 +169,7 @@ impl CommonPostgresqlRepository {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
-                channel_personalization_image_path,
+                channel_background_image_path,
             };
 
             channel_registry.push(channel);
@@ -214,7 +214,7 @@ impl CommonPostgresqlRepository {
                 c.id AS i, \
                 c.name AS n, \
                 c.linked_name AS ln, \
-                c.personalization_image_path AS pip \
+                c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
             ON cs.application_user_id = ${} AND c.id = cs.channel_id \
             WHERE c.name LIKE ${}",
@@ -333,8 +333,8 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_personalization_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
-                Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+                Ok(channel_background_image_path_) => channel_background_image_path_,
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -349,7 +349,7 @@ impl CommonPostgresqlRepository {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
-                channel_personalization_image_path,
+                channel_background_image_path,
             };
 
             channel_registry.push(channel);
@@ -382,7 +382,7 @@ impl CommonPostgresqlRepository {
                 c.id AS i, \
                 c.name AS n, \
                 c.linked_name AS ln, \
-                c.personalization_image_path AS pip \
+                c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
             ON cs.application_user_id = ${} AND c.id = cs.channel_id",
             counter_value
@@ -500,8 +500,8 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_personalization_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
-                Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+                Ok(channel_background_image_path_) => channel_background_image_path_,
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -516,7 +516,7 @@ impl CommonPostgresqlRepository {
                 channel_id,
                 channel_name,
                 channel_linked_name,
-                channel_personalization_image_path,
+                channel_background_image_path,
             };
 
             channel_registry.push(channel);

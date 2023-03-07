@@ -134,7 +134,7 @@ pub struct Outcoming {
 pub struct Channel {
     pub channel_id: i64,
     pub channel_name: String,
-    pub channel_personalization_image_path: String,
+    pub channel_background_image_path: String,
     pub channel_subscribers_quantity: i64,
     pub channel_public_marks_quantity: i64,
     pub channel_hidden_marks_quantity: i64,

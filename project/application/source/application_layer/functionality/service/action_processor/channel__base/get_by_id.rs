@@ -152,7 +152,7 @@ impl ActionProcessor {
             channel_description,
             channel_is_private,
             channel_orientation,
-            channel_personalization_image_path,
+            channel_background_image_path,
             channel_subscribers_quantity,
             channel_marks_quantity,
             channel_viewing_quantity,
@@ -166,7 +166,7 @@ impl ActionProcessor {
             channel_description,
             channel_is_private,
             channel_orientation,
-            channel_personalization_image_path,
+            channel_background_image_path,
             channel_subscribers_quantity,
             channel_marks_quantity,
             channel_viewing_quantity
@@ -194,7 +194,7 @@ pub struct Outcoming {
     pub channel_description: Option<String>,
     pub channel_is_private: bool,
     pub channel_orientation: Vec<i16>,
-    pub channel_personalization_image_path: Option<String>,
+    pub channel_background_image_path: Option<String>,
     pub channel_subscribers_quantity: i64,
     pub channel_marks_quantity: i64,
     pub channel_viewing_quantity: i64

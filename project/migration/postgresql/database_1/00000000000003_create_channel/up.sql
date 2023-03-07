@@ -15,7 +15,7 @@ CREATE TABLE public.channel (       -- // TODO Оффет делаем как (w
     description TEXT,
     is_private BOOLEAN,
     orientation SMALLINT[],
-    personalization_image_path TEXT,
+    background_image_path TEXT,
     subscribers_quantity BIGINT,
     marks_quantity BIGINT,
     viewing_quantity BIGINT,

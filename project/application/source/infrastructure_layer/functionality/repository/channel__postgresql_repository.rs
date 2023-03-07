@@ -24,7 +24,7 @@ impl Channel_PostgresqlRepository {
                 description, \
                 is_private, \
                 orientation, \
-                personalization_image_path, \
+                background_image_path, \
                 subscribers_quantity, \
                 marks_quantity, \
                 viewing_quantity, \
@@ -54,7 +54,7 @@ impl Channel_PostgresqlRepository {
             .add_parameter(&insert.channel_description, Type::TEXT)
             .add_parameter(&insert.channel_is_private, Type::BOOL)
             .add_parameter(&insert.channel_orientation, Type::INT2_ARRAY)
-            .add_parameter(&insert.channel_personalization_image_path, Type::TEXT)
+            .add_parameter(&insert.channel_background_image_path, Type::TEXT)
             .add_parameter(&insert.channel_subscribers_quantity, Type::INT8)
             .add_parameter(&insert.channel_marks_quantity, Type::INT8)
             .add_parameter(&insert.channel_viewing_quantity, Type::INT8);
@@ -120,7 +120,7 @@ impl Channel_PostgresqlRepository {
                 insert.channel_description,
                 insert.channel_is_private,
                 insert.channel_orientation,
-                insert.channel_personalization_image_path,
+                insert.channel_background_image_path,
                 insert.channel_subscribers_quantity,
                 insert.channel_marks_quantity,
                 insert.channel_viewing_quantity,
@@ -140,7 +140,7 @@ impl Channel_PostgresqlRepository {
                 c.description AS d, \
                 c.is_private AS ip, \
                 c.orientation AS or, \
-                c.personalization_image_path AS pip, \
+                c.background_image_path AS bip, \
                 c.subscribers_quantity, \
                 c.marks_quantity AS mq, \
                 c.viewing_quantity AS vq, \
@@ -254,8 +254,8 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_personalization_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(6) {
-            Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
+        let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(6) {
+            Ok(channel_background_image_path_) => channel_background_image_path_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -324,7 +324,7 @@ impl Channel_PostgresqlRepository {
                     channel_description,
                     channel_is_private,
                     channel_orientation,
-                    channel_personalization_image_path,
+                    channel_background_image_path,
                     channel_subscribers_quantity,
                     channel_marks_quantity,
                     channel_viewing_quantity,
@@ -345,7 +345,7 @@ impl Channel_PostgresqlRepository {
                 c.description AS d, \
                 c.is_private AS ip, \
                 c.orientation AS or, \
-                c.personalization_image_path AS pip, \
+                c.background_image_path AS bip, \
                 c.subscribers_quantity, \
                 c.marks_quantity AS mq, \
                 c.viewing_quantity AS vq, \
@@ -459,8 +459,8 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_personalization_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(6) {
-            Ok(channel_personalization_image_path_) => channel_personalization_image_path_,
+        let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(6) {
+            Ok(channel_background_image_path_) => channel_background_image_path_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -529,7 +529,7 @@ impl Channel_PostgresqlRepository {
                     channel_description,
                     channel_is_private,
                     channel_orientation,
-                    channel_personalization_image_path,
+                    channel_background_image_path,
                     channel_subscribers_quantity,
                     channel_marks_quantity,
                     channel_viewing_quantity,
@@ -547,7 +547,7 @@ pub struct Insert {
     pub channel_description: Option<String>,
     pub channel_is_private: bool,
     pub channel_orientation: Vec<i16>,
-    pub channel_personalization_image_path: Option<String>,
+    pub channel_background_image_path: Option<String>,
     pub channel_subscribers_quantity: i64,
     pub channel_marks_quantity: i64,
     pub channel_viewing_quantity: i64,
