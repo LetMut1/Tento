@@ -1,8 +1,8 @@
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name_in_subscriptions::Channel as GetManyByNameInSubscriptionChannel;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_subscription::Channel as GetManyBySubscriptionChannel;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_public_by_name::Channel as GetManyPublicByNameChannel;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_by_id::ChannelInnerLink as GetByIdChannelInnerLink;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_by_id::ChannelOuterLink as GetByIdChannelOuterLink;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_one_by_id::ChannelInnerLink as GetByIdChannelInnerLink;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_one_by_id::ChannelOuterLink as GetByIdChannelOuterLink;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
