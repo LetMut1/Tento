@@ -242,6 +242,27 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
+ - ## VERSION_1__CHANNEL_SUBSCRIPTION__CREATE POST (GET functional)
+```
+Subscribes application user to channel.
+```
+```rust
+Request data:
+struct Incoming {
+    application_user_access_token_deserialized_form: String,
+    channel_id: i64
+}
+```
+```
+Result data: absent.
+```
+```
+Communication codes:
+- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+- CHANNEL__NOT_FOUND
+- CHANNEL__IS_PRIVATE
+```
 <br/><br/>
 
 # API for not authorized application user.

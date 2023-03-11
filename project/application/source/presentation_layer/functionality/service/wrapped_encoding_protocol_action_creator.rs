@@ -1,6 +1,8 @@
 use crate::application_layer::functionality::service::action_processing_delegator::ActionProcessingDelegator;
 use crate::application_layer::functionality::service::action_processing_delegator::ConvertibleParts;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::functionality::service::serializer::Serialize;
+use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -10,7 +12,7 @@ use extern_crate::hyper::body::to_bytes;
 use extern_crate::hyper::Request;
 use extern_crate::hyper::Response;
 use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize;
+use extern_crate::serde::Serialize as SerdeSerialize;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -23,7 +25,7 @@ use super::action_response_creator::ActionResponseCreator;
 use super::request_header_checker::RequestHeaderChecker;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use extern_crate::serde_json;
+use crate::infrastructure_layer::functionality::service::serializer::Json;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct WrappedEncodingProtocolActionCreator;
@@ -51,8 +53,8 @@ impl WrappedEncodingProtocolActionCreator {
             &'a Pool<RedisConnectionManager>
         ) -> F,
         F: Future<Output = Response<Body>>,
-        API: Serialize + for<'de> Deserialize<'de>,
-        APO: Serialize + for<'de> Deserialize<'de>
+        API: SerdeSerialize + for<'de> Deserialize<'de>,
+        APO: SerdeSerialize + for<'de> Deserialize<'de>
     {
         if !RequestHeaderChecker::is_valid(&request) {
             return ActionResponseCreator::create_bad_request();
@@ -65,7 +67,7 @@ impl WrappedEncodingProtocolActionCreator {
             }
         };
 
-        let incoming = match serde_json::from_slice::<'_, API>(bytes.chunk()) {
+        let incoming = match Serializer::<Json>::deserialize::<API>(bytes.chunk()) {
             Ok(wrapped_incoming_) => wrapped_incoming_,
             Err(_) => {
                 return ActionResponseCreator::create_internal_server_error();
@@ -96,7 +98,7 @@ impl WrappedEncodingProtocolActionCreator {
             }
         };
 
-        let data = match serde_json::to_vec(&unified_report) {
+        let data = match Serializer::<Json>::serialize(&unified_report) {
             Ok(data_) => data_,
             Err(_) => {
                 return ActionResponseCreator::create_internal_server_error();

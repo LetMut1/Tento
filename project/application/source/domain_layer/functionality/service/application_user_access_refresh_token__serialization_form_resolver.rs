@@ -2,9 +2,9 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::functionality::service::message_pack_serializer::MessagePack;
-use crate::infrastructure_layer::functionality::service::message_pack_serializer::Serialize;
-use crate::infrastructure_layer::functionality::service::message_pack_serializer::Serializer;
+use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
+use crate::infrastructure_layer::functionality::service::serializer::Serialize;
+use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use extern_crate::crypto::hmac::Hmac;
 use extern_crate::crypto::mac::Mac;
 use extern_crate::crypto::sha2::Sha512;
@@ -17,7 +17,7 @@ impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<String, ErrorAuditor> {
-        let data = match Serializer::serialize(application_user_access_refresh_token) {
+        let data = match Serializer::<MessagePack>::serialize(application_user_access_refresh_token) {
             Ok(data_) => data_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

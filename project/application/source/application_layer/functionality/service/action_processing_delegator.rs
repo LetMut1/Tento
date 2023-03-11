@@ -4,9 +4,9 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::service::message_pack_serializer::MessagePack;
-use crate::infrastructure_layer::functionality::service::message_pack_serializer::Serialize;
-use crate::infrastructure_layer::functionality::service::message_pack_serializer::Serializer;
+use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
+use crate::infrastructure_layer::functionality::service::serializer::Serialize;
+use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -21,7 +21,7 @@ use extern_crate::hyper::body::to_bytes;
 use extern_crate::hyper::Request;
 use extern_crate::hyper::Response;
 use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize;
+use extern_crate::serde::Serialize as SerdeSerialize;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -57,10 +57,10 @@ impl ActionProcessingDelegator {
             &'a Pool<RedisConnectionManager>
         ) -> F,
         F: Future<Output = Response<Body>>,
-        API: Serialize + for<'de> Deserialize<'de>,
-        APO: Serialize + for<'de> Deserialize<'de>
+        API: SerdeSerialize + for<'de> Deserialize<'de>,
+        APO: SerdeSerialize + for<'de> Deserialize<'de>
     {
-        let data = match Serializer::serialize(&incoming.action_processor_incoming) {
+        let data = match Serializer::<MessagePack>::serialize(&incoming.action_processor_incoming) {
             Ok(data_) => data_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -101,7 +101,7 @@ impl ActionProcessingDelegator {
                 }
             };
 
-            let unified_report = match Serializer::deserialize::<'_, UnifiedReport<APO>>(bytes.chunk()) {
+            let unified_report = match Serializer::<MessagePack>::deserialize::<'_, UnifiedReport<APO>>(bytes.chunk()) {
                 Ok(unified_report_) => unified_report_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -122,7 +122,7 @@ impl ActionProcessingDelegator {
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct ConvertibleParts<T>
 where
-    T: Serialize + for<'de> Deserialize<'de>
+    T: SerdeSerialize + for<'de> Deserialize<'de>
 {
     pub request: Request<Body>,
     pub action_processor_incoming: T
@@ -131,7 +131,7 @@ where
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct ActionProcessingDelegatorResult<T>
 where
-    T: Serialize + for<'de> Deserialize<'de>
+    T: SerdeSerialize + for<'de> Deserialize<'de>
 {
     pub response_parts: Parts,
     pub unified_report: Option<UnifiedReport<T>>

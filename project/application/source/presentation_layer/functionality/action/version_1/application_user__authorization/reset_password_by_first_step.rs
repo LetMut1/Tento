@@ -12,9 +12,9 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::service::message_pack_serializer::MessagePack;
-use crate::infrastructure_layer::functionality::service::message_pack_serializer::Serialize;
-use crate::infrastructure_layer::functionality::service::message_pack_serializer::Serializer;
+use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
+use crate::infrastructure_layer::functionality::service::serializer::Serialize;
+use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::presentation_layer::data::communication_code_registry::CommunicationCodeRegistry;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
 use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
@@ -97,7 +97,7 @@ where
         }
     };
 
-    let incoming = match Serializer::deserialize::<'_, Incoming>(bytes.chunk()) {
+    let incoming = match Serializer::<MessagePack>::deserialize::<'_, Incoming>(bytes.chunk()) {
         Ok(incoming_) => incoming_,
         Err(error) => {
             let response = ActionResponseCreator::create_internal_server_error();
@@ -189,7 +189,7 @@ where
             return response;
         }
         ActionProcessorResult::Outcoming { outcoming } => {
-            let data = match Serializer::serialize(&UnifiedReport::data(outcoming)) {
+            let data = match Serializer::<MessagePack>::serialize(&UnifiedReport::data(outcoming)) {
                 Ok(data_) => data_,
                 Err(error) => {
                     let response = ActionResponseCreator::create_internal_server_error();
@@ -228,7 +228,7 @@ where
         ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
             match user_workflow_precedent {
                 UserWorkflowPrecedent::ApplicationUser_NotFound => {
-                    let data = match Serializer::serialize(
+                    let data = match Serializer::<MessagePack>::serialize(
                         &UnifiedReport::<Void>::communication_code(
                             CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND
                         )
