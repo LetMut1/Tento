@@ -5,14 +5,31 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::rmp_serde;
 use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize;
+use extern_crate::serde::Serialize as SerdeSerialize;
+use std::marker::PhantomData;
 
-pub struct MessagePackSerializer;
+pub struct Serializer<T> {
+    _format: PhantomData<T>
+}
 
-impl MessagePackSerializer {
-    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>
+pub struct MessagePack;
+
+pub trait Serialize {
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>
     where
-        T: Serialize
+        T: SerdeSerialize;
+
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor>
+    where
+        T: Deserialize<'a>;
+}
+
+
+
+impl Serialize for Serializer<MessagePack> {
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>
+    where
+        T: SerdeSerialize
     {
         let data = match rmp_serde::to_vec(subject) {
             Ok(data_) => data_,
@@ -29,7 +46,7 @@ impl MessagePackSerializer {
         return Ok(data);
     }
 
-    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor>
     where
         T: Deserialize<'a>
     {

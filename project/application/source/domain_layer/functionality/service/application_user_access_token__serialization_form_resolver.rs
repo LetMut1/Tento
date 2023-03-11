@@ -7,7 +7,9 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::service::message_pack_serializer::MessagePackSerializer;
+use crate::infrastructure_layer::functionality::service::message_pack_serializer::MessagePack;
+use crate::infrastructure_layer::functionality::service::message_pack_serializer::Serialize;
+use crate::infrastructure_layer::functionality::service::message_pack_serializer::Serializer;
 use extern_crate::base64;
 use extern_crate::crypto::hmac::Hmac;
 use extern_crate::crypto::mac::Mac;
@@ -23,7 +25,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>
     ) -> Result<String, ErrorAuditor> {
-        let data = match MessagePackSerializer::serialize(application_user_access_token) {
+        let data = match Serializer::serialize(application_user_access_token) {
             Ok(data_) => data_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -68,7 +70,7 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
             }
         };
 
-        let application_user_access_token = match MessagePackSerializer::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice()) {
+        let application_user_access_token = match Serializer::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice()) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
