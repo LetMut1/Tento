@@ -9,8 +9,10 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::ChannelSubscription_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -31,7 +33,7 @@ impl ActionProcessor {
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -96,8 +98,10 @@ impl ActionProcessor {
             }
         };
 
+        let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
+
         let channel = match Channel_PostgresqlRepository::find_1(
-            &*database_1_postgresql_pooled_connection, incoming.channel_id
+            database_1_postgresql_connection, incoming.channel_id
         ).await {
             Ok(channel_) => channel_,
             Err(mut error) => {
@@ -121,60 +125,31 @@ impl ActionProcessor {
         };
 
         if channel_.get_is_private() {
-            let is_exist = match ChannelSubscription_PostgresqlRepository::is_exist(
-                &*database_1_postgresql_pooled_connection, application_user_access_token.get_application_user_id(), channel_.get_id(),
-            ).await {
-                Ok(channel_) => channel_,
-                Err(mut error) => {
-                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            // TODO Здесь нужно подписываться только по какой-нибудь ссылке, но просто так нельзя. Нужно, чтобы была ссылка для доступа.
 
-                    return Err(error);
-                }
-            };
-
-            if !is_exist
-                && application_user_access_token.get_application_user_id() != channel_.get_owner() {
-                return Ok(
-                    ArgumentResult::Ok {
-                        subject: ActionProcessorResult::UserWorkflowPrecedent {
-                            user_workflow_precedent: UserWorkflowPrecedent::Channel_IsPrivate
-                        }
+            return Ok(
+                ArgumentResult::Ok {
+                    subject: ActionProcessorResult::UserWorkflowPrecedent {
+                        user_workflow_precedent: UserWorkflowPrecedent::Channel_IsPrivate
                     }
-                );
-            }
+                }
+            );
         }
 
-        let (
-            _channel_id,
-            channel_owner,
-            channel_name,
-            channel_linked_name,
-            channel_description,
-            channel_is_private,
-            channel_orientation,
-            channel_cover_image_path,
-            channel_background_image_path,
-            channel_subscribers_quantity,
-            channel_marks_quantity,
-            channel_viewing_quantity,
-            _channel_created_at
-        ) = channel_.into_inner();
-
-        let outcoming = Outcoming {
-            channel_owner,
-            channel_name: channel_name.into_owned(),
-            channel_linked_name,
-            channel_description,
-            channel_is_private,
-            channel_orientation,
-            channel_cover_image_path,
-            channel_background_image_path,
-            channel_subscribers_quantity,
-            channel_marks_quantity,
-            channel_viewing_quantity
+        let insert = Insert {
+            application_user_id: application_user_access_token.get_application_user_id(),
+            channel_id: channel_.get_id()
         };
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
+        if let Err(mut error) = ChannelSubscription_PostgresqlRepository::create(
+            database_1_postgresql_connection, insert
+        ).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
+        }
+
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Void });
     }
 }
 
@@ -184,21 +159,4 @@ impl ActionProcessor {
 pub struct Incoming {
     application_user_access_token_deserialized_form: String,
     channel_id: i64
-}
-
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
-pub struct Outcoming {
-    pub channel_owner: i64,
-    pub channel_name: String,
-    pub channel_linked_name: String,
-    pub channel_description: Option<String>,
-    pub channel_is_private: bool,
-    pub channel_orientation: Vec<i16>,
-    pub channel_cover_image_path: Option<String>,
-    pub channel_background_image_path: Option<String>,
-    pub channel_subscribers_quantity: i64,
-    pub channel_marks_quantity: i64,
-    pub channel_viewing_quantity: i64
 }

@@ -24,6 +24,7 @@ impl HttpRouteRegistry {
     pub const VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS: &'static str = "/1/18";
     pub const VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION: &'static str = "/1/19";
     pub const VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME: &'static str = "/1/20";
+    pub const VERSION_1__CHANNEL_SUBSCRIPTION__CREATE: &'static str = "/1/21";
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
@@ -49,4 +50,5 @@ impl HttpRouteRegistry {
     pub const VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS, HttpRouteRegistry::CONCATENATING_PART);
     pub const VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION, HttpRouteRegistry::CONCATENATING_PART);
     pub const VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME, HttpRouteRegistry::CONCATENATING_PART);
+    pub const VERSION_1__CHANNEL_SUBSCRIPTION__CREATE_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE, HttpRouteRegistry::CONCATENATING_PART);
 }

@@ -13,6 +13,7 @@ use crate::presentation_layer::data::http_route_registry::HttpRouteRegistry;
 use crate::presentation_layer::functionality::action::route_not_found;
 use crate::presentation_layer::functionality::action::version_1::application_user__authorization;
 use crate::presentation_layer::functionality::action::version_1::channel__base;
+use crate::presentation_layer::functionality::action::version_1::channel_subscription__base;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -315,6 +316,11 @@ impl RunServerProcessor {
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
+            (HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE, &Method::POST) => {
+                return channel_subscription__base::create::create(
+                    environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                ).await;
+            }
             // Area for not existing routes.
             _ => {
                 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
@@ -424,6 +430,11 @@ impl RunServerProcessor {
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME_, &Method::POST) => {
                         return channel__base::get_many_public_by_name::get_many_public_by_name_(
+                            environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                        ).await;
+                    }
+                    (HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE_, &Method::POST) => {
+                        return channel_subscription__base::create::create_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }

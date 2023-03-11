@@ -1,6 +1,6 @@
 CREATE TABLE public.channel_subscription (
-    channel_id BIGINT,
     application_user_id BIGINT,
+    channel_id BIGINT,
     created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 90, autovacuum_enabled = true);
 
@@ -8,8 +8,8 @@ CREATE UNIQUE INDEX channel_subscription1 ON public.channel_subscription
 USING btree (application_user_id, channel_id ASC NULLS LAST) WITH (fillfactor = 70);
 
 ALTER TABLE ONLY public.channel_subscription
-ALTER COLUMN channel_id SET NOT NULL,
 ALTER COLUMN application_user_id SET NOT NULL,
+ALTER COLUMN channel_id SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel_subscription2 FOREIGN KEY (channel_id)
 REFERENCES public.channel (id) ON DELETE CASCADE,
