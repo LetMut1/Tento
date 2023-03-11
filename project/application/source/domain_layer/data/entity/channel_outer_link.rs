@@ -1,6 +1,11 @@
-pub struct ChannelInnerLink {
+pub struct ChannelOuterLink {
     /// application_user_id
     from: i64,
-    /// application_user_id
-    to: i64
+    alias: String,
+    adress: String,
+    created_at: String
+}
+
+impl ChannelOuterLink {
+    pub const MAXIMUM_QUANTITY: i16 = 5;
 }

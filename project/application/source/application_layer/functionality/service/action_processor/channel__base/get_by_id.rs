@@ -1,5 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink as EntityChannelInnerLink;
+use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink as EntityChannelOuterLink;
 use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -11,6 +13,7 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::ChannelSubscription_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::CommonPostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -124,7 +127,7 @@ impl ActionProcessor {
             let is_exist = match ChannelSubscription_PostgresqlRepository::is_exist(
                 &*database_1_postgresql_pooled_connection, application_user_access_token.get_application_user_id(), channel_.get_id(),
             ).await {
-                Ok(channel_) => channel_,
+                Ok(is_exist_) => is_exist_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -144,6 +147,28 @@ impl ActionProcessor {
             }
         }
 
+        let channel_inner_link_registry = match CommonPostgresqlRepository::find_4(
+            &*database_1_postgresql_pooled_connection, channel_.get_id(), EntityChannelInnerLink::MAXIMUM_QUANTITY
+        ).await {
+            Ok(channel_inner_link_registry_) => channel_inner_link_registry_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let channel_outer_link_registry = match CommonPostgresqlRepository::find_5(
+            &*database_1_postgresql_pooled_connection, channel_.get_id(), EntityChannelOuterLink::MAXIMUM_QUANTITY
+        ).await {
+            Ok(channel_outer_link_registry_) => channel_outer_link_registry_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
         let (
             _channel_id,
             channel_owner,
@@ -160,7 +185,7 @@ impl ActionProcessor {
             _channel_created_at
         ) = channel_.into_inner();
 
-        let outcoming = Outcoming {
+        let channel = Channel {
             channel_owner,
             channel_name: channel_name.into_owned(),
             channel_linked_name,
@@ -172,6 +197,12 @@ impl ActionProcessor {
             channel_subscribers_quantity,
             channel_marks_quantity,
             channel_viewing_quantity
+        };
+
+        let outcoming = Outcoming {
+            channel,
+            channel_inner_link_registry,
+            channel_outer_link_registry
         };
 
         return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
@@ -190,15 +221,39 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    pub channel_owner: i64,
-    pub channel_name: String,
-    pub channel_linked_name: String,
-    pub channel_description: Option<String>,
-    pub channel_is_private: bool,
-    pub channel_orientation: Vec<i16>,
-    pub channel_cover_image_path: Option<String>,
-    pub channel_background_image_path: Option<String>,
-    pub channel_subscribers_quantity: i64,
-    pub channel_marks_quantity: i64,
-    pub channel_viewing_quantity: i64
+    channel: Channel,
+    channel_inner_link_registry: Vec<ChannelInnerLink>,
+    channel_outer_link_registry: Vec<ChannelOuterLink>,
+}
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+struct Channel {
+    channel_owner: i64,
+    channel_name: String,
+    channel_linked_name: String,
+    channel_description: Option<String>,
+    channel_is_private: bool,
+    channel_orientation: Vec<i16>,
+    channel_cover_image_path: Option<String>,
+    channel_background_image_path: Option<String>,
+    channel_subscribers_quantity: i64,
+    channel_marks_quantity: i64,
+    channel_viewing_quantity: i64
+}
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct ChannelInnerLink {
+    pub channel_inner_link_to: i64
+}
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct ChannelOuterLink {
+    pub channel_outer_link_alias: String,
+    pub channel_outer_link_adress: String
 }

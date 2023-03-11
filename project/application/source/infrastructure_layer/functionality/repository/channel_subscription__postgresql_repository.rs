@@ -27,9 +27,9 @@ impl ChannelSubscription_PostgresqlRepository {
             RETURNING \
                 cs.created_at::TEXT AS ca;";
 
-            prepared_statemant_parameter_convertation_resolver
-                .add_parameter(&insert.application_user_id, Type::INT8)
-                .add_parameter(&insert.channel_id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&insert.application_user_id, Type::INT8)
+            .add_parameter(&insert.channel_id, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()

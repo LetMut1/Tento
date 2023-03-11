@@ -99,7 +99,14 @@ struct Incoming {
 ```
 ```rust
 Result data:
+
 struct Outcoming {
+    channel: Channel,
+    channel_inner_link_registry: Vec<ChannelInnerLink>,
+    channel_outer_link_registry: Vec<ChannelOuterLink>,
+}
+
+struct Channel {
     channel_owner: i64,
     channel_name: String,
     channel_linked_name: String,
@@ -111,6 +118,15 @@ struct Outcoming {
     channel_subscribers_quantity: i64,
     channel_marks_quantity: i64,
     channel_viewing_quantity: i64
+}
+
+struct ChannelInnerLink {
+    channel_inner_link_to: i64
+}
+
+struct ChannelOuterLink {
+    channel_outer_link_alias: String,
+    channel_outer_link_adress: String
 }
 ```
 ```

@@ -1,6 +1,8 @@
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name_in_subscriptions::Channel as GetManyByNameInSubscriptionChannel;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_subscription::Channel as GetManyBySubscriptionChannel;
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_public_by_name::Channel as GetManyPublicByNameChannel;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_by_id::ChannelInnerLink as GetByIdChannelInnerLink;
+use crate::application_layer::functionality::service::action_processor::channel__base::get_by_id::ChannelOuterLink as GetByIdChannelOuterLink;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -565,6 +567,170 @@ impl CommonPostgresqlRepository {
         }
 
         return Ok(channel_registry);
+    }
+
+    pub async fn find_4<'a>(
+        database_1_connection: &'a Connection,
+        channel_inner_link_from: i64,
+        limit: i16
+    ) -> Result<Vec<GetByIdChannelInnerLink>, ErrorAuditor> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query =
+            "SELECT \
+                cil.to_ AS t \
+            FROM public.channel_inner_link cil \
+            WHERE cil.from_ = $1 \
+            LIMIT $2";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&channel_inner_link_from, Type::INT8)
+            .add_parameter(&limit, Type::INT2);
+
+        let statement = match database_1_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let row_registry = match database_1_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let mut channel_inner_link_registry: Vec<GetByIdChannelInnerLink> = vec![];
+
+        if row_registry.is_empty() {
+            return Ok(channel_inner_link_registry);
+        }
+
+        '_a: for row in row_registry.iter() {
+            let channel_inner_link_to = match row.try_get::<'_, usize, i64>(0) {
+                Ok(channel_inner_link_to_) => channel_inner_link_to_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_inner_link = GetByIdChannelInnerLink {
+                channel_inner_link_to
+            };
+
+            channel_inner_link_registry.push(channel_inner_link);
+        }
+
+        return Ok(channel_inner_link_registry);
+    }
+
+    pub async fn find_5<'a>(
+        database_1_connection: &'a Connection,
+        channel_outer_link_from: i64,
+        limit: i16
+    ) -> Result<Vec<GetByIdChannelOuterLink>, ErrorAuditor> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query =
+            "SELECT \
+                col.alias AS al, \
+                col.adress AS ad \
+            FROM public.channel_outer_link col \
+            WHERE col.from_ = $1 \
+            LIMIT $2";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&channel_outer_link_from, Type::INT8)
+            .add_parameter(&limit, Type::INT2);
+
+        let statement = match database_1_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let row_registry = match database_1_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let mut channel_outer_link_registry: Vec<GetByIdChannelOuterLink> = vec![];
+
+        if row_registry.is_empty() {
+            return Ok(channel_outer_link_registry);
+        }
+
+        '_a: for row in row_registry.iter() {
+            let channel_outer_link_alias = match row.try_get::<'_, usize, String>(0) {
+                Ok(channel_outer_link_alias_) => channel_outer_link_alias_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_outer_link_adress = match row.try_get::<'_, usize, String>(1) {
+                Ok(channel_outer_link_adress_) => channel_outer_link_adress_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_outer_link = GetByIdChannelOuterLink {
+                channel_outer_link_alias,
+                channel_outer_link_adress
+            };
+
+            channel_outer_link_registry.push(channel_outer_link);
+        }
+
+        return Ok(channel_outer_link_registry);
     }
 
     // pub async fn request_find_x<'a>(
