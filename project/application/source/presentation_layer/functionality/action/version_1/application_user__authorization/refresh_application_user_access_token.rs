@@ -227,47 +227,6 @@ where
         }
         ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
             match user_workflow_precedent {
-                UserWorkflowPrecedent::ApplicationUserAccessToken_NotExpired => {
-                    let data = match Serializer::<MessagePack>::serialize(
-                        &UnifiedReport::<Void>::communication_code(
-                            CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__NOT_EXPIRED
-                        )
-                    ) {
-                        Ok(data_) => data_,
-                        Err(error) => {
-                            let response = ActionResponseCreator::create_internal_server_error();
-
-                            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
-                                database_2_postgresql_connection_pool, &request, &response, &error
-                            ).await {
-                                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                                unreachable!(
-                                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                                    process does not wait for another write process, and writes immediately.",
-                                    &error,
-                                    &error_
-                                );
-                            }
-
-                            return response;
-                        }
-                    };
-
-                    let response = ActionResponseCreator::create_ok(data);
-
-                    if let Err(mut error) = ActionRoundResultWriter::write(database_2_postgresql_connection_pool, &request, &response).await {
-                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                        unreachable!(
-                            "{}. TODO: Write in concurrent way. It is also necessary that the write
-                            process does not wait for another write process, and writes immediately.",
-                            &error
-                        );
-                    }
-
-                    return response;
-                }
                 UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_NotFound => {
                     let data = match Serializer::<MessagePack>::serialize(
                         &UnifiedReport::<Void>::communication_code(

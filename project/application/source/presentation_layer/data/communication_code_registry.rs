@@ -33,8 +33,7 @@ impl CommunicationCodeRegistry {
     /// Codes for Application_user_access_token context.
     /// [4000, 4999]
     pub const APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED: i64 = 4000;
-    pub const APPLICATION_USER_ACCESS_TOKEN__NOT_EXPIRED: i64 = 4001;
-    pub const APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST: i64 = 4002;
+    pub const APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST: i64 = 4001;
 
     /// Codes for Application_user_access_refresh_token context.
     /// [5000, 5999]
