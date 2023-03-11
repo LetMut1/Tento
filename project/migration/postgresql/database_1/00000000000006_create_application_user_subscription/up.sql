@@ -1,3 +1,5 @@
+SELECT 'This is a stub.';
+
 -- CREATE TABLE public.application_user_subscription (
 --     publisher_application_user_id BIGINT,
 --     subscriber_application_user_id BIGINT

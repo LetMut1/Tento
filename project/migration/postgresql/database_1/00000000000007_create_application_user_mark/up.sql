@@ -1,3 +1,5 @@
+SELECT 'This is a stub.';
+
 -- CREATE TABLE public.channel_feed_publication_mark (
 --     channel_feed_publication_id BIGINT,
 --     application_user_id BIGINT,

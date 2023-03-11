@@ -1,3 +1,5 @@
+SELECT 'This is a stub.';
+
 -- CREATE TABLE public.application_user_direct_message_publication (
 --     id BIGINT,
 --     application_user_direct_message_id BIGINT,

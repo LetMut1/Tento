@@ -1,3 +1,5 @@
+SELECT 'This is a stub.';
+
 -- CREATE TABLE public.application_user_direct_message (
 --     id BIGINT,
 --     list_of_members JSONB
