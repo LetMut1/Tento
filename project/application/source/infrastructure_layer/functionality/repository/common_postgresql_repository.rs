@@ -81,7 +81,7 @@ impl CommonPostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&application_user_id, Type::INT8)
-            .add_parameter(&channel_visability_modifier, Type::TEXT)
+            .add_parameter(&channel_visability_modifier, Type::INT2)
             .add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_channel_name_) = requery_channel_name {
