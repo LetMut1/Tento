@@ -579,7 +579,7 @@ impl Channel_PostgresqlRepository {
         channel_name: &'a str,
         requery_channel_name: &'a Option<String>,
         limit: i16
-    ) -> Result<Vec<Channel_1>, ErrorAuditor> {
+    ) -> Result<Vec<Channel1>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -671,7 +671,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let mut channel_registry: Vec<Channel_1> = vec![];
+        let mut channel_registry: Vec<Channel1> = vec![];
 
         if row_registry.is_empty() {
             return Ok(channel_registry);
@@ -738,7 +738,7 @@ impl Channel_PostgresqlRepository {
                 }
             };
 
-            let channel = Channel_1 {
+            let channel = Channel1 {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
@@ -758,7 +758,7 @@ impl Channel_PostgresqlRepository {
         channel_name: &'a str,
         requery_channel_name: &'a Option<String>,
         limit: i16
-    ) -> Result<Vec<Channel_1>, ErrorAuditor> {
+    ) -> Result<Vec<Channel1>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -865,7 +865,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let mut channel_registry: Vec<Channel_1> = vec![];
+        let mut channel_registry: Vec<Channel1> = vec![];
 
         if row_registry.is_empty() {
             return Ok(channel_registry);
@@ -932,7 +932,7 @@ impl Channel_PostgresqlRepository {
                 }
             };
 
-            let channel = Channel_1 {
+            let channel = Channel1 {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
@@ -951,7 +951,7 @@ impl Channel_PostgresqlRepository {
         application_user_id: i64,
         requery_channel_id: Option<i64>,
         limit: i16
-    ) -> Result<Vec<Channel_1>, ErrorAuditor> {
+    ) -> Result<Vec<Channel1>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -1046,7 +1046,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let mut channel_registry: Vec<Channel_1> = vec![];
+        let mut channel_registry: Vec<Channel1> = vec![];
 
         if row_registry.is_empty() {
             return Ok(channel_registry);
@@ -1113,7 +1113,7 @@ impl Channel_PostgresqlRepository {
                 }
             };
 
-            let channel = Channel_1 {
+            let channel = Channel1 {
                 channel_id,
                 channel_name,
                 channel_linked_name,
@@ -1145,7 +1145,7 @@ pub struct Insert {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
-pub struct Channel_1 {
+pub struct Channel1 {
     pub channel_id: i64,
     pub channel_name: String,
     pub channel_linked_name: String,

@@ -12,10 +12,11 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::channel_inner_link__postgresql_repository::ChannelInnerLink_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::channel_inner_link__postgresql_repository::ChannelInnerLink1;
+use crate::infrastructure_layer::functionality::repository::channel_outer_link__postgresql_repository::ChannelOuterLink_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::channel_outer_link__postgresql_repository::ChannelOuterLink1;
 use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::ChannelSubscription_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::ChannelInnerLink_1;
-use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::ChannelOuterLink_1;
-use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::CommonPostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -149,7 +150,7 @@ impl ActionProcessor {
             }
         }
 
-        let channel_inner_link_registry = match CommonPostgresqlRepository::find_XXX4(
+        let channel_inner_link_registry = match ChannelInnerLink_PostgresqlRepository::find_1(
             &*database_1_postgresql_pooled_connection, channel_.get_id(), EntityChannelInnerLink::MAXIMUM_QUANTITY
         ).await {
             Ok(channel_inner_link_registry_) => channel_inner_link_registry_,
@@ -160,7 +161,7 @@ impl ActionProcessor {
             }
         };
 
-        let channel_outer_link_registry = match CommonPostgresqlRepository::find_XXX5(
+        let channel_outer_link_registry = match ChannelOuterLink_PostgresqlRepository::find_1(
             &*database_1_postgresql_pooled_connection, channel_.get_id(), EntityChannelOuterLink::MAXIMUM_QUANTITY
         ).await {
             Ok(channel_outer_link_registry_) => channel_outer_link_registry_,
@@ -224,8 +225,8 @@ pub struct Incoming {
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     channel: Channel,
-    channel_inner_link_registry: Vec<ChannelInnerLink_1>,
-    channel_outer_link_registry: Vec<ChannelOuterLink_1>,
+    channel_inner_link_registry: Vec<ChannelInnerLink1>,
+    channel_outer_link_registry: Vec<ChannelOuterLink1>,
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]

@@ -161,10 +161,10 @@ Incoming parameters validation rule:
 ```rust
 Result data:
 struct Outcoming {
-    channel_registry: Vec<Channel>
+    channel_registry: Vec<Channel1>
 }
 
-struct Channel {
+struct Channel1 {
     channel_id: i64,
     channel_name: String,
     channel_linked_name: String,
@@ -201,10 +201,10 @@ Incoming parameters validation rule:
 ```rust
 Result data:
 struct Outcoming {
-    channel_registry: Vec<Channel>
+    channel_registry: Vec<Channel1>
 }
 
-struct Channel {
+struct Channel1 {
     channel_id: i64,
     channel_name: String,
     channel_linked_name: String,
@@ -242,10 +242,10 @@ Incoming parameters validation rule:
 ```rust
 Result data:
 struct Outcoming {
-    channel_registry: Vec<Channel>
+    channel_registry: Vec<Channel1>
 }
 
-struct Channel {
+struct Channel1 {
     channel_id: i64,
     channel_name: String,
     channel_linked_name: String,

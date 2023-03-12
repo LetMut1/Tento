@@ -7,5 +7,6 @@ pub mod application_user_registration_token__postgresql_repository;
 pub mod application_user_reset_password_token__postgresql_repository;
 pub mod channel__postgresql_repository;
 pub mod channel_inner_link__postgresql_repository;
+pub mod channel_outer_link__postgresql_repository;
 pub mod channel_subscription__postgresql_repository;
 pub mod common_postgresql_repository;

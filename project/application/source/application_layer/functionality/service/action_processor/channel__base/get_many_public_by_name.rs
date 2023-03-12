@@ -9,7 +9,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_1;
+use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel1;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
@@ -138,5 +138,5 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    channel_registry: Vec<Channel_1>
+    channel_registry: Vec<Channel1>
 }
