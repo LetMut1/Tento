@@ -149,7 +149,7 @@ impl ActionProcessor {
             }
         }
 
-        let channel_inner_link_registry = match CommonPostgresqlRepository::find_4(
+        let channel_inner_link_registry = match CommonPostgresqlRepository::find_XXX4(
             &*database_1_postgresql_pooled_connection, channel_.get_id(), EntityChannelInnerLink::MAXIMUM_QUANTITY
         ).await {
             Ok(channel_inner_link_registry_) => channel_inner_link_registry_,
@@ -160,7 +160,7 @@ impl ActionProcessor {
             }
         };
 
-        let channel_outer_link_registry = match CommonPostgresqlRepository::find_5(
+        let channel_outer_link_registry = match CommonPostgresqlRepository::find_XXX5(
             &*database_1_postgresql_pooled_connection, channel_.get_id(), EntityChannelOuterLink::MAXIMUM_QUANTITY
         ).await {
             Ok(channel_outer_link_registry_) => channel_outer_link_registry_,
