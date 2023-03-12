@@ -13,6 +13,8 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::ChannelSubscription_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::ChannelInnerLink_1;
+use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::ChannelOuterLink_1;
 use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::CommonPostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
@@ -222,8 +224,8 @@ pub struct Incoming {
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     channel: Channel,
-    channel_inner_link_registry: Vec<ChannelInnerLink>,
-    channel_outer_link_registry: Vec<ChannelOuterLink>,
+    channel_inner_link_registry: Vec<ChannelInnerLink_1>,
+    channel_outer_link_registry: Vec<ChannelOuterLink_1>,
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
@@ -241,19 +243,4 @@ struct Channel {
     channel_subscribers_quantity: i64,
     channel_marks_quantity: i64,
     channel_viewing_quantity: i64
-}
-
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
-pub struct ChannelInnerLink {
-    pub channel_inner_link_to: i64
-}
-
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
-pub struct ChannelOuterLink {
-    pub channel_outer_link_alias: String,
-    pub channel_outer_link_adress: String
 }

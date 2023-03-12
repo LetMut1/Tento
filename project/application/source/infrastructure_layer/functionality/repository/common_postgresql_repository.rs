@@ -1,8 +1,3 @@
-use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name_in_subscriptions::Channel as GetManyByNameInSubscriptionChannel;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_subscription::Channel as GetManyBySubscriptionChannel;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_many_public_by_name::Channel as GetManyPublicByNameChannel;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_one_by_id::ChannelInnerLink as GetByIdChannelInnerLink;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_one_by_id::ChannelOuterLink as GetByIdChannelOuterLink;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -10,10 +5,38 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
+use extern_crate::serde::Deserialize;
+use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 
 pub struct CommonPostgresqlRepository;
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Channel_1 {
+    pub channel_id: i64,
+    pub channel_name: String,
+    pub channel_linked_name: String,
+    pub channel_cover_image_path: Option<String>,
+    pub channel_background_image_path: Option<String>
+}
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct ChannelInnerLink_1 {
+    pub channel_inner_link_to: i64
+}
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct ChannelOuterLink_1 {
+    pub channel_outer_link_alias: String,
+    pub channel_outer_link_adress: String
+}
 
 impl CommonPostgresqlRepository {
     pub async fn find_1<'a>(
@@ -21,7 +44,7 @@ impl CommonPostgresqlRepository {
         channel_name: &'a str,
         requery_channel_name: &'a Option<String>,
         limit: i16
-    ) -> Result<Vec<GetManyPublicByNameChannel>, ErrorAuditor> {
+    ) -> Result<Vec<Channel_1>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -113,7 +136,7 @@ impl CommonPostgresqlRepository {
             }
         };
 
-        let mut channel_registry: Vec<GetManyPublicByNameChannel> = vec![];
+        let mut channel_registry: Vec<Channel_1> = vec![];
 
         if row_registry.is_empty() {
             return Ok(channel_registry);
@@ -180,7 +203,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel = GetManyPublicByNameChannel {
+            let channel = Channel_1 {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
@@ -200,7 +223,7 @@ impl CommonPostgresqlRepository {
         channel_name: &'a str,
         requery_channel_name: &'a Option<String>,
         limit: i16
-    ) -> Result<Vec<GetManyByNameInSubscriptionChannel>, ErrorAuditor> {
+    ) -> Result<Vec<Channel_1>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -307,7 +330,7 @@ impl CommonPostgresqlRepository {
             }
         };
 
-        let mut channel_registry: Vec<GetManyByNameInSubscriptionChannel> = vec![];
+        let mut channel_registry: Vec<Channel_1> = vec![];
 
         if row_registry.is_empty() {
             return Ok(channel_registry);
@@ -374,7 +397,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel = GetManyByNameInSubscriptionChannel {
+            let channel = Channel_1 {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
@@ -393,7 +416,7 @@ impl CommonPostgresqlRepository {
         application_user_id: i64,
         requery_channel_id: Option<i64>,
         limit: i16
-    ) -> Result<Vec<GetManyBySubscriptionChannel>, ErrorAuditor> {
+    ) -> Result<Vec<Channel_1>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -488,7 +511,7 @@ impl CommonPostgresqlRepository {
             }
         };
 
-        let mut channel_registry: Vec<GetManyBySubscriptionChannel> = vec![];
+        let mut channel_registry: Vec<Channel_1> = vec![];
 
         if row_registry.is_empty() {
             return Ok(channel_registry);
@@ -555,7 +578,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel = GetManyBySubscriptionChannel {
+            let channel = Channel_1 {
                 channel_id,
                 channel_name,
                 channel_linked_name,
@@ -573,7 +596,7 @@ impl CommonPostgresqlRepository {
         database_1_connection: &'a Connection,
         channel_inner_link_from: i64,
         limit: i16
-    ) -> Result<Vec<GetByIdChannelInnerLink>, ErrorAuditor> {
+    ) -> Result<Vec<ChannelInnerLink_1>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -615,7 +638,7 @@ impl CommonPostgresqlRepository {
             }
         };
 
-        let mut channel_inner_link_registry: Vec<GetByIdChannelInnerLink> = vec![];
+        let mut channel_inner_link_registry: Vec<ChannelInnerLink_1> = vec![];
 
         if row_registry.is_empty() {
             return Ok(channel_inner_link_registry);
@@ -634,7 +657,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_inner_link = GetByIdChannelInnerLink {
+            let channel_inner_link = ChannelInnerLink_1 {
                 channel_inner_link_to
             };
 
@@ -648,7 +671,7 @@ impl CommonPostgresqlRepository {
         database_1_connection: &'a Connection,
         channel_outer_link_from: i64,
         limit: i16
-    ) -> Result<Vec<GetByIdChannelOuterLink>, ErrorAuditor> {
+    ) -> Result<Vec<ChannelOuterLink_1>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -691,7 +714,7 @@ impl CommonPostgresqlRepository {
             }
         };
 
-        let mut channel_outer_link_registry: Vec<GetByIdChannelOuterLink> = vec![];
+        let mut channel_outer_link_registry: Vec<ChannelOuterLink_1> = vec![];
 
         if row_registry.is_empty() {
             return Ok(channel_outer_link_registry);
@@ -722,7 +745,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_outer_link = GetByIdChannelOuterLink {
+            let channel_outer_link = ChannelOuterLink_1 {
                 channel_outer_link_alias,
                 channel_outer_link_adress
             };

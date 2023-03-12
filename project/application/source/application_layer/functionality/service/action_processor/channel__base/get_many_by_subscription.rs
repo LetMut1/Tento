@@ -9,6 +9,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::Channel_1;
 use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::CommonPostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
@@ -134,16 +135,5 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    channel_registry: Vec<Channel>
-}
-
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
-pub struct Channel {
-    pub channel_id: i64,
-    pub channel_name: String,
-    pub channel_linked_name: String,
-    pub channel_cover_image_path: Option<String>,
-    pub channel_background_image_path: Option<String>
+    channel_registry: Vec<Channel_1>
 }
