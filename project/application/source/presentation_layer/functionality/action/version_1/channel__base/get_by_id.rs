@@ -350,10 +350,10 @@ where
 
                     return response;
                 }
-                UserWorkflowPrecedent::Channel_IsPrivate => {
+                UserWorkflowPrecedent::Channel_IsClosed => {
                     let data = match Serializer::<MessagePack>::serialize(
                         &UnifiedReport::<Void>::communication_code(
-                            CommunicationCodeRegistry::CHANNEL__IS_PRIVATE
+                            CommunicationCodeRegistry::CHANNEL__IS_CLOSED
                         )
                     ) {
                         Ok(data_) => data_,

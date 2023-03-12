@@ -1,3 +1,5 @@
+use crate::domain_layer::data::entity::channel::AccessModifier;
+use crate::domain_layer::data::entity::channel::VisabilityModifier;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
@@ -311,7 +313,8 @@ impl CreateFixturesProcessor {
                             channel_name,
                             channel_linked_name,
                             channel_description,
-                            channel_is_private: false,
+                            channel_access_modifier: AccessModifier::Open,
+                            channel_visability_modifier: VisabilityModifier::Public,
                             channel_orientation,
                             channel_cover_image_path: Some(Self::STUB.to_string()),
                             channel_background_image_path: Some(Self::STUB.to_string()),

@@ -7,7 +7,8 @@ pub struct Channel<'a> {
     name: Cow<'a, str>,
     linked_name: String,
     description: Option<String>,
-    is_private: bool,
+    access_modifier: i16,
+    visability_modifier: i16,
     orientation: Vec<i16>,
     cover_image_path: Option<String>,
     background_image_path: Option<String>,
@@ -24,7 +25,8 @@ impl<'a> Channel<'a> {
         name: Cow<'a, str>,
         linked_name: String,
         description: Option<String>,
-        is_private: bool,
+        access_modifier: i16,
+        visability_modifier: i16,
         orientation: Vec<i16>,
         cover_image_path: Option<String>,
         background_image_path: Option<String>,
@@ -39,7 +41,8 @@ impl<'a> Channel<'a> {
             name,
             linked_name,
             description,
-            is_private,
+            access_modifier,
+            visability_modifier,
             orientation,
             cover_image_path,
             background_image_path,
@@ -56,7 +59,8 @@ impl<'a> Channel<'a> {
         Cow<'a, str>,
         String,
         Option<String>,
-        bool,
+        i16,
+        i16,
         Vec<i16>,
         Option<String>,
         Option<String>,
@@ -71,7 +75,8 @@ impl<'a> Channel<'a> {
             self.name,
             self.linked_name,
             self.description,
-            self.is_private,
+            self.access_modifier,
+            self.visability_modifier,
             self.orientation,
             self.cover_image_path,
             self.background_image_path,
@@ -90,7 +95,25 @@ impl<'a> Channel<'a> {
         return self.owner;
     }
 
-    pub fn get_is_private<'b>(&'b self) -> bool {
-        return self.is_private;
+    pub fn get_access_modifier<'b>(&'b self) -> i16 {
+        return self.access_modifier;
     }
+
+    pub fn get_visability_modifier<'b>(&'b self) -> i16 {
+        return self.visability_modifier;
+    }
+}
+
+pub enum AccessModifier {
+    /// 0 in integer representation.
+    Open,
+    /// 1 in integer representation.
+    Close
+}
+
+pub enum VisabilityModifier {
+    /// 0 in integer representation.
+    Public,
+    /// 1 in integer representation.
+    Private
 }

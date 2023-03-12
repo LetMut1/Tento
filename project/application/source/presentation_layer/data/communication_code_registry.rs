@@ -7,6 +7,7 @@ impl CommunicationCodeRegistry {
     pub const APPLICATION_USER__NICKNAME_ALREADY_EXIST: i64 = 1;
     pub const APPLICATION_USER__NOT_FOUND: i64 = 2;
     pub const APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD: i64 = 3;
+    pub const APPLICATION_USER__IS_CHANNEL_OWNER: i64 = 4;
 
     /// Codes for Application_user_registration_token context.
     /// [1000, 1999]
@@ -43,5 +44,5 @@ impl CommunicationCodeRegistry {
     /// Codes for Channel context.
     /// [6000, 6999]
     pub const CHANNEL__NOT_FOUND: i64 = 6000;
-    pub const CHANNEL__IS_PRIVATE: i64 = 6001;
+    pub const CHANNEL__IS_CLOSED: i64 = 6001;
 }

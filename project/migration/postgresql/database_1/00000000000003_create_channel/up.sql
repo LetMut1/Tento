@@ -13,7 +13,8 @@ CREATE TABLE public.channel (       -- // TODO Оффет делаем как (w
     name TEXT,
     linked_name TEXT,
     description TEXT,
-    is_private BOOLEAN,
+    access_modifier SMALLINT,
+    visability_modifier SMALLINT,
     orientation SMALLINT[],
     cover_image_path TEXT,
     background_image_path TEXT,
@@ -36,7 +37,7 @@ USING btree (name COLLATE "C" ASC NULLS LAST) WITH (fillfactor = 80, deduplicate
 -- USING btree (linked_name ASC NULLS LAST) WITH (fillfactor = 80, deduplicate_items = on);
 
 CREATE INDEX channel5 ON public.channel
-USING btree (is_private ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
+USING btree (visability_modifier ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 -- CREATE INDEX channel6 ON public.channel
 -- USING btree (public.limit_channel_subscribers_quantity(subscribers_quantity) ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
@@ -50,7 +51,8 @@ ALTER COLUMN owner SET NOT NULL,
 ALTER COLUMN name SET DATA TYPE TEXT COLLATE "C",
 ALTER COLUMN name SET NOT NULL,
 ALTER COLUMN linked_name SET NOT NULL,
-ALTER COLUMN is_private SET NOT NULL,
+ALTER COLUMN access_modifier SET NOT NULL,
+ALTER COLUMN visability_modifier SET NOT NULL,
 ALTER COLUMN orientation SET NOT NULL,
 ALTER COLUMN subscribers_quantity SET NOT NULL,
 ALTER COLUMN marks_quantity SET NOT NULL,

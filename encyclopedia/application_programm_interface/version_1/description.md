@@ -42,7 +42,7 @@ struct Data<S>
 ```
 /project/application/source/presentation_layer/data/http_route_registry.rs
 ```
-- `HTTP status code` unequal to `200` (it is [`400`, `599`]) have not got `HTTP body`
+- `HTTP status code` unequal to `200` (it is [`400`, `599`]) have not got `HTTP body`.
 
 <br/><br/>
 
@@ -111,7 +111,8 @@ struct Channel {
     channel_name: String,
     channel_linked_name: String,
     channel_description: Option<String>,
-    channel_is_private: bool,
+    channel_access_modifier: i16,
+    channel_visability_modifier: i16,
     channel_orientation: Vec<i16>,
     channel_cover_image_path: Option<String>,
     channel_background_image_path: Option<String>,
@@ -134,7 +135,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 - CHANNEL__NOT_FOUND
-- CHANNEL__IS_PRIVATE
+- CHANNEL__IS_CLOSED
 ```
  - ## VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTION POST (GET functional)
 ```
@@ -168,6 +169,8 @@ struct Channel1 {
     channel_id: i64,
     channel_name: String,
     channel_linked_name: String,
+    channel_access_modifier: i16,
+    channel_visability_modifier: i16,
     channel_cover_image_path: Option<String>,
     channel_background_image_path: Option<String>
 }
@@ -208,6 +211,8 @@ struct Channel1 {
     channel_id: i64,
     channel_name: String,
     channel_linked_name: String,
+    channel_access_modifier: i16,
+    channel_visability_modifier: i16,
     channel_cover_image_path: Option<String>,
     channel_background_image_path: Option<String>
 }
@@ -249,6 +254,8 @@ struct Channel1 {
     channel_id: i64,
     channel_name: String,
     channel_linked_name: String,
+    channel_access_modifier: i16,
+    channel_visability_modifier: i16,
     channel_cover_image_path: Option<String>,
     channel_background_image_path: Option<String>
 }
@@ -274,10 +281,11 @@ Result data: absent.
 ```
 ```
 Communication codes:
+- APPLICATION_USER__IS_CHANNEL_OWNER
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+- CHANNEL__IS_CLOSED
 - CHANNEL__NOT_FOUND
-- CHANNEL__IS_PRIVATE
 ```
 <br/><br/>
 

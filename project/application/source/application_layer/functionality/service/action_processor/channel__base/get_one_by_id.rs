@@ -2,6 +2,8 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink as EntityChannelInnerLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink as EntityChannelOuterLink;
+use crate::domain_layer::data::entity::channel::AccessModifier;
+use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -126,7 +128,9 @@ impl ActionProcessor {
             }
         };
 
-        if channel_.get_is_private() {
+        let channel_access_modifier = Channel_AccessModifierResolver::to_representation(channel_.get_access_modifier());
+
+        if let AccessModifier::Close = channel_access_modifier {
             let is_exist = match ChannelSubscription_PostgresqlRepository::is_exist(
                 &*database_1_postgresql_pooled_connection, application_user_access_token.get_application_user_id(), channel_.get_id(),
             ).await {
@@ -143,7 +147,7 @@ impl ActionProcessor {
                 return Ok(
                     ArgumentResult::Ok {
                         subject: ActionProcessorResult::UserWorkflowPrecedent {
-                            user_workflow_precedent: UserWorkflowPrecedent::Channel_IsPrivate
+                            user_workflow_precedent: UserWorkflowPrecedent::Channel_IsClosed
                         }
                     }
                 );
@@ -178,7 +182,8 @@ impl ActionProcessor {
             channel_name,
             channel_linked_name,
             channel_description,
-            channel_is_private,
+            channel_access_modifier,
+            channel_visability_modifier,
             channel_orientation,
             channel_cover_image_path,
             channel_background_image_path,
@@ -193,7 +198,8 @@ impl ActionProcessor {
             channel_name: channel_name.into_owned(),
             channel_linked_name,
             channel_description,
-            channel_is_private,
+            channel_access_modifier,
+            channel_visability_modifier,
             channel_orientation,
             channel_cover_image_path,
             channel_background_image_path,
@@ -237,7 +243,8 @@ struct Channel {
     channel_name: String,
     channel_linked_name: String,
     channel_description: Option<String>,
-    channel_is_private: bool,
+    channel_access_modifier: i16,
+    channel_visability_modifier: i16,
     channel_orientation: Vec<i16>,
     channel_cover_image_path: Option<String>,
     channel_background_image_path: Option<String>,

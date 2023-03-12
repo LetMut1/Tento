@@ -15,6 +15,7 @@ where
 
 pub enum UserWorkflowPrecedent {
     ApplicationUser_EmailAlreadyExist,
+    ApplicationUser_IsChannelOwner,
     ApplicationUser_NicknameAlreadyExist,
     ApplicationUser_NotFound,
     ApplicationUser_WrongPassword,
@@ -35,6 +36,6 @@ pub enum UserWorkflowPrecedent {
     ApplicationUserResetPasswordToken_IsNotApproved,
     ApplicationUserResetPasswordToken_NotFound,
     ApplicationUserResetPasswordToken_WrongValue,
-    Channel_IsPrivate,
+    Channel_IsClosed,
     Channel_NotFound
 }

@@ -8,10 +8,12 @@ pub enum ArgumentResult<T> {
 }
 
 pub enum InvalidArgument {
+    ApplicationUser_AccessModifier,
     ApplicationUser_Email,
     ApplicationUser_Id,
     ApplicationUser_Nickname,
     ApplicationUser_Password,
+    ApplicationUser_VisabilityModifier,
     ApplicationUserAccessRefreshToken_DeserializedForm,
     ApplicationUserAccessToken_DeserializedForm,
     ApplicationUserAuthorizationToken_Value,

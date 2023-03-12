@@ -1,5 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::channel::AccessModifier;
+use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -124,13 +126,23 @@ impl ActionProcessor {
             }
         };
 
-        if channel_.get_is_private() {
-            // TODO Здесь нужно подписываться только по какой-нибудь ссылке, но просто так нельзя. Нужно, чтобы была ссылка для доступа.
-
+        if channel_.get_owner() == application_user_access_token.get_application_user_id() {
             return Ok(
                 ArgumentResult::Ok {
                     subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::Channel_IsPrivate
+                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_IsChannelOwner
+                    }
+                }
+            );
+        }
+
+        let channel_access_modifier = Channel_AccessModifierResolver::to_representation(channel_.get_access_modifier());
+
+        if let AccessModifier::Close = channel_access_modifier {
+            return Ok(
+                ArgumentResult::Ok {
+                    subject: ActionProcessorResult::UserWorkflowPrecedent {
+                        user_workflow_precedent: UserWorkflowPrecedent::Channel_IsClosed
                     }
                 }
             );

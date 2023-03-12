@@ -1,4 +1,8 @@
+use crate::domain_layer::data::entity::channel::AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel;
+use crate::domain_layer::data::entity::channel::VisabilityModifier;
+use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
+use crate::domain_layer::functionality::service::channel__visability_modifier_resolver::Channel_VisabilityModifierResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -18,6 +22,9 @@ impl Channel_PostgresqlRepository {
     pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<Channel<'static>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
+        let channel_access_modifier = Channel_AccessModifierResolver::from_representation(insert.channel_access_modifier);
+
+        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(insert.channel_visability_modifier);
         let query =
             "INSERT INTO public.channel AS c ( \
                 id, \
@@ -25,7 +32,8 @@ impl Channel_PostgresqlRepository {
                 name, \
                 linked_name, \
                 description, \
-                is_private, \
+                access_modifier, \
+                visability_modifier, \
                 orientation, \
                 cover_image_path, \
                 background_image_path, \
@@ -46,6 +54,7 @@ impl Channel_PostgresqlRepository {
                 $9, \
                 $10, \
                 $11, \
+                $12, \
                 current_timestamp(6) \
             ) \
             RETURNING \
@@ -57,7 +66,8 @@ impl Channel_PostgresqlRepository {
             .add_parameter(&insert.channel_name, Type::TEXT)
             .add_parameter(&insert.channel_linked_name, Type::TEXT)
             .add_parameter(&insert.channel_description, Type::TEXT)
-            .add_parameter(&insert.channel_is_private, Type::BOOL)
+            .add_parameter(&channel_access_modifier, Type::INT2)
+            .add_parameter(&channel_visability_modifier, Type::INT2)
             .add_parameter(&insert.channel_orientation, Type::INT2_ARRAY)
             .add_parameter(&insert.channel_cover_image_path, Type::TEXT)
             .add_parameter(&insert.channel_background_image_path, Type::TEXT)
@@ -124,7 +134,8 @@ impl Channel_PostgresqlRepository {
                 Cow::Owned(insert.channel_name),
                 insert.channel_linked_name,
                 insert.channel_description,
-                insert.channel_is_private,
+                channel_access_modifier,
+                channel_visability_modifier,
                 insert.channel_orientation,
                 insert.channel_cover_image_path,
                 insert.channel_background_image_path,
@@ -145,7 +156,8 @@ impl Channel_PostgresqlRepository {
                 c.name AS n, \
                 c.linked_name AS ln, \
                 c.description AS d, \
-                c.is_private AS ip, \
+                c.access_modifier AS am, \
+                c.visability_modifier AS vm, \
                 c.orientation AS or, \
                 c.cover_image_path AS cip, \
                 c.background_image_path AS bip, \
@@ -238,8 +250,8 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_is_private = match row_registry[0].try_get::<'_, usize, bool>(4) {
-            Ok(channel_is_private_) => channel_is_private_,
+        let channel_access_modifier = match row_registry[0].try_get::<'_, usize, i16>(4) {
+            Ok(channel_access_modifier_) => channel_access_modifier_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -250,7 +262,19 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_orientation = match row_registry[0].try_get::<'_, usize, Vec<i16>>(5) {
+        let channel_visability_modifier = match row_registry[0].try_get::<'_, usize, i16>(5) {
+            Ok(channel_visability_modifier_) => channel_visability_modifier_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let channel_orientation = match row_registry[0].try_get::<'_, usize, Vec<i16>>(6) {
             Ok(channel_orientation_) => channel_orientation_,
             Err(error) => {
                 return Err(
@@ -262,7 +286,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(6) {
+        let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7) {
             Ok(channel_cover_image_path_) => channel_cover_image_path_,
             Err(error) => {
                 return Err(
@@ -274,7 +298,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7) {
+        let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8) {
             Ok(channel_background_image_path_) => channel_background_image_path_,
             Err(error) => {
                 return Err(
@@ -286,7 +310,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_subscribers_quantity = match row_registry[0].try_get::<'_, usize, i64>(8) {
+        let channel_subscribers_quantity = match row_registry[0].try_get::<'_, usize, i64>(9) {
             Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
             Err(error) => {
                 return Err(
@@ -298,7 +322,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_marks_quantity = match row_registry[0].try_get::<'_, usize, i64>(9) {
+        let channel_marks_quantity = match row_registry[0].try_get::<'_, usize, i64>(10) {
             Ok(channel_marks_quantity_) => channel_marks_quantity_,
             Err(error) => {
                 return Err(
@@ -310,7 +334,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_viewing_quantity = match row_registry[0].try_get::<'_, usize, i64>(10) {
+        let channel_viewing_quantity = match row_registry[0].try_get::<'_, usize, i64>(11) {
             Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
             Err(error) => {
                 return Err(
@@ -322,7 +346,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(11) {
+        let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(12) {
             Ok(channel_created_at_) => channel_created_at_,
             Err(error) => {
                 return Err(
@@ -342,7 +366,8 @@ impl Channel_PostgresqlRepository {
                     Cow::Owned(channel_name),
                     channel_linked_name,
                     channel_description,
-                    channel_is_private,
+                    channel_access_modifier,
+                    channel_visability_modifier,
                     channel_orientation,
                     channel_cover_image_path,
                     channel_background_image_path,
@@ -364,7 +389,8 @@ impl Channel_PostgresqlRepository {
                 c.owner AS ow, \
                 c.linked_name AS ln, \
                 c.description AS d, \
-                c.is_private AS ip, \
+                c.access_modifier AS am, \
+                c.visability_modifier AS vm, \
                 c.orientation AS or, \
                 c.cover_image_path AS cip, \
                 c.background_image_path AS bip, \
@@ -457,8 +483,8 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_is_private = match row_registry[0].try_get::<'_, usize, bool>(4) {
-            Ok(channel_is_private_) => channel_is_private_,
+        let channel_access_modifier = match row_registry[0].try_get::<'_, usize, i16>(4) {
+            Ok(channel_access_modifier_) => channel_access_modifier_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -469,7 +495,19 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_orientation = match row_registry[0].try_get::<'_, usize, Vec<i16>>(5) {
+        let channel_visability_modifier = match row_registry[0].try_get::<'_, usize, i16>(5) {
+            Ok(channel_visability_modifier_) => channel_visability_modifier_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let channel_orientation = match row_registry[0].try_get::<'_, usize, Vec<i16>>(6) {
             Ok(channel_orientation_) => channel_orientation_,
             Err(error) => {
                 return Err(
@@ -481,7 +519,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(6) {
+        let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7) {
             Ok(channel_cover_image_path_) => channel_cover_image_path_,
             Err(error) => {
                 return Err(
@@ -493,7 +531,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7) {
+        let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8) {
             Ok(channel_background_image_path_) => channel_background_image_path_,
             Err(error) => {
                 return Err(
@@ -505,7 +543,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_subscribers_quantity = match row_registry[0].try_get::<'_, usize, i64>(8) {
+        let channel_subscribers_quantity = match row_registry[0].try_get::<'_, usize, i64>(9) {
             Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
             Err(error) => {
                 return Err(
@@ -517,7 +555,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_marks_quantity = match row_registry[0].try_get::<'_, usize, i64>(9) {
+        let channel_marks_quantity = match row_registry[0].try_get::<'_, usize, i64>(10) {
             Ok(channel_marks_quantity_) => channel_marks_quantity_,
             Err(error) => {
                 return Err(
@@ -529,7 +567,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_viewing_quantity = match row_registry[0].try_get::<'_, usize, i64>(10) {
+        let channel_viewing_quantity = match row_registry[0].try_get::<'_, usize, i64>(11) {
             Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
             Err(error) => {
                 return Err(
@@ -541,7 +579,7 @@ impl Channel_PostgresqlRepository {
             }
         };
 
-        let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(11) {
+        let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(12) {
             Ok(channel_created_at_) => channel_created_at_,
             Err(error) => {
                 return Err(
@@ -561,7 +599,8 @@ impl Channel_PostgresqlRepository {
                     Cow::Borrowed(channel_name),
                     channel_linked_name,
                     channel_description,
-                    channel_is_private,
+                    channel_access_modifier,
+                    channel_visability_modifier,
                     channel_orientation,
                     channel_cover_image_path,
                     channel_background_image_path,
@@ -593,21 +632,38 @@ impl Channel_PostgresqlRepository {
             }
         };
 
+        let counter_value_1 = counter_value;
+
+        counter_value = match counter.get_next_value() {
+            Ok(counter_value_) => counter_value_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(VisabilityModifier::Public);
+
         let mut query = format!(
             "SELECT \
                 c.id AS i, \
                 c.name AS n, \
                 c.linked_name AS ln, \
+                c.access_modifier AS am, \
                 c.cover_image_path AS cip, \
                 c.background_image_path AS bip \
             FROM public.channel c \
-            WHERE c.is_private = FALSE AND c.name LIKE ${}",
+            WHERE c.visability_modifier = ${} AND c.name LIKE ${}",
+            counter_value_1,
             counter_value
         );
 
         let wildcard = format!("{}%", channel_name);
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&wildcard, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&channel_visability_modifier, Type::TEXT)
+            .add_parameter(&wildcard, Type::TEXT);
 
         if let Some(requery_channel_name_) = requery_channel_name {
             counter_value = match counter.get_next_value() {
@@ -714,7 +770,19 @@ impl Channel_PostgresqlRepository {
                 }
             };
 
-            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+            let channel_access_modifier = match row.try_get::<'_, usize, i16>(3) {
+                Ok(channel_access_modifier_) => channel_access_modifier_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(4) {
                 Ok(channel_cover_image_path_) => channel_cover_image_path_,
                 Err(error) => {
                     return Err(
@@ -726,7 +794,7 @@ impl Channel_PostgresqlRepository {
                 }
             };
 
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(4) {
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
                 Ok(channel_background_image_path_) => channel_background_image_path_,
                 Err(error) => {
                     return Err(
@@ -742,6 +810,8 @@ impl Channel_PostgresqlRepository {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
+                channel_access_modifier,
+                channel_visability_modifier,
                 channel_cover_image_path,
                 channel_background_image_path,
             };
@@ -788,6 +858,8 @@ impl Channel_PostgresqlRepository {
                 c.id AS i, \
                 c.name AS n, \
                 c.linked_name AS ln, \
+                c.access_modifier AS am, \
+                c.visability_modifier AS vm, \
                 c.cover_image_path AS cip, \
                 c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
@@ -908,7 +980,31 @@ impl Channel_PostgresqlRepository {
                 }
             };
 
-            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+            let channel_access_modifier = match row.try_get::<'_, usize, i16>(3) {
+                Ok(channel_access_modifier_) => channel_access_modifier_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_visability_modifier = match row.try_get::<'_, usize, i16>(4) {
+                Ok(channel_visability_modifier_) => channel_visability_modifier_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
                 Ok(channel_cover_image_path_) => channel_cover_image_path_,
                 Err(error) => {
                     return Err(
@@ -920,7 +1016,7 @@ impl Channel_PostgresqlRepository {
                 }
             };
 
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(4) {
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6) {
                 Ok(channel_background_image_path_) => channel_background_image_path_,
                 Err(error) => {
                     return Err(
@@ -936,6 +1032,8 @@ impl Channel_PostgresqlRepository {
                 channel_id,
                 channel_name: channel_name_,
                 channel_linked_name,
+                channel_access_modifier,
+                channel_visability_modifier,
                 channel_cover_image_path,
                 channel_background_image_path,
             };
@@ -970,6 +1068,8 @@ impl Channel_PostgresqlRepository {
                 c.id AS i, \
                 c.name AS n, \
                 c.linked_name AS ln, \
+                c.access_modifier AS am, \
+                c.visability_modifier AS vm, \
                 c.cover_image_path AS cip, \
                 c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
@@ -1089,7 +1189,31 @@ impl Channel_PostgresqlRepository {
                 }
             };
 
-            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(3) {
+            let channel_access_modifier = match row.try_get::<'_, usize, i16>(3) {
+                Ok(channel_access_modifier_) => channel_access_modifier_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_visability_modifier = match row.try_get::<'_, usize, i16>(4) {
+                Ok(channel_visability_modifier_) => channel_visability_modifier_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
+
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
                 Ok(channel_cover_image_path_) => channel_cover_image_path_,
                 Err(error) => {
                     return Err(
@@ -1101,7 +1225,7 @@ impl Channel_PostgresqlRepository {
                 }
             };
 
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(4) {
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6) {
                 Ok(channel_background_image_path_) => channel_background_image_path_,
                 Err(error) => {
                     return Err(
@@ -1117,6 +1241,8 @@ impl Channel_PostgresqlRepository {
                 channel_id,
                 channel_name,
                 channel_linked_name,
+                channel_access_modifier,
+                channel_visability_modifier,
                 channel_cover_image_path,
                 channel_background_image_path,
             };
@@ -1133,7 +1259,8 @@ pub struct Insert {
     pub channel_name: String,
     pub channel_linked_name: String,
     pub channel_description: Option<String>,
-    pub channel_is_private: bool,
+    pub channel_access_modifier: AccessModifier,
+    pub channel_visability_modifier: VisabilityModifier,
     pub channel_orientation: Vec<i16>,
     pub channel_cover_image_path: Option<String>,
     pub channel_background_image_path: Option<String>,
@@ -1149,6 +1276,8 @@ pub struct Channel1 {
     pub channel_id: i64,
     pub channel_name: String,
     pub channel_linked_name: String,
+    pub channel_access_modifier: i16,
+    pub channel_visability_modifier: i16,
     pub channel_cover_image_path: Option<String>,
     pub channel_background_image_path: Option<String>
 }

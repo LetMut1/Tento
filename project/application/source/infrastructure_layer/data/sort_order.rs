@@ -1,6 +1,3 @@
-use super::argument_result::ArgumentResult;
-use super::argument_result::InvalidArgument;
-
 pub enum SortOrder {
     Asc,
     Desc
@@ -12,16 +9,12 @@ impl SortOrder {
     const ASC: &'static str = "ASC";
     const DESC: &'static str = "DESC";
 
-    pub fn new(sort_order_representation: i8) -> ArgumentResult<Self> {
-        if sort_order_representation == Self::ASC_REPRESENTATION {
-            return ArgumentResult::Ok { subject: SortOrder::Asc };
+    pub fn new(sort_order_representation: i8) -> Self {
+        return match sort_order_representation {
+            Self::ASC_REPRESENTATION => SortOrder::Asc,
+            Self::DESC_REPRESENTATION => SortOrder::Desc,
+            _ => SortOrder::Asc
         }
-
-        if sort_order_representation == Self::DESC_REPRESENTATION {
-            return ArgumentResult::Ok { subject: SortOrder::Desc };
-        }
-
-        return ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::SortOrderRepresentation };
     }
 
     pub fn convert(self) -> &'static str {

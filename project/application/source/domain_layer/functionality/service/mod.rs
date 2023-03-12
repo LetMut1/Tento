@@ -21,4 +21,6 @@ pub mod application_user_reset_password_token__expiration_time_resolver;
 pub mod application_user_reset_password_token__validator;
 pub mod application_user_reset_password_token__value_generator;
 pub mod application_user_reset_password_token__wrong_enter_tries_quantity_incrementor;
+pub mod channel__access_modifier_resolver;
 pub mod channel__validator;
+pub mod channel__visability_modifier_resolver;

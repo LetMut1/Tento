@@ -86,10 +86,12 @@ impl Display<ErrorAuditor> for Displayer {
 impl Display<InvalidArgument> for Displayer {
     fn display<'a>(subject: &'a InvalidArgument) -> String {
         let message_part = match *subject {
+            InvalidArgument::ApplicationUser_AccessModifier => "AccessModifier",
             InvalidArgument::ApplicationUser_Email => "ApplicationUser_Email",
             InvalidArgument::ApplicationUser_Id => "ApplicationUser_Id",
             InvalidArgument::ApplicationUser_Nickname => "ApplicationUser_Nickname",
             InvalidArgument::ApplicationUser_Password => "ApplicationUser_Password",
+            InvalidArgument::ApplicationUser_VisabilityModifier => "VisabilityModifier",
             InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm => "ApplicationUserAccessRefreshToken_DeserializedForm",
             InvalidArgument::ApplicationUserAccessToken_DeserializedForm => "ApplicationUserAccessToken_DeserializedForm",
             InvalidArgument::ApplicationUserAuthorizationToken_Value => "ApplicationUserAuthorizationToken_Value",
