@@ -162,7 +162,12 @@ Incoming parameters validation rule:
 ```rust
 Result data:
 struct Outcoming {
-    channel_registry: Vec<Channel1>
+    common_registry: Vec<Common1>
+}
+
+struct Common1 {
+    channel: Channel1,
+    is_application_user_subscribed: bool
 }
 
 struct Channel1 {
@@ -204,7 +209,12 @@ Incoming parameters validation rule:
 ```rust
 Result data:
 struct Outcoming {
-    channel_registry: Vec<Channel1>
+    common_registry: Vec<Common1>
+}
+
+struct Common1 {
+    channel: Channel1,
+    is_application_user_subscribed: bool
 }
 
 struct Channel1 {
@@ -247,7 +257,12 @@ Incoming parameters validation rule:
 ```rust
 Result data:
 struct Outcoming {
-    channel_registry: Vec<Channel1>
+    common_registry: Vec<Common1>
+}
+
+struct Common1 {
+    channel: Channel1,
+    is_application_user_subscribed: bool
 }
 
 struct Channel1 {

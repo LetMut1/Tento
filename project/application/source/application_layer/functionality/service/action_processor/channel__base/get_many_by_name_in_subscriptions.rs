@@ -9,8 +9,8 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel1;
-use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::Common1;
+use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::CommonPostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -108,7 +108,7 @@ impl ActionProcessor {
             }
         };
 
-        let channel_registry = match Channel_PostgresqlRepository::find_4(
+        let common_registry = match CommonPostgresqlRepository::find_4(
             &*database_1_postgresql_pooled_connection,
             application_user_access_token.get_application_user_id(),
             incoming.channel_name.as_str(),
@@ -123,7 +123,7 @@ impl ActionProcessor {
             }
         };
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { channel_registry } } });
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { common_registry } } });
     }
 }
 
@@ -141,5 +141,5 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    channel_registry: Vec<Channel1>
+    common_registry: Vec<Common1>
 }
