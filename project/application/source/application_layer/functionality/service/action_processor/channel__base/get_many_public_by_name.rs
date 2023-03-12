@@ -108,7 +108,7 @@ impl ActionProcessor {
             }
         };
 
-        let common_registry = match CommonPostgresqlRepository::find_3(
+        let common_registry = match CommonPostgresqlRepository::find_1(
             &*database_1_postgresql_pooled_connection,
             application_user_access_token.get_application_user_id(),
             incoming.channel_name.as_str(),

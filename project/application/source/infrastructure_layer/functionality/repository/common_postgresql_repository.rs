@@ -16,7 +16,7 @@ use extern_crate::tokio_postgres::types::Type;
 pub struct CommonPostgresqlRepository;
 
 impl CommonPostgresqlRepository {
-    pub async fn find_3<'a>(
+    pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         application_user_id: i64,
         channel_name: &'a str,
@@ -225,19 +225,7 @@ impl CommonPostgresqlRepository {
                 }
             };
 
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6) {
-                Ok(channel_background_image_path_) => channel_background_image_path_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
-
-            let channel_id_ = match row.try_get::<'_, usize, Option<i64>>(7) {
+            let channel_id_ = match row.try_get::<'_, usize, Option<i64>>(6) {
                 Ok(channel_id_) => channel_id_,
                 Err(error) => {
                     return Err(
@@ -275,7 +263,7 @@ impl CommonPostgresqlRepository {
         return Ok(common_registry);
     }
 
-    pub async fn find_4<'a>(
+    pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
         application_user_id: i64,
         channel_name: &'a str,
@@ -502,7 +490,7 @@ impl CommonPostgresqlRepository {
         return Ok(common_registry);
     }
 
-    pub async fn find_5<'a>(
+    pub async fn find_3<'a>(
         database_1_connection: &'a Connection,
         application_user_id: i64,
         requery_channel_id: Option<i64>,
