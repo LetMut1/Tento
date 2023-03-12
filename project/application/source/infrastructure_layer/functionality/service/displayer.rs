@@ -68,7 +68,7 @@ impl Display<ErrorAuditor> for Displayer {
                                 }
                             }
                             ResourceError::PostgresqlError { ref postgresql_error } => {
-                                format!("Error, runtime, resource,  Postgresql : {}.", postgresql_error)
+                                format!("Error, runtime, resource, Postgresql : {}.", postgresql_error)
                             }
                             ResourceError::RedisError { ref redis_error } => {
                                 format!("Error, runtime, resource, Redis : {}.", redis_error)
