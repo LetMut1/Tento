@@ -64,6 +64,7 @@ impl ActionProcessor {
                 );
             }
         };
+
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         let is_valid_email = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email_or_application_user_nickname.as_str()) {
@@ -127,6 +128,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid {
             return Ok(
                 ArgumentResult::Ok {
@@ -160,6 +162,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let application_user_authorization_token_ = match application_user_authorization_token {
             Some(mut application_user_authorization_token__) => {
                 if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token__) {
@@ -188,16 +191,18 @@ impl ActionProcessor {
                     application_user_authorization_token_wrong_enter_tries_quantity: 0
                 };
 
-                match ApplicationUserAuthorizationToken_PostgresqlRepository::create(
+                let application_user_authorization_token__ = match ApplicationUserAuthorizationToken_PostgresqlRepository::create(
                     database_2_postgresql_connection, insert
                 ).await {
-                    Ok(application_user_authorization_token__) => application_user_authorization_token__,
+                    Ok(application_user_authorization_token___) => application_user_authorization_token___,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         return Err(error);
                     }
-                }
+                };
+
+                application_user_authorization_token__
             }
         };
 

@@ -16,6 +16,7 @@ impl CommunicationCodeRegistry {
     pub const APPLICATION_USER_REGISTRATION_TOKEN__IS_NOT_APPROVED: i64 = 1002;
     pub const APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED: i64 = 1003;
     pub const APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED: i64 = 1004;
+    pub const APPLICATION_USER_REGISTRATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME: i64 = 1005;
 
     /// Codes for Application_user_authorization_token context.
     /// [2000, 2999]

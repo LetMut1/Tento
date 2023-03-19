@@ -21,7 +21,7 @@
 - content-length: ...
 ```
  - The permanent general structure of the each response with `HTTP status code` equal to `200` looks like:
-```rust
+```
 struct UnifiedReport<S>
 {
     data: Option<Data<S>>,
@@ -54,7 +54,7 @@ struct Data<S>
 ```
 Deauthorizes application user from one device.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_access_token_deserialized_form: String
@@ -72,7 +72,7 @@ Communication codes:
 ```
 Deauthorizes application user from all devices.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_access_token_deserialized_form: String
@@ -90,14 +90,14 @@ Communication codes:
 ```
 Returns channel data by id.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_access_token_deserialized_form: String,
     channel_id: i64
 }
 ```
-```rust
+```
 Result data:
 
 struct Outcoming {
@@ -141,7 +141,7 @@ Communication codes:
 ```
 Returns channels the user is subscribed to by name.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_access_token_deserialized_form: String,
@@ -149,8 +149,8 @@ struct Incoming {
     requery_channel_name: Option<String>,
     limit: i16
 }
-```
-```
+
+
 requery_channel_name - an alternative for offset. Used only for requering with persistent channel_name. The value must be equal to the last channel_name of channel registry in received early response.
 
 Incoming parameters validation rule:
@@ -159,7 +159,7 @@ Incoming parameters validation rule:
 - limit:
     -- [1, 100] values.
 ```
-```rust
+```
 Result data:
 struct Outcoming {
     common_registry: Vec<Common1>
@@ -189,15 +189,15 @@ Communication codes:
 ```
 Returns channels the user is subscribed to.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_access_token_deserialized_form: String,
     requery_channel_id: Option<i64>,
     limit: i16
 }
-```
-```
+
+
 requery_channel_id - an alternative for offset. The value must be equal to the last channel_id of channel registry in received early response.
 
 Incoming parameters validation rule:
@@ -206,7 +206,7 @@ Incoming parameters validation rule:
 - limit:
     -- [1, 100] values.
 ```
-```rust
+```
 Result data:
 struct Outcoming {
     common_registry: Vec<Common1>
@@ -236,7 +236,7 @@ Communication codes:
 ```
 Returns public channels by name.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_access_token_deserialized_form: String,
@@ -244,8 +244,8 @@ struct Incoming {
     requery_channel_name: Option<String>,
     limit: i16
 }
-```
-```
+
+
 requery_channel_name - an alternative for offset. Used only for requering with persistent channel_name. The value must be equal to the last channel_name of channel registry in received early response.
 
 Incoming parameters validation rule:
@@ -254,7 +254,7 @@ Incoming parameters validation rule:
 - limit:
     -- [1, 100] values.
 ```
-```rust
+```
 Result data:
 struct Outcoming {
     common_registry: Vec<Common1>
@@ -284,7 +284,7 @@ Communication codes:
 ```
 Subscribes application user to channel.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_access_token_deserialized_form: String,
@@ -309,13 +309,13 @@ Communication codes:
 ```
 Checks application user email for existing.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_email: String
 }
 ```
-```rust
+```
 Result data:
 struct Outcoming {
     result: bool
@@ -328,13 +328,13 @@ Communication codes: absent.
 ```
 Checks application user nickname for existing.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_nickname: String
 }
 ```
-```rust
+```
 Result data:
 struct Outcoming {
     result: bool
@@ -347,7 +347,7 @@ Communication codes: absent.
 ```
 Registers application user for the first step and sends email to user.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_email: String,
@@ -355,7 +355,17 @@ struct Incoming {
 }
 ```
 ```
-Result data: absent.
+Result data:
+struct Outcoming {
+    verification_message_sent: bool,
+    can_be_resent_from: i64
+}
+
+
+verification_message_sent - determines if a verification message has been sent. The value will be false only if the request was retried
+with unchanged parameters without waiting a certain amount of time.
+
+can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
@@ -365,7 +375,7 @@ Communication codes:
 ```
 Registers application user for the second step through token value approving.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_email: String,
@@ -388,7 +398,7 @@ Communication codes:
 ```
 Registers application user for the last step.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_device_id: String,
@@ -398,7 +408,7 @@ struct Incoming {
     application_user_registration_token_value: String
 }
 ```
-```rust
+```
 Result data:
 struct Outcoming {
     application_user_access_token_deserialized_form: String,
@@ -418,7 +428,7 @@ Communication codes:
 ```
 Sends email for register. (Should be used only if the user does not receive an email.)
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_email: String,
@@ -426,19 +436,26 @@ struct Incoming {
 }
 ```
 ```
-Result data: absent.
+Result data:
+struct Outcoming {
+    can_be_resent_from: i64
+}
+
+
+can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
 - APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_REGISTRATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
 ```
  - ## VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP POST
 ```
 Authorizes application user for the firs step and send email to user.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_device_id: String,
@@ -446,7 +463,7 @@ struct Incoming {
     application_user_password: String
 }
 ```
-```rust
+```
 Result data:
 struct Outcoming {
     application_user_id: i64
@@ -460,7 +477,7 @@ Communication codes:
 ```
 Authorizes application user for the last step.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_id: i64,
@@ -468,7 +485,7 @@ struct Incoming {
     application_user_authorization_token_value: String
 }
 ```
-```rust
+```
 Result data:
 struct Outcoming {
     application_user_access_token_deserialized_form: String,
@@ -486,7 +503,7 @@ Communication codes:
 ```
 Sends email for authorization. (Should be used only if the user does not receive an email.)
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_device_id: String,
@@ -506,14 +523,14 @@ Communication codes:
 ```
 Resets application user password for the first step and send email to user.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_email: String,
     application_user_device_id: String
 }
 ```
-```rust
+```
 Result data:
 struct Outcoming {
     application_user_id: i64
@@ -527,7 +544,7 @@ Communication codes:
 ```
 Resets application user password for the second step through token value approving.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_id: i64,
@@ -549,7 +566,7 @@ Communication codes:
 ```
 Resets application user password for the last step.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_device_id: String,
@@ -573,7 +590,7 @@ Communication codes:
 ```
 Sends email for reset password.  (Should be used only if the user does not receive an email.)
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_id: i64,
@@ -594,14 +611,14 @@ Communication codes:
 ```
 Refreshs application user access token.
 ```
-```rust
+```
 Request data:
 struct Incoming {
     application_user_access_token_deserialized_form: String,
     application_user_access_refresh_token_deserialized_form: String
 }
 ```
-```rust
+```
 Result data:
 struct Outcoming {
     application_user_access_token_deserialized_form: String,

@@ -3,6 +3,7 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_registration_token__sending_opportunity_resolver::ApplicationUserRegistrationToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::application_user_registration_token__value_generator::ApplicationUserRegistrationToken_ValueGenerator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -12,7 +13,6 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::ApplicationUserRegistrationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::Insert;
@@ -40,7 +40,7 @@ impl ActionProcessor {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
+    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -120,19 +120,41 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
-        let application_user_registration_token_ = match application_user_registration_token {
+
+        let (application_user_registration_token_, can_send) = match application_user_registration_token {
             Some(mut application_user_registration_token__) => {
+                let mut update = Update {
+                    application_user_registration_token_expires_at: false,
+                    application_user_registration_token_can_be_resent_from: false
+                };
+
+                let (can_send_, mut need_to_update) = if ApplicationUserRegistrationToken_SendingOpportunityResolver::can_send(
+                    &application_user_registration_token__
+                ) {
+                    update.application_user_registration_token_can_be_resent_from = true;
+
+                    (true, true)
+                } else {
+                    (false, false)
+                };
+
                 if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token__)
                     || application_user_registration_token__.get_is_approved() {
+                    need_to_update = true;
+
+                    update.application_user_registration_token_expires_at = true;
+
                     application_user_registration_token__
                         .set_value(ApplicationUserRegistrationToken_ValueGenerator::generate())
                         .set_wrong_enter_tries_quantity(0)
                         .set_is_approved(false);
+                }
 
+                if need_to_update {
                     if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
                         database_2_postgresql_connection,
                         &mut application_user_registration_token__,
-                        Update { application_user_registration_token_expires_at: true }
+                        update
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -140,7 +162,7 @@ impl ActionProcessor {
                     }
                 }
 
-                application_user_registration_token__
+                (application_user_registration_token__, can_send_)
             }
             None => {
                 let insert = Insert {
@@ -151,31 +173,40 @@ impl ActionProcessor {
                     application_user_registration_token_is_approved: false
                 };
 
-                match ApplicationUserRegistrationToken_PostgresqlRepository::create(
+                let application_user_registration_token__ = match ApplicationUserRegistrationToken_PostgresqlRepository::create(
                     database_2_postgresql_connection, insert
                 ).await {
-                    Ok(application_user_registration_token__) => application_user_registration_token__,
+                    Ok(application_user_registration_token___) => application_user_registration_token___,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         return Err(error);
                     }
-                }
+                };
+
+                (application_user_registration_token__, true)
             }
         };
 
-        if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_token(
-            environment_configuration,
-            application_user_registration_token_.get_value(),
-            application_user_registration_token_.get_application_user_email(),
-            application_user_registration_token_.get_application_user_device_id()
-        ) {
-            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        if can_send {
+            if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_token(
+                environment_configuration,
+                application_user_registration_token_.get_value(),
+                application_user_registration_token_.get_application_user_email(),
+                application_user_registration_token_.get_application_user_device_id()
+            ) {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-            return Err(error);
+                return Err(error);
+            }
         }
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Void });
+        let outcoming = Outcoming {
+            verification_message_sent: can_send,
+            can_be_resent_from: application_user_registration_token_.get_can_be_resent_from()
+        };
+
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
     }
 }
 
@@ -185,4 +216,12 @@ impl ActionProcessor {
 pub struct Incoming {
     application_user_email: String,
     application_user_device_id: String
+}
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Outcoming {
+    verification_message_sent: bool,
+    can_be_resent_from: i64
 }

@@ -35,6 +35,8 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_register::Outcoming;
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
 pub async fn send_email_for_register<'a, T>(
@@ -164,7 +166,30 @@ where
 
     match action_processor_result_ {
         ActionProcessorResult::Void => {
-            let data = match Serializer::<MessagePack>::serialize(&UnifiedReport::<Void>::empty()) {
+            let error = ErrorAuditor::new(
+                BaseError::LogicError { message: "Unreachable state." },
+                BacktracePart::new(line!(), file!(), None)
+            );
+
+            let response = ActionResponseCreator::create_not_extended();
+
+            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                database_2_postgresql_connection_pool, &request, &response, &error
+            ).await {
+                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                unreachable!(
+                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                    process does not wait for another write process, and writes immediately.",
+                    &error,
+                    &error_
+                );
+            }
+
+            return response;
+        }
+        ActionProcessorResult::Outcoming { outcoming } => {
+            let data = match Serializer::<MessagePack>::serialize(&UnifiedReport::data(outcoming)) {
                 Ok(data_) => data_,
                 Err(error) => {
                     let response = ActionResponseCreator::create_internal_server_error();
@@ -195,29 +220,6 @@ where
                     "{}. TODO: Write in concurrent way. It is also necessary that the write
                     process does not wait for another write process, and writes immediately.",
                     &error
-                );
-            }
-
-            return response;
-        }
-        ActionProcessorResult::Outcoming { outcoming: _ } => {
-            let error = ErrorAuditor::new(
-                BaseError::LogicError { message: "Unreachable state." },
-                BacktracePart::new(line!(), file!(), None)
-            );
-
-            let response = ActionResponseCreator::create_not_extended();
-
-            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
-                database_2_postgresql_connection_pool, &request, &response, &error
-            ).await {
-                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                unreachable!(
-                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                    process does not wait for another write process, and writes immediately.",
-                    &error,
-                    &error_
                 );
             }
 
@@ -348,6 +350,47 @@ where
 
                     return response;
                 }
+                UserWorkflowPrecedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome => {
+                    let data = match Serializer::<MessagePack>::serialize(
+                        &UnifiedReport::<Void>::communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
+                        )
+                    ) {
+                        Ok(data_) => data_,
+                        Err(error) => {
+                            let response = ActionResponseCreator::create_internal_server_error();
+
+                            if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                                database_2_postgresql_connection_pool, &request, &response, &error
+                            ).await {
+                                error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                                unreachable!(
+                                    "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                                    process does not wait for another write process, and writes immediately.",
+                                    &error,
+                                    &error_
+                                );
+                            }
+
+                            return response;
+                        }
+                    };
+
+                    let response = ActionResponseCreator::create_ok(data);
+
+                    if let Err(mut error) = ActionRoundResultWriter::write(database_2_postgresql_connection_pool, &request, &response).await {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        unreachable!(
+                            "{}. TODO: Write in concurrent way. It is also necessary that the write
+                            process does not wait for another write process, and writes immediately.",
+                            &error
+                        );
+                    }
+
+                    return response;
+                }
                 _ => {
                     let error = ErrorAuditor::new(
                         BaseError::LogicError { message: "Unreachable state." },
@@ -390,7 +433,7 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
-    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Void>(
+    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
         environment_configuration,
         request,
         database_1_postgresql_connection_pool,

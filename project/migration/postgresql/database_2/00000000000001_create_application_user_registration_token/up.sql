@@ -4,7 +4,8 @@ CREATE TABLE public.application_user_registration_token (
     value TEXT,
     wrong_enter_tries_quantity SMALLINT,
     is_approved BOOLEAN,
-    expires_at BIGINT
+    expires_at BIGINT,
+    can_be_resent_from BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE UNIQUE INDEX application_user_registration_token1 ON public.application_user_registration_token
@@ -19,4 +20,5 @@ ALTER COLUMN value SET NOT NULL,
 ALTER COLUMN wrong_enter_tries_quantity SET NOT NULL,
 ALTER COLUMN is_approved SET NOT NULL,
 ALTER COLUMN expires_at SET NOT NULL,
+ALTER COLUMN can_be_resent_from SET NOT NULL,
 ADD CONSTRAINT application_user_registration_token2 UNIQUE USING INDEX application_user_registration_token1;

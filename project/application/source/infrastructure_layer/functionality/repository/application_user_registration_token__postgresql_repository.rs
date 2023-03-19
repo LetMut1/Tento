@@ -29,17 +29,20 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 value, \
                 wrong_enter_tries_quantity, \
                 is_approved, \
-                expires_at \
+                expires_at, \
+                can_be_resent_from \
             ) VALUES ( \
                 $1, \
                 $2, \
                 $3, \
                 $4, \
                 $5, \
-                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $5)::INTERVAL)) \
+                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $5)::INTERVAL)), \
+                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $6)::INTERVAL)) \
             ) \
             RETURNING \
-                aurt.expires_at AS ea;";
+                aurt.expires_at AS ea,
+                aurt.can_be_resent_from AS cbrf;";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&application_user_email, Type::TEXT)
@@ -47,7 +50,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             .add_parameter(&insert.application_user_registration_token_value, Type::TEXT)
             .add_parameter(&insert.application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&insert.application_user_registration_token_is_approved, Type::BOOL)
-            .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2);
+            .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
+            .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_BEFORE_RESENDING, Type::INT2);
 
         let statement = match database_2_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
@@ -89,6 +93,18 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             }
         };
 
+        let application_user_registration_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(1) {
+            Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
         return Ok(
             ApplicationUserRegistrationToken::new(
                 insert.application_user_email,
@@ -96,7 +112,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 insert.application_user_registration_token_value,
                 insert.application_user_registration_token_wrong_enter_tries_quantity,
                 insert.application_user_registration_token_is_approved,
-                application_user_registration_token_expires_at
+                application_user_registration_token_expires_at,
+                application_user_registration_token_can_be_resent_from
             )
         );
     }
@@ -119,100 +136,267 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         if update.application_user_registration_token_expires_at {
-            let query =
-            "UPDATE ONLY public.application_user_registration_token AS aurt
-            SET ( \
-                value, \
-                wrong_enter_tries_quantity, \
-                is_approved, \
-                expires_at \
-            ) = ROW( \
-                $1, \
-                $2, \
-                $3, \
-                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $4)::INTERVAL)) \
-            ) \
-            WHERE aurt.application_user_email = $5 AND aurt.application_user_device_id = $6 \
-            RETURNING \
-                aurt.expires_at AS ae;";
+            if update.application_user_registration_token_can_be_resent_from {
+                let query =
+                "UPDATE ONLY public.application_user_registration_token AS aurt
+                SET ( \
+                    value, \
+                    wrong_enter_tries_quantity, \
+                    is_approved, \
+                    expires_at, \
+                    can_be_resent_from \
+                ) = ROW( \
+                    $1, \
+                    $2, \
+                    $3, \
+                    extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $4)::INTERVAL)), \
+                    extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $5)::INTERVAL)) \
+                ) \
+                WHERE aurt.application_user_email = $6 AND aurt.application_user_device_id = $7 \
+                RETURNING \
+                    aurt.expires_at AS ae,
+                    aurt.can_be_resent_from AS cbrf;";
 
-            prepared_statemant_parameter_convertation_resolver
-                .add_parameter(&application_user_registration_token_value, Type::TEXT)
-                .add_parameter(&application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
-                .add_parameter(&application_user_registration_token_is_approved, Type::BOOL)
-                .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
-                .add_parameter(&application_user_email, Type::TEXT)
-                .add_parameter(&application_user_device_id, Type::TEXT);
+                prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_registration_token_value, Type::TEXT)
+                    .add_parameter(&application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
+                    .add_parameter(&application_user_registration_token_is_approved, Type::BOOL)
+                    .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
+                    .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_BEFORE_RESENDING, Type::INT2)
+                    .add_parameter(&application_user_email, Type::TEXT)
+                    .add_parameter(&application_user_device_id, Type::TEXT);
 
-            let statement = match database_2_connection.prepare_typed(
-                query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
-            ).await {
-                Ok(statement_) => statement_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
+                let statement = match database_2_connection.prepare_typed(
+                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+                ).await {
+                    Ok(statement_) => statement_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
 
-            let row_registry = match database_2_connection.query(
-                &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
-            ).await {
-                Ok(row_registry_) => row_registry_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
+                let row_registry = match database_2_connection.query(
+                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+                ).await {
+                    Ok(row_registry_) => row_registry_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
 
-            let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
+                let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                    Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
 
-            application_user_registration_token.set_expires_at(application_user_registration_token_expires_at);
+                let application_user_registration_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(1) {
+                    Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                application_user_registration_token
+                    .set_expires_at(application_user_registration_token_expires_at)
+                    .set_can_be_resent_from(application_user_registration_token_can_be_resent_from);
+            } else {
+                let query =
+                "UPDATE ONLY public.application_user_registration_token AS aurt
+                SET ( \
+                    value, \
+                    wrong_enter_tries_quantity, \
+                    is_approved, \
+                    expires_at \
+                ) = ROW( \
+                    $1, \
+                    $2, \
+                    $3, \
+                    extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $4)::INTERVAL)) \
+                ) \
+                WHERE aurt.application_user_email = $5 AND aurt.application_user_device_id = $6 \
+                RETURNING \
+                    aurt.expires_at AS ae;";
+
+                prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_registration_token_value, Type::TEXT)
+                    .add_parameter(&application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
+                    .add_parameter(&application_user_registration_token_is_approved, Type::BOOL)
+                    .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
+                    .add_parameter(&application_user_email, Type::TEXT)
+                    .add_parameter(&application_user_device_id, Type::TEXT);
+
+                let statement = match database_2_connection.prepare_typed(
+                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+                ).await {
+                    Ok(statement_) => statement_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                let row_registry = match database_2_connection.query(
+                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+                ).await {
+                    Ok(row_registry_) => row_registry_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                    Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                application_user_registration_token.set_expires_at(application_user_registration_token_expires_at);
+            }
         } else {
-            let query =
-            "UPDATE ONLY public.application_user_registration_token AS aurt
-            SET ( \
-                value, \
-                wrong_enter_tries_quantity, \
-                is_approved \
-            ) = ROW( \
-                $1, \
-                $2, \
-                $3 \
-            ) \
-            WHERE aurt.application_user_email = $4 AND aurt.application_user_device_id = $5 \
-            RETURNING \
-                aurt.application_user_email AS aue;";
+            if update.application_user_registration_token_can_be_resent_from {
+                let query =
+                "UPDATE ONLY public.application_user_registration_token AS aurt
+                SET ( \
+                    value, \
+                    wrong_enter_tries_quantity, \
+                    is_approved, \
+                    can_be_resent_from \
+                ) = ROW( \
+                    $1, \
+                    $2, \
+                    $3, \
+                    extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $4)::INTERVAL))
+                ) \
+                WHERE aurt.application_user_email = $5 AND aurt.application_user_device_id = $6 \
+                RETURNING \
+                    aurt.can_be_resent_from AS cbrf;";
 
-            prepared_statemant_parameter_convertation_resolver
-                .add_parameter(&application_user_registration_token_value, Type::TEXT)
-                .add_parameter(&application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
-                .add_parameter(&application_user_registration_token_is_approved, Type::BOOL)
-                .add_parameter(&application_user_email, Type::TEXT)
-                .add_parameter(&application_user_device_id, Type::TEXT);
+                prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_registration_token_value, Type::TEXT)
+                    .add_parameter(&application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
+                    .add_parameter(&application_user_registration_token_is_approved, Type::BOOL)
+                    .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_BEFORE_RESENDING, Type::INT2)
+                    .add_parameter(&application_user_email, Type::TEXT)
+                    .add_parameter(&application_user_device_id, Type::TEXT);
 
-            let statement = match database_2_connection.prepare_typed(
-                query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
-            ).await {
-                Ok(statement_) => statement_,
-                Err(error) => {
+                let statement = match database_2_connection.prepare_typed(
+                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+                ).await {
+                    Ok(statement_) => statement_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                let row_registry = match database_2_connection.query(
+                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+                ).await {
+                    Ok(row_registry_) => row_registry_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                let application_user_registration_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                    Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                application_user_registration_token.set_can_be_resent_from(application_user_registration_token_can_be_resent_from);
+            } else {
+                let query =
+                "UPDATE ONLY public.application_user_registration_token AS aurt
+                SET ( \
+                    value, \
+                    wrong_enter_tries_quantity, \
+                    is_approved \
+                ) = ROW( \
+                    $1, \
+                    $2, \
+                    $3 \
+                ) \
+                WHERE aurt.application_user_email = $4 AND aurt.application_user_device_id = $5 \
+                RETURNING \
+                    aurt.application_user_email AS aue;";
+
+                prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_registration_token_value, Type::TEXT)
+                    .add_parameter(&application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
+                    .add_parameter(&application_user_registration_token_is_approved, Type::BOOL)
+                    .add_parameter(&application_user_email, Type::TEXT)
+                    .add_parameter(&application_user_device_id, Type::TEXT);
+
+                let statement = match database_2_connection.prepare_typed(
+                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+                ).await {
+                    Ok(statement_) => statement_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                if let Err(error) = database_2_connection.query(
+                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+                ).await {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
@@ -220,17 +404,6 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                         )
                     );
                 }
-            };
-
-            if let Err(error) = database_2_connection.query(
-                &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
-            ).await {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
             }
         }
 
@@ -292,7 +465,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 aurt.value AS v, \
                 aurt.wrong_enter_tries_quantity AS wetq, \
                 aurt.is_approved AS ia, \
-                aurt.expires_at AS ea \
+                aurt.expires_at AS ea, \
+                aurt.can_be_resent_from as cbrf \
             FROM public.application_user_registration_token aurt \
             WHERE aurt.application_user_email = $1 AND aurt.application_user_device_id = $2;";
 
@@ -380,6 +554,18 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             }
         };
 
+        let application_user_registration_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(4) {
+            Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
         return Ok(
             Some(
                 ApplicationUserRegistrationToken::new(
@@ -388,7 +574,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                     application_user_registration_token_value,
                     application_user_registration_token_wrong_enter_tries_quantity,
                     application_user_registration_token_is_approved,
-                    application_user_registration_token_expires_at
+                    application_user_registration_token_expires_at,
+                    application_user_registration_token_can_be_resent_from
                 )
             )
         );
@@ -404,5 +591,6 @@ pub struct Insert<'a> {
 }
 
 pub struct Update {
-    pub application_user_registration_token_expires_at: bool
+    pub application_user_registration_token_expires_at: bool,
+    pub application_user_registration_token_can_be_resent_from: bool
 }
