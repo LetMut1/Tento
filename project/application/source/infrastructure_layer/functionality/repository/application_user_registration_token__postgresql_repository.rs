@@ -7,12 +7,20 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
+use std::borrow::Cow;
 
 pub struct ApplicationUserRegistrationToken_PostgresqlRepository;
 
 impl ApplicationUserRegistrationToken_PostgresqlRepository {
-    pub async fn create<'a, 'b>(database_2_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserRegistrationToken<'b>, ErrorAuditor> {
+    pub async fn create<'a>(
+        database_2_connection: &'a Connection,
+        insert: Insert<'a>
+    ) -> Result<ApplicationUserRegistrationToken<'a>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let application_user_email = insert.application_user_email.as_ref();
+
+        let application_user_device_id = insert.application_user_device_id.as_ref();
 
         let query =
             "INSERT INTO public.application_user_registration_token AS aurt ( \
@@ -34,8 +42,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 aurt.expires_at AS ea;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert.application_user_email, Type::TEXT)
-            .add_parameter(&insert.application_user_device_id, Type::TEXT)
+            .add_parameter(&application_user_email, Type::TEXT)
+            .add_parameter(&application_user_device_id, Type::TEXT)
             .add_parameter(&insert.application_user_registration_token_value, Type::TEXT)
             .add_parameter(&insert.application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&insert.application_user_registration_token_is_approved, Type::BOOL)
@@ -375,8 +383,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         return Ok(
             Some(
                 ApplicationUserRegistrationToken::new(
-                    application_user_email,
-                    application_user_device_id,
+                    Cow::Borrowed(application_user_email),
+                    Cow::Borrowed(application_user_device_id),
                     application_user_registration_token_value,
                     application_user_registration_token_wrong_enter_tries_quantity,
                     application_user_registration_token_is_approved,
@@ -388,8 +396,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
 }
 
 pub struct Insert<'a> {
-    pub application_user_email: &'a str,
-    pub application_user_device_id: &'a str,
+    pub application_user_email: Cow<'a, str>,
+    pub application_user_device_id: Cow<'a, str>,
     pub application_user_registration_token_value: String,
     pub application_user_registration_token_wrong_enter_tries_quantity: i16,
     pub application_user_registration_token_is_approved: bool

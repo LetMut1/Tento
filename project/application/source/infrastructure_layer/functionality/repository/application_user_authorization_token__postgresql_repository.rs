@@ -12,7 +12,10 @@ use std::borrow::Cow;
 pub struct ApplicationUserAuthorizationToken_PostgresqlRepository;
 
 impl ApplicationUserAuthorizationToken_PostgresqlRepository {
-    pub async fn create<'a>(database_2_connection: &'a Connection, insert: Insert<'a>) -> Result<ApplicationUserAuthorizationToken<'a>, ErrorAuditor> {
+    pub async fn create<'a>(
+        database_2_connection: &'a Connection,
+        insert: Insert<'a>
+    ) -> Result<ApplicationUserAuthorizationToken<'a>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let application_user_device_id = insert.application_user_device_id.as_ref();

@@ -1,6 +1,8 @@
+use std::borrow::Cow;
+
 pub struct ApplicationUserRegistrationToken<'a> {
-    application_user_email: &'a str,
-    application_user_device_id: &'a str,
+    application_user_email: Cow<'a, str>,
+    application_user_device_id: Cow<'a, str>,
     value: String,
     wrong_enter_tries_quantity: i16,
     is_approved: bool,
@@ -12,8 +14,8 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 5;
 
     pub fn new(
-        application_user_email: &'a str,
-        application_user_device_id: &'a str,
+        application_user_email: Cow<'a, str>,
+        application_user_device_id: Cow<'a, str>,
         value: String,
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
@@ -29,12 +31,12 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
         };
     }
 
-    pub fn get_application_user_email<'b>(&'b self) -> &'a str {
-        return self.application_user_email;
+    pub fn get_application_user_email<'b>(&'b self) -> &'b str {
+        return self.application_user_email.as_ref();
     }
 
-    pub fn get_application_user_device_id<'b>(&'b self) -> &'a str {
-        return self.application_user_device_id;
+    pub fn get_application_user_device_id<'b>(&'b self) -> &'b str {
+        return self.application_user_device_id.as_ref();
     }
 
     pub fn get_value<'b>(&'b self) -> &'b str {
