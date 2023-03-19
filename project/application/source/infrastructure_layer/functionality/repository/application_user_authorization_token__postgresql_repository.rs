@@ -7,12 +7,15 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
+use std::borrow::Cow;
 
 pub struct ApplicationUserAuthorizationToken_PostgresqlRepository;
 
 impl ApplicationUserAuthorizationToken_PostgresqlRepository {
-    pub async fn create<'a, 'b>(database_2_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserAuthorizationToken<'b>, ErrorAuditor> {
+    pub async fn create<'a>(database_2_connection: &'a Connection, insert: Insert<'a>) -> Result<ApplicationUserAuthorizationToken<'a>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let application_user_device_id = insert.application_user_device_id.as_ref();
 
         let query =
             "INSERT INTO public.application_user_authorization_token AS auat ( \
@@ -33,7 +36,7 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.application_user_id, Type::INT8)
-            .add_parameter(&insert.application_user_device_id, Type::TEXT)
+            .add_parameter(&application_user_device_id, Type::TEXT)
             .add_parameter(&insert.application_user_authorization_token_value, Type::TEXT)
             .add_parameter(&insert.application_user_authorization_token_wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&ApplicationUserAuthorizationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2);
@@ -351,7 +354,7 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository {
             Some(
                 ApplicationUserAuthorizationToken::new(
                     application_user_id,
-                    application_user_device_id,
+                    Cow::Borrowed(application_user_device_id),
                     application_user_authorization_token_value,
                     application_user_authorization_token_wrong_enter_tries_quantity,
                     application_user_authorization_token_expires_at
@@ -363,7 +366,7 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository {
 
 pub struct Insert<'a> {
     pub application_user_id: i64,
-    pub application_user_device_id: &'a str,
+    pub application_user_device_id: Cow<'a, str>,
     pub application_user_authorization_token_value: String,
     pub application_user_authorization_token_wrong_enter_tries_quantity: i16
 }

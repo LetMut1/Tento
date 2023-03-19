@@ -6,6 +6,6 @@
 /// Therefore, those tokens that we delete for the user must be recorded in this entity.
 /// Wherever the validity of a token is checked, you need to check if this token is in this
 /// entity, and block the action if it is.
-pub struct ApplicationUserAccessTokenBlackList<'a> {
-    application_user_access_token_id: &'a str
+pub struct ApplicationUserAccessTokenBlackList {
+    application_user_access_token_id: String
 }
