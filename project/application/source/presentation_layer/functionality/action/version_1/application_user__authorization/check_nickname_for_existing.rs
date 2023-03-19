@@ -164,7 +164,7 @@ where
     match action_processor_result_ {
         ActionProcessorResult::Void => {
             let error = ErrorAuditor::new(
-                BaseError::LogicError { message: "Unreachable state." },
+                BaseError::create_unreachable_state(),
                 BacktracePart::new(line!(), file!(), None)
             );
 
@@ -224,7 +224,7 @@ where
         }
         ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: _ } => {
             let error = ErrorAuditor::new(
-                BaseError::LogicError { message: "Unreachable state." },
+                BaseError::create_unreachable_state(),
                 BacktracePart::new(line!(), file!(), None)
             );
 

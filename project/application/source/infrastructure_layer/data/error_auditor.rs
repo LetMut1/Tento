@@ -55,6 +55,12 @@ pub enum BaseError {
     }
 }
 
+impl BaseError {
+    pub fn create_unreachable_state() -> Self {
+        return Self::LogicError { message: "Unreachable state." }
+    }
+}
+
 impl Display for BaseError {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
         return Ok(());

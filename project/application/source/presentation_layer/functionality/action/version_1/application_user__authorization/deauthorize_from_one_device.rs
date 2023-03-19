@@ -202,7 +202,7 @@ where
         }
         ActionProcessorResult::Outcoming { outcoming: _ } => {
             let error = ErrorAuditor::new(
-                BaseError::LogicError { message: "Unreachable state." },
+                BaseError::create_unreachable_state(),
                 BacktracePart::new(line!(), file!(), None)
             );
 
@@ -309,7 +309,7 @@ where
                 }
                 _ => {
                     let error = ErrorAuditor::new(
-                        BaseError::LogicError { message: "Unreachable state." },
+                        BaseError::create_unreachable_state(),
                         BacktracePart::new(line!(), file!(), None)
                     );
 

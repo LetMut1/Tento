@@ -77,6 +77,4 @@ fn main() -> () {
 
 // Возможно, переписать  по типам. То есть, валидатор, например, имплементироваь для типа entyty. ТАк можно будет все привязать к типам.
 
-// BaseError::LogicError { message: "Unreachable state." } -> в метод.
-
-// resent -> resent
+// BaseError::create_unreachable_state() -> в метод.
