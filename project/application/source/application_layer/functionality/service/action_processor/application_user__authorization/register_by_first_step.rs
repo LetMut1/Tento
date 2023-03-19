@@ -167,7 +167,8 @@ impl ActionProcessor {
         if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_token(
             environment_configuration,
             application_user_registration_token_.get_value(),
-            application_user_registration_token_.get_application_user_email()
+            application_user_registration_token_.get_application_user_email(),
+            application_user_registration_token_.get_application_user_device_id()
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

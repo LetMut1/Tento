@@ -5,15 +5,24 @@ use crate::infrastructure_layer::functionality::service::email_sender::EmailSend
 
 pub struct ApplicationUser_EmailSender;
 
-impl ApplicationUser_EmailSender {     // TODO все &'static str в константы? Тогда пройтись по всему приложению и проверить, везде ли так.
+impl ApplicationUser_EmailSender {
     pub fn send_application_user_authorization_token<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_authorization_token_value: &'a str,
-        application_user_email: &'a str
+        application_user_email: &'a str,
+        application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor> {
+        let message_body = format!(
+            "Your code {} for device {}.",
+            application_user_authorization_token_value,
+            application_user_device_id
+        );
+
+
         if let Err(mut error) = BaseEmailSender::send(
             environment_configuration,
-            "Log in confirmation", "Your code: ".to_string() + application_user_authorization_token_value,
+            "Authorization confirmation",
+            message_body,
             application_user_email
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -27,12 +36,19 @@ impl ApplicationUser_EmailSender {     // TODO все &'static str в конст
     pub fn send_application_user_registration_token<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_registration_token_value: &'a str,
-        application_user_email: &'a str
+        application_user_email: &'a str,
+        application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor> {
+        let message_body = format!(
+            "Your code {} for device {}.",
+            application_user_registration_token_value,
+            application_user_device_id
+        );
+
         if let Err(mut error) = BaseEmailSender::send(
             environment_configuration,
             "Registration confirmation",
-            "Your code: ".to_string() + application_user_registration_token_value,
+            message_body,
             application_user_email
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -46,12 +62,19 @@ impl ApplicationUser_EmailSender {     // TODO все &'static str в конст
     pub fn send_application_user_reset_password_token<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_reset_password_token_value: &'a str,
-        application_user_email: &'a str
+        application_user_email: &'a str,
+        application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor> {
+        let message_body = format!(
+            "Your code: {} for device {}.",
+            application_user_reset_password_token_value,
+            application_user_device_id
+        );
+
         if let Err(mut error) = BaseEmailSender::send(
             environment_configuration,
             "Reset password confirmation",
-            "Your code: ".to_string() + application_user_reset_password_token_value,
+            message_body,
             application_user_email
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
