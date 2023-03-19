@@ -17,6 +17,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         let query =
             "INSERT INTO public.application_user_registration_token AS aurt ( \
                 application_user_email, \
+                application_user_device_id, \
                 value, \
                 wrong_enter_tries_quantity, \
                 is_approved, \
@@ -26,6 +27,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 $2, \
                 $3, \
                 $4, \
+                $5, \
                 extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $5)::INTERVAL)) \
             ) \
             RETURNING \
@@ -33,6 +35,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.application_user_email, Type::TEXT)
+            .add_parameter(&insert.application_user_device_id, Type::TEXT)
             .add_parameter(&insert.application_user_registration_token_value, Type::TEXT)
             .add_parameter(&insert.application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&insert.application_user_registration_token_is_approved, Type::BOOL)
@@ -81,6 +84,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         return Ok(
             ApplicationUserRegistrationToken::new(
                 insert.application_user_email,
+                insert.application_user_device_id,
                 insert.application_user_registration_token_value,
                 insert.application_user_registration_token_wrong_enter_tries_quantity,
                 insert.application_user_registration_token_is_approved,
@@ -95,6 +99,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         update: Update
     ) -> Result<(), ErrorAuditor> {
         let application_user_email = application_user_registration_token.get_application_user_email();
+
+        let application_user_device_id = application_user_registration_token.get_application_user_device_id();
 
         let application_user_registration_token_value = application_user_registration_token.get_value();
 
@@ -118,7 +124,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 $3, \
                 extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $4)::INTERVAL)) \
             ) \
-            WHERE aurt.application_user_email = $5 \
+            WHERE aurt.application_user_email = $5 AND aurt.application_user_device_id = $6 \
             RETURNING \
                 aurt.expires_at AS ae;";
 
@@ -127,7 +133,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 .add_parameter(&application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
                 .add_parameter(&application_user_registration_token_is_approved, Type::BOOL)
                 .add_parameter(&ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
-                .add_parameter(&application_user_email, Type::TEXT);
+                .add_parameter(&application_user_email, Type::TEXT)
+                .add_parameter(&application_user_device_id, Type::TEXT);
 
             let statement = match database_2_connection.prepare_typed(
                 query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
@@ -182,7 +189,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 $2, \
                 $3 \
             ) \
-            WHERE aurt.application_user_email = $4 \
+            WHERE aurt.application_user_email = $4 AND aurt.application_user_device_id = $5 \
             RETURNING \
                 aurt.application_user_email AS aue;";
 
@@ -190,7 +197,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 .add_parameter(&application_user_registration_token_value, Type::TEXT)
                 .add_parameter(&application_user_registration_token_wrong_enter_tries_quantity, Type::INT2)
                 .add_parameter(&application_user_registration_token_is_approved, Type::BOOL)
-                .add_parameter(&application_user_email, Type::TEXT);
+                .add_parameter(&application_user_email, Type::TEXT)
+                .add_parameter(&application_user_device_id, Type::TEXT);
 
             let statement = match database_2_connection.prepare_typed(
                 query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
@@ -221,14 +229,20 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         return Ok(());
     }
 
-    pub async fn delete<'a>(database_2_connection: &'a Connection, application_user_email: &'a str) -> Result<(), ErrorAuditor> {
+    pub async fn delete<'a>(
+        database_2_connection: &'a Connection,
+        application_user_email: &'a str,
+        application_user_device_id: &'a str
+    ) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
             "DELETE FROM ONLY public.application_user_registration_token AS aurt \
-            WHERE aurt.application_user_email = $1;";
+            WHERE aurt.application_user_email = $1 AND aurt.application_user_device_id = $2;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&application_user_email, Type::TEXT)
+            .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
@@ -260,7 +274,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
 
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
-        application_user_email: &'a str
+        application_user_email: &'a str,
+        application_user_device_id: &'a str
     ) -> Result<Option<ApplicationUserRegistrationToken<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -271,9 +286,11 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 aurt.is_approved AS ia, \
                 aurt.expires_at AS ea \
             FROM public.application_user_registration_token aurt \
-            WHERE aurt.application_user_email = $1;";
+            WHERE aurt.application_user_email = $1 AND aurt.application_user_device_id = $2;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&application_user_email, Type::TEXT)
+            .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
@@ -359,6 +376,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             Some(
                 ApplicationUserRegistrationToken::new(
                     application_user_email,
+                    application_user_device_id,
                     application_user_registration_token_value,
                     application_user_registration_token_wrong_enter_tries_quantity,
                     application_user_registration_token_is_approved,
@@ -371,6 +389,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
 
 pub struct Insert<'a> {
     pub application_user_email: &'a str,
+    pub application_user_device_id: &'a str,
     pub application_user_registration_token_value: String,
     pub application_user_registration_token_wrong_enter_tries_quantity: i16,
     pub application_user_registration_token_is_approved: bool

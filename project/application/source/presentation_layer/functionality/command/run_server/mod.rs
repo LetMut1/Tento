@@ -71,3 +71,15 @@ fn main() -> () {
 // Регистрация, создание каналов ( и подобное) должно быть сделано через криптограыию ( нужно, чтобы была уверенность  в том, что запрос происходит не ботом, а через приложение с устройства).
 
 // Ко всем токенам добавить  айди устройство и вывести таймер.
+
+// В сущностях, везде, где есть reference, заменить на Cow.  В Insert - Owning или Cow. Cow - лучше, потому что более общий случай, подходящиц для всех вариарнтов.
+
+// ApplicationUser_EmailSender::send_  везде добавить токены.
+
+
+
+
+//  Сообщить
+// VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP
+// VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP
+// VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER

@@ -350,7 +350,8 @@ Registers application user for the first step and sends email to user.
 ```rust
 Request data:
 struct Incoming {
-    application_user_email: String
+    application_user_email: String,
+    application_user_device_id: String
 }
 ```
 ```
@@ -368,6 +369,7 @@ Registers application user for the second step through token value approving.
 Request data:
 struct Incoming {
     application_user_email: String,
+    application_user_device_id: String,
     application_user_registration_token_value: String
 }
 ```
@@ -419,7 +421,8 @@ Sends email for register. (Should be used only if the user does not receive an e
 ```rust
 Request data:
 struct Incoming {
-    application_user_email: String
+    application_user_email: String,
+    application_user_device_id: String
 }
 ```
 ```

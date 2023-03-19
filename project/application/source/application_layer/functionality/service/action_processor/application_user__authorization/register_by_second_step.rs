@@ -2,6 +2,7 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
+use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_registration_token__validator::ApplicationUserRegistrationToken_Validator;
 use crate::domain_layer::functionality::service::application_user_registration_token__wrong_enter_tries_quantity_incrementor::ApplicationUserRegistrationToken_WrongEnterTriesQuantityIncrementor;
@@ -51,6 +52,10 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
         }
 
+        if !ApplicationUserDevice_Validator::is_valid_id(incoming.application_user_device_id.as_str()) {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
+        }
+
         let is_valid_value = match ApplicationUserRegistrationToken_Validator::is_valid_value(incoming.application_user_registration_token_value.as_str()) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
@@ -77,7 +82,7 @@ impl ActionProcessor {
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, incoming.application_user_email.as_str()
+            database_2_postgresql_connection, incoming.application_user_email.as_str(), incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_registration_token_) => application_user_registration_token_,
             Err(mut error) => {
@@ -101,7 +106,9 @@ impl ActionProcessor {
 
         if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
             if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
-                database_2_postgresql_connection, application_user_registration_token_.get_application_user_email()
+                database_2_postgresql_connection,
+                application_user_registration_token_.get_application_user_email(),
+                application_user_registration_token_.get_application_user_device_id()
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -146,7 +153,9 @@ impl ActionProcessor {
                 }
             } else {
                 if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
-                    database_2_postgresql_connection, application_user_registration_token_.get_application_user_email()
+                    database_2_postgresql_connection,
+                    application_user_registration_token_.get_application_user_email(),
+                    application_user_registration_token_.get_application_user_device_id()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -184,5 +193,6 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_email: String,
+    application_user_device_id: String,
     application_user_registration_token_value: String
 }
