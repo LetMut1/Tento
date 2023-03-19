@@ -8,7 +8,7 @@ pub struct ApplicationUserResetPasswordToken_WrongEnterTriesQuantityIncrementor;
 impl ApplicationUserResetPasswordToken_WrongEnterTriesQuantityIncrementor {
     const STEP_SIZE: i16 = 1;
 
-    pub fn increment<'a>(application_user_reset_password_token: &'a mut ApplicationUserResetPasswordToken) -> Result<(), ErrorAuditor> {
+    pub fn increment<'a>(application_user_reset_password_token: &'a mut ApplicationUserResetPasswordToken<'_>) -> Result<(), ErrorAuditor> {
         let mut counter = Counter::<i16>::new(application_user_reset_password_token.get_wrong_enter_tries_quantity(), Self::STEP_SIZE);
 
         let value = match counter.get_next_value() {

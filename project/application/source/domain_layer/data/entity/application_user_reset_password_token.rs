@@ -1,19 +1,21 @@
-pub struct ApplicationUserResetPasswordToken {
+use std::borrow::Cow;
+
+pub struct ApplicationUserResetPasswordToken<'a> {
     application_user_id: i64,
-    application_user_device_id: String,  // TODO TODO TODO COW
+    application_user_device_id: Cow<'a, str>,
     value: String,
     wrong_enter_tries_quantity: i16,
     is_approved: bool,
     expires_at: i64
 }
 
-impl ApplicationUserResetPasswordToken {
+impl<'a> ApplicationUserResetPasswordToken<'a> {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i16 = 10;
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 3;
 
     pub fn new(
         application_user_id: i64,
-        application_user_device_id: String,
+        application_user_device_id: Cow<'a, str>,
         value: String,
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
@@ -29,19 +31,19 @@ impl ApplicationUserResetPasswordToken {
         };
     }
 
-    pub fn get_application_user_id<'a>(&'a self) -> i64 {
+    pub fn get_application_user_id<'b>(&'b self) -> i64 {
         return self.application_user_id;
     }
 
-    pub fn get_application_user_device_id<'a>(&'a self) -> &'a str {
-        return self.application_user_device_id.as_str();
+    pub fn get_application_user_device_id<'b>(&'b self) -> &'b str {
+        return self.application_user_device_id.as_ref();
     }
 
-    pub fn get_value<'a>(&'a self) -> &'a str {
+    pub fn get_value<'b>(&'b self) -> &'b str {
         return self.value.as_str();
     }
 
-    pub fn get_wrong_enter_tries_quantity<'a>(&'a self) -> i16 {
+    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> i16 {
         return self.wrong_enter_tries_quantity;
     }
 
@@ -59,7 +61,7 @@ impl ApplicationUserResetPasswordToken {
         return self;
     }
 
-    pub fn set_wrong_enter_tries_quantity<'a>(&'a mut self, wrong_enter_tries_quantity: i16) -> &'a mut Self {
+    pub fn set_wrong_enter_tries_quantity<'b>(&'b mut self, wrong_enter_tries_quantity: i16) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
         return self;

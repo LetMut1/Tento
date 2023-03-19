@@ -183,7 +183,7 @@ impl ActionProcessor {
             None => {
                 let insert = Insert {
                     application_user_id: application_user_.get_id(),
-                    application_user_device_id: Cow::Borrowed(incoming.application_user_device_id.as_str()),
+                    application_user_device_id: Cow::Owned(incoming.application_user_device_id),
                     application_user_authorization_token_value: ApplicationUserAuthorizationToken_ValueGenerator::generate(),
                     application_user_authorization_token_wrong_enter_tries_quantity: 0
                 };

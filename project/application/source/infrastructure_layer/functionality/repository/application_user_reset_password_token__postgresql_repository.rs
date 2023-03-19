@@ -7,12 +7,18 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
+use std::borrow::Cow;
 
 pub struct ApplicationUserResetPasswordToken_PostgresqlRepository;
 
 impl ApplicationUserResetPasswordToken_PostgresqlRepository {
-    pub async fn create<'a>(database_2_connection: &'a Connection, insert: Insert) -> Result<ApplicationUserResetPasswordToken, ErrorAuditor> {
+    pub async fn create<'a>(
+        database_2_connection: &'a Connection,
+        insert: Insert<'a>
+    ) -> Result<ApplicationUserResetPasswordToken<'a>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let application_user_device_id = insert.application_user_device_id.as_ref();
 
         let query =
             "INSERT INTO public.application_user_reset_password_token AS aurpt ( \
@@ -35,7 +41,7 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.application_user_id, Type::INT8)
-            .add_parameter(&insert.application_user_device_id, Type::TEXT)
+            .add_parameter(&application_user_device_id, Type::TEXT)
             .add_parameter(&insert.application_user_reset_password_token_value, Type::TEXT)
             .add_parameter(&insert.application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&insert.application_user_reset_password_token_is_approved, Type::BOOL)
@@ -95,7 +101,7 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
 
     pub async fn update<'a>(
         database_2_connection: &'a Connection,
-        application_user_reset_password_token: &'a mut ApplicationUserResetPasswordToken,
+        application_user_reset_password_token: &'a mut ApplicationUserResetPasswordToken<'_>,
         update: Update
     ) -> Result<(), ErrorAuditor> {
         let application_user_id = application_user_reset_password_token.get_application_user_id();
@@ -276,7 +282,7 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
         database_2_connection: &'a Connection,
         application_user_id: i64,
         application_user_device_id: &'a str
-    ) -> Result<Option<ApplicationUserResetPasswordToken>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserResetPasswordToken<'a>>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -376,7 +382,7 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
             Some(
                 ApplicationUserResetPasswordToken::new(
                     application_user_id,
-                    application_user_device_id.to_string(),// TODO ЧЕРЕЗ COW
+                    Cow::Borrowed(application_user_device_id),
                     application_user_reset_password_token_value,
                     application_user_reset_password_token_wrong_enter_tries_quantity,
                     application_user_reset_password_token_is_approved,
@@ -387,9 +393,9 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
     }
 }
 
-pub struct Insert {
+pub struct Insert<'a> {
     pub application_user_id: i64,
-    pub application_user_device_id: String,
+    pub application_user_device_id: Cow<'a, str>,
     pub application_user_reset_password_token_value: String,
     pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
     pub application_user_reset_password_token_is_approved: bool
