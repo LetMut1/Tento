@@ -54,6 +54,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid_email {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
         }
@@ -84,6 +85,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if is_exist_2 {
             return Ok(
                 ArgumentResult::Ok {

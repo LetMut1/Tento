@@ -72,7 +72,7 @@ fn main() -> () {
 
 // Ко всем токенам добавить  айди устройство и вывести таймер.
 
-// В сущностях, везде, где есть reference, заменить на Cow.  В Insert - Owning или Cow. Cow - лучше, потому что более общий случай, подходящиц для всех вариарнтов.
+// В сущностях, везде, где есть reference, заменить на Cow.  В Insert - Owning или Cow. Cow - лучше, потому что более общий случай, подходящиц для всех вариарнтов. Должно быть одинаково. if there cow and there Cow
 
 // ApplicationUser_EmailSender::send_  везде добавить токены.
 
@@ -83,3 +83,7 @@ fn main() -> () {
 // VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP
 // VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP
 // VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER
+// VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP
+// VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP
+// VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP
+// VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD

@@ -509,7 +509,8 @@ Resets application user password for the first step and send email to user.
 ```rust
 Request data:
 struct Incoming {
-    application_user_email: String
+    application_user_email: String,
+    application_user_device_id: String
 }
 ```
 ```rust
@@ -530,6 +531,7 @@ Resets application user password for the second step through token value approvi
 Request data:
 struct Incoming {
     application_user_id: i64,
+    application_user_device_id: String,
     application_user_reset_password_token_value: String
 }
 ```
@@ -550,6 +552,7 @@ Resets application user password for the last step.
 ```rust
 Request data:
 struct Incoming {
+    application_user_device_id: String,
     application_user_id: i64,
     application_user_password: String,
     application_user_reset_password_token_value: String
@@ -573,7 +576,8 @@ Sends email for reset password.  (Should be used only if the user does not recei
 ```rust
 Request data:
 struct Incoming {
-    application_user_id: i64
+    application_user_id: i64,
+    application_user_device_id: String,
 }
 ```
 ```

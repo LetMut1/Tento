@@ -1,6 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
+use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__value_generator::ApplicationUserResetPasswordToken_ValueGenerator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -50,8 +51,13 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid_email {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
+        }
+
+        if !ApplicationUserDevice_Validator::is_valid_id(incoming.application_user_device_id.as_str()) {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -103,7 +109,7 @@ impl ActionProcessor {
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, application_user_.get_id()
+            database_2_postgresql_connection, application_user_.get_id(), incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_reset_password_token_) => application_user_reset_password_token_,
             Err(mut error) => {
@@ -112,6 +118,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let application_user_reset_password_token_ = match application_user_reset_password_token {
             Some(mut application_user_reset_password_token__) => {
                 if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token__)
@@ -137,6 +144,7 @@ impl ActionProcessor {
             None => {
                 let insert = Insert {
                     application_user_id: application_user_.get_id(),
+                    application_user_device_id: incoming.application_user_device_id,
                     application_user_reset_password_token_value: ApplicationUserResetPasswordToken_ValueGenerator::generate(),
                     application_user_reset_password_token_wrong_enter_tries_quantity: 0,
                     application_user_reset_password_token_is_approved: false
@@ -180,7 +188,8 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_email: String
+    application_user_email: String,
+    application_user_device_id: String
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]

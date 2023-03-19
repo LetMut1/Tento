@@ -72,6 +72,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid_email {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
         }
@@ -84,6 +85,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid_value {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserRegistrationToken_Value });
         }
@@ -103,6 +105,7 @@ impl ActionProcessor {
                 );
             }
         };
+
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(database_1_postgresql_connection, incoming.application_user_nickname.as_str()).await {
@@ -113,6 +116,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if is_exist_1 {
             return Ok(
                 ArgumentResult::Ok {
@@ -131,6 +135,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if is_exist_2 {
             return Ok(
                 ArgumentResult::Ok {

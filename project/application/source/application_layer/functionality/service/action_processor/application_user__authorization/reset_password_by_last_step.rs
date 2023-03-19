@@ -3,6 +3,7 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
+use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__validator::ApplicationUserResetPasswordToken_Validator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__wrong_enter_tries_quantity_incrementor::ApplicationUserResetPasswordToken_WrongEnterTriesQuantityIncrementor;
@@ -56,6 +57,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid_value {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserResetPasswordToken_Value });
         }
@@ -66,6 +68,10 @@ impl ActionProcessor {
 
         if !ApplicationUser_Validator::is_valid_password(incoming.application_user_password.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
+        }
+
+        if !ApplicationUserDevice_Validator::is_valid_id(incoming.application_user_device_id.as_str()) {
+            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -82,7 +88,7 @@ impl ActionProcessor {
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, incoming.application_user_id
+            database_2_postgresql_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_reset_password_token_) => application_user_reset_password_token_,
             Err(mut error) => {
@@ -106,7 +112,9 @@ impl ActionProcessor {
 
         if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
             if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::delete(
-                database_2_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
+                database_2_postgresql_connection,
+                application_user_reset_password_token_.get_application_user_id(),
+                application_user_reset_password_token_.get_application_user_device_id()
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -151,7 +159,9 @@ impl ActionProcessor {
                 }
             } else {
                 if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::delete(
-                    database_2_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
+                    database_2_postgresql_connection,
+                    application_user_reset_password_token_.get_application_user_id(),
+                    application_user_reset_password_token_.get_application_user_device_id()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -189,6 +199,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let mut application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
@@ -220,7 +231,9 @@ impl ActionProcessor {
         }
 
         if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::delete(
-            database_2_postgresql_connection, application_user_reset_password_token_.get_application_user_id()
+            database_2_postgresql_connection,
+            application_user_reset_password_token_.get_application_user_id(),
+            application_user_reset_password_token_.get_application_user_device_id()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -245,6 +258,7 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
+    application_user_device_id: String,
     application_user_id: i64,
     application_user_password: String,
     application_user_reset_password_token_value: String

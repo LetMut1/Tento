@@ -1,5 +1,6 @@
 pub struct ApplicationUserResetPasswordToken {
     application_user_id: i64,
+    application_user_device_id: String,  // TODO TODO TODO COW
     value: String,
     wrong_enter_tries_quantity: i16,
     is_approved: bool,
@@ -12,6 +13,7 @@ impl ApplicationUserResetPasswordToken {
 
     pub fn new(
         application_user_id: i64,
+        application_user_device_id: String,
         value: String,
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
@@ -19,6 +21,7 @@ impl ApplicationUserResetPasswordToken {
     ) -> Self {
         return Self {
             application_user_id,
+            application_user_device_id,
             value,
             wrong_enter_tries_quantity,
             is_approved,
@@ -28,6 +31,10 @@ impl ApplicationUserResetPasswordToken {
 
     pub fn get_application_user_id<'a>(&'a self) -> i64 {
         return self.application_user_id;
+    }
+
+    pub fn get_application_user_device_id<'a>(&'a self) -> &'a str {
+        return self.application_user_device_id.as_str();
     }
 
     pub fn get_value<'a>(&'a self) -> &'a str {

@@ -48,6 +48,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid_email {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
         }
@@ -64,6 +65,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid_value {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserRegistrationToken_Value });
         }
@@ -91,6 +93,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let mut application_user_registration_token_ = match application_user_registration_token {
             Some(application_user_registration_token__) => application_user_registration_token__,
             None => {

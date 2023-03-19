@@ -76,6 +76,7 @@ impl ActionProcessor {
                 );
             }
         };
+
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::find_1(
@@ -113,6 +114,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid
             || application_user_access_token_.get_id().as_bytes() != application_user_access_refresh_token_.get_application_user_access_token_id().as_bytes() {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm });

@@ -4,7 +4,7 @@ CREATE TABLE public.application_user_authorization_token (
     value TEXT,
     wrong_enter_tries_quantity SMALLINT,
     expires_at BIGINT
-) WITH (oids = false, fillfactor = 95, autovacuum_enabled = true);
+) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE UNIQUE INDEX application_user_authorization_token1 ON public.application_user_authorization_token
 USING btree (application_user_id, application_user_device_id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
