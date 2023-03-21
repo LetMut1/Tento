@@ -37,8 +37,8 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
                 $3, \
                 $4, \
                 $5, \
-                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $5)::INTERVAL)), \
-                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $6)::INTERVAL)) \
+                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $6)::INTERVAL)), \
+                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $7)::INTERVAL)) \
             ) \
             RETURNING \
                 aurt.expires_at AS ea,
