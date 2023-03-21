@@ -3,6 +3,7 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_reset_password_token__sending_opportunity_resolver::ApplicationUserResetPasswordToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__value_generator::ApplicationUserResetPasswordToken_ValueGenerator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -120,19 +121,40 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_reset_password_token_ = match application_user_reset_password_token {
+        let (application_user_reset_password_token_, can_send) = match application_user_reset_password_token {
             Some(mut application_user_reset_password_token__) => {
+                let mut update = Update {
+                    application_user_reset_password_token_expires_at: false,
+                    application_user_reset_password_token_can_be_resent_from: false
+                };
+
+                let (can_send_, mut need_to_update) = if ApplicationUserResetPasswordToken_SendingOpportunityResolver::can_send(
+                    &application_user_reset_password_token__
+                ) {
+                    update.application_user_reset_password_token_can_be_resent_from = true;
+
+                    (true, true)
+                } else {
+                    (false, false)
+                };
+
                 if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token__)
                     || application_user_reset_password_token__.get_is_approved() {
+                    need_to_update = true;
+
+                    update.application_user_reset_password_token_expires_at = true;
+
                     application_user_reset_password_token__
                         .set_value(ApplicationUserResetPasswordToken_ValueGenerator::generate())
                         .set_wrong_enter_tries_quantity(0)
                         .set_is_approved(false);
+                }
 
+                if need_to_update {
                     if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
                         database_2_postgresql_connection,
                         &mut application_user_reset_password_token__,
-                        Update { application_user_reset_password_token_expires_at: true }
+                        update
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -140,7 +162,7 @@ impl ActionProcessor {
                     }
                 }
 
-                application_user_reset_password_token__
+                (application_user_reset_password_token__, can_send_)
             }
             None => {
                 let insert = Insert {
@@ -162,29 +184,30 @@ impl ActionProcessor {
                     }
                 };
 
-                application_user_reset_password_token__
+                (application_user_reset_password_token__, true)
             }
         };
 
-        if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_reset_password_token(
-            environment_configuration,
-            application_user_reset_password_token_.get_value(),
-            application_user_.get_email(),
-            application_user_reset_password_token_.get_application_user_device_id()
-        ) {
-            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+        if can_send {
+            if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_reset_password_token(
+                environment_configuration,
+                application_user_reset_password_token_.get_value(),
+                application_user_.get_email(),
+                application_user_reset_password_token_.get_application_user_device_id()
+            ) {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
-            return Err(error);
+                return Err(error);
+            }
         }
 
-        return Ok(
-            ArgumentResult::Ok {
-                subject: ActionProcessorResult::Outcoming {
-                    outcoming: Outcoming { application_user_id: application_user_.get_id()
-                    }
-                }
-            }
-        );
+        let outcoming = Outcoming {
+            application_user_id: application_user_.get_id(),
+            verification_message_sent: can_send,
+            application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token_.get_can_be_resent_from()
+        };
+
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
     }
 }
 
@@ -200,5 +223,7 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    application_user_id: i64
+    application_user_id: i64,
+    verification_message_sent: bool,
+    application_user_reset_password_token_can_be_resent_from: i64
 }

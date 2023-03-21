@@ -6,10 +6,12 @@ pub struct ApplicationUserResetPasswordToken<'a> {
     value: String,
     wrong_enter_tries_quantity: i16,
     is_approved: bool,
-    expires_at: i64
+    expires_at: i64,
+    can_be_resent_from: i64
 }
 
 impl<'a> ApplicationUserResetPasswordToken<'a> {
+    pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i16 = 1;
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i16 = 10;
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 3;
 
@@ -19,7 +21,8 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
         value: String,
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
-        expires_at: i64
+        expires_at: i64,
+        can_be_resent_from: i64
     ) -> Self {
         return Self {
             application_user_id,
@@ -27,7 +30,8 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
             value,
             wrong_enter_tries_quantity,
             is_approved,
-            expires_at
+            expires_at,
+            can_be_resent_from
         };
     }
 
@@ -55,6 +59,10 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
         return self.expires_at;
     }
 
+    pub fn get_can_be_resent_from<'b>(&'b self) -> i64 {
+        return self.can_be_resent_from;
+    }
+
     pub fn set_value<'b>(&'b mut self, value: String) -> &'b mut Self {
         self.value = value;
 
@@ -75,6 +83,12 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
 
     pub fn set_expires_at<'b>(&'b mut self, expires_at: i64) -> &'b mut Self {
         self.expires_at = expires_at;
+
+        return self;
+    }
+
+    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: i64) -> &'b mut Self {
+        self.can_be_resent_from = can_be_resent_from;
 
         return self;
     }

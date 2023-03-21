@@ -3,6 +3,7 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_reset_password_token__sending_opportunity_resolver::ApplicationUserResetPasswordToken_SendingOpportunityResolver;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -11,9 +12,9 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::ApplicationUserResetPasswordToken_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -36,7 +37,7 @@ impl ActionProcessor {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
+    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -75,7 +76,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_reset_password_token_ = match application_user_reset_password_token {
+        let mut application_user_reset_password_token_ = match application_user_reset_password_token {
             Some(application_user_reset_password_token__) => application_user_reset_password_token__,
             None => {
                 return Ok(
@@ -116,6 +117,29 @@ impl ActionProcessor {
                     }
                 }
             );
+        }
+
+        if !ApplicationUserResetPasswordToken_SendingOpportunityResolver::can_send(&application_user_reset_password_token_) {
+            return Ok(
+                ArgumentResult::Ok {
+                    subject: ActionProcessorResult::UserWorkflowPrecedent {
+                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome
+                    }
+                }
+            );
+        }
+
+        if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
+            database_2_postgresql_connection,
+            &mut application_user_reset_password_token_,
+            Update {
+                application_user_reset_password_token_expires_at: false,
+                application_user_reset_password_token_can_be_resent_from: true
+            }
+        ).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            return Err(error);
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -165,7 +189,11 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Void });
+        let outcoming = Outcoming {
+            application_user_registration_token_can_be_resent_from: application_user_reset_password_token_.get_can_be_resent_from()
+        };
+
+        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
     }
 }
 
@@ -175,4 +203,11 @@ impl ActionProcessor {
 pub struct Incoming {
     application_user_id: i64,
     application_user_device_id: String,
+}
+
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Outcoming {
+    application_user_registration_token_can_be_resent_from: i64
 }

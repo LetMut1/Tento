@@ -37,6 +37,7 @@ pub enum UserWorkflowPrecedent {
     ApplicationUserResetPasswordToken_AlreadyExpired,
     ApplicationUserResetPasswordToken_IsNotApproved,
     ApplicationUserResetPasswordToken_NotFound,
+    ApplicationUserResetPasswordToken_TimeToResendHasNotCome,
     ApplicationUserResetPasswordToken_WrongValue,
     Channel_IsClosed,
     Channel_NotFound

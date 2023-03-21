@@ -541,7 +541,9 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    application_user_id: i64
+    application_user_id: i64,
+    verification_message_sent: bool,
+    application_user_reset_password_token_can_be_resent_from: i64
 }
 ```
 ```
@@ -606,7 +608,10 @@ struct Incoming {
 }
 ```
 ```
-Result data: absent.
+Result data:
+struct Outcoming {
+    application_user_registration_token_can_be_resent_from: i64
+}
 ```
 ```
 Communication codes:
@@ -614,6 +619,7 @@ Communication codes:
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_RESET_PASSWORD_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
 ```
  - ## VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN POST
 ```

@@ -27,17 +27,20 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                 value, \
                 wrong_enter_tries_quantity, \
                 is_approved, \
-                expires_at \
+                expires_at, \
+                can_be_resent_from \
             ) VALUES ( \
                 $1, \
                 $2, \
                 $3, \
                 $4, \
                 $5, \
-                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $5)::INTERVAL)) \
+                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $5)::INTERVAL)), \
+                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $6)::INTERVAL)) \
             ) \
             RETURNING \
-                aurpt.expires_at AS ea;";
+                aurpt.expires_at AS ea,
+                aurpt.can_be_resent_from AS cbrf;";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.application_user_id, Type::INT8)
@@ -45,7 +48,8 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
             .add_parameter(&insert.application_user_reset_password_token_value, Type::TEXT)
             .add_parameter(&insert.application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
             .add_parameter(&insert.application_user_reset_password_token_is_approved, Type::BOOL)
-            .add_parameter(&ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2);
+            .add_parameter(&ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
+            .add_parameter(&ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_BEFORE_RESENDING, Type::INT2);
 
         let statement = match database_2_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
@@ -87,6 +91,18 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
             }
         };
 
+        let application_user_reset_password_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(1) {
+            Ok(application_user_reset_password_token_can_be_resent_from_) => application_user_reset_password_token_can_be_resent_from_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
         return Ok(
             ApplicationUserResetPasswordToken::new(
                 insert.application_user_id,
@@ -94,7 +110,8 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                 insert.application_user_reset_password_token_value,
                 insert.application_user_reset_password_token_wrong_enter_tries_quantity,
                 insert.application_user_reset_password_token_is_approved,
-                application_user_reset_password_token_expires_at
+                application_user_reset_password_token_expires_at,
+                application_user_reset_password_token_can_be_resent_from
             )
         );
     }
@@ -117,100 +134,267 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         if update.application_user_reset_password_token_expires_at {
-            let query =
-            "UPDATE ONLY public.application_user_reset_password_token AS aurpt
-            SET ( \
-                value, \
-                wrong_enter_tries_quantity, \
-                is_approved, \
-                expires_at \
-            ) = ROW( \
-                $1, \
-                $2, \
-                $3, \
-                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $4)::INTERVAL)) \
-            ) \
-            WHERE aurpt.application_user_id = $5 AND aurpt.application_user_device_id = $6 \
-            RETURNING \
-                aurpt.expires_at AS ea;";
+            if update.application_user_reset_password_token_can_be_resent_from {
+                let query =
+                "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+                SET ( \
+                    value, \
+                    wrong_enter_tries_quantity, \
+                    is_approved, \
+                    expires_at, \
+                    can_be_resent_from \
+                ) = ROW( \
+                    $1, \
+                    $2, \
+                    $3, \
+                    extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $4)::INTERVAL)), \
+                    extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $5)::INTERVAL)) \
+                ) \
+                WHERE aurpt.application_user_id = $6 AND aurpt.application_user_device_id = $7 \
+                RETURNING \
+                    aurpt.expires_at AS ea,
+                    aurpt.can_be_resent_from AS cbrf;";
 
-            prepared_statemant_parameter_convertation_resolver
-                .add_parameter(&application_user_reset_password_token_value, Type::TEXT)
-                .add_parameter(&application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
-                .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
-                .add_parameter(&ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
-                .add_parameter(&application_user_id, Type::INT8)
-                .add_parameter(&application_user_device_id, Type::TEXT);
+                prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_reset_password_token_value, Type::TEXT)
+                    .add_parameter(&application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
+                    .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
+                    .add_parameter(&ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
+                    .add_parameter(&ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_BEFORE_RESENDING, Type::INT2)
+                    .add_parameter(&application_user_id, Type::INT8)
+                    .add_parameter(&application_user_device_id, Type::TEXT);
 
-            let statement = match database_2_connection.prepare_typed(
-                query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
-            ).await {
-                Ok(statement_) => statement_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
+                let statement = match database_2_connection.prepare_typed(
+                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+                ).await {
+                    Ok(statement_) => statement_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
 
-            let row_registry = match database_2_connection.query(
-                &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
-            ).await {
-                Ok(row_registry_) => row_registry_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
+                let row_registry = match database_2_connection.query(
+                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+                ).await {
+                    Ok(row_registry_) => row_registry_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
 
-            let application_user_reset_password_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                Ok(application_user_reset_password_token_token_expires_at_) => application_user_reset_password_token_token_expires_at_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            };
+                let application_user_reset_password_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                    Ok(application_user_reset_password_token_token_expires_at_) => application_user_reset_password_token_token_expires_at_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
 
-            application_user_reset_password_token.set_expires_at(application_user_reset_password_token_expires_at);
+                let application_user_reset_password_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(1) {
+                    Ok(application_user_reset_password_token_can_be_resent_from_) => application_user_reset_password_token_can_be_resent_from_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                application_user_reset_password_token
+                    .set_expires_at(application_user_reset_password_token_expires_at)
+                    .set_can_be_resent_from(application_user_reset_password_token_can_be_resent_from);
+            } else {
+                let query =
+                "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+                SET ( \
+                    value, \
+                    wrong_enter_tries_quantity, \
+                    is_approved, \
+                    expires_at \
+                ) = ROW( \
+                    $1, \
+                    $2, \
+                    $3, \
+                    extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $4)::INTERVAL)) \
+                ) \
+                WHERE aurpt.application_user_id = $5 AND aurpt.application_user_device_id = $6 \
+                RETURNING \
+                    aurpt.expires_at AS ea;";
+
+                prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_reset_password_token_value, Type::TEXT)
+                    .add_parameter(&application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
+                    .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
+                    .add_parameter(&ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT2)
+                    .add_parameter(&application_user_id, Type::INT8)
+                    .add_parameter(&application_user_device_id, Type::TEXT);
+
+                let statement = match database_2_connection.prepare_typed(
+                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+                ).await {
+                    Ok(statement_) => statement_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                let row_registry = match database_2_connection.query(
+                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+                ).await {
+                    Ok(row_registry_) => row_registry_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                let application_user_reset_password_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                    Ok(application_user_reset_password_token_token_expires_at_) => application_user_reset_password_token_token_expires_at_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                application_user_reset_password_token.set_expires_at(application_user_reset_password_token_expires_at);
+            }
         } else {
-            let query =
-            "UPDATE ONLY public.application_user_reset_password_token AS aurpt
-            SET ( \
-                value, \
-                wrong_enter_tries_quantity, \
-                is_approved \
-            ) = ROW( \
-                $1, \
-                $2, \
-                $3 \
-            ) \
-            WHERE aurpt.application_user_id = $4 AND aurpt.application_user_device_id = $5 \
-            RETURNING \
-                aurpt.application_user_id AS aui;";
+            if update.application_user_reset_password_token_can_be_resent_from {
+                let query =
+                "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+                SET ( \
+                    value, \
+                    wrong_enter_tries_quantity, \
+                    is_approved, \
+                    can_be_resent_from \
+                ) = ROW( \
+                    $1, \
+                    $2, \
+                    $3, \
+                    extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $4)::INTERVAL)) \
+                ) \
+                WHERE aurpt.application_user_id = $5 AND aurpt.application_user_device_id = $6 \
+                RETURNING \
+                    aurpt.can_be_resent_from AS cbrf;";
 
-            prepared_statemant_parameter_convertation_resolver
-                .add_parameter(&application_user_reset_password_token_value, Type::TEXT)
-                .add_parameter(&application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
-                .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
-                .add_parameter(&application_user_id, Type::INT8)
-                .add_parameter(&application_user_device_id, Type::TEXT);
+                prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_reset_password_token_value, Type::TEXT)
+                    .add_parameter(&application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
+                    .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
+                    .add_parameter(&ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_BEFORE_RESENDING, Type::INT2)
+                    .add_parameter(&application_user_id, Type::INT8)
+                    .add_parameter(&application_user_device_id, Type::TEXT);
 
-            let statement = match database_2_connection.prepare_typed(
-                query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
-            ).await {
-                Ok(statement_) => statement_,
-                Err(error) => {
+                let statement = match database_2_connection.prepare_typed(
+                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+                ).await {
+                    Ok(statement_) => statement_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                let row_registry = match database_2_connection.query(
+                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+                ).await {
+                    Ok(row_registry_) => row_registry_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                let application_user_reset_password_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(0) {
+                    Ok(application_user_reset_password_token_can_be_resent_from_) => application_user_reset_password_token_can_be_resent_from_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                application_user_reset_password_token.set_can_be_resent_from(application_user_reset_password_token_can_be_resent_from);
+            } else {
+                let query =
+                "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+                SET ( \
+                    value, \
+                    wrong_enter_tries_quantity, \
+                    is_approved \
+                ) = ROW( \
+                    $1, \
+                    $2, \
+                    $3 \
+                ) \
+                WHERE aurpt.application_user_id = $4 AND aurpt.application_user_device_id = $5 \
+                RETURNING \
+                    aurpt.application_user_id AS aui;";
+
+                prepared_statemant_parameter_convertation_resolver
+                    .add_parameter(&application_user_reset_password_token_value, Type::TEXT)
+                    .add_parameter(&application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
+                    .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
+                    .add_parameter(&application_user_id, Type::INT8)
+                    .add_parameter(&application_user_device_id, Type::TEXT);
+
+                let statement = match database_2_connection.prepare_typed(
+                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+                ).await {
+                    Ok(statement_) => statement_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
+                };
+
+                if let Err(error) = database_2_connection.query(
+                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+                ).await {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
@@ -218,17 +402,6 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                         )
                     );
                 }
-            };
-
-            if let Err(error) = database_2_connection.query(
-                &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
-            ).await {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
             }
         }
 
@@ -290,7 +463,8 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                 aurpt.value AS v, \
                 aurpt.wrong_enter_tries_quantity AS wetq, \
                 aurpt.is_approved AS ia, \
-                aurpt.expires_at AS ea \
+                aurpt.expires_at AS ea,
+                aurpt.can_be_resent_from AS cbrf \
             FROM public.application_user_reset_password_token aurpt \
             WHERE aurpt.application_user_id = $1 AND aurpt.application_user_device_id = $2;";
 
@@ -378,6 +552,18 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
             }
         };
 
+        let application_user_reset_password_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(4) {
+            Ok(application_user_reset_password_token_can_be_resent_from_) => application_user_reset_password_token_can_be_resent_from_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken::new(
@@ -386,7 +572,8 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository {
                     application_user_reset_password_token_value,
                     application_user_reset_password_token_wrong_enter_tries_quantity,
                     application_user_reset_password_token_is_approved,
-                    application_user_reset_password_token_expires_at
+                    application_user_reset_password_token_expires_at,
+                    application_user_reset_password_token_can_be_resent_from
                 )
             )
         );
@@ -402,5 +589,6 @@ pub struct Insert<'a> {
 }
 
 pub struct Update {
-    pub application_user_reset_password_token_expires_at: bool
+    pub application_user_reset_password_token_expires_at: bool,
+    pub application_user_reset_password_token_can_be_resent_from: bool
 }
