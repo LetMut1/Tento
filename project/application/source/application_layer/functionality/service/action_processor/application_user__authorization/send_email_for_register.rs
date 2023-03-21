@@ -161,7 +161,9 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        let outcoming = Outcoming { can_be_resent_from: application_user_registration_token_.get_can_be_resent_from() };
+        let outcoming = Outcoming {
+            application_user_registration_token_can_be_resent_from: application_user_registration_token_.get_can_be_resent_from()
+        };
 
         return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
     }
@@ -179,5 +181,5 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    can_be_resent_from: i64
+    application_user_registration_token_can_be_resent_from: i64
 }

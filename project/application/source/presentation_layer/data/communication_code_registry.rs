@@ -23,6 +23,7 @@ impl CommunicationCodeRegistry {
     pub const APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND: i64 = 2000;
     pub const APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE: i64 = 2001;
     pub const APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED: i64 = 2002;
+    pub const APPLICATION_USER_AUTHORIZATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME: i64 = 2003;
 
     /// Codes for Application_user_reset_password_token context.
     /// [3000, 3999]

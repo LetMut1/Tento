@@ -358,14 +358,14 @@ struct Incoming {
 Result data:
 struct Outcoming {
     verification_message_sent: bool,
-    can_be_resent_from: i64
+    application_user_registration_token_can_be_resent_from: i64
 }
 
 
 verification_message_sent - determines if a verification message has been sent. The value will be false only if the request was retried
 with unchanged parameters without waiting a certain amount of time.
 
-can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
+application_user_registration_token_can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
@@ -438,11 +438,11 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    can_be_resent_from: i64
+    application_user_registration_token_can_be_resent_from: i64
 }
 
 
-can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
+application_user_registration_token_can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
@@ -466,8 +466,12 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    application_user_id: i64
+    application_user_id: i64,
+    verification_message_sent: bool,
+    application_user_authorization_token_can_be_resent_from: i64
 }
+
+application_user_authorization_token_can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
@@ -511,13 +515,17 @@ struct Incoming {
 }
 ```
 ```
-Result data: absent.
+Result data:
+struct Outcoming {
+    application_user_authorization_token_can_be_resent_from: i64
+}
 ```
 ```
 Communication codes:
 - APPLICATION_USER__NOT_FOUND
 - APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
 - APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
+- APPLICATION_USER_AUTHORIZATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
 ```
  - ## VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP POST
 ```

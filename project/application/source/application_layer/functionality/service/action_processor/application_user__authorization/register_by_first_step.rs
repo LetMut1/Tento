@@ -203,7 +203,7 @@ impl ActionProcessor {
 
         let outcoming = Outcoming {
             verification_message_sent: can_send,
-            can_be_resent_from: application_user_registration_token_.get_can_be_resent_from()
+            application_user_registration_token_can_be_resent_from: application_user_registration_token_.get_can_be_resent_from()
         };
 
         return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
@@ -223,5 +223,5 @@ pub struct Incoming {
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     verification_message_sent: bool,
-    can_be_resent_from: i64
+    application_user_registration_token_can_be_resent_from: i64
 }
