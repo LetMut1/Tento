@@ -2,10 +2,8 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__expiration_time_resolver::ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::application_user_access_refresh_token__expires_at_generator::ApplicationUserAccessRefreshToken_ExpiresAtGenerator;
-use crate::domain_layer::functionality::service::application_user_access_refresh_token__obfuscation_value_generator::ApplicationUserAccessRefreshToken_ObfuscationValueGenerator;
+use crate::domain_layer::functionality::service::application_user_access_refresh_token__property_generator::ApplicationUserAccessRefreshToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
-use crate::domain_layer::functionality::service::application_user_access_refresh_token__updated_at_generator::ApplicationUserAccessRefreshToken_UpdatedAtGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__expires_at_generator::ApplicationUserAccessToken_ExpiresAtGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__id_generator::ApplicationUserAccessToken_IdGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
@@ -156,7 +154,7 @@ impl ActionProcessor {
             expires_at
         );
 
-        let application_user_access_refresh_token_expires_at = match ApplicationUserAccessRefreshToken_ExpiresAtGenerator::generate() {
+        let application_user_access_refresh_token_expires_at = match ApplicationUserAccessRefreshToken_PropertyGenerator::generate_expires_at() {
             Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -167,9 +165,9 @@ impl ActionProcessor {
 
         application_user_access_refresh_token_
             .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_new.get_id()))
-            .set_obfuscation_value(ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate())
+            .set_obfuscation_value(ApplicationUserAccessRefreshToken_PropertyGenerator::generate_obfuscation_value())
             .set_expires_at(application_user_access_refresh_token_expires_at)
-            .set_updated_at(ApplicationUserAccessRefreshToken_UpdatedAtGenerator::generate());
+            .set_updated_at(ApplicationUserAccessRefreshToken_PropertyGenerator::generate_updated_at());
 
         if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::update(
             database_2_postgresql_connection,
