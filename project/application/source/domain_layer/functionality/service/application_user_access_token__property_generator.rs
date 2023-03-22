@@ -2,11 +2,12 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
+use extern_crate::uuid::Uuid;
 
-pub struct ApplicationUserAccessToken_ExpiresAtGenerator;
+pub struct ApplicationUserAccessToken_PropertyGenerator;
 
-impl ApplicationUserAccessToken_ExpiresAtGenerator {
-    pub fn generate() -> Result<i64, ErrorAuditor> {
+impl ApplicationUserAccessToken_PropertyGenerator {
+    pub fn generate_expires_at() -> Result<i64, ErrorAuditor> {
         let application_user_access_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
             ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
         ) {
@@ -19,5 +20,9 @@ impl ApplicationUserAccessToken_ExpiresAtGenerator {
         };
 
         return Ok(application_user_access_token_expires_at);
+    }
+
+    pub fn generate_id() -> String {
+        return Uuid::new_v4().to_string();
     }
 }
