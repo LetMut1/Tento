@@ -59,6 +59,10 @@ impl BaseError {
     pub fn create_unreachable_state() -> Self {
         return Self::LogicError { message: "Unreachable state." }
     }
+
+    pub fn create_out_of_range() -> Self {
+        return Self::LogicError { message: "Out of range." }
+    }
 }
 
 impl Display for BaseError {

@@ -11,7 +11,6 @@ use crate::domain_layer::functionality::service::application_user_access_token__
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_registration_token__validator::ApplicationUserRegistrationToken_Validator;
-use crate::domain_layer::functionality::service::application_user_registration_token__wrong_enter_tries_quantity_incrementor::ApplicationUserRegistrationToken_WrongEnterTriesQuantityIncrementor;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -211,13 +210,22 @@ impl ActionProcessor {
         }
 
         if application_user_registration_token_.get_value() != incoming.application_user_registration_token_value.as_str() {
-            if let Err(mut error) = ApplicationUserRegistrationToken_WrongEnterTriesQuantityIncrementor::increment(&mut application_user_registration_token_) {
-                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            let application_user_registration_token_wrong_enter_tries_quantity = match application_user_registration_token_.get_wrong_enter_tries_quantity()
+                .checked_add(1) {
+                Some(application_user_registration_token_wrong_enter_tries_quantity_) => application_user_registration_token_wrong_enter_tries_quantity_,
+                None => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::create_out_of_range(),
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
+                }
+            };
 
-                return Err(error);
-            }
+            if application_user_registration_token_wrong_enter_tries_quantity <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                application_user_registration_token_.set_wrong_enter_tries_quantity(application_user_registration_token_wrong_enter_tries_quantity);
 
-            if application_user_registration_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
                     database_2_postgresql_connection,
                     &application_user_registration_token_
