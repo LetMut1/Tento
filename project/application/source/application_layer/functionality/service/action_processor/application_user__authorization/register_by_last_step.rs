@@ -28,7 +28,6 @@ use crate::infrastructure_layer::functionality::repository::application_user_acc
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::ApplicationUserDevice_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::ApplicationUserRegistrationToken_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::Update;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
@@ -222,11 +221,7 @@ impl ActionProcessor {
             if application_user_registration_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
                     database_2_postgresql_connection,
-                    &mut application_user_registration_token_,
-                    Update {
-                        application_user_registration_token_expires_at: false,
-                        application_user_registration_token_can_be_resent_from: false
-                    }
+                    &mut application_user_registration_token_
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

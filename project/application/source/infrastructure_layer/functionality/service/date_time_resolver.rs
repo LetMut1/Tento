@@ -12,7 +12,7 @@ impl DateTimeResolver {
     /// Rule for 2022-09-18 03:03:39.308889+0000
     const TIMESTAMP_FORMAT_TO_FORMAT: &'static str = "%Y-%m-%d %H:%M:%S%.6f%z";
 
-    pub fn add_interval_from_now(quantity_of_minutes: i64) -> Result<i64, ErrorAuditor> {
+    pub fn add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, ErrorAuditor> {
         let mut quantity_of_seconds = match quantity_of_minutes.checked_mul(60) {
             Some(quantity_of_seconds_) => quantity_of_seconds_,
             None => {

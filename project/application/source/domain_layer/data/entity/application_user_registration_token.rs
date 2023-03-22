@@ -11,8 +11,8 @@ pub struct ApplicationUserRegistrationToken<'a> {
 }
 
 impl<'a> ApplicationUserRegistrationToken<'a> {
-    pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i16 = 1;
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i16 = 60 * 3;
+    pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 3;
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 5;
 
     pub fn new(
