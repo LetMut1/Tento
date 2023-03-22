@@ -2,6 +2,7 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
+use crate::domain_layer::functionality::service::application_user_registration_token__can_be_resent_from_generator::ApplicationUserRegistrationToken_CanBeResentFromGenerator;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_registration_token__sending_opportunity_resolver::ApplicationUserRegistrationToken_SendingOpportunityResolver;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -133,7 +134,7 @@ impl ActionProcessor {
             );
         }
 
-        let application_user_registration_token_can_be_resent_from = match ApplicationUserRegistrationToken_SendingOpportunityResolver::create_can_be_resent_from() {
+        let application_user_registration_token_can_be_resent_from = match ApplicationUserRegistrationToken_CanBeResentFromGenerator::generate() {
             Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

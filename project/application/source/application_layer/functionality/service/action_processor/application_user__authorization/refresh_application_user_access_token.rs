@@ -2,6 +2,7 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__expiration_time_resolver::ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_access_refresh_token__expires_at_generator::ApplicationUserAccessRefreshToken_ExpiresAtGenerator;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__obfuscation_value_generator::ApplicationUserAccessRefreshToken_ObfuscationValueGenerator;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__updated_at_generator::ApplicationUserAccessRefreshToken_UpdatedAtGenerator;
@@ -155,7 +156,7 @@ impl ActionProcessor {
             expires_at
         );
 
-        let application_user_access_refresh_token_expires_at = match ApplicationUserAccessRefreshToken_ExpirationTimeResolver::create_expires_at() {
+        let application_user_access_refresh_token_expires_at = match ApplicationUserAccessRefreshToken_ExpiresAtGenerator::generate() {
             Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
