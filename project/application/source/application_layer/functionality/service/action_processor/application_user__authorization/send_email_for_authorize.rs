@@ -1,7 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
-use crate::domain_layer::functionality::service::application_user_authorization_token__can_be_resent_from_generator::ApplicationUserAuthorizationToken_CanBeResentFromGenerator;
+use crate::domain_layer::functionality::service::application_user_authorization_token__property_generator::ApplicationUserAuthorizationToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__sending_opportunity_resolver::ApplicationUserAuthorizationToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
@@ -114,7 +114,7 @@ impl ActionProcessor {
             );
         }
 
-        let application_user_authorization_token_can_be_resent_from = match ApplicationUserAuthorizationToken_CanBeResentFromGenerator::generate() {
+        let application_user_authorization_token_can_be_resent_from = match ApplicationUserAuthorizationToken_PropertyGenerator::generate_can_be_resent_from() {
             Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
