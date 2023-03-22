@@ -12,7 +12,7 @@ pub struct ApplicationUserAccessToken<'a> {
 }
 
 impl<'a> ApplicationUserAccessToken<'a> {
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: u8 = 30;
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 30;
 
     pub fn new(
         id: String,

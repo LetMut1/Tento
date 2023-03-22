@@ -14,7 +14,6 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::ApplicationUserAuthorizationToken_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -114,13 +113,20 @@ impl ActionProcessor {
             );
         }
 
+        let application_user_authorization_token_can_be_resent_from = match ApplicationUserAuthorizationToken_SendingOpportunityResolver::create_can_be_resent_from() {
+            Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        application_user_authorization_token_.set_can_be_resent_from(application_user_authorization_token_can_be_resent_from);
+
         if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::update(
             database_2_postgresql_connection,
-            &mut application_user_authorization_token_,
-            Update {
-                application_user_authorization_token_expires_at: false,
-                application_user_authorization_token_can_be_resent_from: true
-            }
+            &application_user_authorization_token_
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

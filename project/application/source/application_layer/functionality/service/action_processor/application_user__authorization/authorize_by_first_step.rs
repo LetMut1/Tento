@@ -17,7 +17,6 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::ApplicationUserAuthorizationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::Insert;
-use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -166,15 +165,19 @@ impl ActionProcessor {
 
         let (application_user_authorization_token_, can_send) = match application_user_authorization_token {
             Some(mut application_user_authorization_token__) => {
-                let mut update = Update {
-                    application_user_authorization_token_expires_at: false,
-                    application_user_authorization_token_can_be_resent_from: false
-                };
-
                 let (can_send_, mut need_to_update) = if ApplicationUserAuthorizationToken_SendingOpportunityResolver::can_send(
                     &application_user_authorization_token__
                 ) {
-                    update.application_user_authorization_token_can_be_resent_from = true;
+                    let application_user_authorization_token_can_be_resent_from = match ApplicationUserAuthorizationToken_SendingOpportunityResolver::create_can_be_resent_from() {
+                        Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
+                        Err(mut error) => {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    };
+
+                    application_user_authorization_token__.set_can_be_resent_from(application_user_authorization_token_can_be_resent_from);
 
                     (true, true)
                 } else {
@@ -184,18 +187,25 @@ impl ActionProcessor {
                 if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token__) {
                     need_to_update = true;
 
-                    update.application_user_authorization_token_expires_at = true;
+                    let application_user_authorization_token_expires_at = match ApplicationUserAuthorizationToken_ExpirationTimeResolver::create_expires_at() {
+                        Ok(application_user_authorization_token_expires_at_) => application_user_authorization_token_expires_at_,
+                        Err(mut error) => {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    };
 
                     application_user_authorization_token__
                         .set_value(ApplicationUserAuthorizationToken_ValueGenerator::generate())
-                        .set_wrong_enter_tries_quantity(0);
+                        .set_wrong_enter_tries_quantity(0)
+                        .set_expires_at(application_user_authorization_token_expires_at);
                 }
 
                 if need_to_update {
                     if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::update(
                         database_2_postgresql_connection,
-                        &mut application_user_authorization_token__,
-                        update
+                        &application_user_authorization_token__
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -206,11 +216,31 @@ impl ActionProcessor {
                 (application_user_authorization_token__, can_send_)
             }
             None => {
+                let application_user_authorization_token_expires_at = match ApplicationUserAuthorizationToken_ExpirationTimeResolver::create_expires_at() {
+                    Ok(application_user_authorization_token_expires_at_) => application_user_authorization_token_expires_at_,
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        return Err(error);
+                    }
+                };
+
+                let application_user_authorization_token_can_be_resent_from = match ApplicationUserAuthorizationToken_SendingOpportunityResolver::create_can_be_resent_from() {
+                    Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        return Err(error);
+                    }
+                };
+
                 let insert = Insert {
                     application_user_id: application_user_.get_id(),
                     application_user_device_id: Cow::Owned(incoming.application_user_device_id),
                     application_user_authorization_token_value: ApplicationUserAuthorizationToken_ValueGenerator::generate(),
-                    application_user_authorization_token_wrong_enter_tries_quantity: 0
+                    application_user_authorization_token_wrong_enter_tries_quantity: 0,
+                    application_user_authorization_token_expires_at,
+                    application_user_authorization_token_can_be_resent_from
                 };
 
                 let application_user_authorization_token__ = match ApplicationUserAuthorizationToken_PostgresqlRepository::create(

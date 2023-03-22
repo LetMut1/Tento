@@ -10,8 +10,8 @@ pub struct ApplicationUserAuthorizationToken<'a> {
 }
 
 impl<'a> ApplicationUserAuthorizationToken<'a> {
-    pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i16 = 1;
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i16 = 10;
+    pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 10;
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 5;
 
     pub fn new(

@@ -148,7 +148,7 @@ impl ActionProcessor {
             if application_user_registration_token_.get_wrong_enter_tries_quantity() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
                     database_2_postgresql_connection,
-                    &mut application_user_registration_token_
+                    &application_user_registration_token_
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -179,7 +179,7 @@ impl ActionProcessor {
 
         if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
             database_2_postgresql_connection,
-            &mut application_user_registration_token_
+            &application_user_registration_token_
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

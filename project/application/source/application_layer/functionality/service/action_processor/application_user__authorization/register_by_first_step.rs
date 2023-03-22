@@ -162,7 +162,7 @@ impl ActionProcessor {
                 if need_to_update {
                     if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
                         database_2_postgresql_connection,
-                        &mut application_user_registration_token__
+                        &application_user_registration_token__
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
