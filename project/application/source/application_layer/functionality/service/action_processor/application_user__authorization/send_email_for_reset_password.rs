@@ -29,7 +29,7 @@ use std::marker::Sync;
 pub struct ActionProcessor;
 
 impl ActionProcessor {
-    pub async fn process<'a, T>(            // TODO Защита от частого посыла емэй
+    pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

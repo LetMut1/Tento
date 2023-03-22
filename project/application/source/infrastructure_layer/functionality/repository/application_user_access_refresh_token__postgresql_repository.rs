@@ -110,9 +110,9 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
         );
     }
 
-    pub async fn update<'a, 'b>(
+    pub async fn update<'a>(
         database_2_connection: &'a Connection,
-        application_user_access_refresh_token: &'a mut ApplicationUserAccessRefreshToken<'b>,
+        application_user_access_refresh_token: &'a mut ApplicationUserAccessRefreshToken<'_>,
         update: Update
     ) -> Result<(), ErrorAuditor> {
         let application_user_id = application_user_access_refresh_token.get_application_user_id();
