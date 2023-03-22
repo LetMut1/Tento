@@ -7,11 +7,11 @@ pub struct ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 
 impl ApplicationUserResetPasswordToken_ExpirationTimeResolver {
     pub fn is_expired<'a>(application_user_reset_password_token: &'a ApplicationUserResetPasswordToken<'_>) -> bool {
-        return !DateTimeResolver::is_greater_or_equal_than_now(application_user_reset_password_token.get_expires_at());
+        return !DateTimeResolver::unixtime_is_greater_or_equal_than_now(application_user_reset_password_token.get_expires_at());
     }
 
     pub fn create_expires_at() -> Result<i64, ErrorAuditor> {
-        let application_user_reset_password_token_expires_at = match DateTimeResolver::add_minutes_interval_from_now(
+        let application_user_reset_password_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
             ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
         ) {
             Ok(application_user_reset_password_token_expires_at_) => application_user_reset_password_token_expires_at_,

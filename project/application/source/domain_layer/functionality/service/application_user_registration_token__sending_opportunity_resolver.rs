@@ -7,13 +7,13 @@ pub struct ApplicationUserRegistrationToken_SendingOpportunityResolver;
 
 impl ApplicationUserRegistrationToken_SendingOpportunityResolver {
     pub fn can_send<'a>(application_user_registration_token: &'a ApplicationUserRegistrationToken<'_>) -> bool {
-        return !DateTimeResolver::is_greater_or_equal_than_now(
+        return !DateTimeResolver::unixtime_is_greater_or_equal_than_now(
             application_user_registration_token.get_can_be_resent_from()
         );
     }
 
     pub fn create_can_be_resent_from() -> Result<i64, ErrorAuditor> {
-        let application_user_registration_token_can_be_resent_from = match DateTimeResolver::add_minutes_interval_from_now(
+        let application_user_registration_token_can_be_resent_from = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
             ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_BEFORE_RESENDING
         ) {
             Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,

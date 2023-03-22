@@ -7,7 +7,7 @@ pub struct ApplicationUserAccessToken_ExpiresAtGenerator;
 
 impl ApplicationUserAccessToken_ExpiresAtGenerator {
     pub fn generate() -> Result<i64, ErrorAuditor> {
-        let application_user_access_token_expires_at = match DateTimeResolver::add_minutes_interval_from_now(
+        let application_user_access_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
             ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
         ) {
             Ok(application_user_access_token_expires_at_) => application_user_access_token_expires_at_,

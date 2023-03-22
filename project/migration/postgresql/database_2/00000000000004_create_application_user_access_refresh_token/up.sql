@@ -4,7 +4,7 @@ CREATE TABLE public.application_user_access_refresh_token (
     application_user_access_token_id TEXT,
     obfuscation_value TEXT,
     expires_at BIGINT,
-    updated_at TIMESTAMP(6) WITH TIME ZONE
+    updated_at BIGINT
 ) WITH (oids = false, fillfactor = 95, autovacuum_enabled = true);
 
 CREATE UNIQUE INDEX application_user_access_refresh_token1 ON public.application_user_access_refresh_token

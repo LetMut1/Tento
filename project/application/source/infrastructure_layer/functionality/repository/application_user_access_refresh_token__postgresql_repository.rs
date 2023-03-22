@@ -32,19 +32,17 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                 $2, \
                 $3, \
                 $4, \
-                extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $5)::INTERVAL)), \
-                current_timestamp(6) \
-            ) \
-            RETURNING \
-                auart.expires_at AS ea, \
-                auart.updated_at::TEXT AS ua;";
+                $5, \
+                $6 \
+            );";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.application_user_id, Type::INT8)
             .add_parameter(&application_user_device_id_, Type::TEXT)
             .add_parameter(&application_user_access_token_id_, Type::TEXT)
             .add_parameter(&insert.application_user_access_refresh_token_obfuscation_value, Type::TEXT)
-            .add_parameter(&ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT4);
+            .add_parameter(&insert.application_user_access_refresh_token_expires_at, Type::INT8)
+            .add_parameter(&insert.application_user_access_refresh_token_updated_at, Type::INT8);
 
         let statement = match database_2_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
@@ -60,42 +58,15 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             }
         };
 
-        let row_registry = match database_2_connection.query(
+        if let Err(error) = database_2_connection.query(
             &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
         ).await {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        let application_user_access_refresh_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_access_refresh_token_updated_at_) => application_user_access_refresh_token_updated_at_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
         };
 
         return Ok(
@@ -104,16 +75,15 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                 insert.application_user_device_id,
                 insert.application_user_access_token_id,
                 insert.application_user_access_refresh_token_obfuscation_value,
-                application_user_access_refresh_token_expires_at,
-                application_user_access_refresh_token_updated_at
+                insert.application_user_access_refresh_token_expires_at,
+                insert.application_user_access_refresh_token_updated_at
             )
         );
     }
 
     pub async fn update<'a>(
         database_2_connection: &'a Connection,
-        application_user_access_refresh_token: &'a mut ApplicationUserAccessRefreshToken<'_>,
-        update: Update
+        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<(), ErrorAuditor> {
         let application_user_id = application_user_access_refresh_token.get_application_user_id();
 
@@ -123,264 +93,58 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
 
         let application_user_access_refresh_token_obfuscation_value = application_user_access_refresh_token.get_obfuscation_value();
 
+        let application_user_access_refresh_token_expires_at = application_user_access_refresh_token.get_expires_at();
+
+        let application_user_access_refresh_token_updated_at = application_user_access_refresh_token.get_updated_at();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        if update.application_user_access_refresh_token_expires_at {
-            if update.application_user_access_refresh_token_updated_at {
-                let query =
-                    "UPDATE ONLY public.application_user_access_refresh_token AS auart \
-                    SET ( \
-                        application_user_access_token_id, \
-                        obfuscation_value, \
-                        expires_at, \
-                        updated_at
-                    ) = ROW( \
-                        $1, \
-                        $2, \
-                        extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $3)::INTERVAL)), \
-                        current_timestamp(6) \
-                    ) \
-                    WHERE auart.application_user_id = $4 AND auart.application_user_device_id = $5 \
-                    RETURNING \
-                        auart.expires_at AS ea, \
-                        auart.updated_at::TEXT AS ua;";
+        let query =
+            "UPDATE ONLY public.application_user_access_refresh_token AS auart \
+            SET ( \
+                application_user_access_token_id, \
+                obfuscation_value, \
+                expires_at, \
+                updated_at
+            ) = ROW( \
+                $1, \
+                $2, \
+                $3, \
+                $4 \
+            ) \
+            WHERE auart.application_user_id = $5 AND auart.application_user_device_id = $6;";
 
-                prepared_statemant_parameter_convertation_resolver
-                    .add_parameter(&application_user_access_token_id, Type::TEXT)
-                    .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
-                    .add_parameter(&ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT4)
-                    .add_parameter(&application_user_id, Type::INT8)
-                    .add_parameter(&application_user_device_id, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&application_user_access_token_id, Type::TEXT)
+            .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
+            .add_parameter(&application_user_access_refresh_token_expires_at, Type::INT8)
+            .add_parameter(&application_user_access_refresh_token_updated_at, Type::INT8)
+            .add_parameter(&application_user_id, Type::INT8)
+            .add_parameter(&application_user_device_id, Type::TEXT);
 
-                let statement = match database_2_connection.prepare_typed(
-                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
-                ).await {
-                    Ok(statement_) => statement_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                let row_registry = match database_2_connection.query(
-                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
-                ).await {
-                    Ok(row_registry_) => row_registry_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                let application_user_access_refresh_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                    Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(1) {
-                    Ok(application_user_access_refresh_token_updated_at_) => application_user_access_refresh_token_updated_at_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                application_user_access_refresh_token
-                    .set_expires_at(application_user_access_refresh_token_expires_at)
-                    .set_updated_at(application_user_access_refresh_token_updated_at);
-            } else {
-                let query =
-                    "UPDATE ONLY public.application_user_access_refresh_token AS auart \
-                    SET ( \
-                        application_user_access_token_id, \
-                        obfuscation_value, \
-                        expires_at \
-                    ) = ROW( \
-                        $1, \
-                        $2, \
-                        extract(EPOCH FROM (current_timestamp(0) + (INTERVAL '1 MINUTE' * $3)::INTERVAL)) \
-                    ) \
-                    WHERE auart.application_user_id = $4 AND auart.application_user_device_id = $5 \
-                    RETURNING \
-                        auart.expires_at AS ea;";
-
-                prepared_statemant_parameter_convertation_resolver
-                    .add_parameter(&application_user_access_token_id, Type::TEXT)
-                    .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
-                    .add_parameter(&ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION, Type::INT4)
-                    .add_parameter(&application_user_id, Type::INT8)
-                    .add_parameter(&application_user_device_id, Type::TEXT);
-
-                let statement = match database_2_connection.prepare_typed(
-                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
-                ).await {
-                    Ok(statement_) => statement_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                let row_registry = match database_2_connection.query(
-                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
-                ).await {
-                    Ok(row_registry_) => row_registry_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                let application_user_access_refresh_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(0) {
-                    Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                application_user_access_refresh_token.set_expires_at(application_user_access_refresh_token_expires_at);
+        let statement = match database_2_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+        ).await {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
             }
-        } else {
-            if update.application_user_access_refresh_token_updated_at {
-                let query =
-                    "UPDATE ONLY public.application_user_access_refresh_token AS auart \
-                    SET ( \
-                        application_user_access_token_id, \
-                        obfuscation_value, \
-                        updated_at \
-                    ) = ROW( \
-                        $1, \
-                        $2, \
-                        current_timestamp(6) \
-                    ) \
-                    WHERE auart.application_user_id = $3 AND auart.application_user_device_id = $4 \
-                    RETURNING \
-                        auart.updated_at::TEXT AS ua;";
+        };
 
-                prepared_statemant_parameter_convertation_resolver
-                    .add_parameter(&application_user_access_token_id, Type::TEXT)
-                    .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
-                    .add_parameter(&application_user_id, Type::INT8)
-                    .add_parameter(&application_user_device_id, Type::TEXT);
-
-                let statement = match database_2_connection.prepare_typed(
-                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
-                ).await {
-                    Ok(statement_) => statement_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                let row_registry = match database_2_connection.query(
-                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
-                ).await {
-                    Ok(row_registry_) => row_registry_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-                    Ok(application_user_access_refresh_token_updated_at_) => application_user_access_refresh_token_updated_at_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                application_user_access_refresh_token.set_updated_at(application_user_access_refresh_token_updated_at);
-            } else {
-                let query =
-                    "UPDATE ONLY public.application_user_access_refresh_token AS auart \
-                    SET ( \
-                        application_user_access_token_id, \
-                        obfuscation_value \
-                    ) = ROW( \
-                        $1, \
-                        $2 \
-                    ) \
-                    WHERE auart.application_user_id = $3 AND auart.application_user_device_id = $4 \
-                    RETURNING \
-                        auart.application_user_id AS aui;";
-
-                prepared_statemant_parameter_convertation_resolver
-                    .add_parameter(&application_user_access_token_id, Type::TEXT)
-                    .add_parameter(&application_user_access_refresh_token_obfuscation_value, Type::TEXT)
-                    .add_parameter(&application_user_id, Type::INT8)
-                    .add_parameter(&application_user_device_id, Type::TEXT);
-
-                let statement = match database_2_connection.prepare_typed(
-                    query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
-                ).await {
-                    Ok(statement_) => statement_,
-                    Err(error) => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                };
-
-                if let Err(error) = database_2_connection.query(
-                    &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
-                ).await {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
-                }
-            }
+        if let Err(error) = database_2_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+        ).await {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
         };
 
         return Ok(());
@@ -478,7 +242,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
                 auart.application_user_access_token_id AS auati, \
                 auart.obfuscation_value AS ov, \
                 auart.expires_at AS ea, \
-                auart.updated_at::TEXT AS ua \
+                auart.updated_at AS ua \
             FROM public.application_user_access_refresh_token auart \
             WHERE auart.application_user_id = $1 AND auart.application_user_device_id = $2;";
 
@@ -554,7 +318,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository {
             }
         };
 
-        let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, String>(3) {
+        let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
             Ok(application_user_access_refresh_token_updated_at_) => application_user_access_refresh_token_updated_at_,
             Err(error) => {
                 return Err(
@@ -586,9 +350,6 @@ pub struct Insert<'a> {
     pub application_user_device_id: Cow<'a, str>,
     pub application_user_access_token_id: Cow<'a, str>,
     pub application_user_access_refresh_token_obfuscation_value: String,
-}
-
-pub struct Update {
-    pub application_user_access_refresh_token_expires_at: bool,
-    pub application_user_access_refresh_token_updated_at: bool
+    pub application_user_access_refresh_token_expires_at: i64,
+    pub application_user_access_refresh_token_updated_at: i64
 }

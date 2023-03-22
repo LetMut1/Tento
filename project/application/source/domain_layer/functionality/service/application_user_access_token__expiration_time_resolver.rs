@@ -5,6 +5,6 @@ pub struct ApplicationUserAccessToken_ExpirationTimeResolver;
 
 impl ApplicationUserAccessToken_ExpirationTimeResolver {
     pub fn is_expired<'a>(application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> bool {
-        return !DateTimeResolver::is_greater_or_equal_than_now(application_user_access_token.get_expires_at());
+        return !DateTimeResolver::unixtime_is_greater_or_equal_than_now(application_user_access_token.get_expires_at());
     }
 }

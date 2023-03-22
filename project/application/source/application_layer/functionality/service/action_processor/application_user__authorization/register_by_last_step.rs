@@ -4,8 +4,10 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
+use crate::domain_layer::functionality::service::application_user_access_refresh_token__expiration_time_resolver::ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__obfuscation_value_generator::ApplicationUserAccessRefreshToken_ObfuscationValueGenerator;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
+use crate::domain_layer::functionality::service::application_user_access_refresh_token__updated_at_generator::ApplicationUserAccessRefreshToken_UpdatedAtGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__expires_at_generator::ApplicationUserAccessToken_ExpiresAtGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__id_generator::ApplicationUserAccessToken_IdGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
@@ -285,6 +287,7 @@ impl ActionProcessor {
             application_user_device_id: incoming.application_user_device_id,
             application_user_id: application_user.get_id()
         };
+
         let application_user_device = match ApplicationUserDevice_PostgresqlRepository::create(database_1_postgresql_connection, application_user_device_insert).await {
             Ok(application_user_device_) => application_user_device_,
             Err(mut error) => {
@@ -294,7 +297,7 @@ impl ActionProcessor {
             }
         };
 
-        let expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {
+        let application_user_acces_token_expires_at = match ApplicationUserAccessToken_ExpiresAtGenerator::generate() {
             Ok(expires_at_) => expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -302,18 +305,31 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let application_user_access_token = ApplicationUserAccessToken::new(
             ApplicationUserAccessToken_IdGenerator::generate(),
             application_user.get_id(),
             Cow::Borrowed(application_user_device.get_id()),
-            expires_at
+            application_user_acces_token_expires_at
         );
+
+        let application_user_access_refresh_token_expires_at = match ApplicationUserAccessRefreshToken_ExpirationTimeResolver::create_expires_at() {
+            Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
                 // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
         let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
             application_user_id: application_user.get_id(),
             application_user_device_id: Cow::Borrowed(application_user_device.get_id()),
             application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
             application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValueGenerator::generate(),
+            application_user_access_refresh_token_expires_at,
+            application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_UpdatedAtGenerator::generate()
         };
 
         let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::create(

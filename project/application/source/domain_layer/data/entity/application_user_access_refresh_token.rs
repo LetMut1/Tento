@@ -10,11 +10,11 @@ pub struct ApplicationUserAccessRefreshToken<'a> {
     application_user_access_token_id: Cow<'a, str>,
     obfuscation_value: String,
     expires_at: i64,
-    updated_at: String
+    updated_at: i64
 }
 
 impl<'a> ApplicationUserAccessRefreshToken<'a> {
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i32 = 60 * 24 * 30 * 3;
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 24 * 30 * 3;
 
     pub fn new(
         application_user_id: i64,
@@ -22,7 +22,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         application_user_access_token_id: Cow<'a, str>,
         obfuscation_value: String,
         expires_at: i64,
-        updated_at: String
+        updated_at: i64
     ) -> Self {
         return Self {
             application_user_id,
@@ -54,6 +54,10 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         return self.expires_at;
     }
 
+    pub fn get_updated_at<'b>(&'b self) -> i64 {
+        return self.updated_at;
+    }
+
     pub fn set_application_user_access_token_id<'b >(&'b mut self, application_user_access_token_id: Cow<'a, str>) -> &'b mut Self {
         self.application_user_access_token_id = application_user_access_token_id;
 
@@ -72,7 +76,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         return self;
     }
 
-    pub fn set_updated_at<'b>(&'b mut self, updated_at: String) -> &'b mut Self {
+    pub fn set_updated_at<'b>(&'b mut self, updated_at: i64) -> &'b mut Self {
         self.updated_at = updated_at;
 
         return self;
