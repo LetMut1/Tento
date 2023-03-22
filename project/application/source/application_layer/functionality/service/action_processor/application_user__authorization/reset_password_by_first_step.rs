@@ -16,7 +16,6 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::ApplicationUserResetPasswordToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::Insert;
-use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::Update;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -123,15 +122,19 @@ impl ActionProcessor {
 
         let (application_user_reset_password_token_, can_send) = match application_user_reset_password_token {
             Some(mut application_user_reset_password_token__) => {
-                let mut update = Update {
-                    application_user_reset_password_token_expires_at: false,
-                    application_user_reset_password_token_can_be_resent_from: false
-                };
-
                 let (can_send_, mut need_to_update) = if ApplicationUserResetPasswordToken_SendingOpportunityResolver::can_send(
                     &application_user_reset_password_token__
                 ) {
-                    update.application_user_reset_password_token_can_be_resent_from = true;
+                    let application_user_reset_password_token_can_be_resent_from = match ApplicationUserResetPasswordToken_SendingOpportunityResolver::create_can_be_resent_from() {
+                        Ok(application_user_reset_password_token_can_be_resent_from_) => application_user_reset_password_token_can_be_resent_from_,
+                        Err(mut error) => {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    };
+
+                    application_user_reset_password_token__.set_can_be_resent_from(application_user_reset_password_token_can_be_resent_from);
 
                     (true, true)
                 } else {
@@ -142,19 +145,26 @@ impl ActionProcessor {
                     || application_user_reset_password_token__.get_is_approved() {
                     need_to_update = true;
 
-                    update.application_user_reset_password_token_expires_at = true;
+                    let application_user_reset_password_token_expires_at = match ApplicationUserResetPasswordToken_ExpirationTimeResolver::create_expires_at() {
+                        Ok(application_user_reset_password_token_expires_at_) => application_user_reset_password_token_expires_at_,
+                        Err(mut error) => {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    };
 
                     application_user_reset_password_token__
                         .set_value(ApplicationUserResetPasswordToken_ValueGenerator::generate())
                         .set_wrong_enter_tries_quantity(0)
-                        .set_is_approved(false);
+                        .set_is_approved(false)
+                        .set_expires_at(application_user_reset_password_token_expires_at);
                 }
 
                 if need_to_update {
                     if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
                         database_2_postgresql_connection,
-                        &mut application_user_reset_password_token__,
-                        update
+                        &application_user_reset_password_token__
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -165,12 +175,32 @@ impl ActionProcessor {
                 (application_user_reset_password_token__, can_send_)
             }
             None => {
+                let application_user_reset_password_token_expires_at = match ApplicationUserResetPasswordToken_ExpirationTimeResolver::create_expires_at() {
+                    Ok(application_user_reset_password_token_expires_at_) => application_user_reset_password_token_expires_at_,
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        return Err(error);
+                    }
+                };
+
+                let application_user_reset_password_token_can_be_resent_from = match ApplicationUserResetPasswordToken_SendingOpportunityResolver::create_can_be_resent_from() {
+                    Ok(application_user_reset_password_token_can_be_resent_from_) => application_user_reset_password_token_can_be_resent_from_,
+                    Err(mut error) => {
+                        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                        return Err(error);
+                    }
+                };
+
                 let insert = Insert {
                     application_user_id: application_user_.get_id(),
                     application_user_device_id: Cow::Owned(incoming.application_user_device_id),
                     application_user_reset_password_token_value: ApplicationUserResetPasswordToken_ValueGenerator::generate(),
                     application_user_reset_password_token_wrong_enter_tries_quantity: 0,
-                    application_user_reset_password_token_is_approved: false
+                    application_user_reset_password_token_is_approved: false,
+                    application_user_reset_password_token_expires_at,
+                    application_user_reset_password_token_can_be_resent_from
                 };
 
                 let application_user_reset_password_token__ = match ApplicationUserResetPasswordToken_PostgresqlRepository::create(

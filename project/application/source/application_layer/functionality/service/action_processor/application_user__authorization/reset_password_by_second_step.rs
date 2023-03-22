@@ -15,7 +15,6 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::ApplicationUserResetPasswordToken_PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::Update;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
@@ -140,11 +139,7 @@ impl ActionProcessor {
             if application_user_reset_password_token_.get_wrong_enter_tries_quantity() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
                     database_2_postgresql_connection,
-                    &mut application_user_reset_password_token_,
-                    Update {
-                        application_user_reset_password_token_expires_at: false,
-                        application_user_reset_password_token_can_be_resent_from: false
-                    }
+                    &application_user_reset_password_token_
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -175,11 +170,7 @@ impl ActionProcessor {
 
         if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
             database_2_postgresql_connection,
-            &mut application_user_reset_password_token_,
-            Update {
-                application_user_reset_password_token_expires_at: false,
-                application_user_reset_password_token_can_be_resent_from: false
-            }
+            &application_user_reset_password_token_
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
