@@ -172,8 +172,8 @@ impl Backtrace {
         return ();
     }
 
-    pub fn get_backtrace_part_registry<'a>(&'a self) -> &'a Vec<BacktracePart> {
-        return &self.backtrace_part_registry;
+    pub fn get_backtrace_part_registry<'a>(&'a self) -> &'a [BacktracePart] {
+        return self.backtrace_part_registry.as_slice();
     }
 }
 
