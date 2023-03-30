@@ -1,5 +1,7 @@
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::data::entity::application_user_authorization_token::Value;
+use crate::domain_layer::data::entity::application_user_authorization_token::Value as ApplicationUserAuthorizationTokenValue;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
+use crate::domain_layer::data::entity::application_user_registration_token::Value as ApplicationUserRegistrationTokenValue;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Email;
 use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
@@ -72,7 +74,29 @@ impl Validator<ApplicationUser<'_>, Password> {
     }
 }
 
-impl Validator<ApplicationUserAuthorizationToken<'_>, Value> {
+impl Validator<ApplicationUserAuthorizationToken<'_>, ApplicationUserAuthorizationTokenValue> {
+    const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
+
+    pub fn is_valid<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, ErrorAuditor> {
+        let regex = match Regex::new(Self::REGULAR_EXPRESSION) {
+            Ok(regex_) => regex_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        return Ok(
+            regex.is_match(application_user_authorization_token_value)
+        );
+    }
+}
+
+impl Validator<ApplicationUserRegistrationToken<'_>, ApplicationUserRegistrationTokenValue> {
     const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 
     pub fn is_valid<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, ErrorAuditor> {
