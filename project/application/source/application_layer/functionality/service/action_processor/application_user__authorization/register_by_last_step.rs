@@ -105,7 +105,9 @@ impl ActionProcessor {
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(database_1_postgresql_connection, incoming.application_user_nickname.as_str()).await {
+        let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(
+            database_1_postgresql_connection, incoming.application_user_nickname.as_str()
+        ).await {
             Ok(is_exist_1_) => is_exist_1_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -124,7 +126,9 @@ impl ActionProcessor {
             );
         }
 
-        let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(database_1_postgresql_connection, incoming.application_user_email.as_str()).await {
+        let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(
+            database_1_postgresql_connection, incoming.application_user_email.as_str()
+        ).await {
             Ok(is_exist_2_) => is_exist_2_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -157,7 +161,9 @@ impl ActionProcessor {
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, incoming.application_user_email.as_str(), incoming.application_user_device_id.as_str()
+            database_2_postgresql_connection,
+            incoming.application_user_email.as_str(),
+            incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_registration_token_) => application_user_registration_token_,
             Err(mut error) => {

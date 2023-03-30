@@ -63,6 +63,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid_value {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAuthorizationToken_Value });
         }
@@ -94,6 +95,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let mut application_user_authorization_token_ = match application_user_authorization_token {
             Some(application_user_authorization_token__) => application_user_authorization_token__,
             None => {
@@ -180,9 +182,13 @@ impl ActionProcessor {
                 );
             }
         };
+
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_3(database_1_postgresql_connection, incoming.application_user_id).await {
+        let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_3(
+            database_1_postgresql_connection,
+            application_user_authorization_token_.get_application_user_id()
+        ).await {
             Ok(is_exist_) => is_exist_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -190,6 +196,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_exist {
             return Ok(
                 ArgumentResult::Ok {
@@ -208,6 +215,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let application_user_access_token = ApplicationUserAccessToken::new(
             ApplicationUserAccessToken_PropertyGenerator::generate_id(),
             application_user_authorization_token_.get_application_user_id(),
@@ -216,7 +224,9 @@ impl ActionProcessor {
         );
 
         let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, application_user_authorization_token_.get_application_user_id(), application_user_authorization_token_.get_application_user_device_id()
+            database_2_postgresql_connection,
+            application_user_authorization_token_.get_application_user_id(),
+            application_user_authorization_token_.get_application_user_device_id()
         ).await {
             Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
             Err(mut error) => {
@@ -311,6 +321,7 @@ impl ActionProcessor {
             application_user_device_id: incoming.application_user_device_id,
             application_user_id: incoming.application_user_id
         };
+
         if let Err(mut error) = ApplicationUserDevice_PostgresqlRepository::create(database_1_postgresql_connection, application_user_device_insert).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

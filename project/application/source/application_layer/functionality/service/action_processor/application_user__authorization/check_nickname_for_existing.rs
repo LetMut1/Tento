@@ -48,7 +48,9 @@ impl ActionProcessor {
             }
         };
 
-        let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_1(&*database_1_postgresql_pooled_connection, incoming.application_user_nickname.as_str()).await {
+        let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_1(
+            &*database_1_postgresql_pooled_connection, incoming.application_user_nickname.as_str()
+        ).await {
             Ok(is_exist_) => is_exist_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

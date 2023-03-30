@@ -5,11 +5,7 @@ mkdir -p /_tento && \
 rustup default stable && \
 rustup component add \
     clippy \
-# For VSCode extensions {
-# For "rust-lang.rust-analyzer" extension {
     rust-src && \
-# For "rust-lang.rust-analyzer" extension }
-# For VSCode extensions }
 rustup target add \
     aarch64-apple-ios \
     x86_64-apple-ios && \
@@ -19,4 +15,5 @@ apt-get install -y \
     pkg-config \
     libssl-dev && \
 cargo install diesel_cli --no-default-features --features postgres
+
 # TODO TODO TODO для чего pkg-config, libssl-dev? МОжно ли без них?

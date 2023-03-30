@@ -160,7 +160,8 @@ impl ActionProcessor {
         };
 
         let application_user = match ApplicationUser_PostgresqlRepository::find_3(
-            &*database_1_postgresql_pooled_connection, incoming.application_user_id
+            &*database_1_postgresql_pooled_connection,
+            application_user_reset_password_token_.get_application_user_id()
         ).await {
             Ok(application_user_) => application_user_,
             Err(mut error) => {

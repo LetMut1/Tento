@@ -102,7 +102,8 @@ impl ActionProcessor {
         };
 
         let is_valid = match ApplicationUserAccessRefreshToken_SerializationFormResolver::is_valid(
-            environment_configuration, &application_user_access_refresh_token_,
+            environment_configuration,
+            &application_user_access_refresh_token_,
             incoming.application_user_access_refresh_token_deserialized_form.as_str()
         ) {
             Ok(is_valid_) => is_valid_,

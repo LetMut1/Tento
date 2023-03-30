@@ -83,6 +83,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
@@ -110,7 +111,9 @@ impl ActionProcessor {
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, application_user_.get_id(), incoming.application_user_device_id.as_str()
+            database_2_postgresql_connection,
+            application_user_.get_id(),
+            incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_reset_password_token_) => application_user_reset_password_token_,
             Err(mut error) => {
@@ -195,7 +198,7 @@ impl ActionProcessor {
 
                 let insert = Insert {
                     application_user_id: application_user_.get_id(),
-                    application_user_device_id: Cow::Owned(incoming.application_user_device_id),
+                    application_user_device_id: Cow::Borrowed(incoming.application_user_device_id.as_str()),
                     application_user_reset_password_token_value: ApplicationUserResetPasswordToken_PropertyGenerator::generate_value(),
                     application_user_reset_password_token_wrong_enter_tries_quantity: 0,
                     application_user_reset_password_token_is_approved: false,

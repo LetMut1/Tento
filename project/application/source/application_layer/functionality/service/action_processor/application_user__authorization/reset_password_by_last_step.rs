@@ -86,7 +86,9 @@ impl ActionProcessor {
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
+            database_2_postgresql_connection,
+            incoming.application_user_id,
+            incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_reset_password_token_) => application_user_reset_password_token_,
             Err(mut error) => {
@@ -197,7 +199,9 @@ impl ActionProcessor {
         };
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let application_user = match ApplicationUser_PostgresqlRepository::find_3(database_1_postgresql_connection, incoming.application_user_id).await {
+        let application_user = match ApplicationUser_PostgresqlRepository::find_3(
+            database_1_postgresql_connection, incoming.application_user_id
+        ).await {
             Ok(application_user_) => application_user_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

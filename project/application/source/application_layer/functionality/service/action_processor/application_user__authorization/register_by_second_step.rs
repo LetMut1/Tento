@@ -84,7 +84,9 @@ impl ActionProcessor {
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, incoming.application_user_email.as_str(), incoming.application_user_device_id.as_str()
+            database_2_postgresql_connection,
+            incoming.application_user_email.as_str(),
+            incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_registration_token_) => application_user_registration_token_,
             Err(mut error) => {

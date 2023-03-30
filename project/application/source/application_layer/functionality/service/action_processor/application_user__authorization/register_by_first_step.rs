@@ -105,6 +105,7 @@ impl ActionProcessor {
                 );
             }
         };
+
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
@@ -192,8 +193,8 @@ impl ActionProcessor {
                 };
 
                 let insert = Insert {
-                    application_user_email: Cow::Owned(incoming.application_user_email),
-                    application_user_device_id: Cow::Owned(incoming.application_user_device_id),
+                    application_user_email: Cow::Borrowed(incoming.application_user_email.as_str()),
+                    application_user_device_id: Cow::Borrowed(incoming.application_user_device_id.as_str()),
                     application_user_registration_token_value: ApplicationUserRegistrationToken_PropertyGenerator::generate_value(),
                     application_user_registration_token_wrong_enter_tries_quantity: 0,
                     application_user_registration_token_is_approved: false,
