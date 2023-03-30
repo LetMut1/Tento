@@ -23,3 +23,4 @@ pub mod application_user_reset_password_token__validator;
 pub mod channel__access_modifier_resolver;
 pub mod channel__validator;
 pub mod channel__visability_modifier_resolver;
+pub mod validator;
