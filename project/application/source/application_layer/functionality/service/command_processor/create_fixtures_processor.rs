@@ -106,7 +106,7 @@ impl CreateFixturesProcessor {
             }
         };
 
-        if !Validator::<ApplicationUser, Password>::is_valid(Self::APPLICATION_USER__PASSWORD) {
+        if !Validator::<ApplicationUser<'_>, Password>::is_valid(Self::APPLICATION_USER__PASSWORD) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError { message: "Application_user_password should be valid." },
@@ -157,7 +157,7 @@ impl CreateFixturesProcessor {
                 application_user_nickname = format!("{}{}", application_user_nickname.as_str(), character);
             }
 
-            if !Validator::<ApplicationUser, Nickname>::is_valid(application_user_nickname.as_str()) {
+            if !Validator::<ApplicationUser<'_>, Nickname>::is_valid(application_user_nickname.as_str()) {
                 return Err(
                     ErrorAuditor::new(
                         BaseError::LogicError { message: "Application_user nickname should be valid." },

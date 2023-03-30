@@ -1,3 +1,5 @@
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
+use crate::domain_layer::data::entity::application_user_authorization_token::Value;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Email;
 use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
@@ -67,5 +69,27 @@ impl Validator<ApplicationUser<'_>, Password> {
         return password_chars_count >= Self::MINIMUM_LENGTH             // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
             && password_chars_count <= Self::MAXIMUM_LENGTH
             && !application_user_password.contains(' ');
+    }
+}
+
+impl Validator<ApplicationUserAuthorizationToken<'_>, Value> {
+    const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
+
+    pub fn is_valid<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, ErrorAuditor> {
+        let regex = match Regex::new(Self::REGULAR_EXPRESSION) {
+            Ok(regex_) => regex_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        return Ok(
+            regex.is_match(application_user_authorization_token_value)
+        );
     }
 }

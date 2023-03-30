@@ -34,7 +34,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !Validator::<ApplicationUser, Nickname>::is_valid(incoming.application_user_nickname.as_str()) {
+        if !Validator::<ApplicationUser<'_>, Nickname>::is_valid(incoming.application_user_nickname.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Nickname });
         }
 
