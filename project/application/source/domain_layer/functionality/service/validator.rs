@@ -13,6 +13,7 @@ use crate::domain_layer::data::entity::application_user::Nickname;
 use crate::domain_layer::data::entity::application_user::Password;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Id as ChannelId;
+use crate::domain_layer::data::entity::channel::LinkedName;
 use crate::domain_layer::data::entity::channel::Name;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -165,5 +166,11 @@ impl Validator<Channel<'_>, Name> {
     pub fn is_valid<'a>(channel_name: &'a str) -> bool {
         return channel_name.chars().count() <= Self::MAXIMUM_LENGTH
             && !channel_name.is_empty();
+    }
+}
+
+impl Validator<Channel<'_>, LinkedName> {
+    pub fn is_valid<'a>(channel_linked_name: &'a str) -> bool {
+        return true;    // TODO;
     }
 }

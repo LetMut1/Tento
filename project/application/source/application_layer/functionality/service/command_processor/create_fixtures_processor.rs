@@ -6,6 +6,7 @@ use crate::domain_layer::data::entity::application_user::Nickname;
 use crate::domain_layer::data::entity::application_user::Password;
 use crate::domain_layer::data::entity::channel::AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel;
+use crate::domain_layer::data::entity::channel::LinkedName;
 use crate::domain_layer::data::entity::channel::Name;
 use crate::domain_layer::data::entity::channel::VisabilityModifier;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
@@ -254,7 +255,7 @@ impl CreateFixturesProcessor {
 
                 let channel_linked_name = channel_name.clone();
 
-                if !Channel_Validator::is_valid_linked_name(channel_linked_name.as_str()) {
+                if !Validator::<Channel, LinkedName>::is_valid(channel_linked_name.as_str()) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel linked name should be valid." },
