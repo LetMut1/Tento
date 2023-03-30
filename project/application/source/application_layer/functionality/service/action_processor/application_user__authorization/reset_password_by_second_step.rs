@@ -1,11 +1,11 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
+use crate::domain_layer::data::entity::application_user_reset_password_token::Value;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Id;
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::application_user_reset_password_token__validator::ApplicationUserResetPasswordToken_Validator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -42,7 +42,9 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let is_valid_value = match ApplicationUserResetPasswordToken_Validator::is_valid_value(incoming.application_user_reset_password_token_value.as_str()) {
+        let is_valid_value = match Validator::<ApplicationUserResetPasswordToken<'_>, Value>::is_valid(
+            incoming.application_user_reset_password_token_value.as_str()
+        ) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -74,6 +76,7 @@ impl ActionProcessor {
                 );
             }
         };
+
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(

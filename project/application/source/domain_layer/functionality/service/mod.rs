@@ -16,7 +16,6 @@ pub mod application_user_registration_token__sending_opportunity_resolver;
 pub mod application_user_reset_password_token__expiration_time_resolver;
 pub mod application_user_reset_password_token__property_generator;
 pub mod application_user_reset_password_token__sending_opportunity_resolver;
-pub mod application_user_reset_password_token__validator;
 pub mod channel__access_modifier_resolver;
 pub mod channel__validator;
 pub mod channel__visability_modifier_resolver;
