@@ -1,6 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
+use crate::domain_layer::data::entity::channel::Channel;
+use crate::domain_layer::data::entity::channel::Name;
+use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -86,12 +88,12 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Limit });
         }
 
-        if !Channel_Validator::is_valid_name(incoming.channel_name.as_str()) {
+        if !Validator::<Channel, Name>::is_valid(incoming.channel_name.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
         }
 
         if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
-            if !Channel_Validator::is_valid_name(requery_channel_name_.as_str()) {
+            if !Validator::<Channel, Name>::is_valid(requery_channel_name_.as_str()) {
                 return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
             }
         }

@@ -2,8 +2,11 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user_device::Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Email;
+use crate::domain_layer::data::entity::application_user::Nickname;
 use crate::domain_layer::data::entity::application_user::Password;
 use crate::domain_layer::data::entity::channel::AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel;
+use crate::domain_layer::data::entity::channel::Name;
 use crate::domain_layer::data::entity::channel::VisabilityModifier;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
@@ -15,7 +18,6 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::domain_layer::data::entity::application_user::Nickname;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
@@ -233,7 +235,7 @@ impl CreateFixturesProcessor {
             'b: for _t in 1..=Self::QUANTITY_OF_CHANNELS {
                 let mut channel_name = String::new();
 
-                '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Validator::CHANNEL__NAME_MAXIMUM_LENGTH) {
+                '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel, Name>::MAXIMUM_LENGTH) {
                     let character = Self::ASCII_CHARACTER_REGISTRY[
                         thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                     ];
@@ -241,7 +243,7 @@ impl CreateFixturesProcessor {
                     channel_name = format!("{}{}", channel_name.as_str(), character);
                 }
 
-                if !Channel_Validator::is_valid_name(channel_name.as_str()) {
+                if !Validator::<Channel, Name>::is_valid(channel_name.as_str()) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel name should be valid." },

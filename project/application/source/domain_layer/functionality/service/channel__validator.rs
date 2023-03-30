@@ -1,14 +1,8 @@
 pub struct Channel_Validator;
 
 impl Channel_Validator {
-    pub const CHANNEL__NAME_MAXIMUM_LENGTH: usize = 75;
     pub const CHANNEL__DESCRIPTION_MAXIMUM_LENGTH: usize = 500;
 
-
-    pub fn is_valid_name<'a>(channel_name: &'a str) -> bool {
-        return channel_name.chars().count() <= Self::CHANNEL__NAME_MAXIMUM_LENGTH
-            && !channel_name.is_empty();
-    }
 
     pub fn is_valid_linked_name<'a>(channel_linked_name: &'a str) -> bool {
         return true;    // TODO;
