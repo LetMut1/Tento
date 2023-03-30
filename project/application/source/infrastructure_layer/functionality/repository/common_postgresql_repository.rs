@@ -119,7 +119,7 @@ impl CommonPostgresqlRepository {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let statement = match database_1_connection.prepare_typed(
-            query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+            query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -133,7 +133,7 @@ impl CommonPostgresqlRepository {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -351,7 +351,7 @@ impl CommonPostgresqlRepository {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let statement = match database_1_connection.prepare_typed(
-            query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+            query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -365,7 +365,7 @@ impl CommonPostgresqlRepository {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -565,7 +565,7 @@ impl CommonPostgresqlRepository {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let statement = match database_1_connection.prepare_typed(
-            query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+            query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -579,7 +579,7 @@ impl CommonPostgresqlRepository {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -772,7 +772,7 @@ impl CommonPostgresqlRepository {
     //     // let mut channel_registry: Vec<GetManyByCreatedAtChannel> = vec![];
 
     //     // let statement = match database_1_connection.prepare_typed(
-    //     //     query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+    //     //     query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
     //     // ).await {
     //     //     Ok(statement_) => statement_,
     //     //     Err(error) => {
@@ -786,7 +786,7 @@ impl CommonPostgresqlRepository {
     //     // };
 
     //     // let row_registry = match database_1_connection.query(
-    //     //     &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+    //     //     &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
     //     // ).await {
     //     //     Ok(row_registry_) => row_registry_,
     //     //     Err(error) => {
@@ -990,7 +990,7 @@ impl CommonPostgresqlRepository {
     //     // let mut channel_registry: Vec<GetManyBySubscribersQuantityChannel> = vec![];
 
     //     // let statement = match database_1_connection.prepare_typed(
-    //     //     query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+    //     //     query.as_str(), prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
     //     // ).await {
     //     //     Ok(statement_) => statement_,
     //     //     Err(error) => {
@@ -1004,7 +1004,7 @@ impl CommonPostgresqlRepository {
     //     // };
 
     //     // let row_registry = match database_1_connection.query(
-    //     //     &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+    //     //     &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
     //     // ).await {
     //     //     Ok(row_registry_) => row_registry_,
     //     //     Err(error) => {
@@ -1087,7 +1087,7 @@ impl CommonPostgresqlRepository {
     //     // let mut channel_registry: Vec<GetManyByIdRegistryChannel> = vec![];
 
     //     // let statement = match database_1_connection.prepare_typed(
-    //     //     query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+    //     //     query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
     //     // ).await {
     //     //     Ok(statement_) => statement_,
     //     //     Err(error) => {
@@ -1101,7 +1101,7 @@ impl CommonPostgresqlRepository {
     //     // };
 
     //     // let row_registry = match database_1_connection.query(
-    //     //     &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+    //     //     &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
     //     // ).await {
     //     //     Ok(row_registry_) => row_registry_,
     //     //     Err(error) => {

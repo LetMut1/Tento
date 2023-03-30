@@ -51,7 +51,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             .add_parameter(&insert.application_user_registration_token_can_be_resent_from, Type::INT8);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -65,7 +65,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -135,7 +135,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -149,7 +149,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -178,7 +178,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -192,7 +192,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -227,7 +227,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -241,7 +241,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository {
         };
 
         let row_registry = match database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {

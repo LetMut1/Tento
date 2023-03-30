@@ -21,11 +21,11 @@ impl<'a> PreparedStatementParameterConvertationResolver<'a> {
         return self;
     }
 
-    pub fn get_parameter_registry<'b>(&'b self) -> &'b Vec<&'a (dyn ToSql + Sync)> {
+    pub fn get_parameter_registry<'b>(&'b self) -> &'b [&'a (dyn ToSql + Sync)] {
         return &self.parameter_registry;
     }
 
-    pub fn get_parameter_type_registry<'b>(&'b self) -> &'b Vec<Type> {
+    pub fn get_parameter_type_registry<'b>(&'b self) -> &'b [Type] {
         return &self.parameter_type_registry;
     }
 }

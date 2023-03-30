@@ -29,7 +29,7 @@ impl ApplicationUserDevice_PostgresqlRepository {
             .add_parameter(&insert.application_user_id, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -43,7 +43,7 @@ impl ApplicationUserDevice_PostgresqlRepository {
         };
 
         if let Err(error) = database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry().as_slice()
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
