@@ -16,6 +16,7 @@ use crate::domain_layer::data::entity::channel::Description;
 use crate::domain_layer::data::entity::channel::Id as ChannelId;
 use crate::domain_layer::data::entity::channel::LinkedName;
 use crate::domain_layer::data::entity::channel::Name;
+use crate::domain_layer::data::entity::channel::Orientation;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -181,5 +182,11 @@ impl Validator<Channel<'_>, Description> {
 
     pub fn is_valid<'a>(channel_description: &'a str) -> bool {
         return channel_description.chars().count() <= Self::MAXIMUM_LENGTH;
+    }
+}
+
+impl Validator<Channel<'_>, Orientation> {
+    pub fn is_valid<'a>(_channel_orientation: &'a [i16]) -> bool {
+        return true;    // TODO;
     }
 }

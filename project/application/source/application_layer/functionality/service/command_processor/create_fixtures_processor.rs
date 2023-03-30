@@ -9,9 +9,9 @@ use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Description;
 use crate::domain_layer::data::entity::channel::LinkedName;
 use crate::domain_layer::data::entity::channel::Name;
+use crate::domain_layer::data::entity::channel::Orientation;
 use crate::domain_layer::data::entity::channel::VisabilityModifier;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
-use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -292,7 +292,7 @@ impl CreateFixturesProcessor {
 
                 let channel_orientation: Vec<i16> = vec![0, 1, 2];
 
-                if !Channel_Validator::is_valid_orientation(&channel_orientation) {
+                if !Validator::<Channel<'_>, Orientation>::is_valid(channel_orientation.as_slice()) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel orientation email should be valid." },
