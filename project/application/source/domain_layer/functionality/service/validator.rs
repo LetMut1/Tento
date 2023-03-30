@@ -1,5 +1,7 @@
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::Value as ApplicationUserAuthorizationTokenValue;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
+use crate::domain_layer::data::entity::application_user_device::Id as ApplicationUserDeviceId;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user_registration_token::Value as ApplicationUserRegistrationTokenValue;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
@@ -139,5 +141,11 @@ impl Validator<ApplicationUserResetPasswordToken<'_>, ApplicationUserResetPasswo
         return Ok(
             regex.is_match(application_user_authorization_token_value)
         );
+    }
+}
+
+impl Validator<ApplicationUserDevice, ApplicationUserDeviceId> {
+    pub fn is_valid<'a>(application_user_device_id: &'a str) -> bool {
+        return true;
     }
 }

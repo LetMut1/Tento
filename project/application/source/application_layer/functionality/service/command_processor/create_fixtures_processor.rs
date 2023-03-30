@@ -1,10 +1,11 @@
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
+use crate::domain_layer::data::entity::application_user_device::Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Email;
 use crate::domain_layer::data::entity::application_user::Password;
 use crate::domain_layer::data::entity::channel::AccessModifier;
 use crate::domain_layer::data::entity::channel::VisabilityModifier;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
-use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
@@ -115,7 +116,7 @@ impl CreateFixturesProcessor {
             );
         }
 
-        if !ApplicationUserDevice_Validator::is_valid_id(Self::APPLICATION_USER_DEVICE__ID) {
+        if !Validator::<ApplicationUserDevice, Id>::is_valid(Self::APPLICATION_USER_DEVICE__ID) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError { message: "Application_user_device id should be valid." },

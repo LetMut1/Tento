@@ -3,14 +3,15 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::Value;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
+use crate::domain_layer::data::entity::application_user_device::Id as ApplicationUserDeviceId;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::Id;
+use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__property_generator::ApplicationUserAccessRefreshToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_token__property_generator::ApplicationUserAccessToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -53,7 +54,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !Validator::<ApplicationUser<'_>, Id>::is_valid(incoming.application_user_id) {
+        if !Validator::<ApplicationUser<'_>, ApplicationUserId>::is_valid(incoming.application_user_id) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Id });
         }
 
@@ -72,7 +73,7 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAuthorizationToken_Value });
         }
 
-        if !ApplicationUserDevice_Validator::is_valid_id(incoming.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice, ApplicationUserDeviceId>::is_valid(incoming.application_user_device_id.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 

@@ -1,8 +1,9 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
+use crate::domain_layer::data::entity::application_user_device::Id as ApplicationUserDeviceId;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::Id;
-use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
+use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__property_generator::ApplicationUserResetPasswordToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__sending_opportunity_resolver::ApplicationUserResetPasswordToken_SendingOpportunityResolver;
@@ -44,11 +45,11 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !Validator::<ApplicationUser<'_>, Id>::is_valid(incoming.application_user_id) {
+        if !Validator::<ApplicationUser<'_>, ApplicationUserId>::is_valid(incoming.application_user_id) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Id });
         }
 
-        if !ApplicationUserDevice_Validator::is_valid_id(incoming.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice, ApplicationUserDeviceId>::is_valid(incoming.application_user_device_id.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
