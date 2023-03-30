@@ -12,6 +12,7 @@ use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId
 use crate::domain_layer::data::entity::application_user::Nickname;
 use crate::domain_layer::data::entity::application_user::Password;
 use crate::domain_layer::data::entity::channel::Channel;
+use crate::domain_layer::data::entity::channel::Description;
 use crate::domain_layer::data::entity::channel::Id as ChannelId;
 use crate::domain_layer::data::entity::channel::LinkedName;
 use crate::domain_layer::data::entity::channel::Name;
@@ -172,5 +173,13 @@ impl Validator<Channel<'_>, Name> {
 impl Validator<Channel<'_>, LinkedName> {
     pub fn is_valid<'a>(channel_linked_name: &'a str) -> bool {
         return true;    // TODO;
+    }
+}
+
+impl Validator<Channel<'_>, Description> {
+    pub const MAXIMUM_LENGTH: usize = 500;
+
+    pub fn is_valid<'a>(channel_description: &'a str) -> bool {
+        return channel_description.chars().count() <= Self::MAXIMUM_LENGTH;
     }
 }

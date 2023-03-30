@@ -6,6 +6,7 @@ use crate::domain_layer::data::entity::application_user::Nickname;
 use crate::domain_layer::data::entity::application_user::Password;
 use crate::domain_layer::data::entity::channel::AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel;
+use crate::domain_layer::data::entity::channel::Description;
 use crate::domain_layer::data::entity::channel::LinkedName;
 use crate::domain_layer::data::entity::channel::Name;
 use crate::domain_layer::data::entity::channel::VisabilityModifier;
@@ -236,7 +237,7 @@ impl CreateFixturesProcessor {
             'b: for _t in 1..=Self::QUANTITY_OF_CHANNELS {
                 let mut channel_name = String::new();
 
-                '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel, Name>::MAXIMUM_LENGTH) {
+                '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel<'_>, Name>::MAXIMUM_LENGTH) {
                     let character = Self::ASCII_CHARACTER_REGISTRY[
                         thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                     ];
@@ -244,7 +245,7 @@ impl CreateFixturesProcessor {
                     channel_name = format!("{}{}", channel_name.as_str(), character);
                 }
 
-                if !Validator::<Channel, Name>::is_valid(channel_name.as_str()) {
+                if !Validator::<Channel<'_>, Name>::is_valid(channel_name.as_str()) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel name should be valid." },
@@ -255,7 +256,7 @@ impl CreateFixturesProcessor {
 
                 let channel_linked_name = channel_name.clone();
 
-                if !Validator::<Channel, LinkedName>::is_valid(channel_linked_name.as_str()) {
+                if !Validator::<Channel<'_>, LinkedName>::is_valid(channel_linked_name.as_str()) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel linked name should be valid." },
@@ -267,7 +268,7 @@ impl CreateFixturesProcessor {
                 let channel_description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
                     let mut channel_description_ = String::new();
 
-                    '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Validator::CHANNEL__DESCRIPTION_MAXIMUM_LENGTH) {
+                    '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel, Description>::MAXIMUM_LENGTH) {
                         let character = Self::ASCII_CHARACTER_REGISTRY[
                             thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                         ];
@@ -275,7 +276,7 @@ impl CreateFixturesProcessor {
                         channel_description_ = format!("{}{}", channel_description_.as_str(), character);
                     }
 
-                    if !Channel_Validator::is_valid_description(channel_description_.as_str()) {
+                    if !Validator::<Channel<'_>, Description>::is_valid(channel_description_.as_str()) {
                         return Err(
                             ErrorAuditor::new(
                                 BaseError::LogicError { message: "Channel description should be valid." },

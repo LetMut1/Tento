@@ -88,12 +88,12 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Limit });
         }
 
-        if !Validator::<Channel, Name>::is_valid(incoming.channel_name.as_str()) {
+        if !Validator::<Channel<'_>, Name>::is_valid(incoming.channel_name.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
         }
 
         if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
-            if !Validator::<Channel, Name>::is_valid(requery_channel_name_.as_str()) {
+            if !Validator::<Channel<'_>, Name>::is_valid(requery_channel_name_.as_str()) {
                 return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
             }
         }
