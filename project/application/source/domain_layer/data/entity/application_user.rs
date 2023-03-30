@@ -11,6 +11,8 @@ pub struct ApplicationUser<'a> {
     nickname: Cow<'a, str>,
     _nickname: PhantomData<Nickname>,
 
+    _password: PhantomData<Password>,
+
     password_hash: String,
     _password_hash: PhantomData<PasswordHash>,
 
@@ -33,6 +35,7 @@ impl<'a> ApplicationUser<'a> {
             _email: PhantomData,
             nickname,
             _nickname: PhantomData,
+            _password: PhantomData,
             password_hash,
             _password_hash: PhantomData,
             created_at,
@@ -68,6 +71,8 @@ pub struct Id;
 pub struct Email;
 
 pub struct Nickname;
+
+pub struct Password;
 
 pub struct PasswordHash;
 

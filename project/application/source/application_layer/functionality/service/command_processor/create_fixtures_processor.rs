@@ -1,9 +1,9 @@
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Email;
+use crate::domain_layer::data::entity::application_user::Password;
 use crate::domain_layer::data::entity::channel::AccessModifier;
 use crate::domain_layer::data::entity::channel::VisabilityModifier;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
-use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -106,7 +106,7 @@ impl CreateFixturesProcessor {
             }
         };
 
-        if !ApplicationUser_Validator::is_valid_password(Self::APPLICATION_USER__PASSWORD) {
+        if !Validator::<ApplicationUser, Password>::is_valid(Self::APPLICATION_USER__PASSWORD) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError { message: "Application_user_password should be valid." },

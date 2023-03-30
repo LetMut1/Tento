@@ -2,6 +2,7 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Email;
 use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
 use crate::domain_layer::data::entity::application_user::Nickname;
+use crate::domain_layer::data::entity::application_user::Password;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -53,5 +54,18 @@ impl Validator<ApplicationUser<'_>, Nickname> {
             && !application_user_nickname.contains('@')
             && !application_user_nickname.contains(' ')       // TODO Проверить символ табуляци TAB            НАПИСАТЬ Через Регекс?
             && !application_user_nickname.is_empty();
+    }
+}
+
+impl Validator<ApplicationUser<'_>, Password> {
+    const MINIMUM_LENGTH: usize = 7;
+    const MAXIMUM_LENGTH: usize = 65;
+
+    pub fn is_valid<'a>(application_user_password: &'a str) -> bool {
+        let password_chars_count = application_user_password.chars().count();
+
+        return password_chars_count >= Self::MINIMUM_LENGTH             // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
+            && password_chars_count <= Self::MAXIMUM_LENGTH
+            && !application_user_password.contains(' ');
     }
 }

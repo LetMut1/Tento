@@ -1,6 +1,5 @@
 pub mod action_round_register__context_creator;
 pub mod application_user__password_hash_resolver;
-pub mod application_user__validator;
 pub mod application_user_access_refresh_token__expiration_time_resolver;
 pub mod application_user_access_refresh_token__property_generator;
 pub mod application_user_access_refresh_token__serialization_form_resolver;
