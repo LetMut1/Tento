@@ -1,21 +1,49 @@
 use std::borrow::Cow;
+use std::marker::PhantomData;
+use super::application_user::Id as ApplicationUserId;
 
 pub struct Channel<'a> {
     id: i64,
-    /// application_user_id
+    _id: PhantomData<Id>,
+
     owner: i64,
+    _owner: PhantomData<ApplicationUserId>,
+
     name: Cow<'a, str>,
+    _name: PhantomData<Name>,
+
     linked_name: String,
+    _linked_name: PhantomData<LinkedName>,
+
     description: Option<String>,
+    _description: PhantomData<Description>,
+
     access_modifier: i16,
+    _access_modifier: PhantomData<AccessModifier>,
+
     visability_modifier: i16,
+    _visability_modifier: PhantomData<VisabilityModifier>,
+
     orientation: Vec<i16>,
+    _orientation: PhantomData<Orientation>,
+
     cover_image_path: Option<String>,
+    _cover_image_path: PhantomData<CoverImagePath>,
+
     background_image_path: Option<String>,
+    _background_image_path: PhantomData<BackgroundImagePath>,
+
     subscribers_quantity: i64,
+    _subscribers_quantity: PhantomData<SubscribersQuantity>,
+
     marks_quantity: i64,
+    _marks_quantity: PhantomData<MarksQuantity>,
+
     viewing_quantity: i64,
-    created_at: String
+    _viewing_quantity: PhantomData<ViewingQuantity>,
+
+    created_at: String,
+    _created_at: PhantomData<CreatedAt>
 }
 
 impl<'a> Channel<'a> {
@@ -37,19 +65,33 @@ impl<'a> Channel<'a> {
     ) -> Self {
         return Self {
             id,
+            _id: PhantomData,
             owner,
+            _owner: PhantomData,
             name,
+            _name: PhantomData,
             linked_name,
+            _linked_name: PhantomData,
             description,
+            _description: PhantomData,
             access_modifier,
+            _access_modifier: PhantomData,
             visability_modifier,
+            _visability_modifier: PhantomData,
             orientation,
+            _orientation: PhantomData,
             cover_image_path,
+            _cover_image_path: PhantomData,
             background_image_path,
+            _background_image_path: PhantomData,
             subscribers_quantity,
+            _subscribers_quantity: PhantomData,
             marks_quantity,
+            _marks_quantity: PhantomData,
             viewing_quantity,
-            created_at
+            _viewing_quantity: PhantomData,
+            created_at,
+            _created_at: PhantomData
         };
     }
 
@@ -104,6 +146,14 @@ impl<'a> Channel<'a> {
     }
 }
 
+pub struct Id;
+
+pub struct Name;
+
+pub struct LinkedName;
+
+pub struct Description;
+
 pub enum AccessModifier {
     /// 0 in integer representation.
     Open,
@@ -117,3 +167,17 @@ pub enum VisabilityModifier {
     /// 1 in integer representation.
     Private
 }
+
+pub struct Orientation;
+
+pub struct CoverImagePath;
+
+pub struct BackgroundImagePath;
+
+pub struct SubscribersQuantity;
+
+pub struct MarksQuantity;
+
+pub struct ViewingQuantity;
+
+pub struct CreatedAt;

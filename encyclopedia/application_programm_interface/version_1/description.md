@@ -127,7 +127,7 @@ struct ChannelInnerLink {
 
 struct ChannelOuterLink {
     channel_outer_link_alias: String,
-    channel_outer_link_adress: String
+    channel_outer_link_address: String
 }
 ```
 ```

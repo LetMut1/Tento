@@ -1,11 +1,21 @@
 use std::borrow::Cow;
+use std::marker::PhantomData;
 
 pub struct ApplicationUser<'a> {
     id: i64,
+    _id: PhantomData<Id>,
+
     email: Cow<'a, str>,
+    _email: PhantomData<Email>,
+
     nickname: Cow<'a, str>,
+    _nickname: PhantomData<Nickname>,
+
     password_hash: String,
-    created_at: String
+    _password_hash: PhantomData<PasswordHash>,
+
+    created_at: String,
+    _created_at: PhantomData<CreatedAt>
 }
 
 impl<'a> ApplicationUser<'a> {
@@ -18,10 +28,15 @@ impl<'a> ApplicationUser<'a> {
     ) -> Self {
         return Self {
             id,
+            _id: PhantomData,
             email,
+            _email: PhantomData,
             nickname,
+            _nickname: PhantomData,
             password_hash,
-            created_at
+            _password_hash: PhantomData,
+            created_at,
+            _created_at: PhantomData
         };
     }
 
@@ -47,3 +62,13 @@ impl<'a> ApplicationUser<'a> {
         return self;
     }
 }
+
+pub struct Id;
+
+pub struct Email;
+
+pub struct Nickname;
+
+pub struct PasswordHash;
+
+pub struct CreatedAt;

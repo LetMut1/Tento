@@ -1,7 +1,7 @@
 CREATE TABLE public.channel_outer_link (
     from_ BIGINT,
     alias TEXT,
-    adress TEXT,
+    address TEXT,
     created_at TIMESTAMP(6) WITH TIME ZONE
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
@@ -11,7 +11,9 @@ USING btree (from_ ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on
 ALTER TABLE ONLY public.channel_outer_link
 ALTER COLUMN from_ SET NOT NULL,
 ALTER COLUMN alias SET NOT NULL,
-ALTER COLUMN adress SET NOT NULL,
+ALTER COLUMN address SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel_outer_link2 FOREIGN KEY (from_)
 REFERENCES public.channel (id) ON DELETE CASCADE;
+
+COMMENT ON COLUMN public.channel_outer_link.from_ IS 'public.channel.id';

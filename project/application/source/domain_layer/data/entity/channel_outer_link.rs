@@ -1,9 +1,18 @@
+use std::marker::PhantomData;
+use super::channel::Id;
+
 pub struct ChannelOuterLink {
-    /// application_user_id
     from: i64,
+    _from: PhantomData<Id>,
+
     alias: String,
-    adress: String,
-    created_at: String
+    _alias: PhantomData<Alias>,
+
+    address: String,
+    _address: PhantomData<Address>,
+
+    created_at: String,
+    _creatad_at: PhantomData<CreatedAt>
 }
 
 impl ChannelOuterLink {
@@ -12,14 +21,24 @@ impl ChannelOuterLink {
     pub fn new(
         from: i64,
         alias: String,
-        adress: String,
+        address: String,
         created_at: String
     ) -> Self {
         return Self {
             from,
+            _from: PhantomData,
             alias,
-            adress,
-            created_at
+            _alias: PhantomData,
+            address,
+            _address: PhantomData,
+            created_at,
+            _creatad_at: PhantomData
         }
     }
 }
+
+pub struct Alias;
+
+pub struct Address;
+
+pub struct CreatedAt;

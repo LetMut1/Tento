@@ -1,13 +1,29 @@
 use std::borrow::Cow;
+use std::marker::PhantomData;
+use super::application_user_device::Id as ApplicationUserDeviceId;
+use super::application_user::Id as ApplicationUserId;
 
 pub struct ApplicationUserResetPasswordToken<'a> {
     application_user_id: i64,
+    _application_user_id: PhantomData<ApplicationUserId>,
+
     application_user_device_id: Cow<'a, str>,
+    _application_user_device_id: PhantomData<ApplicationUserDeviceId>,
+
     value: String,
+    _value: PhantomData<Value>,
+
     wrong_enter_tries_quantity: i16,
+    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
+
     is_approved: bool,
+    _is_approved: PhantomData<IsApproved>,
+
     expires_at: i64,
-    can_be_resent_from: i64
+    _expires_at: PhantomData<ExpiresAt>,
+
+    can_be_resent_from: i64,
+    _can_be_resent_from: PhantomData<CanBeResentFrom>
 }
 
 impl<'a> ApplicationUserResetPasswordToken<'a> {
@@ -26,12 +42,19 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
     ) -> Self {
         return Self {
             application_user_id,
+            _application_user_id: PhantomData,
             application_user_device_id,
+            _application_user_device_id: PhantomData,
             value,
+            _value: PhantomData,
             wrong_enter_tries_quantity,
+            _wrong_enter_tries_quantity: PhantomData,
             is_approved,
+            _is_approved: PhantomData,
             expires_at,
-            can_be_resent_from
+            _expires_at: PhantomData,
+            can_be_resent_from,
+            _can_be_resent_from: PhantomData
         };
     }
 
@@ -93,3 +116,13 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
         return self;
     }
 }
+
+pub struct Value;
+
+pub struct WrongEnterTriesQuantity;
+
+pub struct IsApproved;
+
+pub struct ExpiresAt;
+
+pub struct CanBeResentFrom;

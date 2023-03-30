@@ -20,7 +20,7 @@ impl ChannelOuterLink_PostgresqlRepository {
             "INSERT INTO public.channel_inner_link AS cil ( \
                 from_, \
                 alias, \
-                adress, \
+                address, \
                 created_at \
             ) VALUES ( \
                 $1, \
@@ -34,7 +34,7 @@ impl ChannelOuterLink_PostgresqlRepository {
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert.channel_outer_link_from, Type::INT8)
             .add_parameter(&insert.channel_outer_link_alias, Type::TEXT)
-            .add_parameter(&insert.channel_outer_link_adress, Type::TEXT);
+            .add_parameter(&insert.channel_outer_link_address, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
             query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry().as_slice()
@@ -79,7 +79,7 @@ impl ChannelOuterLink_PostgresqlRepository {
         let channel_outer_link = ChannelOuterLink::new(
             insert.channel_outer_link_from,
             insert.channel_outer_link_alias,
-            insert.channel_outer_link_adress,
+            insert.channel_outer_link_address,
             channel_outer_link_created_at
         );
 
@@ -96,7 +96,7 @@ impl ChannelOuterLink_PostgresqlRepository {
         let query =
             "SELECT \
                 col.alias AS al, \
-                col.adress AS ad \
+                col.address AS ad \
             FROM public.channel_outer_link col \
             WHERE col.from_ = $1 \
             LIMIT $2";
@@ -152,8 +152,8 @@ impl ChannelOuterLink_PostgresqlRepository {
                 }
             };
 
-            let channel_outer_link_adress = match row.try_get::<'_, usize, String>(1) {
-                Ok(channel_outer_link_adress_) => channel_outer_link_adress_,
+            let channel_outer_link_address = match row.try_get::<'_, usize, String>(1) {
+                Ok(channel_outer_link_address_) => channel_outer_link_address_,
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -166,7 +166,7 @@ impl ChannelOuterLink_PostgresqlRepository {
 
             let channel_outer_link = ChannelOuterLink1 {
                 channel_outer_link_alias,
-                channel_outer_link_adress
+                channel_outer_link_address
             };
 
             channel_outer_link_registry.push(channel_outer_link);
@@ -179,7 +179,7 @@ impl ChannelOuterLink_PostgresqlRepository {
 pub struct Insert {
     pub channel_outer_link_from: i64,
     pub channel_outer_link_alias: String,
-    pub channel_outer_link_adress: String,
+    pub channel_outer_link_address: String,
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
@@ -187,5 +187,5 @@ pub struct Insert {
 #[serde(crate = "extern_crate::serde")]
 pub struct ChannelOuterLink1 {
     pub channel_outer_link_alias: String,
-    pub channel_outer_link_adress: String
+    pub channel_outer_link_address: String
 }

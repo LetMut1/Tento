@@ -1,14 +1,24 @@
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
+use std::marker::PhantomData;
+use super::application_user_device::Id as ApplicationUserDeviceId;
+use super::application_user::Id as ApplicationUserId;
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessToken<'a> {
     id: String,
+    _id: PhantomData<Id>,
+
     application_user_id: i64,
+    _application_user_id: PhantomData<ApplicationUserId>,
+
     application_user_device_id: Cow<'a, str>,
-    expires_at: i64
+    _application_user_device_id: PhantomData<ApplicationUserDeviceId>,
+
+    expires_at: i64,
+    _expires_at: PhantomData<ExpiresAt>
 }
 
 impl<'a> ApplicationUserAccessToken<'a> {
@@ -22,9 +32,13 @@ impl<'a> ApplicationUserAccessToken<'a> {
     ) -> Self {
         return Self {
             id,
+            _id: PhantomData,
             application_user_id,
+            _application_user_id: PhantomData,
             application_user_device_id,
-            expires_at
+            _application_user_device_id: PhantomData,
+            expires_at,
+            _expires_at: PhantomData
         };
     }
 
@@ -44,3 +58,7 @@ impl<'a> ApplicationUserAccessToken<'a> {
         return self.expires_at;
     }
 }
+
+pub struct Id;
+
+pub struct ExpiresAt;

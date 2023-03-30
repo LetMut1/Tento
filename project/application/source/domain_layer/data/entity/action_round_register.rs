@@ -2,19 +2,19 @@ use std::marker::PhantomData;
 
 pub struct ActionRoundRegister {
     route: String,
-    route_: PhantomData<Route>,
+    _route: PhantomData<Route>,
 
     method: String,
-    method_: PhantomData<Method>,
+    _method: PhantomData<Method>,
 
     status_code: i16,
-    statuse_code_: PhantomData<StatusCode>,
+    _statuse_code: PhantomData<StatusCode>,
 
     context: Option<String>,
-    context_: PhantomData<Context>,
+    _context: PhantomData<Context>,
 
     created_at: String,
-    created_at_: PhantomData<CreatedAt>,
+    _created_at: PhantomData<CreatedAt>,
 }
 
 pub struct Route;

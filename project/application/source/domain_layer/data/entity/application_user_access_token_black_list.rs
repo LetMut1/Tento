@@ -1,3 +1,6 @@
+use std::marker::PhantomData;
+use super::application_user_access_token::Id;
+
 /// This entity is not used yet, and we need to decide whether we will use this flow.
 ///
 /// Tokens are refreshed every N minutes. That is, N minutes the token remains
@@ -7,5 +10,6 @@
 /// Wherever the validity of a token is checked, you need to check if this token is in this
 /// entity, and block the action if it is.
 pub struct ApplicationUserAccessTokenBlackList {
-    application_user_access_token_id: String
+    application_user_access_token_id: String,
+    _application_user_access_token_id: PhantomData<Id>
 }
