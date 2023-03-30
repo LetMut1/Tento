@@ -1,8 +1,10 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::channel::AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel;
+use crate::domain_layer::data::entity::channel::Id;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
-use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
+use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -84,7 +86,7 @@ impl ActionProcessor {
             }
         };
 
-        if !Channel_Validator::is_valid_id(incoming.channel_id) {
+        if !Validator::<Channel<'_>, Id>::is_valid(incoming.channel_id) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Id });
         }
 

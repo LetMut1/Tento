@@ -11,6 +11,8 @@ use crate::domain_layer::data::entity::application_user::Email;
 use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
 use crate::domain_layer::data::entity::application_user::Nickname;
 use crate::domain_layer::data::entity::application_user::Password;
+use crate::domain_layer::data::entity::channel::Channel;
+use crate::domain_layer::data::entity::channel::Id as ChannelId;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -147,5 +149,11 @@ impl Validator<ApplicationUserResetPasswordToken<'_>, ApplicationUserResetPasswo
 impl Validator<ApplicationUserDevice, ApplicationUserDeviceId> {
     pub fn is_valid<'a>(application_user_device_id: &'a str) -> bool {
         return true;
+    }
+}
+
+impl Validator<Channel<'_>, ChannelId> {
+    pub fn is_valid<'a>(channel_id: i64) -> bool {
+        return channel_id >= 0;
     }
 }

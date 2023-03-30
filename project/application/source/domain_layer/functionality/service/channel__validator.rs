@@ -4,9 +4,6 @@ impl Channel_Validator {
     pub const CHANNEL__NAME_MAXIMUM_LENGTH: usize = 75;
     pub const CHANNEL__DESCRIPTION_MAXIMUM_LENGTH: usize = 500;
 
-    pub fn is_valid_id<'a>(channel_id: i64) -> bool {
-        return channel_id >= 0;
-    }
 
     pub fn is_valid_name<'a>(channel_name: &'a str) -> bool {
         return channel_name.chars().count() <= Self::CHANNEL__NAME_MAXIMUM_LENGTH
