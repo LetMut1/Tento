@@ -1,6 +1,7 @@
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Email;
 use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
+use crate::domain_layer::data::entity::application_user::Nickname;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -41,5 +42,16 @@ impl Validator<ApplicationUser<'_>, Email> {
             regex.is_match(application_user_email)
                 && application_user_email.chars().count() <= Self::MAXIMUM_LENGTH
         );
+    }
+}
+
+impl Validator<ApplicationUser<'_>, Nickname> {
+    pub const MAXIMUM_LENGTH: usize = 55;
+
+    pub fn is_valid<'a>(application_user_nickname: &'a str) -> bool {
+        return application_user_nickname.chars().count() <= Self::MAXIMUM_LENGTH
+            && !application_user_nickname.contains('@')
+            && !application_user_nickname.contains(' ')       // TODO Проверить символ табуляци TAB            НАПИСАТЬ Через Регекс?
+            && !application_user_nickname.is_empty();
     }
 }

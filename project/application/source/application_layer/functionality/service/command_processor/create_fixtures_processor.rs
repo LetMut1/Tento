@@ -14,6 +14,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::domain_layer::data::entity::application_user::Nickname;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
@@ -148,7 +149,7 @@ impl CreateFixturesProcessor {
         '_a: for _i in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
             let mut application_user_nickname = String::new();
 
-            '_b: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=ApplicationUser_Validator::APPLICATION_USER__NICKNAME_MAXIMUM_LENGTH) {
+            '_b: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<ApplicationUser, Nickname>::MAXIMUM_LENGTH) {
                 let character = Self::ASCII_CHARACTER_REGISTRY[
                     thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                 ];
@@ -156,7 +157,7 @@ impl CreateFixturesProcessor {
                 application_user_nickname = format!("{}{}", application_user_nickname.as_str(), character);
             }
 
-            if !ApplicationUser_Validator::is_valid_nickname(application_user_nickname.as_str()) {
+            if !Validator::<ApplicationUser, Nickname>::is_valid(application_user_nickname.as_str()) {
                 return Err(
                     ErrorAuditor::new(
                         BaseError::LogicError { message: "Application_user nickname should be valid." },

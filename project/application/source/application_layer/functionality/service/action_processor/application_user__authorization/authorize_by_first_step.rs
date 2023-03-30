@@ -2,6 +2,7 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Email;
+use crate::domain_layer::data::entity::application_user::Nickname;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
@@ -92,7 +93,7 @@ impl ActionProcessor {
 
             application_user_
         } else {
-            if ApplicationUser_Validator::is_valid_nickname(incoming.application_user_email_or_application_user_nickname.as_str()) {
+            if Validator::<ApplicationUser, Nickname>::is_valid(incoming.application_user_email_or_application_user_nickname.as_str()) {
                 let application_user_ = match ApplicationUser_PostgresqlRepository::find_1(
                     database_1_postgresql_connection, incoming.application_user_email_or_application_user_nickname.as_str()
                 ).await {
