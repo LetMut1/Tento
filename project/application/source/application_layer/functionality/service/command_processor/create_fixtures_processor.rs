@@ -1,9 +1,12 @@
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
+use crate::domain_layer::data::entity::application_user::Email;
 use crate::domain_layer::data::entity::channel::AccessModifier;
 use crate::domain_layer::data::entity::channel::VisabilityModifier;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
 use crate::domain_layer::functionality::service::channel__validator::Channel_Validator;
+use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -164,7 +167,7 @@ impl CreateFixturesProcessor {
 
             let application_user_email = format!("{}@fixture.com", application_user_nickname.as_str());
 
-            let is_valid_email = match ApplicationUser_Validator::is_valid_email(application_user_email.as_str()) {
+            let is_valid_email = match Validator::<ApplicationUser<'_>, Email>::is_valid(application_user_email.as_str()) {
                 Ok(is_valid_email_) => is_valid_email_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

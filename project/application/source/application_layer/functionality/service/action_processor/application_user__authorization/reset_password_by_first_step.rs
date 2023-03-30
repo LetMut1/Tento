@@ -1,10 +1,12 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::domain_layer::functionality::service::application_user__validator::ApplicationUser_Validator;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
+use crate::domain_layer::data::entity::application_user::Email;
 use crate::domain_layer::functionality::service::application_user_device__validator::ApplicationUserDevice_Validator;
-use crate::domain_layer::functionality::service::application_user_reset_password_token__property_generator::ApplicationUserResetPasswordToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::application_user_reset_password_token__property_generator::ApplicationUserResetPasswordToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__sending_opportunity_resolver::ApplicationUserResetPasswordToken_SendingOpportunityResolver;
+use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -44,7 +46,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let is_valid_email = match ApplicationUser_Validator::is_valid_email(incoming.application_user_email.as_str()) {
+        let is_valid_email = match Validator::<ApplicationUser<'_>, Email>::is_valid(incoming.application_user_email.as_str()) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
