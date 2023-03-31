@@ -1,12 +1,14 @@
 use std::marker::PhantomData;
-use super::channel::Id;
+use super::channel::Channel_Id;
+
+pub use self::CreatedAt as ChannelInnerLink_CreatedAt;
 
 pub struct ChannelInnerLink {
     from: i64,
-    _from: PhantomData<Id>,
+    _from: PhantomData<Channel_Id>,
 
     to: i64,
-    _to: PhantomData<Id>,
+    _to: PhantomData<Channel_Id>,
 
     created_at: String,
     _created_at: PhantomData<CreatedAt>

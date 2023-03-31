@@ -2,8 +2,8 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink as EntityChannelInnerLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink as EntityChannelOuterLink;
-use crate::domain_layer::data::entity::channel::AccessModifier;
-use crate::domain_layer::data::entity::channel::Id;
+use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -89,7 +89,7 @@ impl ActionProcessor {
             }
         };
 
-        if !Validator::<Id>::is_valid(incoming.channel_id) {
+        if !Validator::<Channel_Id>::is_valid(incoming.channel_id) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Id });
         }
 
@@ -131,7 +131,7 @@ impl ActionProcessor {
 
         let channel_access_modifier = Channel_AccessModifierResolver::to_representation(channel_.get_access_modifier());
 
-        if let AccessModifier::Close = channel_access_modifier {
+        if let Channel_AccessModifier::Close = channel_access_modifier {
             let is_exist = match ChannelSubscription_PostgresqlRepository::is_exist(
                 &*database_1_postgresql_pooled_connection, application_user_access_token.get_application_user_id(), channel_.get_id(),
             ).await {

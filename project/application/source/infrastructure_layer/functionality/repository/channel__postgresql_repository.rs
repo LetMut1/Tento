@@ -1,6 +1,6 @@
-use crate::domain_layer::data::entity::channel::AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel;
-use crate::domain_layer::data::entity::channel::VisabilityModifier;
+use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::channel__visability_modifier_resolver::Channel_VisabilityModifierResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -618,8 +618,8 @@ pub struct Insert {
     pub channel_name: String,
     pub channel_linked_name: String,
     pub channel_description: Option<String>,
-    pub channel_access_modifier: AccessModifier,
-    pub channel_visability_modifier: VisabilityModifier,
+    pub channel_access_modifier: Channel_AccessModifier,
+    pub channel_visability_modifier: Channel_VisabilityModifier,
     pub channel_orientation: Vec<i16>,
     pub channel_cover_image_path: Option<String>,
     pub channel_background_image_path: Option<String>,

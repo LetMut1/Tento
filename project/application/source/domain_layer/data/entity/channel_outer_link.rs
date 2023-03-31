@@ -1,9 +1,13 @@
 use std::marker::PhantomData;
-use super::channel::Id;
+use super::channel::Channel_Id;
+
+pub use self::Alias as ChannelOuterLink_Alias;
+pub use self::Address as ChannelOuterLink_Address;
+pub use self::CreatedAt as ChannelOuterLink_CreatedAt;
 
 pub struct ChannelOuterLink {
     from: i64,
-    _from: PhantomData<Id>,
+    _from: PhantomData<Channel_Id>,
 
     alias: String,
     _alias: PhantomData<Alias>,

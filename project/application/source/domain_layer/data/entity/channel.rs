@@ -2,6 +2,20 @@ use std::borrow::Cow;
 use std::marker::PhantomData;
 use super::application_user::ApplicationUser_Id;
 
+pub use self::Id as Channel_Id;
+pub use self::Name as Channel_Name;
+pub use self::LinkedName as Channel_LinkedName;
+pub use self::Description as Channel_Description;
+pub use self::AccessModifier as Channel_AccessModifier;
+pub use self::VisabilityModifier as Channel_VisabilityModifier;
+pub use self::Orientation as Channel_Orientation;
+pub use self::CoverImagePath as Channel_CoverImagePath;
+pub use self::BackgroundImagePath as Channel_BackgroundImagePath;
+pub use self::SubscribersQuantity as Channel_SubscribersQuantity;
+pub use self::MarksQuantity as Channel_MarksQuantity;
+pub use self::ViewingQuantity as Channel_ViewingQuantity;
+pub use self::CreatedAt as Channel_CreatedAt;
+
 pub struct Channel<'a> {
     id: i64,
     _id: PhantomData<Id>,
