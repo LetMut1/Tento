@@ -1,4 +1,4 @@
-use crate::domain_layer::data::entity::application_user_device::Id;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
@@ -117,7 +117,7 @@ impl CreateFixturesProcessor {
             );
         }
 
-        if !Validator::<Id>::is_valid(Self::APPLICATION_USER_DEVICE__ID) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(Self::APPLICATION_USER_DEVICE__ID) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError { message: "Application_user_device id should be valid." },

@@ -1,5 +1,11 @@
 use std::marker::PhantomData;
 
+pub use self::Route as ActionRoundRegister_Route;
+pub use self::Method as ActionRoundRegister_Method;
+pub use self::StatusCode as ActionRoundRegister_StatusCode;
+pub use self::Context as ActionRoundRegister_Context;
+pub use self::CreatedAt as ActionRoundRegister_CreatedAt;
+
 pub struct ActionRoundRegister {
     route: String,
     _route: PhantomData<Route>,

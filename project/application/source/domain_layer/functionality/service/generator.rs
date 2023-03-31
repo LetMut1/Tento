@@ -8,7 +8,7 @@ use crate::domain_layer::data::entity::application_user_access_token::Id as Appl
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::Value as ApplicationUserAuthorizationTokenValue;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
-use crate::domain_layer::data::entity::application_user_device::Id as ApplicationUserDeviceId;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user_registration_token::Value as ApplicationUserRegistrationTokenValue;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;

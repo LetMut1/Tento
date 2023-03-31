@@ -1,6 +1,8 @@
 use std::marker::PhantomData;
 use super::application_user::ApplicationUser_Id;
 
+pub use self::Id as ApplicationUserDevice_Id;
+
 pub struct ApplicationUserDevice {
     id: String,
     _id: PhantomData<Id>,
