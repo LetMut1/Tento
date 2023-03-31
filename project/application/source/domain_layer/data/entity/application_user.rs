@@ -1,6 +1,13 @@
 use std::borrow::Cow;
 use std::marker::PhantomData;
 
+pub use self::Id as ApplicationUser_Id;
+pub use self::Email as ApplicationUser_Email;
+pub use self::Nickname as ApplicationUser_Nickname;
+pub use self::Password as ApplicationUser_Password;
+pub use self::PasswordHash as ApplicationUser_PasswordHash;
+pub use self::CreatedAt as ApplicationUser_CreatedAt;
+
 pub struct ApplicationUser<'a> {
     id: i64,
     _id: PhantomData<Id>,

@@ -1,11 +1,11 @@
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use super::application_user_device::Id as ApplicationUserDeviceId;
-use super::application_user::Email;
+use super::application_user::ApplicationUser_Email;
 
 pub struct ApplicationUserRegistrationToken<'a> {
     application_user_email: Cow<'a, str>,
-    _application_user_email: PhantomData<Email>,
+    _application_user_email: PhantomData<ApplicationUser_Email>,
 
     application_user_device_id: Cow<'a, str>,
     _application_user_device_id: PhantomData<ApplicationUserDeviceId>,

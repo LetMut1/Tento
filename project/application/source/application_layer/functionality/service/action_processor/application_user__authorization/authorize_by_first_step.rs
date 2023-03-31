@@ -5,9 +5,9 @@ use crate::domain_layer::data::entity::application_user_authorization_token::Val
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_device::Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::Email;
-use crate::domain_layer::data::entity::application_user::Nickname;
-use crate::domain_layer::data::entity::application_user::Password;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__property_generator::ApplicationUserAuthorizationToken_PropertyGenerator;
@@ -53,7 +53,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !Validator::<ApplicationUser<'_>, Password>::is_valid(incoming.application_user_password.as_str()) {
+        if !Validator::<ApplicationUser<'_>, ApplicationUser_Password>::is_valid(incoming.application_user_password.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }
 
@@ -75,7 +75,7 @@ impl ActionProcessor {
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let is_valid_email = match Validator::<ApplicationUser<'_>, Email>::is_valid(incoming.application_user_email_or_application_user_nickname.as_str()) {
+        let is_valid_email = match Validator::<ApplicationUser<'_>, ApplicationUser_Email>::is_valid(incoming.application_user_email_or_application_user_nickname.as_str()) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -97,7 +97,7 @@ impl ActionProcessor {
 
             application_user_
         } else {
-            if Validator::<ApplicationUser<'_>, Nickname>::is_valid(incoming.application_user_email_or_application_user_nickname.as_str()) {
+            if Validator::<ApplicationUser<'_>, ApplicationUser_Nickname>::is_valid(incoming.application_user_email_or_application_user_nickname.as_str()) {
                 let application_user_ = match ApplicationUser_PostgresqlRepository::find_1(
                     database_1_postgresql_connection, incoming.application_user_email_or_application_user_nickname.as_str()
                 ).await {

@@ -6,11 +6,11 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::Value as ApplicationUserRegistrationTokenValue;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::Value as ApplicationUserResetPasswordTokenValue;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::Email;
-use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
-use crate::domain_layer::data::entity::application_user::Nickname;
-use crate::domain_layer::data::entity::application_user::Password;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Description;
 use crate::domain_layer::data::entity::channel::Id as ChannelId;
@@ -30,13 +30,13 @@ pub struct Validator<E, F> {
     _field: PhantomData<F>
 }
 
-impl Validator<ApplicationUser<'_>, ApplicationUserId> {
+impl Validator<ApplicationUser<'_>, ApplicationUser_Id> {
     pub fn is_valid<'a>(application_user_id: i64) -> bool {
         return application_user_id >= 0;
     }
 }
 
-impl Validator<ApplicationUser<'_>, Email> {
+impl Validator<ApplicationUser<'_>, ApplicationUser_Email> {
     const REGULAR_EXPRESSION: &'static str = r#"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"#;
     const MAXIMUM_LENGTH: usize = 320;
 
@@ -60,7 +60,7 @@ impl Validator<ApplicationUser<'_>, Email> {
     }
 }
 
-impl Validator<ApplicationUser<'_>, Nickname> {
+impl Validator<ApplicationUser<'_>, ApplicationUser_Nickname> {
     pub const MAXIMUM_LENGTH: usize = 55;
 
     pub fn is_valid<'a>(application_user_nickname: &'a str) -> bool {
@@ -71,7 +71,7 @@ impl Validator<ApplicationUser<'_>, Nickname> {
     }
 }
 
-impl Validator<ApplicationUser<'_>, Password> {
+impl Validator<ApplicationUser<'_>, ApplicationUser_Password> {
     const MINIMUM_LENGTH: usize = 7;
     const MAXIMUM_LENGTH: usize = 65;
 

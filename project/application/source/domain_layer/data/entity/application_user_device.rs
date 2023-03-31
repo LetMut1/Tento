@@ -1,12 +1,12 @@
 use std::marker::PhantomData;
-use super::application_user::Id as ApplicationUserId;
+use super::application_user::ApplicationUser_Id;
 
 pub struct ApplicationUserDevice {
     id: String,
     _id: PhantomData<Id>,
 
     application_user_id: i64,
-    _application_user_id: PhantomData<ApplicationUserId>
+    _application_user_id: PhantomData<ApplicationUser_Id>
 }
 
 impl ApplicationUserDevice {

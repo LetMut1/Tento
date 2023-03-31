@@ -1,10 +1,10 @@
 use std::marker::PhantomData;
-use super::application_user::Id as ApplicationUserId;
+use super::application_user::ApplicationUser_Id;
 use super::channel::Id as ChannelId;
 
 pub struct ChannelSubscription {
     application_user_id: i64,
-    _application_user_id: PhantomData<ApplicationUserId>,
+    _application_user_id: PhantomData<ApplicationUser_Id>,
 
     channel_id: i64,
     _channel_id: PhantomData<ChannelId>,

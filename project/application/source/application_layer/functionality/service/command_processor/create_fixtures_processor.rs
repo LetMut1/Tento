@@ -1,9 +1,9 @@
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_device::Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::Email;
-use crate::domain_layer::data::entity::application_user::Nickname;
-use crate::domain_layer::data::entity::application_user::Password;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::channel::AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Description;
@@ -111,7 +111,7 @@ impl CreateFixturesProcessor {
             }
         };
 
-        if !Validator::<ApplicationUser<'_>, Password>::is_valid(Self::APPLICATION_USER__PASSWORD) {
+        if !Validator::<ApplicationUser<'_>, ApplicationUser_Password>::is_valid(Self::APPLICATION_USER__PASSWORD) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError { message: "Application_user_password should be valid." },
@@ -154,7 +154,7 @@ impl CreateFixturesProcessor {
         '_a: for _i in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
             let mut application_user_nickname = String::new();
 
-            '_b: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<ApplicationUser, Nickname>::MAXIMUM_LENGTH) {
+            '_b: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<ApplicationUser<'_>, ApplicationUser_Nickname>::MAXIMUM_LENGTH) {
                 let character = Self::ASCII_CHARACTER_REGISTRY[
                     thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                 ];
@@ -162,7 +162,7 @@ impl CreateFixturesProcessor {
                 application_user_nickname = format!("{}{}", application_user_nickname.as_str(), character);
             }
 
-            if !Validator::<ApplicationUser<'_>, Nickname>::is_valid(application_user_nickname.as_str()) {
+            if !Validator::<ApplicationUser<'_>, ApplicationUser_Nickname>::is_valid(application_user_nickname.as_str()) {
                 return Err(
                     ErrorAuditor::new(
                         BaseError::LogicError { message: "Application_user nickname should be valid." },
@@ -173,7 +173,7 @@ impl CreateFixturesProcessor {
 
             let application_user_email = format!("{}@fixture.com", application_user_nickname.as_str());
 
-            let is_valid_email = match Validator::<ApplicationUser<'_>, Email>::is_valid(application_user_email.as_str()) {
+            let is_valid_email = match Validator::<ApplicationUser<'_>, ApplicationUser_Email>::is_valid(application_user_email.as_str()) {
                 Ok(is_valid_email_) => is_valid_email_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

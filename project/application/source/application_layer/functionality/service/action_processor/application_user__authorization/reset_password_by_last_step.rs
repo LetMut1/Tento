@@ -5,8 +5,8 @@ use crate::domain_layer::data::entity::application_user_device::Id as Applicatio
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::Value;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
-use crate::domain_layer::data::entity::application_user::Password;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -64,11 +64,11 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserResetPasswordToken_Value });
         }
 
-        if !Validator::<ApplicationUser<'_>, ApplicationUserId>::is_valid(incoming.application_user_id) {
+        if !Validator::<ApplicationUser<'_>, ApplicationUser_Id>::is_valid(incoming.application_user_id) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Id });
         }
 
-        if !Validator::<ApplicationUser<'_>, Password>::is_valid(incoming.application_user_password.as_str()) {
+        if !Validator::<ApplicationUser<'_>, ApplicationUser_Password>::is_valid(incoming.application_user_password.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }
 

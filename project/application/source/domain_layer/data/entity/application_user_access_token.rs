@@ -3,7 +3,7 @@ use extern_crate::serde::Serialize;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use super::application_user_device::Id as ApplicationUserDeviceId;
-use super::application_user::Id as ApplicationUserId;
+use super::application_user::ApplicationUser_Id;
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
@@ -12,7 +12,7 @@ pub struct ApplicationUserAccessToken<'a> {
     _id: PhantomData<Id>,
 
     application_user_id: i64,
-    _application_user_id: PhantomData<ApplicationUserId>,
+    _application_user_id: PhantomData<ApplicationUser_Id>,
 
     application_user_device_id: Cow<'a, str>,
     _application_user_device_id: PhantomData<ApplicationUserDeviceId>,

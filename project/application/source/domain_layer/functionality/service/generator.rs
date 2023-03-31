@@ -14,10 +14,10 @@ use crate::domain_layer::data::entity::application_user_registration_token::Valu
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::Value as ApplicationUserResetPasswordTokenValue;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::Email;
-use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
-use crate::domain_layer::data::entity::application_user::Nickname;
-use crate::domain_layer::data::entity::application_user::Password;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Description;
 use crate::domain_layer::data::entity::channel::Id as ChannelId;

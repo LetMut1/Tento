@@ -1,13 +1,13 @@
 use std::borrow::Cow;
 use std::marker::PhantomData;
-use super::application_user::Id as ApplicationUserId;
+use super::application_user::ApplicationUser_Id;
 
 pub struct Channel<'a> {
     id: i64,
     _id: PhantomData<Id>,
 
     owner: i64,
-    _owner: PhantomData<ApplicationUserId>,
+    _owner: PhantomData<ApplicationUser_Id>,
 
     name: Cow<'a, str>,
     _name: PhantomData<Name>,
