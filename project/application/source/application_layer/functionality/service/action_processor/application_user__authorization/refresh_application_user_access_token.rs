@@ -4,8 +4,8 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ex
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::UpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt as ApplicationUserAccessTokenExpiresAt;
-use crate::domain_layer::data::entity::application_user_access_token::Id;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__expiration_time_resolver::ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
@@ -143,7 +143,7 @@ impl ActionProcessor {
             );
         }
 
-        let expires_at = match Generator::<ApplicationUserAccessTokenExpiresAt>::generate() {
+        let expires_at = match Generator::<ApplicationUserAccessToken_ExpiresAt>::generate() {
             Ok(expires_at_) => expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -152,7 +152,7 @@ impl ActionProcessor {
             }
         };
         let application_user_access_token_new = ApplicationUserAccessToken::new(
-            Generator::<Id>::generate(),
+            Generator::<ApplicationUserAccessToken_Id>::generate(),
             application_user_access_token_.get_application_user_id(),
             Cow::Borrowed(application_user_access_token_.get_application_user_device_id()),
             expires_at

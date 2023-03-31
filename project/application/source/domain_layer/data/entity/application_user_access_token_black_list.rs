@@ -1,5 +1,5 @@
 use std::marker::PhantomData;
-use super::application_user_access_token::Id;
+use super::application_user_access_token::ApplicationUserAccessToken_Id;
 
 /// This entity is not used yet, and we need to decide whether we will use this flow.
 ///
@@ -11,5 +11,5 @@ use super::application_user_access_token::Id;
 /// entity, and block the action if it is.
 pub struct ApplicationUserAccessTokenBlackList {
     application_user_access_token_id: String,
-    _application_user_access_token_id: PhantomData<Id>
+    _application_user_access_token_id: PhantomData<ApplicationUserAccessToken_Id>
 }

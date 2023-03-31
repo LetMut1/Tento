@@ -3,9 +3,9 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ExpiresAt as ApplicationUserAccessRefreshTokenExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::UpdatedAt;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt as ApplicationUserAccessTokenExpiresAt;
-use crate::domain_layer::data::entity::application_user_access_token::Id as ApplicationUserAccessTokenId;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::Value;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
@@ -214,7 +214,7 @@ impl ActionProcessor {
             );
         }
 
-        let expires_at = match Generator::<ApplicationUserAccessTokenExpiresAt>::generate() {
+        let expires_at = match Generator::<ApplicationUserAccessToken_ExpiresAt>::generate() {
             Ok(expires_at_) => expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -224,7 +224,7 @@ impl ActionProcessor {
         };
 
         let application_user_access_token = ApplicationUserAccessToken::new(
-            Generator::<ApplicationUserAccessTokenId>::generate(),
+            Generator::<ApplicationUserAccessToken_Id>::generate(),
             application_user_authorization_token_.get_application_user_id(),
             Cow::Borrowed(application_user_authorization_token_.get_application_user_device_id()),
             expires_at

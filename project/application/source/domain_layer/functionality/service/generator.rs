@@ -3,8 +3,8 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ex
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue as ApplicationUserAccessRefreshTokenObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::UpdatedAt as ApplicationUserAccessRefreshTokenUpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt as ApplicationUserAccessTokenExpiresAt;
-use crate::domain_layer::data::entity::application_user_access_token::Id as ApplicationUserAccessTokenId;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::Value as ApplicationUserAuthorizationTokenValue;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
@@ -39,7 +39,7 @@ pub struct Generator<S> {
     _subject: PhantomData<S>
 }
 
-impl Generator<ApplicationUserAccessTokenExpiresAt> {
+impl Generator<ApplicationUserAccessToken_ExpiresAt> {
     pub fn generate() -> Result<i64, ErrorAuditor> {
         let application_user_access_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
             ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
@@ -56,7 +56,7 @@ impl Generator<ApplicationUserAccessTokenExpiresAt> {
     }
 }
 
-impl Generator<ApplicationUserAccessTokenId> {
+impl Generator<ApplicationUserAccessToken_Id> {
     pub fn generate() -> String {
         return Uuid::new_v4().to_string();
     }

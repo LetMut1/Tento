@@ -5,6 +5,9 @@ use std::marker::PhantomData;
 use super::application_user_device::ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Id;
 
+pub use self::Id as ApplicationUserAccessToken_Id;
+pub use self::ExpiresAt as ApplicationUserAccessToken_ExpiresAt;
+
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessToken<'a> {
