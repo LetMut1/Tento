@@ -3,6 +3,11 @@ use std::marker::PhantomData;
 use super::application_user_device::ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Id;
 
+pub use self::Value as ApplicationUserAuthorizationToken_Value;
+pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
+pub use self::ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt;
+pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
+
 pub struct ApplicationUserAuthorizationToken<'a> {
     application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,

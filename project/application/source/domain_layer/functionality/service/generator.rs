@@ -6,7 +6,7 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::data::entity::application_user_authorization_token::Value as ApplicationUserAuthorizationTokenValue;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
@@ -91,7 +91,7 @@ impl Generator<ApplicationUserAccessRefreshToken_UpdatedAt> {
     }
 }
 
-impl Generator<ApplicationUserAuthorizationTokenValue> {
+impl Generator<ApplicationUserAuthorizationToken_Value> {
     pub fn generate() -> String {
         return NumberRowGenerator::generate_row_with_6_numbers();
     }

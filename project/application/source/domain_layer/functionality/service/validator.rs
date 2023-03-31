@@ -1,4 +1,4 @@
-use crate::domain_layer::data::entity::application_user_authorization_token::Value as ApplicationUserAuthorizationTokenValue;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::Value as ApplicationUserRegistrationTokenValue;
 use crate::domain_layer::data::entity::application_user_reset_password_token::Value as ApplicationUserResetPasswordTokenValue;
@@ -77,7 +77,7 @@ impl Validator<ApplicationUser_Password> {
     }
 }
 
-impl Validator<ApplicationUserAuthorizationTokenValue> {
+impl Validator<ApplicationUserAuthorizationToken_Value> {
     const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 
     pub fn is_valid<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, ErrorAuditor> {
