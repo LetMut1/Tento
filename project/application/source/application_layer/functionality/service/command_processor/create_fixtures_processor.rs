@@ -2,6 +2,7 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_Description;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
@@ -188,7 +189,7 @@ impl CreateFixturesProcessor {
                 );
             }
 
-            let application_user = match ApplicationUser_PostgresqlRepository::find_1(
+            let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser>::find_1(
                 database_1_postgresql_connection, application_user_nickname.as_str()
             ).await {
                 Ok(application_user_) => application_user_,
@@ -198,6 +199,7 @@ impl CreateFixturesProcessor {
                     return Err(error);
                 }
             };
+
             let application_user_ = match application_user {
                 Some(application_user__) => application_user__,
                 None => {

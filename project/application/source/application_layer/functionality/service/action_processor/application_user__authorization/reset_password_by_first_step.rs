@@ -5,6 +5,7 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__sending_opportunity_resolver::ApplicationUserResetPasswordToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -77,7 +78,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user = match ApplicationUser_PostgresqlRepository::find_2(
+        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser>::find_2(
             &*database_1_postgresql_pooled_connection, incoming.application_user_email.as_str()
         ).await {
             Ok(application_user_) => application_user_,
