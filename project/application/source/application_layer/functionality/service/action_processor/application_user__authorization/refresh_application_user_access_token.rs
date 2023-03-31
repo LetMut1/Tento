@@ -2,10 +2,10 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt;
+use crate::domain_layer::data::entity::application_user_access_token::Id;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__expiration_time_resolver::ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__property_generator::ApplicationUserAccessRefreshToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
-use crate::domain_layer::functionality::service::application_user_access_token__property_generator::ApplicationUserAccessToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -141,7 +141,7 @@ impl ActionProcessor {
             );
         }
 
-        let expires_at = match Generator::<ApplicationUserAccessToken, ExpiresAt>::generate() {
+        let expires_at = match Generator::<ApplicationUserAccessToken<'_>, ExpiresAt>::generate() {
             Ok(expires_at_) => expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -150,7 +150,7 @@ impl ActionProcessor {
             }
         };
         let application_user_access_token_new = ApplicationUserAccessToken::new(
-            ApplicationUserAccessToken_PropertyGenerator::generate_id(),
+            Generator::<ApplicationUserAccessToken<'_>, Id>::generate(),
             application_user_access_token_.get_application_user_id(),
             Cow::Borrowed(application_user_access_token_.get_application_user_device_id()),
             expires_at

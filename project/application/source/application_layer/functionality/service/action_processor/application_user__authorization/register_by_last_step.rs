@@ -2,8 +2,9 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt;
+use crate::domain_layer::data::entity::application_user_access_token::Id as ApplicationUserAccessTokenId;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
-use crate::domain_layer::data::entity::application_user_device::Id;
+use crate::domain_layer::data::entity::application_user_device::Id as ApplicationUserDeviceId;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user_registration_token::Value;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
@@ -13,7 +14,6 @@ use crate::domain_layer::data::entity::application_user::Password;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__property_generator::ApplicationUserAccessRefreshToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
-use crate::domain_layer::functionality::service::application_user_access_token__property_generator::ApplicationUserAccessToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -59,7 +59,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-    {                                                                                              // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
+    {
         if !Validator::<ApplicationUser<'_>, Password>::is_valid(incoming.application_user_password.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }
@@ -94,7 +94,7 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserRegistrationToken_Value });
         }
 
-        if !Validator::<ApplicationUserDevice, Id>::is_valid(incoming.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice, ApplicationUserDeviceId>::is_valid(incoming.application_user_device_id.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
@@ -315,7 +315,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_acces_token_expires_at = match Generator::<ApplicationUserAccessToken, ExpiresAt>::generate() {
+        let application_user_acces_token_expires_at = match Generator::<ApplicationUserAccessToken<'_>, ExpiresAt>::generate() {
             Ok(expires_at_) => expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -325,7 +325,7 @@ impl ActionProcessor {
         };
 
         let application_user_access_token = ApplicationUserAccessToken::new(
-            ApplicationUserAccessToken_PropertyGenerator::generate_id(),
+            Generator::<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenId>::generate(),
             application_user.get_id(),
             Cow::Borrowed(application_user_device.get_id()),
             application_user_acces_token_expires_at

@@ -1,5 +1,6 @@
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt as ApplicationUserAccessTokenExpiresAt;
+use crate::domain_layer::data::entity::application_user_access_token::Id as ApplicationUserAccessTokenId;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::Value as ApplicationUserAuthorizationTokenValue;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
@@ -26,6 +27,7 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use extern_crate::regex::Regex;
+use extern_crate::uuid::Uuid;
 use std::marker::PhantomData;
 
 pub struct Generator<E, F> {
@@ -47,5 +49,11 @@ impl Generator<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenExpires
         };
 
         return Ok(application_user_access_token_expires_at);
+    }
+}
+
+impl Generator<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenId> {
+    pub fn generate() -> String {
+        return Uuid::new_v4().to_string();
     }
 }

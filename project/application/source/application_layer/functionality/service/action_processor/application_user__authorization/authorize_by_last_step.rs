@@ -2,6 +2,7 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt;
+use crate::domain_layer::data::entity::application_user_access_token::Id as ApplicationUserAccessTokenId;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::Value;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
@@ -10,7 +11,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__property_generator::ApplicationUserAccessRefreshToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
-use crate::domain_layer::functionality::service::application_user_access_token__property_generator::ApplicationUserAccessToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -49,7 +49,7 @@ impl ActionProcessor {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,             // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>   // TODO сделать На Редисе механизм для невозможности почстоянно отравки емэйла. (Сохранять, если отправлено, и проверять, что отпрпавили. удалять по времени)
+    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -214,7 +214,7 @@ impl ActionProcessor {
             );
         }
 
-        let expires_at = match Generator::<ApplicationUserAccessToken, ExpiresAt>::generate() {
+        let expires_at = match Generator::<ApplicationUserAccessToken<'_>, ExpiresAt>::generate() {
             Ok(expires_at_) => expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -224,7 +224,7 @@ impl ActionProcessor {
         };
 
         let application_user_access_token = ApplicationUserAccessToken::new(
-            ApplicationUserAccessToken_PropertyGenerator::generate_id(),
+            Generator::<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenId>::generate(),
             application_user_authorization_token_.get_application_user_id(),
             Cow::Borrowed(application_user_authorization_token_.get_application_user_device_id()),
             expires_at
