@@ -1,6 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::Value;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
@@ -12,6 +13,7 @@ use crate::domain_layer::functionality::service::application_user_access_refresh
 use crate::domain_layer::functionality::service::application_user_access_token__property_generator::ApplicationUserAccessToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -212,7 +214,7 @@ impl ActionProcessor {
             );
         }
 
-        let expires_at = match ApplicationUserAccessToken_PropertyGenerator::generate_expires_at() {
+        let expires_at = match Generator::<ApplicationUserAccessToken, ExpiresAt>::generate() {
             Ok(expires_at_) => expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
