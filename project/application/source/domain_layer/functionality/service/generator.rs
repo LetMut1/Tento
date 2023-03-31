@@ -35,12 +35,11 @@ use extern_crate::regex::Regex;
 use extern_crate::uuid::Uuid;
 use std::marker::PhantomData;
 
-pub struct Generator<E, F> {
-    _entity: PhantomData<E>,
-    _field: PhantomData<F>
+pub struct Generator<S> {
+    _subject: PhantomData<S>
 }
 
-impl Generator<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenExpiresAt> {
+impl Generator<ApplicationUserAccessTokenExpiresAt> {
     pub fn generate() -> Result<i64, ErrorAuditor> {
         let application_user_access_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
             ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
@@ -57,19 +56,19 @@ impl Generator<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenExpires
     }
 }
 
-impl Generator<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenId> {
+impl Generator<ApplicationUserAccessTokenId> {
     pub fn generate() -> String {
         return Uuid::new_v4().to_string();
     }
 }
 
-impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefreshTokenObfuscationValue> {
+impl Generator<ApplicationUserAccessRefreshTokenObfuscationValue> {
     pub fn generate() -> String {
         return Uuid::new_v4().to_string();
     }
 }
 
-impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefreshTokenExpiresAt> {
+impl Generator<ApplicationUserAccessRefreshTokenExpiresAt> {
     pub fn generate() -> Result<i64, ErrorAuditor> {
         let application_user_access_refresh_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
             ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
@@ -86,13 +85,13 @@ impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefre
     }
 }
 
-impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefreshTokenUpdatedAt> {
+impl Generator<ApplicationUserAccessRefreshTokenUpdatedAt> {
     pub fn generate() -> i64 {
         return DateTimeResolver::unixtime_get_now();
     }
 }
 
-impl Generator<ApplicationUserAuthorizationToken<'_>, ApplicationUserAuthorizationTokenValue> {
+impl Generator<ApplicationUserAuthorizationTokenValue> {
     pub fn generate() -> String {
         return NumberRowGenerator::generate_row_with_6_numbers();
     }

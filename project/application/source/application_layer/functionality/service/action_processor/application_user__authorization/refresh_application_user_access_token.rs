@@ -1,6 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ExpiresAt as ApplicationUserAccessRefreshTokenExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::UpdatedAt;
@@ -144,7 +143,7 @@ impl ActionProcessor {
             );
         }
 
-        let expires_at = match Generator::<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenExpiresAt>::generate() {
+        let expires_at = match Generator::<ApplicationUserAccessTokenExpiresAt>::generate() {
             Ok(expires_at_) => expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -153,13 +152,13 @@ impl ActionProcessor {
             }
         };
         let application_user_access_token_new = ApplicationUserAccessToken::new(
-            Generator::<ApplicationUserAccessToken<'_>, Id>::generate(),
+            Generator::<Id>::generate(),
             application_user_access_token_.get_application_user_id(),
             Cow::Borrowed(application_user_access_token_.get_application_user_device_id()),
             expires_at
         );
 
-        let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefreshTokenExpiresAt>::generate() {
+        let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshTokenExpiresAt>::generate() {
             Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -170,9 +169,9 @@ impl ActionProcessor {
 
         application_user_access_refresh_token_
             .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_new.get_id()))
-            .set_obfuscation_value(Generator::<ApplicationUserAccessRefreshToken<'_>, ObfuscationValue>::generate())
+            .set_obfuscation_value(Generator::<ObfuscationValue>::generate())
             .set_expires_at(application_user_access_refresh_token_expires_at)
-            .set_updated_at(Generator::<ApplicationUserAccessRefreshToken<'_>, UpdatedAt>::generate());
+            .set_updated_at(Generator::<UpdatedAt>::generate());
 
         if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::update(
             database_2_postgresql_connection,
