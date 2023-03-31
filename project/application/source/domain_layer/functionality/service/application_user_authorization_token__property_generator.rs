@@ -7,9 +7,6 @@ use crate::infrastructure_layer::functionality::service::number_row_generator::N
 pub struct ApplicationUserAuthorizationToken_PropertyGenerator;
 
 impl ApplicationUserAuthorizationToken_PropertyGenerator {
-    pub fn generate_value() -> String {
-        return NumberRowGenerator::generate_row_with_6_numbers();
-    }
 
     pub fn generate_expires_at() -> Result<i64, ErrorAuditor> {
         let application_user_authorization_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(

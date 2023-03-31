@@ -1,5 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
+use crate::domain_layer::data::entity::application_user_authorization_token::Value as ApplicationUserAuthorizationTokenValue;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_device::Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
@@ -10,6 +12,7 @@ use crate::domain_layer::functionality::service::application_user__password_hash
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__property_generator::ApplicationUserAuthorizationToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_authorization_token__sending_opportunity_resolver::ApplicationUserAuthorizationToken_SendingOpportunityResolver;
+use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -202,7 +205,7 @@ impl ActionProcessor {
                     };
 
                     application_user_authorization_token__
-                        .set_value(ApplicationUserAuthorizationToken_PropertyGenerator::generate_value())
+                        .set_value(Generator::<ApplicationUserAuthorizationToken<'_>, ApplicationUserAuthorizationTokenValue>::generate())
                         .set_wrong_enter_tries_quantity(0)
                         .set_expires_at(application_user_authorization_token_expires_at);
                 }
@@ -242,7 +245,7 @@ impl ActionProcessor {
                 let insert = Insert {
                     application_user_id: application_user_.get_id(),
                     application_user_device_id: Cow::Borrowed(incoming.application_user_device_id.as_str()),
-                    application_user_authorization_token_value: ApplicationUserAuthorizationToken_PropertyGenerator::generate_value(),
+                    application_user_authorization_token_value: Generator::<ApplicationUserAuthorizationToken<'_>, ApplicationUserAuthorizationTokenValue>::generate(),
                     application_user_authorization_token_wrong_enter_tries_quantity: 0,
                     application_user_authorization_token_expires_at,
                     application_user_authorization_token_can_be_resent_from

@@ -30,6 +30,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
+use crate::infrastructure_layer::functionality::service::number_row_generator::NumberRowGenerator;
 use extern_crate::regex::Regex;
 use extern_crate::uuid::Uuid;
 use std::marker::PhantomData;
@@ -88,5 +89,11 @@ impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefre
 impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefreshTokenUpdatedAt> {
     pub fn generate() -> i64 {
         return DateTimeResolver::unixtime_get_now();
+    }
+}
+
+impl Generator<ApplicationUserAuthorizationToken<'_>, ApplicationUserAuthorizationTokenValue> {
+    pub fn generate() -> String {
+        return NumberRowGenerator::generate_row_with_6_numbers();
     }
 }
