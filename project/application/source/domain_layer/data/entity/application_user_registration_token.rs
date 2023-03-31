@@ -3,6 +3,12 @@ use std::marker::PhantomData;
 use super::application_user_device::ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Email;
 
+pub use self::Value as ApplicationUserRegistrationToken_Value;
+pub use self::WrongEnterTriesQuantity as ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
+pub use self::IsApproved as ApplicationUserRegistrationToken_IsApproved;
+pub use self::ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt;
+pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom;
+
 pub struct ApplicationUserRegistrationToken<'a> {
     application_user_email: Cow<'a, str>,
     _application_user_email: PhantomData<ApplicationUser_Email>,
