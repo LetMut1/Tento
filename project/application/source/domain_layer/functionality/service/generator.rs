@@ -1,7 +1,7 @@
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ExpiresAt as ApplicationUserAccessRefreshTokenExpiresAt;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue as ApplicationUserAccessRefreshTokenObfuscationValue;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::UpdatedAt as ApplicationUserAccessRefreshTokenUpdatedAt;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
@@ -62,13 +62,13 @@ impl Generator<ApplicationUserAccessToken_Id> {
     }
 }
 
-impl Generator<ApplicationUserAccessRefreshTokenObfuscationValue> {
+impl Generator<ApplicationUserAccessRefreshToken_ObfuscationValue> {
     pub fn generate() -> String {
         return Uuid::new_v4().to_string();
     }
 }
 
-impl Generator<ApplicationUserAccessRefreshTokenExpiresAt> {
+impl Generator<ApplicationUserAccessRefreshToken_ExpiresAt> {
     pub fn generate() -> Result<i64, ErrorAuditor> {
         let application_user_access_refresh_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
             ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
@@ -85,7 +85,7 @@ impl Generator<ApplicationUserAccessRefreshTokenExpiresAt> {
     }
 }
 
-impl Generator<ApplicationUserAccessRefreshTokenUpdatedAt> {
+impl Generator<ApplicationUserAccessRefreshToken_UpdatedAt> {
     pub fn generate() -> i64 {
         return DateTimeResolver::unixtime_get_now();
     }

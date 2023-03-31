@@ -1,8 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ExpiresAt as ApplicationUserAccessRefreshTokenExpiresAt;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::UpdatedAt;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
@@ -245,9 +245,9 @@ impl ActionProcessor {
 
         let application_user_access_token_id = Cow::Borrowed(application_user_access_token.get_id());
 
-        let application_user_access_refresh_token_obfuscation_value = Generator::<ObfuscationValue>::generate();
+        let application_user_access_refresh_token_obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
 
-        let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshTokenExpiresAt>::generate() {
+        let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate() {
             Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -256,7 +256,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_updated_at = Generator::<UpdatedAt>::generate();
+        let application_user_access_refresh_token_updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
 // TODO  TRANZACTION
         let application_user_access_refresh_token_ = match application_user_access_refresh_token {
             Some(mut application_user_access_refresh_token__) => {

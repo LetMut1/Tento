@@ -1,8 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ExpiresAt as ApplicationUserAccessRefreshTokenExpiresAt;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::UpdatedAt;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
@@ -158,7 +158,7 @@ impl ActionProcessor {
             expires_at
         );
 
-        let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshTokenExpiresAt>::generate() {
+        let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate() {
             Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -169,9 +169,9 @@ impl ActionProcessor {
 
         application_user_access_refresh_token_
             .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_new.get_id()))
-            .set_obfuscation_value(Generator::<ObfuscationValue>::generate())
+            .set_obfuscation_value(Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate())
             .set_expires_at(application_user_access_refresh_token_expires_at)
-            .set_updated_at(Generator::<UpdatedAt>::generate());
+            .set_updated_at(Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate());
 
         if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::update(
             database_2_postgresql_connection,

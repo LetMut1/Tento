@@ -6,6 +6,10 @@ use super::application_user_access_token::ApplicationUserAccessToken_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Id;
 
+pub use self::ObfuscationValue as ApplicationUserAccessRefreshToken_ObfuscationValue;
+pub use self::ExpiresAt as ApplicationUserAccessRefreshToken_ExpiresAt;
+pub use self::UpdatedAt as ApplicationUserAccessRefreshToken_UpdatedAt;
+
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessRefreshToken<'a> {
