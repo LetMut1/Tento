@@ -1,10 +1,13 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::application_user_registration_token__property_generator::ApplicationUserRegistrationToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_registration_token__sending_opportunity_resolver::ApplicationUserRegistrationToken_SendingOpportunityResolver;
+use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -125,7 +128,7 @@ impl ActionProcessor {
                 let (can_send_, mut need_to_update) = if ApplicationUserRegistrationToken_SendingOpportunityResolver::can_send(
                     &application_user_registration_token__
                 ) {
-                    let application_user_registration_token_can_be_resent_from = match ApplicationUserRegistrationToken_PropertyGenerator::generate_can_be_resent_from() {
+                    let application_user_registration_token_can_be_resent_from = match Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate() {
                         Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -145,7 +148,7 @@ impl ActionProcessor {
                     || application_user_registration_token__.get_is_approved() {
                     need_to_update = true;
 
-                    let application_user_registration_token_expires_at = match ApplicationUserRegistrationToken_PropertyGenerator::generate_expires_at() {
+                    let application_user_registration_token_expires_at = match Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate() {
                         Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -155,7 +158,7 @@ impl ActionProcessor {
                     };
 
                     application_user_registration_token__
-                        .set_value(ApplicationUserRegistrationToken_PropertyGenerator::generate_value())
+                        .set_value(Generator::<ApplicationUserRegistrationToken_Value>::generate())
                         .set_wrong_enter_tries_quantity(0)
                         .set_is_approved(false)
                         .set_expires_at(application_user_registration_token_expires_at);
@@ -175,7 +178,7 @@ impl ActionProcessor {
                 (application_user_registration_token__, can_send_)
             }
             None => {
-                let application_user_registration_token_expires_at = match ApplicationUserRegistrationToken_PropertyGenerator::generate_expires_at() {
+                let application_user_registration_token_expires_at = match Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate() {
                     Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -184,7 +187,7 @@ impl ActionProcessor {
                     }
                 };
 
-                let application_user_registration_token_can_be_resent_from = match ApplicationUserRegistrationToken_PropertyGenerator::generate_can_be_resent_from() {
+                let application_user_registration_token_can_be_resent_from = match Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate() {
                     Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -196,7 +199,7 @@ impl ActionProcessor {
                 let insert = Insert {
                     application_user_email: Cow::Borrowed(incoming.application_user_email.as_str()),
                     application_user_device_id: Cow::Borrowed(incoming.application_user_device_id.as_str()),
-                    application_user_registration_token_value: ApplicationUserRegistrationToken_PropertyGenerator::generate_value(),
+                    application_user_registration_token_value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
                     application_user_registration_token_wrong_enter_tries_quantity: 0,
                     application_user_registration_token_is_approved: false,
                     application_user_registration_token_expires_at,
