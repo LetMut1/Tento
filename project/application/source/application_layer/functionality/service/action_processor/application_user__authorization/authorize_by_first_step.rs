@@ -1,5 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
@@ -7,7 +9,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Nicknam
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::application_user_authorization_token__property_generator::ApplicationUserAuthorizationToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_authorization_token__sending_opportunity_resolver::ApplicationUserAuthorizationToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -173,7 +174,7 @@ impl ActionProcessor {
                 let (can_send_, mut need_to_update) = if ApplicationUserAuthorizationToken_SendingOpportunityResolver::can_send(
                     &application_user_authorization_token__
                 ) {
-                    let application_user_authorization_token_can_be_resent_from = match ApplicationUserAuthorizationToken_PropertyGenerator::generate_can_be_resent_from() {
+                    let application_user_authorization_token_can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
                         Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -192,7 +193,7 @@ impl ActionProcessor {
                 if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token__) {
                     need_to_update = true;
 
-                    let application_user_authorization_token_expires_at = match ApplicationUserAuthorizationToken_PropertyGenerator::generate_expires_at() {
+                    let application_user_authorization_token_expires_at = match Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate() {
                         Ok(application_user_authorization_token_expires_at_) => application_user_authorization_token_expires_at_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -221,7 +222,7 @@ impl ActionProcessor {
                 (application_user_authorization_token__, can_send_)
             }
             None => {
-                let application_user_authorization_token_expires_at = match ApplicationUserAuthorizationToken_PropertyGenerator::generate_expires_at() {
+                let application_user_authorization_token_expires_at = match Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate() {
                     Ok(application_user_authorization_token_expires_at_) => application_user_authorization_token_expires_at_,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -230,7 +231,7 @@ impl ActionProcessor {
                     }
                 };
 
-                let application_user_authorization_token_can_be_resent_from = match ApplicationUserAuthorizationToken_PropertyGenerator::generate_can_be_resent_from() {
+                let application_user_authorization_token_can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
                     Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
