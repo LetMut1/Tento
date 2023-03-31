@@ -1,6 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Id;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -85,7 +84,7 @@ impl ActionProcessor {
         };
 
         if let Some(requery_channel_id_) = incoming.requery_channel_id {
-            if !Validator::<Channel<'_>, Id>::is_valid(requery_channel_id_) {
+            if !Validator::<Id>::is_valid(requery_channel_id_) {
                 return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Id });
             }
         }

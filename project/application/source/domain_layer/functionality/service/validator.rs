@@ -1,17 +1,11 @@
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::Value as ApplicationUserAuthorizationTokenValue;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_device::Id as ApplicationUserDeviceId;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user_registration_token::Value as ApplicationUserRegistrationTokenValue;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::Value as ApplicationUserResetPasswordTokenValue;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Description;
 use crate::domain_layer::data::entity::channel::Id as ChannelId;
 use crate::domain_layer::data::entity::channel::LinkedName;
@@ -25,18 +19,17 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::regex::Regex;
 use std::marker::PhantomData;
 
-pub struct Validator<E, F> {
-    _entity: PhantomData<E>,
-    _field: PhantomData<F>
+pub struct Validator<S> {
+    _subject: PhantomData<S>
 }
 
-impl Validator<ApplicationUser<'_>, ApplicationUser_Id> {
+impl Validator<ApplicationUser_Id> {
     pub fn is_valid<'a>(application_user_id: i64) -> bool {
         return application_user_id >= 0;
     }
 }
 
-impl Validator<ApplicationUser<'_>, ApplicationUser_Email> {
+impl Validator<ApplicationUser_Email> {
     const REGULAR_EXPRESSION: &'static str = r#"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"#;
     const MAXIMUM_LENGTH: usize = 320;
 
@@ -60,7 +53,7 @@ impl Validator<ApplicationUser<'_>, ApplicationUser_Email> {
     }
 }
 
-impl Validator<ApplicationUser<'_>, ApplicationUser_Nickname> {
+impl Validator<ApplicationUser_Nickname> {
     pub const MAXIMUM_LENGTH: usize = 55;
 
     pub fn is_valid<'a>(application_user_nickname: &'a str) -> bool {
@@ -71,7 +64,7 @@ impl Validator<ApplicationUser<'_>, ApplicationUser_Nickname> {
     }
 }
 
-impl Validator<ApplicationUser<'_>, ApplicationUser_Password> {
+impl Validator<ApplicationUser_Password> {
     const MINIMUM_LENGTH: usize = 7;
     const MAXIMUM_LENGTH: usize = 65;
 
@@ -84,7 +77,7 @@ impl Validator<ApplicationUser<'_>, ApplicationUser_Password> {
     }
 }
 
-impl Validator<ApplicationUserAuthorizationToken<'_>, ApplicationUserAuthorizationTokenValue> {
+impl Validator<ApplicationUserAuthorizationTokenValue> {
     const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 
     pub fn is_valid<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, ErrorAuditor> {
@@ -106,7 +99,7 @@ impl Validator<ApplicationUserAuthorizationToken<'_>, ApplicationUserAuthorizati
     }
 }
 
-impl Validator<ApplicationUserRegistrationToken<'_>, ApplicationUserRegistrationTokenValue> {
+impl Validator<ApplicationUserRegistrationTokenValue> {
     const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 
     pub fn is_valid<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, ErrorAuditor> {
@@ -128,7 +121,7 @@ impl Validator<ApplicationUserRegistrationToken<'_>, ApplicationUserRegistration
     }
 }
 
-impl Validator<ApplicationUserResetPasswordToken<'_>, ApplicationUserResetPasswordTokenValue> {
+impl Validator<ApplicationUserResetPasswordTokenValue> {
     const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 
     pub fn is_valid<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, ErrorAuditor> {
@@ -150,19 +143,19 @@ impl Validator<ApplicationUserResetPasswordToken<'_>, ApplicationUserResetPasswo
     }
 }
 
-impl Validator<ApplicationUserDevice, ApplicationUserDeviceId> {
+impl Validator<ApplicationUserDeviceId> {
     pub fn is_valid<'a>(application_user_device_id: &'a str) -> bool {
         return true;
     }
 }
 
-impl Validator<Channel<'_>, ChannelId> {
+impl Validator<ChannelId> {
     pub fn is_valid<'a>(channel_id: i64) -> bool {
         return channel_id >= 0;
     }
 }
 
-impl Validator<Channel<'_>, Name> {
+impl Validator<Name> {
     pub const MAXIMUM_LENGTH: usize = 75;
 
     pub fn is_valid<'a>(channel_name: &'a str) -> bool {
@@ -171,13 +164,13 @@ impl Validator<Channel<'_>, Name> {
     }
 }
 
-impl Validator<Channel<'_>, LinkedName> {
+impl Validator<LinkedName> {
     pub fn is_valid<'a>(channel_linked_name: &'a str) -> bool {
         return true;    // TODO;
     }
 }
 
-impl Validator<Channel<'_>, Description> {
+impl Validator<Description> {
     pub const MAXIMUM_LENGTH: usize = 500;
 
     pub fn is_valid<'a>(channel_description: &'a str) -> bool {
@@ -185,7 +178,7 @@ impl Validator<Channel<'_>, Description> {
     }
 }
 
-impl Validator<Channel<'_>, Orientation> {
+impl Validator<Orientation> {
     pub fn is_valid<'a>(_channel_orientation: &'a [i16]) -> bool {
         return true;    // TODO;
     }

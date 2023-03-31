@@ -1,11 +1,8 @@
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_device::Id;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::channel::AccessModifier;
-use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Description;
 use crate::domain_layer::data::entity::channel::LinkedName;
 use crate::domain_layer::data::entity::channel::Name;
@@ -111,7 +108,7 @@ impl CreateFixturesProcessor {
             }
         };
 
-        if !Validator::<ApplicationUser<'_>, ApplicationUser_Password>::is_valid(Self::APPLICATION_USER__PASSWORD) {
+        if !Validator::<ApplicationUser_Password>::is_valid(Self::APPLICATION_USER__PASSWORD) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError { message: "Application_user_password should be valid." },
@@ -120,7 +117,7 @@ impl CreateFixturesProcessor {
             );
         }
 
-        if !Validator::<ApplicationUserDevice, Id>::is_valid(Self::APPLICATION_USER_DEVICE__ID) {
+        if !Validator::<Id>::is_valid(Self::APPLICATION_USER_DEVICE__ID) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError { message: "Application_user_device id should be valid." },
@@ -154,7 +151,7 @@ impl CreateFixturesProcessor {
         '_a: for _i in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
             let mut application_user_nickname = String::new();
 
-            '_b: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<ApplicationUser<'_>, ApplicationUser_Nickname>::MAXIMUM_LENGTH) {
+            '_b: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<ApplicationUser_Nickname>::MAXIMUM_LENGTH) {
                 let character = Self::ASCII_CHARACTER_REGISTRY[
                     thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                 ];
@@ -162,7 +159,7 @@ impl CreateFixturesProcessor {
                 application_user_nickname = format!("{}{}", application_user_nickname.as_str(), character);
             }
 
-            if !Validator::<ApplicationUser<'_>, ApplicationUser_Nickname>::is_valid(application_user_nickname.as_str()) {
+            if !Validator::<ApplicationUser_Nickname>::is_valid(application_user_nickname.as_str()) {
                 return Err(
                     ErrorAuditor::new(
                         BaseError::LogicError { message: "Application_user nickname should be valid." },
@@ -173,7 +170,7 @@ impl CreateFixturesProcessor {
 
             let application_user_email = format!("{}@fixture.com", application_user_nickname.as_str());
 
-            let is_valid_email = match Validator::<ApplicationUser<'_>, ApplicationUser_Email>::is_valid(application_user_email.as_str()) {
+            let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(application_user_email.as_str()) {
                 Ok(is_valid_email_) => is_valid_email_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -237,7 +234,7 @@ impl CreateFixturesProcessor {
             'b: for _t in 1..=Self::QUANTITY_OF_CHANNELS {
                 let mut channel_name = String::new();
 
-                '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel<'_>, Name>::MAXIMUM_LENGTH) {
+                '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Name>::MAXIMUM_LENGTH) {
                     let character = Self::ASCII_CHARACTER_REGISTRY[
                         thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                     ];
@@ -245,7 +242,7 @@ impl CreateFixturesProcessor {
                     channel_name = format!("{}{}", channel_name.as_str(), character);
                 }
 
-                if !Validator::<Channel<'_>, Name>::is_valid(channel_name.as_str()) {
+                if !Validator::<Name>::is_valid(channel_name.as_str()) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel name should be valid." },
@@ -256,7 +253,7 @@ impl CreateFixturesProcessor {
 
                 let channel_linked_name = channel_name.clone();
 
-                if !Validator::<Channel<'_>, LinkedName>::is_valid(channel_linked_name.as_str()) {
+                if !Validator::<LinkedName>::is_valid(channel_linked_name.as_str()) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel linked name should be valid." },
@@ -268,7 +265,7 @@ impl CreateFixturesProcessor {
                 let channel_description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
                     let mut channel_description_ = String::new();
 
-                    '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel, Description>::MAXIMUM_LENGTH) {
+                    '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Description>::MAXIMUM_LENGTH) {
                         let character = Self::ASCII_CHARACTER_REGISTRY[
                             thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                         ];
@@ -276,7 +273,7 @@ impl CreateFixturesProcessor {
                         channel_description_ = format!("{}{}", channel_description_.as_str(), character);
                     }
 
-                    if !Validator::<Channel<'_>, Description>::is_valid(channel_description_.as_str()) {
+                    if !Validator::<Description>::is_valid(channel_description_.as_str()) {
                         return Err(
                             ErrorAuditor::new(
                                 BaseError::LogicError { message: "Channel description should be valid." },
@@ -292,7 +289,7 @@ impl CreateFixturesProcessor {
 
                 let channel_orientation: Vec<i16> = vec![0, 1, 2];
 
-                if !Validator::<Channel<'_>, Orientation>::is_valid(channel_orientation.as_slice()) {
+                if !Validator::<Orientation>::is_valid(channel_orientation.as_slice()) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel orientation email should be valid." },

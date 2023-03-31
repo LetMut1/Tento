@@ -1,10 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_device::Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user_registration_token::Value;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -43,7 +41,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let is_valid_email = match Validator::<ApplicationUser<'_>, ApplicationUser_Email>::is_valid(incoming.application_user_email.as_str()) {
+        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(incoming.application_user_email.as_str()) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -56,11 +54,11 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
         }
 
-        if !Validator::<ApplicationUserDevice, Id>::is_valid(incoming.application_user_device_id.as_str()) {
+        if !Validator::<Id>::is_valid(incoming.application_user_device_id.as_str()) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
-        let is_valid_value = match Validator::<ApplicationUserRegistrationToken<'_>, Value>::is_valid(incoming.application_user_registration_token_value.as_str()) {
+        let is_valid_value = match Validator::<Value>::is_valid(incoming.application_user_registration_token_value.as_str()) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
