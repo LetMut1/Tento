@@ -7,9 +7,6 @@ use extern_crate::uuid::Uuid;
 pub struct ApplicationUserAccessRefreshToken_PropertyGenerator;
 
 impl ApplicationUserAccessRefreshToken_PropertyGenerator {
-    pub fn generate_obfuscation_value() -> String {
-        return Uuid::new_v4().to_string();
-    }
 
     pub fn generate_expires_at() -> Result<i64, ErrorAuditor> {
         let application_user_access_refresh_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(

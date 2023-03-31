@@ -1,5 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::Id as ApplicationUserAccessTokenId;
@@ -345,7 +347,7 @@ impl ActionProcessor {
             application_user_id: application_user.get_id(),
             application_user_device_id: Cow::Borrowed(application_user_device.get_id()),
             application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
-            application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_PropertyGenerator::generate_obfuscation_value(),
+            application_user_access_refresh_token_obfuscation_value: Generator::<ApplicationUserAccessRefreshToken, ObfuscationValue>::generate(),
             application_user_access_refresh_token_expires_at,
             application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_PropertyGenerator::generate_updated_at()
         };

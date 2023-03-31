@@ -1,3 +1,5 @@
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue as ApplicationUserAccessRefreshTokenObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt as ApplicationUserAccessTokenExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::Id as ApplicationUserAccessTokenId;
@@ -53,6 +55,12 @@ impl Generator<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenExpires
 }
 
 impl Generator<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenId> {
+    pub fn generate() -> String {
+        return Uuid::new_v4().to_string();
+    }
+}
+
+impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefreshTokenObfuscationValue> {
     pub fn generate() -> String {
         return Uuid::new_v4().to_string();
     }
