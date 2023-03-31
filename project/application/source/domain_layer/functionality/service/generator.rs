@@ -1,4 +1,5 @@
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ExpiresAt as ApplicationUserAccessRefreshTokenExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue as ApplicationUserAccessRefreshTokenObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt as ApplicationUserAccessTokenExpiresAt;
@@ -63,5 +64,22 @@ impl Generator<ApplicationUserAccessToken<'_>, ApplicationUserAccessTokenId> {
 impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefreshTokenObfuscationValue> {
     pub fn generate() -> String {
         return Uuid::new_v4().to_string();
+    }
+}
+
+impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefreshTokenExpiresAt> {
+    pub fn generate() -> Result<i64, ErrorAuditor> {
+        let application_user_access_refresh_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
+            ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
+        ) {
+            Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        return Ok(application_user_access_refresh_token_expires_at);
     }
 }
