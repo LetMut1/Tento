@@ -1,13 +1,4 @@
--- CREATE FUNCTION public.limit_channel_subscribers_quantity(IN channel_subscribers_quantity BIGINT) RETURNS BIGINT AS
--- $$
---   BEGIN
---     RETURN channel_subscribers_quantity / 50;
---   END
--- $$
--- LANGUAGE plpgsql
--- IMMUTABLE;
-
-CREATE TABLE public.channel (       -- // TODO Оффет делаем как (where id < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод)
+CREATE TABLE public.channel (
     id BIGINT,
     owner BIGINT,
     name TEXT,
@@ -33,17 +24,8 @@ USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 CREATE UNIQUE INDEX channel3 ON public.channel
 USING btree (name COLLATE "C" ASC NULLS LAST) WITH (fillfactor = 80, deduplicate_items = on);
 
--- CREATE UNIQUE INDEX channel4 ON public.channel
--- USING btree (linked_name ASC NULLS LAST) WITH (fillfactor = 80, deduplicate_items = on);
-
 CREATE INDEX channel5 ON public.channel
 USING btree (visability_modifier ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
-
--- CREATE INDEX channel6 ON public.channel
--- USING btree (public.limit_channel_subscribers_quantity(subscribers_quantity) ASC NULLS LAST) WITH (fillfactor = 70, deduplicate_items = on);
-
--- CREATE UNIQUE INDEX channel7 ON public.channel
--- USING btree (created_at ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 ALTER TABLE ONLY public.channel
 ALTER COLUMN id SET NOT NULL,
@@ -62,7 +44,5 @@ ADD CONSTRAINT channel8 PRIMARY KEY USING INDEX channel2,
 ADD CONSTRAINT channel9 FOREIGN KEY (owner)
 REFERENCES public.application_user (id) ON DELETE RESTRICT,
 ADD CONSTRAINT channel10 UNIQUE USING INDEX channel3;
--- ADD CONSTRAINT channel11 UNIQUE USING INDEX channel4,
--- ADD CONSTRAINT channel12 UNIQUE USING INDEX channel7;
 
 COMMENT ON COLUMN public.channel.owner IS 'public.application_user.id';
