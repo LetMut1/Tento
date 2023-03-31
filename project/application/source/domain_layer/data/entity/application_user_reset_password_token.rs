@@ -3,6 +3,12 @@ use std::marker::PhantomData;
 use super::application_user_device::ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Id;
 
+pub use self::Value as ApplicationUserResetPasswordToken_Value;
+pub use self::WrongEnterTriesQuantity as ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
+pub use self::IsApproved as ApplicationUserResetPasswordToken_IsApproved;
+pub use self::ExpiresAt as ApplicationUserResetPasswordToken_ExpiresAt;
+pub use self::CanBeResentFrom as ApplicationUserResetPasswordToken_CanBeResentFrom;
+
 pub struct ApplicationUserResetPasswordToken<'a> {
     application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,
