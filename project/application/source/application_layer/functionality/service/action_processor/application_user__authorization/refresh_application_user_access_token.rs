@@ -3,11 +3,11 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ExpiresAt as ApplicationUserAccessRefreshTokenExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::UpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt as ApplicationUserAccessTokenExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::Id;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__expiration_time_resolver::ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
-use crate::domain_layer::functionality::service::application_user_access_refresh_token__property_generator::ApplicationUserAccessRefreshToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -172,7 +172,7 @@ impl ActionProcessor {
             .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_new.get_id()))
             .set_obfuscation_value(Generator::<ApplicationUserAccessRefreshToken<'_>, ObfuscationValue>::generate())
             .set_expires_at(application_user_access_refresh_token_expires_at)
-            .set_updated_at(ApplicationUserAccessRefreshToken_PropertyGenerator::generate_updated_at());
+            .set_updated_at(Generator::<ApplicationUserAccessRefreshToken<'_>, UpdatedAt>::generate());
 
         if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::update(
             database_2_postgresql_connection,

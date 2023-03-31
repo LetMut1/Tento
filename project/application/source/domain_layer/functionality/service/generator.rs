@@ -1,6 +1,7 @@
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ExpiresAt as ApplicationUserAccessRefreshTokenExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue as ApplicationUserAccessRefreshTokenObfuscationValue;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::UpdatedAt as ApplicationUserAccessRefreshTokenUpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt as ApplicationUserAccessTokenExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::Id as ApplicationUserAccessTokenId;
@@ -81,5 +82,11 @@ impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefre
         };
 
         return Ok(application_user_access_refresh_token_expires_at);
+    }
+}
+
+impl Generator<ApplicationUserAccessRefreshToken<'_>, ApplicationUserAccessRefreshTokenUpdatedAt> {
+    pub fn generate() -> i64 {
+        return DateTimeResolver::unixtime_get_now();
     }
 }

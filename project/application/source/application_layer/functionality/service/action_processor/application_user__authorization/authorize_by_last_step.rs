@@ -3,6 +3,7 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ExpiresAt as ApplicationUserAccessRefreshTokenExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ObfuscationValue;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::UpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ExpiresAt as ApplicationUserAccessTokenExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::Id as ApplicationUserAccessTokenId;
@@ -12,7 +13,6 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user_device::Id as ApplicationUserDeviceId;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::Id as ApplicationUserId;
-use crate::domain_layer::functionality::service::application_user_access_refresh_token__property_generator::ApplicationUserAccessRefreshToken_PropertyGenerator;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
@@ -259,7 +259,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_updated_at = ApplicationUserAccessRefreshToken_PropertyGenerator::generate_updated_at();
+        let application_user_access_refresh_token_updated_at = Generator::<ApplicationUserAccessRefreshToken<'_>, UpdatedAt>::generate();
 // TODO  TRANZACTION
         let application_user_access_refresh_token_ = match application_user_access_refresh_token {
             Some(mut application_user_access_refresh_token__) => {
