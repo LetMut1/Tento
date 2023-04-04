@@ -1,3 +1,4 @@
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_1;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -84,75 +85,6 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAutho
                 insert.application_user_authorization_token_can_be_resent_from
             )
         );
-    }
-
-    pub async fn update<'a>(
-        database_2_connection: &'a Connection,
-        application_user_authorization_token: &'a ApplicationUserAuthorizationToken<'_>
-    ) -> Result<(), ErrorAuditor> {
-        let application_user_id = application_user_authorization_token.get_application_user_id();
-
-        let application_user_device_id = application_user_authorization_token.get_application_user_device_id();
-
-        let application_user_authorization_token_value = application_user_authorization_token.get_value();
-
-        let application_user_authorization_token_wrong_enter_tries_quantity = application_user_authorization_token.get_wrong_enter_tries_quantity();
-
-        let application_user_authorization_token_expires_at = application_user_authorization_token.get_expires_at();
-
-        let application_user_authorization_token_can_be_resent_from = application_user_authorization_token.get_can_be_resent_from();
-
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query =
-            "UPDATE ONLY public.application_user_authorization_token AS auat \
-            SET ( \
-                value, \
-                wrong_enter_tries_quantity, \
-                expires_at, \
-                can_be_resent_from \
-            ) = ROW( \
-                $1, \
-                $2, \
-                $3, \
-                $4 \
-            ) \
-            WHERE auat.application_user_id = $5 AND auat.application_user_device_id = $6;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_authorization_token_value, Type::TEXT)
-            .add_parameter(&application_user_authorization_token_wrong_enter_tries_quantity, Type::INT2)
-            .add_parameter(&application_user_authorization_token_expires_at, Type::INT8)
-            .add_parameter(&application_user_authorization_token_can_be_resent_from, Type::INT8)
-            .add_parameter(&application_user_id, Type::INT8)
-            .add_parameter(&application_user_device_id, Type::TEXT);
-
-        let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
-        ).await {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
-        ).await {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        };
-
-        return Ok(());
     }
 
     pub async fn delete<'a>(
@@ -310,6 +242,77 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAutho
                 )
             )
         );
+    }
+}
+
+impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
+    pub async fn update<'a>(
+        database_2_connection: &'a Connection,
+        application_user_authorization_token: &'a ApplicationUserAuthorizationToken<'_>
+    ) -> Result<(), ErrorAuditor> {
+        let application_user_id = application_user_authorization_token.get_application_user_id();
+
+        let application_user_device_id = application_user_authorization_token.get_application_user_device_id();
+
+        let application_user_authorization_token_value = application_user_authorization_token.get_value();
+
+        let application_user_authorization_token_wrong_enter_tries_quantity = application_user_authorization_token.get_wrong_enter_tries_quantity();
+
+        let application_user_authorization_token_expires_at = application_user_authorization_token.get_expires_at();
+
+        let application_user_authorization_token_can_be_resent_from = application_user_authorization_token.get_can_be_resent_from();
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query =
+            "UPDATE ONLY public.application_user_authorization_token AS auat \
+            SET ( \
+                value, \
+                wrong_enter_tries_quantity, \
+                expires_at, \
+                can_be_resent_from \
+            ) = ROW( \
+                $1, \
+                $2, \
+                $3, \
+                $4 \
+            ) \
+            WHERE auat.application_user_id = $5 AND auat.application_user_device_id = $6;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&application_user_authorization_token_value, Type::TEXT)
+            .add_parameter(&application_user_authorization_token_wrong_enter_tries_quantity, Type::INT2)
+            .add_parameter(&application_user_authorization_token_expires_at, Type::INT8)
+            .add_parameter(&application_user_authorization_token_can_be_resent_from, Type::INT8)
+            .add_parameter(&application_user_id, Type::INT8)
+            .add_parameter(&application_user_device_id, Type::TEXT);
+
+        let statement = match database_2_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+        ).await {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if let Err(error) = database_2_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+        ).await {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        };
+
+        return Ok(());
     }
 }
 

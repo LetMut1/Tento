@@ -6,6 +6,7 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_1;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
@@ -156,7 +157,7 @@ impl ActionProcessor {
             if application_user_authorization_token_wrong_enter_tries_quantity <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 application_user_authorization_token_.set_wrong_enter_tries_quantity(application_user_authorization_token_wrong_enter_tries_quantity);
 
-                if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::update(
+                if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken_1>::update(
                     database_2_postgresql_connection,
                     &application_user_authorization_token_
                 ).await {

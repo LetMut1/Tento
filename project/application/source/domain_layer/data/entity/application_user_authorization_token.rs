@@ -106,6 +106,20 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
     }
 }
 
+pub struct ApplicationUserAuthorizationToken_1 {
+    value: String,
+    _value: PhantomData<Value>,
+
+    wrong_enter_tries_quantity: i16,
+    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
+
+    expires_at: i64,
+    _expires_at: PhantomData<ExpiresAt>,
+
+    can_be_resent_from: i64,
+    _can_be_resent_from: PhantomData<CanBeResentFrom>,
+}
+
 pub struct Value;
 
 pub struct WrongEnterTriesQuantity;
