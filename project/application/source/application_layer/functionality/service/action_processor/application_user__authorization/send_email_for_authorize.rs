@@ -1,6 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
@@ -66,8 +67,10 @@ impl ActionProcessor {
         };
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
+        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::find_1(
+            database_2_postgresql_connection,
+            incoming.application_user_id,
+            incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_authorization_token_) => application_user_authorization_token_,
             Err(mut error) => {
@@ -90,8 +93,10 @@ impl ActionProcessor {
         };
 
         if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
-            if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::delete(
-                database_2_postgresql_connection, application_user_authorization_token_.get_application_user_id(), application_user_authorization_token_.get_application_user_device_id()
+            if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
+                database_2_postgresql_connection,
+                application_user_authorization_token_.get_application_user_id(),
+                application_user_authorization_token_.get_application_user_device_id()
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -128,7 +133,7 @@ impl ActionProcessor {
 
         application_user_authorization_token_.set_can_be_resent_from(application_user_authorization_token_can_be_resent_from);
 
-        if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::update(
+        if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::update(
             database_2_postgresql_connection,
             &application_user_authorization_token_
         ).await {

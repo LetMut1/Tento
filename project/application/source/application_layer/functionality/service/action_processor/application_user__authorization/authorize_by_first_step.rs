@@ -3,6 +3,7 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_1;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_2;
@@ -181,8 +182,9 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, application_user_aggregator.get_application_user_id(),
+        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::find_1(
+            database_2_postgresql_connection,
+            application_user_aggregator.get_application_user_id(),
             incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_authorization_token_) => application_user_authorization_token_,
@@ -233,7 +235,7 @@ impl ActionProcessor {
                 }
 
                 if need_to_update {
-                    if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::update(
+                    if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::update(
                         database_2_postgresql_connection,
                         &application_user_authorization_token__
                     ).await {
@@ -273,7 +275,7 @@ impl ActionProcessor {
                     application_user_authorization_token_can_be_resent_from
                 };
 
-                let application_user_authorization_token__ = match ApplicationUserAuthorizationToken_PostgresqlRepository::create(
+                let application_user_authorization_token__ = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::create(
                     database_2_postgresql_connection, insert
                 ).await {
                     Ok(application_user_authorization_token___) => application_user_authorization_token___,

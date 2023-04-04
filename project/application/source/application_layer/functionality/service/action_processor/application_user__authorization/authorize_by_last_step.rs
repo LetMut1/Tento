@@ -93,8 +93,10 @@ impl ActionProcessor {
         };
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::find_1(
-            database_2_postgresql_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
+        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::find_1(
+            database_2_postgresql_connection,
+            incoming.application_user_id,
+            incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_authorization_token_) => application_user_authorization_token_,
             Err(mut error) => {
@@ -118,8 +120,10 @@ impl ActionProcessor {
         };
 
         if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
-            if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::delete(
-                database_2_postgresql_connection, application_user_authorization_token_.get_application_user_id(), application_user_authorization_token_.get_application_user_device_id()
+            if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
+                database_2_postgresql_connection,
+                application_user_authorization_token_.get_application_user_id(),
+                application_user_authorization_token_.get_application_user_device_id()
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -152,7 +156,7 @@ impl ActionProcessor {
             if application_user_authorization_token_wrong_enter_tries_quantity <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 application_user_authorization_token_.set_wrong_enter_tries_quantity(application_user_authorization_token_wrong_enter_tries_quantity);
 
-                if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::update(
+                if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::update(
                     database_2_postgresql_connection,
                     &application_user_authorization_token_
                 ).await {
@@ -161,8 +165,10 @@ impl ActionProcessor {
                     return Err(error);
                 }
             } else {
-                if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::delete(
-                    database_2_postgresql_connection, application_user_authorization_token_.get_application_user_id(), application_user_authorization_token_.get_application_user_device_id()
+                if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
+                    database_2_postgresql_connection,
+                    application_user_authorization_token_.get_application_user_id(),
+                    application_user_authorization_token_.get_application_user_device_id()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -299,8 +305,10 @@ impl ActionProcessor {
             }
         };
 
-        if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::delete(
-            database_2_postgresql_connection, application_user_authorization_token_.get_application_user_id(), application_user_authorization_token_.get_application_user_device_id()
+        if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
+            database_2_postgresql_connection,
+            application_user_authorization_token_.get_application_user_id(),
+            application_user_authorization_token_.get_application_user_device_id()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

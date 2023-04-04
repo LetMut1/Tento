@@ -8,10 +8,14 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use std::borrow::Cow;
+use std::marker::PhantomData;
 
-pub struct ApplicationUserAuthorizationToken_PostgresqlRepository;
+pub struct ApplicationUserAuthorizationToken_PostgresqlRepository<F> {
+    _form: PhantomData<F>
+}
 
-impl ApplicationUserAuthorizationToken_PostgresqlRepository {
+
+impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     pub async fn create<'a>(
         database_2_connection: &'a Connection,
         insert: Insert<'a>
