@@ -5,6 +5,7 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_registration_token__sending_opportunity_resolver::ApplicationUserRegistrationToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -77,7 +78,7 @@ impl ActionProcessor {
             }
         };
 
-        let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(
+        let is_exist_2 = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             &*database_1_postgresql_pooled_connection, incoming.application_user_email.as_str()
         ).await {
             Ok(is_exist_2_) => is_exist_2_,

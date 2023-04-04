@@ -87,7 +87,7 @@ impl ActionProcessor {
         };
 
         let application_user_aggregator = if is_valid_email {
-            let application_user_ = match ApplicationUser_PostgresqlRepository::<ApplicationUser_2>::find_2(
+            let application_user_ = match ApplicationUser_PostgresqlRepository::<ApplicationUser_2<'_>>::find_2(
                 database_1_postgresql_connection, incoming.application_user_email_or_application_user_nickname.as_str()
             ).await {
                 Ok(application_user__) => application_user__,
@@ -114,7 +114,7 @@ impl ActionProcessor {
             ApplicationUser_Aggregator::Second { application_user: application_user__ }
         } else {
             if Validator::<ApplicationUser_Nickname>::is_valid(incoming.application_user_email_or_application_user_nickname.as_str()) {
-                let application_user_ = match ApplicationUser_PostgresqlRepository::<ApplicationUser_1>::find_1(
+                let application_user_ = match ApplicationUser_PostgresqlRepository::<ApplicationUser_1<'_>>::find_1(
                     database_1_postgresql_connection,
                     incoming.application_user_email_or_application_user_nickname.as_str()
                 ).await {

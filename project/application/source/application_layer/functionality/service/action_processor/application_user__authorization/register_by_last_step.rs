@@ -12,6 +12,7 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
@@ -112,7 +113,7 @@ impl ActionProcessor {
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let is_exist_1 = match ApplicationUser_PostgresqlRepository::is_exist_1(
+        let is_exist_1 = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             database_1_postgresql_connection, incoming.application_user_nickname.as_str()
         ).await {
             Ok(is_exist_1_) => is_exist_1_,
@@ -133,7 +134,7 @@ impl ActionProcessor {
             );
         }
 
-        let is_exist_2 = match ApplicationUser_PostgresqlRepository::is_exist_2(
+        let is_exist_2 = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             database_1_postgresql_connection, incoming.application_user_email.as_str()
         ).await {
             Ok(is_exist_2_) => is_exist_2_,
@@ -292,7 +293,10 @@ impl ActionProcessor {
             application_user_nickname: incoming.application_user_nickname,
             application_user_password_hash,
         };
-        let application_user = match ApplicationUser_PostgresqlRepository::create(database_1_postgresql_connection, application_user_insert).await {
+        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::create(
+            database_1_postgresql_connection,
+            application_user_insert
+        ).await {
             Ok(application_user_) => application_user_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

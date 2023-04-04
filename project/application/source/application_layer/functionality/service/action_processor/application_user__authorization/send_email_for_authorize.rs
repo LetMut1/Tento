@@ -3,6 +3,7 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__sending_opportunity_resolver::ApplicationUserAuthorizationToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -148,8 +149,9 @@ impl ActionProcessor {
             }
         };
 
-        let application_user = match ApplicationUser_PostgresqlRepository::find_3(
-            &*database_1_postgresql_pooled_connection, application_user_authorization_token_.get_application_user_id()
+        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::find_3(
+            &*database_1_postgresql_pooled_connection,
+            application_user_authorization_token_.get_application_user_id()
         ).await {
             Ok(application_user_) => application_user_,
             Err(mut error) => {

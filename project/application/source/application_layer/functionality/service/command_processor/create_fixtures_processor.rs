@@ -189,7 +189,7 @@ impl CreateFixturesProcessor {
                 );
             }
 
-            let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser>::find_1(
+            let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::find_1(
                 database_1_postgresql_connection, application_user_nickname.as_str()
             ).await {
                 Ok(application_user_) => application_user_,
@@ -209,7 +209,7 @@ impl CreateFixturesProcessor {
                         application_user_password_hash: application_user_password_hash.clone(),
                     };
 
-                    let application_user__ = match ApplicationUser_PostgresqlRepository::create(database_1_postgresql_connection, application_user_insert).await {
+                    let application_user__ = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::create(database_1_postgresql_connection, application_user_insert).await {
                         Ok(application_user_) => application_user_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

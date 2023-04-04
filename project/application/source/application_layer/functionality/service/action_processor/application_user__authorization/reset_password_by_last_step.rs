@@ -1,10 +1,11 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -202,8 +203,9 @@ impl ActionProcessor {
         };
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let application_user = match ApplicationUser_PostgresqlRepository::find_3(
-            database_1_postgresql_connection, incoming.application_user_id
+        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::find_3(
+            database_1_postgresql_connection,
+            incoming.application_user_id
         ).await {
             Ok(application_user_) => application_user_,
             Err(mut error) => {
@@ -237,7 +239,10 @@ impl ActionProcessor {
 
         application_user_.set_password_hash(password_hash);
 
-        if let Err(mut error) = ApplicationUser_PostgresqlRepository::update(database_1_postgresql_connection, &application_user_).await {
+        if let Err(mut error) = ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::update(
+            database_1_postgresql_connection,
+            &application_user_
+        ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);

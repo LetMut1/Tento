@@ -1,4 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -57,7 +58,7 @@ impl ActionProcessor {
             }
         };
 
-        let is_exist = match ApplicationUser_PostgresqlRepository::is_exist_2(
+        let is_exist = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             &*database_1_postgresql_pooled_connection, incoming.application_user_email.as_str()
         ).await {
             Ok(is_exist_) => is_exist_,
