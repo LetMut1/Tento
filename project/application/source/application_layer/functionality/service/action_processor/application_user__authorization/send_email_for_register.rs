@@ -2,6 +2,7 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_registration_token__sending_opportunity_resolver::ApplicationUserRegistrationToken_SendingOpportunityResolver;
@@ -72,7 +73,7 @@ impl ActionProcessor {
         };
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
+        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_email.as_str(),
             incoming.application_user_device_id.as_str()
@@ -99,7 +100,7 @@ impl ActionProcessor {
         };
 
         if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
-            if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
+            if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 application_user_registration_token_.get_application_user_email(),
                 application_user_registration_token_.get_application_user_device_id()
@@ -149,7 +150,7 @@ impl ActionProcessor {
 
         application_user_registration_token_.set_can_be_resent_from(application_user_registration_token_can_be_resent_from);
 
-        if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
+        if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::update(
             database_2_postgresql_connection,
             &application_user_registration_token_
         ).await {

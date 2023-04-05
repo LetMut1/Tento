@@ -4,6 +4,7 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
@@ -79,7 +80,8 @@ impl ActionProcessor {
         };
 
         let is_exist_2 = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
-            &*database_1_postgresql_pooled_connection, incoming.application_user_email.as_str()
+            &*database_1_postgresql_pooled_connection,
+            incoming.application_user_email.as_str()
         ).await {
             Ok(is_exist_2_) => is_exist_2_,
             Err(mut error) => {
@@ -113,7 +115,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
+        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::find_1(
             database_2_postgresql_connection, incoming.application_user_email.as_str(), incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_registration_token_) => application_user_registration_token_,
@@ -166,7 +168,7 @@ impl ActionProcessor {
                 }
 
                 if need_to_update {
-                    if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
+                    if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::update(
                         database_2_postgresql_connection,
                         &application_user_registration_token__
                     ).await {
@@ -207,7 +209,7 @@ impl ActionProcessor {
                     application_user_registration_token_can_be_resent_from
                 };
 
-                let application_user_registration_token__ = match ApplicationUserRegistrationToken_PostgresqlRepository::create(
+                let application_user_registration_token__ = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create(
                     database_2_postgresql_connection, insert
                 ).await {
                     Ok(application_user_registration_token___) => application_user_registration_token___,

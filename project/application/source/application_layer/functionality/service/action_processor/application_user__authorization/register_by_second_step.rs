@@ -84,7 +84,7 @@ impl ActionProcessor {
         };
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::find_1(
+        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_email.as_str(),
             incoming.application_user_device_id.as_str()
@@ -111,7 +111,7 @@ impl ActionProcessor {
         };
 
         if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
-            if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
+            if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 application_user_registration_token_.get_application_user_email(),
                 application_user_registration_token_.get_application_user_device_id()
@@ -157,7 +157,7 @@ impl ActionProcessor {
             if application_user_registration_token_wrong_enter_tries_quantity <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 application_user_registration_token_.set_wrong_enter_tries_quantity(application_user_registration_token_wrong_enter_tries_quantity);
 
-                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
+                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::update(
                     database_2_postgresql_connection,
                     &application_user_registration_token_
                 ).await {
@@ -166,7 +166,7 @@ impl ActionProcessor {
                     return Err(error);
                 }
             } else {
-                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::delete(
+                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                     database_2_postgresql_connection,
                     application_user_registration_token_.get_application_user_email(),
                     application_user_registration_token_.get_application_user_device_id()
@@ -188,7 +188,7 @@ impl ActionProcessor {
 
         application_user_registration_token_.set_is_approved(true);
 
-        if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::update(
+        if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::update(
             database_2_postgresql_connection,
             &application_user_registration_token_
         ).await {
