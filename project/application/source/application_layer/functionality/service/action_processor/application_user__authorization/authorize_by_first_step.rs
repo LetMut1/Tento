@@ -1,6 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_1;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_2;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_3;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
@@ -194,7 +196,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::find_1(
+        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken_1>::find_1(
             database_2_postgresql_connection,
             application_user_id,
             incoming.application_user_device_id.as_str()
@@ -207,10 +209,10 @@ impl ActionProcessor {
             }
         };
 
-        let (application_user_authorization_token_, can_send) = match application_user_authorization_token {
-            Some(mut application_user_authorization_token__) => {
-                let (can_send_, mut need_to_update) = if ApplicationUserAuthorizationToken_SendingOpportunityResolver::can_send(
-                    &application_user_authorization_token__
+        let (application_user_authorization_token_aggregator, can_send) = match application_user_authorization_token {
+            Some(mut application_user_authorization_token_) => {
+                let (can_send_, need_to_update_1) = if ApplicationUserAuthorizationToken_SendingOpportunityResolver::can_send(
+                    &application_user_authorization_token_
                 ) {
                     let application_user_authorization_token_can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
                         Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
@@ -221,16 +223,14 @@ impl ActionProcessor {
                         }
                     };
 
-                    application_user_authorization_token__.set_can_be_resent_from(application_user_authorization_token_can_be_resent_from);
+                    application_user_authorization_token_.set_can_be_resent_from(application_user_authorization_token_can_be_resent_from);
 
                     (true, true)
                 } else {
                     (false, false)
                 };
 
-                if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token__) {
-                    need_to_update = true;
-
+                let need_to_update_2 = if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
                     let application_user_authorization_token_expires_at = match Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate() {
                         Ok(application_user_authorization_token_expires_at_) => application_user_authorization_token_expires_at_,
                         Err(mut error) => {
@@ -240,24 +240,61 @@ impl ActionProcessor {
                         }
                     };
 
-                    application_user_authorization_token__
+                    application_user_authorization_token_
                         .set_value(Generator::<ApplicationUserAuthorizationToken_Value>::generate())
                         .set_wrong_enter_tries_quantity(0)
                         .set_expires_at(application_user_authorization_token_expires_at);
-                }
 
-                if need_to_update {
+                    true
+                } else {
+                    false
+                };
+
+                if need_to_update_1 && need_to_update_2 {
                     if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken_1>::update(
                         database_2_postgresql_connection,
-                        &application_user_authorization_token__
+                        &application_user_authorization_token_,
+                        application_user_id,
+                        incoming.application_user_device_id.as_str()
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         return Err(error);
                     }
+                } else {
+                    if need_to_update_1 {
+                        if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken_3>::update(
+                            database_2_postgresql_connection,
+                            &application_user_authorization_token_,
+                            application_user_id,
+                            incoming.application_user_device_id.as_str()
+                        ).await {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    }
+
+                    if need_to_update_2 {
+                        if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken_2>::update(
+                            database_2_postgresql_connection,
+                            &application_user_authorization_token_,
+                            application_user_id,
+                            incoming.application_user_device_id.as_str()
+                        ).await {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    }
                 }
 
-                (application_user_authorization_token__, can_send_)
+                (
+                    ApplicationUserAuthorizationToken_Aggregator::Second {
+                        application_user_authorization_token: application_user_authorization_token_
+                    },
+                    can_send_
+                )
             }
             None => {
                 let application_user_authorization_token_expires_at = match Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate() {
@@ -287,10 +324,10 @@ impl ActionProcessor {
                     application_user_authorization_token_can_be_resent_from
                 };
 
-                let application_user_authorization_token__ = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::create(
+                let application_user_authorization_token_ = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::create(
                     database_2_postgresql_connection, insert
                 ).await {
-                    Ok(application_user_authorization_token___) => application_user_authorization_token___,
+                    Ok(application_user_authorization_token__) => application_user_authorization_token__,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -298,7 +335,12 @@ impl ActionProcessor {
                     }
                 };
 
-                (application_user_authorization_token__, true)
+                (
+                    ApplicationUserAuthorizationToken_Aggregator::First {
+                        application_user_authorization_token: application_user_authorization_token_
+                    },
+                    true
+                )
             }
         };
 
@@ -307,12 +349,17 @@ impl ActionProcessor {
             ApplicationUser_Aggregator::Second { application_user: _ } => incoming.application_user_email_or_application_user_nickname.as_str()
         };
 
+        let application_user_authorization_token_value = match application_user_authorization_token_aggregator {
+            ApplicationUserAuthorizationToken_Aggregator::First { application_user_authorization_token: ref application_user_authorization_token_ } => application_user_authorization_token_.get_value(),
+            ApplicationUserAuthorizationToken_Aggregator::Second { application_user_authorization_token: ref application_user_authorization_token_ } => application_user_authorization_token_.get_value()
+        };
+
         if can_send {
             if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_authorization_token(
                 environment_configuration,
-                application_user_authorization_token_.get_value(),
+                application_user_authorization_token_value,
                 application_user_email,
-                application_user_authorization_token_.get_application_user_device_id()
+                incoming.application_user_device_id.as_str()
             ) {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -320,10 +367,15 @@ impl ActionProcessor {
             }
         }
 
+        let application_user_authorization_token_can_be_resent_from = match application_user_authorization_token_aggregator {
+            ApplicationUserAuthorizationToken_Aggregator::First { application_user_authorization_token: ref application_user_authorization_token_ } => application_user_authorization_token_.get_can_be_resent_from(),
+            ApplicationUserAuthorizationToken_Aggregator::Second { application_user_authorization_token: ref application_user_authorization_token_ } => application_user_authorization_token_.get_can_be_resent_from()
+        };
+
         let outcoming = Outcoming {
             application_user_id,
             verification_message_sent: can_send,
-            application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.get_can_be_resent_from()
+            application_user_authorization_token_can_be_resent_from
         };
 
         return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
@@ -354,5 +406,14 @@ enum ApplicationUser_Aggregator {
     },
     Second {
         application_user: ApplicationUser_2
+    }
+}
+
+enum ApplicationUserAuthorizationToken_Aggregator<'a> {
+    First {
+        application_user_authorization_token: ApplicationUserAuthorizationToken<'a>
+    },
+    Second {
+        application_user_authorization_token: ApplicationUserAuthorizationToken_1
     }
 }
