@@ -298,13 +298,13 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository<ApplicationUserAcces
         T: Getter<&'a T, ApplicationUserAccessRefreshToken_ExpiresAt, i64>,
         T: Getter<&'a T, ApplicationUserAccessRefreshToken_UpdatedAt, i64>,
     {
-        let application_user_access_token_id = <T as Getter<&'a T, ApplicationUserAccessToken_Id, &'a str>>::get(subject);
+        let application_user_access_token_id = <T as Getter<&'_ T, ApplicationUserAccessToken_Id, &'_ str>>::get(subject);
 
-        let application_user_access_refresh_token_obfuscation_value = <T as Getter<&'a T, ApplicationUserAccessRefreshToken_ObfuscationValue, &'a str>>::get(subject);
+        let application_user_access_refresh_token_obfuscation_value = <T as Getter<&'_ T, ApplicationUserAccessRefreshToken_ObfuscationValue, &'_ str>>::get(subject);
 
-        let application_user_access_refresh_token_expires_at = <T as Getter<&'a T, ApplicationUserAccessRefreshToken_ExpiresAt, i64>>::get(subject);
+        let application_user_access_refresh_token_expires_at = <T as Getter<&'_ T, ApplicationUserAccessRefreshToken_ExpiresAt, i64>>::get(subject);
 
-        let application_user_access_refresh_token_updated_at = <T as Getter<&'a T, ApplicationUserAccessRefreshToken_UpdatedAt, i64>>::get(subject);
+        let application_user_access_refresh_token_updated_at = <T as Getter<&'_ T, ApplicationUserAccessRefreshToken_UpdatedAt, i64>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

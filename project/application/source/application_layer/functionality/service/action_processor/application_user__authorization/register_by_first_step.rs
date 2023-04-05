@@ -1,6 +1,9 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_1;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_2;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_3;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
@@ -115,8 +118,10 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::find_1(
-            database_2_postgresql_connection, incoming.application_user_email.as_str(), incoming.application_user_device_id.as_str()
+        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken_1>::find_1(
+            database_2_postgresql_connection,
+            incoming.application_user_email.as_str(),
+            incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_registration_token_) => application_user_registration_token_,
             Err(mut error) => {
@@ -126,10 +131,10 @@ impl ActionProcessor {
             }
         };
 
-        let (application_user_registration_token_, can_send) = match application_user_registration_token {
-            Some(mut application_user_registration_token__) => {
-                let (can_send_, mut need_to_update) = if ApplicationUserRegistrationToken_SendingOpportunityResolver::can_send(
-                    &application_user_registration_token__
+        let (application_user_registration_token_aggregator, can_send) = match application_user_registration_token {
+            Some(mut application_user_registration_token_) => {
+                let (can_send_, need_to_update_1) = if ApplicationUserRegistrationToken_SendingOpportunityResolver::can_send(
+                    &application_user_registration_token_
                 ) {
                     let application_user_registration_token_can_be_resent_from = match Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate() {
                         Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
@@ -140,17 +145,15 @@ impl ActionProcessor {
                         }
                     };
 
-                    application_user_registration_token__.set_can_be_resent_from(application_user_registration_token_can_be_resent_from);
+                    application_user_registration_token_.set_can_be_resent_from(application_user_registration_token_can_be_resent_from);
 
                     (true, true)
                 } else {
                     (false, false)
                 };
 
-                if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token__)
-                    || application_user_registration_token__.get_is_approved() {
-                    need_to_update = true;
-
+                let need_to_update_2 = if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_)
+                    || application_user_registration_token_.get_is_approved() {
                     let application_user_registration_token_expires_at = match Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate() {
                         Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
                         Err(mut error) => {
@@ -160,25 +163,62 @@ impl ActionProcessor {
                         }
                     };
 
-                    application_user_registration_token__
+                    application_user_registration_token_
                         .set_value(Generator::<ApplicationUserRegistrationToken_Value>::generate())
                         .set_wrong_enter_tries_quantity(0)
                         .set_is_approved(false)
                         .set_expires_at(application_user_registration_token_expires_at);
-                }
 
-                if need_to_update {
-                    if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::update(
+                    true
+                } else {
+                    false
+                };
+
+                if need_to_update_1 && need_to_update_2 {
+                    if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken_1>::update(
                         database_2_postgresql_connection,
-                        &application_user_registration_token__
+                        &application_user_registration_token_,
+                        incoming.application_user_email.as_str(),
+                        incoming.application_user_device_id.as_str()
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         return Err(error);
                     }
+                } else {
+                    if need_to_update_1 {
+                        if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken_2>::update(
+                            database_2_postgresql_connection,
+                            &application_user_registration_token_,
+                            incoming.application_user_email.as_str(),
+                            incoming.application_user_device_id.as_str()
+                        ).await {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    }
+
+                    if need_to_update_2 {
+                        if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken_3>::update(
+                            database_2_postgresql_connection,
+                            &application_user_registration_token_,
+                            incoming.application_user_email.as_str(),
+                            incoming.application_user_device_id.as_str()
+                        ).await {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    }
                 }
 
-                (application_user_registration_token__, can_send_)
+                (
+                    ApplicationUserRegistrationToken_Aggregator::Second {
+                        application_user_registration_token: application_user_registration_token_
+                    },
+                    can_send_
+                )
             }
             None => {
                 let application_user_registration_token_expires_at = match Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate() {
@@ -209,7 +249,7 @@ impl ActionProcessor {
                     application_user_registration_token_can_be_resent_from
                 };
 
-                let application_user_registration_token__ = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create(
+                let application_user_registration_token_ = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create(
                     database_2_postgresql_connection, insert
                 ).await {
                     Ok(application_user_registration_token___) => application_user_registration_token___,
@@ -220,16 +260,26 @@ impl ActionProcessor {
                     }
                 };
 
-                (application_user_registration_token__, true)
+                (
+                    ApplicationUserRegistrationToken_Aggregator::First {
+                        application_user_registration_token: application_user_registration_token_
+                    },
+                    true
+                )
             }
         };
 
         if can_send {
+            let application_user_registration_token_value = match application_user_registration_token_aggregator {
+                ApplicationUserRegistrationToken_Aggregator::First { application_user_registration_token: ref application_user_registration_token_ } => application_user_registration_token_.get_value(),
+                ApplicationUserRegistrationToken_Aggregator::Second { application_user_registration_token: ref application_user_registration_token_ } => application_user_registration_token_.get_value()
+            };
+
             if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_token(
                 environment_configuration,
-                application_user_registration_token_.get_value(),
-                application_user_registration_token_.get_application_user_email(),
-                application_user_registration_token_.get_application_user_device_id()
+                application_user_registration_token_value,
+                incoming.application_user_email.as_str(),
+                incoming.application_user_device_id.as_str()
             ) {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -237,9 +287,14 @@ impl ActionProcessor {
             }
         }
 
+        let application_user_registration_token_can_be_resent_from = match application_user_registration_token_aggregator {
+            ApplicationUserRegistrationToken_Aggregator::First { application_user_registration_token: ref application_user_registration_token_ } => application_user_registration_token_.get_can_be_resent_from(),
+            ApplicationUserRegistrationToken_Aggregator::Second { application_user_registration_token: ref application_user_registration_token_ } => application_user_registration_token_.get_can_be_resent_from()
+        };
+
         let outcoming = Outcoming {
             verification_message_sent: can_send,
-            application_user_registration_token_can_be_resent_from: application_user_registration_token_.get_can_be_resent_from()
+            application_user_registration_token_can_be_resent_from
         };
 
         return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
@@ -260,4 +315,13 @@ pub struct Incoming {
 pub struct Outcoming {
     verification_message_sent: bool,
     application_user_registration_token_can_be_resent_from: i64
+}
+
+enum ApplicationUserRegistrationToken_Aggregator<'a> {
+    First {
+        application_user_registration_token: ApplicationUserRegistrationToken<'a>
+    },
+    Second {
+        application_user_registration_token: ApplicationUserRegistrationToken_1
+    }
 }

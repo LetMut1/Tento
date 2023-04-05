@@ -349,12 +349,12 @@ impl ActionProcessor {
             ApplicationUser_Aggregator::Second { application_user: _ } => incoming.application_user_email_or_application_user_nickname.as_str()
         };
 
-        let application_user_authorization_token_value = match application_user_authorization_token_aggregator {
-            ApplicationUserAuthorizationToken_Aggregator::First { application_user_authorization_token: ref application_user_authorization_token_ } => application_user_authorization_token_.get_value(),
-            ApplicationUserAuthorizationToken_Aggregator::Second { application_user_authorization_token: ref application_user_authorization_token_ } => application_user_authorization_token_.get_value()
-        };
-
         if can_send {
+            let application_user_authorization_token_value = match application_user_authorization_token_aggregator {
+                ApplicationUserAuthorizationToken_Aggregator::First { application_user_authorization_token: ref application_user_authorization_token_ } => application_user_authorization_token_.get_value(),
+                ApplicationUserAuthorizationToken_Aggregator::Second { application_user_authorization_token: ref application_user_authorization_token_ } => application_user_authorization_token_.get_value()
+            };
+
             if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_authorization_token(
                 environment_configuration,
                 application_user_authorization_token_value,

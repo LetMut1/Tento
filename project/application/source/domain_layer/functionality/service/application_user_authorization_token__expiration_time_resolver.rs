@@ -10,7 +10,7 @@ impl ApplicationUserAuthorizationToken_ExpirationTimeResolver {
         T: Getter<&'a T, ApplicationUserAuthorizationToken_ExpiresAt, i64>
     {
         return !DateTimeResolver::unixtime_is_greater_or_equal_than_now(
-            <T as Getter<&'a T, ApplicationUserAuthorizationToken_ExpiresAt, i64>>::get(subject)
+            <T as Getter<&'_ T, ApplicationUserAuthorizationToken_ExpiresAt, i64>>::get(subject)
         );
     }
 }
