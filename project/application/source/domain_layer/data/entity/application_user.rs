@@ -73,25 +73,21 @@ impl<'a> ApplicationUser<'a> {
     }
 }
 
-pub struct ApplicationUser_1<'a> {
+pub struct ApplicationUser_1 {
     id: i64,
     _id: PhantomData<Id>,
 
     email: String,
     _email: PhantomData<Email>,
 
-    nickname: Cow<'a, str>,
-    _nickname: PhantomData<Nickname>,
-
     password_hash: String,
     _password_hash: PhantomData<PasswordHash>,
 }
 
-impl<'a> ApplicationUser_1<'a> {
+impl ApplicationUser_1 {
     pub fn new(
         id: i64,
         email: String,
-        nickname: Cow<'a, str>,
         password_hash: String
     ) -> Self {
         return Self {
@@ -99,66 +95,50 @@ impl<'a> ApplicationUser_1<'a> {
             _id: PhantomData,
             email,
             _email: PhantomData,
-            nickname,
-            _nickname: PhantomData,
             password_hash,
             _password_hash: PhantomData
         };
     }
 
-    pub fn get_id<'b>(&'b self) -> i64 {
+    pub fn get_id<'a>(&'a self) -> i64 {
         return self.id;
     }
 
-    pub fn get_email<'b>(&'b self) -> &'b str {
+    pub fn get_email<'a>(&'a self) -> &'a str {
         return self.email.as_str();
     }
 
-    pub fn get_nickname<'b>(&'b self) -> &'b str {
-        return self.nickname.as_ref();
-    }
-
-    pub fn get_password_hash<'b>(&'b self) -> &'b str {
+    pub fn get_password_hash<'a>(&'a self) -> &'a str {
         return self.password_hash.as_str();
     }
 }
 
-pub struct ApplicationUser_2<'a> {
+pub struct ApplicationUser_2 {
     id: i64,
     _id: PhantomData<Id>,
-
-    email: Cow<'a, str>,
-    _email: PhantomData<Email>,
 
     password_hash: String,
     _password_hash: PhantomData<PasswordHash>,
 }
 
-impl<'a> ApplicationUser_2<'a> {
+impl ApplicationUser_2 {
     pub fn new(
         id: i64,
-        email: Cow<'a, str>,
         password_hash: String
     ) -> Self {
         return Self {
             id,
             _id: PhantomData,
-            email,
-            _email: PhantomData,
             password_hash,
             _password_hash: PhantomData
         };
     }
 
-    pub fn get_id<'b>(&'b self) -> i64 {
+    pub fn get_id<'a>(&'a self) -> i64 {
         return self.id;
     }
 
-    pub fn get_email<'b>(&'b self) -> &'b str {
-        return self.email.as_ref();
-    }
-
-    pub fn get_password_hash<'b>(&'b self) -> &'b str {
+    pub fn get_password_hash<'a>(&'a self) -> &'a str {
         return self.password_hash.as_str();
     }
 }

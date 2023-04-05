@@ -629,11 +629,11 @@ impl ApplicationUser_PostgresqlRepository<ApplicationUser<'_>> {
     }
 }
 
-impl ApplicationUser_PostgresqlRepository<ApplicationUser_1<'_>> {
+impl ApplicationUser_PostgresqlRepository<ApplicationUser_1> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         application_user_nickname: &'a str
-    ) -> Result<Option<ApplicationUser_1<'a>>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUser_1>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -719,7 +719,6 @@ impl ApplicationUser_PostgresqlRepository<ApplicationUser_1<'_>> {
                 ApplicationUser_1::new(
                     application_user_id,
                     application_user_email,
-                    Cow::Borrowed(application_user_nickname),
                     application_user_password_hash
                 )
             )
@@ -727,11 +726,11 @@ impl ApplicationUser_PostgresqlRepository<ApplicationUser_1<'_>> {
     }
 }
 
-impl ApplicationUser_PostgresqlRepository<ApplicationUser_2<'_>> {
+impl ApplicationUser_PostgresqlRepository<ApplicationUser_2> {
     pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
         application_user_email: &'a str
-    ) -> Result<Option<ApplicationUser_2<'a>>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUser_2>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -803,7 +802,6 @@ impl ApplicationUser_PostgresqlRepository<ApplicationUser_2<'_>> {
             Some(
                 ApplicationUser_2::new(
                     application_user_id,
-                    Cow::Borrowed(application_user_email),
                     application_user_password_hash
                 )
             )
