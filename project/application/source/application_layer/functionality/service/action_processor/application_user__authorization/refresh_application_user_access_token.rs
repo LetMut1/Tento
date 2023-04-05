@@ -1,11 +1,13 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_1;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
-use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__expiration_time_resolver::ApplicationUserAccessRefreshToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
@@ -81,7 +83,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::find_1(
+        let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection, application_user_access_token_.get_application_user_id(), application_user_access_token_.get_application_user_device_id()
         ).await {
             Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
@@ -124,7 +126,7 @@ impl ActionProcessor {
         }
 
         if ApplicationUserAccessRefreshToken_ExpirationTimeResolver::is_expired(&application_user_access_refresh_token_) {
-            if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_1(
+            if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 application_user_access_refresh_token_.get_application_user_id(),
                 application_user_access_refresh_token_.get_application_user_device_id()
@@ -173,9 +175,11 @@ impl ActionProcessor {
             .set_expires_at(application_user_access_refresh_token_expires_at)
             .set_updated_at(Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate());
 
-        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::update(
+        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken_1>::update(
             database_2_postgresql_connection,
-            &application_user_access_refresh_token_
+            &application_user_access_refresh_token_,
+            application_user_access_token_.get_application_user_id(),
+            application_user_access_token_.get_application_user_device_id()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

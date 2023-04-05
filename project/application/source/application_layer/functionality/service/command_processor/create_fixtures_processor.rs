@@ -1,4 +1,5 @@
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
@@ -227,7 +228,10 @@ impl CreateFixturesProcessor {
                 application_user_id: application_user_.get_id()
             };
 
-            if let Err(mut error) = ApplicationUserDevice_PostgresqlRepository::create(database_1_postgresql_connection, application_user_device_insert).await {
+            if let Err(mut error) = ApplicationUserDevice_PostgresqlRepository::<ApplicationUserDevice>::create(
+                database_1_postgresql_connection,
+                application_user_device_insert
+            ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);

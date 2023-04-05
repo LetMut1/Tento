@@ -1,3 +1,4 @@
+use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
@@ -106,6 +107,56 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
 
         return self;
     }
+}
+
+impl<'a> Getter<&'a Self, ApplicationUser_Id, i64> for ApplicationUserAccessRefreshToken<'_> {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.application_user_id;
+    }
+}
+
+impl<'a, 'b: 'a> Getter<&'a Self, ApplicationUserDevice_Id, &'a str> for ApplicationUserAccessRefreshToken<'b> {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.application_user_device_id.as_ref();
+    }
+}
+
+impl<'a, 'b: 'a> Getter<&'a Self, ApplicationUserAccessToken_Id, &'a str> for ApplicationUserAccessRefreshToken<'b> {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.application_user_access_token_id.as_ref();
+    }
+}
+
+impl<'a> Getter<&'a Self, ObfuscationValue, &'a str> for ApplicationUserAccessRefreshToken<'_> {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.obfuscation_value.as_str();
+    }
+}
+
+impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAccessRefreshToken<'_> {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.expires_at;
+    }
+}
+
+impl<'a> Getter<&'a Self, UpdatedAt, i64> for ApplicationUserAccessRefreshToken<'_> {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.updated_at;
+    }
+}
+
+pub struct ApplicationUserAccessRefreshToken_1 {
+    application_user_access_token_id: String,
+    _application_user_access_token_id: PhantomData<ApplicationUserAccessToken_Id>,
+
+    obfuscation_value: String,
+    _obfuscation_value: PhantomData<ObfuscationValue>,
+
+    expires_at: i64,
+    _expires_at: PhantomData<ExpiresAt>,
+
+    updated_at: i64,
+    _updated_at: PhantomData<UpdatedAt>,
 }
 
 pub struct ObfuscationValue;

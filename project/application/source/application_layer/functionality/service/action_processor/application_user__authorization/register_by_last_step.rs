@@ -3,10 +3,12 @@ use crate::application_layer::data::action_processor_result::UserWorkflowPrecede
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
-use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
@@ -310,7 +312,10 @@ impl ActionProcessor {
             application_user_id: application_user.get_id()
         };
 
-        let application_user_device = match ApplicationUserDevice_PostgresqlRepository::create(database_1_postgresql_connection, application_user_device_insert).await {
+        let application_user_device = match ApplicationUserDevice_PostgresqlRepository::<ApplicationUserDevice>::create(
+            database_1_postgresql_connection,
+            application_user_device_insert
+        ).await {
             Ok(application_user_device_) => application_user_device_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -354,7 +359,7 @@ impl ActionProcessor {
             application_user_access_refresh_token_updated_at: Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate()
         };
 
-        let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::create(
+        let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
             database_2_postgresql_connection, application_user_access_refresh_token_insert
         ).await {
             Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,

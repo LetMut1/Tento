@@ -257,6 +257,87 @@ pub struct ApplicationUserAuthorizationToken_3 {
     _can_be_resent_from: PhantomData<CanBeResentFrom>,
 }
 
+pub struct ApplicationUserAuthorizationToken_4 {
+    value: String,
+    _value: PhantomData<Value>,
+
+    wrong_enter_tries_quantity: i16,
+    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
+
+    expires_at: i64,
+    _expires_at: PhantomData<ExpiresAt>
+}
+
+impl ApplicationUserAuthorizationToken_4 {
+    pub fn new(
+        value: String,
+        wrong_enter_tries_quantity: i16,
+        expires_at: i64
+    ) -> Self {
+        return Self {
+            value,
+            _value: PhantomData,
+            wrong_enter_tries_quantity,
+            _wrong_enter_tries_quantity: PhantomData,
+            expires_at,
+            _expires_at: PhantomData
+        };
+    }
+
+    pub fn get_value<'a>(&'a self) -> &'a str {
+        return self.value.as_str();
+    }
+
+    pub fn get_wrong_enter_tries_quantity<'a>(&'a self) -> i16 {
+        return self.wrong_enter_tries_quantity;
+    }
+
+    pub fn get_expires_at<'a>(&'a self) -> i64 {
+        return self.expires_at;
+    }
+
+    pub fn set_value<'a>(&'a mut self, value: String) -> &'a mut Self {
+        self.value = value;
+
+        return self;
+    }
+
+    pub fn set_wrong_enter_tries_quantity<'a>(&'a mut self, wrong_enter_tries_quantity: i16) -> &'a mut Self {
+        self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
+
+        return self;
+    }
+
+    pub fn set_expires_at<'a>(&'a mut self, expires_at: i64) -> &'a mut Self {
+        self.expires_at = expires_at;
+
+        return self;
+    }
+}
+
+impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken_4 {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.value.as_str();
+    }
+}
+
+impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken_4 {
+    fn get(subject: &'a Self) -> i16 {
+        return subject.wrong_enter_tries_quantity;
+    }
+}
+
+impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken_4 {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.expires_at;
+    }
+}
+
+pub struct ApplicationUserAuthorizationToken_5 {
+    wrong_enter_tries_quantity: i16,
+    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>
+}
+
 pub struct Value;
 
 pub struct WrongEnterTriesQuantity;

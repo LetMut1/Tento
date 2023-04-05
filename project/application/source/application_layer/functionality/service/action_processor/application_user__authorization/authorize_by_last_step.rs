@@ -1,15 +1,19 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_1;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_1;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_4;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_5;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
@@ -94,7 +98,7 @@ impl ActionProcessor {
         };
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::find_1(
+        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken_4>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_id,
             incoming.application_user_device_id.as_str()
@@ -123,8 +127,8 @@ impl ActionProcessor {
         if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
             if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                 database_2_postgresql_connection,
-                application_user_authorization_token_.get_application_user_id(),
-                application_user_authorization_token_.get_application_user_device_id()
+                incoming.application_user_id,
+                incoming.application_user_device_id.as_str()
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -157,11 +161,11 @@ impl ActionProcessor {
             if application_user_authorization_token_wrong_enter_tries_quantity <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 application_user_authorization_token_.set_wrong_enter_tries_quantity(application_user_authorization_token_wrong_enter_tries_quantity);
 
-                if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken_1>::update(
+                if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken_5>::update(
                     database_2_postgresql_connection,
                     &application_user_authorization_token_,
-                    application_user_authorization_token_.get_application_user_id(),
-                    application_user_authorization_token_.get_application_user_device_id()
+                    incoming.application_user_id,
+                    incoming.application_user_device_id.as_str()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -170,8 +174,8 @@ impl ActionProcessor {
             } else {
                 if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                     database_2_postgresql_connection,
-                    application_user_authorization_token_.get_application_user_id(),
-                    application_user_authorization_token_.get_application_user_device_id()
+                    incoming.application_user_id,
+                    incoming.application_user_device_id.as_str()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -204,7 +208,7 @@ impl ActionProcessor {
 
         let is_exist = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_3(
             database_1_postgresql_connection,
-            application_user_authorization_token_.get_application_user_id()
+            incoming.application_user_id
         ).await {
             Ok(is_exist_) => is_exist_,
             Err(mut error) => {
@@ -235,15 +239,15 @@ impl ActionProcessor {
 
         let application_user_access_token = ApplicationUserAccessToken::new(
             Generator::<ApplicationUserAccessToken_Id>::generate(),
-            application_user_authorization_token_.get_application_user_id(),
-            Cow::Borrowed(application_user_authorization_token_.get_application_user_device_id()),
+            incoming.application_user_id,
+            Cow::Borrowed(incoming.application_user_device_id.as_str()),
             expires_at
         );
 
-        let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::find_1(
+        let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
-            application_user_authorization_token_.get_application_user_id(),
-            application_user_authorization_token_.get_application_user_device_id()
+            incoming.application_user_id,
+            incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
             Err(mut error) => {
@@ -276,9 +280,11 @@ impl ActionProcessor {
                     .set_expires_at(application_user_access_refresh_token_expires_at)
                     .set_updated_at(application_user_access_refresh_token_updated_at);
 
-                if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::update(
+                if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken_1>::update(
                     database_2_postgresql_connection,
-                    &application_user_access_refresh_token__
+                    &application_user_access_refresh_token__,
+                    incoming.application_user_id,
+                    incoming.application_user_device_id.as_str()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -289,36 +295,44 @@ impl ActionProcessor {
             }
             None => {
                 let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
-                    application_user_id: application_user_authorization_token_.get_application_user_id(),
-                    application_user_device_id: Cow::Borrowed(application_user_authorization_token_.get_application_user_device_id()),
+                    application_user_id: incoming.application_user_id,
+                    application_user_device_id: Cow::Borrowed(incoming.application_user_device_id.as_str()),
                     application_user_access_token_id,
                     application_user_access_refresh_token_obfuscation_value,
                     application_user_access_refresh_token_expires_at,
                     application_user_access_refresh_token_updated_at
                 };
 
-                match ApplicationUserAccessRefreshToken_PostgresqlRepository::create(database_2_postgresql_connection, application_user_access_refresh_token_insert).await {
+                let application_user_access_refresh_token__ = match ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
+                    database_2_postgresql_connection,
+                    application_user_access_refresh_token_insert
+                ).await {
                     Ok(application_user_access_refresh_token___) => application_user_access_refresh_token___,
                     Err(mut error) => {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                         return Err(error);
                     }
-                }
+                };
+
+                application_user_access_refresh_token__
             }
         };
 
         if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
             database_2_postgresql_connection,
-            application_user_authorization_token_.get_application_user_id(),
-            application_user_authorization_token_.get_application_user_device_id()
+            incoming.application_user_id,
+            incoming.application_user_device_id.as_str()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
         }
 // TODO  TRANZACTION
-        let application_user_access_token_deserialized_form = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration, &application_user_access_token) {
+        let application_user_access_token_deserialized_form = match ApplicationUserAccessToken_SerializationFormResolver::serialize(
+            environment_configuration,
+            &application_user_access_token
+        ) {
             Ok(application_user_access_token_deserialized_form_) => application_user_access_token_deserialized_form_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -327,7 +341,10 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_deserialized_form = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(environment_configuration, &application_user_access_refresh_token_) {
+        let application_user_access_refresh_token_deserialized_form = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(
+            environment_configuration,
+            &application_user_access_refresh_token_
+        ) {
             Ok(application_user_access_refresh_token_deserialized_form_) => application_user_access_refresh_token_deserialized_form_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -341,7 +358,10 @@ impl ActionProcessor {
             application_user_id: incoming.application_user_id
         };
 
-        if let Err(mut error) = ApplicationUserDevice_PostgresqlRepository::create(database_1_postgresql_connection, application_user_device_insert).await {
+        if let Err(mut error) = ApplicationUserDevice_PostgresqlRepository::<ApplicationUserDevice>::create(
+            database_1_postgresql_connection,
+            application_user_device_insert
+        ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);

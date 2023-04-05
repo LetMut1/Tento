@@ -1,5 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -92,7 +93,7 @@ impl ActionProcessor {
             }
         };
 
-        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_1(
+        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
             &*database_2_postgresql_pooled_connection,
             application_user_access_token.get_application_user_id(),
             application_user_access_token.get_application_user_device_id()

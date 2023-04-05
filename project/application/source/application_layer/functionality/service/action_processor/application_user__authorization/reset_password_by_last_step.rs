@@ -1,5 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
@@ -258,7 +259,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::delete_2(
+        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection, application_user_.get_id()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
