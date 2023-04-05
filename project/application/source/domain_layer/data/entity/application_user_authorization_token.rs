@@ -1,3 +1,4 @@
+use crate::domain_layer::functionality::service::getter::Getter;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use super::application_user_device::ApplicationUserDevice_Id;
@@ -106,6 +107,42 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
     }
 }
 
+impl<'a> Getter<&'a Self, ApplicationUser_Id, i64> for ApplicationUserAuthorizationToken<'_> {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.application_user_id;
+    }
+}
+
+impl<'a, 'b: 'a> Getter<&'a Self, ApplicationUserDevice_Id, &'a str> for ApplicationUserAuthorizationToken<'b> {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.application_user_device_id.as_ref();
+    }
+}
+
+impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken<'_> {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.value.as_str();
+    }
+}
+
+impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken<'_> {
+    fn get(subject: &'a Self) -> i16 {
+        return subject.wrong_enter_tries_quantity;
+    }
+}
+
+impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken<'_> {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.expires_at;
+    }
+}
+
+impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserAuthorizationToken<'_> {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.can_be_resent_from;
+    }
+}
+
 pub struct ApplicationUserAuthorizationToken_1 {
     value: String,
     _value: PhantomData<Value>,
@@ -118,6 +155,30 @@ pub struct ApplicationUserAuthorizationToken_1 {
 
     can_be_resent_from: i64,
     _can_be_resent_from: PhantomData<CanBeResentFrom>,
+}
+
+impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken_1 {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.value.as_str();
+    }
+}
+
+impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken_1 {
+    fn get(subject: &'a Self) -> i16 {
+        return subject.wrong_enter_tries_quantity;
+    }
+}
+
+impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken_1 {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.expires_at;
+    }
+}
+
+impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserAuthorizationToken_1 {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.can_be_resent_from;
+    }
 }
 
 pub struct Value;

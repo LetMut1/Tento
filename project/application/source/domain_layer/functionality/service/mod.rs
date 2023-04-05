@@ -13,4 +13,5 @@ pub mod application_user_reset_password_token__sending_opportunity_resolver;
 pub mod channel__access_modifier_resolver;
 pub mod channel__visability_modifier_resolver;
 pub mod generator;
+pub mod getter;
 pub mod validator;

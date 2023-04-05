@@ -1,5 +1,12 @@
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_1;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+use crate::domain_layer::functionality::service::getter::Getter;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -11,10 +18,9 @@ use extern_crate::tokio_postgres::types::Type;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 
-pub struct ApplicationUserAuthorizationToken_PostgresqlRepository<F> {
-    _form: PhantomData<F>
+pub struct ApplicationUserAuthorizationToken_PostgresqlRepository<E> {
+    _entity: PhantomData<E>
 }
-
 
 impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     pub async fn create<'a>(
@@ -246,21 +252,29 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAutho
 }
 
 impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
-    pub async fn update<'a>(
+    pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
-        application_user_authorization_token: &'a ApplicationUserAuthorizationToken<'_>
-    ) -> Result<(), ErrorAuditor> {
-        let application_user_id = application_user_authorization_token.get_application_user_id();
+        application_user_authorization_token: &'a T
+    ) -> Result<(), ErrorAuditor>
+    where
+        T: Getter<&'a T, ApplicationUser_Id, i64>,
+        T: Getter<&'a T, ApplicationUserDevice_Id, &'a str>,
+        T: Getter<&'a T, ApplicationUserAuthorizationToken_Value, &'a str>,
+        T: Getter<&'a T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>,
+        T: Getter<&'a T, ApplicationUserAuthorizationToken_ExpiresAt, i64>,
+        T: Getter<&'a T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>
+    {
+        let application_user_id = <T as Getter<&'_ T, ApplicationUser_Id, i64>>::get(application_user_authorization_token);
 
-        let application_user_device_id = application_user_authorization_token.get_application_user_device_id();
+        let application_user_device_id = <T as Getter<&'_ T, ApplicationUserDevice_Id, &'_ str>>::get(application_user_authorization_token);
 
-        let application_user_authorization_token_value = application_user_authorization_token.get_value();
+        let application_user_authorization_token_value = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_Value, &'_ str>>::get(application_user_authorization_token);
 
-        let application_user_authorization_token_wrong_enter_tries_quantity = application_user_authorization_token.get_wrong_enter_tries_quantity();
+        let application_user_authorization_token_wrong_enter_tries_quantity = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>>::get(application_user_authorization_token);
 
-        let application_user_authorization_token_expires_at = application_user_authorization_token.get_expires_at();
+        let application_user_authorization_token_expires_at = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_ExpiresAt, i64>>::get(application_user_authorization_token);
 
-        let application_user_authorization_token_can_be_resent_from = application_user_authorization_token.get_can_be_resent_from();
+        let application_user_authorization_token_can_be_resent_from = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>>::get(application_user_authorization_token);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

@@ -12,8 +12,8 @@ use extern_crate::tokio_postgres::types::Type;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 
-pub struct ApplicationUser_PostgresqlRepository<F> {
-    _form: PhantomData<F>
+pub struct ApplicationUser_PostgresqlRepository<E> {
+    _entity: PhantomData<E>
 }
 
 impl ApplicationUser_PostgresqlRepository<ApplicationUser<'_>> {
