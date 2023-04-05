@@ -186,7 +186,10 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        let application_user_access_token_deserialized_form_new = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration, &application_user_access_token_new) {
+        let application_user_access_token_deserialized_form_new = match ApplicationUserAccessToken_SerializationFormResolver::serialize(
+            environment_configuration,
+            &application_user_access_token_new
+        ) {
             Ok(application_user_access_token_deserialized_form_new_) => application_user_access_token_deserialized_form_new_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -195,7 +198,10 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_deserialized_form_new = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(environment_configuration, &application_user_access_refresh_token_) {
+        let application_user_access_refresh_token_deserialized_form_new = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(
+            environment_configuration,
+            &application_user_access_refresh_token_
+        ) {
             Ok(application_user_access_refresh_token_deserialized_form_new_) => application_user_access_refresh_token_deserialized_form_new_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

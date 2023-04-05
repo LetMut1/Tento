@@ -91,5 +91,14 @@ fn main() -> () {
 
 // Some(_) => _,
 
+
+
+
 // СДелал оптимизацию запросов для:
 // - authorize_by_first_step.
+// - authorize_by_last_step.
+// - chech_email_for_existing
+// - check_nickname_for_existing
+// - deauthorize_from_one_device
+// - deauthorize_from_all_device
+// - refresh_application_user_access_refresh_token

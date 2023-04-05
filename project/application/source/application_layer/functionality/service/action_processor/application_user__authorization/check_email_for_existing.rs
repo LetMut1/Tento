@@ -42,6 +42,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         if !is_valid_email {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
         }
