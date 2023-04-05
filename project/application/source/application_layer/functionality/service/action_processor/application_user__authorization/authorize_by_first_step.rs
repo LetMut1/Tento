@@ -323,7 +323,7 @@ impl ActionProcessor {
         let outcoming = Outcoming {
             application_user_id,
             verification_message_sent: can_send,
-            application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.get_application_user_id()
+            application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.get_can_be_resent_from()
         };
 
         return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
