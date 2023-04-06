@@ -2,6 +2,7 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_1;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
@@ -162,9 +163,11 @@ impl ActionProcessor {
             if application_user_reset_password_token_wrong_enter_tries_quantity <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 application_user_reset_password_token_.set_wrong_enter_tries_quantity(application_user_reset_password_token_wrong_enter_tries_quantity);
 
-                if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::update(
+                if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_1>::update(
                     database_2_postgresql_connection,
-                    &application_user_reset_password_token_
+                    &application_user_reset_password_token_,
+                    application_user_reset_password_token_.get_application_user_id(),
+                    application_user_reset_password_token_.get_application_user_device_id()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
