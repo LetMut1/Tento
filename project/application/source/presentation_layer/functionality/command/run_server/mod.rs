@@ -104,3 +104,4 @@ fn main() -> () {
 // - deauthorize_from_all_device
 // - refresh_application_user_access_refresh_token
 // - register_by_first_step
+// - register_by_last_step

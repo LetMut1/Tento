@@ -305,6 +305,95 @@ pub struct ApplicationUserRegistrationToken_3 {
     _expires_at: PhantomData<ExpiresAt>,
 }
 
+impl ApplicationUserRegistrationToken_3 {
+    pub fn new(
+        value: String,
+        wrong_enter_tries_quantity: i16,
+        is_approved: bool,
+        expires_at: i64
+    ) -> Self {
+        return Self {
+            value,
+            _value: PhantomData,
+            wrong_enter_tries_quantity,
+            _wrong_enter_tries_quantity: PhantomData,
+            is_approved,
+            _is_approved: PhantomData,
+            expires_at,
+            _expires_at: PhantomData
+        };
+    }
+
+    pub fn get_value<'b>(&'b self) -> &'b str {
+        return self.value.as_str();
+    }
+
+    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> i16 {
+        return self.wrong_enter_tries_quantity;
+    }
+
+    pub fn get_is_approved<'b>(&'b self) -> bool {
+        return self.is_approved;
+    }
+
+    pub fn get_expires_at<'b>(&'b self) -> i64 {
+        return self.expires_at;
+    }
+
+    pub fn set_value<'b>(&'b mut self, value: String) -> &'b mut Self {
+        self.value = value;
+
+        return self;
+    }
+
+    pub fn set_wrong_enter_tries_quantity<'b>(&'b mut self, wrong_enter_tries_quantity: i16) -> &'b mut Self {
+        self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
+
+        return self;
+    }
+
+    pub fn set_is_approved<'b>(&'b mut self, is_approved: bool) -> &'b mut Self {
+        self.is_approved = is_approved;
+
+        return self;
+    }
+
+    pub fn set_expires_at<'b>(&'b mut self, expires_at: i64) -> &'b mut Self {
+        self.expires_at = expires_at;
+
+        return self;
+    }
+}
+
+impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken_3 {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.value.as_str();
+    }
+}
+
+impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserRegistrationToken_3 {
+    fn get(subject: &'a Self) -> i16 {
+        return subject.wrong_enter_tries_quantity;
+    }
+}
+
+impl<'a> Getter<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken_3 {
+    fn get(subject: &'a Self) -> bool {
+        return subject.is_approved;
+    }
+}
+
+impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_3 {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.expires_at;
+    }
+}
+
+pub struct ApplicationUserRegistrationToken_4 {
+    wrong_enter_tries_quantity: i16,
+    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
+}
+
 pub struct Value;
 
 pub struct WrongEnterTriesQuantity;

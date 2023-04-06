@@ -9,7 +9,8 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_1;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_3;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_4;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
@@ -117,7 +118,8 @@ impl ActionProcessor {
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         let is_exist_1 = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
-            database_1_postgresql_connection, incoming.application_user_nickname.as_str()
+            database_1_postgresql_connection,
+            incoming.application_user_nickname.as_str()
         ).await {
             Ok(is_exist_1_) => is_exist_1_,
             Err(mut error) => {
@@ -138,7 +140,8 @@ impl ActionProcessor {
         }
 
         let is_exist_2 = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
-            database_1_postgresql_connection, incoming.application_user_email.as_str()
+            database_1_postgresql_connection,
+            incoming.application_user_email.as_str()
         ).await {
             Ok(is_exist_2_) => is_exist_2_,
             Err(mut error) => {
@@ -169,9 +172,10 @@ impl ActionProcessor {
                 );
             }
         };
+
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::find_1(
+        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken_3>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_email.as_str(),
             incoming.application_user_device_id.as_str()
@@ -196,11 +200,12 @@ impl ActionProcessor {
                 );
             }
         };
+
         if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
             if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
-                application_user_registration_token_.get_application_user_email(),
-                application_user_registration_token_.get_application_user_device_id()
+                incoming.application_user_email.as_str(),
+                incoming.application_user_device_id.as_str()
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -243,11 +248,11 @@ impl ActionProcessor {
             if application_user_registration_token_wrong_enter_tries_quantity <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 application_user_registration_token_.set_wrong_enter_tries_quantity(application_user_registration_token_wrong_enter_tries_quantity);
 
-                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken_1>::update(
+                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken_4>::update(
                     database_2_postgresql_connection,
                     &application_user_registration_token_,
-                    application_user_registration_token_.get_application_user_email(),
-                    application_user_registration_token_.get_application_user_device_id()
+                    incoming.application_user_email.as_str(),
+                    incoming.application_user_device_id.as_str()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -256,8 +261,8 @@ impl ActionProcessor {
             } else {
                 if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                     database_2_postgresql_connection,
-                    application_user_registration_token_.get_application_user_email(),
-                    application_user_registration_token_.get_application_user_device_id()
+                    incoming.application_user_email.as_str(),
+                    incoming.application_user_device_id.as_str()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -285,8 +290,8 @@ impl ActionProcessor {
 
         if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
             database_2_postgresql_connection,
-            application_user_registration_token_.get_application_user_email(),
-            application_user_registration_token_.get_application_user_device_id()
+            incoming.application_user_email.as_str(),
+            incoming.application_user_device_id.as_str()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -298,6 +303,7 @@ impl ActionProcessor {
             application_user_nickname: incoming.application_user_nickname,
             application_user_password_hash,
         };
+
         let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::create(
             database_1_postgresql_connection,
             application_user_insert
@@ -352,7 +358,7 @@ impl ActionProcessor {
             }
         };
 
-                // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
+// TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
         let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
             application_user_id: application_user.get_id(),
             application_user_device_id: Cow::Borrowed(application_user_device.get_id()),
@@ -373,7 +379,10 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_token_deserialized_form = match ApplicationUserAccessToken_SerializationFormResolver::serialize(environment_configuration, &application_user_access_token) {
+        let application_user_access_token_deserialized_form = match ApplicationUserAccessToken_SerializationFormResolver::serialize(
+            environment_configuration,
+            &application_user_access_token
+        ) {
             Ok(application_user_access_token_deserialized_form_) => application_user_access_token_deserialized_form_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -382,7 +391,10 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_deserialized_form = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(environment_configuration, &application_user_access_refresh_token) {
+        let application_user_access_refresh_token_deserialized_form = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(
+            environment_configuration,
+            &application_user_access_refresh_token
+        ) {
             Ok(application_user_access_refresh_token_deserialized_form_) => application_user_access_refresh_token_deserialized_form_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
