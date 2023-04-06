@@ -100,6 +100,8 @@ fn main() -> () {
 
 // ПРОВерить все репозитории и сделат везде по образу и подобию.
 
+// .as_bytes()  посмотретЬ, удалить??
+
 // СДелал оптимизацию запросов для:
 // - authorize_by_first_step.
 // - authorize_by_last_step.
@@ -113,3 +115,4 @@ fn main() -> () {
 // - register_by_second_step
 // - reset_password_by_first_step
 // - reset_password_by_last_step
+// - reset_password_by_second_step

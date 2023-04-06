@@ -394,6 +394,11 @@ pub struct ApplicationUserResetPasswordToken_4 {
     _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
 }
 
+pub struct ApplicationUserResetPasswordToken_5 {
+    is_approved: bool,
+    _is_approved: PhantomData<IsApproved>
+}
+
 pub struct Value;
 
 pub struct WrongEnterTriesQuantity;

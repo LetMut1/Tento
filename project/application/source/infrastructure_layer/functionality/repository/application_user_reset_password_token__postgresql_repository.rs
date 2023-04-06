@@ -2,6 +2,7 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_2;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_3;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_4;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_5;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
@@ -747,6 +748,63 @@ impl ApplicationUserResetPasswordToken_PostgresqlRepository<ApplicationUserReset
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&application_user_reset_password_token_wrong_enter_tries_quantity, Type::INT2)
+            .add_parameter(&application_user_id, Type::INT8)
+            .add_parameter(&application_user_device_id, Type::TEXT);
+
+        let statement = match database_2_connection.prepare_typed(
+            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+        ).await {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        if let Err(error) = database_2_connection.query(
+            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+        ).await {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        };
+
+        return Ok(());
+    }
+}
+
+impl ApplicationUserResetPasswordToken_PostgresqlRepository<ApplicationUserResetPasswordToken_5> {
+    pub async fn update<'a, T>(
+        database_2_connection: &'a Connection,
+        subject: &'a T,
+        application_user_id: i64,
+        application_user_device_id: &'a str
+    ) -> Result<(), ErrorAuditor>
+    where
+        T: Getter<&'a T, ApplicationUserResetPasswordToken_IsApproved, bool>
+    {
+        let application_user_reset_password_token_is_approved = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_IsApproved, bool>>::get(subject);
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query =
+            "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+            SET ( \
+                is_approved \
+            ) = ROW( \
+                $1 \
+            ) \
+            WHERE aurpt.application_user_id = $2 AND aurpt.application_user_device_id = $3;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&application_user_reset_password_token_is_approved, Type::BOOL)
             .add_parameter(&application_user_id, Type::INT8)
             .add_parameter(&application_user_device_id, Type::TEXT);
 

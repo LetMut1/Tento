@@ -1,7 +1,9 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_1;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_3;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_4;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_5;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
@@ -79,7 +81,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::find_1(
+        let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_3>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_id,
             incoming.application_user_device_id.as_str()
@@ -108,8 +110,8 @@ impl ActionProcessor {
         if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
             if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                 database_2_postgresql_connection,
-                application_user_reset_password_token_.get_application_user_id(),
-                application_user_reset_password_token_.get_application_user_device_id()
+                incoming.application_user_id,
+                incoming.application_user_device_id.as_str()
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -152,11 +154,11 @@ impl ActionProcessor {
             if application_user_reset_password_token_wrong_enter_tries_quantity <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 application_user_reset_password_token_.set_wrong_enter_tries_quantity(application_user_reset_password_token_wrong_enter_tries_quantity);
 
-                if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_1>::update(
+                if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_4>::update(
                     database_2_postgresql_connection,
                     &application_user_reset_password_token_,
-                    application_user_reset_password_token_.get_application_user_id(),
-                    application_user_reset_password_token_.get_application_user_device_id()
+                    incoming.application_user_id,
+                    incoming.application_user_device_id.as_str()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -165,8 +167,8 @@ impl ActionProcessor {
             } else {
                 if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                     database_2_postgresql_connection,
-                    application_user_reset_password_token_.get_application_user_id(),
-                    application_user_reset_password_token_.get_application_user_device_id()
+                    incoming.application_user_id,
+                    incoming.application_user_device_id.as_str()
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -185,11 +187,11 @@ impl ActionProcessor {
 
         application_user_reset_password_token_.set_is_approved(true);
 
-        if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_1>::update(
+        if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_5>::update(
             database_2_postgresql_connection,
             &application_user_reset_password_token_,
-            application_user_reset_password_token_.get_application_user_id(),
-            application_user_reset_password_token_.get_application_user_device_id()
+            incoming.application_user_id,
+            incoming.application_user_device_id.as_str()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
