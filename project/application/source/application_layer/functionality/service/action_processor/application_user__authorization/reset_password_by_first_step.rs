@@ -4,6 +4,7 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
@@ -115,7 +116,7 @@ impl ActionProcessor {
         };
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::find_1(
+        let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::find_1(
             database_2_postgresql_connection,
             application_user_.get_id(),
             incoming.application_user_device_id.as_str()
@@ -170,7 +171,7 @@ impl ActionProcessor {
                 }
 
                 if need_to_update {
-                    if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::update(
+                    if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::update(
                         database_2_postgresql_connection,
                         &application_user_reset_password_token__
                     ).await {
@@ -211,7 +212,7 @@ impl ActionProcessor {
                     application_user_reset_password_token_can_be_resent_from
                 };
 
-                let application_user_reset_password_token__ = match ApplicationUserResetPasswordToken_PostgresqlRepository::create(
+                let application_user_reset_password_token__ = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::create(
                     database_2_postgresql_connection, insert
                 ).await {
                     Ok(application_user_reset_password_token___) => application_user_reset_password_token___,
