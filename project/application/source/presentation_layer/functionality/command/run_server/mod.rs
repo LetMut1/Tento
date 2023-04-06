@@ -92,8 +92,9 @@ fn main() -> () {
 
 // Some(_) => _,
 
+// !!!!!!! reset_password_last_step добавить емейл (посмотреть, подобные кейсы), чтобы проверять соотетсвие емейла и айдишника???????????
 
-
+// Проверить в репозитории, все ли методы используются.
 
 // СДелал оптимизацию запросов для:
 // - authorize_by_first_step.
@@ -106,3 +107,4 @@ fn main() -> () {
 // - register_by_first_step
 // - register_by_last_step
 // - register_by_second_step
+// - reset_password_by_first_step

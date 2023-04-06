@@ -143,6 +143,26 @@ impl ApplicationUser_2 {
     }
 }
 
+pub struct ApplicationUser_3 {
+    id: i64,
+    _id: PhantomData<Id>
+}
+
+impl ApplicationUser_3 {
+    pub fn new(
+        id: i64
+    ) -> Self {
+        return Self {
+            id,
+            _id: PhantomData
+        };
+    }
+
+    pub fn get_id<'a>(&'a self) -> i64 {
+        return self.id;
+    }
+}
+
 pub struct Id;
 
 pub struct Email;

@@ -2,12 +2,14 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_1;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_2;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_3;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_3;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__sending_opportunity_resolver::ApplicationUserResetPasswordToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -80,8 +82,9 @@ impl ActionProcessor {
             }
         };
 
-        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::find_2(
-            &*database_1_postgresql_pooled_connection, incoming.application_user_email.as_str()
+        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser_3>::find_2(
+            &*database_1_postgresql_pooled_connection,
+            incoming.application_user_email.as_str()
         ).await {
             Ok(application_user_) => application_user_,
             Err(mut error) => {
@@ -115,9 +118,10 @@ impl ActionProcessor {
                 );
             }
         };
+
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::find_1(
+        let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_1>::find_1(
             database_2_postgresql_connection,
             application_user_.get_id(),
             incoming.application_user_device_id.as_str()
@@ -130,10 +134,10 @@ impl ActionProcessor {
             }
         };
 
-        let (application_user_reset_password_token_, can_send) = match application_user_reset_password_token {
-            Some(mut application_user_reset_password_token__) => {
-                let (can_send_, mut need_to_update) = if ApplicationUserResetPasswordToken_SendingOpportunityResolver::can_send(
-                    &application_user_reset_password_token__
+        let (application_user_reset_password_token_aggregator, can_send) = match application_user_reset_password_token {
+            Some(mut application_user_reset_password_token_) => {
+                let (can_send_, need_to_update_1) = if ApplicationUserResetPasswordToken_SendingOpportunityResolver::can_send(
+                    &application_user_reset_password_token_
                 ) {
                     let application_user_reset_password_token_can_be_resent_from = match Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate() {
                         Ok(application_user_reset_password_token_can_be_resent_from_) => application_user_reset_password_token_can_be_resent_from_,
@@ -144,17 +148,15 @@ impl ActionProcessor {
                         }
                     };
 
-                    application_user_reset_password_token__.set_can_be_resent_from(application_user_reset_password_token_can_be_resent_from);
+                    application_user_reset_password_token_.set_can_be_resent_from(application_user_reset_password_token_can_be_resent_from);
 
                     (true, true)
                 } else {
                     (false, false)
                 };
 
-                if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token__)
-                    || application_user_reset_password_token__.get_is_approved() {
-                    need_to_update = true;
-
+                let need_to_update_2 = if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_)
+                    || application_user_reset_password_token_.get_is_approved() {
                     let application_user_reset_password_token_expires_at = match Generator::<ApplicationUserResetPasswordToken_ExpiresAt>::generate() {
                         Ok(application_user_reset_password_token_expires_at_) => application_user_reset_password_token_expires_at_,
                         Err(mut error) => {
@@ -164,17 +166,21 @@ impl ActionProcessor {
                         }
                     };
 
-                    application_user_reset_password_token__
+                    application_user_reset_password_token_
                         .set_value(Generator::<ApplicationUserResetPasswordToken_Value>::generate())
                         .set_wrong_enter_tries_quantity(0)
                         .set_is_approved(false)
                         .set_expires_at(application_user_reset_password_token_expires_at);
-                }
 
-                if need_to_update {
+                    true
+                } else {
+                    false
+                };
+
+                if need_to_update_1 && need_to_update_2 {
                     if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_1>::update(
                         database_2_postgresql_connection,
-                        &application_user_reset_password_token__,
+                        &application_user_reset_password_token_,
                         application_user_.get_id(),
                         incoming.application_user_device_id.as_str()
                     ).await {
@@ -182,9 +188,40 @@ impl ActionProcessor {
 
                         return Err(error);
                     }
+                } else {
+                    if need_to_update_1 {
+                        if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_2>::update(
+                            database_2_postgresql_connection,
+                            &application_user_reset_password_token_,
+                            application_user_.get_id(),
+                            incoming.application_user_device_id.as_str()
+                        ).await {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    }
+
+                    if need_to_update_2 {
+                        if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_3>::update(
+                            database_2_postgresql_connection,
+                            &application_user_reset_password_token_,
+                            application_user_.get_id(),
+                            incoming.application_user_device_id.as_str()
+                        ).await {
+                            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                            return Err(error);
+                        }
+                    }
                 }
 
-                (application_user_reset_password_token__, can_send_)
+                (
+                    ApplicationUserResetPasswordToken_Aggregator::Second {
+                        application_user_reset_password_token: application_user_reset_password_token_
+                    },
+                    can_send_
+                )
             }
             None => {
                 let application_user_reset_password_token_expires_at = match Generator::<ApplicationUserResetPasswordToken_ExpiresAt>::generate() {
@@ -215,7 +252,7 @@ impl ActionProcessor {
                     application_user_reset_password_token_can_be_resent_from
                 };
 
-                let application_user_reset_password_token__ = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::create(
+                let application_user_reset_password_token_ = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::create(
                     database_2_postgresql_connection, insert
                 ).await {
                     Ok(application_user_reset_password_token___) => application_user_reset_password_token___,
@@ -226,16 +263,26 @@ impl ActionProcessor {
                     }
                 };
 
-                (application_user_reset_password_token__, true)
+                (
+                    ApplicationUserResetPasswordToken_Aggregator::First {
+                        application_user_reset_password_token: application_user_reset_password_token_
+                    },
+                    true
+                )
             }
         };
 
         if can_send {
+            let application_user_reset_password_token_value = match application_user_reset_password_token_aggregator {
+                ApplicationUserResetPasswordToken_Aggregator::First { application_user_reset_password_token: ref application_user_reset_password_token_} => application_user_reset_password_token_.get_value(),
+                ApplicationUserResetPasswordToken_Aggregator::Second { application_user_reset_password_token: ref application_user_reset_password_token_} => application_user_reset_password_token_.get_value(),
+            };
+
             if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_reset_password_token(
                 environment_configuration,
-                application_user_reset_password_token_.get_value(),
-                application_user_.get_email(),
-                application_user_reset_password_token_.get_application_user_device_id()
+                application_user_reset_password_token_value,
+                incoming.application_user_email.as_str(),
+                incoming.application_user_device_id.as_str()
             ) {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -243,10 +290,15 @@ impl ActionProcessor {
             }
         }
 
+        let application_user_reset_password_token_can_be_resent_from = match application_user_reset_password_token_aggregator {
+            ApplicationUserResetPasswordToken_Aggregator::First { application_user_reset_password_token: ref application_user_reset_password_token_} => application_user_reset_password_token_.get_can_be_resent_from(),
+            ApplicationUserResetPasswordToken_Aggregator::Second { application_user_reset_password_token: ref application_user_reset_password_token_} => application_user_reset_password_token_.get_can_be_resent_from(),
+        };
+
         let outcoming = Outcoming {
             application_user_id: application_user_.get_id(),
             verification_message_sent: can_send,
-            application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token_.get_can_be_resent_from()
+            application_user_reset_password_token_can_be_resent_from
         };
 
         return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
@@ -268,4 +320,13 @@ pub struct Outcoming {
     application_user_id: i64,
     verification_message_sent: bool,
     application_user_reset_password_token_can_be_resent_from: i64
+}
+
+enum ApplicationUserResetPasswordToken_Aggregator<'a> {
+    First {
+        application_user_reset_password_token: ApplicationUserResetPasswordToken<'a>
+    },
+    Second {
+        application_user_reset_password_token: ApplicationUserResetPasswordToken_1
+    }
 }

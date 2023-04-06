@@ -286,6 +286,25 @@ impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserResetPassword
     }
 }
 
+pub struct ApplicationUserResetPasswordToken_2 {
+    can_be_resent_from: i64,
+    _can_be_resent_from: PhantomData<CanBeResentFrom>
+}
+
+pub struct ApplicationUserResetPasswordToken_3 {
+    value: String,
+    _value: PhantomData<Value>,
+
+    wrong_enter_tries_quantity: i16,
+    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
+
+    is_approved: bool,
+    _is_approved: PhantomData<IsApproved>,
+
+    expires_at: i64,
+    _expires_at: PhantomData<ExpiresAt>
+}
+
 pub struct Value;
 
 pub struct WrongEnterTriesQuantity;
