@@ -391,7 +391,12 @@ impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_3
 
 pub struct ApplicationUserRegistrationToken_4 {
     wrong_enter_tries_quantity: i16,
-    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
+    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>
+}
+
+pub struct ApplicationUserRegistrationToken_5 {
+    is_approved: bool,
+    _is_approved: PhantomData<IsApproved>
 }
 
 pub struct Value;

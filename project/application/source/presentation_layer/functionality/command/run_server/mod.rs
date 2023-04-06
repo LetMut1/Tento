@@ -105,3 +105,4 @@ fn main() -> () {
 // - refresh_application_user_access_refresh_token
 // - register_by_first_step
 // - register_by_last_step
+// - register_by_second_step
