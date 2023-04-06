@@ -1,12 +1,16 @@
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
+use crate::domain_layer::functionality::service::getter::Getter;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 
 pub struct ApplicationUserResetPasswordToken_SendingOpportunityResolver;
 
 impl ApplicationUserResetPasswordToken_SendingOpportunityResolver {
-    pub fn can_send<'a>(application_user_reset_password_token: &'a ApplicationUserResetPasswordToken<'_>) -> bool {
+    pub fn can_send<'a, T>(subject: &'a T) -> bool
+    where
+        T: Getter<&'a T, ApplicationUserResetPasswordToken_CanBeResentFrom, i64>
+    {
         return !DateTimeResolver::unixtime_is_greater_or_equal_than_now(
-            application_user_reset_password_token.get_can_be_resent_from()
+            <T as Getter<&'_ T, ApplicationUserResetPasswordToken_CanBeResentFrom, i64>>::get(subject)
         );
     }
 }

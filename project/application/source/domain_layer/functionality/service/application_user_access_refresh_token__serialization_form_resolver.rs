@@ -32,7 +32,9 @@ impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
         );
         hmac.input(data.as_slice());
 
-        let application_user_access_refresh_token_deserialized_form = hex::encode(hmac.result().code());     // TODO  TODO TODO time attac// TODO TODO TODO TODO TODO Валидно ли кодирует ХЕКС, если это Байты МессаджПака?
+        let application_user_access_refresh_token_deserialized_form = hex::encode(
+            hmac.result().code()
+        );     // TODO  TODO TODO time attac// TODO TODO TODO TODO TODO Валидно ли кодирует ХЕКС, если это Байты МессаджПака?
 
         return Ok(application_user_access_refresh_token_deserialized_form);
     }

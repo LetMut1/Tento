@@ -1,3 +1,4 @@
+use crate::domain_layer::functionality::service::getter::Getter;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use super::application_user_device::ApplicationUserDevice_Id;
@@ -120,6 +121,48 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
+    }
+}
+
+impl<'a> Getter<&'a Self, ApplicationUser_Id, i64> for ApplicationUserResetPasswordToken<'_> {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.application_user_id;
+    }
+}
+
+impl<'a, 'b: 'a> Getter<&'a Self, ApplicationUserDevice_Id, &'a str> for ApplicationUserResetPasswordToken<'b> {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.application_user_device_id.as_ref();
+    }
+}
+
+impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserResetPasswordToken<'_> {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.value.as_str();
+    }
+}
+
+impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserResetPasswordToken<'_> {
+    fn get(subject: &'a Self) -> i16 {
+        return subject.wrong_enter_tries_quantity;
+    }
+}
+
+impl<'a> Getter<&'a Self, IsApproved, bool> for ApplicationUserResetPasswordToken<'_> {
+    fn get(subject: &'a Self) -> bool {
+        return subject.is_approved;
+    }
+}
+
+impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserResetPasswordToken<'_> {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.expires_at;
+    }
+}
+
+impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserResetPasswordToken<'_> {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.can_be_resent_from;
     }
 }
 
