@@ -21,7 +21,6 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::ApplicationUserResetPasswordToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::cloud_message_resolver::CloudMessageResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -91,7 +90,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_3>::find_1(
+        let application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken_3>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_id,
             incoming.application_user_device_id.as_str()
@@ -118,7 +117,7 @@ impl ActionProcessor {
         };
 
         if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
-            if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
+            if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                 database_2_postgresql_connection,
                 incoming.application_user_id,
                 incoming.application_user_device_id.as_str()
@@ -164,7 +163,7 @@ impl ActionProcessor {
             if application_user_reset_password_token_wrong_enter_tries_quantity <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 application_user_reset_password_token_.set_wrong_enter_tries_quantity(application_user_reset_password_token_wrong_enter_tries_quantity);
 
-                if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_4>::update(
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken_4>::update(
                     database_2_postgresql_connection,
                     &application_user_reset_password_token_,
                     incoming.application_user_id,
@@ -175,7 +174,7 @@ impl ActionProcessor {
                     return Err(error);
                 }
             } else {
-                if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                     database_2_postgresql_connection,
                     incoming.application_user_id,
                     incoming.application_user_device_id.as_str()
@@ -255,7 +254,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
+        if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
             database_2_postgresql_connection,
             incoming.application_user_id,
             incoming.application_user_device_id.as_str()
