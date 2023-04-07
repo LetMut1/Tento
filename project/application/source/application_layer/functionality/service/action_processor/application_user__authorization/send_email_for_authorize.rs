@@ -66,6 +66,7 @@ impl ActionProcessor {
                 );
             }
         };
+
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::find_1(
@@ -80,6 +81,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let mut application_user_authorization_token_ = match application_user_authorization_token {
             Some(application_user_authorization_token__) => application_user_authorization_token__,
             None => {
@@ -168,6 +170,7 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
+
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {

@@ -249,26 +249,10 @@ pub struct ApplicationUserAuthorizationToken_2 {
     _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
 
     expires_at: i64,
-    _expires_at: PhantomData<ExpiresAt>,
-}
-
-pub struct ApplicationUserAuthorizationToken_3 {
-    can_be_resent_from: i64,
-    _can_be_resent_from: PhantomData<CanBeResentFrom>,
-}
-
-pub struct ApplicationUserAuthorizationToken_4 {
-    value: String,
-    _value: PhantomData<Value>,
-
-    wrong_enter_tries_quantity: i16,
-    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
-
-    expires_at: i64,
     _expires_at: PhantomData<ExpiresAt>
 }
 
-impl ApplicationUserAuthorizationToken_4 {
+impl ApplicationUserAuthorizationToken_2 {
     pub fn new(
         value: String,
         wrong_enter_tries_quantity: i16,
@@ -315,27 +299,40 @@ impl ApplicationUserAuthorizationToken_4 {
     }
 }
 
-impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken_4 {
+impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken_2 {
     fn get(subject: &'a Self) -> &'a str {
         return subject.value.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken_4 {
+impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken_2 {
     fn get(subject: &'a Self) -> i16 {
         return subject.wrong_enter_tries_quantity;
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken_4 {
+impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken_2 {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }
 }
 
-pub struct ApplicationUserAuthorizationToken_5 {
+pub struct ApplicationUserAuthorizationToken_3 {
+    can_be_resent_from: i64,
+    _can_be_resent_from: PhantomData<CanBeResentFrom>,
+}
+
+pub struct ApplicationUserAuthorizationToken_4 {
     wrong_enter_tries_quantity: i16,
     _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>
+}
+
+pub struct ApplicationUserAuthorizationToken_5 {
+    expires_at: i64,
+    _expires_at: PhantomData<ExpiresAt>,
+
+    can_be_resent_from: i64,
+    _can_be_resent_from: PhantomData<CanBeResentFrom>,
 }
 
 pub struct Value;
