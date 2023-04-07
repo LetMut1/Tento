@@ -122,3 +122,4 @@ fn main() -> () {
 // - reset_password_by_first_step
 // - reset_password_by_last_step
 // - reset_password_by_second_step
+// - send_email_for_authorize

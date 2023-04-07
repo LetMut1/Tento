@@ -226,6 +226,32 @@ impl<'a> Getter<&'a Self, PasswordHash, &'a str> for ApplicationUser_4 {
     }
 }
 
+pub struct ApplicationUser_5 {
+    email: String,
+    _email: PhantomData<Email>,
+}
+
+impl ApplicationUser_5 {
+    pub fn new(
+        email: String
+    ) -> Self {
+        return Self {
+            email,
+            _email: PhantomData
+        };
+    }
+
+    pub fn get_email<'a>(&'a self) -> &'a str {
+        return self.email.as_str();
+    }
+}
+
+impl<'a> Getter<&'a Self, Email, &'a str> for ApplicationUser_5 {
+    fn get(subject: &'a Self) -> &'a str {
+        return subject.email.as_str();
+    }
+}
+
 pub struct Id;
 
 pub struct Email;
