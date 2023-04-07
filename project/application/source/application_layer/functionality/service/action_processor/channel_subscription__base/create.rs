@@ -15,7 +15,6 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::ChannelSubscription_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
@@ -156,7 +155,7 @@ impl ActionProcessor {
             channel_id: channel_.get_id()
         };
 
-        if let Err(mut error) = ChannelSubscription_PostgresqlRepository::<ChannelSubscription>::create(
+        if let Err(mut error) = PostgresqlRepository::<ChannelSubscription>::create(
             database_1_postgresql_connection, insert
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

@@ -18,7 +18,6 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::channel_inner_link__postgresql_repository::ChannelInnerLink1;
 use crate::infrastructure_layer::functionality::repository::channel_outer_link__postgresql_repository::ChannelOuterLink1;
-use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::ChannelSubscription_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
@@ -132,7 +131,7 @@ impl ActionProcessor {
         let channel_access_modifier = Channel_AccessModifierResolver::to_representation(channel_.get_access_modifier());
 
         if let Channel_AccessModifier::Close = channel_access_modifier {
-            let is_exist = match ChannelSubscription_PostgresqlRepository::<ChannelSubscription>::is_exist(
+            let is_exist = match PostgresqlRepository::<ChannelSubscription>::is_exist(
                 &*database_1_postgresql_pooled_connection, application_user_access_token.get_application_user_id(), channel_.get_id(),
             ).await {
                 Ok(is_exist_) => is_exist_,
