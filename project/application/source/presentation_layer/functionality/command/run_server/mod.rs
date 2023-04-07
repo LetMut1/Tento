@@ -109,18 +109,4 @@ fn main() -> () {
 
 
 // СДелал оптимизацию запросов для:
-// - authorize_by_first_step.
-// - authorize_by_last_step.
-// - chech_email_for_existing
-// - check_nickname_for_existing
-// - deauthorize_from_one_device
-// - deauthorize_from_all_device
-// - refresh_application_user_access_refresh_token
-// - register_by_first_step
-// - register_by_last_step
-// - register_by_second_step
-// - reset_password_by_first_step
-// - reset_password_by_last_step
-// - reset_password_by_second_step
-// - send_email_for_authorize
-// - send_email_for_register
+// - application_user_authorization

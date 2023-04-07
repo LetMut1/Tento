@@ -1,11 +1,12 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_1;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_2;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_6;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__sending_opportunity_resolver::ApplicationUserResetPasswordToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -55,6 +56,43 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
+        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
+            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser_5>::find_3(
+            &*database_1_postgresql_pooled_connection,
+            incoming.application_user_id
+        ).await {
+            Ok(application_user_) => application_user_,
+            Err(mut error) => {
+                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+                return Err(error);
+            }
+        };
+
+        let application_user_ = match application_user {
+            Some(application_user__) => application_user__,
+            None => {
+                return Ok(
+                    ArgumentResult::Ok {
+                        subject: ActionProcessorResult::UserWorkflowPrecedent {
+                            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound
+                        }
+                    }
+                );
+            }
+        };
+
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
@@ -66,10 +104,13 @@ impl ActionProcessor {
                 );
             }
         };
+
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::find_1(
-            database_2_postgresql_connection, incoming.application_user_id, incoming.application_user_device_id.as_str()
+        let application_user_reset_password_token = match ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_6>::find_1(
+            database_2_postgresql_connection,
+            incoming.application_user_id,
+            incoming.application_user_device_id.as_str()
         ).await {
             Ok(application_user_reset_password_token_) => application_user_reset_password_token_,
             Err(mut error) => {
@@ -95,8 +136,8 @@ impl ActionProcessor {
         if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_) {
             if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                 database_2_postgresql_connection,
-                application_user_reset_password_token_.get_application_user_id(),
-                application_user_reset_password_token_.get_application_user_device_id()
+                incoming.application_user_id,
+                incoming.application_user_device_id.as_str()
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -143,59 +184,22 @@ impl ActionProcessor {
 
         application_user_reset_password_token_.set_can_be_resent_from(application_user_reset_password_token_can_be_resent_from);
 
-        if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_1>::update(
+        if let Err(mut error) = ApplicationUserResetPasswordToken_PostgresqlRepository::<ApplicationUserResetPasswordToken_2>::update(
             database_2_postgresql_connection,
             &application_user_reset_password_token_,
-            application_user_reset_password_token_.get_application_user_id(),
-            application_user_reset_password_token_.get_application_user_device_id()
+            incoming.application_user_id,
+            incoming.application_user_device_id.as_str()
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
         }
 
-        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
-            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::ConnectionPoolPostgresqlError { bb8_postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::find_3(
-            &*database_1_postgresql_pooled_connection,
-            application_user_reset_password_token_.get_application_user_id()
-        ).await {
-            Ok(application_user_) => application_user_,
-            Err(mut error) => {
-                error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                return Err(error);
-            }
-        };
-
-        let application_user_ = match application_user {
-            Some(application_user__) => application_user__,
-            None => {
-                return Ok(
-                    ArgumentResult::Ok {
-                        subject: ActionProcessorResult::UserWorkflowPrecedent {
-                            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound
-                        }
-                    }
-                );
-            }
-        };
-
         if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_reset_password_token(
             environment_configuration,
             application_user_reset_password_token_.get_value(),
             application_user_.get_email(),
-            application_user_reset_password_token_.get_application_user_device_id()
+            incoming.application_user_device_id.as_str()
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
