@@ -34,7 +34,6 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
-use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::ApplicationUserRegistrationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -173,7 +172,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken_3>::find_1(
+        let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken_3>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_email.as_str(),
             incoming.application_user_device_id.as_str()
@@ -200,7 +199,7 @@ impl ActionProcessor {
         };
 
         if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_) {
-            if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+            if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 incoming.application_user_email.as_str(),
                 incoming.application_user_device_id.as_str()
@@ -246,7 +245,7 @@ impl ActionProcessor {
             if application_user_registration_token_wrong_enter_tries_quantity <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 application_user_registration_token_.set_wrong_enter_tries_quantity(application_user_registration_token_wrong_enter_tries_quantity);
 
-                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken_4>::update(
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken_4>::update(
                     database_2_postgresql_connection,
                     &application_user_registration_token_,
                     incoming.application_user_email.as_str(),
@@ -257,7 +256,7 @@ impl ActionProcessor {
                     return Err(error);
                 }
             } else {
-                if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                     database_2_postgresql_connection,
                     incoming.application_user_email.as_str(),
                     incoming.application_user_device_id.as_str()
@@ -286,7 +285,7 @@ impl ActionProcessor {
             }
         };
 
-        if let Err(mut error) = ApplicationUserRegistrationToken_PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+        if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
             database_2_postgresql_connection,
             incoming.application_user_email.as_str(),
             incoming.application_user_device_id.as_str()

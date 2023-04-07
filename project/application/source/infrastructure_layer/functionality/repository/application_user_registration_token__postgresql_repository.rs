@@ -20,14 +20,9 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use super::postgresql_repository::PostgresqlRepository;
 
-pub struct ApplicationUserRegistrationToken_PostgresqlRepository<E> {
-    _entity: PhantomData<E>
-}
-
-impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn create<'a>(
         database_2_connection: &'a Connection,
         insert: Insert<'a>
@@ -148,7 +143,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegist
     }
 }
 
-impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegistrationToken_1> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken_1> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -355,7 +350,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegist
     }
 }
 
-impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegistrationToken_2> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken_2> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -412,7 +407,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegist
     }
 }
 
-impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegistrationToken_3> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken_3> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -599,7 +594,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegist
     }
 }
 
-impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegistrationToken_4> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken_4> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -656,7 +651,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegist
     }
 }
 
-impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegistrationToken_5> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken_5> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -713,7 +708,7 @@ impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegist
     }
 }
 
-impl ApplicationUserRegistrationToken_PostgresqlRepository<ApplicationUserRegistrationToken_6> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken_6> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         application_user_email: &'a str,
