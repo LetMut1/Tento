@@ -1,7 +1,9 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink as EntityChannelInnerLink;
-use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink as EntityChannelOuterLink;
+use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
+use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
+use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
+use crate::domain_layer::data::entity::channel::Channel as EntityChannel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
@@ -105,7 +107,7 @@ impl ActionProcessor {
             }
         };
 
-        let channel = match Channel_PostgresqlRepository::find_1(
+        let channel = match Channel_PostgresqlRepository::<EntityChannel<'_>>::find_1(
             &*database_1_postgresql_pooled_connection, incoming.channel_id
         ).await {
             Ok(channel_) => channel_,
@@ -132,7 +134,7 @@ impl ActionProcessor {
         let channel_access_modifier = Channel_AccessModifierResolver::to_representation(channel_.get_access_modifier());
 
         if let Channel_AccessModifier::Close = channel_access_modifier {
-            let is_exist = match ChannelSubscription_PostgresqlRepository::is_exist(
+            let is_exist = match ChannelSubscription_PostgresqlRepository::<ChannelSubscription>::is_exist(
                 &*database_1_postgresql_pooled_connection, application_user_access_token.get_application_user_id(), channel_.get_id(),
             ).await {
                 Ok(is_exist_) => is_exist_,
@@ -155,8 +157,8 @@ impl ActionProcessor {
             }
         }
 
-        let channel_inner_link_registry = match ChannelInnerLink_PostgresqlRepository::find_1(
-            &*database_1_postgresql_pooled_connection, channel_.get_id(), EntityChannelInnerLink::MAXIMUM_QUANTITY
+        let channel_inner_link_registry = match ChannelInnerLink_PostgresqlRepository::<ChannelInnerLink>::find_1(
+            &*database_1_postgresql_pooled_connection, channel_.get_id(), ChannelInnerLink::MAXIMUM_QUANTITY
         ).await {
             Ok(channel_inner_link_registry_) => channel_inner_link_registry_,
             Err(mut error) => {
@@ -166,8 +168,8 @@ impl ActionProcessor {
             }
         };
 
-        let channel_outer_link_registry = match ChannelOuterLink_PostgresqlRepository::find_1(
-            &*database_1_postgresql_pooled_connection, channel_.get_id(), EntityChannelOuterLink::MAXIMUM_QUANTITY
+        let channel_outer_link_registry = match ChannelOuterLink_PostgresqlRepository::<ChannelOuterLink>::find_1(
+            &*database_1_postgresql_pooled_connection, channel_.get_id(), ChannelOuterLink::MAXIMUM_QUANTITY
         ).await {
             Ok(channel_outer_link_registry_) => channel_outer_link_registry_,
             Err(mut error) => {

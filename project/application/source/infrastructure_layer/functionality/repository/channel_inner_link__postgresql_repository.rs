@@ -9,10 +9,13 @@ use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
+use std::marker::PhantomData;
 
-pub struct ChannelInnerLink_PostgresqlRepository;
+pub struct ChannelInnerLink_PostgresqlRepository<E> {
+    _entity: PhantomData<E>
+}
 
-impl ChannelInnerLink_PostgresqlRepository {
+impl ChannelInnerLink_PostgresqlRepository<ChannelInnerLink> {
     pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<ChannelInnerLink, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

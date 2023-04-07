@@ -1,3 +1,4 @@
+use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::domain_layer::functionality::service::action_round_register__context_creator::ActionRoundRegister_ContextCreator;
 use crate::domain_layer::functionality::service::action_round_register__context_creator::CreateContext;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -111,7 +112,10 @@ impl ActionRoundResultWriter {
             action_round_register_context
         };
 
-        if let Err(mut error) = ActionRoundRegister_PostgresqlRepository::create(&*database_2_postgresql_pooled_connection, insert).await {
+        if let Err(mut error) = ActionRoundRegister_PostgresqlRepository::<ActionRoundRegister>::create(
+            &*database_2_postgresql_pooled_connection,
+            insert
+        ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);

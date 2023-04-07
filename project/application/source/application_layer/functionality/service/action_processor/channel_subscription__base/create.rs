@@ -1,7 +1,9 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_Id;
+use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -103,7 +105,7 @@ impl ActionProcessor {
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let channel = match Channel_PostgresqlRepository::find_1(
+        let channel = match Channel_PostgresqlRepository::<Channel<'_>>::find_1(
             database_1_postgresql_connection, incoming.channel_id
         ).await {
             Ok(channel_) => channel_,
@@ -154,7 +156,7 @@ impl ActionProcessor {
             channel_id: channel_.get_id()
         };
 
-        if let Err(mut error) = ChannelSubscription_PostgresqlRepository::create(
+        if let Err(mut error) = ChannelSubscription_PostgresqlRepository::<ChannelSubscription>::create(
             database_1_postgresql_connection, insert
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

@@ -10,6 +10,7 @@ use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
+use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
@@ -304,7 +305,7 @@ impl CreateFixturesProcessor {
                     );
                 }
 
-                let channel = match Channel_PostgresqlRepository::find_2(
+                let channel = match Channel_PostgresqlRepository::<Channel<'_>>::find_2(
                     database_1_postgresql_connection, channel_name.as_str()
                 ).await {
                     Ok(channel_) => channel_,
@@ -335,7 +336,7 @@ impl CreateFixturesProcessor {
                             channel_viewing_quantity: 0
                         };
 
-                        if let Err(mut error) = Channel_PostgresqlRepository::create(
+                        if let Err(mut error) = Channel_PostgresqlRepository::<Channel<'_>>::create(
                             database_1_postgresql_connection, channel_insert
                         ).await {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
