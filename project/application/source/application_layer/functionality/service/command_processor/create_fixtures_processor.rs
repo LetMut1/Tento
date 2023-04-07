@@ -24,7 +24,6 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
-use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Channel_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Insert as ChannelInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::environment_configuration__creator::EnvironmentConfiguration_Creator;
@@ -304,7 +303,7 @@ impl CreateFixturesProcessor {
                     );
                 }
 
-                let channel = match Channel_PostgresqlRepository::<Channel<'_>>::find_2(
+                let channel = match PostgresqlRepository::<Channel<'_>>::find_2(
                     database_1_postgresql_connection, channel_name.as_str()
                 ).await {
                     Ok(channel_) => channel_,
@@ -335,7 +334,7 @@ impl CreateFixturesProcessor {
                             channel_viewing_quantity: 0
                         };
 
-                        if let Err(mut error) = Channel_PostgresqlRepository::<Channel<'_>>::create(
+                        if let Err(mut error) = PostgresqlRepository::<Channel<'_>>::create(
                             database_1_postgresql_connection, channel_insert
                         ).await {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
