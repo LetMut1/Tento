@@ -31,7 +31,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::ApplicationUserAccessRefreshToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
@@ -117,7 +117,7 @@ impl ActionProcessor {
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let is_exist_1 = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
+        let is_exist_1 = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             database_1_postgresql_connection,
             incoming.application_user_nickname.as_str()
         ).await {
@@ -139,7 +139,7 @@ impl ActionProcessor {
             );
         }
 
-        let is_exist_2 = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
+        let is_exist_2 = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             database_1_postgresql_connection,
             incoming.application_user_email.as_str()
         ).await {
@@ -304,7 +304,7 @@ impl ActionProcessor {
             application_user_password_hash,
         };
 
-        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::create(
+        let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::create(
             database_1_postgresql_connection,
             application_user_insert
         ).await {

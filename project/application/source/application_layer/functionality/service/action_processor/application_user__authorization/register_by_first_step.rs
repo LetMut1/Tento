@@ -22,9 +22,9 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::ApplicationUserRegistrationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -82,7 +82,7 @@ impl ActionProcessor {
             }
         };
 
-        let is_exist_2 = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
+        let is_exist_2 = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             &*database_1_postgresql_pooled_connection,
             incoming.application_user_email.as_str()
         ).await {

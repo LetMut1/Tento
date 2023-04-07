@@ -20,7 +20,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::ApplicationUserAccessRefreshToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::ApplicationUserResetPasswordToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::cloud_message_resolver::CloudMessageResolver;
@@ -210,7 +210,7 @@ impl ActionProcessor {
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser_4>::find_3(
+        let application_user = match PostgresqlRepository::<ApplicationUser_4>::find_3(
             database_1_postgresql_connection,
             incoming.application_user_id
         ).await {
@@ -246,7 +246,7 @@ impl ActionProcessor {
 
         application_user_.set_password_hash(password_hash);
 
-        if let Err(mut error) = ApplicationUser_PostgresqlRepository::<ApplicationUser_4>::update(
+        if let Err(mut error) = PostgresqlRepository::<ApplicationUser_4>::update(
             database_1_postgresql_connection,
             &application_user_,
             incoming.application_user_id

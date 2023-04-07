@@ -15,14 +15,9 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use super::postgresql_repository::PostgresqlRepository;
 
-pub struct ApplicationUser_PostgresqlRepository<E> {
-    _entity: PhantomData<E>
-}
-
-impl ApplicationUser_PostgresqlRepository<ApplicationUser<'_>> {
+impl PostgresqlRepository<ApplicationUser<'_>> {
     pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<ApplicationUser<'static>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -361,7 +356,7 @@ impl ApplicationUser_PostgresqlRepository<ApplicationUser<'_>> {
     }
 }
 
-impl ApplicationUser_PostgresqlRepository<ApplicationUser_1> {
+impl PostgresqlRepository<ApplicationUser_1> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         application_user_nickname: &'a str
@@ -458,7 +453,7 @@ impl ApplicationUser_PostgresqlRepository<ApplicationUser_1> {
     }
 }
 
-impl ApplicationUser_PostgresqlRepository<ApplicationUser_2> {
+impl PostgresqlRepository<ApplicationUser_2> {
     pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
         application_user_email: &'a str
@@ -541,7 +536,7 @@ impl ApplicationUser_PostgresqlRepository<ApplicationUser_2> {
     }
 }
 
-impl ApplicationUser_PostgresqlRepository<ApplicationUser_3> {
+impl PostgresqlRepository<ApplicationUser_3> {
     pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
         application_user_email: &'a str
@@ -610,7 +605,7 @@ impl ApplicationUser_PostgresqlRepository<ApplicationUser_3> {
     }
 }
 
-impl ApplicationUser_PostgresqlRepository<ApplicationUser_4> {
+impl PostgresqlRepository<ApplicationUser_4> {
     pub async fn update<'a, T>(
         database_1_connection: &'a Connection,
         subject: &'a T,
@@ -732,7 +727,7 @@ impl ApplicationUser_PostgresqlRepository<ApplicationUser_4> {
     }
 }
 
-impl ApplicationUser_PostgresqlRepository<ApplicationUser_5> {
+impl PostgresqlRepository<ApplicationUser_5> {
     pub async fn find_3<'a>(
         database_1_connection: &'a Connection,
         application_user_id: i64

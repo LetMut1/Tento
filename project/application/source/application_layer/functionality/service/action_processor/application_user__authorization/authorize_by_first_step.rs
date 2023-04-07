@@ -26,7 +26,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::ApplicationUserAuthorizationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
@@ -91,7 +91,7 @@ impl ActionProcessor {
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         let application_user_aggregator = if is_valid_email {
-            let application_user_ = match ApplicationUser_PostgresqlRepository::<ApplicationUser_2>::find_2(
+            let application_user_ = match PostgresqlRepository::<ApplicationUser_2>::find_2(
                 database_1_postgresql_connection,
                 incoming.application_user_email_or_application_user_nickname.as_str()
             ).await {
@@ -119,7 +119,7 @@ impl ActionProcessor {
             ApplicationUser_Aggregator::Second { application_user: application_user__ }
         } else {
             if Validator::<ApplicationUser_Nickname>::is_valid(incoming.application_user_email_or_application_user_nickname.as_str()) {
-                let application_user_ = match ApplicationUser_PostgresqlRepository::<ApplicationUser_1>::find_1(
+                let application_user_ = match PostgresqlRepository::<ApplicationUser_1>::find_1(
                     database_1_postgresql_connection,
                     incoming.application_user_email_or_application_user_nickname.as_str()
                 ).await {

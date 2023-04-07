@@ -22,7 +22,7 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
-use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::ApplicationUserDevice_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
@@ -191,7 +191,7 @@ impl CreateFixturesProcessor {
                 );
             }
 
-            let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::find_1(
+            let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
                 database_1_postgresql_connection, application_user_nickname.as_str()
             ).await {
                 Ok(application_user_) => application_user_,
@@ -211,7 +211,7 @@ impl CreateFixturesProcessor {
                         application_user_password_hash: application_user_password_hash.clone(),
                     };
 
-                    let application_user__ = match ApplicationUser_PostgresqlRepository::<ApplicationUser<'_>>::create(database_1_postgresql_connection, application_user_insert).await {
+                    let application_user__ = match PostgresqlRepository::<ApplicationUser<'_>>::create(database_1_postgresql_connection, application_user_insert).await {
                         Ok(application_user_) => application_user_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

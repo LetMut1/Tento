@@ -22,7 +22,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::ApplicationUser_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::ApplicationUserResetPasswordToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
@@ -82,7 +82,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user = match ApplicationUser_PostgresqlRepository::<ApplicationUser_3>::find_2(
+        let application_user = match PostgresqlRepository::<ApplicationUser_3>::find_2(
             &*database_1_postgresql_pooled_connection,
             incoming.application_user_email.as_str()
         ).await {
