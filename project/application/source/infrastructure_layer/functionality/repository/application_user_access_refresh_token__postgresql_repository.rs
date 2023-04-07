@@ -15,6 +15,7 @@ use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use std::borrow::Cow;
 use std::marker::PhantomData;
+use super::postgresql_repository::PostgresqlRepository;
 
 pub struct ApplicationUserAccessRefreshToken_PostgresqlRepository<E> {
     _entity: PhantomData<E>

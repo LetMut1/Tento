@@ -10,3 +10,4 @@ pub mod channel_inner_link__postgresql_repository;
 pub mod channel_outer_link__postgresql_repository;
 pub mod channel_subscription__postgresql_repository;
 pub mod common_postgresql_repository;
+pub mod postgresql_repository;

@@ -8,6 +8,7 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use std::marker::PhantomData;
+use super::postgresql_repository::PostgresqlRepository;
 
 pub struct ChannelSubscription_PostgresqlRepository<E> {
     _entity: PhantomData<E>

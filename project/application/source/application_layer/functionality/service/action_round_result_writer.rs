@@ -6,8 +6,8 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::action_round_register__postgresql_repository::ActionRoundRegister_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::action_round_register__postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::converter::Convert;
 use crate::infrastructure_layer::functionality::service::converter::Converter;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -112,7 +112,7 @@ impl ActionRoundResultWriter {
             action_round_register_context
         };
 
-        if let Err(mut error) = ActionRoundRegister_PostgresqlRepository::<ActionRoundRegister>::create(
+        if let Err(mut error) = PostgresqlRepository::<ActionRoundRegister>::create(
             &*database_2_postgresql_pooled_connection,
             insert
         ).await {

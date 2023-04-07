@@ -10,6 +10,7 @@ use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use std::marker::PhantomData;
+use super::postgresql_repository::PostgresqlRepository;
 
 pub struct ChannelInnerLink_PostgresqlRepository<E> {
     _entity: PhantomData<E>
