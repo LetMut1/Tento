@@ -16,7 +16,6 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::channel_inner_link__postgresql_repository::ChannelInnerLink_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::channel_inner_link__postgresql_repository::ChannelInnerLink1;
 use crate::infrastructure_layer::functionality::repository::channel_outer_link__postgresql_repository::ChannelOuterLink_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::channel_outer_link__postgresql_repository::ChannelOuterLink1;
@@ -157,7 +156,7 @@ impl ActionProcessor {
             }
         }
 
-        let channel_inner_link_registry = match ChannelInnerLink_PostgresqlRepository::<ChannelInnerLink>::find_1(
+        let channel_inner_link_registry = match PostgresqlRepository::<ChannelInnerLink>::find_1(
             &*database_1_postgresql_pooled_connection, channel_.get_id(), ChannelInnerLink::MAXIMUM_QUANTITY
         ).await {
             Ok(channel_inner_link_registry_) => channel_inner_link_registry_,
