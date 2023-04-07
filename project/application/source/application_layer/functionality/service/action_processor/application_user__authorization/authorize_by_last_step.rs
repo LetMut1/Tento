@@ -29,7 +29,6 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::ApplicationUserAccessRefreshToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::ApplicationUserAuthorizationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::ApplicationUserDevice_PostgresqlRepository;
@@ -244,7 +243,7 @@ impl ActionProcessor {
             expires_at
         );
 
-        let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
+        let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_id,
             incoming.application_user_device_id.as_str()
@@ -280,7 +279,7 @@ impl ActionProcessor {
                     .set_expires_at(application_user_access_refresh_token_expires_at)
                     .set_updated_at(application_user_access_refresh_token_updated_at);
 
-                if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken_1>::update(
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken_1>::update(
                     database_2_postgresql_connection,
                     &application_user_access_refresh_token__,
                     incoming.application_user_id,
@@ -303,7 +302,7 @@ impl ActionProcessor {
                     application_user_access_refresh_token_updated_at
                 };
 
-                let application_user_access_refresh_token__ = match ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
+                let application_user_access_refresh_token__ = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
                     database_2_postgresql_connection,
                     application_user_access_refresh_token_insert
                 ).await {

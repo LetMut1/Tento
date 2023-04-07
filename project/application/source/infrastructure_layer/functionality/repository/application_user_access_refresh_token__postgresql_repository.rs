@@ -14,14 +14,9 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use super::postgresql_repository::PostgresqlRepository;
 
-pub struct ApplicationUserAccessRefreshToken_PostgresqlRepository<E> {
-    _entity: PhantomData<E>
-}
-
-impl ApplicationUserAccessRefreshToken_PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
+impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub async fn create<'a, 'b>(database_2_connection: &'a Connection, insert: Insert<'b>) -> Result<ApplicationUserAccessRefreshToken<'b>, ErrorAuditor> {
         let application_user_device_id_ = insert.application_user_device_id.as_ref();
 
@@ -286,7 +281,7 @@ impl ApplicationUserAccessRefreshToken_PostgresqlRepository<ApplicationUserAcces
     }
 }
 
-impl ApplicationUserAccessRefreshToken_PostgresqlRepository<ApplicationUserAccessRefreshToken_1> {
+impl PostgresqlRepository<ApplicationUserAccessRefreshToken_1> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,

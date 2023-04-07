@@ -20,7 +20,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::ApplicationUserAccessRefreshToken_PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
@@ -83,7 +83,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_access_refresh_token = match ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
+        let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection, application_user_access_token_.get_application_user_id(), application_user_access_token_.get_application_user_device_id()
         ).await {
             Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
@@ -126,7 +126,7 @@ impl ActionProcessor {
         }
 
         if ApplicationUserAccessRefreshToken_ExpirationTimeResolver::is_expired(&application_user_access_refresh_token_) {
-            if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
+            if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 application_user_access_refresh_token_.get_application_user_id(),
                 application_user_access_refresh_token_.get_application_user_device_id()
@@ -175,7 +175,7 @@ impl ActionProcessor {
             .set_expires_at(application_user_access_refresh_token_expires_at)
             .set_updated_at(Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate());
 
-        if let Err(mut error) = ApplicationUserAccessRefreshToken_PostgresqlRepository::<ApplicationUserAccessRefreshToken_1>::update(
+        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken_1>::update(
             database_2_postgresql_connection,
             &application_user_access_refresh_token_,
             application_user_access_token_.get_application_user_id(),
