@@ -20,7 +20,6 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::repository::application_user_authorization_token__postgresql_repository::ApplicationUserAuthorizationToken_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
@@ -107,7 +106,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token = match ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken_5>::find_1(
+        let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken_5>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_id,
             incoming.application_user_device_id.as_str()
@@ -134,7 +133,7 @@ impl ActionProcessor {
         };
 
         if ApplicationUserAuthorizationToken_ExpirationTimeResolver::is_expired(&application_user_authorization_token_) {
-            if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
+            if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 incoming.application_user_id,
                 incoming.application_user_device_id.as_str()
@@ -174,7 +173,7 @@ impl ActionProcessor {
 
         application_user_authorization_token_.set_can_be_resent_from(application_user_authorization_token_can_be_resent_from);
 
-        if let Err(mut error) = ApplicationUserAuthorizationToken_PostgresqlRepository::<ApplicationUserAuthorizationToken_3>::update(
+        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken_3>::update(
             database_2_postgresql_connection,
             &application_user_authorization_token_,
             incoming.application_user_id,

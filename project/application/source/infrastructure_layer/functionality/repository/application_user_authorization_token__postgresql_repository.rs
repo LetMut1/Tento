@@ -18,14 +18,9 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use super::postgresql_repository::PostgresqlRepository;
 
-pub struct ApplicationUserAuthorizationToken_PostgresqlRepository<E> {
-    _entity: PhantomData<E>
-}
-
-impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     pub async fn create<'a>(
         database_2_connection: &'a Connection,
         insert: Insert<'a>
@@ -140,7 +135,7 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAutho
     }
 }
 
-impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -327,7 +322,7 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAutho
     }
 }
 
-impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -494,7 +489,7 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAutho
     }
 }
 
-impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAuthorizationToken_3> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken_3> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -551,7 +546,7 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAutho
     }
 }
 
-impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAuthorizationToken_4> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken_4> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -608,7 +603,7 @@ impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAutho
     }
 }
 
-impl ApplicationUserAuthorizationToken_PostgresqlRepository<ApplicationUserAuthorizationToken_5> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken_5> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         application_user_id: i64,
