@@ -30,7 +30,6 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
-use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::ApplicationUserDevice_PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -356,7 +355,7 @@ impl ActionProcessor {
             application_user_id: incoming.application_user_id
         };
 
-        if let Err(mut error) = ApplicationUserDevice_PostgresqlRepository::<ApplicationUserDevice>::create(
+        if let Err(mut error) = PostgresqlRepository::<ApplicationUserDevice>::create(
             database_1_postgresql_connection,
             application_user_device_insert
         ).await {
