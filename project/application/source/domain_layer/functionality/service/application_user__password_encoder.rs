@@ -5,13 +5,12 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as InfrastructureEncoder;
-use crate::infrastructure_layer::functionality::service::encoder::Encoder_;
 use crate::infrastructure_layer::functionality::service::encoder::Argon2Id;
 use super::encoder::Encoder;
 
 impl Encoder<ApplicationUser_Password> {
     pub fn encode<'a>(application_user_password: &'a str) -> Result<String, ErrorAuditor> {
-        let application_user_password_hash = match <InfrastructureEncoder as Encoder_<Argon2Id>>::encode(
+        let application_user_password_hash = match InfrastructureEncoder::<Argon2Id>::encode(
             application_user_password.as_bytes()
         ) {
             Ok(application_user_password_hash_) => application_user_password_hash_,
@@ -29,7 +28,7 @@ impl Encoder<ApplicationUser_Password> {
     }
 
     pub fn is_valid<'a>(application_user_password: &'a str, application_user_password_hash: &'a str) -> Result<bool, ErrorAuditor> {
-        let value = match <InfrastructureEncoder as Encoder_<Argon2Id>>::is_valid(
+        let value = match InfrastructureEncoder::<Argon2Id>::is_valid(
             application_user_password.as_bytes(),
             application_user_password_hash
         ) {
