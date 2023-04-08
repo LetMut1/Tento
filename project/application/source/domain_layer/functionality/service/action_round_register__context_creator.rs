@@ -1,7 +1,7 @@
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
-use crate::infrastructure_layer::functionality::service::displayer::Display;
-use crate::infrastructure_layer::functionality::service::displayer::Displayer;
+use crate::infrastructure_layer::functionality::service::formatter::Format;
+use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 
 pub struct ActionRoundRegister_ContextCreator;
 
@@ -11,12 +11,12 @@ pub trait CreateContext<T> {
 
 impl CreateContext<InvalidArgument> for ActionRoundRegister_ContextCreator {
     fn create<'a>(from: &'a InvalidArgument) -> String {
-        return Displayer::display(from);
+        return Formatter::prepare(from);
     }
 }
 
 impl CreateContext<ErrorAuditor> for ActionRoundRegister_ContextCreator {
     fn create<'a>(from: &'a ErrorAuditor) -> String {
-        return Displayer::display(from);
+        return Formatter::prepare(from);
     }
 }

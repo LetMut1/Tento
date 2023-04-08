@@ -1,12 +1,12 @@
 extern crate application;
 
 use application::application_layer::functionality::service::command_processor::run_server_processor::RunServerProcessor;
-use application::infrastructure_layer::functionality::service::displayer::Display;
-use application::infrastructure_layer::functionality::service::displayer::Displayer;
+use application::infrastructure_layer::functionality::service::formatter::Format;
+use application::infrastructure_layer::functionality::service::formatter::Formatter;
 
 fn main() -> () {
     if let Err(error) = RunServerProcessor::process() {
-        println!("{}", Displayer::display(&error));
+        println!("{}", Formatter::prepare(&error));
     }
 
     return ();

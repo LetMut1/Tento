@@ -5,20 +5,22 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 
-pub struct Displayer;
+pub struct Formatter;
 
-pub trait Display<T> {
-    fn display<'a>(subject: &'a T) -> String;
+pub trait Format<T> {
+    fn prepare<'a>(subject: &'a T) -> String;
 }
 
-impl Display<ErrorAuditor> for Displayer {
-    fn display<'a>(subject: &'a ErrorAuditor) -> String {
+impl Format<ErrorAuditor> for Formatter {
+    fn prepare<'a>(subject: &'a ErrorAuditor) -> String {
         let mut backtrace_message = String::new();
+
         '_a: for (index, backtrace_part) in subject
             .get_backtrace()
             .get_backtrace_part_registry()
             .iter()
             .enumerate() {
+
             if index == 0 {
                 backtrace_message = match backtrace_part.get_context() {
                     Some(context) => {
@@ -83,8 +85,8 @@ impl Display<ErrorAuditor> for Displayer {
     }
 }
 
-impl Display<InvalidArgument> for Displayer {
-    fn display<'a>(subject: &'a InvalidArgument) -> String {
+impl Format<InvalidArgument> for Formatter {
+    fn prepare<'a>(subject: &'a InvalidArgument) -> String {
         let message_part = match *subject {
             InvalidArgument::ApplicationUser_AccessModifier => "AccessModifier",
             InvalidArgument::ApplicationUser_Email => "ApplicationUser_Email",

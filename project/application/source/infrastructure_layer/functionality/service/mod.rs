@@ -4,7 +4,7 @@ pub mod cloud_message_resolver;
 pub mod converter;
 pub mod counter;
 pub mod date_time_resolver;
-pub mod displayer;
+pub mod formatter;
 pub mod email_sender;
 pub mod environment_configuration__creator;
 pub mod number_row_generator;
