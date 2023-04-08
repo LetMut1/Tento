@@ -24,6 +24,7 @@ pub mod channel__access_modifier_resolver;
 pub mod channel__visability_modifier_resolver;
 pub mod channel_validator;
 pub mod encoder;
+pub mod expiration_time_resolver;
 pub mod generator;
 pub mod getter;
 pub mod validator;
