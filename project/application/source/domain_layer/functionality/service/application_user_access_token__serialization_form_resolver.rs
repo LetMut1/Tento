@@ -94,7 +94,10 @@ impl ApplicationUserAccessToken_Encoder {
             Sha512::new(),
             environment_configuration.get_security_auat_signature_encoding_private_key().as_bytes()
         );
-        hmac.input(application_user_access_token_serialized.as_bytes());
+
+        hmac.input(
+            application_user_access_token_serialized.as_bytes()
+        );
 
         return hex::encode(hmac.result().code());   // TODO TIme attack
     }
@@ -104,7 +107,7 @@ impl ApplicationUserAccessToken_Encoder {
         application_user_access_token_serialized: &'a str,
         application_user_access_token_signature: &'a str
     ) -> bool {
-        return Self::create(environment_configuration, application_user_access_token_serialized).as_bytes()
-            == application_user_access_token_signature.as_bytes();
+        return Self::create(environment_configuration, application_user_access_token_serialized).as_str()
+            == application_user_access_token_signature;
     }
 }

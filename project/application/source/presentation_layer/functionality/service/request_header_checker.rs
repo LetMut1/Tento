@@ -15,6 +15,7 @@ impl RequestHeaderChecker {
                 return false;
             }
         };
+
         if header_value_content_type.as_bytes() != ActionResponseCreator::HEADER_VALUE_CONTENT_TYPE.as_bytes() {
             return false;
         }
@@ -25,6 +26,7 @@ impl RequestHeaderChecker {
                 return false;
             }
         };
+
         if header_value_x_content_type_options.as_bytes() != ActionResponseCreator::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS.as_bytes() {
             return false;
         }

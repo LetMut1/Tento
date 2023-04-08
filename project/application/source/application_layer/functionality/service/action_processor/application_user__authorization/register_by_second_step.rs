@@ -144,7 +144,7 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_registration_token_.get_value().as_bytes() != incoming.application_user_registration_token_value.as_bytes() {
+        if application_user_registration_token_.get_value() != incoming.application_user_registration_token_value.as_str() {
             let application_user_registration_token_wrong_enter_tries_quantity = match application_user_registration_token_.get_wrong_enter_tries_quantity()
                 .checked_add(1) {
                 Some(application_user_registration_token_wrong_enter_tries_quantity_) => application_user_registration_token_wrong_enter_tries_quantity_,

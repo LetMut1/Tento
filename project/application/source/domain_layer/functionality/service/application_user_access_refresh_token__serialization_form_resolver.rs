@@ -56,7 +56,7 @@ impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
         };
 
         return Ok(
-            application_user_access_refresh_token_deserialized_form_.as_bytes() == application_user_access_refresh_token_deserialized_form.as_bytes()
+            application_user_access_refresh_token_deserialized_form_.as_str() == application_user_access_refresh_token_deserialized_form
         );
     }
 }

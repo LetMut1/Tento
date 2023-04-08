@@ -121,7 +121,7 @@ impl ActionProcessor {
         };
 
         if !is_valid
-            || application_user_access_token_.get_id().as_bytes() != application_user_access_refresh_token_.get_application_user_access_token_id().as_bytes() {
+            || application_user_access_token_.get_id() != application_user_access_refresh_token_.get_application_user_access_token_id() {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm });
         }
 

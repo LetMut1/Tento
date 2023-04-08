@@ -43,9 +43,11 @@ impl ApplicationUser_PasswordEncoder {      // TODO отрабатывает з�
     fn encode<'a>(application_user_password: &'a str) -> Result<String, ErrorAuditor> {                          // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.
         let config = Config::default();   // TODO настроить конфиг
 
+        let salt = Uuid::new_v4();
+
         let value = match argon2::hash_encoded(
             application_user_password.as_bytes(),
-            Uuid::new_v4().as_bytes().as_slice(),
+            salt.as_bytes().as_slice(),
             &config
         ) {
             Ok(value_) => value_,

@@ -137,7 +137,7 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_reset_password_token_.get_value().as_bytes() != incoming.application_user_reset_password_token_value.as_bytes() {
+        if application_user_reset_password_token_.get_value() != incoming.application_user_reset_password_token_value.as_str() {
             let application_user_reset_password_token_wrong_enter_tries_quantity = match application_user_reset_password_token_.get_wrong_enter_tries_quantity()
                 .checked_add(1) {
                 Some(application_user_reset_password_token_wrong_enter_tries_quantity_) => application_user_reset_password_token_wrong_enter_tries_quantity_,
