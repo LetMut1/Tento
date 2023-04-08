@@ -1,3 +1,4 @@
+use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
@@ -59,6 +60,12 @@ impl<'a> ApplicationUserAccessToken<'a> {
 
     pub fn get_expires_at<'b>(&'b self) -> i64 {
         return self.expires_at;
+    }
+}
+
+impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAccessToken<'_> {
+    fn get(subject: &'a Self) -> i64 {
+        return subject.expires_at;
     }
 }
 

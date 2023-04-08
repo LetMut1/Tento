@@ -1,10 +1,16 @@
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::functionality::service::getter::Getter;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
+use super::expiration_time_resolver::ExpirationTimeResolver;
 
-pub struct ApplicationUserAccessToken_ExpirationTimeResolver;
-
-impl ApplicationUserAccessToken_ExpirationTimeResolver {
-    pub fn is_expired<'a>(application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> bool {
-        return !DateTimeResolver::unixtime_is_greater_or_equal_than_now(application_user_access_token.get_expires_at());
+impl ExpirationTimeResolver<ApplicationUserAccessToken<'_>> {
+    pub fn is_expired<'a, T>(subject: &'a T) -> bool
+    where
+        T: Getter<&'a T, ApplicationUserAccessToken_ExpiresAt, i64>
+    {
+        return !DateTimeResolver::unixtime_is_greater_or_equal_than_now(
+            <T as Getter<&'_ T, ApplicationUserAccessToken_ExpiresAt, i64>>::get(subject)
+        );
     }
 }

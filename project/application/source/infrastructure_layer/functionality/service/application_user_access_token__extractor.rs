@@ -1,6 +1,6 @@
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::functionality::service::application_user_access_token__expiration_time_resolver::ApplicationUserAccessToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
+use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -23,6 +23,7 @@ impl ApplicationUserAccessToken_Extractor {
                 return Err(error);
             }
         };
+
         let application_user_access_token_ = match application_user_access_token {
             ArgumentResult::Ok { subject: application_user_access_token__ } => application_user_access_token__,
             ArgumentResult::InvalidArgument { invalid_argument } => {
@@ -30,7 +31,7 @@ impl ApplicationUserAccessToken_Extractor {
             }
         };
 
-        if ApplicationUserAccessToken_ExpirationTimeResolver::is_expired(&application_user_access_token_) {
+        if ExpirationTimeResolver::<ApplicationUserAccessToken<'_>>::is_expired(&application_user_access_token_) {
             return Ok(ArgumentResult::Ok { subject: ExtractorResult::ApplicationUserAccessTokenAlreadyExpired });
         }
 

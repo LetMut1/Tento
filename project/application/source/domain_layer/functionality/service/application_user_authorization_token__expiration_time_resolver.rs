@@ -1,10 +1,10 @@
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::functionality::service::getter::Getter;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
+use super::expiration_time_resolver::ExpirationTimeResolver;
 
-pub struct ApplicationUserAuthorizationToken_ExpirationTimeResolver;
-
-impl ApplicationUserAuthorizationToken_ExpirationTimeResolver {
+impl ExpirationTimeResolver<ApplicationUserAuthorizationToken<'_>> {
     pub fn is_expired<'a, T>(subject: &'a T) -> bool
     where
         T: Getter<&'a T, ApplicationUserAuthorizationToken_ExpiresAt, i64>

@@ -10,8 +10,8 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_3;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__sending_opportunity_resolver::ApplicationUserResetPasswordToken_SendingOpportunityResolver;
+use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -154,7 +154,7 @@ impl ActionProcessor {
                     (false, false)
                 };
 
-                let need_to_update_2 = if ApplicationUserResetPasswordToken_ExpirationTimeResolver::is_expired(&application_user_reset_password_token_)
+                let need_to_update_2 = if ExpirationTimeResolver::<ApplicationUserResetPasswordToken<'_>>::is_expired(&application_user_reset_password_token_)
                     || application_user_reset_password_token_.get_is_approved() {
                     let application_user_reset_password_token_expires_at = match Generator::<ApplicationUserResetPasswordToken_ExpiresAt>::generate() {
                         Ok(application_user_reset_password_token_expires_at_) => application_user_reset_password_token_expires_at_,

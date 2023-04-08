@@ -10,8 +10,8 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::functionality::service::application_user_registration_token__expiration_time_resolver::ApplicationUserRegistrationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_registration_token__sending_opportunity_resolver::ApplicationUserRegistrationToken_SendingOpportunityResolver;
+use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -151,7 +151,7 @@ impl ActionProcessor {
                     (false, false)
                 };
 
-                let need_to_update_2 = if ApplicationUserRegistrationToken_ExpirationTimeResolver::is_expired(&application_user_registration_token_)
+                let need_to_update_2 = if ExpirationTimeResolver::<ApplicationUserRegistrationToken<'_>>::is_expired(&application_user_registration_token_)
                     || application_user_registration_token_.get_is_approved() {
                     let application_user_registration_token_expires_at = match Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate() {
                         Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
