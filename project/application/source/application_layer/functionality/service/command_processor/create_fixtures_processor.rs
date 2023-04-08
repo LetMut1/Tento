@@ -190,7 +190,8 @@ impl CreateFixturesProcessor {
             }
 
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
-                database_1_postgresql_connection, application_user_nickname.as_str()
+                database_1_postgresql_connection,
+                application_user_nickname.as_str()
             ).await {
                 Ok(application_user_) => application_user_,
                 Err(mut error) => {
