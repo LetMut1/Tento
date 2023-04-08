@@ -12,10 +12,9 @@ use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
+use super::postgresql_repository::PostgresqlRepository;
 
-pub struct CommonPostgresqlRepository;
-
-impl CommonPostgresqlRepository {
+impl PostgresqlRepository<Common1> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         application_user_id: i64,

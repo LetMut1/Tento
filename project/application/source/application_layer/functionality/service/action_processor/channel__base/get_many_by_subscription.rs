@@ -11,7 +11,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::Common1;
-use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::CommonPostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -105,7 +105,7 @@ impl ActionProcessor {
             }
         };
 
-        let common_registry = match CommonPostgresqlRepository::find_3(
+        let common_registry = match PostgresqlRepository::<Common1>::find_3(
             &*database_1_postgresql_pooled_connection,
             application_user_access_token.get_application_user_id(),
             incoming.requery_channel_id,
