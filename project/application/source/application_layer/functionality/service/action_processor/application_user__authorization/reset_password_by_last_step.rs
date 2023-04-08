@@ -9,8 +9,8 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user::ApplicationUser_4;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
-use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__expiration_time_resolver::ApplicationUserResetPasswordToken_ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -233,7 +233,9 @@ impl ActionProcessor {
             }
         };
 
-        let password_hash = match ApplicationUser_PasswordHashResolver::create(incoming.application_user_password.as_str()) {
+        let password_hash = match Encoder::<ApplicationUser_Password>::encode(
+            incoming.application_user_password.as_str()
+        ) {
             Ok(password_hash_) => password_hash_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

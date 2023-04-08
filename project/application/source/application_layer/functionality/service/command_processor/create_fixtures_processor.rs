@@ -11,7 +11,7 @@ use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::data::entity::channel::Channel;
-use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
+use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -127,7 +127,7 @@ impl CreateFixturesProcessor {
             );
         }
 
-        let application_user_password_hash = match ApplicationUser_PasswordHashResolver::create(Self::APPLICATION_USER__PASSWORD) {
+        let application_user_password_hash = match Encoder::<ApplicationUser_Password>::encode(Self::APPLICATION_USER__PASSWORD) {
             Ok(application_user_password_hash_) => application_user_password_hash_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

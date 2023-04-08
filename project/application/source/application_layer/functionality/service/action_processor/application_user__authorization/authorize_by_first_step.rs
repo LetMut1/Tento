@@ -13,9 +13,9 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_2;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
-use crate::domain_layer::functionality::service::application_user__password_hash_resolver::ApplicationUser_PasswordHashResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__expiration_time_resolver::ApplicationUserAuthorizationToken_ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::application_user_authorization_token__sending_opportunity_resolver::ApplicationUserAuthorizationToken_SendingOpportunityResolver;
+use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -154,7 +154,7 @@ impl ActionProcessor {
             ApplicationUser_Aggregator::Second { ref application_user } => application_user.get_password_hash()
         };
 
-        let is_valid = match ApplicationUser_PasswordHashResolver::is_valid(
+        let is_valid = match Encoder::<ApplicationUser_Password>::is_valid(
             incoming.application_user_password.as_str(),
             application_user_password_hash
         ) {

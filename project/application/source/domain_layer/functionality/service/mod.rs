@@ -1,5 +1,5 @@
 pub mod action_round_register__context_creator;
-pub mod application_user__password_hash_resolver;
+pub mod application_user__password_encoder;
 pub mod application_user__validator;
 pub mod application_user_access_refresh_token__expiration_time_resolver;
 pub mod application_user_access_refresh_token__generator;
@@ -23,6 +23,7 @@ pub mod application_user_reset_password_token__validator;
 pub mod channel__access_modifier_resolver;
 pub mod channel__visability_modifier_resolver;
 pub mod channel_validator;
+pub mod encoder;
 pub mod generator;
 pub mod getter;
 pub mod validator;
