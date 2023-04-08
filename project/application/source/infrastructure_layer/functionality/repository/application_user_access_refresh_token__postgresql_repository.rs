@@ -50,7 +50,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .add_parameter(&insert.application_user_access_refresh_token_updated_at, Type::INT8);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -64,7 +65,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -102,7 +104,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -116,7 +119,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -139,7 +143,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -153,7 +158,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -187,7 +193,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -201,7 +208,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         };
 
         let row_registry = match database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -328,7 +336,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken_1> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -342,7 +351,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken_1> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(

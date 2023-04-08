@@ -55,7 +55,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             .add_parameter(&insert.application_user_authorization_token_can_be_resent_from, Type::INT8);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -69,7 +70,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -107,7 +109,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -121,7 +124,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -182,7 +186,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -196,7 +201,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -230,7 +236,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -244,7 +251,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
         };
 
         let row_registry = match database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -363,7 +371,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -377,7 +386,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -410,7 +420,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -424,7 +435,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
         };
 
         let row_registry = match database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -518,7 +530,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_3> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -532,7 +545,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_3> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -575,7 +589,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_4> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -589,7 +604,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_4> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -624,7 +640,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_5> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -638,7 +655,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_5> {
         };
 
         let row_registry = match database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {

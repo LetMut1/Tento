@@ -36,7 +36,8 @@ impl PostgresqlRepository<ChannelOuterLink> {
             .add_parameter(&insert.channel_outer_link_address, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -50,7 +51,8 @@ impl PostgresqlRepository<ChannelOuterLink> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -105,7 +107,8 @@ impl PostgresqlRepository<ChannelOuterLink> {
             .add_parameter(&limit, Type::INT2);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -119,7 +122,8 @@ impl PostgresqlRepository<ChannelOuterLink> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {

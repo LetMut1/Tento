@@ -45,7 +45,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             .add_parameter(&insert.application_user_password_hash, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -59,7 +60,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -119,7 +121,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -133,7 +136,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -165,7 +169,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -179,7 +184,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -211,7 +217,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -225,7 +232,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -263,7 +271,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -277,7 +286,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -374,7 +384,8 @@ impl PostgresqlRepository<ApplicationUser_1> {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -388,7 +399,8 @@ impl PostgresqlRepository<ApplicationUser_1> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -470,7 +482,8 @@ impl PostgresqlRepository<ApplicationUser_2> {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -484,7 +497,8 @@ impl PostgresqlRepository<ApplicationUser_2> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -552,7 +566,8 @@ impl PostgresqlRepository<ApplicationUser_3> {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -566,7 +581,8 @@ impl PostgresqlRepository<ApplicationUser_3> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -634,7 +650,8 @@ impl PostgresqlRepository<ApplicationUser_4> {
             .add_parameter(&application_user_id, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -648,7 +665,8 @@ impl PostgresqlRepository<ApplicationUser_4> {
         };
 
         if let Err(error) = database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -676,7 +694,8 @@ impl PostgresqlRepository<ApplicationUser_4> {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -690,7 +709,8 @@ impl PostgresqlRepository<ApplicationUser_4> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -743,7 +763,8 @@ impl PostgresqlRepository<ApplicationUser_5> {
         prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_id, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -757,7 +778,8 @@ impl PostgresqlRepository<ApplicationUser_5> {
         };
 
         let row_registry = match database_1_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {

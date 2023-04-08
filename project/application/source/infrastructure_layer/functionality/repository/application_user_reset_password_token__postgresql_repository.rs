@@ -60,7 +60,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             .add_parameter(&insert.application_user_reset_password_token_can_be_resent_from, Type::INT8);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -74,7 +75,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -113,7 +115,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -127,7 +130,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -194,7 +198,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_1> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -208,7 +213,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_1> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -243,7 +249,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_1> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -257,7 +264,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_1> {
         };
 
         let row_registry = match database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -377,7 +385,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_2> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -391,7 +400,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_2> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -452,7 +462,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_3> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -466,7 +477,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_3> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -500,7 +512,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_3> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -514,7 +527,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_3> {
         };
 
         let row_registry = match database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
@@ -621,7 +635,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_4> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -635,7 +650,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_4> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -678,7 +694,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_5> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -692,7 +709,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_5> {
         };
 
         if let Err(error) = database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             return Err(
                 ErrorAuditor::new(
@@ -728,7 +746,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_6> {
             .add_parameter(&application_user_device_id, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
-            query, prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
+            query,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
         ).await {
             Ok(statement_) => statement_,
             Err(error) => {
@@ -742,7 +761,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_6> {
         };
 
         let row_registry = match database_2_connection.query(
-            &statement, prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
+            &statement,
+            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
         ).await {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
