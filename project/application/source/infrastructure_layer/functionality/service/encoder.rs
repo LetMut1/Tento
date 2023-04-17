@@ -13,7 +13,6 @@ use extern_crate::base64::STANDARD;
 use extern_crate::crypto::hmac::Hmac as Hmac_;
 use extern_crate::crypto::mac::Mac;
 use extern_crate::crypto::sha2::Sha512;
-use extern_crate::hex::encode as hex_encode;
 use extern_crate::uuid::Uuid;
 use std::marker::PhantomData;
 
@@ -24,8 +23,6 @@ pub struct Encoder<S> {
 pub struct Argon2Id;
 
 pub struct Hmac;
-
-pub struct Hex;
 
 pub struct Base64;
 
@@ -76,12 +73,6 @@ impl Encoder<Hmac> {
         hmac.raw_result(encoded_data);  // TODO TIme attack
 
         return ();
-    }
-}
-
-impl Encoder<Hex> {
-    pub fn encode<'a>(data: &'a [u8]) -> String {
-        return hex_encode(data);
     }
 }
 

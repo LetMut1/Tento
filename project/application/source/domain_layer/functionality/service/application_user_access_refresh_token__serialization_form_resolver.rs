@@ -2,13 +2,12 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::functionality::service::encoder::Base64;
+use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
+use crate::infrastructure_layer::functionality::service::encoder::Hmac;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
-use extern_crate::crypto::hmac::Hmac;
-use extern_crate::crypto::mac::Mac;
-use extern_crate::crypto::sha2::Sha512;
-use extern_crate::hex;
 
 pub struct ApplicationUserAccessRefreshToken_SerializationFormResolver;
 
@@ -26,15 +25,15 @@ impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
             }
         };
 
-        let mut hmac = Hmac::new(
-            Sha512::new(),
-            environment_configuration.get_security_auart_encoding_private_key().as_bytes()
-        );
-        hmac.input(data.as_slice());
+        let mut hmac_encoded_data: Vec<u8> = vec![];
 
-        let application_user_access_refresh_token_deserialized_form = hex::encode(
-            hmac.result().code()
-        );     // TODO  TODO TODO time attac// TODO TODO TODO TODO TODO Валидно ли кодирует ХЕКС, если это Байты МессаджПака?
+        Encoder_::<Hmac>::encode(
+            environment_configuration.get_security_auart_encoding_private_key().as_bytes(),
+            data.as_slice(),
+            hmac_encoded_data.as_mut_slice()
+        );
+
+        let application_user_access_refresh_token_deserialized_form = Encoder_::<Base64>::encode(hmac_encoded_data.as_slice());
 
         return Ok(application_user_access_refresh_token_deserialized_form);
     }
@@ -45,7 +44,8 @@ impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
         application_user_access_refresh_token_deserialized_form: &'a str
     ) -> Result<bool, ErrorAuditor> {
         let application_user_access_refresh_token_deserialized_form_ = match Self::encode(
-            environment_configuration, application_user_access_refresh_token
+            environment_configuration,
+            application_user_access_refresh_token
         ) {
             Ok(application_user_access_refresh_token_deserialized_form__) => application_user_access_refresh_token_deserialized_form__,
             Err(mut error) => {

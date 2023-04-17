@@ -27,9 +27,6 @@ bytes = { package = "bytes", version = "^1.1", default-features = true, features
 chrono = { package = "chrono", version = "^0.4", default-features = true, features = [], optional = false }
 crypto = { package = "rust-crypto", version = "^0.2", default-features = true, features = [], optional = false }
 dotenv = { package = "dotenv", version = "^0.15", default-features = true, features = [], optional = false }
-futures = { package = "futures", version = "^0.3", default-features = true, features = [], optional = false }
-futures_util = { package = "futures-util", version = "^0.3", default-features = true, features = [], optional = false }
-hex = { package = "hex", version = "^0.4", default-features = true, features = [], optional = false }
 http = { package = "http", version = "^0.2", default-features = true, features = [], optional = false }
 hyper = { package = "hyper", version = "^0.14", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 lettre = { package = "lettre", version = "^0.9", default-features = true, features = [], optional = false }

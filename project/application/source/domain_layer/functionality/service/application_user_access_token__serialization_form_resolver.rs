@@ -1,4 +1,5 @@
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -9,8 +10,6 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::encoder::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
-use crate::domain_layer::functionality::service::encoder::Encoder;
-use crate::infrastructure_layer::functionality::service::encoder::Hex;
 use crate::infrastructure_layer::functionality::service::encoder::Hmac;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
@@ -103,7 +102,7 @@ impl Encoder<Signature> {
             hmac_encoded_data.as_mut_slice()
         );
 
-        return Encoder_::<Hex>::encode(hmac_encoded_data.as_slice());
+        return Encoder_::<Base64>::encode(hmac_encoded_data.as_slice());
     }
 
     fn is_valid<'a>(
