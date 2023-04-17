@@ -7,14 +7,14 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::service::encoder::Base64;
+use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
+use crate::domain_layer::functionality::service::encoder::Encoder;
+use crate::infrastructure_layer::functionality::service::encoder::Hex;
+use crate::infrastructure_layer::functionality::service::encoder::Hmac;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
-use extern_crate::base64;
-use extern_crate::crypto::hmac::Hmac;
-use extern_crate::crypto::mac::Mac;
-use extern_crate::crypto::sha2::Sha512;
-use extern_crate::hex;
 
 pub struct ApplicationUserAccessToken_SerializationFormResolver;
 
@@ -34,13 +34,19 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
             }
         };
 
-        let application_user_access_token_serialized = base64::encode_config(data.as_slice(), base64::STANDARD);  // TODO TODO TODO TODO TODO Можно ли здесь использовать Бэйс64 на байтф мессаджПака?
+        let application_user_access_token_serialized = Encoder_::<Base64>::encode(data.as_slice());
 
-        let application_user_access_token_signature = ApplicationUserAccessToken_Encoder::create(
-            environment_configuration, application_user_access_token_serialized.as_str()
+        let application_user_access_token_signature = Encoder::<Signature>::encode(
+            environment_configuration,
+            application_user_access_token_serialized.as_str()
         );
 
-        let application_user_access_token_deserialized_form = application_user_access_token_serialized + Self::TOKEN_PARTS_SEPARATOR + application_user_access_token_signature.as_str();
+        let application_user_access_token_deserialized_form = format!(
+            "{}{}{}",
+            application_user_access_token_serialized,
+            Self::TOKEN_PARTS_SEPARATOR,
+            application_user_access_token_signature
+        );
 
         return Ok(application_user_access_token_deserialized_form);
     }
@@ -49,16 +55,15 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_deserialized_form: &'a str
     ) -> Result<ArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
-        let token_part_registry = application_user_access_token_deserialized_form
-            .split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR)
-            .collect::<Vec<&'_ str>>();                                                         // TODO проверить, правильно ли вот тут вообще
+        let token_part_registry = application_user_access_token_deserialized_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR)
+            .collect::<Vec<&'_ str>>();         // TODO проверить, правильно ли вот тут вообще
 
         if token_part_registry.len() != 2
-            || !ApplicationUserAccessToken_Encoder::is_valid(environment_configuration, token_part_registry[0], token_part_registry[1]) {
+            || !Encoder::<Signature>::is_valid(environment_configuration, token_part_registry[0], token_part_registry[1]) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
         }
 
-        let data = match base64::decode_config(token_part_registry[0].as_bytes(), base64::STANDARD) {
+        let data = match Encoder_::<Base64>::decode(token_part_registry[0].as_bytes()) {
             Ok(data_) => data_,
             Err(error) => {
                 return Err(
@@ -83,23 +88,22 @@ impl ApplicationUserAccessToken_SerializationFormResolver {
     }
 }
 
-struct ApplicationUserAccessToken_Encoder;
+struct Signature;
 
-impl ApplicationUserAccessToken_Encoder {
-    fn create<'a>(
+impl Encoder<Signature> {
+    fn encode<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_serialized: &'a str
     ) -> String {
-        let mut hmac = Hmac::new(
-            Sha512::new(),
-            environment_configuration.get_security_auat_signature_encoding_private_key().as_bytes()
+        let mut hmac_encoded_data: Vec<u8> = vec![];
+
+        Encoder_::<Hmac>::encode(
+            environment_configuration.get_security_auat_signature_encoding_private_key().as_bytes(),
+            application_user_access_token_serialized.as_bytes(),
+            hmac_encoded_data.as_mut_slice()
         );
 
-        hmac.input(
-            application_user_access_token_serialized.as_bytes()
-        );
-
-        return hex::encode(hmac.result().code());   // TODO TIme attack
+        return Encoder_::<Hex>::encode(hmac_encoded_data.as_slice());
     }
 
     fn is_valid<'a>(
@@ -107,7 +111,7 @@ impl ApplicationUserAccessToken_Encoder {
         application_user_access_token_serialized: &'a str,
         application_user_access_token_signature: &'a str
     ) -> bool {
-        return Self::create(environment_configuration, application_user_access_token_serialized).as_str()
+        return Self::encode(environment_configuration, application_user_access_token_serialized).as_str()
             == application_user_access_token_signature;
     }
 }
