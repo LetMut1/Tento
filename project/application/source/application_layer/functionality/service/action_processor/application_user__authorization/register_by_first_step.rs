@@ -10,6 +10,7 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
+use crate::domain_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use crate::domain_layer::functionality::service::application_user_registration_token__sending_opportunity_resolver::ApplicationUserRegistrationToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -24,7 +25,6 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;

@@ -6,6 +6,8 @@ use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription
 use crate::domain_layer::data::entity::channel::Channel as EntityChannel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_Id;
+use crate::domain_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
+use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -19,8 +21,6 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::channel_inner_link__postgresql_repository::ChannelInnerLink1;
 use crate::infrastructure_layer::functionality::repository::channel_outer_link__postgresql_repository::ChannelOuterLink1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
-use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;

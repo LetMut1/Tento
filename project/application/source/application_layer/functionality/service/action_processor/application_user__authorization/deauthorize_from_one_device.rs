@@ -1,6 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
+use crate::domain_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
+use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -10,8 +12,6 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
-use crate::infrastructure_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;

@@ -10,6 +10,7 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_3;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+use crate::domain_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
 use crate::domain_layer::functionality::service::application_user_reset_password_token__sending_opportunity_resolver::ApplicationUserResetPasswordToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -22,9 +23,8 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token__postgresql_repository::Insert;
-use crate::infrastructure_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
