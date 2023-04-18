@@ -13,7 +13,7 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_2;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
-use crate::domain_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
+use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -354,7 +354,7 @@ impl ActionProcessor {
                 ApplicationUserAuthorizationToken_Aggregator::Second { application_user_authorization_token: ref application_user_authorization_token_ } => application_user_authorization_token_.get_value()
             };
 
-            if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_authorization_token(
+            if let Err(mut error) = EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
                 environment_configuration,
                 application_user_authorization_token_value,
                 application_user_email,

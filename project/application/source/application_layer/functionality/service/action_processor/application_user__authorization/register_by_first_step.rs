@@ -10,7 +10,7 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
+use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::sending_opportunity_resolver::SendingOpportunityResolver;
@@ -274,7 +274,7 @@ impl ActionProcessor {
                 ApplicationUserRegistrationToken_Aggregator::Second { application_user_registration_token: ref application_user_registration_token_ } => application_user_registration_token_.get_value()
             };
 
-            if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_registration_token(
+            if let Err(mut error) = EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
                 environment_configuration,
                 application_user_registration_token_value,
                 incoming.application_user_email.as_str(),

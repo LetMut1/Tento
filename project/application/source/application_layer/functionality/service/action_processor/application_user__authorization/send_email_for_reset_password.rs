@@ -7,7 +7,7 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
-use crate::domain_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
+use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::sending_opportunity_resolver::SendingOpportunityResolver;
@@ -194,7 +194,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        if let Err(mut error) = ApplicationUser_EmailSender::send_application_user_reset_password_token(
+        if let Err(mut error) = EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
             environment_configuration,
             application_user_reset_password_token_.get_value(),
             application_user_.get_email(),
