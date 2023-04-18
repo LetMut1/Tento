@@ -5,16 +5,8 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use std::convert::TryFrom;
-use std::marker::PhantomData;
 
-pub struct Converter<F, T>
-where
-    F: Sized,
-    T: Sized
-{
-    _from: PhantomData<F>,
-    _to: PhantomData<T>
-}
+pub struct Converter;
 
 pub trait Convert<F, T>
 where
@@ -24,7 +16,7 @@ where
     fn convert(subject: F) -> Result<T, ErrorAuditor>;
 }
 
-impl Convert<u16, i16> for Converter<u16, i16> {
+impl Convert<u16, i16> for Converter {
     fn convert(subject: u16) -> Result<i16, ErrorAuditor> {
         let converted_subject = match i16::try_from(subject) {
             Ok(converted_subject_) => converted_subject_,

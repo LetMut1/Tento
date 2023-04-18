@@ -1,6 +1,6 @@
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Context;
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
-use crate::domain_layer::functionality::service::action_round_register__context_creator::CreateContext;
+use crate::domain_layer::functionality::service::action_round_register__context_creator::ContextFrom;
 use crate::domain_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -57,13 +57,13 @@ impl ActionRoundResultWriter {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        Creator<ActionRoundRegister_Context>: CreateContext<E>
+        Creator<ActionRoundRegister_Context>: ContextFrom<E>
     {
         if let Err(mut error) = Self::write_(
             database_2_postgresql_connection_pool,
             request,
             response,
-            Some(<Creator<ActionRoundRegister_Context> as CreateContext<E>>::create(subject))
+            Some(<Creator<ActionRoundRegister_Context> as ContextFrom<E>>::create(subject))
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -85,7 +85,7 @@ impl ActionRoundResultWriter {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let action_round_register_status_code = match Converter::<u16, i16>::convert(response.status().as_u16()) {
+        let action_round_register_status_code = match <Converter as Convert<u16, i16>>::convert(response.status().as_u16()) {
             Ok(action_round_register_status_code_) => action_round_register_status_code_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
