@@ -5,10 +5,9 @@ use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use super::extractor::Extractor;
 
-pub struct ApplicationUserAccessToken_Extractor;
-
-impl ApplicationUserAccessToken_Extractor {
+impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_deserialized_form: &'a str

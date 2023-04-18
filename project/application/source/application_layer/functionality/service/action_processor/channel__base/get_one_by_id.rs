@@ -1,14 +1,15 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
 use crate::domain_layer::data::entity::channel::Channel as EntityChannel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_Id;
-use crate::domain_layer::functionality::service::application_user_access_token__extractor::ApplicationUserAccessToken_Extractor;
 use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
+use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -46,7 +47,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let extractor_result = match ApplicationUserAccessToken_Extractor::extract(
+        let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             environment_configuration, incoming.application_user_access_token_deserialized_form.as_str()
         ).await {
             Ok(extractor_result_) => extractor_result_,
