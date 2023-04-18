@@ -7,9 +7,9 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
-use crate::domain_layer::functionality::service::application_user_registration_token__sending_opportunity_resolver::ApplicationUserRegistrationToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
+use crate::domain_layer::functionality::service::sending_opportunity_resolver::SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -132,7 +132,7 @@ impl ActionProcessor {
             );
         }
 
-        if !ApplicationUserRegistrationToken_SendingOpportunityResolver::can_send(&application_user_registration_token_) {
+        if !SendingOpportunityResolver::<ApplicationUserRegistrationToken<'_>>::can_send(&application_user_registration_token_) {
             return Ok(
                 ArgumentResult::Ok {
                     subject: ActionProcessorResult::UserWorkflowPrecedent {

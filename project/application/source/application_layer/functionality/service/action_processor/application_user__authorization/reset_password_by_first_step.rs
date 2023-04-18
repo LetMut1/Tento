@@ -11,9 +11,9 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user::ApplicationUser_3;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::functionality::service::application_user__email_sender::ApplicationUser_EmailSender;
-use crate::domain_layer::functionality::service::application_user_reset_password_token__sending_opportunity_resolver::ApplicationUserResetPasswordToken_SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
+use crate::domain_layer::functionality::service::sending_opportunity_resolver::SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -135,7 +135,7 @@ impl ActionProcessor {
 
         let (application_user_reset_password_token_aggregator, can_send) = match application_user_reset_password_token {
             Some(mut application_user_reset_password_token_) => {
-                let (can_send_, need_to_update_1) = if ApplicationUserResetPasswordToken_SendingOpportunityResolver::can_send(
+                let (can_send_, need_to_update_1) = if SendingOpportunityResolver::<ApplicationUserResetPasswordToken<'_>>::can_send(
                     &application_user_reset_password_token_
                 ) {
                     let application_user_reset_password_token_can_be_resent_from = match Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate() {

@@ -31,3 +31,4 @@ pub mod generator;
 pub mod getter;
 pub mod serialization_form_resolver;
 pub mod validator;
+pub mod sending_opportunity_resolver;

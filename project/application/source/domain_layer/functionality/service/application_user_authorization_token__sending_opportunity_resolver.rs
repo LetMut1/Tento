@@ -1,10 +1,10 @@
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::functionality::service::getter::Getter;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
+use super::sending_opportunity_resolver::SendingOpportunityResolver;
 
-pub struct ApplicationUserAuthorizationToken_SendingOpportunityResolver;
-
-impl ApplicationUserAuthorizationToken_SendingOpportunityResolver {
+impl SendingOpportunityResolver<ApplicationUserAuthorizationToken<'_>> {
     pub fn can_send<'a, T>(subject: &'a T) -> bool
     where
         T: Getter<&'a T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>
