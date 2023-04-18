@@ -14,10 +14,9 @@ use crate::infrastructure_layer::functionality::service::encoder::Hmac;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
+use super::serialization_form_resolver::SerializationFormResolver;
 
-pub struct ApplicationUserAccessToken_SerializationFormResolver;
-
-impl ApplicationUserAccessToken_SerializationFormResolver {
+impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
     pub fn serialize<'a>(

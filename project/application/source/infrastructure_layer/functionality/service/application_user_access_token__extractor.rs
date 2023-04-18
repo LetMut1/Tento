@@ -1,6 +1,6 @@
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
+use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -13,7 +13,7 @@ impl ApplicationUserAccessToken_Extractor {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_deserialized_form: &'a str
     ) -> Result<ArgumentResult<ExtractorResult>, ErrorAuditor> {
-        let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(
+        let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
             environment_configuration, application_user_access_token_deserialized_form
         ) {
             Ok(application_user_access_token_) => application_user_access_token_,

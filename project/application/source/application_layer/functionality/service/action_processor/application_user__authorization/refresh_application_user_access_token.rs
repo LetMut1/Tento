@@ -8,10 +8,9 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
-use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
+use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -47,7 +46,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let application_user_access_token = match ApplicationUserAccessToken_SerializationFormResolver::deserialize(
+        let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
             environment_configuration, incoming.application_user_access_token_deserialized_form.as_str()
         ) {
             Ok(application_user_access_token_) => application_user_access_token_,
@@ -107,7 +106,7 @@ impl ActionProcessor {
             }
         };
 
-        let is_valid = match ApplicationUserAccessRefreshToken_SerializationFormResolver::is_valid(
+        let is_valid = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
             environment_configuration,
             &application_user_access_refresh_token_,
             incoming.application_user_access_refresh_token_deserialized_form.as_str()
@@ -186,7 +185,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        let application_user_access_token_deserialized_form_new = match ApplicationUserAccessToken_SerializationFormResolver::serialize(
+        let application_user_access_token_deserialized_form_new = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
             environment_configuration,
             &application_user_access_token_new
         ) {
@@ -198,7 +197,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_deserialized_form_new = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(
+        let application_user_access_refresh_token_deserialized_form_new = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
             environment_configuration,
             &application_user_access_refresh_token_
         ) {

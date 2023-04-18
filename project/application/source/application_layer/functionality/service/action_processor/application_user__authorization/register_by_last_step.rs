@@ -17,11 +17,10 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::functionality::service::application_user_access_refresh_token__serialization_form_resolver::ApplicationUserAccessRefreshToken_SerializationFormResolver;
-use crate::domain_layer::functionality::service::application_user_access_token__serialization_form_resolver::ApplicationUserAccessToken_SerializationFormResolver;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
+use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -378,7 +377,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_token_deserialized_form = match ApplicationUserAccessToken_SerializationFormResolver::serialize(
+        let application_user_access_token_deserialized_form = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
             environment_configuration,
             &application_user_access_token
         ) {
@@ -390,7 +389,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_deserialized_form = match ApplicationUserAccessRefreshToken_SerializationFormResolver::encode(
+        let application_user_access_refresh_token_deserialized_form = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
             environment_configuration,
             &application_user_access_refresh_token
         ) {

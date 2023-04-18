@@ -27,4 +27,5 @@ pub mod encoder;
 pub mod expiration_time_resolver;
 pub mod generator;
 pub mod getter;
+pub mod serialization_form_resolver;
 pub mod validator;

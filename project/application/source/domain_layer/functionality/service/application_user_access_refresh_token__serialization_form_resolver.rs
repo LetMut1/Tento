@@ -8,11 +8,10 @@ use crate::infrastructure_layer::functionality::service::encoder::Hmac;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
+use super::serialization_form_resolver::SerializationFormResolver;
 
-pub struct ApplicationUserAccessRefreshToken_SerializationFormResolver;
-
-impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
-    pub fn encode<'a>(
+impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
+    pub fn serialize<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>
     ) -> Result<String, ErrorAuditor> {
@@ -43,7 +42,7 @@ impl ApplicationUserAccessRefreshToken_SerializationFormResolver {
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_deserialized_form: &'a str
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_access_refresh_token_deserialized_form_ = match Self::encode(
+        let application_user_access_refresh_token_deserialized_form_ = match Self::serialize(
             environment_configuration,
             application_user_access_refresh_token
         ) {
