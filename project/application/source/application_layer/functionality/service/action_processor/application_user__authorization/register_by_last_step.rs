@@ -377,11 +377,11 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_token_deserialized_form = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
+        let application_user_access_token_serialized_form = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
             environment_configuration,
             &application_user_access_token
         ) {
-            Ok(application_user_access_token_deserialized_form_) => application_user_access_token_deserialized_form_,
+            Ok(application_user_access_token_serialized_form_) => application_user_access_token_serialized_form_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -389,11 +389,11 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_deserialized_form = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
+        let application_user_access_refresh_token_serialized_form = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
             environment_configuration,
             &application_user_access_refresh_token
         ) {
-            Ok(application_user_access_refresh_token_deserialized_form_) => application_user_access_refresh_token_deserialized_form_,
+            Ok(application_user_access_refresh_token_serialized_form_) => application_user_access_refresh_token_serialized_form_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -405,8 +405,8 @@ impl ActionProcessor {
             ArgumentResult::Ok {
                 subject: ActionProcessorResult::Outcoming {
                     outcoming: Outcoming {
-                        application_user_access_token_deserialized_form,
-                        application_user_access_refresh_token_deserialized_form
+                        application_user_access_token_serialized_form,
+                        application_user_access_refresh_token_serialized_form
                     }
                 }
             }
@@ -429,6 +429,6 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    application_user_access_token_deserialized_form: String,
-    application_user_access_refresh_token_deserialized_form: String
+    application_user_access_token_serialized_form: String,
+    application_user_access_refresh_token_serialized_form: String
 }

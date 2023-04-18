@@ -47,7 +47,7 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
-            environment_configuration, incoming.application_user_access_token_deserialized_form.as_str()
+            environment_configuration, incoming.application_user_access_token_serialized_form.as_str()
         ) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
@@ -109,7 +109,7 @@ impl ActionProcessor {
         let is_valid = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
             environment_configuration,
             &application_user_access_refresh_token_,
-            incoming.application_user_access_refresh_token_deserialized_form.as_str()
+            incoming.application_user_access_refresh_token_serialized_form.as_str()
         ) {
             Ok(is_valid_) => is_valid_,
             Err(mut error) => {
@@ -185,11 +185,11 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        let application_user_access_token_deserialized_form_new = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
+        let application_user_access_token_serialized_form_new = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
             environment_configuration,
             &application_user_access_token_new
         ) {
-            Ok(application_user_access_token_deserialized_form_new_) => application_user_access_token_deserialized_form_new_,
+            Ok(application_user_access_token_serialized_form_new_) => application_user_access_token_serialized_form_new_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -197,11 +197,11 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_deserialized_form_new = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
+        let application_user_access_refresh_token_serialized_form_new = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
             environment_configuration,
             &application_user_access_refresh_token_
         ) {
-            Ok(application_user_access_refresh_token_deserialized_form_new_) => application_user_access_refresh_token_deserialized_form_new_,
+            Ok(application_user_access_refresh_token_serialized_form_new_) => application_user_access_refresh_token_serialized_form_new_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -213,8 +213,8 @@ impl ActionProcessor {
             ArgumentResult::Ok {
                 subject: ActionProcessorResult::Outcoming {
                     outcoming: Outcoming {
-                       application_user_access_token_deserialized_form: application_user_access_token_deserialized_form_new,
-                       application_user_access_refresh_token_deserialized_form: application_user_access_refresh_token_deserialized_form_new
+                       application_user_access_token_serialized_form: application_user_access_token_serialized_form_new,
+                       application_user_access_refresh_token_serialized_form: application_user_access_refresh_token_serialized_form_new
                     }
                 }
             }
@@ -226,14 +226,14 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_access_token_deserialized_form: String,
-    application_user_access_refresh_token_deserialized_form: String
+    application_user_access_token_serialized_form: String,
+    application_user_access_refresh_token_serialized_form: String
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    application_user_access_token_deserialized_form: String,
-    application_user_access_refresh_token_deserialized_form: String
+    application_user_access_token_serialized_form: String,
+    application_user_access_refresh_token_serialized_form: String
 }

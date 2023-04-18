@@ -92,7 +92,7 @@ fn main() -> () {
 // !!!!!!! reset_password_last_step добавить емейл (посмотреть, подобные кейсы), чтобы проверять соотетсвие емейла и айдишника???????????
 
 
-// application_user_access_token_deserialized_form -> serialized
+// application_user_access_token_serialized_form -> serialized
 
 
 // СДелал оптимизацию запросов для:

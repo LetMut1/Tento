@@ -32,21 +32,21 @@ impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
             hmac_encoded_data.as_mut_slice()
         );
 
-        let application_user_access_refresh_token_deserialized_form = Encoder_::<Base64>::encode(hmac_encoded_data.as_slice());
+        let application_user_access_refresh_token_serialized_form = Encoder_::<Base64>::encode(hmac_encoded_data.as_slice());
 
-        return Ok(application_user_access_refresh_token_deserialized_form);
+        return Ok(application_user_access_refresh_token_serialized_form);
     }
 
     pub fn is_valid<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
-        application_user_access_refresh_token_deserialized_form: &'a str
+        application_user_access_refresh_token_serialized_form: &'a str
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_access_refresh_token_deserialized_form_ = match Self::serialize(
+        let application_user_access_refresh_token_serialized_form_ = match Self::serialize(
             environment_configuration,
             application_user_access_refresh_token
         ) {
-            Ok(application_user_access_refresh_token_deserialized_form__) => application_user_access_refresh_token_deserialized_form__,
+            Ok(application_user_access_refresh_token_serialized_form__) => application_user_access_refresh_token_serialized_form__,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -55,7 +55,7 @@ impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
         };
 
         return Ok(
-            application_user_access_refresh_token_deserialized_form_.as_str() == application_user_access_refresh_token_deserialized_form
+            application_user_access_refresh_token_serialized_form_.as_str() == application_user_access_refresh_token_serialized_form
         );
     }
 }

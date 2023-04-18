@@ -39,21 +39,21 @@ impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
             application_user_access_token_serialized.as_str()
         );
 
-        let application_user_access_token_deserialized_form = format!(
+        let application_user_access_token_serialized_form = format!(
             "{}{}{}",
             application_user_access_token_serialized,
             Self::TOKEN_PARTS_SEPARATOR,
             application_user_access_token_signature
         );
 
-        return Ok(application_user_access_token_deserialized_form);
+        return Ok(application_user_access_token_serialized_form);
     }
 
     pub fn deserialize<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
-        application_user_access_token_deserialized_form: &'a str
+        application_user_access_token_serialized_form: &'a str
     ) -> Result<ArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
-        let token_part_registry = application_user_access_token_deserialized_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR)
+        let token_part_registry = application_user_access_token_serialized_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR)
             .collect::<Vec<&'_ str>>();         // TODO проверить, правильно ли вот тут вообще
 
         if token_part_registry.len() != 2

@@ -43,7 +43,7 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
-            environment_configuration, incoming.application_user_access_token_deserialized_form.as_str()
+            environment_configuration, incoming.application_user_access_token_serialized_form.as_str()
         ).await {
             Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {
@@ -133,7 +133,7 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_access_token_deserialized_form: String,
+    application_user_access_token_serialized_form: String,
     channel_name: String,
     requery_channel_name: Option<String>,
     limit: i16
