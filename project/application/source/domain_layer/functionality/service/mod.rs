@@ -27,6 +27,7 @@ pub mod application_user_reset_password_token__validator;
 pub mod channel__access_modifier_resolver;
 pub mod channel__visability_modifier_resolver;
 pub mod channel_validator;
+pub mod creator;
 pub mod email_sender;
 pub mod encoder;
 pub mod expiration_time_resolver;
