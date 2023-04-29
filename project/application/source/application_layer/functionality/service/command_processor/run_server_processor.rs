@@ -40,7 +40,7 @@ pub struct RunServerProcessor;
 
 impl RunServerProcessor {
     pub fn process() -> Result<(), ErrorAuditor> {
-        let environment_configuration = match Loader::<EnvironmentConfiguration>::create_from_configuration_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
+        let environment_configuration = match Loader::<EnvironmentConfiguration>::load_from_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
             Ok(environment_configuration_) => environment_configuration_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

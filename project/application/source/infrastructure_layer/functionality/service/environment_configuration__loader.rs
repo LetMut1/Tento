@@ -20,7 +20,7 @@ impl Loader<EnvironmentConfiguration> {
     const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.env";  // TODO TODO TODO TODO TODOenv::remove_var can PANIC. Подумать, что делать. Использовать другой крейт (toml), или написать свой парсер. Паника - всегжа плохо
     const LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";
 
-    pub fn create_from_configuration_file(configuration_file_path: &'static str) -> Result<EnvironmentConfiguration, ErrorAuditor> {
+    pub fn load_from_file(configuration_file_path: &'static str) -> Result<EnvironmentConfiguration, ErrorAuditor> {
         let file_path = match Path::new(configuration_file_path).parent() {
             Some(file_path_) => file_path_,
             None => {
