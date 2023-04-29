@@ -32,20 +32,20 @@ pub struct WrappedEncodingProtocolActionCreator;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl WrappedEncodingProtocolActionCreator {
-    pub async fn create_for_json<'a, T, FO, F, API, APO>(
+    pub async fn create_for_json<'a, T, AP, F, API, APO>(
         environment_configuration: &'a EnvironmentConfiguration,
         mut request: Request<Body>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        wrapped_action: FO
+        action_processor: AP
     ) -> Response<Body>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        FO: FnOnce(
+        AP: FnOnce(
             &'a EnvironmentConfiguration,
             Request<Body>,
             &'a Pool<PostgresqlConnectionManager<T>>,
@@ -83,7 +83,7 @@ impl WrappedEncodingProtocolActionCreator {
                 request,
                 action_processor_incoming: incoming
             },
-            wrapped_action
+            action_processor
         ).await {
             Ok(action_processor_result_) => action_processor_result_,
             Err(_) => {
