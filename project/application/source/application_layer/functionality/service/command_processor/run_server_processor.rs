@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
-use crate::infrastructure_layer::functionality::service::environment_configuration__creator::EnvironmentConfiguration_Creator;
+use crate::infrastructure_layer::functionality::service::loader::Loader;
 use crate::infrastructure_layer::functionality::service::postgresql_connection_pool_creator::PostgresqlConnectionPoolCreator;
 use crate::infrastructure_layer::functionality::service::redis_connection_pool_creator::RedisConnectionPoolCreator;
 use crate::presentation_layer::data::http_route_registry::HttpRouteRegistry;
@@ -40,7 +40,7 @@ pub struct RunServerProcessor;
 
 impl RunServerProcessor {
     pub fn process() -> Result<(), ErrorAuditor> {
-        let environment_configuration = match EnvironmentConfiguration_Creator::create_from_configuration_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
+        let environment_configuration = match Loader::<EnvironmentConfiguration>::create_from_configuration_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
             Ok(environment_configuration_) => environment_configuration_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

@@ -13,10 +13,9 @@ use std::env;
 use std::net::ToSocketAddrs;
 use std::path::Path;
 use std::str::FromStr;
+use super::loader::Loader;
 
-pub struct EnvironmentConfiguration_Creator;
-
-impl EnvironmentConfiguration_Creator {
+impl Loader<EnvironmentConfiguration> {
     const PRODUCTION_ENVIRONMENT_FILE_NAME: &'static str = "production.env";  // TODO Посмотреть, какие есть еще лучшие форматы аналоги .env (Может, Томл?)
     const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.env";  // TODO TODO TODO TODO TODOenv::remove_var can PANIC. Подумать, что делать. Использовать другой крейт (toml), или написать свой парсер. Паника - всегжа плохо
     const LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "development.local.env";

@@ -26,7 +26,7 @@ use crate::infrastructure_layer::functionality::repository::application_user__po
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Insert as ChannelInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::environment_configuration__creator::EnvironmentConfiguration_Creator;
+use crate::infrastructure_layer::functionality::service::loader::Loader;
 use crate::infrastructure_layer::functionality::service::postgresql_connection_pool_creator::PostgresqlConnectionPoolCreator;
 use extern_crate::rand::Rng;
 use extern_crate::rand::thread_rng;
@@ -53,7 +53,7 @@ impl CreateFixturesProcessor {
 
 
     pub fn process() -> Result<(), ErrorAuditor> {
-        let environment_configuration = match EnvironmentConfiguration_Creator::create_from_configuration_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
+        let environment_configuration = match Loader::<EnvironmentConfiguration>::create_from_configuration_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
             Ok(environment_configuration_) => environment_configuration_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
