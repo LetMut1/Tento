@@ -6,9 +6,10 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
+use crate::infrastructure_layer::functionality::service::creator::Creator;
+use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
+use crate::infrastructure_layer::functionality::service::creator::RedisConnectonPool;
 use crate::infrastructure_layer::functionality::service::loader::Loader;
-use crate::infrastructure_layer::functionality::service::postgresql_connection_pool_creator::PostgresqlConnectionPoolCreator;
-use crate::infrastructure_layer::functionality::service::redis_connection_pool_creator::RedisConnectionPoolCreator;
 use crate::presentation_layer::data::http_route_registry::HttpRouteRegistry;
 use crate::presentation_layer::functionality::action::route_not_found;
 use crate::presentation_layer::functionality::action::version_1::application_user__authorization;
@@ -26,7 +27,6 @@ use extern_crate::hyper::Server;
 use extern_crate::hyper::server::conn::AddrStream;
 use extern_crate::hyper::service::make_service_fn;
 use extern_crate::hyper::service::service_fn;
-use extern_crate::tokio_postgres::NoTls;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -81,7 +81,7 @@ impl RunServerProcessor {
             }
             Environment::Development |
             Environment::LocalDevelopment => {
-                let database_1_postgresql_connection_pool = match PostgresqlConnectionPoolCreator::<NoTls>::create(
+                let database_1_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
                     environment_configuration.get_environment(),
                     environment_configuration.get_database_1_postgresql_configuration()
                 ).await {
@@ -93,7 +93,7 @@ impl RunServerProcessor {
                     }
                 };
 
-                let database_2_postgresql_connection_pool = match PostgresqlConnectionPoolCreator::<NoTls>::create(
+                let database_2_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
                     environment_configuration.get_environment(),
                     environment_configuration.get_database_2_postgresql_configuration()
                 ).await {
@@ -109,7 +109,7 @@ impl RunServerProcessor {
             }
         };
 
-        let redis_connection_pool = match RedisConnectionPoolCreator::create(
+        let redis_connection_pool = match Creator::<RedisConnectonPool>::create(
             environment_configuration.get_environment(),
             environment_configuration.get_redis_url()
         ).await {
@@ -453,7 +453,7 @@ impl RunServerProcessor {
 #[derive(Clone)]
 enum PostgresqlConnectionPoolAggregator {
     LocalDevelopment {
-        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>,
-        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<NoTls>>
+        database_1_postgresql_connection_pool: PostgresqlConnectionPoolNoTls,
+        database_2_postgresql_connection_pool: PostgresqlConnectionPoolNoTls
     }
 }

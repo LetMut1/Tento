@@ -10,6 +10,7 @@ pub struct PostgrasqlTransactionManager;
 impl PostgrasqlTransactionManager {
     pub async fn start_transaction<'a>(connection: &'a Connection, transaction_isolation_level: TransactionIsolationLevel) -> Result<Self, ErrorAuditor> {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
+
         match transaction_isolation_level {
             TransactionIsolationLevel::ReadCommitted => {
                 query += " READ COMMITTED, READ WRITE, NOT DEFERRABLE;";

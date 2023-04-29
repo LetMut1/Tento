@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
 use crate::infrastructure_layer::functionality::service::generator::Generator as Generator_;
-use crate::infrastructure_layer::functionality::service::number_row_generator::NumberRow;
+use crate::infrastructure_layer::functionality::service::generator::NumberRow;
 use super::generator::Generator;
 
 impl Generator<ApplicationUserResetPasswordToken_Value> {

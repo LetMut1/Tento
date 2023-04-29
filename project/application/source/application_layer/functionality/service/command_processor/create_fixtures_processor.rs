@@ -27,10 +27,10 @@ use crate::infrastructure_layer::functionality::repository::application_user_dev
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Insert as ChannelInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::loader::Loader;
-use crate::infrastructure_layer::functionality::service::postgresql_connection_pool_creator::PostgresqlConnectionPoolCreator;
+use crate::infrastructure_layer::functionality::service::creator::Creator;
+use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
 use extern_crate::rand::Rng;
 use extern_crate::rand::thread_rng;
-use extern_crate::tokio_postgres::NoTls;
 use extern_crate::tokio::runtime::Builder;
 use std::clone::Clone;
 
@@ -97,7 +97,7 @@ impl CreateFixturesProcessor {
     }
 
     async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
-        let database_1_postgresql_connection_pool = match PostgresqlConnectionPoolCreator::<NoTls>::create(
+        let database_1_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
             environment_configuration.get_environment(),
             environment_configuration.get_database_1_postgresql_configuration()
         ).await {
