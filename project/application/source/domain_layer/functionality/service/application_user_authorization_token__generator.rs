@@ -5,12 +5,13 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
-use crate::infrastructure_layer::functionality::service::number_row_generator::NumberRowGenerator;
+use crate::infrastructure_layer::functionality::service::generator::Generator as Generator_;
+use crate::infrastructure_layer::functionality::service::number_row_generator::NumberRow;
 use super::generator::Generator;
 
 impl Generator<ApplicationUserAuthorizationToken_Value> {
     pub fn generate() -> String {
-        return NumberRowGenerator::generate_row_with_6_numbers();
+        return Generator_::<NumberRow>::generate_6();
     }
 }
 
