@@ -61,7 +61,7 @@ impl ActionProcessor {
         APRR: FnOnce(ArgumentResult<ActionProcessorResult<APO>>) -> F2,
         F2: Future<Output = Result<Response<Body>, ErrorAuditor>>
     {
-        if !RequestHeaderChecker::is_valid(&request) {
+        if !RequestHeaderChecker::is_valid(&request) {                     // TODOD Переназвать action_processor директорию и текущий файл. Разобраться, правильно ли использован ЛогВрайтер. JSON для тестов
             let response = ActionResponseCreator::create_bad_request();
 
             if let Err(mut error) = ActionRoundResultWriter::write_with_context(
