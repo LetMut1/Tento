@@ -33,14 +33,14 @@ use extern_crate::serde::Serialize as SerdeSerialize;
 pub struct ActionProcessor;
 
 impl ActionProcessor {
-    pub async fn process<'a, SF, T, AP, F1, API, APO, APRR, F2>(
+    pub async fn process<'a, SF, T, AIP, F1, API, APO, AIPRR, F2>(
         environment_configuration: &'a EnvironmentConfiguration,
         mut request: Request<Body>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        action_processor: AP,
-        action_processor_result_resolver: APRR
+        action_inner_processor: AIP,
+        action_inner_processor_result_resolver: AIPRR
     ) -> Response<Body>
     where
         Serializer<SF>: Serialize,
@@ -48,7 +48,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        AP: FnOnce(
+        AIP: FnOnce(
             &'a EnvironmentConfiguration,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<PostgresqlConnectionManager<T>>,
@@ -58,7 +58,7 @@ impl ActionProcessor {
         F1: Future<Output = Result<ArgumentResult<ActionProcessorResult<APO>>, ErrorAuditor>>,
         API: for<'de> Deserialize<'de>,
         APO: SerdeSerialize,
-        APRR: FnOnce(ArgumentResult<ActionProcessorResult<APO>>) -> F2,
+        AIPRR: FnOnce(ArgumentResult<ActionProcessorResult<APO>>) -> F2,
         F2: Future<Output = Result<Response<Body>, ErrorAuditor>>
     {
         if !RequestHeaderChecker::is_valid(&request) {                     // TODOD Переназвать action_processor директорию и текущий файл. Разобраться, правильно ли использован ЛогВрайтер. JSON для тестов
@@ -128,7 +128,7 @@ impl ActionProcessor {
             }
         };
 
-        let action_processor_result = match action_processor(
+        let action_processor_result = match action_inner_processor(
             environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
@@ -156,7 +156,7 @@ impl ActionProcessor {
             }
         };
 
-        let response = match action_processor_result_resolver(action_processor_result).await {
+        let response = match action_inner_processor_result_resolver(action_processor_result).await {
             Ok(response_) => response_,
             Err(error) => {
                 let response = ActionResponseCreator::create_internal_server_error();
