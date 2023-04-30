@@ -1,7 +1,6 @@
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Context;
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::domain_layer::functionality::service::action_round_register__context_creator::ContextFrom;
-use crate::domain_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -22,10 +21,10 @@ use extern_crate::tokio_postgres::tls::TlsConnect;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
+use super::creator::Creator;
+use super::writer::Writer;
 
-pub struct ActionRoundResultWriter;
-
-impl ActionRoundResultWriter {
+impl Writer<ActionRoundRegister> {
     pub async fn write<'a, T>(
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request<Body>,
@@ -59,11 +58,13 @@ impl ActionRoundResultWriter {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         Creator<ActionRoundRegister_Context>: ContextFrom<E>
     {
+        let action_round_register_context = <Creator<ActionRoundRegister_Context> as ContextFrom<E>>::create(subject);
+
         if let Err(mut error) = Self::write_(
             database_2_postgresql_connection_pool,
             request,
             response,
-            Some(<Creator<ActionRoundRegister_Context> as ContextFrom<E>>::create(subject))
+            Some(action_round_register_context)
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 

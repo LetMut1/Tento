@@ -1,4 +1,5 @@
 pub mod action_round_register__context_creator;
+pub mod action_round_register__writer;
 pub mod application_user__password_encoder;
 pub mod application_user__validator;
 pub mod application_user_access_refresh_token__expiration_time_resolver;
@@ -37,3 +38,4 @@ pub mod getter;
 pub mod sending_opportunity_resolver;
 pub mod serialization_form_resolver;
 pub mod validator;
+pub mod writer;

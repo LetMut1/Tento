@@ -1,5 +1,6 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::functionality::service::action_round_result_writer::ActionRoundResultWriter;
+use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
+use crate::domain_layer::functionality::service::writer::Writer;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -33,7 +34,7 @@ use extern_crate::serde::Serialize as SerdeSerialize;
 pub struct ActionProcessor;
 
 impl ActionProcessor {
-    pub async fn process<'a, SF, T, AIP, F1, API, APO, AIPRR, F2>(
+    pub async fn process<'a, SF, T, AIP, F1, AIPI, AIPO, AIPRR, F2>(
         environment_configuration: &'a EnvironmentConfiguration,
         mut request: Request<Body>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -53,24 +54,24 @@ impl ActionProcessor {
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<RedisConnectionManager>,
-            API
+            AIPI
         ) -> F1,
-        F1: Future<Output = Result<ArgumentResult<ActionProcessorResult<APO>>, ErrorAuditor>>,
-        API: for<'de> Deserialize<'de>,
-        APO: SerdeSerialize,
-        AIPRR: FnOnce(ArgumentResult<ActionProcessorResult<APO>>) -> F2,
+        F1: Future<Output = Result<ArgumentResult<ActionProcessorResult<AIPO>>, ErrorAuditor>>,
+        AIPI: for<'de> Deserialize<'de>,
+        AIPO: SerdeSerialize,
+        AIPRR: FnOnce(ArgumentResult<ActionProcessorResult<AIPO>>) -> F2,
         F2: Future<Output = Result<Response<Body>, ErrorAuditor>>
     {
-        if !RequestHeaderChecker::is_valid(&request) {                     // TODOD Переназвать action_processor директорию и текущий файл. Разобраться, правильно ли использован ЛогВрайтер. JSON для тестов
+        if !RequestHeaderChecker::is_valid(&request) {
             let response = ActionResponseCreator::create_bad_request();
 
-            if let Err(mut error) = ActionRoundResultWriter::write_with_context(
+            if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
                 database_2_postgresql_connection_pool, &request, &response, &InvalidArgument::HttpHeaders
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 unreachable!(
-                    "{}. TODO: Write in concurrent way. It is also necessary that the write
+                    "{}. TODO: Write in concurrent way. It is also necessary that the write                     // TODO CHANGE all occurences.
                     process does not wait for another write process, and writes immediately.",
                     &error,
                 );
@@ -89,7 +90,7 @@ impl ActionProcessor {
 
                 let response = ActionResponseCreator::create_internal_server_error();
 
-                if let Err(mut error__) = ActionRoundResultWriter::write_with_context(
+                if let Err(mut error__) = Writer::<ActionRoundRegister>::write_with_context(
                     database_2_postgresql_connection_pool, &request, &response, &error_
                 ).await {
                     error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -106,12 +107,12 @@ impl ActionProcessor {
             }
         };
 
-        let action_processor_incoming = match Serializer::<SF>::deserialize::<'_, API>(bytes.chunk()) {
-            Ok(action_processor_incoming_) => action_processor_incoming_,
+        let action_inner_processor_incoming = match Serializer::<SF>::deserialize::<'_, AIPI>(bytes.chunk()) {
+            Ok(action_inner_processor_incoming_) => action_inner_processor_incoming_,
             Err(error) => {
                 let response = ActionResponseCreator::create_internal_server_error();
 
-                if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
                     database_2_postgresql_connection_pool, &request, &response, &error
                 ).await {
                     error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -128,18 +129,18 @@ impl ActionProcessor {
             }
         };
 
-        let action_processor_result = match action_inner_processor(
+        let action_inner_processor_result = match action_inner_processor(
             environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             redis_connection_pool,
-            action_processor_incoming
+            action_inner_processor_incoming
         ).await {
-            Ok(action_processor_result_) => action_processor_result_,
+            Ok(action_inner_processor_result_) => action_inner_processor_result_,
             Err(error) => {
                 let response = ActionResponseCreator::create_internal_server_error();
 
-                if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
                     database_2_postgresql_connection_pool, &request, &response, &error
                 ).await {
                     error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -156,12 +157,12 @@ impl ActionProcessor {
             }
         };
 
-        let response = match action_inner_processor_result_resolver(action_processor_result).await {
+        let response = match action_inner_processor_result_resolver(action_inner_processor_result).await {
             Ok(response_) => response_,
             Err(error) => {
                 let response = ActionResponseCreator::create_internal_server_error();
 
-                if let Err(mut error_) = ActionRoundResultWriter::write_with_context(
+                if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
                     database_2_postgresql_connection_pool, &request, &response, &error
                 ).await {
                     error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
