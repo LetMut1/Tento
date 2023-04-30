@@ -1,7 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::application_layer::functionality::service::action_inner_processor::application_user__authorization::send_email_for_register::ActionProcessor;
-use crate::application_layer::functionality::service::action_inner_processor::application_user__authorization::send_email_for_register::Incoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_register::ActionProcessor;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_register::Incoming;
 use crate::application_layer::functionality::service::XXXXXXXDELETEaction_round_result_writer::ActionRoundResultWriter;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -35,7 +35,7 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_inner_processor::application_user__authorization::send_email_for_register::Outcoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::send_email_for_register::Outcoming;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 

@@ -1,7 +1,9 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::application_layer::functionality::service::action_inner_processor::application_user__authorization::authorize_by_first_step::ActionProcessor;
-use crate::application_layer::functionality::service::action_inner_processor::application_user__authorization::authorize_by_first_step::Incoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_first_step::ActionProcessor;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_first_step::Incoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::authorize_by_first_step::Outcoming;
+use crate::application_layer::functionality::service::core_action_processor::CoreActionProcessor;
 use crate::application_layer::functionality::service::XXXXXXXDELETEaction_round_result_writer::ActionRoundResultWriter;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -34,8 +36,6 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::application_layer::functionality::service::action_inner_processor::application_user__authorization::authorize_by_first_step::Outcoming;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
 
@@ -291,6 +291,44 @@ where
                     }
 
                     return response;
+                }
+            }
+        }
+    }
+}
+
+pub async fn resolve(
+    action_processor_result: ActionProcessorResult<Outcoming>
+) -> Result<UnifiedReport<Outcoming>, ErrorAuditor> {
+    match action_processor_result {
+        ActionProcessorResult::Void => {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::create_unreachable_state(),
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
+        ActionProcessorResult::Outcoming { outcoming } => {
+            return Ok(UnifiedReport::data(outcoming));
+        }
+        ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
+            match user_workflow_precedent {
+                UserWorkflowPrecedent::ApplicationUser_NotFound |
+                UserWorkflowPrecedent::ApplicationUser_WrongPassword => {
+                    return Ok(
+                        UnifiedReport::communication_code(
+                            CommunicationCodeRegistry::APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
+                        )
+                    );
+                }
+                _ => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::create_unreachable_state(),
+                            BacktracePart::new(line!(), file!(), None)
+                        )
+                    );
                 }
             }
         }

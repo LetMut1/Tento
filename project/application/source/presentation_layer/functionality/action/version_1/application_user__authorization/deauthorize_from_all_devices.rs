@@ -1,7 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::application_layer::functionality::service::action_inner_processor::application_user__authorization::deauthorize_from_all_devices::ActionProcessor;
-use crate::application_layer::functionality::service::action_inner_processor::application_user__authorization::deauthorize_from_all_devices::Incoming;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::deauthorize_from_all_devices::ActionProcessor;
+use crate::application_layer::functionality::service::action_processor::application_user__authorization::deauthorize_from_all_devices::Incoming;
 use crate::application_layer::functionality::service::XXXXXXXDELETEaction_round_result_writer::ActionRoundResultWriter;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
