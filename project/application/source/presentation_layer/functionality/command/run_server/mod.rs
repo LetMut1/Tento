@@ -105,3 +105,5 @@ fn main() -> () {
 //// TODOD В сигнатуру класть коннекшн, JSON для тестов. ActionProcessor/AInnerProcessor/ CommandProcessor - Этло ведь не сервисы
 
 // channel_subscription create обработать ALready_subscribed
+
+// СЕрвисы с фантомной датой писать файл под новый тип, но делать pub use в самом сервисе.
