@@ -1,8 +1,5 @@
-use crate::application_layer::functionality::service::XXXXXXXDELETEaction_round_result_writer::ActionRoundResultWriter;
-use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
+use crate::application_layer::functionality::service::action_processor::route_not_found::ActionProcessor;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -29,19 +26,5 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
-    let response = ActionResponseCreator::create_not_found();
-
-    if let Err(mut error) = ActionRoundResultWriter::write_with_context(
-        database_2_postgresql_connection_pool, &request, &response, &InvalidArgument::HttpRoute
-    ).await {
-        error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-        unreachable!(
-            "{}. TODO: Write in concurrent way. It is also necessary that the write
-            process does not wait for another write process, and writes immediately.",
-            &error
-        );
-    }
-
-    return response;
+    return ActionProcessor::process(request, database_2_postgresql_connection_pool).await;
 }
