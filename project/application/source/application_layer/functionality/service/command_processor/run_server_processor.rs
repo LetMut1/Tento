@@ -277,7 +277,7 @@ impl RunServerProcessor {
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN, &Method::POST) => {
-                return application_user__authorization::refresh_application_user_access_token::refresh_application_user_access_token(
+                return application_user__authorization::refresh_application_user_access_token::RefreshApplicationUserAccessToken::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -394,7 +394,7 @@ impl RunServerProcessor {
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_, &Method::POST) => {
-                        return application_user__authorization::refresh_application_user_access_token::refresh_application_user_access_token_(
+                        return application_user__authorization::refresh_application_user_access_token::RefreshApplicationUserAccessToken::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
