@@ -252,7 +252,7 @@ impl RunServerProcessor {
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE, &Method::POST) => {
-                return application_user__authorization::send_email_for_authorize::send_email_for_authorize(
+                return application_user__authorization::send_email_for_authorize::SendEmailForAuthorize::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -369,7 +369,7 @@ impl RunServerProcessor {
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE_, &Method::POST) => {
-                        return application_user__authorization::send_email_for_authorize::send_email_for_authorize_(
+                        return application_user__authorization::send_email_for_authorize::SendEmailForAuthorize::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
