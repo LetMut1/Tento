@@ -217,7 +217,7 @@ impl RunServerProcessor {
             }
             // GET functional.
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING, &Method::POST) => {
-                return application_user__authorization::check_email_for_existing::check_email_for_existing(
+                return application_user__authorization::check_email_for_existing::CheckEmailForExisting::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -334,7 +334,7 @@ impl RunServerProcessor {
                     }
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_, &Method::POST) => {
-                        return application_user__authorization::check_email_for_existing::check_email_for_existing_(
+                        return application_user__authorization::check_email_for_existing::CheckEmailForExisting::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
