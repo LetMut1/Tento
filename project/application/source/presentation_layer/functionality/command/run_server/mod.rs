@@ -1,6 +1,6 @@
 extern crate application;
 
-use application::application_layer::functionality::service::command_processor::run_server_processor::RunServerProcessor;
+use application::application_layer::functionality::command_processor::run_server_processor::RunServerProcessor;
 use application::infrastructure_layer::functionality::service::formatter::Format;
 use application::infrastructure_layer::functionality::service::formatter::Formatter;
 

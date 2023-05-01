@@ -1,9 +1,9 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_many_public_by_name::ActionProcessor;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_many_public_by_name::Incoming;
-use crate::application_layer::functionality::service::action_processor::channel__base::get_many_public_by_name::Outcoming;
-use crate::application_layer::functionality::service::core_action_processor::CoreActionProcessor;
+use crate::application_layer::functionality::action_processor::channel__base::get_many_public_by_name::ActionProcessor;
+use crate::application_layer::functionality::action_processor::channel__base::get_many_public_by_name::Incoming;
+use crate::application_layer::functionality::action_processor::channel__base::get_many_public_by_name::Outcoming;
+use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
