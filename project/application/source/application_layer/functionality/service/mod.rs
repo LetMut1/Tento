@@ -4,4 +4,4 @@ pub mod XXXXXXXDELETEaction_round_result_writer;
 pub mod command_processor;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub mod action_processing_delegator;
+pub mod action_delegator;

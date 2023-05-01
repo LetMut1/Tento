@@ -37,7 +37,7 @@ use std::marker::Sync;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::action_processor::channel__base::get_many_by_name_in_subscriptions::Outcoming;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::presentation_layer::functionality::service::wrapped_encoding_protocol_action_creator::WrappedEncodingProtocolActionCreator;
+use crate::presentation_layer::functionality::service::wrapped_action_creator::WrappedActionCreator;
 
 pub async fn get_many_by_name_in_subscriptions<'a, T>(
     environment_configuration: &'a EnvironmentConfiguration,
@@ -351,7 +351,7 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
 {
-    return WrappedEncodingProtocolActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
+    return WrappedActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
         environment_configuration,
         request,
         database_1_postgresql_connection_pool,

@@ -32,24 +32,24 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub struct ActionProcessingDelegator;
+pub struct ActionDelegator;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-impl ActionProcessingDelegator {
-    pub async fn delegate<'a, T, AP, F, API, APO>(
+impl ActionDelegator {
+    pub async fn delegate<'a, T, A, F, API, APO>(
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: ConvertibleParts<API>,
-        action_processor: AP
+        action: A
     ) -> Result<ActionProcessingDelegatorResult<APO>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        AP: FnOnce(
+        A: FnOnce(
             &'a EnvironmentConfiguration,
             Request<Body>,
             &'a Pool<PostgresqlConnectionManager<T>>,
@@ -75,7 +75,7 @@ impl ActionProcessingDelegator {
 
         let request = Request::from_parts(request_parts, Body::from(data));
 
-        let response = action_processor(
+        let response = action(
             environment_configuration,
             request,
             database_1_postgresql_connection_pool,

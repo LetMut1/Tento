@@ -1,5 +1,5 @@
-use crate::application_layer::functionality::service::action_processing_delegator::ActionProcessingDelegator;
-use crate::application_layer::functionality::service::action_processing_delegator::ConvertibleParts;
+use crate::application_layer::functionality::service::action_delegator::ActionDelegator;
+use crate::application_layer::functionality::service::action_delegator::ConvertibleParts;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
@@ -28,24 +28,24 @@ use super::request_header_checker::RequestHeaderChecker;
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub struct WrappedEncodingProtocolActionCreator;
+pub struct WrappedActionCreator;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-impl WrappedEncodingProtocolActionCreator {
-    pub async fn create_for_json<'a, T, AP, F, API, APO>(
+impl WrappedActionCreator {
+    pub async fn create_for_json<'a, T, A, F, API, APO>(
         environment_configuration: &'a EnvironmentConfiguration,
         mut request: Request<Body>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        action_processor: AP
+        action: A
     ) -> Response<Body>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        AP: FnOnce(
+        A: FnOnce(
             &'a EnvironmentConfiguration,
             Request<Body>,
             &'a Pool<PostgresqlConnectionManager<T>>,
@@ -74,7 +74,7 @@ impl WrappedEncodingProtocolActionCreator {
             }
         };
 
-        let action_processing_delegator_result = match ActionProcessingDelegator::delegate::<'_, _, _, _, API, APO>(
+        let action_processing_delegator_result = match ActionDelegator::delegate::<'_, _, _, _, API, APO>(
             environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
@@ -83,7 +83,7 @@ impl WrappedEncodingProtocolActionCreator {
                 request,
                 action_processor_incoming: incoming
             },
-            action_processor
+            action
         ).await {
             Ok(action_processor_result_) => action_processor_result_,
             Err(_) => {
