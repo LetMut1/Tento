@@ -272,7 +272,7 @@ impl RunServerProcessor {
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD, &Method::POST) => {
-                return application_user__authorization::send_email_for_reset_password::send_email_for_reset_password(
+                return application_user__authorization::send_email_for_reset_password::SendEmailForResetPassword::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -389,7 +389,7 @@ impl RunServerProcessor {
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_, &Method::POST) => {
-                        return application_user__authorization::send_email_for_reset_password::send_email_for_reset_password_(
+                        return application_user__authorization::send_email_for_reset_password::SendEmailForResetPassword::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
