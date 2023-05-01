@@ -27,88 +27,92 @@ use std::marker::Sync;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::presentation_layer::functionality::service::wrapped_action_creator::WrappedActionCreator;
 
-pub async fn authorize_by_first_step<'a, T>(
-    environment_configuration: &'a EnvironmentConfiguration,
-    request: Request<Body>,
-    database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-    database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-    redis_connection_pool: &'a Pool<RedisConnectionManager>
-) -> Response<Body>
-where
-    T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-    <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-    <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-    <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-{
-    return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, _>(
-        environment_configuration,
-        request,
-        database_1_postgresql_connection_pool,
-        database_2_postgresql_connection_pool,
-        redis_connection_pool,
-        ActionProcessor::process,
-        resolve
-    ).await;
-}
+pub struct AuthorizeByFirstStep;
 
-fn resolve(
-    action_processor_result: ActionProcessorResult<Outcoming>
-) -> Result<UnifiedReport<Outcoming>, ErrorAuditor> {
-    match action_processor_result {
-        ActionProcessorResult::Void => {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::create_unreachable_state(),
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
-        ActionProcessorResult::Outcoming { outcoming } => {
-            return Ok(UnifiedReport::data(outcoming));
-        }
-        ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
-            match user_workflow_precedent {
-                UserWorkflowPrecedent::ApplicationUser_NotFound |
-                UserWorkflowPrecedent::ApplicationUser_WrongPassword => {
-                    return Ok(
-                        UnifiedReport::communication_code(
-                            CommunicationCodeRegistry::APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
-                        )
-                    );
-                }
-                _ => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::create_unreachable_state(),
-                            BacktracePart::new(line!(), file!(), None)
-                        )
-                    );
+impl AuthorizeByFirstStep {
+    pub async fn run<'a, T>(
+        environment_configuration: &'a EnvironmentConfiguration,
+        request: Request<Body>,
+        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: &'a Pool<RedisConnectionManager>
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, _>(
+            environment_configuration,
+            request,
+            database_1_postgresql_connection_pool,
+            database_2_postgresql_connection_pool,
+            redis_connection_pool,
+            ActionProcessor::process,
+            Self::resolve
+        ).await;
+    }
+
+    fn resolve(
+        action_processor_result: ActionProcessorResult<Outcoming>
+    ) -> Result<UnifiedReport<Outcoming>, ErrorAuditor> {
+        match action_processor_result {
+            ActionProcessorResult::Void => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::create_unreachable_state(),
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+            ActionProcessorResult::Outcoming { outcoming } => {
+                return Ok(UnifiedReport::data(outcoming));
+            }
+            ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
+                match user_workflow_precedent {
+                    UserWorkflowPrecedent::ApplicationUser_NotFound |
+                    UserWorkflowPrecedent::ApplicationUser_WrongPassword => {
+                        return Ok(
+                            UnifiedReport::communication_code(
+                                CommunicationCodeRegistry::APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
+                            )
+                        );
+                    }
+                    _ => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::create_unreachable_state(),
+                                BacktracePart::new(line!(), file!(), None)
+                            )
+                        );
+                    }
                 }
             }
         }
     }
-}
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub async fn authorize_by_first_step_<'a, T>(
-    environment_configuration: &'a EnvironmentConfiguration,
-    request: Request<Body>,
-    database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-    database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-    redis_connection_pool: &'a Pool<RedisConnectionManager>
-) -> Response<Body>
-where
-    T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-    <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-    <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-    <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
-{
-    return WrappedActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
-        environment_configuration,
-        request,
-        database_1_postgresql_connection_pool,
-        database_2_postgresql_connection_pool,
-        redis_connection_pool,
-        authorize_by_first_step
-    ).await;
+    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
+    pub async fn run_<'a, T>(
+        environment_configuration: &'a EnvironmentConfiguration,
+        request: Request<Body>,
+        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        redis_connection_pool: &'a Pool<RedisConnectionManager>
+    ) -> Response<Body>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+    {
+        return WrappedActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
+            environment_configuration,
+            request,
+            database_1_postgresql_connection_pool,
+            database_2_postgresql_connection_pool,
+            redis_connection_pool,
+            Self::run
+        ).await;
+    }
 }

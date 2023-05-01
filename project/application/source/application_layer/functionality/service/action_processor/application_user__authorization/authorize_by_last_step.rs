@@ -32,6 +32,7 @@ use crate::infrastructure_layer::functionality::repository::application_user_acc
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
@@ -50,6 +51,7 @@ impl ActionProcessor {
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,             // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
+        _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
     ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where

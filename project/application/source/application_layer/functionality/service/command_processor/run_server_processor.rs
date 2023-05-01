@@ -242,12 +242,12 @@ impl RunServerProcessor {
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP, &Method::POST) => {
-                return application_user__authorization::authorize_by_first_step::authorize_by_first_step(
+                return application_user__authorization::authorize_by_first_step::AuthorizeByFirstStep::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP, &Method::POST) => {
-                return application_user__authorization::authorize_by_last_step::authorize_by_last_step(
+                return application_user__authorization::authorize_by_last_step::AuthorizeByLastStep::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -359,12 +359,12 @@ impl RunServerProcessor {
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP_, &Method::POST) => {
-                        return application_user__authorization::authorize_by_first_step::authorize_by_first_step_(
+                        return application_user__authorization::authorize_by_first_step::AuthorizeByFirstStep::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP_, &Method::POST) => {
-                        return application_user__authorization::authorize_by_last_step::authorize_by_last_step_(
+                        return application_user__authorization::authorize_by_last_step::AuthorizeByLastStep::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
