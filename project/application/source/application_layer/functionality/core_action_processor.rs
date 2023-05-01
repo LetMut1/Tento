@@ -9,10 +9,11 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::service::creator::Creator;
+use crate::infrastructure_layer::functionality::service::creator::Response;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
-use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
 use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -21,7 +22,6 @@ use extern_crate::bytes::Buf;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::body::to_bytes;
 use extern_crate::hyper::Request;
-use extern_crate::hyper::Response;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize as SerdeSerialize;
 use extern_crate::tokio_postgres::Socket;
@@ -43,7 +43,7 @@ impl CoreActionProcessor {
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
         action_processor: AP,
         action_processor_result_resolver: APRR
-    ) -> Response<Body>
+    ) -> Response
     where
         Serializer<SF>: Serialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -63,7 +63,7 @@ impl CoreActionProcessor {
         APRR: FnOnce(ActionProcessorResult<APO>) -> Result<UnifiedReport<APO>, ErrorAuditor>
     {
         if !RequestHeaderChecker::is_valid(&request) {
-            let response = ActionResponseCreator::create_bad_request();
+            let response = Creator::<Response>::create_bad_request();
 
             if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
                 database_2_postgresql_connection_pool, &request, &response, &InvalidArgument::HttpHeaders
@@ -88,7 +88,7 @@ impl CoreActionProcessor {
                     BacktracePart::new(line!(), file!(), None)
                 );
 
-                let response = ActionResponseCreator::create_internal_server_error();
+                let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error__) = Writer::<ActionRoundRegister>::write_with_context(
                     database_2_postgresql_connection_pool, &request, &response, &error_
@@ -110,7 +110,7 @@ impl CoreActionProcessor {
         let action_processor_incoming = match Serializer::<SF>::deserialize::<'_, API>(bytes.chunk()) {
             Ok(action_processor_incoming_) => action_processor_incoming_,
             Err(error) => {
-                let response = ActionResponseCreator::create_internal_server_error();
+                let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
                     database_2_postgresql_connection_pool, &request, &response, &error
@@ -138,7 +138,7 @@ impl CoreActionProcessor {
         ).await {
             Ok(action_processor_result_) => action_processor_result_,
             Err(error) => {
-                let response = ActionResponseCreator::create_internal_server_error();
+                let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
                     database_2_postgresql_connection_pool, &request, &response, &error
@@ -160,7 +160,7 @@ impl CoreActionProcessor {
         let action_processor_result_ = match action_processor_result {
             ArgumentResult::Ok { subject: action_processor_result__ } => action_processor_result__,
             ArgumentResult::InvalidArgument { invalid_argument } => {
-                let response = ActionResponseCreator::create_bad_request();
+                let response = Creator::<Response>::create_bad_request();
 
                 if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
                     database_2_postgresql_connection_pool, &request, &response, &invalid_argument
@@ -183,7 +183,7 @@ impl CoreActionProcessor {
                 let data = match Serializer::<SF>::serialize(&unified_report) {
                     Ok(data_) => data_,
                     Err(error) => {
-                        let response = ActionResponseCreator::create_internal_server_error();
+                        let response = Creator::<Response>::create_internal_server_error();
 
                         if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
                             database_2_postgresql_connection_pool, &request, &response, &error
@@ -202,7 +202,7 @@ impl CoreActionProcessor {
                     }
                 };
 
-                let response = ActionResponseCreator::create_ok(data);
+                let response = Creator::<Response>::create_ok(data);
 
                 if let Err(mut error) = Writer::<ActionRoundRegister>::write(
                     database_2_postgresql_connection_pool, &request, &response
@@ -219,7 +219,7 @@ impl CoreActionProcessor {
                 response
             },
             Err(error) => {
-                let response = ActionResponseCreator::create_internal_server_error();
+                let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
                     database_2_postgresql_connection_pool, &request, &response, &error

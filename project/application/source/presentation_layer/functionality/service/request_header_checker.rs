@@ -1,7 +1,8 @@
 use extern_crate::http::header;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::Request;
-use super::action_response_creator::ActionResponseCreator;
+use crate::infrastructure_layer::functionality::service::creator::Response;
+use crate::infrastructure_layer::functionality::service::creator::Creator;
 
 pub struct RequestHeaderChecker;
 
@@ -16,7 +17,7 @@ impl RequestHeaderChecker {
             }
         };
 
-        if header_value_content_type.as_bytes() != ActionResponseCreator::HEADER_VALUE_CONTENT_TYPE.as_bytes() {
+        if header_value_content_type.as_bytes() != Creator::<Response>::HEADER_VALUE_CONTENT_TYPE.as_bytes() {
             return false;
         }
 
@@ -27,7 +28,7 @@ impl RequestHeaderChecker {
             }
         };
 
-        if header_value_x_content_type_options.as_bytes() != ActionResponseCreator::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS.as_bytes() {
+        if header_value_x_content_type_options.as_bytes() != Creator::<Response>::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS.as_bytes() {
             return false;
         }
 

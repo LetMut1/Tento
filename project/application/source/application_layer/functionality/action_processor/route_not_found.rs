@@ -2,12 +2,12 @@ use crate::domain_layer::data::entity::action_round_register::ActionRoundRegiste
 use crate::domain_layer::functionality::service::writer::Writer;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::presentation_layer::functionality::service::action_response_creator::ActionResponseCreator;
+use crate::infrastructure_layer::functionality::service::creator::Creator;
+use crate::infrastructure_layer::functionality::service::creator::Response;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::Request;
-use extern_crate::hyper::Response;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -21,14 +21,14 @@ impl ActionProcessor {
     pub async fn process<'a, T>(
         request: Request<Body>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>
-    ) -> Response<Body>
+    ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let response = ActionResponseCreator::create_not_found();
+        let response = Creator::<Response>::create_not_found();
 
         if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
             database_2_postgresql_connection_pool, &request, &response, &InvalidArgument::HttpRoute
