@@ -317,7 +317,7 @@ impl RunServerProcessor {
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE, &Method::POST) => {
-                return channel_subscription__base::create::create(
+                return channel_subscription__base::create::Create::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -434,7 +434,7 @@ impl RunServerProcessor {
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE_, &Method::POST) => {
-                        return channel_subscription__base::create::create_(
+                        return channel_subscription__base::create::Create::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
