@@ -312,7 +312,7 @@ impl RunServerProcessor {
             }
             // GET functional.
             (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME, &Method::POST) => {
-                return channel__base::get_many_public_by_name::get_many_public_by_name(
+                return channel__base::get_many_public_by_name::GetManyPublicByName::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -429,7 +429,7 @@ impl RunServerProcessor {
                     }
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME_, &Method::POST) => {
-                        return channel__base::get_many_public_by_name::get_many_public_by_name_(
+                        return channel__base::get_many_public_by_name::GetManyPublicByName::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
