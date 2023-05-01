@@ -237,7 +237,7 @@ impl RunServerProcessor {
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER, &Method::POST) => {
-                return application_user__authorization::send_email_for_register::send_email_for_register(
+                return application_user__authorization::send_email_for_register::SendEmailForRegister::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -354,7 +354,7 @@ impl RunServerProcessor {
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER_, &Method::POST) => {
-                        return application_user__authorization::send_email_for_register::send_email_for_register_(
+                        return application_user__authorization::send_email_for_register::SendEmailForRegister::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
