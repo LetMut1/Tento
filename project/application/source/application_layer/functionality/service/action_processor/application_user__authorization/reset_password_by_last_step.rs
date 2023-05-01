@@ -14,6 +14,7 @@ use crate::domain_layer::functionality::service::expiration_time_resolver::Expir
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -23,6 +24,7 @@ use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::cloud_message_resolver::CloudMessageResolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
 use extern_crate::tokio_postgres::Socket;
@@ -39,8 +41,10 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
+        _environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
     ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
     where

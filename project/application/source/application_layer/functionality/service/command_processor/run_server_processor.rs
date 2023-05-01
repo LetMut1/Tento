@@ -267,7 +267,7 @@ impl RunServerProcessor {
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP, &Method::POST) => {
-                return application_user__authorization::reset_password_by_last_step::reset_password_by_last_step(
+                return application_user__authorization::reset_password_by_last_step::ResetPasswordByLastStep::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -384,7 +384,7 @@ impl RunServerProcessor {
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_, &Method::POST) => {
-                        return application_user__authorization::reset_password_by_last_step::reset_password_by_last_step_(
+                        return application_user__authorization::reset_password_by_last_step::ResetPasswordByLastStep::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
