@@ -283,7 +283,7 @@ impl RunServerProcessor {
             }
             // Area for existing routes with authorized user.
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE, &Method::POST) => {
-                return application_user__authorization::deauthorize_from_one_device::deauthorize_from_one_device(
+                return application_user__authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -400,7 +400,7 @@ impl RunServerProcessor {
                     }
                     // Area for existing routes with authorized user.
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_, &Method::POST) => {
-                        return application_user__authorization::deauthorize_from_one_device::deauthorize_from_one_device_(
+                        return application_user__authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }

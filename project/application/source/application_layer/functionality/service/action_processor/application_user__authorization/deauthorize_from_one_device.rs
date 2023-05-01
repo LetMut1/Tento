@@ -14,6 +14,7 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
 use extern_crate::tokio_postgres::Socket;
@@ -31,7 +32,9 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
+        _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
     ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
     where
