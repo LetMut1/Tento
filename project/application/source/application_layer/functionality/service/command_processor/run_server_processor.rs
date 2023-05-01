@@ -222,7 +222,7 @@ impl RunServerProcessor {
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP, &Method::POST) => {
-                return application_user__authorization::register_by_first_step::register_by_first_step(
+                return application_user__authorization::register_by_first_step::RegisterByFirstStep::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -339,7 +339,7 @@ impl RunServerProcessor {
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP_, &Method::POST) => {
-                        return application_user__authorization::register_by_first_step::register_by_first_step_(
+                        return application_user__authorization::register_by_first_step::RegisterByFirstStep::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
