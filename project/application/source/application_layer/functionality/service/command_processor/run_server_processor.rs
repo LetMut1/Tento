@@ -300,7 +300,7 @@ impl RunServerProcessor {
             }
             // GET functional.
             (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS, &Method::POST) => {
-                return channel__base::get_many_by_name_in_subscriptions::get_many_by_name_in_subscriptions(
+                return channel__base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -417,7 +417,7 @@ impl RunServerProcessor {
                     }
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_, &Method::POST) => {
-                        return channel__base::get_many_by_name_in_subscriptions::get_many_by_name_in_subscriptions_(
+                        return channel__base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
