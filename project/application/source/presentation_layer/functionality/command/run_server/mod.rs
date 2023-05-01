@@ -104,7 +104,4 @@ fn main() -> () {
 
 //// TODOD В сигнатуру класть коннекшн, JSON для тестов. ActionProcessor/AInnerProcessor/ CommandProcessor - Этло ведь не сервисы
 
-
-// TODO presentation layer Creator сделать через PhantomData
-
 // channel_subscription create обработать ALready_subscribed
