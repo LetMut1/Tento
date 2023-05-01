@@ -1,4 +1,2 @@
-pub mod application_user__authorization;
-pub mod channel__base;
-pub mod channel_subscription__base;
 pub mod route_not_found;
+pub mod version_1;

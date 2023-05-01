@@ -1,7 +1,7 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::functionality::action_processor::application_user__authorization::check_nickname_for_existing::ActionProcessor;
-use crate::application_layer::functionality::action_processor::application_user__authorization::check_nickname_for_existing::Incoming;
-use crate::application_layer::functionality::action_processor::application_user__authorization::check_nickname_for_existing::Outcoming;
+use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::check_nickname_for_existing::ActionProcessor;
+use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::check_nickname_for_existing::Incoming;
+use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::check_nickname_for_existing::Outcoming;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;

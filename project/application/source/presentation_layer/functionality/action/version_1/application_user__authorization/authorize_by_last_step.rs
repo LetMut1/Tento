@@ -1,8 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::application_layer::functionality::action_processor::application_user__authorization::authorize_by_last_step::ActionProcessor;
-use crate::application_layer::functionality::action_processor::application_user__authorization::authorize_by_last_step::Incoming;
-use crate::application_layer::functionality::action_processor::application_user__authorization::authorize_by_last_step::Outcoming;
+use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::ActionProcessor;
+use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::Incoming;
+use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::Outcoming;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;

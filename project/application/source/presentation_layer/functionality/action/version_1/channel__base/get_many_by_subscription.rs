@@ -1,8 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
-use crate::application_layer::functionality::action_processor::channel__base::get_many_by_subscription::ActionProcessor;
-use crate::application_layer::functionality::action_processor::channel__base::get_many_by_subscription::Incoming;
-use crate::application_layer::functionality::action_processor::channel__base::get_many_by_subscription::Outcoming;
+use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_subscription::ActionProcessor;
+use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_subscription::Incoming;
+use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_subscription::Outcoming;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
