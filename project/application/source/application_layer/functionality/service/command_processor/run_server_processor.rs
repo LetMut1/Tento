@@ -288,7 +288,7 @@ impl RunServerProcessor {
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE, &Method::POST) => {
-                return application_user__authorization::deauthorize_from_all_devices::deauthorize_from_all_devices(
+                return application_user__authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -405,7 +405,7 @@ impl RunServerProcessor {
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_, &Method::POST) => {
-                        return application_user__authorization::deauthorize_from_all_devices::deauthorize_from_all_devices_(
+                        return application_user__authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }
