@@ -211,7 +211,7 @@ impl RunServerProcessor {
             // Area for existing routes with not authorized user.
             // GET functional.
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING, &Method::POST) => {
-                return application_user__authorization::check_nickname_for_existing::check_nickname_for_existing(
+                return application_user__authorization::check_nickname_for_existing::CheckNicknameForExisting::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -328,7 +328,7 @@ impl RunServerProcessor {
                     // Area for existing routes with not authorized user.
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_, &Method::POST) => {
-                        return application_user__authorization::check_nickname_for_existing::check_nickname_for_existing_(
+                        return application_user__authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }

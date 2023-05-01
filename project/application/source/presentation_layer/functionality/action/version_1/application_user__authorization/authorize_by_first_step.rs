@@ -91,8 +91,10 @@ impl AuthorizeByFirstStep {
             }
         }
     }
+}
 
-    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+impl AuthorizeByFirstStep {
     pub async fn run_<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
         request: Request<Body>,

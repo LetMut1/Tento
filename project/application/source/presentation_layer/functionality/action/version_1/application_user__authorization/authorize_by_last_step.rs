@@ -111,8 +111,10 @@ impl AuthorizeByLastStep {
             }
         }
     }
+}
 
-    #[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+impl AuthorizeByLastStep {
     pub async fn run_<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
         request: Request<Body>,
