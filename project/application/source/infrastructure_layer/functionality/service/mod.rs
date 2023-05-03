@@ -1,3 +1,5 @@
+pub mod argon2id_encoder;
+pub mod base64_encoder;
 pub mod cloud_message_resolver;
 pub mod converter;
 pub mod counter;
@@ -8,6 +10,7 @@ pub mod encoder;
 pub mod environment_configuration__loader;
 pub mod formatter;
 pub mod generator;
+pub mod hmac_encoder;
 pub mod loader;
 pub mod postgrasql_transaction_manager;
 pub mod postgresql_connection_pool_creator;
