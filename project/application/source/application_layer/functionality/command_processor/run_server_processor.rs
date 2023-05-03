@@ -4,6 +4,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
+use crate::infrastructure_layer::data::control_type_registry::Response;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
@@ -22,7 +23,6 @@ use extern_crate::hyper::Body;
 use extern_crate::hyper::Error as HyperError;
 use extern_crate::hyper::Method;
 use extern_crate::hyper::Request;
-use extern_crate::hyper::Response;
 use extern_crate::hyper::Server;
 use extern_crate::hyper::server::conn::AddrStream;
 use extern_crate::hyper::service::make_service_fn;
@@ -196,7 +196,7 @@ impl RunServerProcessor {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>
-    ) -> Response<Body>
+    ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

@@ -3,6 +3,7 @@ use crate::application_layer::functionality::action_processor::version_1::applic
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::check_nickname_for_existing::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::check_nickname_for_existing::Outcoming;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
+use crate::infrastructure_layer::data::control_type_registry::Response;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -14,7 +15,6 @@ use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::Request;
-use extern_crate::hyper::Response;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -34,7 +34,7 @@ impl CheckNicknameForExisting {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>
-    ) -> Response<Body>
+    ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -87,7 +87,7 @@ impl CheckNicknameForExisting {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>
-    ) -> Response<Body>
+    ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

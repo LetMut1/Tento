@@ -103,8 +103,6 @@ fn main() -> () {
 
 // channel_subscription create обработать ALready_subscribed
 
-// Заменил Response<Body> на Response. -Нужно использовать только один вариант.
-
 // посмотреть, будут ли сервесы в Презентейшн лэер.
 
 

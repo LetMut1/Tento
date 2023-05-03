@@ -1,4 +1,5 @@
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::control_type_registry::Response;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -19,7 +20,6 @@ use extern_crate::http::StatusCode;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::body::to_bytes;
 use extern_crate::hyper::Request;
-use extern_crate::hyper::Response;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize as SerdeSerialize;
 use extern_crate::tokio_postgres::Socket;
@@ -56,7 +56,7 @@ impl ActionDelegator {
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<RedisConnectionManager>
         ) -> F,
-        F: Future<Output = Response<Body>>,
+        F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>
     {

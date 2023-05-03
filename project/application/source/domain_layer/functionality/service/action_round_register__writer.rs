@@ -1,6 +1,7 @@
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Context;
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::domain_layer::functionality::service::action_round_register__context_creator::ContextFrom;
+use crate::infrastructure_layer::data::control_type_registry::Response;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -14,7 +15,6 @@ use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectio
 use extern_crate::bb8::Pool;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::Request;
-use extern_crate::hyper::Response;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -28,7 +28,7 @@ impl Writer<ActionRoundRegister> {
     pub async fn write<'a, T>(
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request<Body>,
-        response: &'a Response<Body>
+        response: &'a Response
     ) -> Result<(), ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -48,7 +48,7 @@ impl Writer<ActionRoundRegister> {
     pub async fn write_with_context<'a, T, E>(
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request<Body>,
-        response: &'a Response<Body>,
+        response: &'a Response,
         subject: &'a E
     ) -> Result<(), ErrorAuditor>
     where
@@ -77,7 +77,7 @@ impl Writer<ActionRoundRegister> {
     async fn write_<'a, T>(
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request<Body>,
-        response: &'a Response<Body>,
+        response: &'a Response,
         action_round_register_context: Option<String>
     ) -> Result<(), ErrorAuditor>
     where
