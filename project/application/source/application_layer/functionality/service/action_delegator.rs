@@ -1,5 +1,6 @@
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::control_type_registry::Response;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -19,7 +20,6 @@ use extern_crate::http::response::Parts;
 use extern_crate::http::StatusCode;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::body::to_bytes;
-use extern_crate::hyper::Request;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize as SerdeSerialize;
 use extern_crate::tokio_postgres::Socket;
@@ -51,7 +51,7 @@ impl ActionDelegator {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         A: FnOnce(
             &'a EnvironmentConfiguration,
-            Request<Body>,
+            Request,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<RedisConnectionManager>
@@ -124,7 +124,7 @@ pub struct ConvertibleParts<T>
 where
     T: SerdeSerialize + for<'de> Deserialize<'de>
 {
-    pub request: Request<Body>,
+    pub request: Request,
     pub action_processor_incoming: T
 }
 

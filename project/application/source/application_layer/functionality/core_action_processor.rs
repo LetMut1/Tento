@@ -3,6 +3,7 @@ use crate::domain_layer::data::entity::action_round_register::ActionRoundRegiste
 use crate::domain_layer::functionality::service::writer::Writer;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -19,9 +20,7 @@ use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectio
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::bytes::Buf;
-use extern_crate::hyper::Body;
 use extern_crate::hyper::body::to_bytes;
-use extern_crate::hyper::Request;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize as SerdeSerialize;
 use extern_crate::tokio_postgres::Socket;
@@ -37,7 +36,7 @@ pub struct CoreActionProcessor;
 impl CoreActionProcessor {
     pub async fn process<'a, SF, T, AP, F, API, APO, APRR>(
         environment_configuration: &'a EnvironmentConfiguration,
-        mut request: Request<Body>,
+        mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,

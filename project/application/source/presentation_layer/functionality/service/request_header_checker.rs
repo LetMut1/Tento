@@ -1,13 +1,12 @@
-use extern_crate::http::header;
-use extern_crate::hyper::Body;
-use extern_crate::hyper::Request;
-use crate::infrastructure_layer::functionality::service::creator::Response;
+use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
+use crate::infrastructure_layer::functionality::service::creator::Response;
+use extern_crate::http::header;
 
 pub struct RequestHeaderChecker;
 
 impl RequestHeaderChecker {
-    pub fn is_valid<'a>(request: &'a Request<Body>) -> bool {
+    pub fn is_valid<'a>(request: &'a Request) -> bool {
         let header_map = request.headers();
 
         let header_value_content_type = match header_map.get(header::CONTENT_TYPE) {

@@ -1,5 +1,6 @@
 use crate::application_layer::functionality::service::action_delegator::ActionDelegator;
 use crate::application_layer::functionality::service::action_delegator::ConvertibleParts;
+use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::Response;
@@ -9,9 +10,7 @@ use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectio
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::bytes::Buf;
-use extern_crate::hyper::Body;
 use extern_crate::hyper::body::to_bytes;
-use extern_crate::hyper::Request;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize as SerdeSerialize;
 use extern_crate::tokio_postgres::Socket;
@@ -34,7 +33,7 @@ pub struct WrappedActionCreator;
 impl WrappedActionCreator {
     pub async fn create_for_json<'a, T, A, F, API, APO>(
         environment_configuration: &'a EnvironmentConfiguration,
-        mut request: Request<Body>,
+        mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -47,7 +46,7 @@ impl WrappedActionCreator {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         A: FnOnce(
             &'a EnvironmentConfiguration,
-            Request<Body>,
+            Request,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<RedisConnectionManager>

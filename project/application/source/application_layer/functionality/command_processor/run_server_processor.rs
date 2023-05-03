@@ -1,10 +1,11 @@
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::control_type_registry::Request;
+use crate::infrastructure_layer::data::control_type_registry::Response;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::control_type_registry::Response;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
@@ -19,10 +20,8 @@ use crate::presentation_layer::functionality::action::version_1::channel_subscri
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
-use extern_crate::hyper::Body;
 use extern_crate::hyper::Error as HyperError;
 use extern_crate::hyper::Method;
-use extern_crate::hyper::Request;
 use extern_crate::hyper::Server;
 use extern_crate::hyper::server::conn::AddrStream;
 use extern_crate::hyper::service::make_service_fn;
@@ -192,7 +191,7 @@ impl RunServerProcessor {
 
     async fn resolve<'a, T>(   // TODO Можно ли пробростить ЛОггер как объект? Нужно ли?  (Лог4рс делает так, чтобы все крееты, на основе этого лога могли писать в общий лог) // TODO TODO  TODO Пути через константы?
         environment_configuration: &'a EnvironmentConfiguration,
-        request: Request<Body>,
+        request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>

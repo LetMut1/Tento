@@ -3,6 +3,7 @@ use crate::application_layer::functionality::action_processor::version_1::applic
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::check_email_for_existing::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::check_email_for_existing::Outcoming;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
+use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::control_type_registry::Response;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -13,8 +14,6 @@ use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
-use extern_crate::hyper::Body;
-use extern_crate::hyper::Request;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -30,7 +29,7 @@ pub struct CheckEmailForExisting;
 impl CheckEmailForExisting {
     pub async fn run<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
-        request: Request<Body>,
+        request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>
@@ -83,7 +82,7 @@ impl CheckEmailForExisting {
 impl CheckEmailForExisting {
     pub async fn run_<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
-        request: Request<Body>,
+        request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>
