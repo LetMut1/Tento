@@ -1,12 +1,13 @@
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use extern_crate::chrono::DateTime;
+use extern_crate::chrono::DateTime as ChronoDateTime;
 use extern_crate::chrono::Utc;
+use super::resolver::Resolver;
 
-pub struct DateTimeResolver;
+pub struct DateTime;
 
-impl DateTimeResolver {
+impl Resolver<DateTime> {
     /// Rule for 2022-09-18 03:03:39.308889+00
     const TIMESTAMP_FORMAT_TO_PARSE: &'static str = "%Y-%m-%d %H:%M:%S%.6f%#z";
     /// Rule for 2022-09-18 03:03:39.308889+0000
@@ -51,7 +52,7 @@ impl DateTimeResolver {
     }
 
     pub fn timestamp_is_valid_timestamp<'a>(date_time: &'a str) -> bool {
-        if let Ok(_) = DateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT_TO_PARSE) {
+        if let Ok(_) = ChronoDateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT_TO_PARSE) {
             return true;
         }
 

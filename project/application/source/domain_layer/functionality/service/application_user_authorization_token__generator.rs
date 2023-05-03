@@ -4,7 +4,8 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::functionality::service::date_time_resolver::DateTimeResolver;
+use crate::infrastructure_layer::functionality::service::resolver::DateTime;
+use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use crate::infrastructure_layer::functionality::service::generator::Generator as Generator_;
 use crate::infrastructure_layer::functionality::service::generator::NumberRow;
 use super::generator::Generator;
@@ -17,7 +18,7 @@ impl Generator<ApplicationUserAuthorizationToken_Value> {
 
 impl Generator<ApplicationUserAuthorizationToken_ExpiresAt> {
     pub fn generate() -> Result<i64, ErrorAuditor> {
-        let application_user_authorization_token_expires_at = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
+        let application_user_authorization_token_expires_at = match Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(
             ApplicationUserAuthorizationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
         ) {
             Ok(application_user_authorization_token_expires_at_) => application_user_authorization_token_expires_at_,
@@ -34,7 +35,7 @@ impl Generator<ApplicationUserAuthorizationToken_ExpiresAt> {
 
 impl Generator<ApplicationUserAuthorizationToken_CanBeResentFrom> {
     pub fn generate() -> Result<i64, ErrorAuditor> {
-        let application_user_authorization_token_can_be_resent_from = match DateTimeResolver::unixtime_add_minutes_interval_from_now(
+        let application_user_authorization_token_can_be_resent_from = match Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(
             ApplicationUserAuthorizationToken::QUANTITY_OF_MINUTES_BEFORE_RESENDING
         ) {
             Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
