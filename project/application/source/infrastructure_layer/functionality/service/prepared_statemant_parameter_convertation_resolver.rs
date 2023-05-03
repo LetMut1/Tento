@@ -14,7 +14,10 @@ impl<'a> PreparedStatementParameterConvertationResolver<'a> {
         };
     }
 
-    pub fn add_parameter<'b>(&'b mut self, parameter_value: &'a (dyn ToSql + Sync), patameter_type: Type) -> &'b mut Self {
+    pub fn add_parameter<'b>(
+        &'b mut self, parameter_value:
+        &'a (dyn ToSql + Sync), patameter_type: Type
+    ) -> &'b mut Self {
         self.parameter_registry.push(parameter_value);
         self.parameter_type_registry.push(patameter_type);
 

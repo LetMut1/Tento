@@ -12,6 +12,7 @@ pub mod formatter;
 pub mod generator;
 pub mod hmac_encoder;
 pub mod loader;
+pub mod number_row_generator;
 pub mod postgrasql_transaction_manager;
 pub mod postgresql_connection_pool_creator;
 pub mod prepared_statemant_parameter_convertation_resolver;
