@@ -14,14 +14,16 @@ pub mod hmac__encoder;
 pub mod loader;
 pub mod message_pack__serializer;
 pub mod number_row__generator;
-pub mod postgresql_transaction__resolver;
 pub mod postgresql_connection_pool__creator;
+pub mod postgresql_transaction__resolver;
 pub mod prepared_statemant_parameter_convertation_resolver;
 pub mod redis_connection_pool__creator;
+pub mod request__validator;
 pub mod resolver;
 pub mod response__creator;
 pub mod sender;
 pub mod serializer;
+pub mod validator;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub mod json__serializer;

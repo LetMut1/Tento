@@ -6,6 +6,7 @@ use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::Response;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
+use crate::infrastructure_layer::functionality::service::validator::Validator;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -21,7 +22,6 @@ use std::future::Future;
 use std::marker::Send;
 use std::marker::Sync;
 use std::ops::FnOnce;
-use super::request_header_checker::RequestHeaderChecker;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
@@ -55,7 +55,7 @@ impl WrappedActionCreator {
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>
     {
-        if !RequestHeaderChecker::is_valid(&request) {
+        if !Validator::<Request>::is_valid(&request) {
             return Creator::<Response>::create_bad_request();
         }
 

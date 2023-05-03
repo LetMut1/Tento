@@ -14,8 +14,8 @@ use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::Response;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
+use crate::infrastructure_layer::functionality::service::validator::Validator;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
-use crate::presentation_layer::functionality::service::request_header_checker::RequestHeaderChecker;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -61,7 +61,7 @@ impl CoreActionProcessor {
         APO: SerdeSerialize,
         APRR: FnOnce(ActionProcessorResult<APO>) -> Result<UnifiedReport<APO>, ErrorAuditor>
     {
-        if !RequestHeaderChecker::is_valid(&request) {
+        if !Validator::<Request>::is_valid(&request) {
             let response = Creator::<Response>::create_bad_request();
 
             if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(

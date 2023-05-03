@@ -1,11 +1,11 @@
-use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::Response;
 use extern_crate::http::header;
+use super::validator::Validator;
 
-pub struct RequestHeaderChecker;
+pub use crate::infrastructure_layer::data::control_type_registry::Request;
 
-impl RequestHeaderChecker {
+impl Validator<Request> {
     pub fn is_valid<'a>(request: &'a Request) -> bool {
         let header_map = request.headers();
 
