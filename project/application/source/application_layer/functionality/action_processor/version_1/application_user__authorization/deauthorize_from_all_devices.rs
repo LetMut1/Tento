@@ -13,7 +13,8 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::cloud_message_resolver::CloudMessageResolver;
+use crate::infrastructure_layer::functionality::service::resolver::CloudMessage;
+use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -106,7 +107,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        CloudMessageResolver::deauthorize_application_user_from_all_devices();
+        Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
 
         return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Void });
     }
