@@ -11,7 +11,7 @@ use super::creator::Creator;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use extern_crate::http::response::Parts;
 
-pub type Response = HyperResponse<Body>;
+pub use crate::infrastructure_layer::data::control_type_registry::Response;
 
 impl Creator<Response> {
     pub const HEADER_VALUE_CONTENT_TYPE: &'static str = "application/octet-stream";        // TODO В файл с константами

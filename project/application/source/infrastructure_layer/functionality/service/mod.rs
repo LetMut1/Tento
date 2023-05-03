@@ -14,7 +14,7 @@ pub mod hmac_encoder;
 pub mod loader;
 pub mod message_pack_serializer;
 pub mod number_row_generator;
-pub mod postgrasql_transaction_manager;
+pub mod postgresql_transaction_resolver;
 pub mod postgresql_connection_pool_creator;
 pub mod prepared_statemant_parameter_convertation_resolver;
 pub mod redis_connection_pool_creator;

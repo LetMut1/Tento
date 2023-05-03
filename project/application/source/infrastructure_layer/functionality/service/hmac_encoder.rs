@@ -3,7 +3,7 @@ use extern_crate::crypto::mac::Mac;
 use extern_crate::crypto::sha2::Sha512;
 use super::encoder::Encoder;
 
-pub struct Hmac;
+pub use crate::infrastructure_layer::data::control_type_registry::Hmac;
 
 impl Encoder<Hmac> {
     pub fn encode<'a>(salt: &'a [u8], data: &'a [u8], encoded_data: &'a mut [u8]) -> () {

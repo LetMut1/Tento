@@ -9,7 +9,7 @@ use extern_crate::serde::Serialize as SerdeSerialize;
 use super::serializer::Serialize;
 use super::serializer::Serializer;
 
-pub struct MessagePack;
+pub use crate::infrastructure_layer::data::control_type_registry::MessagePack;
 
 impl Serialize for Serializer<MessagePack> {
     fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>

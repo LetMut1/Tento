@@ -4,11 +4,15 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::tokio_postgres::Client as Connection;
+use super::resolver::Resolver;
 
-pub struct PostgrasqlTransactionManager;
+pub use crate::infrastructure_layer::data::control_type_registry::PostgresqlTransaction;
 
-impl PostgrasqlTransactionManager {
-    pub async fn start_transaction<'a>(connection: &'a Connection, transaction_isolation_level: TransactionIsolationLevel) -> Result<Self, ErrorAuditor> {
+impl Resolver<PostgresqlTransaction> {
+    pub async fn start<'a>(
+        connection: &'a Connection,
+        transaction_isolation_level: TransactionIsolationLevel
+    ) -> Result<Self, ErrorAuditor> {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
 
         match transaction_isolation_level {
@@ -42,10 +46,10 @@ impl PostgrasqlTransactionManager {
             );
         }
 
-        return Ok(Self);
+        return Ok(Self::new());
     }
 
-    pub async fn commit_transaction<'a>(self, connection: &'a Connection) -> Result<(), ErrorAuditor> {
+    pub async fn commit<'a>(self, connection: &'a Connection) -> Result<(), ErrorAuditor> {
         let query = "COMMIT;";
 
         if let Err(error) = connection.execute(query, &[]).await {
@@ -60,7 +64,7 @@ impl PostgrasqlTransactionManager {
         return Ok(());
     }
 
-    pub async fn rollback_transaction<'a>(self, connection: &'a Connection) -> Result<(), ErrorAuditor> {
+    pub async fn rollback<'a>(self, connection: &'a Connection) -> Result<(), ErrorAuditor> {
         let query = "ROLLBACK;";
 
         if let Err(error) = connection.execute(query, &[]).await {

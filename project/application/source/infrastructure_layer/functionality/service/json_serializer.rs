@@ -10,7 +10,7 @@ use super::serializer::Serialize;
 use super::serializer::Serializer;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-pub struct Json;
+pub use crate::infrastructure_layer::data::control_type_registry::Json;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl Serialize for Serializer<Json> {

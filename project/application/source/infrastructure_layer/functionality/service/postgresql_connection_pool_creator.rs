@@ -11,7 +11,7 @@ use extern_crate::tokio_postgres::NoTls;
 use std::clone::Clone;
 use super::creator::Creator;
 
-pub type PostgresqlConnectionPoolNoTls = Pool<PostgresqlConnectionManager<NoTls>>;
+pub use crate::infrastructure_layer::data::control_type_registry::PostgresqlConnectionPoolNoTls;
 
 impl Creator<PostgresqlConnectionPoolNoTls> {
     pub async fn create<'a>(environment: &'a Environment, configuration: &'a Config) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, ErrorAuditor> {
