@@ -9,7 +9,7 @@ use extern_crate::argon2::verify_encoded;
 use extern_crate::uuid::Uuid;
 use super::encoder::Encoder;
 
-pub struct Argon2Id;
+pub use crate::infrastructure_layer::data::control_type_registry::Argon2Id;
 
 impl Encoder<Argon2Id> {       // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090
     pub fn encode<'a>(data: &'a [u8]) -> Result<String, ErrorAuditor> {    // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.

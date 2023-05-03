@@ -15,10 +15,11 @@ use extern_crate::lettre::ClientSecurity;
 use extern_crate::lettre::smtp::SmtpClient;
 use extern_crate::lettre::Transport;
 use std::convert::Into;
+use super::sender::Sender;
 
-pub struct EmailSender;
+pub use crate::infrastructure_layer::data::control_type_registry::Email;
 
-impl EmailSender {   // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
+impl Sender<Email> {   // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         subject: &'a str,

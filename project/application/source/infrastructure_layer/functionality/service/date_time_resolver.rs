@@ -5,7 +5,7 @@ use extern_crate::chrono::DateTime as ChronoDateTime;
 use extern_crate::chrono::Utc;
 use super::resolver::Resolver;
 
-pub struct DateTime;
+pub use crate::infrastructure_layer::data::control_type_registry::DateTime;
 
 impl Resolver<DateTime> {
     /// Rule for 2022-09-18 03:03:39.308889+00

@@ -20,6 +20,7 @@ pub mod prepared_statemant_parameter_convertation_resolver;
 pub mod redis_connection_pool_creator;
 pub mod resolver;
 pub mod response_creator;
+pub mod sender;
 pub mod serializer;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]

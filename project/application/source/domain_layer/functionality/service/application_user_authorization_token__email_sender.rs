@@ -2,7 +2,8 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::functionality::service::email_sender::EmailSender as EmailSender_;
+use crate::infrastructure_layer::functionality::service::sender::Email;
+use crate::infrastructure_layer::functionality::service::sender::Sender;
 use super::email_sender::EmailSender;
 
 impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
@@ -19,7 +20,7 @@ impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
         );
 
 
-        if let Err(mut error) = EmailSender_::send(
+        if let Err(mut error) = Sender::<Email>::send(
             environment_configuration,
             "Authorization confirmation",
             message_body,
