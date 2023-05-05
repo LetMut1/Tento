@@ -12,7 +12,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
-use crate::domain_layer::functionality::service::sending_opportunity_resolver::SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -135,8 +134,8 @@ impl ActionProcessor {
 
         let (application_user_registration_token_aggregator, can_send) = match application_user_registration_token {
             Some(mut application_user_registration_token_) => {
-                let (can_send_, need_to_update_1) = if SendingOpportunityResolver::<ApplicationUserRegistrationToken<'_>>::can_send(
-                    &application_user_registration_token_
+                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(
+                    application_user_registration_token_.get_can_be_resent_from()
                 ) {
                     let application_user_registration_token_can_be_resent_from = match Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate() {
                         Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,

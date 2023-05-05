@@ -9,7 +9,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
-use crate::domain_layer::functionality::service::sending_opportunity_resolver::SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -155,7 +154,7 @@ impl ActionProcessor {
             );
         }
 
-        if !SendingOpportunityResolver::<ApplicationUserAuthorizationToken<'_>>::can_send(&application_user_authorization_token_) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_can_be_resent_from()) {
             return Ok(
                 ArgumentResult::Ok {
                     subject: ActionProcessorResult::UserWorkflowPrecedent {
