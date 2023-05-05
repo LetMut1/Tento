@@ -8,6 +8,7 @@ pub mod date_time__resolver;
 pub mod email__sender;
 pub mod encoder;
 pub mod environment_configuration__loader;
+pub mod expiration_time_checker;
 pub mod formatter;
 pub mod generator;
 pub mod hmac__encoder;

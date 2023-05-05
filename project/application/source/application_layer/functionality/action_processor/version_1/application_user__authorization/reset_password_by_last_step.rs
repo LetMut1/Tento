@@ -10,7 +10,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_4;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::functionality::service::encoder::Encoder;
-use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::argument_result::InvalidArgument;
@@ -22,6 +21,8 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
 use crate::infrastructure_layer::functionality::service::resolver::CloudMessage;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -121,7 +122,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeResolver::<ApplicationUserResetPasswordToken<'_>>::is_expired(&application_user_reset_password_token_) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.get_expires_at()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                 database_2_postgresql_connection,
                 incoming.application_user_id,

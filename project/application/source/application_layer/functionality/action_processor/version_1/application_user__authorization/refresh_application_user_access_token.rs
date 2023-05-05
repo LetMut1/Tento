@@ -8,7 +8,6 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
@@ -20,6 +19,8 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -127,7 +128,7 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm });
         }
 
-        if ExpirationTimeResolver::<ApplicationUserAccessRefreshToken<'_>>::is_expired(&application_user_access_refresh_token_) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token_.get_expires_at()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 application_user_access_refresh_token_.get_application_user_id(),

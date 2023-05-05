@@ -11,7 +11,6 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
-use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::sending_opportunity_resolver::SendingOpportunityResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -25,6 +24,8 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token__postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -153,7 +154,7 @@ impl ActionProcessor {
                     (false, false)
                 };
 
-                let need_to_update_2 = if ExpirationTimeResolver::<ApplicationUserRegistrationToken<'_>>::is_expired(&application_user_registration_token_)
+                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_expires_at())
                     || application_user_registration_token_.get_is_approved() {
                     let application_user_registration_token_expires_at = match Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate() {
                         Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,

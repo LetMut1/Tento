@@ -18,7 +18,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Nicknam
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::encoder::Encoder;
-use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -34,6 +33,8 @@ use crate::infrastructure_layer::functionality::repository::application_user__po
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -199,7 +200,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeResolver::<ApplicationUserRegistrationToken<'_>>::is_expired(&application_user_registration_token_) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_expires_at()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 incoming.application_user_email.as_str(),

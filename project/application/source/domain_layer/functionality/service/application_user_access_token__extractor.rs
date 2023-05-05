@@ -1,10 +1,11 @@
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::functionality::service::expiration_time_resolver::ExpirationTimeResolver;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::data::argument_result::ArgumentResult;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
 use super::extractor::Extractor;
 
 impl Extractor<ApplicationUserAccessToken<'_>> {
@@ -31,7 +32,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
             }
         };
 
-        if ExpirationTimeResolver::<ApplicationUserAccessToken<'_>>::is_expired(&application_user_access_token_) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token_.get_expires_at()) {
             return Ok(ArgumentResult::Ok { subject: ExtractorResult::ApplicationUserAccessTokenAlreadyExpired });
         }
 
