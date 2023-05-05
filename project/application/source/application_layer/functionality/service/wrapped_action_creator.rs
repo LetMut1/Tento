@@ -24,14 +24,11 @@ use std::marker::Sync;
 use std::ops::FnOnce;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::infrastructure_layer::functionality::service::serializer::Json;
-
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub struct WrappedActionCreator;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl WrappedActionCreator {
-    pub async fn create_for_json<'a, T, A, F, API, APO>(
+    pub async fn create_for_json<'a, SF, WSF, T, A, F, API, APO>(
         environment_configuration: &'a EnvironmentConfiguration,
         mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -40,6 +37,8 @@ impl WrappedActionCreator {
         action: A
     ) -> Response
     where
+        Serializer<SF>: Serialize,
+        Serializer<WSF>: Serialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
@@ -66,14 +65,14 @@ impl WrappedActionCreator {
             }
         };
 
-        let incoming = match Serializer::<Json>::deserialize::<API>(bytes.chunk()) {
+        let incoming = match Serializer::<SF>::deserialize::<API>(bytes.chunk()) {
             Ok(wrapped_incoming_) => wrapped_incoming_,
             Err(_) => {
                 return Creator::<Response>::create_internal_server_error();
             }
         };
 
-        let action_processing_delegator_result = match ActionDelegator::delegate::<'_, _, _, _, API, APO>(
+        let action_processing_delegator_result = match ActionDelegator::delegate::<'_, WSF, _, _, _, API, APO>(
             environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
@@ -97,7 +96,7 @@ impl WrappedActionCreator {
             }
         };
 
-        let data = match Serializer::<Json>::serialize(&unified_report) {
+        let data = match Serializer::<SF>::serialize(&unified_report) {
             Ok(data_) => data_,
             Err(_) => {
                 return Creator::<Response>::create_internal_server_error();

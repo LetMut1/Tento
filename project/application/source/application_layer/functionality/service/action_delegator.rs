@@ -6,7 +6,6 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::presentation_layer::data::unified_report::UnifiedReport;
@@ -36,7 +35,7 @@ pub struct ActionDelegator;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl ActionDelegator {
-    pub async fn delegate<'a, T, A, F, API, APO>(
+    pub async fn delegate<'a, SF, T, A, F, API, APO>(
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -45,6 +44,7 @@ impl ActionDelegator {
         action: A
     ) -> Result<ActionProcessingDelegatorResult<APO>, ErrorAuditor>
     where
+        Serializer<SF>: Serialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
@@ -60,7 +60,7 @@ impl ActionDelegator {
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>
     {
-        let data = match Serializer::<MessagePack>::serialize(&incoming.action_processor_incoming) {
+        let data = match Serializer::<SF>::serialize(&incoming.action_processor_incoming) {
             Ok(data_) => data_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -101,7 +101,7 @@ impl ActionDelegator {
                 }
             };
 
-            let unified_report = match Serializer::<MessagePack>::deserialize::<'_, UnifiedReport<APO>>(bytes.chunk()) {
+            let unified_report = match Serializer::<SF>::deserialize::<'_, UnifiedReport<APO>>(bytes.chunk()) {
                 Ok(unified_report_) => unified_report_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));

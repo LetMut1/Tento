@@ -23,6 +23,8 @@ use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use crate::application_layer::functionality::service::wrapped_action_creator::WrappedActionCreator;
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use crate::infrastructure_layer::functionality::service::serializer::Json;
 
 pub struct CheckEmailForExisting;
 
@@ -93,7 +95,7 @@ impl CheckEmailForExisting {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return WrappedActionCreator::create_for_json::<'_, _, _, _, Incoming, Outcoming>(
+        return WrappedActionCreator::create_for_json::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming>(
             environment_configuration,
             request,
             database_1_postgresql_connection_pool,

@@ -103,6 +103,9 @@ fn main() -> () {
 
 // channel_subscription create обработать ALready_subscribed
 
+// data.len() as u64  это безопасно, но лучше сделать через конвертер.
+
+// PostgresqlConnectionManager<T> -> PostgresqlConnectionManager<MTC> там, где есть много дженериков.
 
 
 
