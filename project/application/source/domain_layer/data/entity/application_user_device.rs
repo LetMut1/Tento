@@ -3,6 +3,8 @@ use super::application_user::ApplicationUser_Id;
 
 pub use self::Id as ApplicationUserDevice_Id;
 
+pub struct Id;
+
 pub struct ApplicationUserDevice {
     id: String,
     _id: PhantomData<Id>,
@@ -28,5 +30,3 @@ impl ApplicationUserDevice {
         return self.id.as_str();
     }
 }
-
-pub struct Id;

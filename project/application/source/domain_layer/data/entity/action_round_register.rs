@@ -6,6 +6,16 @@ pub use self::StatusCode as ActionRoundRegister_StatusCode;
 pub use self::Context as ActionRoundRegister_Context;
 pub use self::CreatedAt as ActionRoundRegister_CreatedAt;
 
+pub struct Route;
+
+pub struct Method;
+
+pub struct StatusCode;
+
+pub struct Context;
+
+pub struct CreatedAt;
+
 pub struct ActionRoundRegister {
     route: String,
     _route: PhantomData<Route>,
@@ -22,13 +32,3 @@ pub struct ActionRoundRegister {
     created_at: String,
     _created_at: PhantomData<CreatedAt>,
 }
-
-pub struct Route;
-
-pub struct Method;
-
-pub struct StatusCode;
-
-pub struct Context;
-
-pub struct CreatedAt;

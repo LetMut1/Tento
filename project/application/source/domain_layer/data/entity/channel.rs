@@ -16,6 +16,42 @@ pub use self::MarksQuantity as Channel_MarksQuantity;
 pub use self::ViewingQuantity as Channel_ViewingQuantity;
 pub use self::CreatedAt as Channel_CreatedAt;
 
+pub struct Id;
+
+pub struct Name;
+
+pub struct LinkedName;
+
+pub struct Description;
+
+pub enum AccessModifier {
+    /// 0 in integer representation.
+    Open,
+    /// 1 in integer representation.
+    Close
+}
+
+pub enum VisabilityModifier {
+    /// 0 in integer representation.
+    Public,
+    /// 1 in integer representation.
+    Private
+}
+
+pub struct Orientation;
+
+pub struct CoverImagePath;
+
+pub struct BackgroundImagePath;
+
+pub struct SubscribersQuantity;
+
+pub struct MarksQuantity;
+
+pub struct ViewingQuantity;
+
+pub struct CreatedAt;
+
 pub struct Channel<'a> {
     id: i64,
     _id: PhantomData<Id>,
@@ -159,39 +195,3 @@ impl<'a> Channel<'a> {
         return self.visability_modifier;
     }
 }
-
-pub struct Id;
-
-pub struct Name;
-
-pub struct LinkedName;
-
-pub struct Description;
-
-pub enum AccessModifier {
-    /// 0 in integer representation.
-    Open,
-    /// 1 in integer representation.
-    Close
-}
-
-pub enum VisabilityModifier {
-    /// 0 in integer representation.
-    Public,
-    /// 1 in integer representation.
-    Private
-}
-
-pub struct Orientation;
-
-pub struct CoverImagePath;
-
-pub struct BackgroundImagePath;
-
-pub struct SubscribersQuantity;
-
-pub struct MarksQuantity;
-
-pub struct ViewingQuantity;
-
-pub struct CreatedAt;

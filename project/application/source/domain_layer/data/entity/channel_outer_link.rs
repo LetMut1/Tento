@@ -5,6 +5,12 @@ pub use self::Alias as ChannelOuterLink_Alias;
 pub use self::Address as ChannelOuterLink_Address;
 pub use self::CreatedAt as ChannelOuterLink_CreatedAt;
 
+pub struct Alias;
+
+pub struct Address;
+
+pub struct CreatedAt;
+
 pub struct ChannelOuterLink {
     from: i64,
     _from: PhantomData<Channel_Id>,
@@ -40,9 +46,3 @@ impl ChannelOuterLink {
         }
     }
 }
-
-pub struct Alias;
-
-pub struct Address;
-
-pub struct CreatedAt;

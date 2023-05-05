@@ -9,6 +9,10 @@ use super::application_user::ApplicationUser_Id;
 pub use self::Id as ApplicationUserAccessToken_Id;
 pub use self::ExpiresAt as ApplicationUserAccessToken_ExpiresAt;
 
+pub struct Id;
+
+pub struct ExpiresAt;
+
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessToken<'a> {
@@ -68,7 +72,3 @@ impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAccessToken<'_> {
         return subject.expires_at;
     }
 }
-
-pub struct Id;
-
-pub struct ExpiresAt;

@@ -9,6 +9,18 @@ pub use self::Password as ApplicationUser_Password;
 pub use self::PasswordHash as ApplicationUser_PasswordHash;
 pub use self::CreatedAt as ApplicationUser_CreatedAt;
 
+pub struct Id;
+
+pub struct Email;
+
+pub struct Nickname;
+
+pub struct Password;
+
+pub struct PasswordHash;
+
+pub struct CreatedAt;
+
 pub struct ApplicationUser<'a> {
     id: i64,
     _id: PhantomData<Id>,
@@ -251,15 +263,3 @@ impl<'a> Getter<&'a Self, Email, &'a str> for ApplicationUser_5 {
         return subject.email.as_str();
     }
 }
-
-pub struct Id;
-
-pub struct Email;
-
-pub struct Nickname;
-
-pub struct Password;
-
-pub struct PasswordHash;
-
-pub struct CreatedAt;

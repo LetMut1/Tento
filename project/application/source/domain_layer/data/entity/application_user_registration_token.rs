@@ -10,6 +10,16 @@ pub use self::IsApproved as ApplicationUserRegistrationToken_IsApproved;
 pub use self::ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt;
 pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom;
 
+pub struct Value;
+
+pub struct WrongEnterTriesQuantity;
+
+pub struct IsApproved;
+
+pub struct ExpiresAt;
+
+pub struct CanBeResentFrom;
+
 pub struct ApplicationUserRegistrationToken<'a> {
     application_user_email: Cow<'a, str>,
     _application_user_email: PhantomData<ApplicationUser_Email>,
@@ -478,13 +488,3 @@ impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserRegistrationT
         return subject.can_be_resent_from;
     }
 }
-
-pub struct Value;
-
-pub struct WrongEnterTriesQuantity;
-
-pub struct IsApproved;
-
-pub struct ExpiresAt;
-
-pub struct CanBeResentFrom;

@@ -10,6 +10,16 @@ pub use self::IsApproved as ApplicationUserResetPasswordToken_IsApproved;
 pub use self::ExpiresAt as ApplicationUserResetPasswordToken_ExpiresAt;
 pub use self::CanBeResentFrom as ApplicationUserResetPasswordToken_CanBeResentFrom;
 
+pub struct Value;
+
+pub struct WrongEnterTriesQuantity;
+
+pub struct IsApproved;
+
+pub struct ExpiresAt;
+
+pub struct CanBeResentFrom;
+
 pub struct ApplicationUserResetPasswordToken<'a> {
     application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,
@@ -478,13 +488,3 @@ impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserResetPassword
         return subject.can_be_resent_from;
     }
 }
-
-pub struct Value;
-
-pub struct WrongEnterTriesQuantity;
-
-pub struct IsApproved;
-
-pub struct ExpiresAt;
-
-pub struct CanBeResentFrom;

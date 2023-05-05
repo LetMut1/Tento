@@ -11,6 +11,12 @@ pub use self::ObfuscationValue as ApplicationUserAccessRefreshToken_ObfuscationV
 pub use self::ExpiresAt as ApplicationUserAccessRefreshToken_ExpiresAt;
 pub use self::UpdatedAt as ApplicationUserAccessRefreshToken_UpdatedAt;
 
+pub struct ObfuscationValue;
+
+pub struct ExpiresAt;
+
+pub struct UpdatedAt;
+
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessRefreshToken<'a> {
@@ -158,9 +164,3 @@ pub struct ApplicationUserAccessRefreshToken_1 {
     updated_at: i64,
     _updated_at: PhantomData<UpdatedAt>,
 }
-
-pub struct ObfuscationValue;
-
-pub struct ExpiresAt;
-
-pub struct UpdatedAt;

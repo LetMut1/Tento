@@ -4,6 +4,8 @@ use super::channel::Channel_Id;
 
 pub use self::CreatedAt as ChannelSubscription_CreatedAt;
 
+pub struct CreatedAt;
+
 pub struct ChannelSubscription {
     application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,
@@ -31,5 +33,3 @@ impl ChannelSubscription {
         };
     }
 }
-
-pub struct CreatedAt;

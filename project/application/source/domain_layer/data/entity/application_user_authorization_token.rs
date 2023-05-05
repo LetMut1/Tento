@@ -9,6 +9,14 @@ pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_Wrong
 pub use self::ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt;
 pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
 
+pub struct Value;
+
+pub struct WrongEnterTriesQuantity;
+
+pub struct ExpiresAt;
+
+pub struct CanBeResentFrom;
+
 pub struct ApplicationUserAuthorizationToken<'a> {
     application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,
@@ -396,11 +404,3 @@ impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserAuthorization
         return subject.can_be_resent_from;
     }
 }
-
-pub struct Value;
-
-pub struct WrongEnterTriesQuantity;
-
-pub struct ExpiresAt;
-
-pub struct CanBeResentFrom;

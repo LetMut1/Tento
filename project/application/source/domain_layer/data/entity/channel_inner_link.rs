@@ -3,6 +3,8 @@ use super::channel::Channel_Id;
 
 pub use self::CreatedAt as ChannelInnerLink_CreatedAt;
 
+pub struct CreatedAt;
+
 pub struct ChannelInnerLink {
     from: i64,
     _from: PhantomData<Channel_Id>,
@@ -32,5 +34,3 @@ impl ChannelInnerLink {
         };
     }
 }
-
-pub struct CreatedAt;
