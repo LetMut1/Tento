@@ -24,7 +24,7 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use crate::presentation_layer::functionality::service::wrapped_action_creator::WrappedActionCreator;
+use crate::application_layer::functionality::service::wrapped_action_creator::WrappedActionCreator;
 
 pub struct RegisterBySecondStep;
 

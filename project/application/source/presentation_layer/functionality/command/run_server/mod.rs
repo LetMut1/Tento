@@ -103,7 +103,53 @@ fn main() -> () {
 
 // channel_subscription create обработать ALready_subscribed
 
-// посмотреть, будут ли сервесы в Презентейшн лэер.
+
+
+
 
 
 // RequestChecker -> Validator
+
+// pub struct Route<T>(T);
+
+// impl Route<String> {
+//     pub fn new(inner: String) -> Self {
+//         return Self(inner);
+//     }
+
+//     pub fn as_ref<'a>(&'a self) -> Route<&'a str> {
+//         return Route(self.0.as_str());
+//     }
+
+//     pub fn get<'a>(&'a self) -> &'a str {
+//         return self.0.as_str();
+//     }
+// }
+
+// impl<'a> Route<&'a str> {
+//     pub fn get<'b>(&'b self) -> &'a str {
+//         return self.0;
+//     }
+// }
+
+// pub struct Method<T>(T);
+
+// impl Method<String> {
+//     pub fn new(inner: String) -> Self {
+//         return Self(inner);
+//     }
+
+//     pub fn as_ref<'a>(&'a self) -> Method<&'a str> {
+//         return Method(self.0.as_str());
+//     }
+
+//     pub fn get<'a>(&'a self) -> &'a str {
+//         return self.0.as_str();
+//     }
+// }
+
+// impl<'a> Method<&'a str> {
+//     pub fn get<'b>(&'b self) -> &'a str {
+//         return self.0;
+//     }
+// }
