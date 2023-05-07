@@ -1,0 +1,15 @@
+[package]
+name = "procedural_macros"
+version = "0.1.0"
+authors.workspace = true
+edition = "2021"
+
+[lib]
+name = "procedural_macros"
+proc-macro = true
+path = "./mod.rs"
+
+[dependencies]
+proc-macro2 = { package = "proc-macro2", version = "^1.0", default-features = true, features = [], optional = false }
+quote = { package = "quote", version = "^1.0", default-features = true, features = [], optional = false }
+syn = { package = "syn", version = "^2.0", default-features = true, features = ["full"], optional = false }
