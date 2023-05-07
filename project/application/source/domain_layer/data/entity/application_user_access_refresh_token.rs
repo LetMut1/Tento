@@ -2,7 +2,6 @@ use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use super::application_user_access_token::ApplicationUserAccessToken_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Id;
@@ -174,15 +173,8 @@ impl<'a> Getter<'a, UpdatedAt> for ApplicationUserAccessRefreshToken<'_> {
 }
 
 pub struct ApplicationUserAccessRefreshToken_1 {
-    application_user_access_token_id: String,
-    _application_user_access_token_id: PhantomData<ApplicationUserAccessToken_Id>,
-
-    obfuscation_value: String,
-    _obfuscation_value: PhantomData<ObfuscationValue>,
-
-    expires_at: i64,
-    _expires_at: PhantomData<ExpiresAt>,
-
-    updated_at: i64,
-    _updated_at: PhantomData<UpdatedAt>,
+    application_user_access_token_id: ApplicationUserAccessToken_Id,
+    obfuscation_value: ObfuscationValue,
+    expires_at: ExpiresAt,
+    updated_at: UpdatedAt
 }
