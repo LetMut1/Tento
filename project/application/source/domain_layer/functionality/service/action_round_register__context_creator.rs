@@ -6,17 +6,17 @@ use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use super::creator::Creator;
 
 pub trait ContextFrom<T> {
-    fn create<'a>(from: &'a T) -> String;
+    fn create<'a>(from: &'a T) -> ActionRoundRegister_Context;
 }
 
 impl ContextFrom<InvalidArgument> for Creator<ActionRoundRegister_Context> {
-    fn create<'a>(from: &'a InvalidArgument) -> String {
-        return Formatter::prepare(from);
+    fn create<'a>(from: &'a InvalidArgument) -> ActionRoundRegister_Context {
+        return ActionRoundRegister_Context::new(Formatter::prepare(from));
     }
 }
 
 impl ContextFrom<ErrorAuditor> for Creator<ActionRoundRegister_Context> {
-    fn create<'a>(from: &'a ErrorAuditor) -> String {
-        return Formatter::prepare(from);
+    fn create<'a>(from: &'a ErrorAuditor) -> ActionRoundRegister_Context {
+        return ActionRoundRegister_Context::new(Formatter::prepare(from));
     }
 }

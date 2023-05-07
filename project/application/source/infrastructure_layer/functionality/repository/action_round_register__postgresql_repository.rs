@@ -1,3 +1,7 @@
+use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Context;
+use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Method;
+use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Route;
+use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_StatusCode;
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -9,9 +13,20 @@ use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use super::postgresql_repository::PostgresqlRepository;
 
-impl PostgresqlRepository<ActionRoundRegister> {
+impl PostgresqlRepository<ActionRoundRegister<'_>> {
     pub async fn create<'a, 'b>(database_2_connection: &'a Connection, insert: Insert<'b>) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let action_round_register_route = insert.action_round_register_route.get();
+
+        let action_round_register_method = insert.action_round_register_method.get();
+
+        let action_round_register_status_code = insert.action_round_register_status_code.get();
+
+        let action_round_register_context = match insert.action_round_register_context {
+            Some(ref action_round_register_context_) => Some(action_round_register_context_.get()),
+            None => None
+        };
 
         let query =
             "INSERT INTO public.action_round_register AS arr ( \
@@ -29,10 +44,10 @@ impl PostgresqlRepository<ActionRoundRegister> {
             );";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert.action_round_register_route, Type::TEXT)
-            .add_parameter(&insert.action_round_register_method, Type::TEXT)
-            .add_parameter(&insert.action_round_register_status_code, Type::INT2)
-            .add_parameter(&insert.action_round_register_context, Type::TEXT);
+            .add_parameter(&action_round_register_route, Type::TEXT)
+            .add_parameter(&action_round_register_method, Type::TEXT)
+            .add_parameter(&action_round_register_status_code, Type::INT2)
+            .add_parameter(&action_round_register_context, Type::TEXT);
 
         let statement = match database_2_connection.prepare_typed(
             query,
@@ -66,8 +81,8 @@ impl PostgresqlRepository<ActionRoundRegister> {
 }
 
 pub struct Insert<'a> {
-    pub action_round_register_route: &'a str,
-    pub action_round_register_method: &'a str,
-    pub action_round_register_status_code: i16,
-    pub action_round_register_context: Option<String>
+    pub action_round_register_route: ActionRoundRegister_Route<'a>,
+    pub action_round_register_method: ActionRoundRegister_Method<'a>,
+    pub action_round_register_status_code: ActionRoundRegister_StatusCode,
+    pub action_round_register_context: Option<ActionRoundRegister_Context>
 }

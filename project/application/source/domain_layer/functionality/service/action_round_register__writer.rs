@@ -1,4 +1,7 @@
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Context;
+use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Method;
+use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Route;
+use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_StatusCode;
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::domain_layer::functionality::service::action_round_register__context_creator::ContextFrom;
 use crate::infrastructure_layer::data::control_type_registry::Request;
@@ -17,13 +20,14 @@ use extern_crate::bb8::Pool;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
+use std::borrow::Cow;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use super::creator::Creator;
 use super::writer::Writer;
 
-impl Writer<ActionRoundRegister> {
+impl Writer<ActionRoundRegister<'_>> {
     pub async fn write<'a, T>(
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request,
@@ -77,7 +81,7 @@ impl Writer<ActionRoundRegister> {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request,
         response: &'a Response,
-        action_round_register_context: Option<String>
+        action_round_register_context: Option<ActionRoundRegister_Context>
     ) -> Result<(), ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -86,12 +90,23 @@ impl Writer<ActionRoundRegister> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let action_round_register_status_code = match <Converter as Convert<u16, i16>>::convert(response.status().as_u16()) {
-            Ok(action_round_register_status_code_) => action_round_register_status_code_,
+            Ok(action_round_register_status_code_) => ActionRoundRegister_StatusCode::new(action_round_register_status_code_),
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
                 return Err(error);
             }
+        };
+
+        let action_round_register_route = ActionRoundRegister_Route::new(Cow::Borrowed(request.uri().path()));
+
+        let action_round_register_method = ActionRoundRegister_Method::new(Cow::Borrowed(request.method().as_str()));
+
+        let insert = Insert {
+            action_round_register_route,
+            action_round_register_method,
+            action_round_register_status_code,
+            action_round_register_context
         };
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -104,13 +119,6 @@ impl Writer<ActionRoundRegister> {
                     )
                 );
             }
-        };
-
-        let insert = Insert {
-            action_round_register_route: request.uri().path(),
-            action_round_register_method: request.method().as_str(),
-            action_round_register_status_code,
-            action_round_register_context
         };
 
         if let Err(mut error) = PostgresqlRepository::<ActionRoundRegister>::create(
