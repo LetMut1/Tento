@@ -1,8 +1,12 @@
+use extern_crate::serde::Deserialize;
+use extern_crate::serde::Serialize;
 use std::marker::PhantomData;
 use super::application_user::ApplicationUser_Id;
 
 pub use self::Id as ApplicationUserDevice_Id;
 
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Id(String);
 
 impl Id {

@@ -9,6 +9,8 @@ use super::application_user::ApplicationUser_Id;
 pub use self::Id as ApplicationUserAccessToken_Id;
 pub use self::ExpiresAt as ApplicationUserAccessToken_ExpiresAt;
 
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Id(String);
 
 impl Id {

@@ -1,4 +1,6 @@
 use crate::domain_layer::functionality::service::getter::GetterDELETE;
+use extern_crate::serde::Deserialize;
+use extern_crate::serde::Serialize;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 
@@ -9,7 +11,8 @@ pub use self::Password as ApplicationUser_Password;
 pub use self::PasswordHash as ApplicationUser_PasswordHash;
 pub use self::CreatedAt as ApplicationUser_CreatedAt;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Id(i64);
 
 impl Id {
