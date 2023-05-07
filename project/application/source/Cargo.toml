@@ -18,7 +18,7 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
-extern_crate = { path = "./infrastructure_layer/extern_crate", package = "extern_crate", version = "0.1.0", default-features = true, features = [], optional = false }
+extern_crate = { path = "./../extern_crate", package = "extern_crate", version = "0.1.0", default-features = true, features = [], optional = false }
 
 [features]
 default = []

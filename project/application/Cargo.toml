@@ -1,19 +1,19 @@
 [workspace]
 resolver = "2"
 members = [
+    "./extern_crate",
     "./integration_module",
     "./procedural_macros",
     "./source",
-    "./source/infrastructure_layer/extern_crate",
     "./source/presentation_layer/functionality/command/create_fixtures",
     "./source/presentation_layer/functionality/command/remove_incomplite_state",
     "./source/presentation_layer/functionality/command/run_server"
 ]
 default-members = [
+    "./extern_crate",
     "./integration_module",
     "./procedural_macros",
     "./source",
-    "./source/infrastructure_layer/extern_crate",
     "./source/presentation_layer/functionality/command/create_fixtures",
     "./source/presentation_layer/functionality/command/remove_incomplite_state",
     "./source/presentation_layer/functionality/command/run_server"
