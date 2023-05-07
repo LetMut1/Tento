@@ -1,4 +1,4 @@
-use crate::domain_layer::functionality::service::getter::Getter;
+use crate::domain_layer::functionality::service::getter::GetterDELETE;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 
@@ -86,31 +86,31 @@ impl<'a> ApplicationUser<'a> {
     }
 }
 
-impl<'a> Getter<&'a Self, Id, i64> for ApplicationUser<'_> {
+impl<'a> GetterDELETE<&'a Self, Id, i64> for ApplicationUser<'_> {
     fn get(subject: &'a Self) -> i64 {
         return subject.id;
     }
 }
 
-impl<'a, 'b: 'a> Getter<&'a Self, Email, &'a str> for ApplicationUser<'b> {
+impl<'a, 'b: 'a> GetterDELETE<&'a Self, Email, &'a str> for ApplicationUser<'b> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.email.as_ref();
     }
 }
 
-impl<'a, 'b: 'a> Getter<&'a Self, Nickname, &'a str> for ApplicationUser<'b> {
+impl<'a, 'b: 'a> GetterDELETE<&'a Self, Nickname, &'a str> for ApplicationUser<'b> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.nickname.as_ref();
     }
 }
 
-impl<'a> Getter<&'a Self, PasswordHash, &'a str> for ApplicationUser<'_> {
+impl<'a> GetterDELETE<&'a Self, PasswordHash, &'a str> for ApplicationUser<'_> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.password_hash.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, CreatedAt, &'a str> for ApplicationUser<'_> {
+impl<'a> GetterDELETE<&'a Self, CreatedAt, &'a str> for ApplicationUser<'_> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.created_at.as_str();
     }
@@ -232,7 +232,7 @@ impl ApplicationUser_4 {
     }
 }
 
-impl<'a> Getter<&'a Self, PasswordHash, &'a str> for ApplicationUser_4 {
+impl<'a> GetterDELETE<&'a Self, PasswordHash, &'a str> for ApplicationUser_4 {
     fn get(subject: &'a Self) -> &'a str {
         return subject.password_hash.as_str();
     }
@@ -258,7 +258,7 @@ impl ApplicationUser_5 {
     }
 }
 
-impl<'a> Getter<&'a Self, Email, &'a str> for ApplicationUser_5 {
+impl<'a> GetterDELETE<&'a Self, Email, &'a str> for ApplicationUser_5 {
     fn get(subject: &'a Self) -> &'a str {
         return subject.email.as_str();
     }

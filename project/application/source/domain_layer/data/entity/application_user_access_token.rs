@@ -1,4 +1,4 @@
-use crate::domain_layer::functionality::service::getter::Getter;
+use crate::domain_layer::functionality::service::getter::GetterDELETE;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
@@ -67,7 +67,7 @@ impl<'a> ApplicationUserAccessToken<'a> {
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAccessToken<'_> {
+impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserAccessToken<'_> {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }

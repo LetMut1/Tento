@@ -5,7 +5,7 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_4;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::functionality::service::getter::Getter;
+use crate::domain_layer::functionality::service::getter::GetterDELETE;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -628,9 +628,9 @@ impl PostgresqlRepository<ApplicationUser_4> {
         application_user_id: i64
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUser_PasswordHash, &'a str>
+        T: GetterDELETE<&'a T, ApplicationUser_PasswordHash, &'a str>
     {
-        let application_user_password_hash = <T as Getter<&'a T, ApplicationUser_PasswordHash, &'a str>>::get(subject);
+        let application_user_password_hash = <T as GetterDELETE<&'a T, ApplicationUser_PasswordHash, &'a str>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

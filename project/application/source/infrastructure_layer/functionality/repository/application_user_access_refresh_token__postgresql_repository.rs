@@ -4,7 +4,7 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
-use crate::domain_layer::functionality::service::getter::Getter;
+use crate::domain_layer::functionality::service::getter::GetterDELETE;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -297,18 +297,18 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken_1> {
         application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUserAccessToken_Id, &'a str>,
-        T: Getter<&'a T, ApplicationUserAccessRefreshToken_ObfuscationValue, &'a str>,
-        T: Getter<&'a T, ApplicationUserAccessRefreshToken_ExpiresAt, i64>,
-        T: Getter<&'a T, ApplicationUserAccessRefreshToken_UpdatedAt, i64>,
+        T: GetterDELETE<&'a T, ApplicationUserAccessToken_Id, &'a str>,
+        T: GetterDELETE<&'a T, ApplicationUserAccessRefreshToken_ObfuscationValue, &'a str>,
+        T: GetterDELETE<&'a T, ApplicationUserAccessRefreshToken_ExpiresAt, i64>,
+        T: GetterDELETE<&'a T, ApplicationUserAccessRefreshToken_UpdatedAt, i64>,
     {
-        let application_user_access_token_id = <T as Getter<&'_ T, ApplicationUserAccessToken_Id, &'_ str>>::get(subject);
+        let application_user_access_token_id = <T as GetterDELETE<&'_ T, ApplicationUserAccessToken_Id, &'_ str>>::get(subject);
 
-        let application_user_access_refresh_token_obfuscation_value = <T as Getter<&'_ T, ApplicationUserAccessRefreshToken_ObfuscationValue, &'_ str>>::get(subject);
+        let application_user_access_refresh_token_obfuscation_value = <T as GetterDELETE<&'_ T, ApplicationUserAccessRefreshToken_ObfuscationValue, &'_ str>>::get(subject);
 
-        let application_user_access_refresh_token_expires_at = <T as Getter<&'_ T, ApplicationUserAccessRefreshToken_ExpiresAt, i64>>::get(subject);
+        let application_user_access_refresh_token_expires_at = <T as GetterDELETE<&'_ T, ApplicationUserAccessRefreshToken_ExpiresAt, i64>>::get(subject);
 
-        let application_user_access_refresh_token_updated_at = <T as Getter<&'_ T, ApplicationUserAccessRefreshToken_UpdatedAt, i64>>::get(subject);
+        let application_user_access_refresh_token_updated_at = <T as GetterDELETE<&'_ T, ApplicationUserAccessRefreshToken_UpdatedAt, i64>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

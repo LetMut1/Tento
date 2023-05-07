@@ -3,7 +3,6 @@ resolver = "2"
 members = [
     "./extern_crate",
     "./integration_module",
-    "./procedural_macros",
     "./source",
     "./source/presentation_layer/functionality/command/create_fixtures",
     "./source/presentation_layer/functionality/command/remove_incomplite_state",
@@ -12,7 +11,6 @@ members = [
 default-members = [
     "./extern_crate",
     "./integration_module",
-    "./procedural_macros",
     "./source",
     "./source/presentation_layer/functionality/command/create_fixtures",
     "./source/presentation_layer/functionality/command/remove_incomplite_state",

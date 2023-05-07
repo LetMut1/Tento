@@ -8,7 +8,7 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::functionality::service::getter::Getter;
+use crate::domain_layer::functionality::service::getter::GetterDELETE;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -147,18 +147,18 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
         application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUserAuthorizationToken_Value, &'a str>,
-        T: Getter<&'a T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>,
-        T: Getter<&'a T, ApplicationUserAuthorizationToken_ExpiresAt, i64>,
-        T: Getter<&'a T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>
+        T: GetterDELETE<&'a T, ApplicationUserAuthorizationToken_Value, &'a str>,
+        T: GetterDELETE<&'a T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>,
+        T: GetterDELETE<&'a T, ApplicationUserAuthorizationToken_ExpiresAt, i64>,
+        T: GetterDELETE<&'a T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>
     {
-        let application_user_authorization_token_value = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_Value, &'_ str>>::get(subject);
+        let application_user_authorization_token_value = <T as GetterDELETE<&'_ T, ApplicationUserAuthorizationToken_Value, &'_ str>>::get(subject);
 
-        let application_user_authorization_token_wrong_enter_tries_quantity = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>>::get(subject);
+        let application_user_authorization_token_wrong_enter_tries_quantity = <T as GetterDELETE<&'_ T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>>::get(subject);
 
-        let application_user_authorization_token_expires_at = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_ExpiresAt, i64>>::get(subject);
+        let application_user_authorization_token_expires_at = <T as GetterDELETE<&'_ T, ApplicationUserAuthorizationToken_ExpiresAt, i64>>::get(subject);
 
-        let application_user_authorization_token_can_be_resent_from = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>>::get(subject);
+        let application_user_authorization_token_can_be_resent_from = <T as GetterDELETE<&'_ T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -338,15 +338,15 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
         application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUserAuthorizationToken_Value, &'a str>,
-        T: Getter<&'a T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>,
-        T: Getter<&'a T, ApplicationUserAuthorizationToken_ExpiresAt, i64>
+        T: GetterDELETE<&'a T, ApplicationUserAuthorizationToken_Value, &'a str>,
+        T: GetterDELETE<&'a T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>,
+        T: GetterDELETE<&'a T, ApplicationUserAuthorizationToken_ExpiresAt, i64>
     {
-        let application_user_authorization_token_value = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_Value, &'_ str>>::get(subject);
+        let application_user_authorization_token_value = <T as GetterDELETE<&'_ T, ApplicationUserAuthorizationToken_Value, &'_ str>>::get(subject);
 
-        let application_user_authorization_token_wrong_enter_tries_quantity = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>>::get(subject);
+        let application_user_authorization_token_wrong_enter_tries_quantity = <T as GetterDELETE<&'_ T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>>::get(subject);
 
-        let application_user_authorization_token_expires_at = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_ExpiresAt, i64>>::get(subject);
+        let application_user_authorization_token_expires_at = <T as GetterDELETE<&'_ T, ApplicationUserAuthorizationToken_ExpiresAt, i64>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -509,9 +509,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_3> {
         application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>
+        T: GetterDELETE<&'a T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>
     {
-        let application_user_authorization_token_can_be_resent_from = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>>::get(subject);
+        let application_user_authorization_token_can_be_resent_from = <T as GetterDELETE<&'_ T, ApplicationUserAuthorizationToken_CanBeResentFrom, i64>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -568,9 +568,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_4> {
         application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>
+        T: GetterDELETE<&'a T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>
     {
-        let application_user_authorization_token_wrong_enter_tries_quantity = <T as Getter<&'_ T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>>::get(subject);
+        let application_user_authorization_token_wrong_enter_tries_quantity = <T as GetterDELETE<&'_ T, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity, i16>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

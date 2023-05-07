@@ -1,4 +1,4 @@
-use crate::domain_layer::functionality::service::getter::Getter;
+use crate::domain_layer::functionality::service::getter::GetterDELETE;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
@@ -115,37 +115,37 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
     }
 }
 
-impl<'a> Getter<&'a Self, ApplicationUser_Id, i64> for ApplicationUserAccessRefreshToken<'_> {
+impl<'a> GetterDELETE<&'a Self, ApplicationUser_Id, i64> for ApplicationUserAccessRefreshToken<'_> {
     fn get(subject: &'a Self) -> i64 {
         return subject.application_user_id;
     }
 }
 
-impl<'a, 'b: 'a> Getter<&'a Self, ApplicationUserDevice_Id, &'a str> for ApplicationUserAccessRefreshToken<'b> {
+impl<'a, 'b: 'a> GetterDELETE<&'a Self, ApplicationUserDevice_Id, &'a str> for ApplicationUserAccessRefreshToken<'b> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.application_user_device_id.as_ref();
     }
 }
 
-impl<'a, 'b: 'a> Getter<&'a Self, ApplicationUserAccessToken_Id, &'a str> for ApplicationUserAccessRefreshToken<'b> {
+impl<'a, 'b: 'a> GetterDELETE<&'a Self, ApplicationUserAccessToken_Id, &'a str> for ApplicationUserAccessRefreshToken<'b> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.application_user_access_token_id.as_ref();
     }
 }
 
-impl<'a> Getter<&'a Self, ObfuscationValue, &'a str> for ApplicationUserAccessRefreshToken<'_> {
+impl<'a> GetterDELETE<&'a Self, ObfuscationValue, &'a str> for ApplicationUserAccessRefreshToken<'_> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.obfuscation_value.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAccessRefreshToken<'_> {
+impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserAccessRefreshToken<'_> {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }
 }
 
-impl<'a> Getter<&'a Self, UpdatedAt, i64> for ApplicationUserAccessRefreshToken<'_> {
+impl<'a> GetterDELETE<&'a Self, UpdatedAt, i64> for ApplicationUserAccessRefreshToken<'_> {
     fn get(subject: &'a Self) -> i64 {
         return subject.updated_at;
     }

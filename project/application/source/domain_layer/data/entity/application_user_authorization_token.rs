@@ -1,4 +1,4 @@
-use crate::domain_layer::functionality::service::getter::Getter;
+use crate::domain_layer::functionality::service::getter::GetterDELETE;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use super::application_user_device::ApplicationUserDevice_Id;
@@ -115,37 +115,37 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
     }
 }
 
-impl<'a> Getter<&'a Self, ApplicationUser_Id, i64> for ApplicationUserAuthorizationToken<'_> {
+impl<'a> GetterDELETE<&'a Self, ApplicationUser_Id, i64> for ApplicationUserAuthorizationToken<'_> {
     fn get(subject: &'a Self) -> i64 {
         return subject.application_user_id;
     }
 }
 
-impl<'a, 'b: 'a> Getter<&'a Self, ApplicationUserDevice_Id, &'a str> for ApplicationUserAuthorizationToken<'b> {
+impl<'a, 'b: 'a> GetterDELETE<&'a Self, ApplicationUserDevice_Id, &'a str> for ApplicationUserAuthorizationToken<'b> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.application_user_device_id.as_ref();
     }
 }
 
-impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken<'_> {
+impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken<'_> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.value.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken<'_> {
+impl<'a> GetterDELETE<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken<'_> {
     fn get(subject: &'a Self) -> i16 {
         return subject.wrong_enter_tries_quantity;
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken<'_> {
+impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken<'_> {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }
 }
 
-impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserAuthorizationToken<'_> {
+impl<'a> GetterDELETE<&'a Self, CanBeResentFrom, i64> for ApplicationUserAuthorizationToken<'_> {
     fn get(subject: &'a Self) -> i64 {
         return subject.can_be_resent_from;
     }
@@ -225,25 +225,25 @@ impl ApplicationUserAuthorizationToken_1 {
     }
 }
 
-impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken_1 {
+impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken_1 {
     fn get(subject: &'a Self) -> &'a str {
         return subject.value.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken_1 {
+impl<'a> GetterDELETE<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken_1 {
     fn get(subject: &'a Self) -> i16 {
         return subject.wrong_enter_tries_quantity;
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken_1 {
+impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken_1 {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }
 }
 
-impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserAuthorizationToken_1 {
+impl<'a> GetterDELETE<&'a Self, CanBeResentFrom, i64> for ApplicationUserAuthorizationToken_1 {
     fn get(subject: &'a Self) -> i64 {
         return subject.can_be_resent_from;
     }
@@ -307,19 +307,19 @@ impl ApplicationUserAuthorizationToken_2 {
     }
 }
 
-impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken_2 {
+impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken_2 {
     fn get(subject: &'a Self) -> &'a str {
         return subject.value.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken_2 {
+impl<'a> GetterDELETE<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserAuthorizationToken_2 {
     fn get(subject: &'a Self) -> i16 {
         return subject.wrong_enter_tries_quantity;
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken_2 {
+impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken_2 {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }
@@ -387,19 +387,19 @@ impl ApplicationUserAuthorizationToken_5 {
     }
 }
 
-impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken_5 {
+impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserAuthorizationToken_5 {
     fn get(subject: &'a Self) -> &'a str {
         return subject.value.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken_5 {
+impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserAuthorizationToken_5 {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }
 }
 
-impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserAuthorizationToken_5 {
+impl<'a> GetterDELETE<&'a Self, CanBeResentFrom, i64> for ApplicationUserAuthorizationToken_5 {
     fn get(subject: &'a Self) -> i64 {
         return subject.can_be_resent_from;
     }

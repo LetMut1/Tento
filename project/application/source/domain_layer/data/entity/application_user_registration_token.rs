@@ -1,4 +1,4 @@
-use crate::domain_layer::functionality::service::getter::Getter;
+use crate::domain_layer::functionality::service::getter::GetterDELETE;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use super::application_user_device::ApplicationUserDevice_Id;
@@ -134,43 +134,43 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
     }
 }
 
-impl<'a, 'b: 'a> Getter<&'a Self, ApplicationUser_Email, &'a str> for ApplicationUserRegistrationToken<'b> {
+impl<'a, 'b: 'a> GetterDELETE<&'a Self, ApplicationUser_Email, &'a str> for ApplicationUserRegistrationToken<'b> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.application_user_email.as_ref();
     }
 }
 
-impl<'a, 'b: 'a> Getter<&'a Self, ApplicationUserDevice_Id, &'a str> for ApplicationUserRegistrationToken<'b> {
+impl<'a, 'b: 'a> GetterDELETE<&'a Self, ApplicationUserDevice_Id, &'a str> for ApplicationUserRegistrationToken<'b> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.application_user_device_id.as_ref();
     }
 }
 
-impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken<'_> {
+impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken<'_> {
     fn get(subject: &'a Self) -> &'a str {
         return subject.value.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserRegistrationToken<'_> {
+impl<'a> GetterDELETE<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserRegistrationToken<'_> {
     fn get(subject: &'a Self) -> i16 {
         return subject.wrong_enter_tries_quantity;
     }
 }
 
-impl<'a> Getter<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken<'_> {
+impl<'a> GetterDELETE<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken<'_> {
     fn get(subject: &'a Self) -> bool {
         return subject.is_approved;
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken<'_> {
+impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken<'_> {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }
 }
 
-impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserRegistrationToken<'_> {
+impl<'a> GetterDELETE<&'a Self, CanBeResentFrom, i64> for ApplicationUserRegistrationToken<'_> {
     fn get(subject: &'a Self) -> i64 {
         return subject.can_be_resent_from;
     }
@@ -266,31 +266,31 @@ impl ApplicationUserRegistrationToken_1 {
     }
 }
 
-impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken_1 {
+impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken_1 {
     fn get(subject: &'a Self) -> &'a str {
         return subject.value.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserRegistrationToken_1 {
+impl<'a> GetterDELETE<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserRegistrationToken_1 {
     fn get(subject: &'a Self) -> i16 {
         return subject.wrong_enter_tries_quantity;
     }
 }
 
-impl<'a> Getter<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken_1 {
+impl<'a> GetterDELETE<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken_1 {
     fn get(subject: &'a Self) -> bool {
         return subject.is_approved;
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_1 {
+impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_1 {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }
 }
 
-impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserRegistrationToken_1 {
+impl<'a> GetterDELETE<&'a Self, CanBeResentFrom, i64> for ApplicationUserRegistrationToken_1 {
     fn get(subject: &'a Self) -> i64 {
         return subject.can_be_resent_from;
     }
@@ -375,25 +375,25 @@ impl ApplicationUserRegistrationToken_3 {
     }
 }
 
-impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken_3 {
+impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken_3 {
     fn get(subject: &'a Self) -> &'a str {
         return subject.value.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserRegistrationToken_3 {
+impl<'a> GetterDELETE<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserRegistrationToken_3 {
     fn get(subject: &'a Self) -> i16 {
         return subject.wrong_enter_tries_quantity;
     }
 }
 
-impl<'a> Getter<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken_3 {
+impl<'a> GetterDELETE<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken_3 {
     fn get(subject: &'a Self) -> bool {
         return subject.is_approved;
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_3 {
+impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_3 {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }
@@ -465,25 +465,25 @@ impl ApplicationUserRegistrationToken_6 {
     }
 }
 
-impl<'a> Getter<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken_6 {
+impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken_6 {
     fn get(subject: &'a Self) -> &'a str {
         return subject.value.as_str();
     }
 }
 
-impl<'a> Getter<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken_6 {
+impl<'a> GetterDELETE<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken_6 {
     fn get(subject: &'a Self) -> bool {
         return subject.is_approved;
     }
 }
 
-impl<'a> Getter<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_6 {
+impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_6 {
     fn get(subject: &'a Self) -> i64 {
         return subject.expires_at;
     }
 }
 
-impl<'a> Getter<&'a Self, CanBeResentFrom, i64> for ApplicationUserRegistrationToken_6 {
+impl<'a> GetterDELETE<&'a Self, CanBeResentFrom, i64> for ApplicationUserRegistrationToken_6 {
     fn get(subject: &'a Self) -> i64 {
         return subject.can_be_resent_from;
     }

@@ -10,7 +10,7 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::functionality::service::getter::Getter;
+use crate::domain_layer::functionality::service::getter::GetterDELETE;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -153,21 +153,21 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_1> {
         application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_Value, &'a str>,
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>,
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_IsApproved, bool>,
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_ExpiresAt, i64>,
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_CanBeResentFrom, i64>
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_Value, &'a str>,
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>,
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_IsApproved, bool>,
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_ExpiresAt, i64>,
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_CanBeResentFrom, i64>
     {
-        let application_user_reset_password_token_value = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_Value, &'_ str>>::get(subject);
+        let application_user_reset_password_token_value = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_Value, &'_ str>>::get(subject);
 
-        let application_user_reset_password_token_wrong_enter_tries_quantity = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>>::get(subject);
+        let application_user_reset_password_token_wrong_enter_tries_quantity = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>>::get(subject);
 
-        let application_user_reset_password_token_is_approved = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_IsApproved, bool>>::get(subject);
+        let application_user_reset_password_token_is_approved = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_IsApproved, bool>>::get(subject);
 
-        let application_user_reset_password_token_expires_at = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_ExpiresAt, i64>>::get(subject);
+        let application_user_reset_password_token_expires_at = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_ExpiresAt, i64>>::get(subject);
 
-        let application_user_reset_password_token_can_be_resent_from = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_CanBeResentFrom, i64>>::get(subject);
+        let application_user_reset_password_token_can_be_resent_from = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_CanBeResentFrom, i64>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -364,9 +364,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_2> {
         application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_CanBeResentFrom, i64>
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_CanBeResentFrom, i64>
     {
-        let application_user_reset_password_token_can_be_resent_from = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_CanBeResentFrom, i64>>::get(subject);
+        let application_user_reset_password_token_can_be_resent_from = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_CanBeResentFrom, i64>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -423,18 +423,18 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_3> {
         application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_Value, &'a str>,
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>,
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_IsApproved, bool>,
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_ExpiresAt, i64>
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_Value, &'a str>,
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>,
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_IsApproved, bool>,
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_ExpiresAt, i64>
     {
-        let application_user_reset_password_token_value = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_Value, &'_ str>>::get(subject);
+        let application_user_reset_password_token_value = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_Value, &'_ str>>::get(subject);
 
-        let application_user_reset_password_token_wrong_enter_tries_quantity = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>>::get(subject);
+        let application_user_reset_password_token_wrong_enter_tries_quantity = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>>::get(subject);
 
-        let application_user_reset_password_token_is_approved = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_IsApproved, bool>>::get(subject);
+        let application_user_reset_password_token_is_approved = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_IsApproved, bool>>::get(subject);
 
-        let application_user_reset_password_token_expires_at = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_ExpiresAt, i64>>::get(subject);
+        let application_user_reset_password_token_expires_at = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_ExpiresAt, i64>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -614,9 +614,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_4> {
         application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>
     {
-        let application_user_reset_password_token_wrong_enter_tries_quantity = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>>::get(subject);
+        let application_user_reset_password_token_wrong_enter_tries_quantity = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity, i16>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -673,9 +673,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_5> {
         application_user_device_id: &'a str
     ) -> Result<(), ErrorAuditor>
     where
-        T: Getter<&'a T, ApplicationUserResetPasswordToken_IsApproved, bool>
+        T: GetterDELETE<&'a T, ApplicationUserResetPasswordToken_IsApproved, bool>
     {
-        let application_user_reset_password_token_is_approved = <T as Getter<&'_ T, ApplicationUserResetPasswordToken_IsApproved, bool>>::get(subject);
+        let application_user_reset_password_token_is_approved = <T as GetterDELETE<&'_ T, ApplicationUserResetPasswordToken_IsApproved, bool>>::get(subject);
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
