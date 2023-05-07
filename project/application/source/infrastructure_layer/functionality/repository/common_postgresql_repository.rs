@@ -1,4 +1,4 @@
-use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
+use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
 use crate::domain_layer::functionality::service::channel__visability_modifier_resolver::Channel_VisabilityModifierResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -57,7 +57,7 @@ impl PostgresqlRepository<Common1> {
             }
         };
 
-        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(Channel_VisabilityModifier::Public);
+        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(Channel_VisabilityModifier_::Public);
 
         let mut query = format!(
             "SELECT \

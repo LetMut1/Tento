@@ -2,7 +2,7 @@ use crate::application_layer::data::action_processor_result::ActionProcessorResu
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
-use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
@@ -144,7 +144,7 @@ impl ActionProcessor {
 
         let channel_access_modifier = Channel_AccessModifierResolver::to_representation(channel_.get_access_modifier());
 
-        if let Channel_AccessModifier::Close = channel_access_modifier {
+        if let Channel_AccessModifier_::Close = channel_access_modifier {
             return Ok(
                 ArgumentResult::Ok {
                     subject: ActionProcessorResult::UserWorkflowPrecedent {

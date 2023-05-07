@@ -5,7 +5,7 @@ use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
 use crate::domain_layer::data::entity::channel::Channel as EntityChannel;
-use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
@@ -134,7 +134,7 @@ impl ActionProcessor {
 
         let channel_access_modifier = Channel_AccessModifierResolver::to_representation(channel_.get_access_modifier());
 
-        if let Channel_AccessModifier::Close = channel_access_modifier {
+        if let Channel_AccessModifier_::Close = channel_access_modifier {
             let is_exist = match PostgresqlRepository::<ChannelSubscription>::is_exist(
                 &*database_1_postgresql_pooled_connection, application_user_access_token.get_application_user_id(), channel_.get_id(),
             ).await {

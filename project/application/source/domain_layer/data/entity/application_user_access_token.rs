@@ -9,9 +9,30 @@ use super::application_user::ApplicationUser_Id;
 pub use self::Id as ApplicationUserAccessToken_Id;
 pub use self::ExpiresAt as ApplicationUserAccessToken_ExpiresAt;
 
-pub struct Id;
+pub struct Id(String);
 
-pub struct ExpiresAt;
+impl Id {
+    pub fn new(inner: String) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> &'a str {
+        return self.0.as_str();
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct ExpiresAt(i64);
+
+impl ExpiresAt {
+    pub fn new(inner: i64) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> i64 {
+        return self.0;
+    }
+}
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]

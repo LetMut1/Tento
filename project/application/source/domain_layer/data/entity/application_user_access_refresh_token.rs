@@ -11,11 +11,43 @@ pub use self::ObfuscationValue as ApplicationUserAccessRefreshToken_ObfuscationV
 pub use self::ExpiresAt as ApplicationUserAccessRefreshToken_ExpiresAt;
 pub use self::UpdatedAt as ApplicationUserAccessRefreshToken_UpdatedAt;
 
-pub struct ObfuscationValue;
+pub struct ObfuscationValue(String);
 
-pub struct ExpiresAt;
+impl ObfuscationValue {
+    pub fn new(inner: String) -> Self {
+        return Self(inner);
+    }
 
-pub struct UpdatedAt;
+    pub fn get<'a>(&'a self) -> &'a str {
+        return self.0.as_str();
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct ExpiresAt(i64);
+
+impl ExpiresAt {
+    pub fn new(inner: i64) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> i64 {
+        return self.0;
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct UpdatedAt(i64);
+
+impl UpdatedAt {
+    pub fn new(inner: i64) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> i64 {
+        return self.0;
+    }
+}
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]

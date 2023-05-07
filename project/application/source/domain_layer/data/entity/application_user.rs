@@ -9,17 +9,78 @@ pub use self::Password as ApplicationUser_Password;
 pub use self::PasswordHash as ApplicationUser_PasswordHash;
 pub use self::CreatedAt as ApplicationUser_CreatedAt;
 
-pub struct Id;
+#[derive(Clone, Copy)]
+pub struct Id(i64);
 
-pub struct Email;
+impl Id {
+    pub fn new(inner: i64) -> Self {
+        return Self(inner);
+    }
 
-pub struct Nickname;
+    pub fn get<'a>(&'a self) -> i64 {
+        return self.0;
+    }
+}
 
-pub struct Password;
+pub struct Email(String);
 
-pub struct PasswordHash;
+impl Email {
+    pub fn new(inner: String) -> Self {
+        return Self(inner);
+    }
 
-pub struct CreatedAt;
+    pub fn get<'a>(&'a self) -> &'a str {
+        return self.0.as_str();
+    }
+}
+
+pub struct Nickname(String);
+
+impl Nickname {
+    pub fn new(inner: String) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> &'a str {
+        return self.0.as_str();
+    }
+}
+
+pub struct Password(String);
+
+impl Password {
+    pub fn new(inner: String) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> &'a str {
+        return self.0.as_str();
+    }
+}
+
+pub struct PasswordHash(String);
+
+impl PasswordHash {
+    pub fn new(inner: String) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> &'a str {
+        return self.0.as_str();
+    }
+}
+
+pub struct CreatedAt(String);
+
+impl CreatedAt {
+    pub fn new(inner: String) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> &'a str {
+        return self.0.as_str();
+    }
+}
 
 pub struct ApplicationUser<'a> {
     id: i64,

@@ -4,12 +4,12 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 use crate::domain_layer::data::entity::channel::Channel_Description;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
-use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
+use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -325,8 +325,8 @@ impl CreateFixturesProcessor {
                             channel_name,
                             channel_linked_name,
                             channel_description,
-                            channel_access_modifier: Channel_AccessModifier::Open,
-                            channel_visability_modifier: Channel_VisabilityModifier::Public,
+                            channel_access_modifier: Channel_AccessModifier_::Open,
+                            channel_visability_modifier: Channel_VisabilityModifier_::Public,
                             channel_orientation,
                             channel_cover_image_path: Some(Self::STUB.to_string()),
                             channel_background_image_path: Some(Self::STUB.to_string()),

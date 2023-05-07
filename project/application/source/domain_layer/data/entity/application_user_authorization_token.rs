@@ -9,13 +9,56 @@ pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_Wrong
 pub use self::ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt;
 pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
 
-pub struct Value;
+pub struct Value(String);
 
-pub struct WrongEnterTriesQuantity;
+impl Value {
+    pub fn new(inner: String) -> Self {
+        return Self(inner);
+    }
 
-pub struct ExpiresAt;
+    pub fn get<'a>(&'a self) -> &'a str {
+        return self.0.as_str();
+    }
+}
 
-pub struct CanBeResentFrom;
+#[derive(Clone, Copy)]
+pub struct WrongEnterTriesQuantity(i16);
+
+impl WrongEnterTriesQuantity {
+    pub fn new(inner: i16) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> i16 {
+        return self.0;
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct ExpiresAt(i64);
+
+impl ExpiresAt {
+    pub fn new(inner: i64) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> i64 {
+        return self.0;
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct CanBeResentFrom(i64);
+
+impl CanBeResentFrom {
+    pub fn new(inner: i64) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> i64 {
+        return self.0;
+    }
+}
 
 pub struct ApplicationUserAuthorizationToken<'a> {
     application_user_id: i64,

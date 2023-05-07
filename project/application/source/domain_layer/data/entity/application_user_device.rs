@@ -3,7 +3,17 @@ use super::application_user::ApplicationUser_Id;
 
 pub use self::Id as ApplicationUserDevice_Id;
 
-pub struct Id;
+pub struct Id(String);
+
+impl Id {
+    pub fn new(inner: String) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> &'a str {
+        return self.0.as_str();
+    }
+}
 
 pub struct ApplicationUserDevice {
     id: String,

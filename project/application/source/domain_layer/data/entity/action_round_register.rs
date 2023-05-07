@@ -38,7 +38,7 @@ impl StatusCode {
         return Self(inner);
     }
 
-    pub fn get<'b>(&'b self) -> i16 {
+    pub fn get<'a>(&'a self) -> i16 {
         return self.0;
     }
 }

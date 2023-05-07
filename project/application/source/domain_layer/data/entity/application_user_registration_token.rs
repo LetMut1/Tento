@@ -10,15 +10,69 @@ pub use self::IsApproved as ApplicationUserRegistrationToken_IsApproved;
 pub use self::ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt;
 pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom;
 
-pub struct Value;
+pub struct Value(String);
 
-pub struct WrongEnterTriesQuantity;
+impl Value {
+    pub fn new(inner: String) -> Self {
+        return Self(inner);
+    }
 
-pub struct IsApproved;
+    pub fn get<'a>(&'a self) -> &'a str {
+        return self.0.as_str();
+    }
+}
 
-pub struct ExpiresAt;
+#[derive(Clone, Copy)]
+pub struct WrongEnterTriesQuantity(i16);
 
-pub struct CanBeResentFrom;
+impl WrongEnterTriesQuantity {
+    pub fn new(inner: i16) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> i16 {
+        return self.0;
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct IsApproved(bool);
+
+impl IsApproved {
+    pub fn new(inner: bool) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> bool {
+        return self.0;
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct ExpiresAt(i64);
+
+impl ExpiresAt {
+    pub fn new(inner: i64) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> i64 {
+        return self.0;
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct CanBeResentFrom(i64);
+
+impl CanBeResentFrom {
+    pub fn new(inner: i64) -> Self {
+        return Self(inner);
+    }
+
+    pub fn get<'a>(&'a self) -> i64 {
+        return self.0;
+    }
+}
 
 pub struct ApplicationUserRegistrationToken<'a> {
     application_user_email: Cow<'a, str>,
