@@ -1,5 +1,4 @@
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use super::application_user::ApplicationUser_Id;
 
 pub use self::Id as Channel_Id;
@@ -29,6 +28,7 @@ impl Id {
     }
 }
 
+#[derive(Clone)]
 pub struct Name(String);
 
 impl Name {
@@ -193,113 +193,72 @@ impl CreatedAt {
 }
 
 pub struct Channel<'a> {
-    id: i64,
-    _id: PhantomData<Id>,
-
-    owner: i64,
-    _owner: PhantomData<ApplicationUser_Id>,
-
-    name: Cow<'a, str>,
-    _name: PhantomData<Name>,
-
-    linked_name: String,
-    _linked_name: PhantomData<LinkedName>,
-
-    description: Option<String>,
-    _description: PhantomData<Description>,
-
-    access_modifier: i16,
-    _access_modifier: PhantomData<AccessModifier>,
-
-    visability_modifier: i16,
-    _visability_modifier: PhantomData<VisabilityModifier>,
-
-    orientation: Vec<i16>,
-    _orientation: PhantomData<Orientation>,
-
-    cover_image_path: Option<String>,
-    _cover_image_path: PhantomData<CoverImagePath>,
-
-    background_image_path: Option<String>,
-    _background_image_path: PhantomData<BackgroundImagePath>,
-
-    subscribers_quantity: i64,
-    _subscribers_quantity: PhantomData<SubscribersQuantity>,
-
-    marks_quantity: i64,
-    _marks_quantity: PhantomData<MarksQuantity>,
-
-    viewing_quantity: i64,
-    _viewing_quantity: PhantomData<ViewingQuantity>,
-
-    created_at: String,
-    _created_at: PhantomData<CreatedAt>
+    id: Id,
+    owner: ApplicationUser_Id,
+    name: Cow<'a, Name>,
+    linked_name: LinkedName,
+    description: Option<Description>,
+    access_modifier: AccessModifier,
+    visability_modifier: VisabilityModifier,
+    orientation: Orientation,
+    cover_image_path: Option<CoverImagePath>,
+    background_image_path: Option<BackgroundImagePath>,
+    subscribers_quantity: SubscribersQuantity,
+    marks_quantity: MarksQuantity,
+    viewing_quantity: ViewingQuantity,
+    created_at: CreatedAt
 }
 
 impl<'a> Channel<'a> {
     pub fn new(
-        id: i64,
-        owner: i64,
-        name: Cow<'a, str>,
-        linked_name: String,
-        description: Option<String>,
-        access_modifier: i16,
-        visability_modifier: i16,
-        orientation: Vec<i16>,
-        cover_image_path: Option<String>,
-        background_image_path: Option<String>,
-        subscribers_quantity: i64,
-        marks_quantity: i64,
-        viewing_quantity: i64,
-        created_at: String
+        id: Id,
+        owner: ApplicationUser_Id,
+        name: Cow<'a, Name>,
+        linked_name: LinkedName,
+        description: Option<Description>,
+        access_modifier: AccessModifier,
+        visability_modifier: VisabilityModifier,
+        orientation: Orientation,
+        cover_image_path: Option<CoverImagePath>,
+        background_image_path: Option<BackgroundImagePath>,
+        subscribers_quantity: SubscribersQuantity,
+        marks_quantity: MarksQuantity,
+        viewing_quantity: ViewingQuantity,
+        created_at: CreatedAt
     ) -> Self {
         return Self {
             id,
-            _id: PhantomData,
             owner,
-            _owner: PhantomData,
             name,
-            _name: PhantomData,
             linked_name,
-            _linked_name: PhantomData,
             description,
-            _description: PhantomData,
             access_modifier,
-            _access_modifier: PhantomData,
             visability_modifier,
-            _visability_modifier: PhantomData,
             orientation,
-            _orientation: PhantomData,
             cover_image_path,
-            _cover_image_path: PhantomData,
             background_image_path,
-            _background_image_path: PhantomData,
             subscribers_quantity,
-            _subscribers_quantity: PhantomData,
             marks_quantity,
-            _marks_quantity: PhantomData,
             viewing_quantity,
-            _viewing_quantity: PhantomData,
-            created_at,
-            _created_at: PhantomData
+            created_at
         };
     }
 
     pub fn into_inner(self) -> (
-        i64,
-        i64,
-        Cow<'a, str>,
-        String,
-        Option<String>,
-        i16,
-        i16,
-        Vec<i16>,
-        Option<String>,
-        Option<String>,
-        i64,
-        i64,
-        i64,
-        String
+        Id,
+        ApplicationUser_Id,
+        Cow<'a, Name>,
+        LinkedName,
+        Option<Description>,
+        AccessModifier,
+        VisabilityModifier,
+        Orientation,
+        Option<CoverImagePath>,
+        Option<BackgroundImagePath>,
+        SubscribersQuantity,
+        MarksQuantity,
+        ViewingQuantity,
+        CreatedAt
     ) {
         return (
             self.id,
@@ -319,19 +278,19 @@ impl<'a> Channel<'a> {
         );
     }
 
-    pub fn get_id<'b>(&'b self) -> i64 {
+    pub fn get_id<'b>(&'b self) -> Id {
         return self.id;
     }
 
-    pub fn get_owner<'b>(&'b self) -> i64 {
+    pub fn get_owner<'b>(&'b self) -> ApplicationUser_Id {
         return self.owner;
     }
 
-    pub fn get_access_modifier<'b>(&'b self) -> i16 {
+    pub fn get_access_modifier<'b>(&'b self) -> AccessModifier {
         return self.access_modifier;
     }
 
-    pub fn get_visability_modifier<'b>(&'b self) -> i16 {
+    pub fn get_visability_modifier<'b>(&'b self) -> VisabilityModifier {
         return self.visability_modifier;
     }
 }

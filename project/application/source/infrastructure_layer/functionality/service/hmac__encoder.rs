@@ -16,3 +16,8 @@ impl Encoder<Hmac> {
         return ();
     }
 }
+
+
+
+
+https://docs.rs/hmac/latest/hmac/ - этот hmac может верифицировать.

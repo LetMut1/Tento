@@ -1,4 +1,3 @@
-use std::marker::PhantomData;
 use super::channel::Channel_Id;
 
 pub use self::Alias as ChannelOuterLink_Alias;
@@ -42,37 +41,26 @@ impl CreatedAt {
 }
 
 pub struct ChannelOuterLink {
-    from: i64,
-    _from: PhantomData<Channel_Id>,
-
-    alias: String,
-    _alias: PhantomData<Alias>,
-
-    address: String,
-    _address: PhantomData<Address>,
-
-    created_at: String,
-    _creatad_at: PhantomData<CreatedAt>
+    from: Channel_Id,
+    alias: Alias,
+    address: Address,
+    created_at: CreatedAt
 }
 
 impl ChannelOuterLink {
     pub const MAXIMUM_QUANTITY: i16 = 5;
 
     pub fn new(
-        from: i64,
-        alias: String,
-        address: String,
-        created_at: String
+        from: Channel_Id,
+        alias: Alias,
+        address: Address,
+        created_at: CreatedAt
     ) -> Self {
         return Self {
             from,
-            _from: PhantomData,
             alias,
-            _alias: PhantomData,
             address,
-            _address: PhantomData,
-            created_at,
-            _creatad_at: PhantomData
+            created_at
         }
     }
 }

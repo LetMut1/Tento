@@ -145,37 +145,37 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
 
 impl<'a> Getter<'a, ApplicationUser_Id> for ApplicationUserAuthorizationToken<'_> {
     fn get(&'a self) -> ApplicationUser_Id {
-        return self.application_user_id;
+        return self.get_application_user_id();
     }
 }
 
 impl<'a> Getter<'a, &'a ApplicationUserDevice_Id> for ApplicationUserAuthorizationToken<'_> {
     fn get(&'a self) -> &'a ApplicationUserDevice_Id {
-        return self.application_user_device_id.as_ref();
+        return self.get_application_user_device_id();
     }
 }
 
 impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken<'_> {
     fn get(&'a self) -> &'a Value {
-        return &self.value;
+        return self.get_value();
     }
 }
 
 impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserAuthorizationToken<'_> {
     fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.wrong_enter_tries_quantity;
+        return self.get_wrong_enter_tries_quantity();
     }
 }
 
 impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken<'_> {
     fn get(&'a self) -> ExpiresAt {
-        return self.expires_at;
+        return self.get_expires_at();
     }
 }
 
 impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken<'_> {
     fn get(&'a self) -> CanBeResentFrom {
-        return self.can_be_resent_from;
+        return self.get_can_be_resent_from();
     }
 }
 
@@ -247,25 +247,25 @@ impl ApplicationUserAuthorizationToken_1 {
 
 impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken_1 {
     fn get(&'a self) -> &'a Value {
-        return &self.value;
+        return self.get_value();
     }
 }
 
 impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserAuthorizationToken_1 {
     fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.wrong_enter_tries_quantity;
+        return self.get_wrong_enter_tries_quantity();
     }
 }
 
 impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken_1 {
     fn get(&'a self) -> ExpiresAt {
-        return self.expires_at;
+        return self.get_expires_at();
     }
 }
 
 impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken_1 {
     fn get(&'a self) -> CanBeResentFrom {
-        return self.can_be_resent_from;
+        return self.get_can_be_resent_from();
     }
 }
 
@@ -324,13 +324,13 @@ impl ApplicationUserAuthorizationToken_2 {
 
 impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken_2 {
     fn get(&'a self) -> &'a Value {
-        return &self.value;
+        return self.get_value();
     }
 }
 
 impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserAuthorizationToken_2 {
     fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.wrong_enter_tries_quantity;
+        return self.get_wrong_enter_tries_quantity();
     }
 }
 
@@ -394,18 +394,18 @@ impl ApplicationUserAuthorizationToken_5 {
 
 impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken_5 {
     fn get(&'a self) -> &'a Value {
-        return &self.value;
+        return self.get_value();
     }
 }
 
 impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken_5 {
     fn get(&'a self) -> ExpiresAt {
-        return self.expires_at;
+        return self.get_expires_at();
     }
 }
 
 impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken_5 {
     fn get(&'a self) -> CanBeResentFrom {
-        return self.can_be_resent_from;
+        return self.get_can_be_resent_from();
     }
 }

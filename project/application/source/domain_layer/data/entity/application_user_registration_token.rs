@@ -1,6 +1,5 @@
-use crate::domain_layer::functionality::service::getter::GetterDELETE;
+use crate::domain_layer::functionality::service::getter::Getter;
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use super::application_user_device::ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Email;
 
@@ -75,26 +74,13 @@ impl CanBeResentFrom {
 }
 
 pub struct ApplicationUserRegistrationToken<'a> {
-    application_user_email: Cow<'a, str>,
-    _application_user_email: PhantomData<ApplicationUser_Email>,
-
-    application_user_device_id: Cow<'a, str>,
-    _application_user_device_id: PhantomData<ApplicationUserDevice_Id>,
-
-    value: String,
-    _value: PhantomData<Value>,
-
-    wrong_enter_tries_quantity: i16,
-    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
-
-    is_approved: bool,
-    _is_approved: PhantomData<IsApproved>,
-
-    expires_at: i64,
-    _expires_at: PhantomData<ExpiresAt>,
-
-    can_be_resent_from: i64,
-    _can_be_resent_from: PhantomData<CanBeResentFrom>
+    application_user_email: Cow<'a, ApplicationUser_Email>,
+    application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+    value: Value,
+    wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    is_approved: IsApproved,
+    expires_at: ExpiresAt,
+    can_be_resent_from: CanBeResentFrom
 }
 
 impl<'a> ApplicationUserRegistrationToken<'a> {
@@ -103,442 +89,405 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 5;
 
     pub fn new(
-        application_user_email: Cow<'a, str>,
-        application_user_device_id: Cow<'a, str>,
-        value: String,
-        wrong_enter_tries_quantity: i16,
-        is_approved: bool,
-        expires_at: i64,
-        can_be_resent_from: i64
+        application_user_email: Cow<'a, ApplicationUser_Email>,
+        application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+        value: Value,
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+        is_approved: IsApproved,
+        expires_at: ExpiresAt,
+        can_be_resent_from: CanBeResentFrom
     ) -> Self {
         return Self {
             application_user_email,
-            _application_user_email: PhantomData,
             application_user_device_id,
-            _application_user_device_id: PhantomData,
             value,
-            _value: PhantomData,
             wrong_enter_tries_quantity,
-            _wrong_enter_tries_quantity: PhantomData,
             is_approved,
-            _is_approved: PhantomData,
             expires_at,
-            _expires_at: PhantomData,
-            can_be_resent_from,
-            _can_be_resent_from: PhantomData
+            can_be_resent_from
         };
     }
 
-    pub fn get_application_user_email<'b>(&'b self) -> &'b str {
+    pub fn get_application_user_email<'b>(&'b self) -> &'b ApplicationUser_Email {
         return self.application_user_email.as_ref();
     }
 
-    pub fn get_application_user_device_id<'b>(&'b self) -> &'b str {
+    pub fn get_application_user_device_id<'b>(&'b self) -> &'b ApplicationUserDevice_Id {
         return self.application_user_device_id.as_ref();
     }
 
-    pub fn get_value<'b>(&'b self) -> &'b str {
-        return self.value.as_str();
+    pub fn get_value<'b>(&'b self) -> &'b Value {
+        return &self.value;
     }
 
-    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> i16 {
+    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> WrongEnterTriesQuantity {
         return self.wrong_enter_tries_quantity;
     }
 
-    pub fn get_is_approved<'b>(&'b self) -> bool {
+    pub fn get_is_approved<'b>(&'b self) -> IsApproved {
         return self.is_approved;
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> i64 {
+    pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
         return self.expires_at;
     }
 
-    pub fn get_can_be_resent_from<'b>(&'b self) -> i64 {
+    pub fn get_can_be_resent_from<'b>(&'b self) -> CanBeResentFrom {
         return self.can_be_resent_from;
     }
 
-    pub fn set_value<'b>(&'b mut self, value: String) -> &'b mut Self {
+    pub fn set_value<'b>(&'b mut self, value: Value) -> &'b mut Self {
         self.value = value;
 
         return self;
     }
 
-    pub fn set_wrong_enter_tries_quantity<'b>(&'b mut self, wrong_enter_tries_quantity: i16) -> &'b mut Self {
+    pub fn set_wrong_enter_tries_quantity<'b>(
+        &'b mut self,
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+    ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
         return self;
     }
 
-    pub fn set_is_approved<'b>(&'b mut self, is_approved: bool) -> &'b mut Self {
+    pub fn set_is_approved<'b>(&'b mut self, is_approved: IsApproved) -> &'b mut Self {
         self.is_approved = is_approved;
 
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: i64) -> &'b mut Self {
+    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;
     }
 
-    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: i64) -> &'b mut Self {
+    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: CanBeResentFrom) -> &'b mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
     }
 }
 
-impl<'a, 'b: 'a> GetterDELETE<&'a Self, ApplicationUser_Email, &'a str> for ApplicationUserRegistrationToken<'b> {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.application_user_email.as_ref();
+impl<'a> Getter<'a, &'a ApplicationUser_Email> for ApplicationUserRegistrationToken<'_> {
+    fn get(&'a self) -> &'a ApplicationUser_Email {
+        return self.get_application_user_email();
     }
 }
 
-impl<'a, 'b: 'a> GetterDELETE<&'a Self, ApplicationUserDevice_Id, &'a str> for ApplicationUserRegistrationToken<'b> {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.application_user_device_id.as_ref();
+impl<'a> Getter<'a, &'a ApplicationUserDevice_Id> for ApplicationUserRegistrationToken<'_> {
+    fn get(&'a self) -> &'a ApplicationUserDevice_Id {
+        return self.get_application_user_device_id();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken<'_> {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.value.as_str();
+impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken<'_> {
+    fn get(&'a self) -> &'a Value {
+        return self.get_value();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserRegistrationToken<'_> {
-    fn get(subject: &'a Self) -> i16 {
-        return subject.wrong_enter_tries_quantity;
+impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserRegistrationToken<'_> {
+    fn get(&'a self) -> WrongEnterTriesQuantity {
+        return self.get_wrong_enter_tries_quantity();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken<'_> {
-    fn get(subject: &'a Self) -> bool {
-        return subject.is_approved;
+impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken<'_> {
+    fn get(&'a self) -> IsApproved {
+        return self.get_is_approved();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken<'_> {
-    fn get(subject: &'a Self) -> i64 {
-        return subject.expires_at;
+impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken<'_> {
+    fn get(&'a self) -> ExpiresAt {
+        return self.get_expires_at();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, CanBeResentFrom, i64> for ApplicationUserRegistrationToken<'_> {
-    fn get(subject: &'a Self) -> i64 {
-        return subject.can_be_resent_from;
+impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken<'_> {
+    fn get(&'a self) -> CanBeResentFrom {
+        return self.get_can_be_resent_from();
     }
 }
 
 pub struct ApplicationUserRegistrationToken_1 {
-    value: String,
-    _value: PhantomData<Value>,
-
-    wrong_enter_tries_quantity: i16,
-    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
-
-    is_approved: bool,
-    _is_approved: PhantomData<IsApproved>,
-
-    expires_at: i64,
-    _expires_at: PhantomData<ExpiresAt>,
-
-    can_be_resent_from: i64,
-    _can_be_resent_from: PhantomData<CanBeResentFrom>
+    value: Value,
+    wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    is_approved: IsApproved,
+    expires_at: ExpiresAt,
+    can_be_resent_from: CanBeResentFrom
 }
 
 impl ApplicationUserRegistrationToken_1 {
     pub fn new(
-        value: String,
-        wrong_enter_tries_quantity: i16,
-        is_approved: bool,
-        expires_at: i64,
-        can_be_resent_from: i64
+        value: Value,
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+        is_approved: IsApproved,
+        expires_at: ExpiresAt,
+        can_be_resent_from: CanBeResentFrom
     ) -> Self {
         return Self {
             value,
-            _value: PhantomData,
             wrong_enter_tries_quantity,
-            _wrong_enter_tries_quantity: PhantomData,
             is_approved,
-            _is_approved: PhantomData,
             expires_at,
-            _expires_at: PhantomData,
-            can_be_resent_from,
-            _can_be_resent_from: PhantomData
+            can_be_resent_from
         };
     }
 
-    pub fn get_value<'b>(&'b self) -> &'b str {
-        return self.value.as_str();
+    pub fn get_value<'b>(&'b self) -> &'b Value {
+        return &self.value;
     }
 
-    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> i16 {
+    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> WrongEnterTriesQuantity {
         return self.wrong_enter_tries_quantity;
     }
 
-    pub fn get_is_approved<'b>(&'b self) -> bool {
+    pub fn get_is_approved<'b>(&'b self) -> IsApproved {
         return self.is_approved;
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> i64 {
+    pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
         return self.expires_at;
     }
 
-    pub fn get_can_be_resent_from<'b>(&'b self) -> i64 {
+    pub fn get_can_be_resent_from<'b>(&'b self) -> CanBeResentFrom {
         return self.can_be_resent_from;
     }
 
-    pub fn set_value<'b>(&'b mut self, value: String) -> &'b mut Self {
+    pub fn set_value<'b>(&'b mut self, value: Value) -> &'b mut Self {
         self.value = value;
 
         return self;
     }
 
-    pub fn set_wrong_enter_tries_quantity<'b>(&'b mut self, wrong_enter_tries_quantity: i16) -> &'b mut Self {
+    pub fn set_wrong_enter_tries_quantity<'b>(
+        &'b mut self,
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+    ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
         return self;
     }
 
-    pub fn set_is_approved<'b>(&'b mut self, is_approved: bool) -> &'b mut Self {
+    pub fn set_is_approved<'b>(&'b mut self, is_approved: IsApproved) -> &'b mut Self {
         self.is_approved = is_approved;
 
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: i64) -> &'b mut Self {
+    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;
     }
 
-    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: i64) -> &'b mut Self {
+    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: CanBeResentFrom) -> &'b mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken_1 {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.value.as_str();
+impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken_1 {
+    fn get(&'a self) -> &'a Value {
+        return self.get_value();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserRegistrationToken_1 {
-    fn get(subject: &'a Self) -> i16 {
-        return subject.wrong_enter_tries_quantity;
+impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserRegistrationToken_1 {
+    fn get(&'a self) -> WrongEnterTriesQuantity {
+        return self.get_wrong_enter_tries_quantity();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken_1 {
-    fn get(subject: &'a Self) -> bool {
-        return subject.is_approved;
+impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken_1 {
+    fn get(&'a self) -> IsApproved {
+        return self.get_is_approved();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_1 {
-    fn get(subject: &'a Self) -> i64 {
-        return subject.expires_at;
+impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken_1 {
+    fn get(&'a self) -> ExpiresAt {
+        return self.get_expires_at();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, CanBeResentFrom, i64> for ApplicationUserRegistrationToken_1 {
-    fn get(subject: &'a Self) -> i64 {
-        return subject.can_be_resent_from;
+impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken_1 {
+    fn get(&'a self) -> CanBeResentFrom {
+        return self.get_can_be_resent_from();
     }
 }
 
 pub struct ApplicationUserRegistrationToken_2 {
-    can_be_resent_from: i64,
-    _can_be_resent_from: PhantomData<CanBeResentFrom>
+    can_be_resent_from: CanBeResentFrom
 }
 
 pub struct ApplicationUserRegistrationToken_3 {
-    value: String,
-    _value: PhantomData<Value>,
-
-    wrong_enter_tries_quantity: i16,
-    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
-
-    is_approved: bool,
-    _is_approved: PhantomData<IsApproved>,
-
-    expires_at: i64,
-    _expires_at: PhantomData<ExpiresAt>,
+    value: Value,
+    wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    is_approved: IsApproved,
+    expires_at: ExpiresAt
 }
 
 impl ApplicationUserRegistrationToken_3 {
     pub fn new(
-        value: String,
-        wrong_enter_tries_quantity: i16,
-        is_approved: bool,
-        expires_at: i64
+        value: Value,
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+        is_approved: IsApproved,
+        expires_at: ExpiresAt
     ) -> Self {
         return Self {
             value,
-            _value: PhantomData,
             wrong_enter_tries_quantity,
-            _wrong_enter_tries_quantity: PhantomData,
             is_approved,
-            _is_approved: PhantomData,
-            expires_at,
-            _expires_at: PhantomData
+            expires_at
         };
     }
 
-    pub fn get_value<'b>(&'b self) -> &'b str {
-        return self.value.as_str();
+    pub fn get_value<'b>(&'b self) -> &'b Value {
+        return &self.value;
     }
 
-    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> i16 {
+    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> WrongEnterTriesQuantity {
         return self.wrong_enter_tries_quantity;
     }
 
-    pub fn get_is_approved<'b>(&'b self) -> bool {
+    pub fn get_is_approved<'b>(&'b self) -> IsApproved {
         return self.is_approved;
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> i64 {
+    pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
         return self.expires_at;
     }
 
-    pub fn set_value<'b>(&'b mut self, value: String) -> &'b mut Self {
+    pub fn set_value<'b>(&'b mut self, value: Value) -> &'b mut Self {
         self.value = value;
 
         return self;
     }
 
-    pub fn set_wrong_enter_tries_quantity<'b>(&'b mut self, wrong_enter_tries_quantity: i16) -> &'b mut Self {
+    pub fn set_wrong_enter_tries_quantity<'b>(
+        &'b mut self,
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+    ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
         return self;
     }
 
-    pub fn set_is_approved<'b>(&'b mut self, is_approved: bool) -> &'b mut Self {
+    pub fn set_is_approved<'b>(&'b mut self, is_approved: IsApproved) -> &'b mut Self {
         self.is_approved = is_approved;
 
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: i64) -> &'b mut Self {
+    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken_3 {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.value.as_str();
+impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken_3 {
+    fn get(&'a self) -> &'a Value {
+        return self.get_value();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, WrongEnterTriesQuantity, i16> for ApplicationUserRegistrationToken_3 {
-    fn get(subject: &'a Self) -> i16 {
-        return subject.wrong_enter_tries_quantity;
+impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserRegistrationToken_3 {
+    fn get(&'a self) -> WrongEnterTriesQuantity {
+        return self.get_wrong_enter_tries_quantity();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken_3 {
-    fn get(subject: &'a Self) -> bool {
-        return subject.is_approved;
+impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken_3 {
+    fn get(&'a self) -> IsApproved {
+        return self.get_is_approved();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_3 {
-    fn get(subject: &'a Self) -> i64 {
-        return subject.expires_at;
+impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken_3 {
+    fn get(&'a self) -> ExpiresAt {
+        return self.get_expires_at();
     }
 }
 
 pub struct ApplicationUserRegistrationToken_4 {
-    wrong_enter_tries_quantity: i16,
-    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>
+    wrong_enter_tries_quantity: WrongEnterTriesQuantity
 }
 
 pub struct ApplicationUserRegistrationToken_5 {
-    is_approved: bool,
-    _is_approved: PhantomData<IsApproved>
+    is_approved: IsApproved
 }
 
 pub struct ApplicationUserRegistrationToken_6 {
-    value: String,
-    _value: PhantomData<Value>,
-
-    is_approved: bool,
-    _is_approved: PhantomData<IsApproved>,
-
-    expires_at: i64,
-    _expires_at: PhantomData<ExpiresAt>,
-
-    can_be_resent_from: i64,
-    _can_be_resent_from: PhantomData<CanBeResentFrom>
+    value: Value,
+    is_approved: IsApproved,
+    expires_at: ExpiresAt,
+    can_be_resent_from: CanBeResentFrom
 }
 
 impl ApplicationUserRegistrationToken_6 {
     pub fn new(
-        value: String,
-        is_approved: bool,
-        expires_at: i64,
-        can_be_resent_from: i64
+        value: Value,
+        is_approved: IsApproved,
+        expires_at: ExpiresAt,
+        can_be_resent_from: CanBeResentFrom
     ) -> Self {
         return Self {
             value,
-            _value: PhantomData,
             is_approved,
-            _is_approved: PhantomData,
             expires_at,
-            _expires_at: PhantomData,
-            can_be_resent_from,
-            _can_be_resent_from: PhantomData
+            can_be_resent_from
         };
     }
 
-    pub fn get_value<'b>(&'b self) -> &'b str {
-        return self.value.as_str();
+    pub fn get_value<'b>(&'b self) -> &'b Value {
+        return self.get_value();
     }
 
-    pub fn get_is_approved<'b>(&'b self) -> bool {
-        return self.is_approved;
+    pub fn get_is_approved<'b>(&'b self) -> IsApproved {
+        return self.get_is_approved();
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> i64 {
-        return self.expires_at;
+    pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
+        return self.get_expires_at();
     }
 
-    pub fn get_can_be_resent_from<'b>(&'b self) -> i64 {
-        return self.can_be_resent_from;
+    pub fn get_can_be_resent_from<'b>(&'b self) -> CanBeResentFrom {
+        return self.get_can_be_resent_from();
     }
 
-    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: i64) -> &'b mut Self {
+    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: CanBeResentFrom) -> &'b mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, Value, &'a str> for ApplicationUserRegistrationToken_6 {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.value.as_str();
+impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken_6 {
+    fn get(&'a self) -> &'a Value {
+        return self.get_value();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, IsApproved, bool> for ApplicationUserRegistrationToken_6 {
-    fn get(subject: &'a Self) -> bool {
-        return subject.is_approved;
+impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken_6 {
+    fn get(&'a self) -> IsApproved {
+        return self.get_is_approved();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, ExpiresAt, i64> for ApplicationUserRegistrationToken_6 {
-    fn get(subject: &'a Self) -> i64 {
-        return subject.expires_at;
+impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken_6 {
+    fn get(&'a self) -> ExpiresAt {
+        return self.get_expires_at();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, CanBeResentFrom, i64> for ApplicationUserRegistrationToken_6 {
-    fn get(subject: &'a Self) -> i64 {
-        return subject.can_be_resent_from;
+impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken_6 {
+    fn get(&'a self) -> CanBeResentFrom {
+        return self.get_can_be_resent_from();
     }
 }

@@ -1,4 +1,4 @@
-use crate::domain_layer::functionality::service::getter::GetterDELETE;
+use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
@@ -25,6 +25,7 @@ impl Id {
     }
 }
 
+#[derive(Clone)]
 pub struct Email(String);
 
 impl Email {
@@ -37,6 +38,7 @@ impl Email {
     }
 }
 
+#[derive(Clone)]
 pub struct Nickname(String);
 
 impl Nickname {
@@ -86,244 +88,214 @@ impl CreatedAt {
 }
 
 pub struct ApplicationUser<'a> {
-    id: i64,
-    _id: PhantomData<Id>,
-
-    email: Cow<'a, str>,
-    _email: PhantomData<Email>,
-
-    nickname: Cow<'a, str>,
-    _nickname: PhantomData<Nickname>,
-
+    id: Id,
+    email: Cow<'a, Email>,
+    nickname: Cow<'a, Nickname>,
     _password: PhantomData<Password>,
-
-    password_hash: String,
-    _password_hash: PhantomData<PasswordHash>,
-
-    created_at: String,
-    _created_at: PhantomData<CreatedAt>
+    password_hash: PasswordHash,
+    created_at: CreatedAt
 }
 
 impl<'a> ApplicationUser<'a> {
     pub fn new(
-        id: i64,
-        email: Cow<'a, str>,
-        nickname: Cow<'a, str>,
-        password_hash: String,
-        created_at: String
+        id: Id,
+        email: Cow<'a, Email>,
+        nickname: Cow<'a, Nickname>,
+        password_hash: PasswordHash,
+        created_at: CreatedAt
     ) -> Self {
         return Self {
             id,
-            _id: PhantomData,
             email,
-            _email: PhantomData,
             nickname,
-            _nickname: PhantomData,
             _password: PhantomData,
             password_hash,
-            _password_hash: PhantomData,
-            created_at,
-            _created_at: PhantomData
+            created_at
         };
     }
 
-    pub fn get_id<'b>(&'b self) -> i64 {
+    pub fn get_id<'b>(&'b self) -> Id {
         return self.id;
     }
 
-    pub fn get_email<'b>(&'b self) -> &'b str {
+    pub fn get_email<'b>(&'b self) -> &'b Email {
         return self.email.as_ref();
     }
 
-    pub fn get_nickname<'b>(&'b self) -> &'b str {
+    pub fn get_nickname<'b>(&'b self) -> &'b Nickname {
         return self.nickname.as_ref();
     }
 
-    pub fn get_password_hash<'b>(&'b self) -> &'b str {
-        return self.password_hash.as_str();
+    pub fn get_password_hash<'b>(&'b self) -> &'b PasswordHash {
+        return &self.password_hash;
     }
 
-    pub fn set_password_hash<'b>(&'b mut self, password_hash: String) -> &'b mut Self {
+    pub fn get_created_at<'b>(&'b self) -> &'b CreatedAt {
+        return &self.created_at
+    }
+
+    pub fn set_password_hash<'b>(&'b mut self, password_hash: PasswordHash) -> &'b mut Self {
         self.password_hash = password_hash;
 
         return self;
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, Id, i64> for ApplicationUser<'_> {
-    fn get(subject: &'a Self) -> i64 {
-        return subject.id;
+impl<'a> Getter<'a, Id> for ApplicationUser<'_> {
+    fn get(&'a self) -> Id {
+        return self.get_id();
     }
 }
 
-impl<'a, 'b: 'a> GetterDELETE<&'a Self, Email, &'a str> for ApplicationUser<'b> {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.email.as_ref();
+impl<'a> Getter<'a, &'a Email> for ApplicationUser<'_> {
+    fn get(&'a self) -> &'a Email {
+        return self.get_email();
     }
 }
 
-impl<'a, 'b: 'a> GetterDELETE<&'a Self, Nickname, &'a str> for ApplicationUser<'b> {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.nickname.as_ref();
+impl<'a> Getter<'a, &'a Nickname> for ApplicationUser<'_> {
+    fn get(&'a self) -> &'a Nickname {
+        return self.get_nickname();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, PasswordHash, &'a str> for ApplicationUser<'_> {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.password_hash.as_str();
+impl<'a> Getter<'a, &'a PasswordHash> for ApplicationUser<'_> {
+    fn get(&'a self) -> &'a PasswordHash {
+        return self.get_password_hash();
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, CreatedAt, &'a str> for ApplicationUser<'_> {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.created_at.as_str();
+impl<'a> Getter<'a, &'a CreatedAt> for ApplicationUser<'_> {
+    fn get(&'a self) -> &'a CreatedAt {
+        return self.get_created_at();
     }
 }
 
 pub struct ApplicationUser_1 {
-    id: i64,
-    _id: PhantomData<Id>,
-
-    email: String,
-    _email: PhantomData<Email>,
-
-    password_hash: String,
-    _password_hash: PhantomData<PasswordHash>,
+    id: Id,
+    email: Email,
+    password_hash: PasswordHash
 }
 
 impl ApplicationUser_1 {
     pub fn new(
-        id: i64,
-        email: String,
-        password_hash: String
+        id: Id,
+        email: Email,
+        password_hash: PasswordHash
     ) -> Self {
         return Self {
             id,
-            _id: PhantomData,
             email,
-            _email: PhantomData,
-            password_hash,
-            _password_hash: PhantomData
+            password_hash
         };
     }
 
-    pub fn get_id<'a>(&'a self) -> i64 {
+    pub fn get_id<'a>(&'a self) -> Id {
         return self.id;
     }
 
-    pub fn get_email<'a>(&'a self) -> &'a str {
-        return self.email.as_str();
+    pub fn get_email<'a>(&'a self) -> &'a Email {
+        return &self.email;
     }
 
-    pub fn get_password_hash<'a>(&'a self) -> &'a str {
-        return self.password_hash.as_str();
+    pub fn get_password_hash<'a>(&'a self) -> &'a PasswordHash {
+        return &self.password_hash;
     }
 }
 
 pub struct ApplicationUser_2 {
-    id: i64,
-    _id: PhantomData<Id>,
-
-    password_hash: String,
-    _password_hash: PhantomData<PasswordHash>,
+    id: Id,
+    password_hash: PasswordHash
 }
 
 impl ApplicationUser_2 {
     pub fn new(
-        id: i64,
-        password_hash: String
+        id: Id,
+        password_hash: PasswordHash
     ) -> Self {
         return Self {
             id,
-            _id: PhantomData,
-            password_hash,
-            _password_hash: PhantomData
+            password_hash
         };
     }
 
-    pub fn get_id<'a>(&'a self) -> i64 {
+    pub fn get_id<'a>(&'a self) -> Id {
         return self.id;
     }
 
-    pub fn get_password_hash<'a>(&'a self) -> &'a str {
-        return self.password_hash.as_str();
+    pub fn get_password_hash<'a>(&'a self) -> &'a PasswordHash {
+        return &self.password_hash;
     }
 }
 
 pub struct ApplicationUser_3 {
-    id: i64,
-    _id: PhantomData<Id>
+    id: Id
 }
 
 impl ApplicationUser_3 {
     pub fn new(
-        id: i64
+        id: Id
     ) -> Self {
         return Self {
-            id,
-            _id: PhantomData
+            id
         };
     }
 
-    pub fn get_id<'a>(&'a self) -> i64 {
+    pub fn get_id<'a>(&'a self) -> Id {
         return self.id;
     }
 }
 
 pub struct ApplicationUser_4 {
-    password_hash: String,
-    _password_hash: PhantomData<PasswordHash>,
+    password_hash: PasswordHash
 }
 
 impl ApplicationUser_4 {
     pub fn new(
-        password_hash: String
+        password_hash: PasswordHash
     ) -> Self {
         return Self {
-            password_hash,
-            _password_hash: PhantomData
+            password_hash
         };
     }
 
-    pub fn get_password_hash<'a>(&'a self) -> &'a str {
-        return self.password_hash.as_str();
+    pub fn get_password_hash<'a>(&'a self) -> &'a PasswordHash {
+        return &self.password_hash;
     }
 
-    pub fn set_password_hash<'b>(&'b mut self, password_hash: String) -> &'b mut Self {
+    pub fn set_password_hash<'b>(&'b mut self, password_hash: PasswordHash) -> &'b mut Self {
         self.password_hash = password_hash;
 
         return self;
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, PasswordHash, &'a str> for ApplicationUser_4 {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.password_hash.as_str();
+impl<'a> Getter<'a, &'a PasswordHash> for ApplicationUser_4 {
+    fn get(&'a self) -> &'a PasswordHash {
+        return self.get_password_hash();
     }
 }
 
 pub struct ApplicationUser_5 {
-    email: String,
-    _email: PhantomData<Email>,
+    email: Email
 }
 
 impl ApplicationUser_5 {
     pub fn new(
-        email: String
+        email: Email
     ) -> Self {
         return Self {
-            email,
-            _email: PhantomData
+            email
         };
     }
 
-    pub fn get_email<'a>(&'a self) -> &'a str {
-        return self.email.as_str();
+    pub fn get_email<'a>(&'a self) -> &'a Email {
+        return &self.email;
     }
 }
 
-impl<'a> GetterDELETE<&'a Self, Email, &'a str> for ApplicationUser_5 {
-    fn get(subject: &'a Self) -> &'a str {
-        return subject.email.as_str();
+impl<'a> Getter<'a, &'a Email> for ApplicationUser_5 {
+    fn get(&'a self) -> &'a Email {
+        return self.get_email();
     }
 }

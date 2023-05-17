@@ -138,37 +138,37 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
 
 impl<'a> Getter<'a, ApplicationUser_Id> for ApplicationUserAccessRefreshToken<'_> {
     fn get(&'a self) -> ApplicationUser_Id {
-        return self.application_user_id;
+        return self.get_application_user_id();
     }
 }
 
 impl<'a> Getter<'a, &'a ApplicationUserDevice_Id> for ApplicationUserAccessRefreshToken<'_> {
     fn get(&'a self) -> &'a ApplicationUserDevice_Id {
-        return self.application_user_device_id.as_ref();
+        return self.get_application_user_device_id();
     }
 }
 
 impl<'a> Getter<'a, &'a ApplicationUserAccessToken_Id> for ApplicationUserAccessRefreshToken<'_> {
     fn get(&'a self) -> &'a ApplicationUserAccessToken_Id {
-        return self.application_user_access_token_id.as_ref();
+        return self.get_application_user_access_token_id();
     }
 }
 
 impl<'a> Getter<'a, &'a ObfuscationValue> for ApplicationUserAccessRefreshToken<'_> {
     fn get(&'a self) -> &'a ObfuscationValue {
-        return &self.obfuscation_value;
+        return self.get_obfuscation_value();
     }
 }
 
 impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAccessRefreshToken<'_> {
     fn get(&'a self) -> ExpiresAt {
-        return self.expires_at;
+        return self.get_expires_at();
     }
 }
 
 impl<'a> Getter<'a, UpdatedAt> for ApplicationUserAccessRefreshToken<'_> {
     fn get(&'a self) -> UpdatedAt {
-        return self.updated_at;
+        return self.get_updated_at();
     }
 }
 
