@@ -1,4 +1,6 @@
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -11,6 +13,10 @@ use super::postgresql_repository::PostgresqlRepository;
 
 impl PostgresqlRepository<ApplicationUserDevice> {
     pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<ApplicationUserDevice, ErrorAuditor> {
+        let application_user_id = insert.application_user_id.get();
+
+        let application_user_device_id = insert.application_user_device_id.get();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -24,8 +30,8 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             ON CONFLICT ON CONSTRAINT application_user_device2 DO NOTHING;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert.application_user_device_id, Type::TEXT)
-            .add_parameter(&insert.application_user_id, Type::INT8);
+            .add_parameter(&application_user_device_id, Type::TEXT)
+            .add_parameter(&application_user_id, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
             query,
@@ -64,6 +70,6 @@ impl PostgresqlRepository<ApplicationUserDevice> {
 }
 
 pub struct Insert {
-    pub application_user_device_id: String,
-    pub application_user_id: i64
+    pub application_user_device_id: ApplicationUserDevice_Id,
+    pub application_user_id: ApplicationUser_Id
 }

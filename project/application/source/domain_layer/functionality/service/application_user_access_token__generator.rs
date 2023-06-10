@@ -9,7 +9,7 @@ use extern_crate::uuid::Uuid;
 use super::generator::Generator;
 
 impl Generator<ApplicationUserAccessToken_ExpiresAt> {
-    pub fn generate() -> Result<i64, ErrorAuditor> {
+    pub fn generate() -> Result<ApplicationUserAccessToken_ExpiresAt, ErrorAuditor> {
         let application_user_access_token_expires_at = match Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(
             ApplicationUserAccessToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
         ) {
@@ -21,12 +21,12 @@ impl Generator<ApplicationUserAccessToken_ExpiresAt> {
             }
         };
 
-        return Ok(application_user_access_token_expires_at);
+        return Ok(ApplicationUserAccessToken_ExpiresAt::new(application_user_access_token_expires_at));
     }
 }
 
 impl Generator<ApplicationUserAccessToken_Id> {
-    pub fn generate() -> String {
-        return Uuid::new_v4().to_string();
+    pub fn generate() -> ApplicationUserAccessToken_Id {
+        return ApplicationUserAccessToken_Id::new(Uuid::new_v4().to_string());
     }
 }

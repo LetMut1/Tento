@@ -91,13 +91,13 @@ struct Signature;
 impl Encoder<Signature> {
     fn encode<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
-        application_user_access_token_serialized: &'a str
+        application_user_access_token_serialized_form: &'a str
     ) -> String {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
             environment_configuration.get_security_auat_signature_encoding_private_key().as_bytes(),
-            application_user_access_token_serialized.as_bytes(),
+            application_user_access_token_serialized_form.as_bytes(),
             hmac_encoded_data.as_mut_slice()
         );
 

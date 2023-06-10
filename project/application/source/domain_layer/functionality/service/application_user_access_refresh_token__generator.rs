@@ -10,13 +10,13 @@ use extern_crate::uuid::Uuid;
 use super::generator::Generator;
 
 impl Generator<ApplicationUserAccessRefreshToken_ObfuscationValue> {
-    pub fn generate() -> String {
-        return Uuid::new_v4().to_string();
+    pub fn generate() -> ApplicationUserAccessRefreshToken_ObfuscationValue {
+        return ApplicationUserAccessRefreshToken_ObfuscationValue::new(Uuid::new_v4().to_string());
     }
 }
 
 impl Generator<ApplicationUserAccessRefreshToken_ExpiresAt> {
-    pub fn generate() -> Result<i64, ErrorAuditor> {
+    pub fn generate() -> Result<ApplicationUserAccessRefreshToken_ExpiresAt, ErrorAuditor> {
         let application_user_access_refresh_token_expires_at = match Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(
             ApplicationUserAccessRefreshToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
         ) {
@@ -28,12 +28,12 @@ impl Generator<ApplicationUserAccessRefreshToken_ExpiresAt> {
             }
         };
 
-        return Ok(application_user_access_refresh_token_expires_at);
+        return Ok(ApplicationUserAccessRefreshToken_ExpiresAt::new(application_user_access_refresh_token_expires_at));
     }
 }
 
 impl Generator<ApplicationUserAccessRefreshToken_UpdatedAt> {
-    pub fn generate() -> i64 {
-        return Resolver::<DateTime>::unixtime_get_now();
+    pub fn generate() -> ApplicationUserAccessRefreshToken_UpdatedAt {
+        return ApplicationUserAccessRefreshToken_UpdatedAt::new(Resolver::<DateTime>::unixtime_get_now());
     }
 }

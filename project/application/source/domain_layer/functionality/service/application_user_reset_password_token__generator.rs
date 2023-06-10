@@ -11,8 +11,8 @@ use crate::infrastructure_layer::functionality::service::generator::NumberRow;
 use super::generator::Generator;
 
 impl Generator<ApplicationUserResetPasswordToken_Value> {
-    pub fn generate() -> String {
-        return Generator_::<NumberRow>::generate_6();
+    pub fn generate() -> ApplicationUserResetPasswordToken_Value {
+        return ApplicationUserResetPasswordToken_Value::new(Generator_::<NumberRow>::generate_6());
     }
 }
 
@@ -29,12 +29,12 @@ impl Generator<ApplicationUserResetPasswordToken_ExpiresAt> {
             }
         };
 
-        return Ok(application_user_reset_password_token_expires_at);
+        return Ok(ApplicationUserResetPasswordToken_ExpiresAt::new(application_user_reset_password_token_expires_at));
     }
 }
 
 impl Generator<ApplicationUserResetPasswordToken_CanBeResentFrom> {
-    pub fn generate() -> Result<i64, ErrorAuditor> {
+    pub fn generate() -> Result<ApplicationUserResetPasswordToken_CanBeResentFrom, ErrorAuditor> {
         let application_user_reset_password_token_can_be_resent_from = match Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(
             ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_BEFORE_RESENDING
         ) {
@@ -46,6 +46,6 @@ impl Generator<ApplicationUserResetPasswordToken_CanBeResentFrom> {
             }
         };
 
-        return Ok(application_user_reset_password_token_can_be_resent_from);
+        return Ok(ApplicationUserResetPasswordToken_CanBeResentFrom::new(application_user_reset_password_token_can_be_resent_from));
     }
 }

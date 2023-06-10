@@ -11,13 +11,13 @@ use crate::infrastructure_layer::functionality::service::generator::NumberRow;
 use super::generator::Generator;
 
 impl Generator<ApplicationUserRegistrationToken_Value> {
-    pub fn generate() -> String {
-        return Generator_::<NumberRow>::generate_6();
+    pub fn generate() -> ApplicationUserRegistrationToken_Value {
+        return ApplicationUserRegistrationToken_Value::new(Generator_::<NumberRow>::generate_6());
     }
 }
 
 impl Generator<ApplicationUserRegistrationToken_ExpiresAt> {
-    pub fn generate() -> Result<i64, ErrorAuditor> {
+    pub fn generate() -> Result<ApplicationUserRegistrationToken_ExpiresAt, ErrorAuditor> {
         let application_user_registration_token_expires_at = match Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(
             ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
         ) {
@@ -29,12 +29,12 @@ impl Generator<ApplicationUserRegistrationToken_ExpiresAt> {
             }
         };
 
-        return Ok(application_user_registration_token_expires_at);
+        return Ok(ApplicationUserRegistrationToken_ExpiresAt::new(application_user_registration_token_expires_at));
     }
 }
 
 impl Generator<ApplicationUserRegistrationToken_CanBeResentFrom> {
-    pub fn generate() -> Result<i64, ErrorAuditor> {
+    pub fn generate() -> Result<ApplicationUserRegistrationToken_CanBeResentFrom, ErrorAuditor> {
         let application_user_registration_token_can_be_resent_from = match Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(
             ApplicationUserRegistrationToken::QUANTITY_OF_MINUTES_BEFORE_RESENDING
         ) {
@@ -46,6 +46,6 @@ impl Generator<ApplicationUserRegistrationToken_CanBeResentFrom> {
             }
         };
 
-        return Ok(application_user_registration_token_can_be_resent_from);
+        return Ok(ApplicationUserRegistrationToken_CanBeResentFrom::new(application_user_registration_token_can_be_resent_from));
     }
 }
