@@ -17,7 +17,7 @@ impl Generator<ApplicationUserResetPasswordToken_Value> {
 }
 
 impl Generator<ApplicationUserResetPasswordToken_ExpiresAt> {
-    pub fn generate() -> Result<i64, ErrorAuditor> {
+    pub fn generate() -> Result<ApplicationUserResetPasswordToken_ExpiresAt, ErrorAuditor> {
         let application_user_reset_password_token_expires_at = match Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(
             ApplicationUserResetPasswordToken::QUANTITY_OF_MINUTES_FOR_EXPIRATION
         ) {

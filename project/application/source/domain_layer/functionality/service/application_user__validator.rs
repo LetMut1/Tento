@@ -20,7 +20,9 @@ impl Validator<ApplicationUser_Email> {
     const REGULAR_EXPRESSION: &'static str = r#"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"#;
     const MAXIMUM_LENGTH: usize = 320;
 
-    pub fn is_valid<'a>(application_user_email: &'a str) -> Result<bool, ErrorAuditor> {
+    pub fn is_valid<'a>(application_user_email: &'a ApplicationUser_Email) -> Result<bool, ErrorAuditor> {
+        let application_user_email_ = application_user_email.get();
+
         let regex = match Regex::new(Self::REGULAR_EXPRESSION) {
             Ok(regex_) => regex_,
             Err(error) => {
@@ -34,8 +36,8 @@ impl Validator<ApplicationUser_Email> {
         };
 
         return Ok(
-            regex.is_match(application_user_email)
-                && application_user_email.chars().count() <= Self::MAXIMUM_LENGTH
+            regex.is_match(application_user_email_)
+                && application_user_email_.chars().count() <= Self::MAXIMUM_LENGTH
         );
     }
 }
@@ -43,11 +45,13 @@ impl Validator<ApplicationUser_Email> {
 impl Validator<ApplicationUser_Nickname> {
     pub const MAXIMUM_LENGTH: usize = 55;
 
-    pub fn is_valid<'a>(application_user_nickname: &'a str) -> bool {
-        return application_user_nickname.chars().count() <= Self::MAXIMUM_LENGTH
-            && !application_user_nickname.contains('@')
-            && !application_user_nickname.contains(' ')       // TODO Проверить символ табуляци TAB            НАПИСАТЬ Через Регекс?
-            && !application_user_nickname.is_empty();
+    pub fn is_valid<'a>(application_user_nickname: &'a ApplicationUser_Nickname) -> bool {
+        let application_user_nickname_ = application_user_nickname.get();
+
+        return application_user_nickname_.chars().count() <= Self::MAXIMUM_LENGTH
+            && !application_user_nickname_.contains('@')
+            && !application_user_nickname_.contains(' ')       // TODO Проверить символ табуляци TAB            НАПИСАТЬ Через Регекс?
+            && !application_user_nickname_.is_empty();
     }
 }
 
@@ -55,11 +59,13 @@ impl Validator<ApplicationUser_Password> {
     const MINIMUM_LENGTH: usize = 7;
     const MAXIMUM_LENGTH: usize = 65;
 
-    pub fn is_valid<'a>(application_user_password: &'a str) -> bool {
-        let password_chars_count = application_user_password.chars().count();
+    pub fn is_valid<'a>(application_user_password: &'a ApplicationUser_Password) -> bool {
+        let application_user_password_ = application_user_password.get();
+
+        let password_chars_count = application_user_password_.chars().count();
 
         return password_chars_count >= Self::MINIMUM_LENGTH             // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
             && password_chars_count <= Self::MAXIMUM_LENGTH
-            && !application_user_password.contains(' ');
+            && !application_user_password_.contains(' ');
     }
 }

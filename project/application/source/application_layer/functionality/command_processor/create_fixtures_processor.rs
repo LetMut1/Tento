@@ -5,10 +5,15 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Nicknam
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
+use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
+use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
 use crate::domain_layer::data::entity::channel::Channel_Description;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
+use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
+use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
+use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::functionality::service::encoder::Encoder;
@@ -32,7 +37,6 @@ use crate::infrastructure_layer::functionality::service::creator::PostgresqlConn
 use extern_crate::rand::Rng;
 use extern_crate::rand::thread_rng;
 use extern_crate::tokio::runtime::Builder;
-use std::clone::Clone;
 
 pub struct CreateFixturesProcessor;
 
@@ -41,7 +45,7 @@ impl CreateFixturesProcessor {
     const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
     const QUANTITY_OF_CHANNELS: u8 = 5;
     const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
-    const APPLICATION_USER_DEVICE__ID: &'static str = "device";
+    const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";
     const ASCII_CHARACTER_REGISTRY: [char; 26] = [
         'a', 'b', 'c', 'd', 'e',
         'f', 'g', 'h', 'i', 'j',
@@ -50,7 +54,6 @@ impl CreateFixturesProcessor {
         'u', 'v', 'w', 'x', 'y',
         'z',
     ];
-
 
     pub fn process() -> Result<(), ErrorAuditor> {
         let environment_configuration = match Loader::<EnvironmentConfiguration>::load_from_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
@@ -109,7 +112,9 @@ impl CreateFixturesProcessor {
             }
         };
 
-        if !Validator::<ApplicationUser_Password>::is_valid(Self::APPLICATION_USER__PASSWORD) {
+        let application_user_password = ApplicationUser_Password::new(Self::APPLICATION_USER__PASSWORD.to_string());
+
+        if !Validator::<ApplicationUser_Password>::is_valid(&application_user_password) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError { message: "Application_user_password should be valid." },
@@ -118,16 +123,7 @@ impl CreateFixturesProcessor {
             );
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(Self::APPLICATION_USER_DEVICE__ID) {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::LogicError { message: "Application_user_device id should be valid." },
-                    BacktracePart::new(line!(), file!(), None)
-                )
-            );
-        }
-
-        let application_user_password_hash = match Encoder::<ApplicationUser_Password>::encode(Self::APPLICATION_USER__PASSWORD) {
+        let application_user_password_hash = match Encoder::<ApplicationUser_Password>::encode(&application_user_password) {
             Ok(application_user_password_hash_) => application_user_password_hash_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -149,18 +145,20 @@ impl CreateFixturesProcessor {
         };
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        '_a: for _i in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
-            let mut application_user_nickname = String::new();
+        '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
+            let mut application_user_nickname = ApplicationUser_Nickname::new(String::new());
 
-            '_b: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<ApplicationUser_Nickname>::MAXIMUM_LENGTH) {
+            '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<ApplicationUser_Nickname>::MAXIMUM_LENGTH) {
                 let character = Self::ASCII_CHARACTER_REGISTRY[
                     thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                 ];
 
-                application_user_nickname = format!("{}{}", application_user_nickname.as_str(), character);
+                application_user_nickname = ApplicationUser_Nickname::new(
+                    format!("{}{}", application_user_nickname.get(), character)
+                );
             }
 
-            if !Validator::<ApplicationUser_Nickname>::is_valid(application_user_nickname.as_str()) {
+            if !Validator::<ApplicationUser_Nickname>::is_valid(&application_user_nickname) {
                 return Err(
                     ErrorAuditor::new(
                         BaseError::LogicError { message: "Application_user nickname should be valid." },
@@ -169,9 +167,11 @@ impl CreateFixturesProcessor {
                 );
             }
 
-            let application_user_email = format!("{}@fixture.com", application_user_nickname.as_str());
+            let application_user_email = ApplicationUser_Email::new(
+                format!("{}@fixture.com", application_user_nickname.get())
+            );
 
-            let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(application_user_email.as_str()) {
+            let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&application_user_email) {
                 Ok(is_valid_email_) => is_valid_email_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -191,7 +191,7 @@ impl CreateFixturesProcessor {
 
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
                 database_1_postgresql_connection,
-                application_user_nickname.as_str()
+                &application_user_nickname
             ).await {
                 Ok(application_user_) => application_user_,
                 Err(mut error) => {
@@ -207,10 +207,13 @@ impl CreateFixturesProcessor {
                     let application_user_insert = ApplicationUserInsert {
                         application_user_email,
                         application_user_nickname,
-                        application_user_password_hash: application_user_password_hash.clone(),
+                        application_user_password_hash: application_user_password_hash.clone()
                     };
 
-                    let application_user__ = match PostgresqlRepository::<ApplicationUser<'_>>::create(database_1_postgresql_connection, application_user_insert).await {
+                    let application_user__ = match PostgresqlRepository::<ApplicationUser<'_>>::create(
+                        database_1_postgresql_connection,
+                        application_user_insert
+                    ).await {
                         Ok(application_user_) => application_user_,
                         Err(mut error) => {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -223,8 +226,21 @@ impl CreateFixturesProcessor {
                 }
             };
 
+            let application_user_device_id = ApplicationUserDevice_Id::new(
+                format!("{}_{}", application_user_.get_nickname().get(), Self::APPLICATION_USER_DEVICE__ID_PART)
+            );
+
+            if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device_id) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::LogicError { message: "Application_user_device id should be valid." },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+
             let application_user_device_insert = ApplicationUserDeviceInsert {
-                application_user_device_id: format!("{}_{}", application_user_.get_nickname(), Self::APPLICATION_USER_DEVICE__ID),
+                application_user_device_id,
                 application_user_id: application_user_.get_id()
             };
 
@@ -237,18 +253,18 @@ impl CreateFixturesProcessor {
                 return Err(error);
             };
 
-            'b: for _t in 1..=Self::QUANTITY_OF_CHANNELS {
-                let mut channel_name = String::new();
+            'b: for _ in 1..=Self::QUANTITY_OF_CHANNELS {
+                let mut channel_name = Channel_Name::new(String::new());
 
-                '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel_Name>::MAXIMUM_LENGTH) {
+                '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel_Name>::MAXIMUM_LENGTH) {
                     let character = Self::ASCII_CHARACTER_REGISTRY[
                         thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                     ];
 
-                    channel_name = format!("{}{}", channel_name.as_str(), character);
+                    channel_name = Channel_Name::new(format!("{}{}", channel_name.get(), character));
                 }
 
-                if !Validator::<Channel_Name>::is_valid(channel_name.as_str()) {
+                if !Validator::<Channel_Name>::is_valid(&channel_name) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel name should be valid." },
@@ -257,9 +273,9 @@ impl CreateFixturesProcessor {
                     );
                 }
 
-                let channel_linked_name = channel_name.clone();
+                let channel_linked_name = Channel_LinkedName::new(channel_name.get().to_string());
 
-                if !Validator::<Channel_LinkedName>::is_valid(channel_linked_name.as_str()) {
+                if !Validator::<Channel_LinkedName>::is_valid(&channel_linked_name) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel linked name should be valid." },
@@ -269,17 +285,17 @@ impl CreateFixturesProcessor {
                 }
 
                 let channel_description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
-                    let mut channel_description_ = String::new();
+                    let mut channel_description_ = Channel_Description::new(String::new());
 
-                    '_c: for _j in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel_Description>::MAXIMUM_LENGTH) {
+                    '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel_Description>::MAXIMUM_LENGTH) {
                         let character = Self::ASCII_CHARACTER_REGISTRY[
                             thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())
                         ];
 
-                        channel_description_ = format!("{}{}", channel_description_.as_str(), character);
+                        channel_description_ = Channel_Description::new(format!("{}{}", channel_description_.get(), character));
                     }
 
-                    if !Validator::<Channel_Description>::is_valid(channel_description_.as_str()) {
+                    if !Validator::<Channel_Description>::is_valid(&channel_description_) {
                         return Err(
                             ErrorAuditor::new(
                                 BaseError::LogicError { message: "Channel description should be valid." },
@@ -293,9 +309,9 @@ impl CreateFixturesProcessor {
                     None
                 };
 
-                let channel_orientation: Vec<i16> = vec![0, 1, 2];
+                let channel_orientation = Channel_Orientation::new(vec![0, 1, 2]);
 
-                if !Validator::<Channel_Orientation>::is_valid(channel_orientation.as_slice()) {
+                if !Validator::<Channel_Orientation>::is_valid(&channel_orientation) {
                     return Err(
                         ErrorAuditor::new(
                             BaseError::LogicError { message: "Channel orientation email should be valid." },
@@ -305,7 +321,7 @@ impl CreateFixturesProcessor {
                 }
 
                 let channel = match PostgresqlRepository::<Channel<'_>>::find_2(
-                    database_1_postgresql_connection, channel_name.as_str()
+                    database_1_postgresql_connection, &channel_name
                 ).await {
                     Ok(channel_) => channel_,
                     Err(mut error) => {
@@ -328,11 +344,11 @@ impl CreateFixturesProcessor {
                             channel_access_modifier: Channel_AccessModifier_::Open,
                             channel_visability_modifier: Channel_VisabilityModifier_::Public,
                             channel_orientation,
-                            channel_cover_image_path: Some(Self::STUB.to_string()),
-                            channel_background_image_path: Some(Self::STUB.to_string()),
-                            channel_subscribers_quantity: 0,
-                            channel_marks_quantity: 0,
-                            channel_viewing_quantity: 0
+                            channel_cover_image_path: Some(Channel_CoverImagePath::new(Self::STUB.to_string())),
+                            channel_background_image_path: Some(Channel_BackgroundImagePath::new(Self::STUB.to_string())),
+                            channel_subscribers_quantity: Channel_SubscribersQuantity::new(0),
+                            channel_marks_quantity: Channel_MarksQuantity::new(0),
+                            channel_viewing_quantity: Channel_ViewingQuantity::new(0)
                         };
 
                         if let Err(mut error) = PostgresqlRepository::<Channel<'_>>::create(
