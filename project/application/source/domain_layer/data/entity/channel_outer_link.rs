@@ -11,6 +11,7 @@ pub use self::CreatedAt as ChannelOuterLink_CreatedAt;
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Alias(String);
 
 impl Alias {
@@ -26,6 +27,7 @@ impl Alias {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Address(String);
 
 impl Address {

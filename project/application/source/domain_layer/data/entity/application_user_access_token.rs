@@ -9,6 +9,7 @@ pub use self::ExpiresAt as ApplicationUserAccessToken_ExpiresAt;
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Id(String);
 
 impl Id {
@@ -23,6 +24,7 @@ impl Id {
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct ExpiresAt(i64);
 
 impl ExpiresAt {

@@ -12,6 +12,7 @@ pub use self::UpdatedAt as ApplicationUserAccessRefreshToken_UpdatedAt;
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct ObfuscationValue(String);
 
 impl ObfuscationValue {
@@ -26,6 +27,7 @@ impl ObfuscationValue {
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct ExpiresAt(i64);
 
 impl ExpiresAt {
@@ -40,6 +42,7 @@ impl ExpiresAt {
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct UpdatedAt(i64);
 
 impl UpdatedAt {

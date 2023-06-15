@@ -24,6 +24,7 @@ pub use self::VisabilityModifier_ as Channel_VisabilityModifier_;
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Id(i64);
 
 impl Id {
@@ -39,6 +40,7 @@ impl Id {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Clone, Serialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Name(String);
 
 impl Name {
@@ -54,6 +56,7 @@ impl Name {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct LinkedName(String);
 
 impl LinkedName {
@@ -81,6 +84,7 @@ impl Description {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct AccessModifier(i16);
 
 impl AccessModifier {
@@ -106,6 +110,7 @@ pub enum AccessModifier_ {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct VisabilityModifier(i16);
 
 impl VisabilityModifier {
@@ -143,6 +148,7 @@ impl Orientation {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct CoverImagePath(String);
 
 impl CoverImagePath {
@@ -158,6 +164,7 @@ impl CoverImagePath {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct BackgroundImagePath(String);
 
 impl BackgroundImagePath {

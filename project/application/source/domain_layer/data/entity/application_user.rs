@@ -13,6 +13,7 @@ pub use self::CreatedAt as ApplicationUser_CreatedAt;
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Id(i64);
 
 impl Id {
